@@ -1,0 +1,66 @@
+name: Java CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [17, 21]
+    name: Java ${{ matrix.java }}
+    steps:
+      - name: Checkout API Challenges
+        uses: actions/checkout@v4
+        with:
+          path: apichallenges
+
+      - name: Checkout Thingifier dependency
+        uses: actions/checkout@v4
+        with:
+          repository: eviltester/thingifier
+          ref: master
+          path: thingifier
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+
+      - name: Install Thingifier dependency
+        run: mvn -B -f thingifier/pom.xml -pl ercoremodel,thingifier -am install -DskipTests
+
+      - name: Check formatting
+        run: mvn -B -f apichallenges/pom.xml spotless:check
+
+      - name: Run API Challenges tests
+        run: mvn -B -f apichallenges/pom.xml clean test
+
+      - name: Static analysis and package deployable app
+        run: mvn -B -f apichallenges/pom.xml -DskipTests verify
+
+      - name: Run ChallengerAuto memory regression
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          -Dchallenger.auto.target=local
+          -Dchallenger.auto.local.repository=memory
+          -Dchallenger.auto.local.playerMode=multi
+
+      - name: Run ChallengerAuto sqlite-memory regression
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          -Dchallenger.auto.target=local
+          -Dchallenger.auto.local.repository=sqlite-memory
+          -Dchallenger.auto.local.playerMode=multi
+
+      - name: Upload deployable jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: apichallenges-java-${{ matrix.java }}
+          path: apichallenges/challenger/target/apichallenges.jar

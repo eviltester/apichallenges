@@ -1,108 +1,108 @@
-# Thingifier
+# API Challenges
 
-An experiment in Model Based API Development.
+API Challenges is a self-teaching API practice application.
 
-## Download
+This repository contains the runnable API Challenges application and its
+automated acceptance test suite:
 
-Thingifier comes preconfigured for download as:
+- `challenger` builds the deployable `apichallenges.jar`
+- `challengerAuto` runs the API-level challenge regression suite
 
-- [a simple todo list](https://github.com/eviltester/thingifier/releases/download/v1.5.2/runTodoListRestAPI-1.5.2.jar)
-- [a more complex todo list manager](https://github.com/eviltester/thingifier/releases/download/v1.5.2/runTodoManagerRestAPI-1.5.2.jar)
+Thingifier remains in the separate
+[`eviltester/thingifier`](https://github.com/eviltester/thingifier) repository.
+Until Thingifier is published as a normal Maven artifact, CI checks out
+Thingifier and installs its library artifacts into the Maven cache before
+building this repository.
 
-When you download one of the `.jar` files then use:
+## Build
 
-- `java -jar runTodoListRestAPI-1.5.2.jar`
+Install Thingifier locally first:
 
-Where you replace the name of the `.jar` file with the name of the file you downloaded.
+```shell
+git clone https://github.com/eviltester/thingifier.git ../thingifier
+mvn -B -f ../thingifier/pom.xml -pl ercoremodel,thingifier -am install -DskipTests
+```
 
-- then visit http://localhost:4567 and you will see the welcome gui.
-- there are links to the API documentation, and the View GUI
+Then build API Challenges:
 
-Command line options are:
+```shell
+mvn -B clean test
+mvn -B -pl challenger -am package
+```
 
-- `-port=1234` to change the port to `1234`
-- `-version=1` to start with a different version.
-    - Each api comes preconfigured with multiple versions, by default the 'best' version is used, so if you switch to an earlier version you might find more bugs.
+The deployable app is:
 
-## Cloud Deploy
+```text
+challenger/target/apichallenges.jar
+```
 
-An online version of the application can be found at:
+Run it with:
 
-- https://apichallenges.eviltester.com
+```shell
+java -jar challenger/target/apichallenges.jar
+```
 
-The API Challenges is built on a simple todo thingifier model.
+Then visit:
 
-This version will reset all data every 10 minutes.
+- <http://localhost:4567>
+- <http://localhost:4567/challenges>
+- <http://localhost:4567/docs>
+- <http://localhost:4567/docs/swagger-ui>
 
-If you want to practice seriously then I suggest downloading the `.jar` and running it locally.
+## Challenger Auto
 
-We are not responsible for any data that you find on the cloud deploy.
+Run the full local regression suite:
 
-We reserve the right to remove the cloud deploy or change the reset time if we discover it is being misused.
+```shell
+mvn -B -pl challengerAuto -am test
+```
 
-## Usage
+Run specific repository modes:
 
-Currently Thingifier is suitable for using as a Practice Test App for API Testing.
+```shell
+mvn -B -pl challengerAuto -am test \
+  -Dchallenger.auto.target=local \
+  -Dchallenger.auto.local.repository=memory \
+  -Dchallenger.auto.local.playerMode=multi
+
+mvn -B -pl challengerAuto -am test \
+  -Dchallenger.auto.target=local \
+  -Dchallenger.auto.local.repository=sqlite-memory \
+  -Dchallenger.auto.local.playerMode=multi
+```
+
+## Docker
+
+Build the jar first, then build the image:
+
+```shell
+mvn -B -pl challenger -am package
+docker build -t eviltester/apichallenges -f docker/apichallenges/Dockerfile .
+```
+
+Run the image:
+
+```shell
+docker run --rm -p 4567:4567 eviltester/apichallenges
+```
+
+The GitHub Actions Docker workflow builds and smoke-tests the image. On `master`,
+`main`, and version tags it can push to Docker Hub when `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` repository secrets are configured.
 
 ## Code Formatting
 
 Java source formatting is enforced with Spotless and google-java-format using
 the AOSP four-space style.
 
-To format the code:
-
-```shell
-mvn spotless:apply
-```
-
-To check formatting without changing files:
+Check formatting:
 
 ```shell
 mvn spotless:check
 ```
 
-The repository includes a pre-commit hook that runs the Spotless check before
-each commit. Enable the versioned hooks in a clone with:
+Apply formatting:
 
 ```shell
-git config core.hooksPath .githooks
+mvn spotless:apply
 ```
-
-On Unix-like systems, if Git reports that the hook is not executable, run:
-
-```shell
-chmod +x .githooks/pre-commit
-```
-
-GitHub Actions also runs `mvn -B spotless:check` in both Java 17 and Java 21
-matrix builds before running the Maven tests.
-    
-## Details
-
-Based on my [Compendium-TA](https://www.compendiumdev.co.uk/page.php?title=compendiumta) tool from 2003/2004.
-
-If you actually want an ER Based tool then check out:
-
-- [Jeddict](https://jeddict.github.io/)
-- [Evolutility](http://www.evolutility.org/index.aspx)
-
-If you want to generate test data for an api, investigate:
-
-- [next.json-generator.com](https://next.json-generator.com/)
-- [Java-Faker](https://github.com/DiUS/java-faker)
-
----
-
-- Alan Richardson
-- https://www.eviltester.com
-- https://www.compendiumdev.co.uk
-- https://uk.linkedin.com/in/eviltester
-- https://twitter.com/eviltester
-
----
-
-Current TODO List:
-
-- test clear down internal challenger databases after time
-- add additional challenges about instance limits e.g. try to exceed 20
-- add additional challenges around field validation values and limits

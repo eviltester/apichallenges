@@ -1,32 +1,32 @@
-Build the full project
+Deploy API Challenges
+=====================
 
-`mvn package`
+Build the deployable jar:
 
-Getting build errors?
+    mvn -B -pl challenger -am package
 
-What does `mvn -version` tell you about the Java version being used?
+The deployable artifact is:
 
-Switch to the right java version:
+    challenger/target/apichallenges.jar
 
-export JAVA_HOME=`/usr/libexec/java_home -v 11.0`
+Run locally:
 
-i.e. https://medium.com/@devkosal/switching-java-jdk-versions-on-macos-80bc868e686a
+    java -jar challenger/target/apichallenges.jar -model=challengeapi -noshutdown -multiplayer
 
-For heroku:
+Docker:
 
-NOTE: need to have `heroku plugins:install java` for the `deploy:jar` to be recognised - more info https://devcenter.heroku.com/articles/deploying-executable-jar-files
+    docker build -t eviltester/apichallenges -f docker/apichallenges/Dockerfile .
+    docker run --rm -p 4567:4567 eviltester/apichallenges
 
-NOTE: if you can't deploy then check the Heroku Stack. Heroku prevents deployment if the stack is out of date, but doesn't generate an error message like "The stack is out of date, you cannot deploy". Instead it will write something like "ERROR: status code: 422, reason phrase: Unprocessable Entity". Check information on stack upgrades here https://devcenter.heroku.com/articles/upgrading-to-the-latest-stack but usually you just have to do `heroku stack:set heroku-22 -a apichallenges`
+Before deployment, run the ChallengerAuto suite against the target environment:
 
+    mvn -B -pl challengerAuto -am test -Dchallenger.auto.target=existing -Dchallenger.auto.baseUrl=http://localhost:4567
 
-Deploy the challenger app full jar
+For hosted environments, use:
 
-- `heroku login`
-- have the deployment page open in case we need to rollback
-    - https://dashboard.heroku.com/apps/apichallenges/activity
-- view the logs to watch release progress
-    - https://dashboard.heroku.com/apps/apichallenges/logs
-- cd challenger
-- `heroku deploy:jar target/apichallenges.jar --app apichallenges`
-- change ChallengerAuto to point to apichallenges.eviltester.com and run the tests
-- roll back on any issues
+    mvn -B -pl challengerAuto -am test -Dchallenger.auto.target=live -Dchallenger.auto.baseUrl=https://your-host.example
+
+Only enable the full mutating suite against environments where creating,
+updating, and deleting API data is acceptable:
+
+    -Dchallenger.auto.external.full=true
