@@ -35,7 +35,12 @@ jobs:
           cache: maven
 
       - name: Install Thingifier dependency
-        run: mvn -B -f thingifier/pom.xml -pl ercoremodel,thingifier -am install -DskipTests
+        run: >
+          mvn -B -f thingifier/pom.xml -pl ercoremodel,thingifier -am install
+          -DskipTests
+          -Dspotless.check.skip=true
+          -Dcheckstyle.skip=true
+          -Dpmd.skip=true
 
       - name: Build deployable jar
         run: mvn -B -f apichallenges/pom.xml -pl challenger -am package

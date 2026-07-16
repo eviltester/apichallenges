@@ -20,7 +20,11 @@ Install Thingifier locally first:
 
 ```shell
 git clone https://github.com/eviltester/thingifier.git ../thingifier
-mvn -B -f ../thingifier/pom.xml -pl ercoremodel,thingifier -am install -DskipTests
+mvn -B -f ../thingifier/pom.xml -pl ercoremodel,thingifier -am install \
+  -DskipTests \
+  -Dspotless.check.skip=true \
+  -Dcheckstyle.skip=true \
+  -Dpmd.skip=true
 ```
 
 Then build API Challenges:
