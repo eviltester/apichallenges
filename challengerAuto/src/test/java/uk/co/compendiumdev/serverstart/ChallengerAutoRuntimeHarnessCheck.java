@@ -1,4 +1,4 @@
-package uk.co.compendiumdev.sparkstart;
+package uk.co.compendiumdev.serverstart;
 
 import io.restassured.RestAssured;
 import java.util.Collections;

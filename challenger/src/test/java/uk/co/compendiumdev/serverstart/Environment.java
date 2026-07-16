@@ -1,10 +1,9 @@
-package uk.co.compendiumdev.sparkstart;
+package uk.co.compendiumdev.serverstart;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Spark;
 import uk.co.compendiumdev.challenge.ChallengeMain;
 
 public class Environment {
@@ -33,13 +32,12 @@ public class Environment {
         //            return "https://apichallenges.eviltester.com";
 
         logger.info("Checking app running");
-        // if not running then start the spark
+        // if not running then start the server
         if (ChallengeMain.getChallenger() == null || !Port.inUse("localhost", 4567)) {
 
             logger.info(
                     "App not running starting with single player mode == " + isSinglePlayerMode);
             // start it up
-            Spark.port(4567);
             List<String> args = new ArrayList<>();
 
             if (isSinglePlayerMode) {
@@ -87,8 +85,6 @@ public class Environment {
     }
 
     public static void stop() {
-        Spark.stop();
-        Spark.awaitStop();
         ChallengeMain.stop();
         waitTillRunningStatus(false);
     }
