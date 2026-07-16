@@ -42,13 +42,14 @@ jobs:
           -Dpmd.skip=true
 
       - name: Check formatting
+        if: matrix.java == 21
         run: mvn -B -f apichallenges/pom.xml spotless:check
 
       - name: Run API Challenges tests
         run: mvn -B -f apichallenges/pom.xml clean test
 
-      - name: Static analysis and package deployable app
-        run: mvn -B -f apichallenges/pom.xml -DskipTests verify
+      - name: Package deployable app
+        run: mvn -B -f apichallenges/pom.xml -pl challenger -am package -DskipTests
 
       - name: Run ChallengerAuto memory regression
         run: >
@@ -63,6 +64,10 @@ jobs:
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=sqlite-memory
           -Dchallenger.auto.local.playerMode=multi
+
+      - name: Static analysis
+        if: matrix.java == 21
+        run: mvn -B -f apichallenges/pom.xml -DskipTests verify
 
       - name: Upload deployable jar
         uses: actions/upload-artifact@v4
