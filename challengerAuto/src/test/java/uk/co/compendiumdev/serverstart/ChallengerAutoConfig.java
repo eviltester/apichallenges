@@ -1,4 +1,4 @@
-package uk.co.compendiumdev.sparkstart;
+package uk.co.compendiumdev.serverstart;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,12 +1,16 @@
-package uk.co.compendiumdev.sparkstart;
+package uk.co.compendiumdev.serverstart;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** check if port is in use */
 public class Port {
+
+    static Logger logger = LoggerFactory.getLogger(Port.class);
 
     public static boolean inUse(String host, String port) {
         return inUse(host, Integer.valueOf(port));
@@ -15,7 +19,7 @@ public class Port {
     // http://stackoverflow.com/questions/434718/sockets-discover-port-availability-using-java
     public static boolean inUse(String host, int port) {
         Socket s = null;
-        System.out.println("Checking for port on " + host + ":" + port);
+        logger.info("Checking for port on " + host + ":" + port);
 
         try {
 
@@ -26,18 +30,17 @@ public class Port {
 
             // If the code makes it this far without an exception it means
             // something is using the port and has responded.
-            System.out.println("Port " + port + " is in use, assuming proxy is running");
+            logger.warn("Port " + port + " is in use, assuming proxy is running");
             return true;
         } catch (IOException e) {
-            System.out.println("Port " + port + " is free, no proxy running");
+            logger.info("Port " + port + " is free, no proxy running");
             return false;
         } finally {
             if (s != null) {
                 try {
                     s.close();
                 } catch (IOException e) {
-                    System.out.println("Port " + port + " check had an error ");
-                    e.printStackTrace();
+                    logger.error("Port " + port + " check had an error ", e);
                     // swallow exception and return false for our use case
                     return false;
                 }
