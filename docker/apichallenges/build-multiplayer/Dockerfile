@@ -9,7 +9,7 @@ FROM maven:3.9.9-eclipse-temurin-21 AS build
 ARG APICHALLENGES_THINGIFIER_REF=master
 # Railway can reuse Docker layers aggressively. Bump this value when the
 # source-built Thingifier dependency must be refreshed from the same ref.
-ARG APICHALLENGES_THINGIFIER_CACHE_BUST=20260717-docs-link-api
+ARG APICHALLENGES_THINGIFIER_CACHE_BUST=20260717-thingifier-5729448f
 
 WORKDIR /workspace
 
