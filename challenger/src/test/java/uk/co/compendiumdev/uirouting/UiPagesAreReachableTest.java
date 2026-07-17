@@ -296,9 +296,7 @@ public class UiPagesAreReachableTest {
         List<Arguments> args = new ArrayList<>();
         args.add(
                 Arguments.of(
-                        "/docs/swagger-ui",
-                        "/docs/openapi.json",
-                        "API Challenges - Swagger UI"));
+                        "/docs/swagger-ui", "/docs/openapi.json", "API Challenges - Swagger UI"));
         args.add(
                 Arguments.of(
                         "/simpleapi/docs/swagger-ui",
