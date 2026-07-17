@@ -12,6 +12,13 @@ Build the image:
 docker build -t eviltester/apichallenges -f docker/apichallenges/Dockerfile .
 ```
 
+Build the multiplayer/cloud-storage deployment image directly from source:
+
+```shell
+docker build -t eviltester/apichallenges:multiplayer \
+  -f docker/apichallenges/build-multiplayer/Dockerfile .
+```
+
 Run the image:
 
 ```shell
