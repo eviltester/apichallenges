@@ -210,6 +210,36 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void simulationModePageUsesLocalOriginByDefault() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("GET http://localhost:4567/sim/entities"));
+    }
+
+    @Test
+    void simulationModePageUsesForwardedHttpsOriginBehindProxy() {
+
+        final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
+        proxyHttp.clearHeaders();
+        proxyHttp.setHeader("ContentType", "text/html; charset=utf-8");
+        proxyHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+        proxyHttp.setHeader("X-Forwarded-Proto", "https");
+        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.eviltester.com");
+
+        final HttpResponseDetails response = proxyHttp.send("/practice-modes/simulation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains("GET https://apichallenges.eviltester.com/sim/entities"));
+        Assertions.assertFalse(
+                response.body.contains("GET http://apichallenges.eviltester.com/sim/entities"));
+    }
+
+    @Test
     void staticAssetsAreServedBeforeGenericFallbackRoutes() {
 
         HttpResponseDetails response = http.send("/css/default.css", "get");
