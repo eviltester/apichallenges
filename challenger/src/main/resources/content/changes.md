@@ -2,12 +2,18 @@
 title: API Challenges Change Log
 seo_title: Change Log Guide for API Testing | API Challenges Guide
 description: Change log for the API Challenges
-lastmod: 2026-04-07
+lastmod: 2026-07-17
 seo_description: Track API Challenges updates, including new guides, improvements, and feature changes that help you learn API testing more effectively over time.
 showads: true
 ---
 
 # Change Log
+
+## 2026/07/17 - API Challenges repo and Swagger UI updates
+
+- Moved to the [API Challenges GitHub repo](https://github.com/eviltester/apichallenges)
+- Added inline HTTP Request widgets in the [API Simulator instructions](/practice-modes/simulation)
+- Added Swagger UI for [Simple API](/simpleapi/docs/swagger-ui) and [API Challenges](/docs/swagger-ui)
 
 ## 2026/04/07 - Author page and formatting
 

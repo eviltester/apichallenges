@@ -5,7 +5,7 @@
 To download:
 
 - Visit the releases page
-     - https://github.com/eviltester/thingifier/releases
+     - https://github.com/eviltester/apichallenges/releases
 - Look for the `apichallenger.jar`
 - Download `apichallenger.jar`
 

@@ -21,7 +21,7 @@ There are many ways to do this and some automated execution is probably required
 
 I have an automated Java execution using Rest Assured to complete this:
 
-- [C058DeleteAllTodosTest.java](https://github.com/eviltester/thingifier/blob/master/challengerAuto/src/test/java/uk/co/compendiumdev/challenger/restassured/_19_misc_challenges/C058DeleteAllTodosTest.java)
+- [C058DeleteAllTodosTest.java](https://github.com/eviltester/apichallenges/blob/main/challengerAuto/src/test/java/uk/co/compendiumdev/challenger/restassured/_19_misc_challenges/C058DeleteAllTodosTest.java)
 
 This uses a bunch of abstractions to keep the code simple but the basic process is:
 

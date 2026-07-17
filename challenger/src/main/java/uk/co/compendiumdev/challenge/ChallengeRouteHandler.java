@@ -42,6 +42,7 @@ public class ChallengeRouteHandler {
         this.apiChallengesDocumentationDefn = apiDefn;
         apiDefn.setThingifier(thingifier);
         apiDefn.setSeoTitle("API Challenges API Documentation | API Challenges");
+        apiDefn.setSwaggerUiTitle("API Challenges - Swagger UI");
         apiDefn.setSeoDescription(
                 "Explore API Challenges endpoint documentation with request formats, payload examples, and expected responses for practical API testing.");
         apiDefn.setMetaRobots("index,follow");

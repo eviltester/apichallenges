@@ -51,6 +51,8 @@ Use your API Client to issue a `GET` request on the `/sim/entities` end point.
 GET {{<ORIGIN_URL>}}/sim/entities
 ```
 
+{{<sim-live-request method="GET" path="/sim/entities">}}
+
 You should see a `200` status code, which means that the request was a success.
 
 In the response you should see a JSON payload with 10 items.
@@ -68,6 +70,8 @@ Issue a GET request to `/sim/entities/1`
 GET {{<ORIGIN_URL>}}/sim/entities/1
 ```
 
+{{<sim-live-request method="GET" path="/sim/entities/1">}}
+
 * The response should have a status code of `200`, meaning `OK`, the API found the item 
 * The response should Return the details of entity number 1 
 
@@ -84,6 +88,8 @@ There was no entity with `id` equal to `13` so if we try to `GET` that we will r
 ```
 GET {{<ORIGIN_URL>}}/sim/entities/13
 ```
+
+{{<sim-live-request method="GET" path="/sim/entities/13">}}
 
 * Entity does not exist, receive a 404 response
 * Try other values for the `id` and see that you receive 404 responses
@@ -105,6 +111,8 @@ With body:
 ```
     {"name": "bob"}
 ```
+
+{{<sim-live-request method="POST" path="/sim/entities" body='{"name": "bob"}'>}}
 
 > NOTE: we've tried to make the simulator easy to use so it doesn't actually matter what you add as the payload, you'll still see the response below.
 
@@ -166,6 +174,8 @@ Add a payload which contains the information you want to update:
     {"name": "eris"}
 ```
 
+{{<sim-live-request method="POST" path="/sim/entities/10" body='{"name": "eris"}'>}}
+
 You will receive a `200` status code.
 
 *   Amend an entity...note we assume you are amending to the payload above, because that is what we return.
@@ -219,6 +229,8 @@ With the payload in the body as:
     {"name": "eris"}
 ```
 
+{{<sim-live-request method="PUT" path="/sim/entities/10" body='{"name": "eris"}'>}}
+
 `PUT` and `POST` are not always interchangeable with APIs. For each API you use, read the documentation to learn how the API works.
 
 
@@ -232,13 +244,23 @@ The only entity we can delete is `id` equal to `9`
 DELETE {{<ORIGIN_URL>}}/sim/entities/9
 ```
 
+{{<sim-live-request method="DELETE" path="/sim/entities/9">}}
+
 This should respond with a status code of `204` meaning `OK` successfully completed, but no additional information to show in the body of the response.
+
+### Step 7a - Don't trust the output
+
+For functional testing, we don't just want to take the API's word that it has actually performed the functionality.
+So in the case of a `DELETE`, just because the API told us the operation was successful we want to check.
+And we can do that by issuing a `GET` request on the specific item we just deleted.
 
 To check that something is deleted, try to GET it and make sure that you receive a 404 response.
 
 ```
 GET {{<ORIGIN_URL>}}/sim/entities/9
 ```
+
+{{<sim-live-request method="GET" path="/sim/entities/9">}}
 
 *   if you GET id 9 then you will find it 404's (because it was deleted)
 
@@ -258,6 +280,8 @@ To find out what Verbs, or Methods, we are allowed to use, issue an `OPTIONS` re
 OPTIONS {{<ORIGIN_URL>}}/sim/entities
 ```
 
+{{<sim-live-request method="OPTIONS" path="/sim/entities">}}
+
 By looking at the `Allow` header in the response we can see that we are allowed to `GET, POST, PUT, HEAD, OPTIONS`
 
 If we tried to `DELETE` or `PATCH` then we should receive an appropriate status code of `405`
@@ -268,6 +292,8 @@ Try and see:
 DELETE {{<ORIGIN_URL>}}/sim/entities
 ```
 
+{{<sim-live-request method="DELETE" path="/sim/entities">}}
+
 `DELETE` correctly returns a `405` response as we expected.
 
 And:
@@ -275,6 +301,8 @@ And:
 ```
 PATCH {{<ORIGIN_URL>}}/sim/entities
 ```
+
+{{<sim-live-request method="PATCH" path="/sim/entities">}}
 
 Patch returns a `501` status, which indicates a problem with the API. No API should return a `500` range status code as it indicates a server problem:
 
@@ -296,11 +324,15 @@ Try this by issuing a `HEAD` request.
 HEAD {{<ORIGIN_URL>}}/sim/entities
 ```
 
+{{<sim-live-request method="HEAD" path="/sim/entities">}}
+
 And compare the response with a `GET` request:
 
 ```
 GET {{<ORIGIN_URL>}}/sim/entities
 ```
+
+{{<sim-live-request method="GET" path="/sim/entities">}}
 
 The headers should be the same.
 
@@ -315,6 +347,10 @@ If you want to explore the tool more then you could try the experiments below, o
 *   PATCH and TRACE should be 501 for all end endpoints
 *   any other `/sim/*` endpoints should respond with a 404
 
+Use the editable request widget below to experiment with different verbs, URLs, and headers.
+
+{{<sim-live-request method="GET" path="/sim/entities" editable="true">}}
+
 
 ## Automating Examples
 
@@ -322,7 +358,7 @@ The Simulator is a very simple set of endpoints to automate because it doesn't m
 
 I have created an example set of very simple Java `@Test` methods using RestAssured which automate the Simulator.
 
-[Simulator Automated Execution Coverage](https://github.com/eviltester/thingifier/blob/master/challengerAuto/src/test/java/uk/co/compendiumdev/simulator/SimulatorHttpTest.java)
+[Simulator Automated Execution Coverage](https://github.com/eviltester/apichallenges/blob/main/challengerAuto/src/test/java/uk/co/compendiumdev/simulator/SimulatorHttpTest.java)
 
 ## Swagger OpenAPI File
 

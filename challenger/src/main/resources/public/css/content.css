@@ -194,3 +194,144 @@ a.next-challenge-cta-link {
 a.next-challenge-cta-link:hover {
     background: #163858;
 }
+
+/* Simulation mode live request widgets */
+.sim-live-widget {
+    border: 1px solid #c6d3df;
+    background: #f8fbfd;
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+}
+
+.sim-live-title {
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+}
+
+.sim-live-tabs,
+.sim-live-response-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.sim-live-tab,
+.sim-live-response-tab,
+.sim-live-copy,
+.sim-live-execute {
+    border: 1px solid #8fa7bc;
+    background: #ffffff;
+    color: #152536;
+    cursor: pointer;
+    font: inherit;
+    padding: 0.45rem 0.65rem;
+}
+
+.sim-live-tab.active,
+.sim-live-response-tab.active {
+    background: #1f4e79;
+    border-color: #1f4e79;
+    color: #ffffff;
+}
+
+.sim-live-execute {
+    background: #2f6f3e;
+    border-color: #2f6f3e;
+    color: #ffffff;
+    margin: 0.75rem 0;
+}
+
+.sim-live-execute:disabled {
+    background: #6f7f8f;
+    border-color: #6f7f8f;
+    cursor: wait;
+}
+
+.sim-live-execute-icon {
+    display: inline-block;
+    margin-right: 0.4rem;
+}
+
+.sim-live-request-line {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.sim-live-method {
+    background: #e1edf7;
+    border: 1px solid #9bb6cd;
+    color: #102d46;
+    padding: 0.2rem 0.4rem;
+}
+
+.sim-live-request-line code {
+    overflow-wrap: anywhere;
+}
+
+.sim-live-edit-controls {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.sim-live-edit-controls label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+}
+
+.sim-live-edit-method,
+.sim-live-edit-url,
+.sim-live-edit-headers {
+    border: 1px solid #9bb6cd;
+    box-sizing: border-box;
+    font: inherit;
+    padding: 0.45rem;
+    width: 100%;
+}
+
+.sim-live-edit-headers {
+    font-family: Consolas, "Courier New", monospace;
+    min-height: 7rem;
+    resize: vertical;
+}
+
+.sim-live-reset {
+    border: 1px solid #8fa7bc;
+    background: #ffffff;
+    color: #152536;
+    cursor: pointer;
+    font: inherit;
+    justify-self: start;
+    padding: 0.45rem 0.65rem;
+}
+
+.sim-live-command-panel {
+    position: relative;
+}
+
+.sim-live-command,
+.sim-live-request-body,
+.sim-live-response-panel {
+    background: #ffffff;
+    border: 1px solid #c9d5df;
+    max-height: 24rem;
+    overflow: auto;
+    padding: 0.75rem;
+    white-space: pre-wrap;
+}
+
+.sim-live-copy {
+    margin-top: 0.5rem;
+}
+
+.sim-live-status {
+    border-left: 4px solid #1f4e79;
+    background: #eef4f9;
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}

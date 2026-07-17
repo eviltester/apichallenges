@@ -313,7 +313,7 @@ Getting started with these applications can be a little harder than using the on
 
 I've listed a few applications here initially and will expand the instructions to include walkthroughs and setup guides in future updates.
 
-- [Api Challenges](https://github.com/eviltester/thingifier/tree/master/challenger)
+- [Api Challenges](https://github.com/eviltester/apichallenges)
   - API challenges can be run locally if you install a Java SDK and maven as pre-requisites.
 - [JSON Server](https://github.com/typicode/json-server)
    - Can be run locally if you have Node and npm installed.
