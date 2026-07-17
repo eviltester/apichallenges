@@ -274,6 +274,16 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void mirrorPracticeModePageDoesNotAdvertiseSwaggerUi() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/mirror", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/mirror/docs/swagger\""));
+    }
+
+    @Test
     void docsPagesRenderPerApiSeoMetadata() {
 
         final HttpResponseDetails docsResponse = http.send("/docs", "get");
