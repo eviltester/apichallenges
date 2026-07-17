@@ -191,6 +191,25 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void canFetchOpenApiJsonForSwaggerUiBehindHttpsProxy() {
+
+        final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
+        proxyHttp.clearHeaders();
+        proxyHttp.setHeader("X-Forwarded-Proto", "https");
+        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.eviltester.com");
+
+        final HttpResponseDetails response = proxyHttp.send("/docs/openapi.json", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertNotNull(response.getHeader("Content-Type"));
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertTrue(response.body.contains("\"openapi\" : \"3.0.1\","));
+        Assertions.assertTrue(
+                response.body.indexOf("\"url\" : \"https://apichallenges.eviltester.com\"")
+                        < response.body.indexOf("\"url\" : \"http://localhost:4567\""));
+    }
+
+    @Test
     void staticAssetsAreServedBeforeGenericFallbackRoutes() {
 
         HttpResponseDetails response = http.send("/css/default.css", "get");
