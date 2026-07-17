@@ -166,6 +166,7 @@ public class MirrorRoutes {
         apiDocDefn.setMetaRobots("noindex,follow");
         apiDocDefn.setOgType("website");
         apiDocDefn.setTwitterCard("summary_large_image");
+        apiDocDefn.setShowSwaggerUiLink(false);
 
         new ThingifierAutoDocGenRouting(apiDocDefn.getThingifier(), apiDocDefn, guiTemplates);
     }

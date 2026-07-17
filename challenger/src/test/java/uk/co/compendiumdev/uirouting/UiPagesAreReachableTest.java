@@ -262,7 +262,7 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void challengerMenuContainsSwaggerUiLinks() {
+    void challengerMenuContainsSwaggerUiLinksOnlyForSuitableModes() {
 
         final HttpResponseDetails response = http.send("/", "get");
 
@@ -270,7 +270,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
-        Assertions.assertTrue(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
+        Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
     }
 
     @Test
@@ -324,6 +324,9 @@ public class UiPagesAreReachableTest {
                         "<title>Mirror Mode API Documentation | API Challenges</title>"));
         Assertions.assertTrue(
                 mirrorDocsResponse.body.contains("<meta name='robots' content='noindex,follow'>"));
+        Assertions.assertFalse(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger-ui'"));
+        Assertions.assertFalse(mirrorDocsResponse.body.contains("Open Swagger UI"));
+        Assertions.assertTrue(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger'"));
     }
 
     @Test

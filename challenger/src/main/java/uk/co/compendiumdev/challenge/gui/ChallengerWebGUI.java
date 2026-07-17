@@ -147,7 +147,6 @@ public class ChallengerWebGUI {
                                 <ul>
                                     <li><a href="/practice-modes/mirror">About HTTP Mirror</a></li>
                                     <li><a href="/mirror/docs">Mirror API Docs</a></li>
-                                    <li><a href="/mirror/docs/swagger-ui">Swagger UI</a></li>
                                     <li><a href="/mirror/docs/swagger">[Download Open API File]</a></li>
 
                                 </ul>
