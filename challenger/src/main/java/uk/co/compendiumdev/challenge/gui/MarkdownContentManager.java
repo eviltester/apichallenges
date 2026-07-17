@@ -147,6 +147,7 @@ public class MarkdownContentManager {
         String state = "EXPECTING_HEADER";
         boolean addedToc = false;
         String firstYouTubeVideoId = "";
+        boolean simulationLiveRequestWidgetUsed = false;
 
         try {
             while ((line = reader.readLine()) != null) {
@@ -174,6 +175,10 @@ public class MarkdownContentManager {
                 if (state.equals("READING_HEADER") && !line.trim().isEmpty()) {
                     // probably shouldn't be reading headers we found a non-empty line
                     state = "READING_CONTENT";
+                }
+
+                if (line.contains("{{<sim-live-request")) {
+                    simulationLiveRequestWidgetUsed = true;
                 }
 
                 // process any macros
@@ -215,6 +220,9 @@ public class MarkdownContentManager {
         }
 
         headerInject = headerInject + youtubeHeaderInject;
+        if (simulationLiveRequestWidgetUsed) {
+            headerInject = headerInject + "<script src='/js/sim-live-request.js' defer></script>";
+        }
 
         String markdownFromResource = mdcontent.toString();
         Node document = parser.parse(markdownFromResource);
@@ -554,6 +562,40 @@ public class MarkdownContentManager {
         String youtubeMacroRegex =
                 "\\{\\{<youtube-embed key=\"([a-zA-Z0-9_-]+)\" title=\"(.+)\">}}";
         line = line.replaceAll(youtubeMacroRegex, youTubeHtmlBlock);
+
+        if (line.contains("{{<sim-live-request")) {
+            final String simLiveRequestMacroRegex =
+                    "\\{\\{<sim-live-request method=\"([A-Z]+)\" path=\"([^\"]+)\""
+                            + "(?: body='([^']*)')?(?: editable=\"(true|false)\")?>}}";
+            final Pattern simLiveRequestPattern = Pattern.compile(simLiveRequestMacroRegex);
+            final Matcher simLiveRequestMatcher = simLiveRequestPattern.matcher(line);
+            final StringBuffer processedLine = new StringBuffer();
+            while (simLiveRequestMatcher.find()) {
+                final String method = simLiveRequestMatcher.group(1);
+                final String path = simLiveRequestMatcher.group(2);
+                final String body =
+                        simLiveRequestMatcher.group(3) == null
+                                ? ""
+                                : simLiveRequestMatcher.group(3);
+                final String editable =
+                        simLiveRequestMatcher.group(4) == null
+                                ? "false"
+                                : simLiveRequestMatcher.group(4);
+                final String replacement =
+                        String.format(
+                                "<div class=\"sim-live-request\" data-method=\"%s\""
+                                        + " data-path=\"%s\" data-body=\"%s\""
+                                        + " data-editable=\"%s\"></div>",
+                                escapeHtmlAttribute(method),
+                                escapeHtmlAttribute(path),
+                                escapeHtmlAttribute(body),
+                                escapeHtmlAttribute(editable));
+                simLiveRequestMatcher.appendReplacement(
+                        processedLine, Matcher.quoteReplacement(replacement));
+            }
+            simLiveRequestMatcher.appendTail(processedLine);
+            line = processedLine.toString();
+        }
 
         if (line.contains("{{<PARTIAL_SNIPPET")) {
             String partialMacroRegex = "\\{\\{<PARTIAL_SNIPPET filename=\"(.+)\">}}";

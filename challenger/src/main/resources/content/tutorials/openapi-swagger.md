@@ -47,6 +47,22 @@ The Editor has the benefit that you can see the YAML version of the specificatio
 
 The more detailed the OpenAPI specification file, the more features the UI will have and the more benefit you will gain from the tools that consume the API.
 
+## Application Hosted Swagger Interfaces
+
+Some applications host the Swagger UI as part of the application, pre-configured with the OpenAPI file for that API.
+
+This makes it easier for users to try the API because they do not have to download the OpenAPI file, load it into a separate tool, or read through custom and complicated API documentation before making their first request.
+
+Examples on this site include:
+
+- [Simple API Swagger UI](/simpleapi/docs/swagger-ui)
+- [API Challenges Swagger UI](/docs/swagger-ui)
+
+On our Test Pages site we also have:
+
+- [Shopping Cart Swagger UI](https://testpages.eviltester.com/apps/basiccart/swagger/)
+- [Simple Calculator Swagger UI](https://testpages.eviltester.com/apps/calculator-api/swagger/)
+
 ## Running the Swagger Editor locally
 
 I prefer to run the Swagger Editor locally and do so using Docker.

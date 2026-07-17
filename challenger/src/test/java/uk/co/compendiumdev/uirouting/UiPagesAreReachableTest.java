@@ -240,6 +240,35 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void simulationModePageIncludesLiveRequestWidgetsForEachStep() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        Assertions.assertEquals(
+                14, response.body.split("class=\"sim-live-request\"", -1).length - 1);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"GET\""
+                                + " data-path=\"/sim/entities\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"POST\""
+                                + " data-path=\"/sim/entities\""
+                                + " data-body=\"{&quot;name&quot;: &quot;bob&quot;}\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"HEAD\""
+                                + " data-path=\"/sim/entities\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"PATCH\""
+                                + " data-path=\"/sim/entities\""));
+        Assertions.assertTrue(response.body.contains("data-editable=\"true\""));
+    }
+
+    @Test
     void staticAssetsAreServedBeforeGenericFallbackRoutes() {
 
         HttpResponseDetails response = http.send("/css/default.css", "get");
@@ -252,6 +281,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
         Assertions.assertTrue(response.body.contains("htmlTableOfContents"));
 
+        response = http.send("/js/sim-live-request.js", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
+        Assertions.assertTrue(response.body.contains("buildCurlCommand"));
+
         response = http.send("/favicon/site.webmanifest", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("manifest+json"));
@@ -260,17 +294,33 @@ public class UiPagesAreReachableTest {
 
     static Stream<Arguments> swaggerUiPageRoutes() {
         List<Arguments> args = new ArrayList<>();
-        args.add(Arguments.of("/docs/swagger-ui", "/docs/openapi.json"));
-        args.add(Arguments.of("/simpleapi/docs/swagger-ui", "/simpleapi/docs/openapi.json"));
-        args.add(Arguments.of("/sim/docs/swagger-ui", "/sim/docs/openapi.json"));
-        args.add(Arguments.of("/mirror/docs/swagger-ui", "/mirror/docs/openapi.json"));
+        args.add(
+                Arguments.of(
+                        "/docs/swagger-ui",
+                        "/docs/openapi.json",
+                        "API Challenges - Swagger UI"));
+        args.add(
+                Arguments.of(
+                        "/simpleapi/docs/swagger-ui",
+                        "/simpleapi/docs/openapi.json",
+                        "Simple API - Swagger UI"));
+        args.add(
+                Arguments.of(
+                        "/sim/docs/swagger-ui",
+                        "/sim/docs/openapi.json",
+                        "API Simulator - Swagger UI"));
+        args.add(
+                Arguments.of(
+                        "/mirror/docs/swagger-ui",
+                        "/mirror/docs/openapi.json",
+                        "Mirror Mode API Documentation | API Challenges Swagger UI"));
         return args.stream();
     }
 
     @ParameterizedTest(name = "swagger ui page {0} references {1}")
     @MethodSource("swaggerUiPageRoutes")
     void swaggerUiPagesRenderAndReferenceMatchingOpenApiJson(
-            final String swaggerUiPath, final String openApiJsonPath) {
+            final String swaggerUiPath, final String openApiJsonPath, final String pageTitle) {
 
         final HttpResponseDetails response = http.send(swaggerUiPath, "get");
 
@@ -289,6 +339,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("syntaxHighlight: {activated: false}"));
         Assertions.assertTrue(response.body.contains("SwaggerUIBundle"));
         Assertions.assertTrue(response.body.contains("url: \"" + openApiJsonPath + "\""));
+        Assertions.assertTrue(response.body.contains("<h1>" + pageTitle + "</h1>"));
+        Assertions.assertTrue(response.body.contains("<title>" + pageTitle + "</title>"));
     }
 
     @Test

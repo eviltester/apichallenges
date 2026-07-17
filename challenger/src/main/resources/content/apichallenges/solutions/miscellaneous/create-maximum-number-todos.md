@@ -23,7 +23,7 @@ There are many ways to do this and some automated execution is probably required
 
 I have an automated Java execution using Rest Assured to complete this:
 
-- [C058DeleteAllTodosTest.java](https://github.com/eviltester/thingifier/blob/master/challengerAuto/src/test/java/uk/co/compendiumdev/challenger/restassured/_19_misc_challenges/C059AddMaximumNumberOfTodosTest.java)
+- [C059AddMaximumNumberOfTodosTest.java](https://github.com/eviltester/apichallenges/blob/main/challengerAuto/src/test/java/uk/co/compendiumdev/challenger/restassured/_19_misc_challenges/C059AddMaximumNumberOfTodosTest.java)
 
 This uses a bunch of abstractions to keep the code simple but the basic process is:
 
@@ -75,4 +75,3 @@ Some tools have the ability to issue Data Driven requests, so if you can parse t
 - [Postman Data Driven Community Posts](https://community.postman.com/tag/data-driven)
 
 Most of the API client tools also have the ability to create scripts to achieve this.
-

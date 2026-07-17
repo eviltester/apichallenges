@@ -96,6 +96,7 @@ public class SimpleApiRoutes {
         apiDocDefn.setThingifier(simplethings);
         apiDocDefn.setPathPrefix("/simpleapi"); // where can the API endpoints be found
         apiDocDefn.setSeoTitle("Simple API Documentation | API Challenges");
+        apiDocDefn.setSwaggerUiTitle("Simple API - Swagger UI");
         apiDocDefn.setSeoDescription(
                 "Read Simple API endpoint documentation with schemas, examples, and response expectations for hands-on HTTP and API testing practice.");
         apiDocDefn.setMetaRobots("index,follow");

@@ -98,6 +98,7 @@ public class SimulationRoutes {
         apiDocDefn.setThingifier(simulation);
         apiDocDefn.setPathPrefix("/sim"); // where can the API endpoints be found
         apiDocDefn.setSeoTitle("Simulation Mode API Documentation | API Challenges");
+        apiDocDefn.setSwaggerUiTitle("API Simulator - Swagger UI");
         apiDocDefn.setSeoDescription(
                 "Review Simulation Mode API documentation for deterministic request behavior, payload formats, and response handling used in guided practice.");
         apiDocDefn.setMetaRobots("noindex,follow");
