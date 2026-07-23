@@ -42,7 +42,7 @@ public class PostChallenges {
                 "Read Solution",
                 "HREF",
                 "/apichallenges/solutions/post-create/post-todos-422-title-too-long");
-        //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
+
         // TODO: create solution for failing title too long
 
         return aChallenge;
@@ -64,7 +64,6 @@ public class PostChallenges {
                 "");
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/post-create/post-todos-422");
-        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         return aChallenge;
     }
 
@@ -88,7 +87,6 @@ public class PostChallenges {
                 "HREF",
                 "/apichallenges/solutions/post-create/post-todos-422-description-too-long");
 
-        //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         // TODO: create video solution for failing description too long
         return aChallenge;
     }
@@ -116,8 +114,6 @@ public class PostChallenges {
                 "HREF",
                 "/apichallenges/solutions/post-create/post-todos-201-max-content");
 
-        //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
-        // TODO: create video solution for max out title and description
         return aChallenge;
     }
 
@@ -142,8 +138,6 @@ public class PostChallenges {
                 "HREF",
                 "/apichallenges/solutions/post-create/post-todos-413-content-too-long");
 
-        //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
-        // TODO: create video solution for failing content too long
         return aChallenge;
     }
 
@@ -164,9 +158,6 @@ public class PostChallenges {
                 "Read Solution",
                 "HREF",
                 "/apichallenges/solutions/post-create/post-todos-422-extra-field");
-
-        //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
-        // TODO: create video solution for unrecognised field names
         return aChallenge;
     }
 
