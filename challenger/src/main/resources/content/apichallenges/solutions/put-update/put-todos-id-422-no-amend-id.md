@@ -5,7 +5,7 @@ title: API Challenges Solution For - PUT todos/id no amend id 422
 seo_title: Solution: PUT todos/id no amend id 422 | API Challenges
 description: How to solve API challenge PUT todos/id no amend id 422.
 seo_description: Use this walkthrough to solve PUT todos/id no amend id 422 with request setup, key headers, and expected status codes.
-next_challenge: /apichallenges/solutions/delete/delete-todos-id-200
+next_challenge: /apichallenges/solutions/delete/delete-todos-id-204
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a body id that differs from the URL id||Send the request and verify the response status is 422
 showads: true
 ---
@@ -21,3 +21,6 @@ Look for the validation message containing:
 ```text
 Can not amend id from
 ```
+### Try it now
+
+{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"id":"{{missingTodoId}}","title":"mismatch id","doneStatus":true,"description":"created from the solution page"}'>}}

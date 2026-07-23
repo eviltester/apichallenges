@@ -105,6 +105,22 @@ public class AuthRoutesTest {
     }
 
     @Test
+    void liveWidgetBasicAuthFailureDoesNotTriggerBrowserAuthenticationDialog() {
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challenger.getXChallenger());
+        http.setHeader("Authorization", "basic " + base64("wrong:wrong"));
+        http.setHeader("X-API-Challenges-Live-Widget", "true");
+
+        final HttpResponseDetails response = http.send("/secret/token", "post");
+
+        Assertions.assertEquals(401, response.statusCode);
+        Assertions.assertNull(response.getHeader("WWW-Authenticate"));
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+    }
+
+    @Test
     void noProcessingWhenPassBasicAuthButNoChallenger() {
 
         http.clearHeaders();

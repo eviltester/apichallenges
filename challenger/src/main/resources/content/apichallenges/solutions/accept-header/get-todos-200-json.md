@@ -37,6 +37,11 @@ How to complete the challenge `GET /todos JSON (200)` to successfully GET all th
 - Check the `content-type` header in the response has `application/json`
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

@@ -9,16 +9,16 @@ import uk.co.compendiumdev.challenger.payloads.ErrorMessages;
 import uk.co.compendiumdev.challenger.restassured.api.ChallengesStatus;
 import uk.co.compendiumdev.challenger.restassured.api.RestAssuredBaseTest;
 
-public class C061GetChallengesTooLongXChallenger431Test extends RestAssuredBaseTest {
+public class C061GetHeartbeatTooLongXChallenger431Test extends RestAssuredBaseTest {
 
     @Test
-    public void canGetChallengesWithTooLongXChallengerHeaderAndReceive431() {
+    public void canGetHeartbeatWithTooLongXChallengerHeaderAndReceive431() {
 
         Response response =
                 RestAssured.given()
                         .header("X-CHALLENGER", xChallenger + "x".repeat(65))
                         .accept("application/json")
-                        .get(apiPath("/challenges"))
+                        .get(apiPath("/heartbeat"))
                         .then()
                         .statusCode(431)
                         .contentType(ContentType.JSON)
@@ -34,7 +34,7 @@ public class C061GetChallengesTooLongXChallenger431Test extends RestAssuredBaseT
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
         Assertions.assertTrue(
-                statuses.getChallengeNamed("GET /challenges (431) X-CHALLENGER too long").status,
+                statuses.getChallengeNamed("GET /heartbeat (431) X-CHALLENGER too long").status,
                 "challenge not passed");
     }
 }

@@ -27,3 +27,6 @@ The response should be `409 Conflict`:
 ```
 
 This is a conflict because the URL identifies one challenger while the payload identifies another.
+### Try it now
+
+{{<api-live-request method="PUT" path="/challenger/{{mismatchedChallenger}}" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{{currentChallengerJson}}'>}}

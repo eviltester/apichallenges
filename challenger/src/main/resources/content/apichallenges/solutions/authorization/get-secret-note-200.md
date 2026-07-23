@@ -45,6 +45,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - You should receive a 200 response and the body of the response will contain the secret note
 
+### Try it now
+
+{{<api-live-request method="GET" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

@@ -28,6 +28,11 @@ How to solve challenge GET todo 404 by issuing a GET request on a non-existent e
 - The request should have an `X-CHALLENGER` header
 - The response status code should be `404`
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todo" expected-status="404" headers="Accept: */*">}}
+
+
 ## Example Request
 
 ~~~~~~~~

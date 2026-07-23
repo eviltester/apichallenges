@@ -52,6 +52,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - The body of the response will contain the secret note
 
 
+### Try it now
+
+{{<api-live-request method="POST" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

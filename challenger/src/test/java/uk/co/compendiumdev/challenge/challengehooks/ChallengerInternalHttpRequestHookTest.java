@@ -94,7 +94,32 @@ public class ChallengerInternalHttpRequestHookTest {
     }
 
     @Test
-    public void inMultUserModeOversizedXChallengerHeaderReturns431AndTracksByGuidPrefix() {
+    public void inMultUserModeOversizedXChallengerHeaderOnHeartbeatReturns431AndTracksByGuidPrefix() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        final ChallengerAuthData challenger = challengers.createNewChallenger();
+        challengers.setMultiPlayerMode();
+
+        final ChallengerInternalHTTPRequestHook hook =
+                new ChallengerInternalHTTPRequestHook(challengers);
+
+        final InternalHttpRequest request =
+                new InternalHttpRequest("/heartbeat")
+                        .setVerb(InternalHttpMethod.GET)
+                        .addHeader("Accept", "application/json")
+                        .addHeader("X-CHALLENGER", challenger.getXChallenger() + "x".repeat(65));
+
+        InternalHttpResponse response = hook.run(request);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(431, response.getStatusCode());
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertTrue(response.getBody().contains("X-CHALLENGER header is too large"));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
+    }
+
+    @Test
+    public void inMultUserModeOversizedXChallengerHeaderOnChallengesReturns431ButDoesNotTrack() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
         final ChallengerAuthData challenger = challengers.createNewChallenger();
@@ -113,9 +138,7 @@ public class ChallengerInternalHttpRequestHookTest {
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(431, response.getStatusCode());
-        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
-        Assertions.assertTrue(response.getBody().contains("X-CHALLENGER header is too large"));
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
+        Assertions.assertFalse(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
     }
 
     @Test

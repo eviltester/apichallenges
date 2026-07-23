@@ -41,6 +41,11 @@ As a set of follow on exercises:
 - Try to issue requests for each of the allowed verbs.
 
 
+### Try it now
+
+{{<api-live-request method="OPTIONS" path="/todos" expected-status="200" headers="Accept: */*">}}
+
+
 ## Example Request
 
 ~~~~~~~~

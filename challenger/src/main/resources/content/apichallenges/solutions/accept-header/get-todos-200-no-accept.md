@@ -63,6 +63,11 @@ Hints:
 - add `-v` to the generated code if you want to see the full response output.
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="">}}
+
+
 ## Example Request
 
 ~~~~~~~~

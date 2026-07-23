@@ -352,7 +352,7 @@ public class SimpleApiModeTest {
 
         HttpResponseDetails response = api.apiDeleteItem(createdItem.id);
 
-        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(204, response.statusCode);
         Assertions.assertEquals(404, api.apiGetItemResponse(createdItem.id).statusCode);
     }
 

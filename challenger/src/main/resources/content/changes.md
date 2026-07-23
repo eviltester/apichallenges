@@ -12,6 +12,11 @@ showads: true
 ## 2026/07/23 - Expanded Status Code Range
 - Expanded the status codes to cover `431`, `422` and `409`, rather than use `400` for everything
 - Added new challenges for `431` for a Too Long X-Challenger header and `409` mismatched X-Challenger GUIDs
+- Added inline clients into the API Challenges solution pages to make solving within the browser possible (for most challenges).
+- Fixing API responses to be more accurate e.g. `204` for no-content 200 responses e.g. `DELETE`
+- Added the `Copy for AI` buttons to Swagger UI
+- re-ordered navigation API Simulator, API Challenges, Simple API
+
 
 ## 2026/07/17 - API Challenges repo and Swagger UI updates
 

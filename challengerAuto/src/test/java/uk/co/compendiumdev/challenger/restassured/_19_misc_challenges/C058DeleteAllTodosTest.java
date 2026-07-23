@@ -24,7 +24,7 @@ public class C058DeleteAllTodosTest extends RestAssuredBaseTest {
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
 
-        Assertions.assertTrue(statuses.getChallengeNamed("DELETE /todos/{id} (200) all").status);
+        Assertions.assertTrue(statuses.getChallengeNamed("DELETE /todos/{id} (204) all").status);
 
         // check all deleted
         List<Todo> noToDos = api.getTodos();

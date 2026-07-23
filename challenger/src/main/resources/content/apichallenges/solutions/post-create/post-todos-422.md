@@ -35,3 +35,6 @@ The response should be `422 Unprocessable Content` because the request body can 
 ```
 
 Remember to include your `X-CHALLENGER` header so the challenge is tracked.
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"invalid doneStatus","doneStatus":"truthy","description":"created from the solution page"}'>}}

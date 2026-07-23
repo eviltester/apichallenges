@@ -115,7 +115,7 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
         }
 
         ChallengerAuthData challenger = challengerFromOversizedHeaderPrefix(xChallenger);
-        if (challenger != null) {
+        if (challenger != null && isXChallengerTooLongChallengeRequest(request)) {
             challenger.touch();
             challengers.pass(challenger, CHALLENGE.X_CHALLENGER_TOO_LONG_431);
         }
@@ -140,6 +140,10 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
             response.setHeader("X-CHALLENGER", challenger.getXChallenger());
         }
         return response;
+    }
+
+    private boolean isXChallengerTooLongChallengeRequest(final InternalHttpRequest request) {
+        return request.getVerb() == InternalHttpMethod.GET && request.getPath().equals("heartbeat");
     }
 
     private ChallengerAuthData challengerFromOversizedHeaderPrefix(final String xChallenger) {

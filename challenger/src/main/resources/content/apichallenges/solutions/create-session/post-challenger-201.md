@@ -28,6 +28,11 @@ How to complete the challenge `POST /challenger 201`.
 - Use this in any future requests to track your progress
 - The `LOCATION` header has a url to access your challenge status through the GUI
 
+### Try it now
+
+{{<api-live-request method="POST" path="/challenger" expected-status="201" use-challenger="false" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

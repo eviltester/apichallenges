@@ -3,7 +3,7 @@ date:  2021-07-24T08:15:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - authentication failed 401
 seo_title: Solution: authentication failed 401 | API Challenges
-description: How to solve API challenge 29 - authentication failed with username and password.
+description: How to solve API challenge - authentication failed with username and password.
 seo_description: Use this walkthrough to solve authentication failed 401 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authentication/post-secret-201
 schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 401
@@ -19,7 +19,7 @@ the wrong details. In response the API returns a status code of 401.
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## Challenge 29 Authentication Failed
+## Challenge 49 Authentication Failed
 
 > Issue a POST request on the `/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
 
@@ -41,6 +41,11 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 - There should be no payload in the message
 - You should receive a 401 response - meaning "Unauthorized" because you entered the wrong username or password
 - The request should have an `X-CHALLENGER` header to track challenge completion
+
+### Try it now
+
+{{<api-live-request method="POST" path="/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*">}}
+
 
 ## Example Request
 

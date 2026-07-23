@@ -111,7 +111,7 @@ public class ChallengerApiResponseHookTest {
 
             fixture.hook.run(
                     fixture.request("todos/" + todo.getPrimaryKeyValue(), DELETE),
-                    fixture.apiResponse(200),
+                    fixture.apiResponse(204),
                     fixture.thingifier.apiConfig());
 
             Assertions.assertTrue(fixture.challenger.statusOfChallenge(CHALLENGE.DELETE_ALL_TODOS));
@@ -130,7 +130,7 @@ public class ChallengerApiResponseHookTest {
 
             fixture.hook.run(
                     fixture.request("todos/" + deletedTodo.getPrimaryKeyValue(), DELETE),
-                    fixture.apiResponse(200),
+                    fixture.apiResponse(204),
                     fixture.thingifier.apiConfig());
 
             Assertions.assertFalse(

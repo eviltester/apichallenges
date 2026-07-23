@@ -47,6 +47,21 @@ NOTE: This header feature is normally implemented by the HTTP server so often de
 
 NOTE: As an additional exercise, you might want to see if you can DELETE todos using a POST and the `X-HTTP-Method-Override` header. Experiment and see what you can achieve using this approach.
 
+### Try it now
+
+#### DELETE
+
+{{<api-live-request method="POST" path="/heartbeat" expected-status="405" headers="X-HTTP-Method-Override: DELETE||Accept: */*">}}
+
+#### PATCH
+
+{{<api-live-request method="POST" path="/heartbeat" expected-status="500" headers="X-HTTP-Method-Override: PATCH||Accept: */*">}}
+
+#### TRACE
+
+{{<api-live-request method="POST" path="/heartbeat" expected-status="501" headers="X-HTTP-Method-Override: TRACE||Accept: */*">}}
+
+
 ## Example Request
 
 ~~~~~~~~

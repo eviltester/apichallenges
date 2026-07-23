@@ -46,6 +46,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - You should receive a 403 response - meaning you are not authorized
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/secret/note" expected-status="403" headers="X-AUTH-TOKEN: wrong-token||Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

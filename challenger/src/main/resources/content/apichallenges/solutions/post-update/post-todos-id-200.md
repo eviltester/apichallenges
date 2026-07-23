@@ -52,7 +52,12 @@ How to use a POST request to successfully update a todo item in the application.
 }
 ```
 
-NOTE: if you haven't read the documentation and don't know what format to use then issue a GET request for a single entity and the payload format for the `POST` is likely to be pretty close. You may not be allowed to use all the fields in an update, e.g. the `id` might throw an error becuase you should not be able to update the `id`.
+NOTE: if you haven't read the documentation and don't know what format to use then issue a GET request for a single entity and the payload format for the `POST` is likely to be pretty close. You may not be allowed to use all the fields in an update, e.g. the `id` might throw an error because you should not be able to update the `id`.
+
+
+### Try it now
+
+{{<api-live-request method="POST" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
 
 
 ## Example Request
