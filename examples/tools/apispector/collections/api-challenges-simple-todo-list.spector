@@ -1,0 +1,1581 @@
+{
+  "version": "1.0",
+  "id": "8da342f9-7d97-429e-9690-48753a15620e",
+  "name": "API Challenges Simple Todo List",
+  "description": "A Simple todo list",
+  "rootFolder": {
+    "id": "79c83686-c2a7-4957-96ff-14a8f22fddbc",
+    "name": "root",
+    "description": "",
+    "folders": [
+      {
+        "id": "1fdb98fa-6952-4c3f-ac78-1f227aa11f85",
+        "name": "adhoc",
+        "description": "",
+        "folders": [],
+        "requestIds": [
+          "60274ead-2ce4-42c4-bac3-7646eea120e0",
+          "da31b4dc-a3ee-4dbf-9bbe-53deab055443",
+          "56a31ce6-17be-46bb-bf17-49b97ff7d8fe",
+          "25a10c5e-c996-4263-9b6a-4c0451ceeac7",
+          "5b482c66-7b25-4357-b72a-7027c07ba981",
+          "b74d3a9d-3743-4cf3-b7dc-2ab059c657df",
+          "4f96999f-02ed-4ab0-b6d6-6d3ffd8c84d4",
+          "925ca237-3d87-493c-be09-6af3237a1107",
+          "010482e0-126a-4b97-ab0d-77f9d75205f5",
+          "8fcde2b8-5357-4e49-8005-70c02f67c95d",
+          "a7689f16-57b2-42a6-8866-70827fce214f",
+          "85c12a4d-9eac-4dd3-b9f0-018db11c0199",
+          "9ce7c2ff-5b89-49cd-824a-bc9b9460ed3a",
+          "0bca9ce2-368a-41e1-9aec-1efc2031baaa",
+          "739856c7-8264-4a38-844d-8e57909dc83f",
+          "a04c6b2d-6903-4157-94cc-c662f986b19e",
+          "69caab92-b2de-4a3d-9ee1-a523257fd496",
+          "fb1e43b2-cbfe-46b0-91d7-8b1e69ce4e6b",
+          "daad86fe-a9cd-4e2d-a639-8cdd01835668",
+          "581eba38-d18b-43d8-9a03-45cc3007dbd4",
+          "26b73595-917b-4665-b498-446ea9a1599a",
+          "6fe0cbb8-f2bb-47d6-8a53-4c38e96a5420",
+          "72679e42-9be5-4668-af5e-9f0011ea18da",
+          "8a62e7a1-aadf-434e-97b0-2ed5c3d61204",
+          "8d56b2c7-ac53-4cc3-905a-2911bd236f2b",
+          "e176e65b-c15e-4617-bdf7-c10469d1b3cf",
+          "a9609911-cafb-487b-af55-e4517137fa77",
+          "73deb278-1444-43a5-87c3-f59915a455a9",
+          "9f2ffa92-7c15-4174-88b2-d19aa24f60ec",
+          "75e61204-b55c-454c-9589-adeef3e24a01"
+        ]
+      },
+      {
+        "id": "57c624c8-13b6-4bc7-a3d4-d60703473552",
+        "name": "solved",
+        "description": "",
+        "folders": [],
+        "requestIds": [
+          "ea41fb46-83f6-44bc-b6ef-c4ff27c6c1d0",
+          "fbc891b0-2ad9-4a5b-87c0-43c7a7e95190",
+          "9ed4a350-a508-4f21-8e79-f0fad4b4f376",
+          "85159848-fee2-4bb3-97d6-dc33ee0f3fb0",
+          "f5afa9dd-29a5-4151-a9f7-dbb37afee34d",
+          "4a1fb5b3-dfeb-4200-809e-5648332cf026",
+          "3dbb59c9-ad51-4efe-83dd-4e0b970ab676",
+          "7e73968b-4415-48b2-9868-1279d3b1f790",
+          "9183654c-515c-4f5b-93f1-cfe1ee87ad3a",
+          "6f5e58a6-ccb8-417f-8b1f-45073681ad38",
+          "2b730d54-bef9-4083-969a-246914257dbc",
+          "6e2c84ad-5eca-445d-a264-0d9b7c5a5259",
+          "4513741f-d0f8-488a-8ee0-f776d85b3301",
+          "c0b4c3a8-6351-4729-b3ce-bec932cde3e7",
+          "31d47fdd-e01c-46cd-8c7b-a1816c80a9cb",
+          "c4525bc1-1f26-4b9d-b7df-7c2473f3c9f8",
+          "a33f930d-fe11-470d-96ac-7f1bfb63cc96",
+          "4dfc30d7-9f07-4d43-9610-0c07ffac894f",
+          "965aede1-b0ba-4e6a-968a-7234f7de2c8d",
+          "e4637b1a-7caf-4a0b-b67a-652987b6f4b6",
+          "98720d1c-a335-473e-b7fc-43925e3fc0a4",
+          "9be6370a-aaac-4bfa-9106-273c2cd466d6",
+          "bff492eb-abe6-4ce4-872c-4603d83cdf46",
+          "b8ca90d0-4241-4988-b22f-79527232cb44",
+          "5cc8922f-755c-46bd-b559-1b1d2e01c0ae",
+          "94189c9b-3dce-4b00-a43b-123772fd313c",
+          "5827a41e-f724-4cc7-8e8e-e88d6c10770a",
+          "fd6bfd50-9252-4b69-812f-eb6190bdfb10",
+          "84fb0770-67ad-4cbe-82fa-23326b54ac9e",
+          "72cedf6a-6b66-443d-ad2f-d19f348141b2",
+          "9faeb5e8-2aed-4b80-8f0e-682566cb59dc"
+        ]
+      }
+    ],
+    "requestIds": []
+  },
+  "requests": {
+    "56a31ce6-17be-46bb-bf17-49b97ff7d8fe": {
+      "id": "56a31ce6-17be-46bb-bf17-49b97ff7d8fe",
+      "name": "return all the instances of todo",
+      "method": "GET",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return all the instances of todo",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"array\",\n  \"description\": \"todos\",\n  \"items\": {\n    \"type\": \"object\",\n    \"description\": \"todo\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"integer\",\n        \"description\": \"Field is an ID and should not be amended or set.\",\n        \"example\": \"80\"\n      },\n      \"title\": {\n        \"type\": \"string\",\n        \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n        \"example\": \"A title\"\n      },\n      \"doneStatus\": {\n        \"type\": \"boolean\",\n        \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n        \"example\": \"false\"\n      },\n      \"description\": {\n        \"type\": \"string\",\n        \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n        \"example\": \"my description\"\n      }\n    },\n    \"title\": \"todo\",\n    \"xml\": {\n      \"name\": \"todo\",\n      \"wrapped\": true\n    }\n  },\n  \"title\": \"todos\",\n  \"xml\": {\n    \"wrapped\": true\n  }\n}"
+    },
+    "da31b4dc-a3ee-4dbf-9bbe-53deab055443": {
+      "id": "da31b4dc-a3ee-4dbf-9bbe-53deab055443",
+      "name": "we should be able to create todo without a ID using the field values in the body of the message. A maximum of 20 todos is allowed.",
+      "method": "POST",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "{\n  \"title\": \"A title\",\n  \"doneStatus\": \"false\",\n  \"description\": \"my description\"\n}"
+      },
+      "description": "we should be able to create todo without a ID using the field values in the body of the message. A maximum of 20 todos is allowed.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "25a10c5e-c996-4263-9b6a-4c0451ceeac7": {
+      "id": "25a10c5e-c996-4263-9b6a-4c0451ceeac7",
+      "name": "method not allowed",
+      "method": "PUT",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "5b482c66-7b25-4357-b72a-7027c07ba981": {
+      "id": "5b482c66-7b25-4357-b72a-7027c07ba981",
+      "name": "method not allowed",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "b74d3a9d-3743-4cf3-b7dc-2ab059c657df": {
+      "id": "b74d3a9d-3743-4cf3-b7dc-2ab059c657df",
+      "name": "method not allowed",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "4f96999f-02ed-4ab0-b6d6-6d3ffd8c84d4": {
+      "id": "4f96999f-02ed-4ab0-b6d6-6d3ffd8c84d4",
+      "name": "headers for all the instances of todo",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "headers for all the instances of todo",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "925ca237-3d87-493c-be09-6af3237a1107": {
+      "id": "925ca237-3d87-493c-be09-6af3237a1107",
+      "name": "show all Options for endpoint of todos",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "show all Options for endpoint of todos",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "010482e0-126a-4b97-ab0d-77f9d75205f5": {
+      "id": "010482e0-126a-4b97-ab0d-77f9d75205f5",
+      "name": "return a specific instances of todo using a id",
+      "method": "GET",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "8fcde2b8-5357-4e49-8005-70c02f67c95d": {
+      "id": "8fcde2b8-5357-4e49-8005-70c02f67c95d",
+      "name": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "method": "POST",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "null"
+      },
+      "description": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "a7689f16-57b2-42a6-8866-70827fce214f": {
+      "id": "a7689f16-57b2-42a6-8866-70827fce214f",
+      "name": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "method": "PUT",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "null"
+      },
+      "description": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "85c12a4d-9eac-4dd3-b9f0-018db11c0199": {
+      "id": "85c12a4d-9eac-4dd3-b9f0-018db11c0199",
+      "name": "method not allowed",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9ce7c2ff-5b89-49cd-824a-bc9b9460ed3a": {
+      "id": "9ce7c2ff-5b89-49cd-824a-bc9b9460ed3a",
+      "name": "delete a specific instances of todo using a id",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "delete a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "0bca9ce2-368a-41e1-9aec-1efc2031baaa": {
+      "id": "0bca9ce2-368a-41e1-9aec-1efc2031baaa",
+      "name": "headers for a specific instances of todo using a id",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "headers for a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "739856c7-8264-4a38-844d-8e57909dc83f": {
+      "id": "739856c7-8264-4a38-844d-8e57909dc83f",
+      "name": "show all Options for endpoint of todos/:id",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "show all Options for endpoint of todos/:id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "a04c6b2d-6903-4157-94cc-c662f986b19e": {
+      "id": "a04c6b2d-6903-4157-94cc-c662f986b19e",
+      "name": "Shutdown the API server",
+      "method": "GET",
+      "url": "{{baseUrl}}/shutdown",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Shutdown the API server",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "69caab92-b2de-4a3d-9ee1-a523257fd496": {
+      "id": "69caab92-b2de-4a3d-9ee1-a523257fd496",
+      "name": "Get a challenger in Json format to allow continued tracking of challenges.",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenger/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "36f70c75-9d4a-4879-bb68-fb35c4dc7ae9",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get a challenger in Json format to allow continued tracking of challenges.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "fb1e43b2-cbfe-46b0-91d7-8b1e69ce4e6b": {
+      "id": "fb1e43b2-cbfe-46b0-91d7-8b1e69ce4e6b",
+      "name": "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.",
+      "method": "PUT",
+      "url": "{{baseUrl}}/challenger/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "36f70c75-9d4a-4879-bb68-fb35c4dc7ae9",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "60274ead-2ce4-42c4-bac3-7646eea120e0": {
+      "id": "60274ead-2ce4-42c4-bac3-7646eea120e0",
+      "name": "Create a challenger using the X-CHALLENGER guid header.",
+      "method": "POST",
+      "url": "{{baseUrl}}/challenger",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Create a challenger using the X-CHALLENGER guid header.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "daad86fe-a9cd-4e2d-a639-8cdd01835668": {
+      "id": "daad86fe-a9cd-4e2d-a639-8cdd01835668",
+      "name": "Get the todo data for the supplied X-CHALLENGER guid to allow later restoration of the todos.",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenger/database/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "6cfc8986-151c-4467-a476-8b48d4ad1b08",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get the todo data for the supplied X-CHALLENGER guid to allow later restoration of the todos.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "581eba38-d18b-43d8-9a03-45cc3007dbd4": {
+      "id": "581eba38-d18b-43d8-9a03-45cc3007dbd4",
+      "name": "Restore a saved set of todos for a challenger matching the supplied X-CHALLENGER guid.",
+      "method": "PUT",
+      "url": "{{baseUrl}}/challenger/database/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "6cfc8986-151c-4467-a476-8b48d4ad1b08",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Restore a saved set of todos for a challenger matching the supplied X-CHALLENGER guid.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "26b73595-917b-4665-b498-446ea9a1599a": {
+      "id": "26b73595-917b-4665-b498-446ea9a1599a",
+      "name": "Get list of challenges and their completion status",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get list of challenges and their completion status",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "6fe0cbb8-f2bb-47d6-8a53-4c38e96a5420": {
+      "id": "6fe0cbb8-f2bb-47d6-8a53-4c38e96a5420",
+      "name": "Headers for list of challenges endpoint",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Headers for list of challenges endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "72679e42-9be5-4668-af5e-9f0011ea18da": {
+      "id": "72679e42-9be5-4668-af5e-9f0011ea18da",
+      "name": "Options for list of challenges endpoint",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Options for list of challenges endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "8a62e7a1-aadf-434e-97b0-2ed5c3d61204": {
+      "id": "8a62e7a1-aadf-434e-97b0-2ed5c3d61204",
+      "name": "Is the server running? YES 204",
+      "method": "GET",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Is the server running? YES 204",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "8d56b2c7-ac53-4cc3-905a-2911bd236f2b": {
+      "id": "8d56b2c7-ac53-4cc3-905a-2911bd236f2b",
+      "name": "Headers for heartbeat endpoint",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Headers for heartbeat endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "e176e65b-c15e-4617-bdf7-c10469d1b3cf": {
+      "id": "e176e65b-c15e-4617-bdf7-c10469d1b3cf",
+      "name": "Options for heartbeat endpoint",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Options for heartbeat endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "a9609911-cafb-487b-af55-e4517137fa77": {
+      "id": "a9609911-cafb-487b-af55-e4517137fa77",
+      "name": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "method": "POST",
+      "url": "{{baseUrl}}/secret/token",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "basic",
+        "username": "",
+        "password": ""
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "73deb278-1444-43a5-87c3-f59915a455a9": {
+      "id": "73deb278-1444-43a5-87c3-f59915a455a9",
+      "name": "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.",
+      "method": "GET",
+      "url": "{{baseUrl}}/secret/note",
+      "headers": [
+        {
+          "key": "X-AUTH-TOKEN",
+          "value": "",
+          "enabled": true,
+          "description": ""
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9f2ffa92-7c15-4174-88b2-d19aa24f60ec": {
+      "id": "9f2ffa92-7c15-4174-88b2-d19aa24f60ec",
+      "name": "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
+      "method": "POST",
+      "url": "{{baseUrl}}/secret/note",
+      "headers": [
+        {
+          "key": "X-AUTH-TOKEN",
+          "value": "",
+          "enabled": true,
+          "description": ""
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "ea41fb46-83f6-44bc-b6ef-c4ff27c6c1d0": {
+      "id": "ea41fb46-83f6-44bc-b6ef-c4ff27c6c1d0",
+      "name": "Create a challenger (solved 1)",
+      "method": "POST",
+      "url": "{{baseUrl}}/challenger",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Create a challenger using the X-CHALLENGER guid header.",
+      "meta": {
+        "tags": []
+      },
+      "postRequestScript": "const headers = sp.response.headers;\n\n// Use collectionVariables so the value persists across requests\nsp.collectionVariables.set(\"xchallenger\", headers[\"x-challenger\"]);"
+    },
+    "4a1fb5b3-dfeb-4200-809e-5648332cf026": {
+      "id": "4a1fb5b3-dfeb-4200-809e-5648332cf026",
+      "name": "we should be able to create todo without a ID using the field values in the body of the message. A maximum of 20 todos is allowed.",
+      "method": "POST",
+      "url": "{{baseUrl}}/todos",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml",
+          "enabled": false
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "{\n  \"title\": \"A title\",\n  \"doneStatus\": \"false\",\n  \"description\": \"my description\"\n}"
+      },
+      "description": "we should be able to create todo without a ID using the field values in the body of the message. A maximum of 20 todos is allowed.",
+      "meta": {
+        "tags": []
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "fbc891b0-2ad9-4a5b-87c0-43c7a7e95190": {
+      "id": "fbc891b0-2ad9-4a5b-87c0-43c7a7e95190",
+      "name": "return all the instances of todo (solved 2)",
+      "method": "GET",
+      "url": "{{baseUrl}}/todos",
+      "headers": [
+        {
+          "key": "X-CHALLENGER",
+          "value": "{{xchallenger}}",
+          "enabled": true
+        },
+        {
+          "key": "Accept",
+          "value": "application/json",
+          "enabled": true
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return all the instances of todo",
+      "meta": {
+        "tags": []
+      },
+      "schema": "{\n  \"type\": \"array\",\n  \"description\": \"todos\",\n  \"items\": {\n    \"type\": \"object\",\n    \"description\": \"todo\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"integer\",\n        \"description\": \"Field is an ID and should not be amended or set.\",\n        \"example\": \"80\"\n      },\n      \"title\": {\n        \"type\": \"string\",\n        \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n        \"example\": \"A title\"\n      },\n      \"doneStatus\": {\n        \"type\": \"boolean\",\n        \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n        \"example\": \"false\"\n      },\n      \"description\": {\n        \"type\": \"string\",\n        \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n        \"example\": \"my description\"\n      }\n    },\n    \"title\": \"todo\",\n    \"xml\": {\n      \"name\": \"todo\",\n      \"wrapped\": true\n    }\n  },\n  \"title\": \"todos\",\n  \"xml\": {\n    \"wrapped\": true\n  }\n}",
+      "contract": {
+        "statusCode": 200,
+        "headers": [
+          {
+            "key": "content-type",
+            "value": "application/json",
+            "required": true
+          }
+        ],
+        "bodySchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"todos\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"integer\"\n          },\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"doneStatus\": {\n            \"type\": \"boolean\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"id\",\n          \"title\",\n          \"doneStatus\",\n          \"description\"\n        ]\n      }\n    }\n  },\n  \"required\": [\n    \"todos\"\n  ]\n}"
+      }
+    },
+    "3dbb59c9-ad51-4efe-83dd-4e0b970ab676": {
+      "id": "3dbb59c9-ad51-4efe-83dd-4e0b970ab676",
+      "name": "method not allowed",
+      "method": "PUT",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": []
+      }
+    },
+    "7e73968b-4415-48b2-9868-1279d3b1f790": {
+      "id": "7e73968b-4415-48b2-9868-1279d3b1f790",
+      "name": "method not allowed",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9183654c-515c-4f5b-93f1-cfe1ee87ad3a": {
+      "id": "9183654c-515c-4f5b-93f1-cfe1ee87ad3a",
+      "name": "method not allowed",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "6f5e58a6-ccb8-417f-8b1f-45073681ad38": {
+      "id": "6f5e58a6-ccb8-417f-8b1f-45073681ad38",
+      "name": "headers for all the instances of todo",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "headers for all the instances of todo",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "2b730d54-bef9-4083-969a-246914257dbc": {
+      "id": "2b730d54-bef9-4083-969a-246914257dbc",
+      "name": "show all Options for endpoint of todos",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/todos",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "show all Options for endpoint of todos",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "6e2c84ad-5eca-445d-a264-0d9b7c5a5259": {
+      "id": "6e2c84ad-5eca-445d-a264-0d9b7c5a5259",
+      "name": "return a specific instances of todo using a id",
+      "method": "GET",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "4513741f-d0f8-488a-8ee0-f776d85b3301": {
+      "id": "4513741f-d0f8-488a-8ee0-f776d85b3301",
+      "name": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "method": "POST",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "null"
+      },
+      "description": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "c0b4c3a8-6351-4729-b3ce-bec932cde3e7": {
+      "id": "c0b4c3a8-6351-4729-b3ce-bec932cde3e7",
+      "name": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "method": "PUT",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "json",
+        "json": "null"
+      },
+      "description": "amend a specific instances of todo using a id with a body containing the fields to amend",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      },
+      "schema": "{\n  \"type\": \"object\",\n  \"description\": \"todo\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\",\n      \"description\": \"Field is an ID and should not be amended or set.\",\n      \"example\": \"80\"\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"The title of the TODO Item. Value is mandatory. Value can not be empty. Maximum length allowed is 50.\",\n      \"example\": \"A title\"\n    },\n    \"doneStatus\": {\n      \"type\": \"boolean\",\n      \"description\": \"Status to track the todo completion. Value must be a Boolean (true, false) value.\",\n      \"example\": \"false\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Longer description of the todo. Maximum length allowed is 200.\",\n      \"example\": \"my description\"\n    }\n  },\n  \"title\": \"todo\",\n  \"xml\": {\n    \"name\": \"todo\",\n    \"wrapped\": true\n  }\n}"
+    },
+    "31d47fdd-e01c-46cd-8c7b-a1816c80a9cb": {
+      "id": "31d47fdd-e01c-46cd-8c7b-a1816c80a9cb",
+      "name": "method not allowed",
+      "method": "PATCH",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "method not allowed",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "c4525bc1-1f26-4b9d-b7df-7c2473f3c9f8": {
+      "id": "c4525bc1-1f26-4b9d-b7df-7c2473f3c9f8",
+      "name": "delete a specific instances of todo using a id",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "delete a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "a33f930d-fe11-470d-96ac-7f1bfb63cc96": {
+      "id": "a33f930d-fe11-470d-96ac-7f1bfb63cc96",
+      "name": "headers for a specific instances of todo using a id",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "headers for a specific instances of todo using a id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "4dfc30d7-9f07-4d43-9610-0c07ffac894f": {
+      "id": "4dfc30d7-9f07-4d43-9610-0c07ffac894f",
+      "name": "show all Options for endpoint of todos/:id",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/todos/{{id}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "id",
+          "value": "41",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "show all Options for endpoint of todos/:id",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "965aede1-b0ba-4e6a-968a-7234f7de2c8d": {
+      "id": "965aede1-b0ba-4e6a-968a-7234f7de2c8d",
+      "name": "Shutdown the API server",
+      "method": "GET",
+      "url": "{{baseUrl}}/shutdown",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Shutdown the API server",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "e4637b1a-7caf-4a0b-b67a-652987b6f4b6": {
+      "id": "e4637b1a-7caf-4a0b-b67a-652987b6f4b6",
+      "name": "Get a challenger in Json format to allow continued tracking of challenges.",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenger/{{xchallenger}}}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "36f70c75-9d4a-4879-bb68-fb35c4dc7ae9",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get a challenger in Json format to allow continued tracking of challenges.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "98720d1c-a335-473e-b7fc-43925e3fc0a4": {
+      "id": "98720d1c-a335-473e-b7fc-43925e3fc0a4",
+      "name": "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.",
+      "method": "PUT",
+      "url": "{{baseUrl}}/challenger/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "36f70c75-9d4a-4879-bb68-fb35c4dc7ae9",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9be6370a-aaac-4bfa-9106-273c2cd466d6": {
+      "id": "9be6370a-aaac-4bfa-9106-273c2cd466d6",
+      "name": "Get the todo data for the supplied X-CHALLENGER guid to allow later restoration of the todos.",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenger/database/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "6cfc8986-151c-4467-a476-8b48d4ad1b08",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get the todo data for the supplied X-CHALLENGER guid to allow later restoration of the todos.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "bff492eb-abe6-4ce4-872c-4603d83cdf46": {
+      "id": "bff492eb-abe6-4ce4-872c-4603d83cdf46",
+      "name": "Restore a saved set of todos for a challenger matching the supplied X-CHALLENGER guid.",
+      "method": "PUT",
+      "url": "{{baseUrl}}/challenger/database/{{guid}}",
+      "headers": [],
+      "params": [
+        {
+          "key": "guid",
+          "value": "6cfc8986-151c-4467-a476-8b48d4ad1b08",
+          "enabled": true,
+          "description": "",
+          "paramType": "path"
+        }
+      ],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Restore a saved set of todos for a challenger matching the supplied X-CHALLENGER guid.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9ed4a350-a508-4f21-8e79-f0fad4b4f376": {
+      "id": "9ed4a350-a508-4f21-8e79-f0fad4b4f376",
+      "name": "Get list of challenges (solved 3)",
+      "method": "GET",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [
+        {
+          "key": "X-CHALLENGER",
+          "value": "{{xchallenger}}",
+          "enabled": true
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Get list of challenges and their completion status",
+      "meta": {
+        "tags": []
+      },
+      "contract": {
+        "statusCode": 200,
+        "headers": [],
+        "bodySchema": ""
+      },
+      "postRequestScript": "const json = sp.response.json();\n\nsp.test(\"JSON field equals value\", function() {\n  sp.expect(json.challenges[0].status).to.equal(true);\n  sp.expect(json.challenges[1].status).to.equal(true);\n  sp.expect(json.challenges[2].status).to.equal(true);\n});"
+    },
+    "b8ca90d0-4241-4988-b22f-79527232cb44": {
+      "id": "b8ca90d0-4241-4988-b22f-79527232cb44",
+      "name": "Headers for list of challenges endpoint",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Headers for list of challenges endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "5cc8922f-755c-46bd-b559-1b1d2e01c0ae": {
+      "id": "5cc8922f-755c-46bd-b559-1b1d2e01c0ae",
+      "name": "Options for list of challenges endpoint",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/challenges",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Options for list of challenges endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "94189c9b-3dce-4b00-a43b-123772fd313c": {
+      "id": "94189c9b-3dce-4b00-a43b-123772fd313c",
+      "name": "Is the server running? YES 204",
+      "method": "GET",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Is the server running? YES 204",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "5827a41e-f724-4cc7-8e8e-e88d6c10770a": {
+      "id": "5827a41e-f724-4cc7-8e8e-e88d6c10770a",
+      "name": "Headers for heartbeat endpoint",
+      "method": "HEAD",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Headers for heartbeat endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "fd6bfd50-9252-4b69-812f-eb6190bdfb10": {
+      "id": "fd6bfd50-9252-4b69-812f-eb6190bdfb10",
+      "name": "Options for heartbeat endpoint",
+      "method": "OPTIONS",
+      "url": "{{baseUrl}}/heartbeat",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "Options for heartbeat endpoint",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "84fb0770-67ad-4cbe-82fa-23326b54ac9e": {
+      "id": "84fb0770-67ad-4cbe-82fa-23326b54ac9e",
+      "name": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "method": "POST",
+      "url": "{{baseUrl}}/secret/token",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "basic",
+        "username": "",
+        "password": ""
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "72cedf6a-6b66-443d-ad2f-d19f348141b2": {
+      "id": "72cedf6a-6b66-443d-ad2f-d19f348141b2",
+      "name": "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.",
+      "method": "GET",
+      "url": "{{baseUrl}}/secret/note",
+      "headers": [
+        {
+          "key": "X-AUTH-TOKEN",
+          "value": "",
+          "enabled": true,
+          "description": ""
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "9faeb5e8-2aed-4b80-8f0e-682566cb59dc": {
+      "id": "9faeb5e8-2aed-4b80-8f0e-682566cb59dc",
+      "name": "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
+      "method": "POST",
+      "url": "{{baseUrl}}/secret/note",
+      "headers": [
+        {
+          "key": "X-AUTH-TOKEN",
+          "value": "",
+          "enabled": true,
+          "description": ""
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
+      "meta": {
+        "tags": [
+          "default"
+        ]
+      }
+    },
+    "85159848-fee2-4bb3-97d6-dc33ee0f3fb0": {
+      "id": "85159848-fee2-4bb3-97d6-dc33ee0f3fb0",
+      "name": "todo (404)",
+      "method": "GET",
+      "url": "{{baseUrl}}/todo",
+      "headers": [
+        {
+          "key": "X-CHALLENGER",
+          "value": "{{xchallenger}}",
+          "enabled": true
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return all the instances of todo",
+      "meta": {
+        "tags": []
+      },
+      "schema": "",
+      "contract": {
+        "statusCode": 404,
+        "headers": [],
+        "bodySchema": ""
+      },
+      "postRequestScript": "sp.test(\"Status is 404\", function() {\n  sp.expect(sp.response.code).to.equal(404);\n});"
+    },
+    "f5afa9dd-29a5-4151-a9f7-dbb37afee34d": {
+      "id": "f5afa9dd-29a5-4151-a9f7-dbb37afee34d",
+      "name": "specific todo",
+      "method": "GET",
+      "url": "{{baseUrl}}/todos/1",
+      "headers": [
+        {
+          "key": "X-CHALLENGER",
+          "value": "{{xchallenger}}",
+          "enabled": true
+        }
+      ],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      },
+      "description": "return all the instances of todo",
+      "meta": {
+        "tags": []
+      },
+      "schema": ""
+    },
+    "75e61204-b55c-454c-9589-adeef3e24a01": {
+      "id": "75e61204-b55c-454c-9589-adeef3e24a01",
+      "name": "New Request",
+      "method": "GET",
+      "url": "",
+      "headers": [],
+      "params": [],
+      "auth": {
+        "type": "none"
+      },
+      "body": {
+        "mode": "none"
+      }
+    }
+  },
+  "collectionVariables": {
+    "xchallenger": "undefined"
+  }
+}
