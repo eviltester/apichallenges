@@ -428,7 +428,7 @@ public class AuthRoutesTest {
 
         final HttpResponseDetails response = http.post("/secret/note", "{}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
         Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
@@ -445,7 +445,7 @@ public class AuthRoutesTest {
 
         final HttpResponseDetails response = http.post("/secret/note", "");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
         Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
@@ -463,7 +463,7 @@ public class AuthRoutesTest {
         // {"name":"bob"}
         final HttpResponseDetails response = http.post("/secret/note", "{\"name\":\"bob\"}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
         Assertions.assertEquals("application/json", response.getHeader("Content-Type"));

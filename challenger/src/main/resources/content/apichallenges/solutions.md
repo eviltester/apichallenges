@@ -40,16 +40,16 @@ If your goal is API automation, each solution also provides clear assertion targ
 ## Creation Challenges with POST
 
 - [POST /todos id (201)](/apichallenges/solutions/post-create/post-todos-201)
-- [POST /todos (400) doneStatus](/apichallenges/solutions/post-create/post-todos-400)
-- [POST /todos (400) title too long](/apichallenges/solutions/post-create/post-todos-400-title-too-long)
-- [POST /todos (400) description too long](/apichallenges/solutions/post-create/post-todos-400-description-too-long)
+- [POST /todos (422) doneStatus](/apichallenges/solutions/post-create/post-todos-422)
+- [POST /todos (422) title too long](/apichallenges/solutions/post-create/post-todos-422-title-too-long)
+- [POST /todos (422) description too long](/apichallenges/solutions/post-create/post-todos-422-description-too-long)
 - [POST /todos (201) max out content](/apichallenges/solutions/post-create/post-todos-201-max-content)
 - [POST /todos (413) content too long](/apichallenges/solutions/post-create/post-todos-413-content-too-long)
-- [POST /todos (400) extra](/apichallenges/solutions/post-create/post-todos-400-extra-field)
+- [POST /todos (422) extra](/apichallenges/solutions/post-create/post-todos-422-extra-field)
 
 ## Creation Challenges with PUT
 
-- [PUT /todos/{id} (400)](/apichallenges/solutions/put-create/put-todos-400-create)
+- [PUT /todos/{id} (422)](/apichallenges/solutions/put-create/put-todos-422-create)
 
 ## Update Challenges with POST
 
@@ -60,8 +60,8 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 - [PUT /todos/{id} full (200)](/apichallenges/solutions/put-update/put-todos-id-200-update-full)
 - [PUT /todos/{id} partial (200)](/apichallenges/solutions/put-update/put-todos-id-200-update-partial)
-- [PUT /todos/{id} no title (400)](/apichallenges/solutions/put-update/put-todos-id-400-no-title)
-- [PUT /todos/{id} no amend id (400)](/apichallenges/solutions/put-update/put-todos-id-400-no-amend-id)
+- [PUT /todos/{id} no title (422)](/apichallenges/solutions/put-update/put-todos-id-422-no-title)
+- [PUT /todos/{id} no amend id (422)](/apichallenges/solutions/put-update/put-todos-id-422-no-amend-id)
 
 ## DELETE Challenges
 
@@ -91,6 +91,7 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [Solve the Save and Restore Session Challenges](/apichallenges/solutions/manage-session/save-restore-session)
    - GET /challenger/guid (existing X-CHALLENGER)
    - PUT /challenger/guid RESTORE
+   - PUT /challenger/guid (409) mismatch
    - GET /challenger/database/guid (200)
    - PUT /challenger/database/guid (Update)
 
@@ -106,6 +107,7 @@ If your goal is API automation, each solution also provides clear assertion targ
   - PATCH /heartbeat (500)
   - TRACE /heartbeat (501)
   - GET /heartbeat (204)
+- [GET /challenges (431) X-CHALLENGER too long](/apichallenges/solutions/status-codes/x-challenger-too-long-431)
 
 ## HTTP Method Override Challenges
 
@@ -134,5 +136,5 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## Miscellaneous Challenges
 
-- [DELETE /todos/{id} (200) all](/apichallenges/solutions/miscellaneous/create-maximum-number-todos)
-- [POST /todos (201) all](/apichallenges/solutions/miscellaneous/delete-all-todos)
+- [DELETE /todos/{id} (200) all](/apichallenges/solutions/miscellaneous/delete-all-todos)
+- [POST /todos (409) max todos](/apichallenges/solutions/miscellaneous/create-maximum-number-todos)

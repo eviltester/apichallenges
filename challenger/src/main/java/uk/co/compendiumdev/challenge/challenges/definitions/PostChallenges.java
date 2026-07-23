@@ -26,11 +26,11 @@ public class PostChallenges {
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData postTodosTitleTooLong400(int challengeOrder) {
+    public static ChallengeDefinitionData postTodosTitleTooLong422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (400) title too long",
+                        "POST /todos (422) title too long",
                         "Issue a POST request to create a todo but fail length validation on the `title` field because your title exceeds maximum allowable characters.");
 
         aChallenge.addHint(
@@ -41,18 +41,18 @@ public class PostChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/post-create/post-todos-400-title-too-long");
+                "/apichallenges/solutions/post-create/post-todos-422-title-too-long");
         //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         // TODO: create solution for failing title too long
 
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData postTodosBadDoneStatus400(int challengeOrder) {
+    public static ChallengeDefinitionData postTodosBadDoneStatus422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (400) doneStatus",
+                        "POST /todos (422) doneStatus",
                         "Issue a POST request to create a todo but fail validation on the `doneStatus` field");
 
         aChallenge.addHint(
@@ -63,16 +63,16 @@ public class PostChallenges {
                 "",
                 "");
         aChallenge.addSolutionLink(
-                "Read Solution", "HREF", "/apichallenges/solutions/post-create/post-todos-400");
+                "Read Solution", "HREF", "/apichallenges/solutions/post-create/post-todos-422");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData postTodosDescriptionTooLong400(int challengeOrder) {
+    public static ChallengeDefinitionData postTodosDescriptionTooLong422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (400) description too long",
+                        "POST /todos (422) description too long",
                         "Issue a POST request to create a todo but fail length validation on the `description` because your description exceeds maximum allowable characters.");
 
         aChallenge.addHint(
@@ -86,7 +86,7 @@ public class PostChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/post-create/post-todos-400-description-too-long");
+                "/apichallenges/solutions/post-create/post-todos-422-description-too-long");
 
         //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         // TODO: create video solution for failing description too long
@@ -147,11 +147,11 @@ public class PostChallenges {
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData postTodosInvalidExtraField400(int challengeOrder) {
+    public static ChallengeDefinitionData postTodosInvalidExtraField422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (400) extra",
+                        "POST /todos (422) extra",
                         "Issue a POST request to create a todo but fail validation because your payload contains an unrecognised field.");
 
         aChallenge.addHint("Try to create a todo with a title, description and a priority");
@@ -163,7 +163,7 @@ public class PostChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/post-create/post-todos-400-extra-field");
+                "/apichallenges/solutions/post-create/post-todos-422-extra-field");
 
         //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tlye5bQ72g0");
         // TODO: create video solution for unrecognised field names

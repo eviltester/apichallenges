@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,7 +228,7 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
-    public void canPutTodos400FailCreatePass() {
+    public void canPutTodos422FailCreatePass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -238,13 +239,13 @@ public abstract class ChallengeCompleteTest {
         // try to create a to do but fail because the AUTO fields mean we can't control the id
         final HttpResponseDetails response =
                 http.send(
-                        "/todos/200",
+                        "/todos/99999999",
                         "PUT",
                         headers,
-                        "{\"id\":200, \"title\":\"mytodo\",\"description\":\"a todo\",\"doneStatus\":false}");
+                        "{\"id\":99999999, \"title\":\"mytodo\",\"description\":\"a todo\",\"doneStatus\":false}");
 
-        Assertions.assertEquals(400, response.statusCode);
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_400));
+        Assertions.assertEquals(422, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_422));
     }
 
     @Test
@@ -314,7 +315,7 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
-    public void canPutTodos200MissingTitleAmendPass() {
+    public void canPutTodos422MissingTitleAmendPass() {
 
         final EntityDefinition todos =
                 ChallengeMain.getChallenger()
@@ -342,12 +343,12 @@ public abstract class ChallengeCompleteTest {
                         "{\"description\":\"my description\"}");
         // title is mandatory so this will fail
 
-        Assertions.assertEquals(400, response.statusCode);
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_MISSING_TITLE_400));
+        Assertions.assertEquals(422, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_MISSING_TITLE_422));
     }
 
     @Test
-    public void canNotPutTodos400ChangeIdAmendPass() {
+    public void canNotPutTodos422ChangeIdAmendPass() {
 
         final EntityDefinition todos =
                 ChallengeMain.getChallenger()
@@ -377,8 +378,8 @@ public abstract class ChallengeCompleteTest {
                                 Integer.parseInt(aTodo.getPrimaryKeyValue() + 1)));
         // title is mandatory so this will fail
 
-        Assertions.assertEquals(400, response.statusCode);
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_400_NO_AMEND_ID));
+        Assertions.assertEquals(422, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_422_NO_AMEND_ID));
     }
 
     @Test
@@ -418,7 +419,7 @@ public abstract class ChallengeCompleteTest {
                         headers,
                         "{\"title\":\"mytodo\",\"description\":\"a todo\",\"doneStatus\":\"bob\"}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_TODOS_BAD_DONE_STATUS));
     }
 
@@ -440,7 +441,7 @@ public abstract class ChallengeCompleteTest {
                         headers,
                         "{\"title\":\"*3*5*7*9*12*15*18*21*24*27*30*33*36*39*42*45*48*51*\",\"description\":\"a todo\"}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
                         "Failed Validation: Maximum allowable length exceeded for title - maximum allowed is 50"));
@@ -473,7 +474,7 @@ public abstract class ChallengeCompleteTest {
                                 + twoHundredAndOneChars
                                 + "\"}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
                         "Failed Validation: Maximum allowable length exceeded for description - maximum allowed is 200"));
@@ -553,7 +554,7 @@ public abstract class ChallengeCompleteTest {
                         headers,
                         "{\"title\":\"title\",\"description\":\"description\", \"priority\": \"urgent\"}");
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertTrue(response.body.contains("Could not find field: priority"));
         Assertions.assertTrue(
                 challenger.statusOfChallenge(CHALLENGE.POST_TODOS_INVALID_EXTRA_FIELD));
@@ -740,7 +741,7 @@ public abstract class ChallengeCompleteTest {
                             "{\"title\":\"mytodo\",\"description\":\"a todo\",\"doneStatus\":false}");
         }
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(409, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains("ERROR: Cannot add instance, maximum limit of 20 reached"));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_ALL_TODOS));
@@ -1285,6 +1286,45 @@ public abstract class ChallengeCompleteTest {
         Assertions.assertEquals(200, restoreResponse.statusCode);
         Assertions.assertTrue(
                 challenger.statusOfChallenge(CHALLENGE.PUT_RESTORABLE_CHALLENGER_PROGRESS_STATUS));
+    }
+
+    @Test
+    public void canRestoreChallengerGuidMismatch409Pass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/challenger/" + challenger.getXChallenger(),
+                        "GET",
+                        x_challenger_header,
+                        "");
+
+        final HttpResponseDetails mismatchResponse =
+                http.send(
+                        "/challenger/" + UUID.randomUUID(),
+                        "PUT",
+                        x_challenger_header,
+                        response.body);
+
+        Assertions.assertEquals(409, mismatchResponse.statusCode);
+        Assertions.assertTrue(mismatchResponse.body.contains("URL GUID does not match payload"));
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.PUT_CHALLENGER_GUID_MISMATCH_409));
+    }
+
+    @Test
+    public void canGetChallengesTooLongXChallenger431Pass() {
+
+        Map<String, String> x_challenger_header =
+                getXChallengerHeader(challenger.getXChallenger() + "x".repeat(101));
+
+        final HttpResponseDetails response =
+                http.send("/challenges", "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(431, response.statusCode);
+        Assertions.assertTrue(response.body.contains("X-CHALLENGER header is too large"));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
     }
 
     @Test

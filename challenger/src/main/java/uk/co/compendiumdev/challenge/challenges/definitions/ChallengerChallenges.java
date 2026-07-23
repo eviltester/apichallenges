@@ -123,6 +123,25 @@ public class ChallengerChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData putRestoreChallengerProgressGuidMismatch409(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "PUT /challenger/guid (409) mismatch",
+                        "Issue a PUT request on the `/challenger/{guid}` end point where the URL GUID does not match the payload X-CHALLENGER value.");
+        aChallenge.addHint("Use the challenger payload returned from a GET /challenger/{guid}");
+        aChallenge.addHint(
+                "Change the xChallenger field in the payload so it differs from the GUID in the URL.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/manage-session/put-challenger-guid-409-mismatch");
+
+        return aChallenge;
+    }
+
     public static ChallengeDefinitionData putRestoreChallengerProgress201(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(

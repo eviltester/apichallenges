@@ -105,15 +105,15 @@ public class ChallengeDefinitions {
                 postCreateChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_TODOS_BAD_DONE_STATUS,
-                PostChallenges.postTodosBadDoneStatus400(challengeOrder++),
+                PostChallenges.postTodosBadDoneStatus422(challengeOrder++),
                 postCreateChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_TODOS_TOO_LONG_TITLE_LENGTH,
-                PostChallenges.postTodosTitleTooLong400(challengeOrder++),
+                PostChallenges.postTodosTitleTooLong422(challengeOrder++),
                 postCreateChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_TODOS_TOO_LONG_DESCRIPTION_LENGTH,
-                PostChallenges.postTodosDescriptionTooLong400(challengeOrder++),
+                PostChallenges.postTodosDescriptionTooLong422(challengeOrder++),
                 postCreateChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_MAX_OUT_TITLE_DESCRIPTION_LENGTH,
@@ -125,7 +125,7 @@ public class ChallengeDefinitions {
                 postCreateChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_TODOS_INVALID_EXTRA_FIELD,
-                PostChallenges.postTodosInvalidExtraField400(challengeOrder++),
+                PostChallenges.postTodosInvalidExtraField422(challengeOrder++),
                 postCreateChallenges);
 
         // CREATE with PUT
@@ -136,8 +136,8 @@ public class ChallengeDefinitions {
         sections.add(putCreateChallenges);
 
         storeChallengeAs(
-                CHALLENGE.PUT_TODOS_400,
-                PutChallenges.putTodosId400(challengeOrder++),
+                CHALLENGE.PUT_TODOS_422,
+                PutChallenges.putTodosId422(challengeOrder++),
                 putCreateChallenges);
 
         // UPDATE with POST
@@ -172,12 +172,12 @@ public class ChallengeDefinitions {
                 PutChallenges.putTodosIdPartial200(challengeOrder++),
                 putUpdateChallenges);
         storeChallengeAs(
-                CHALLENGE.PUT_TODOS_MISSING_TITLE_400,
-                PutChallenges.putTodosIdNoTitle400(challengeOrder++),
+                CHALLENGE.PUT_TODOS_MISSING_TITLE_422,
+                PutChallenges.putTodosIdNoTitle422(challengeOrder++),
                 putUpdateChallenges);
         storeChallengeAs(
-                CHALLENGE.PUT_TODOS_400_NO_AMEND_ID,
-                PutChallenges.putTodosIdNonMatchedIdsAmend400(challengeOrder++),
+                CHALLENGE.PUT_TODOS_422_NO_AMEND_ID,
+                PutChallenges.putTodosIdNonMatchedIdsAmend422(challengeOrder++),
                 putUpdateChallenges);
 
         // DELETE
@@ -284,6 +284,10 @@ public class ChallengeDefinitions {
                 CHALLENGE.PUT_RESTORABLE_CHALLENGER_PROGRESS_STATUS,
                 ChallengerChallenges.putRestoreChallengerProgress200(challengeOrder++),
                 restoreChallenger);
+        storeChallengeAs(
+                CHALLENGE.PUT_CHALLENGER_GUID_MISMATCH_409,
+                ChallengerChallenges.putRestoreChallengerProgressGuidMismatch409(challengeOrder++),
+                restoreChallenger);
 
         // the create with PUT is only valid in multi-user mode, pass in the mode and exclude this
         // challenge
@@ -343,6 +347,10 @@ public class ChallengeDefinitions {
         storeChallengeAs(
                 CHALLENGE.GET_HEARTBEAT_204,
                 StatusCodeChallenges.noContent204UsingGet(challengeOrder++),
+                miscStatusCodes);
+        storeChallengeAs(
+                CHALLENGE.X_CHALLENGER_TOO_LONG_431,
+                StatusCodeChallenges.xChallengerTooLong431(challengeOrder++),
                 miscStatusCodes);
 
         ChallengeSection methodOverrideChallenges =
@@ -433,7 +441,7 @@ public class ChallengeDefinitions {
                 miscChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_ALL_TODOS,
-                MiscChallenges.postAllTodos201(challengeOrder),
+                MiscChallenges.postAllTodos409(challengeOrder),
                 miscChallenges);
 
         Set challengeNames = new HashSet();

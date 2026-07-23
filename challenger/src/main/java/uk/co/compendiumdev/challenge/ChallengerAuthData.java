@@ -85,9 +85,27 @@ public class ChallengerAuthData {
     public Boolean statusOfChallenge(final CHALLENGE challenge) {
         Boolean status = challengeStatus.get(challenge);
         if (status == null) {
-            return false;
+            return statusOfRenamedChallenge(challenge);
         }
         return challengeStatus.get(challenge);
+    }
+
+    private Boolean statusOfRenamedChallenge(final CHALLENGE challenge) {
+        if (challenge == CHALLENGE.PUT_TODOS_422) {
+            return statusOfDeprecatedChallenge(CHALLENGE.PUT_TODOS_400);
+        }
+        if (challenge == CHALLENGE.PUT_TODOS_MISSING_TITLE_422) {
+            return statusOfDeprecatedChallenge(CHALLENGE.PUT_TODOS_MISSING_TITLE_400);
+        }
+        if (challenge == CHALLENGE.PUT_TODOS_422_NO_AMEND_ID) {
+            return statusOfDeprecatedChallenge(CHALLENGE.PUT_TODOS_400_NO_AMEND_ID);
+        }
+        return false;
+    }
+
+    private Boolean statusOfDeprecatedChallenge(final CHALLENGE challenge) {
+        Boolean status = challengeStatus.get(challenge);
+        return status == null ? false : status;
     }
 
     public void pass(final CHALLENGE id) {

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengeMain;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
@@ -80,6 +81,25 @@ public class ChallengerTrackingRoutesTest {
         Assertions.assertEquals(404, response.statusCode);
         Assertions.assertEquals(
                 XChallengerHeader.NOT_FOUND_ERROR_MESSAGE, response.getHeader("X-CHALLENGER"));
+    }
+
+    @Test
+    void will409WhenPutPayloadXChallengerDoesNotMatchUrlGuid() {
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challenger.getXChallenger());
+        http.setHeader("Content-Type", "application/json");
+
+        String mismatchedUrlGuid = UUID.randomUUID().toString();
+        final HttpResponseDetails response =
+                http.put("/challenger/" + mismatchedUrlGuid, challenger.asJson());
+
+        Assertions.assertEquals(409, response.statusCode);
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+
+        Assertions.assertTrue(
+                response.body.contains("URL GUID does not match payload X-CHALLENGER"));
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.PUT_CHALLENGER_GUID_MISMATCH_409));
     }
 
     @Test

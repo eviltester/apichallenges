@@ -149,7 +149,7 @@ public class ChallengerTrackingRoutes {
 
                     // check payload against id
                     if (!challenger.getXChallenger().equals(xChallengerGuid)) {
-                        result.status(400);
+                        result.status(409);
                         return ApiResponseAsJson.getErrorMessageJson(
                                 "URL GUID does not match payload X-CHALLENGER");
                     }
@@ -208,7 +208,7 @@ public class ChallengerTrackingRoutes {
                                 null)
                         .addDocumentation(
                                 "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.")
-                        .addPossibleStatuses(200, 201, 400)
+                        .addPossibleStatuses(200, 201, 400, 409)
                         .addRequestUrlParam(guidField));
 
         /*

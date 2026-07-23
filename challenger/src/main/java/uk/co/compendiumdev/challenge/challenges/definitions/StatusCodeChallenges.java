@@ -69,6 +69,25 @@ public class StatusCodeChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData xChallengerTooLong431(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /challenges (431) X-CHALLENGER too long",
+                        "Issue a GET request on the `/challenges` end point with an X-CHALLENGER header value that is too long and receive 431 (Request Header Fields Too Large).");
+        aChallenge.addHint(
+                "Start the oversized X-CHALLENGER value with your real challenger GUID, then append extra characters.");
+        aChallenge.addHint(
+                "The header must be longer than 100 characters to trigger the 431 response.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/status-codes/x-challenger-too-long-431");
+
+        return aChallenge;
+    }
+
     /*
        Status codes using method overrides
     */

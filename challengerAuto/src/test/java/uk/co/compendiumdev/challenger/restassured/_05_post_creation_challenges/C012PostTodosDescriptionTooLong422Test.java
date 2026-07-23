@@ -1,7 +1,5 @@
 package uk.co.compendiumdev.challenger.restassured._05_post_creation_challenges;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
@@ -10,34 +8,33 @@ import uk.co.compendiumdev.challenger.payloads.Todo;
 import uk.co.compendiumdev.challenger.restassured.api.ChallengesStatus;
 import uk.co.compendiumdev.challenger.restassured.api.RestAssuredBaseTest;
 
-public class C010PostTodosFailValidationDoneStatus400Test extends RestAssuredBaseTest {
+public class C012PostTodosDescriptionTooLong422Test extends RestAssuredBaseTest {
 
     @Test
-    void can400NotCreateATodoWithInvalidDoneStatusPost() {
+    void can422NotCreateATodoWithDescriptionTooLing() {
 
         Todo createMe = new Todo();
-        createMe.title = "my name " + System.currentTimeMillis();
-        createMe.description = "my description " + System.currentTimeMillis();
-
-        // cannot create an invalid status with an invalid boolean value so...
-        // createMe.doneStatus = true;
-        // work with the JSON to create a 'bad' payload
-
-        final JsonElement createMeJson = new Gson().toJsonTree(createMe);
-        createMeJson.getAsJsonObject().addProperty("doneStatus", "truthy");
+        createMe.title = "just right";
+        // max length on title is 200
+        createMe.description =
+                "*3*5*7*10*13*16*19*22*25*28*31*34*37*40*43*46*49*"
+                        + "52*55*58*61*64*67*70*73*76*79*82*85*88*91*94*97*101*105*109*113*"
+                        + "117*121*125*129*133*137*141*145*149*153*157*"
+                        + "161*165*169*173*177*181*185*189*193*197*201*";
 
         RestAssured.given()
                 .header("X-CHALLENGER", xChallenger)
                 .accept("application/json")
                 .contentType("application/json")
-                .body(createMeJson.toString())
+                .body(createMe)
                 .post(apiPath("/todos"))
                 .then()
-                .statusCode(400)
+                .statusCode(422)
                 .contentType(ContentType.JSON);
 
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
-        Assertions.assertTrue(statuses.getChallengeNamed("POST /todos (400) doneStatus").status);
+        Assertions.assertTrue(
+                statuses.getChallengeNamed("POST /todos (422) description too long").status);
     }
 }

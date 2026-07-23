@@ -4,13 +4,12 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
 
 public class MiscChallenges {
 
-    // TODO: create solution and video for Post all
-    public static ChallengeDefinitionData postAllTodos201(int challengeOrder) {
+    public static ChallengeDefinitionData postAllTodos409(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (201) all",
-                        "Issue as many POST requests as it takes to add the maximum number of TODOS allowed for a user. The maximum number should be listed in the documentation.");
+                        "POST /todos (409) max todos",
+                        "Issue as many POST requests as it takes to exceed the maximum number of TODOS allowed for a user. The maximum number should be listed in the documentation.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",

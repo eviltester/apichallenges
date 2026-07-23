@@ -119,6 +119,18 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (request.getVerb() == PUT
                 && request.getPath().startsWith("challenger/")
+                && (response.getStatusCode() == 409)
+                && response.getBody().contains("URL GUID does not match payload X-CHALLENGER")) {
+
+            String challengerId = response.getHeader("X-Challenger");
+            challenger = challengers.getChallenger(challengerId);
+            if (challenger != null) {
+                challengers.pass(challenger, CHALLENGE.PUT_CHALLENGER_GUID_MISMATCH_409);
+            }
+        }
+
+        if (request.getVerb() == PUT
+                && request.getPath().startsWith("challenger/")
                 && (response.getStatusCode() == 201)) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -195,9 +207,9 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (request.getVerb() == PUT
                 && request.getPath().matches("todos/.*")
-                && response.getStatusCode() == 400) {
+                && response.getStatusCode() == 422) {
             if (response.getBody().contains("Cannot create todo with PUT due to Auto fields id")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_400);
+                challengers.pass(challenger, CHALLENGE.PUT_TODOS_422);
             }
         }
 
@@ -212,9 +224,9 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (request.getVerb() == PUT
                 && request.getPath().matches("todos/.*")
-                && response.getStatusCode() == 400) {
+                && response.getStatusCode() == 422) {
             if (response.getBody().contains("title : field is mandatory")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_MISSING_TITLE_400);
+                challengers.pass(challenger, CHALLENGE.PUT_TODOS_MISSING_TITLE_422);
             }
         }
 
@@ -229,9 +241,9 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (request.getVerb() == PUT
                 && request.getPath().matches("todos/.*")
-                && response.getStatusCode() == 400) {
+                && response.getStatusCode() == 422) {
             if (response.getBody().contains("Can not amend id from")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_400_NO_AMEND_ID);
+                challengers.pass(challenger, CHALLENGE.PUT_TODOS_422_NO_AMEND_ID);
             }
         }
 
