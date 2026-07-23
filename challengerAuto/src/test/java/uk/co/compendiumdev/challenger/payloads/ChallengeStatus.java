@@ -17,7 +17,7 @@ public class ChallengeStatus {
     public Boolean GET_ACCEPT_ANY_DEFAULT_JSON;
     public Boolean POST_CREATE_JSON_ACCEPT_XML;
     public Boolean DELETE_HEARTBEAT_405;
-    public Boolean PUT_TODOS_MISSING_TITLE_400;
+    public Boolean PUT_TODOS_MISSING_TITLE_422;
     public Boolean OVERRIDE_DELETE_HEARTBEAT_405;
     public Boolean POST_SECRET_NOTE_BEARER_200;
     public Boolean GET_RESTORE_EXISTING_CHALLENGER;
@@ -37,9 +37,9 @@ public class ChallengeStatus {
     public Boolean POST_TODOS_415;
     public Boolean CREATE_SECRET_TOKEN_201;
     public Boolean POST_CREATE_XML;
-    public Boolean PUT_TODOS_400;
+    public Boolean PUT_TODOS_422;
     public Boolean GET_SECRET_NOTE_200;
-    public Boolean PUT_TODOS_400_NO_AMEND_ID;
+    public Boolean PUT_TODOS_422_NO_AMEND_ID;
     public Boolean GET_TODOS_FILTERED;
     public Boolean POST_TODOS_BAD_DONE_STATUS;
     public Boolean GET_TODO_404;
@@ -61,4 +61,6 @@ public class ChallengeStatus {
     public Boolean GET_SECRET_NOTE_401;
     public Boolean POST_MAX_OUT_TITLE_DESCRIPTION_LENGTH;
     public Boolean PUT_TODOS_FULL_200;
+    public Boolean PUT_CHALLENGER_GUID_MISMATCH_409;
+    public Boolean X_CHALLENGER_TOO_LONG_431;
 }

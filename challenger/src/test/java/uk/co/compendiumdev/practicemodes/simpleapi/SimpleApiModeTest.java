@@ -46,7 +46,7 @@ public class SimpleApiModeTest {
         args.add(Arguments.of(501, "trace", "/simpleapi/items"));
         args.add(Arguments.of(405, "delete", "/simpleapi/items"));
         args.add(Arguments.of(405, "put", "/simpleapi/items"));
-        args.add(Arguments.of(400, "post", "/simpleapi/items"));
+        args.add(Arguments.of(422, "post", "/simpleapi/items"));
 
         args.add(Arguments.of(200, "get", "/simpleapi/randomisbn"));
         args.add(Arguments.of(200, "head", "/simpleapi/randomisbn"));
@@ -179,7 +179,7 @@ public class SimpleApiModeTest {
         Assertions.assertEquals(201, response.statusCode);
         Assertions.assertEquals("application/json", response.getHeader("content-type"));
 
-        Assertions.assertEquals(400, duplicateIsbnResponse.statusCode);
+        Assertions.assertEquals(422, duplicateIsbnResponse.statusCode);
         Assertions.assertTrue(
                 duplicateIsbnResponse.body.contains("Field isbn13 Value is not unique"),
                 "did not expect " + duplicateIsbnResponse.body);
@@ -225,7 +225,7 @@ public class SimpleApiModeTest {
                                 .stripIndent());
 
         Assertions.assertEquals(
-                400,
+                422,
                 amendResponse.statusCode,
                 "should not be able to amend item to " + amendResponse.body);
         Assertions.assertTrue(
@@ -274,7 +274,7 @@ public class SimpleApiModeTest {
                                 .stripIndent());
 
         Assertions.assertEquals(
-                400,
+                422,
                 amendResponse.statusCode,
                 "should not be able to amend item to " + amendResponse.body);
         Assertions.assertTrue(
@@ -306,7 +306,7 @@ public class SimpleApiModeTest {
                         """
                                 .stripIndent());
 
-        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(422, response.statusCode);
         Assertions.assertEquals("application/json", response.getHeader("content-type"));
 
         ErrorMessagesResponse error =
@@ -375,7 +375,7 @@ public class SimpleApiModeTest {
 
         itemToCreate.isbn13 = "101" + "1234567890";
         HttpResponseDetails finalResponse = api.apiCreateItemResponse(itemToCreate);
-        Assertions.assertEquals(400, finalResponse.statusCode);
+        Assertions.assertEquals(409, finalResponse.statusCode);
 
         ErrorMessagesResponse errorMessage =
                 new Gson().fromJson(finalResponse.body, ErrorMessagesResponse.class);

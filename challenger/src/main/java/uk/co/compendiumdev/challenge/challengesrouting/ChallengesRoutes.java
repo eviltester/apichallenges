@@ -86,7 +86,7 @@ public class ChallengesRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation("Get list of challenges and their completion status")
-                        .addPossibleStatuses(200));
+                        .addPossibleStatuses(200, 431));
 
         // TODO: because these hardcode contentType and ignore Accept there should be a light weight
         // wrapper available

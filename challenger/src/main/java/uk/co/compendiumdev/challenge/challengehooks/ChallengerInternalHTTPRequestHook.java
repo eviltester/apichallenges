@@ -10,12 +10,21 @@ import uk.co.compendiumdev.thingifier.adapter.httpserver.messagehooks.InternalHt
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpMethod;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
+import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.AcceptHeaderParser;
+import uk.co.compendiumdev.thingifier.api.response.ApiResponseError;
 
 /*
    This is an Internal HTTP request because it covers functionality for endpoints that do not
    go through the normal API process i.e. heartbeat, challenges, challenger
 */
 public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHook {
+    static final int MAX_X_CHALLENGER_HEADER_LENGTH = 100;
+    static final int UUID_TEXT_LENGTH = 36;
+    static final String X_CHALLENGER_TOO_LONG_MESSAGE =
+            "X-CHALLENGER header is too large, maximum allowed is "
+                    + MAX_X_CHALLENGER_HEADER_LENGTH
+                    + " characters";
+
     private final Challengers challengers;
 
     public ChallengerInternalHTTPRequestHook(final Challengers challengers) {
@@ -33,6 +42,11 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
         String[] pathSegments = request.getPath().split("/");
         if (!validEndpointPrefixesToRunAgainst.contains(pathSegments[0])) {
             return null;
+        }
+
+        InternalHttpResponse tooLongHeaderResponse = rejectTooLongXChallengerHeader(request);
+        if (tooLongHeaderResponse != null) {
+            return tooLongHeaderResponse;
         }
 
         ChallengerAuthData challenger =
@@ -92,5 +106,49 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
         }
 
         return null;
+    }
+
+    private InternalHttpResponse rejectTooLongXChallengerHeader(final InternalHttpRequest request) {
+        String xChallenger = request.getHeader("X-CHALLENGER");
+        if (xChallenger.length() <= MAX_X_CHALLENGER_HEADER_LENGTH) {
+            return null;
+        }
+
+        ChallengerAuthData challenger = challengerFromOversizedHeaderPrefix(xChallenger);
+        if (challenger != null) {
+            challenger.touch();
+            challengers.pass(challenger, CHALLENGE.X_CHALLENGER_TOO_LONG_431);
+        }
+
+        AcceptHeaderParser accept = new AcceptHeaderParser(request.getAcceptHeader());
+        String contentType = accept.hasAPreferenceForXml() ? "application/xml" : "application/json";
+
+        InternalHttpResponse response =
+                new InternalHttpResponse()
+                        .setStatus(431)
+                        .setType(contentType)
+                        .setBody(
+                                ApiResponseError.asAppropriate(
+                                        request.getAcceptHeader(), X_CHALLENGER_TOO_LONG_MESSAGE))
+                        .setHeader("Access-Control-Allow-Origin", "*")
+                        .setHeader("Access-Control-Allow-Headers", "*")
+                        .setHeader("Access-Control-Allow-Credentials", "true")
+                        .setHeader("Access-Control-Allow-Methods", "*")
+                        .setHeader("Access-Control-Expose-Headers", "*");
+
+        if (challenger != null) {
+            response.setHeader("X-CHALLENGER", challenger.getXChallenger());
+        }
+        return response;
+    }
+
+    private ChallengerAuthData challengerFromOversizedHeaderPrefix(final String xChallenger) {
+        if (xChallenger.startsWith(Challengers.SINGLE_PLAYER_GUID)) {
+            return challengers.getChallenger(Challengers.SINGLE_PLAYER_GUID);
+        }
+        if (xChallenger.length() < UUID_TEXT_LENGTH) {
+            return null;
+        }
+        return challengers.getChallenger(xChallenger.substring(0, UUID_TEXT_LENGTH));
     }
 }

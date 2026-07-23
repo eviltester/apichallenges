@@ -89,11 +89,6 @@ Returned body:
 }
 ```
 
-## Overview Video
-
-{{<youtube-embed key="tlye5bQ72g0" title="Solution to failing to create a Todo item using POST">}}
-
-[Patreon ad free version](https://www.patreon.com/posts/46603655)
 
 
 

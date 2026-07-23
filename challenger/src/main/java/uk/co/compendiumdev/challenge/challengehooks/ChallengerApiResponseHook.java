@@ -206,7 +206,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().matches("todos")
-                && response.getStatusCode() == 400
+                && response.getStatusCode() == 422
                 && collate(response.apiResponse().getErrorMessages())
                         .contains("Failed Validation: doneStatus should be BOOLEAN")) {
             challengers.pass(challenger, CHALLENGE.POST_TODOS_BAD_DONE_STATUS);
@@ -216,7 +216,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 &&
                 // trap when creating or amending
                 request.getPath().startsWith("todo")
-                && response.getStatusCode() == 400
+                && response.getStatusCode() == 422
                 && collate(response.apiResponse().getErrorMessages())
                         .contains(
                                 "Failed Validation: Maximum allowable length exceeded for title - maximum allowed is 50")) {
@@ -227,7 +227,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 &&
                 // trap when creating or amending
                 request.getPath().startsWith("todo")
-                && response.getStatusCode() == 400
+                && response.getStatusCode() == 422
                 && collate(response.apiResponse().getErrorMessages())
                         .contains(
                                 "Failed Validation: Maximum allowable length exceeded for description - maximum allowed is 200")) {
@@ -237,7 +237,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         // POST to create too many todos
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().contentEquals("todos")
-                && response.getStatusCode() == 400
+                && response.getStatusCode() == 409
                 && collate(response.apiResponse().getErrorMessages())
                         .contains("ERROR: Cannot add instance, maximum limit of 20 reached")) {
             challengers.pass(challenger, CHALLENGE.POST_ALL_TODOS);
@@ -260,7 +260,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().matches("todos")
-                && response.getStatusCode() == 400
+                && response.getStatusCode() == 422
                 && collate(response.apiResponse().getErrorMessages())
                         .contains("Could not find field:")) {
             challengers.pass(challenger, CHALLENGE.POST_TODOS_INVALID_EXTRA_FIELD);

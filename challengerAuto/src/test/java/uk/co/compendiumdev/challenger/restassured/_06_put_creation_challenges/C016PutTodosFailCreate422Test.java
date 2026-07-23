@@ -10,7 +10,7 @@ import uk.co.compendiumdev.challenger.payloads.Todo;
 import uk.co.compendiumdev.challenger.restassured.api.ChallengesStatus;
 import uk.co.compendiumdev.challenger.restassured.api.RestAssuredBaseTest;
 
-public class C016PutTodosFailCreate400Test extends RestAssuredBaseTest {
+public class C016PutTodosFailCreate422Test extends RestAssuredBaseTest {
 
     @Test
     void canFailToCreateTodoWithPut() {
@@ -29,7 +29,7 @@ public class C016PutTodosFailCreate400Test extends RestAssuredBaseTest {
                         .body(createMe)
                         .put(apiPath("/todos/" + createMe.id))
                         .then()
-                        .statusCode(400)
+                        .statusCode(422)
                         .contentType(ContentType.JSON)
                         .extract()
                         .response();
@@ -42,6 +42,6 @@ public class C016PutTodosFailCreate400Test extends RestAssuredBaseTest {
 
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
-        Assertions.assertTrue(statuses.getChallengeNamed("PUT /todos/{id} (400)").status);
+        Assertions.assertTrue(statuses.getChallengeNamed("PUT /todos/{id} (422)").status);
     }
 }

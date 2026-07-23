@@ -132,6 +132,35 @@ public class ChallengerInternalHttpResponseHookTest {
     }
 
     @Test
+    public void putChallengerGuidMismatch409PassesChallengeUsingResponseChallengerHeader() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        challengers.setMultiPlayerMode();
+
+        ChallengerInternalHTTPResponseHook hook =
+                new ChallengerInternalHTTPResponseHook(challengers);
+
+        final ChallengerAuthData challenger = challengers.createNewChallenger();
+
+        InternalHttpRequest request =
+                new InternalHttpRequest("/challenger/different-guid")
+                        .setVerb("PUT")
+                        .addHeader("X-CHALLENGER", challenger.getXChallenger());
+
+        InternalHttpResponse response =
+                new InternalHttpResponse()
+                        .setStatus(409)
+                        .setHeader("X-CHALLENGER", challenger.getXChallenger())
+                        .setBody(
+                                "{\"errorMessages\":[\"URL GUID does not match payload X-CHALLENGER\"]}");
+
+        hook.run(request, response);
+
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.PUT_CHALLENGER_GUID_MISMATCH_409));
+    }
+
+    @Test
     public void optionsOnTodosPassesChallenge() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));

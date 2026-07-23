@@ -9,6 +9,7 @@ import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpMethod;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
+import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
 
 public class ChallengerInternalHttpRequestHookTest {
 
@@ -90,6 +91,31 @@ public class ChallengerInternalHttpRequestHookTest {
         // we passed the GET /challenges for default user
         Assertions.assertFalse(
                 challengers.SINGLE_PLAYER.statusOfChallenge(CHALLENGE.GET_CHALLENGES));
+    }
+
+    @Test
+    public void inMultUserModeOversizedXChallengerHeaderReturns431AndTracksByGuidPrefix() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        final ChallengerAuthData challenger = challengers.createNewChallenger();
+        challengers.setMultiPlayerMode();
+
+        final ChallengerInternalHTTPRequestHook hook =
+                new ChallengerInternalHTTPRequestHook(challengers);
+
+        final InternalHttpRequest request =
+                new InternalHttpRequest("/challenges")
+                        .setVerb(InternalHttpMethod.GET)
+                        .addHeader("Accept", "application/json")
+                        .addHeader("X-CHALLENGER", challenger.getXChallenger() + "x".repeat(65));
+
+        InternalHttpResponse response = hook.run(request);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(431, response.getStatusCode());
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertTrue(response.getBody().contains("X-CHALLENGER header is too large"));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
     }
 
     @Test

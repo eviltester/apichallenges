@@ -45,7 +45,6 @@ How to solve challenge GET todo 404 by issuing a GET request on a non-existent e
 < Connection: close
 < Date: Thu, 27 Aug 2020 13:46:19 GMT
 < X-Challenger: x-challenger-guid
-< Content-Type: text/html;charset=utf-8
 < Server: Jetty(9.4.z-SNAPSHOT)
 < Via: 1.1 vegur
 ~~~~~~~~

@@ -4,11 +4,11 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
 
 public class PutChallenges {
 
-    public static ChallengeDefinitionData putTodosId400(int challengeOrder) {
+    public static ChallengeDefinitionData putTodosId422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /todos/{id} (400)",
+                        "PUT /todos/{id} (422)",
                         "Issue a PUT request to unsuccessfully create a todo");
 
         aChallenge.addHint("Add a JSON payload in the request", "");
@@ -24,7 +24,7 @@ public class PutChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/put-create/put-todos-400-create");
+                "/apichallenges/solutions/put-create/put-todos-422-create");
 
         // todo: create video solution for PUT todos 400 challenge
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "T0LFHwavsNA");
@@ -89,11 +89,11 @@ public class PutChallenges {
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData putTodosIdNoTitle400(int challengeOrder) {
+    public static ChallengeDefinitionData putTodosIdNoTitle422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /todos/{id} no title (400)",
+                        "PUT /todos/{id} no title (422)",
                         "Issue a PUT request to fail to update an existing todo because title is missing in payload.");
 
         aChallenge.addHint(
@@ -104,18 +104,18 @@ public class PutChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/put-update/put-todos-id-400-no-title");
+                "/apichallenges/solutions/put-update/put-todos-id-422-no-title");
 
         // todo: create solution video for PUT todos partial 200 challenge
 
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData putTodosIdNonMatchedIdsAmend400(int challengeOrder) {
+    public static ChallengeDefinitionData putTodosIdNonMatchedIdsAmend422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /todos/{id} no amend id (400)",
+                        "PUT /todos/{id} no amend id (422)",
                         "Issue a PUT request to fail to update an existing todo because id different in payload.");
 
         // todo: create solution for PUT todos partial 200 challenge
@@ -130,7 +130,7 @@ public class PutChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/put-update/put-todos-id-400-no-amend-id");
+                "/apichallenges/solutions/put-update/put-todos-id-422-no-amend-id");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "T0LFHwavsNA");
         // TODO: add solution video for put totos id no amend id

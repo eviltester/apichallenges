@@ -48,7 +48,7 @@ public class C059AddMaximumNumberOfTodosTest extends RestAssuredBaseTest {
                         .body(createMe)
                         .post(apiPath("/todos"))
                         .then()
-                        .statusCode(400)
+                        .statusCode(409)
                         .extract()
                         .response();
 
@@ -60,7 +60,7 @@ public class C059AddMaximumNumberOfTodosTest extends RestAssuredBaseTest {
 
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
-        Assertions.assertTrue(statuses.getChallengeNamed("POST /todos (201) all").status);
+        Assertions.assertTrue(statuses.getChallengeNamed("POST /todos (409) max todos").status);
 
         // now delete those todos we created
         idsToDelete.forEach(todos::deleteTodo);
