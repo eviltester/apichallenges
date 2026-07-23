@@ -100,6 +100,8 @@ public class ChallengeMain {
         <link rel="stylesheet" href="/css/toc.css">
         <link rel="stylesheet" href="/css/content.css">
             """);
+        app.getGuiManagement()
+                .appendToCustomHeadContent(PlausibleAnalyticsHead.fromEnvironment().asHtml());
 
         challenger.setupGui(app.getGuiManagement());
         challenger.configureRoutes();
