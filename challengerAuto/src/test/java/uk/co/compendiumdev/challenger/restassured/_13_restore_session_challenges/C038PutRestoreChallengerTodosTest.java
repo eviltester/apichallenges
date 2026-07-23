@@ -46,9 +46,7 @@ public class C038PutRestoreChallengerTodosTest extends RestAssuredBaseTest {
                 .body(newTodos)
                 .put(apiPath("/challenger/database/" + xChallenger))
                 .then()
-                .statusCode(204)
-                . // updated existing
-                contentType(ContentType.JSON);
+                .statusCode(204);
 
         ChallengesStatus statusesCheck = new ChallengesStatus();
         statusesCheck.getFor(xChallenger);

@@ -147,7 +147,7 @@ public class MarkdownContentManager {
         String state = "EXPECTING_HEADER";
         boolean addedToc = false;
         String firstYouTubeVideoId = "";
-        boolean simulationLiveRequestWidgetUsed = false;
+        boolean liveRequestWidgetUsed = false;
 
         try {
             while ((line = reader.readLine()) != null) {
@@ -177,8 +177,8 @@ public class MarkdownContentManager {
                     state = "READING_CONTENT";
                 }
 
-                if (line.contains("{{<sim-live-request")) {
-                    simulationLiveRequestWidgetUsed = true;
+                if (line.contains("{{<sim-live-request") || line.contains("{{<api-live-request")) {
+                    liveRequestWidgetUsed = true;
                 }
 
                 // process any macros
@@ -220,7 +220,7 @@ public class MarkdownContentManager {
         }
 
         headerInject = headerInject + youtubeHeaderInject;
-        if (simulationLiveRequestWidgetUsed) {
+        if (liveRequestWidgetUsed) {
             headerInject = headerInject + "<script src='/js/sim-live-request.js' defer></script>";
         }
 
@@ -563,39 +563,8 @@ public class MarkdownContentManager {
                 "\\{\\{<youtube-embed key=\"([a-zA-Z0-9_-]+)\" title=\"(.+)\">}}";
         line = line.replaceAll(youtubeMacroRegex, youTubeHtmlBlock);
 
-        if (line.contains("{{<sim-live-request")) {
-            final String simLiveRequestMacroRegex =
-                    "\\{\\{<sim-live-request method=\"([A-Z]+)\" path=\"([^\"]+)\""
-                            + "(?: body='([^']*)')?(?: editable=\"(true|false)\")?>}}";
-            final Pattern simLiveRequestPattern = Pattern.compile(simLiveRequestMacroRegex);
-            final Matcher simLiveRequestMatcher = simLiveRequestPattern.matcher(line);
-            final StringBuffer processedLine = new StringBuffer();
-            while (simLiveRequestMatcher.find()) {
-                final String method = simLiveRequestMatcher.group(1);
-                final String path = simLiveRequestMatcher.group(2);
-                final String body =
-                        simLiveRequestMatcher.group(3) == null
-                                ? ""
-                                : simLiveRequestMatcher.group(3);
-                final String editable =
-                        simLiveRequestMatcher.group(4) == null
-                                ? "false"
-                                : simLiveRequestMatcher.group(4);
-                final String replacement =
-                        String.format(
-                                "<div class=\"sim-live-request\" data-method=\"%s\""
-                                        + " data-path=\"%s\" data-body=\"%s\""
-                                        + " data-editable=\"%s\"></div>",
-                                escapeHtmlAttribute(method),
-                                escapeHtmlAttribute(path),
-                                escapeHtmlAttribute(body),
-                                escapeHtmlAttribute(editable));
-                simLiveRequestMatcher.appendReplacement(
-                        processedLine, Matcher.quoteReplacement(replacement));
-            }
-            simLiveRequestMatcher.appendTail(processedLine);
-            line = processedLine.toString();
-        }
+        line = processLiveRequestMacro(line, "sim-live-request", "sim-live-request", "false");
+        line = processLiveRequestMacro(line, "api-live-request", "api-live-request", "true");
 
         if (line.contains("{{<PARTIAL_SNIPPET")) {
             String partialMacroRegex = "\\{\\{<PARTIAL_SNIPPET filename=\"(.+)\">}}";
@@ -613,6 +582,77 @@ public class MarkdownContentManager {
             line = line.replaceAll(macroRegex, params.get(paramReplace));
         }
         return line;
+    }
+
+    private String processLiveRequestMacro(
+            final String line,
+            final String macroName,
+            final String placeholderClass,
+            final String defaultEditable) {
+        if (!line.contains("{{<" + macroName)) {
+            return line;
+        }
+
+        final Pattern macroPattern = Pattern.compile("\\{\\{<" + macroName + "\\s+([\\s\\S]*?)>}}");
+        final Matcher macroMatcher = macroPattern.matcher(line);
+        final StringBuffer processedLine = new StringBuffer();
+        while (macroMatcher.find()) {
+            final Map<String, String> attributes = parseMacroAttributes(macroMatcher.group(1));
+            final String replacement =
+                    renderLiveRequestPlaceholder(attributes, placeholderClass, defaultEditable);
+            macroMatcher.appendReplacement(processedLine, Matcher.quoteReplacement(replacement));
+        }
+        macroMatcher.appendTail(processedLine);
+        return processedLine.toString();
+    }
+
+    private Map<String, String> parseMacroAttributes(final String rawAttributes) {
+        final Map<String, String> attributes = new LinkedHashMap<>();
+        final Pattern attributePattern =
+                Pattern.compile("([a-zA-Z][a-zA-Z0-9-]*)=(\"([^\"]*)\"|'([^']*)')");
+        final Matcher attributeMatcher = attributePattern.matcher(rawAttributes);
+        while (attributeMatcher.find()) {
+            final String key = attributeMatcher.group(1);
+            final String doubleQuotedValue = attributeMatcher.group(3);
+            final String singleQuotedValue = attributeMatcher.group(4);
+            attributes.put(key, doubleQuotedValue == null ? singleQuotedValue : doubleQuotedValue);
+        }
+        return attributes;
+    }
+
+    private String renderLiveRequestPlaceholder(
+            final Map<String, String> attributes,
+            final String placeholderClass,
+            final String defaultEditable) {
+        final String method = attributes.getOrDefault("method", "GET");
+        final String path = attributes.getOrDefault("path", "/");
+        final String editable = attributes.getOrDefault("editable", defaultEditable);
+
+        final StringBuilder html = new StringBuilder();
+        html.append("<div class=\"")
+                .append(placeholderClass)
+                .append("\" data-method=\"")
+                .append(escapeHtmlAttribute(method))
+                .append("\" data-path=\"")
+                .append(escapeHtmlAttribute(path))
+                .append("\" data-editable=\"")
+                .append(escapeHtmlAttribute(editable))
+                .append("\"");
+
+        for (Map.Entry<String, String> attribute : attributes.entrySet()) {
+            final String key = attribute.getKey();
+            if (key.equals("method") || key.equals("path") || key.equals("editable")) {
+                continue;
+            }
+            html.append(" data-")
+                    .append(escapeHtmlAttribute(key))
+                    .append("=\"")
+                    .append(escapeHtmlAttribute(attribute.getValue()))
+                    .append("\"");
+        }
+
+        html.append("></div>");
+        return html.toString();
     }
 
     private String getResourceAsString(String fileName) {

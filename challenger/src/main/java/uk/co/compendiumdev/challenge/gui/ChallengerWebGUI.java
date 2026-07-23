@@ -111,13 +111,14 @@ public class ChallengerWebGUI {
                                 <!-- TODO include a sample of learning information -->
                             </li>
 
-                            <li id='simple-api-root-menu'><a href="/practice-modes/simpleapi">Simple API</a>
+                            
+                            <li id='sim-api-root-menu'><a href="/practice-modes/simulation">API Simulator</a>
                                 <ul>
-                                    <li><a href="/practice-modes/simpleapi">About Simple API</a>
-                                    <li><a href="/simpleapi/docs">API Docs</a>
-                                    <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
-                                    <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
-                                    <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
+                                    <li><a href="/practice-modes/simulation">About API Simulator</a></li>
+                                    <li><a href="/sim/docs">API Docs</a></li>
+                                    <li><a href="/sim/docs/swagger-ui">Swagger UI</a></li>
+                                    <li><a href="/sim/docs/swagger">[Download Open API File]</a></li>
+
                                 </ul>
                             </li>
 
@@ -133,13 +134,13 @@ public class ChallengerWebGUI {
                                 </ul>
                             </li>
 
-                            <li id='sim-api-root-menu'><a href="/practice-modes/simulation">API Simulator</a>
+                            <li id='simple-api-root-menu'><a href="/practice-modes/simpleapi">Simple API</a>
                                 <ul>
-                                    <li><a href="/practice-modes/simulation">About API Simulator</a></li>
-                                    <li><a href="/sim/docs">API Docs</a></li>
-                                    <li><a href="/sim/docs/swagger-ui">Swagger UI</a></li>
-                                    <li><a href="/sim/docs/swagger">[Download Open API File]</a></li>
-
+                                    <li><a href="/practice-modes/simpleapi">About Simple API</a>
+                                    <li><a href="/simpleapi/docs">API Docs</a>
+                                    <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
+                                    <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
+                                    <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
                                 </ul>
                             </li>
 
@@ -329,11 +330,13 @@ public class ChallengerWebGUI {
         get(
                 "/gui/challenges",
                 (request, result) -> {
-                    if (request.cookie("X-THINGIFIER-DATABASE-NAME") != null) {
+                    String challengerCookie = request.cookie("X-CHALLENGER");
+                    if (challengerCookie == null) {
+                        challengerCookie = request.cookie("X-THINGIFIER-DATABASE-NAME");
+                    }
+                    if (challengerCookie != null) {
                         // we didn't add a challenger in the URL but we do have one in the cookie
-                        result.header(
-                                "location",
-                                "/gui/challenges/" + request.cookie("X-THINGIFIER-DATABASE-NAME"));
+                        result.header("location", "/gui/challenges/" + challengerCookie);
                         result.status(302);
                         return "";
                     }
@@ -651,6 +654,9 @@ public class ChallengerWebGUI {
     private String storeThingifierDatabaseNameCookie(String xChallenger) {
         return "<script>"
                 + "setCookie('X-THINGIFIER-DATABASE-NAME','"
+                + xChallenger
+                + "',365);"
+                + "setCookie('X-CHALLENGER','"
                 + xChallenger
                 + "',365);"
                 + "</script>";

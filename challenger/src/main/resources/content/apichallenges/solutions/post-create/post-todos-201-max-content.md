@@ -55,6 +55,11 @@ Hints:
 - when testing for field lengths CounterString tools can be useful to generate strings of the exact length required
 - a 201 response usually has a `Location` header with a URL which we could `GET` to see the created item
 
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"{{title50}}","doneStatus":true,"description":"{{description200}}"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

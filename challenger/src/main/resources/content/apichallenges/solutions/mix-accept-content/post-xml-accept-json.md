@@ -55,6 +55,11 @@ Extras:
 
 - try GET the location header URL to return the created todo item
 
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/xml||Accept: application/json" body='<todo><title>xml solution widget</title><doneStatus>true</doneStatus><description>created from XML</description></todo>'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

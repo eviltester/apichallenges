@@ -41,6 +41,11 @@ It is possible to ask for multiple types in the Accept header, expressing a pref
 The chained Accept header `application/xml,application/json` asks for XML as first preference, but if not supported then supply JSON.
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml,application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

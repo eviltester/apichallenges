@@ -1,7 +1,11 @@
 package uk.co.compendiumdev.uirouting;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -255,8 +259,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"sim-live-request\" data-method=\"POST\""
-                                + " data-path=\"/sim/entities\""
-                                + " data-body=\"{&quot;name&quot;: &quot;bob&quot;}\""));
+                                + " data-path=\"/sim/entities\""));
+        Assertions.assertTrue(
+                response.body.contains("data-body=\"{&quot;name&quot;: &quot;bob&quot;}\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"sim-live-request\" data-method=\"HEAD\""
@@ -276,6 +281,13 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
         Assertions.assertTrue(response.body.contains(".rootmenu"));
 
+        response = http.send("/css/content.css", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
+        Assertions.assertTrue(response.body.contains("div.main-text-content pre"));
+        Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
+        Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
+
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
@@ -285,6 +297,27 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
         Assertions.assertTrue(response.body.contains("buildCurlCommand"));
+        Assertions.assertTrue(response.body.contains("api-live-request"));
+        Assertions.assertTrue(response.body.contains("currentChallenger"));
+        Assertions.assertTrue(response.body.contains("X-Auth-Token"));
+        Assertions.assertTrue(response.body.contains("firstTodoId"));
+        Assertions.assertTrue(response.body.contains("updateRenderedWidgetsFromSession"));
+        Assertions.assertTrue(response.body.contains("formatRequestBody"));
+        Assertions.assertTrue(response.body.contains("JSON.stringify(JSON.parse(request.body)"));
+        Assertions.assertTrue(response.body.contains("formatXml"));
+        Assertions.assertTrue(response.body.contains("DOMParser"));
+        Assertions.assertTrue(response.body.contains("Pretty print body"));
+        Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHODS"));
+        Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS"));
+        Assertions.assertTrue(response.body.contains("x-http-method-override"));
+        Assertions.assertTrue(response.body.contains("unsupportedMethodOverrideHeader"));
+        Assertions.assertTrue(response.body.contains("X-API-Challenges-Live-Widget"));
+        Assertions.assertTrue(response.body.contains("browserRequestHeaders"));
+        Assertions.assertTrue(response.body.contains("Use the cURL or wget tabs"));
+        Assertions.assertTrue(response.body.contains("oversizedChallengerValue"));
+        Assertions.assertTrue(response.body.contains("101 - prefix.length"));
+        Assertions.assertTrue(response.body.contains("autoCreateFirstTodo"));
+        Assertions.assertTrue(response.body.contains("lastCreatedTodoId"));
 
         response = http.send("/favicon/site.webmanifest", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -551,6 +584,185 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<aside class='next-challenge-cta'"));
         Assertions.assertTrue(response.body.contains("class='next-challenge-cta-link'"));
         Assertions.assertTrue(response.body.contains("Try the next challenge walkthrough"));
+    }
+
+    @Test
+    void statusCodeSolutionsLinkToHeaderTooLargeSolutionBeforeMethodOverride() {
+
+        HttpResponseDetails response =
+                http.send(
+                        "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
+                        "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/status-codes/x-challenger-too-long-431'"));
+
+        response =
+                http.send(
+                        "/apichallenges/solutions/status-codes/x-challenger-too-long-431",
+                        "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/method-override/all-method-overrides'"));
+    }
+
+    @Test
+    void authorizationSolutionsIncludePostSecretNoteFailuresInNextWalkthroughOrder() {
+
+        HttpResponseDetails response =
+                http.send("/apichallenges/solutions/authorization/get-secret-note-200", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/authorization/post-secret-note-200'"));
+
+        response = http.send("/apichallenges/solutions/authorization/post-secret-note-200", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/authorization/post-secret-note-401-403'"));
+
+        response =
+                http.send(
+                        "/apichallenges/solutions/authorization/post-secret-note-401-403",
+                        "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/authorization/get-post-secret-note-bearer'"));
+    }
+
+    @Test
+    void activeSolutionPagesIncludeApiLiveRequestWidgets() {
+
+        final HttpResponseDetails indexResponse = http.send("/apichallenges/solutions", "get");
+        Assertions.assertEquals(200, indexResponse.statusCode);
+
+        final Pattern solutionLinkPattern =
+                Pattern.compile("href=\"(/apichallenges/solutions/[^\"]+)\"");
+        final Matcher solutionLinkMatcher = solutionLinkPattern.matcher(indexResponse.body);
+        final Set<String> solutionLinks = new LinkedHashSet<>();
+        while (solutionLinkMatcher.find()) {
+            solutionLinks.add(solutionLinkMatcher.group(1));
+        }
+
+        Assertions.assertFalse(solutionLinks.isEmpty());
+
+        for (final String solutionLink : solutionLinks) {
+            final HttpResponseDetails response = http.send(solutionLink, "get");
+
+            Assertions.assertEquals(200, response.statusCode, solutionLink);
+            Assertions.assertTrue(
+                    response.body.contains("src='/js/sim-live-request.js'"), solutionLink);
+            Assertions.assertTrue(
+                    response.body.contains("class=\"api-live-request\""), solutionLink);
+        }
+    }
+
+    @Test
+    void solutionLiveRequestMacroRendersEscapedRequestAttributes() {
+
+        final HttpResponseDetails response =
+                http.send("/apichallenges/solutions/post-create/post-todos-201", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"api-live-request\" data-method=\"POST\""
+                                + " data-path=\"/todos\" data-editable=\"true\""
+                                + " data-expected-status=\"201\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-headers=\"Content-Type: application/json||Accept:"
+                                + " application/json\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-body=\"{&quot;title&quot;:&quot;solution widget todo&quot;"));
+    }
+
+    @Test
+    void deleteSolutionUsesVisibleSetupAndDoesNotAutoCreateTodoDuringDelete() {
+
+        final HttpResponseDetails response =
+                http.send("/apichallenges/solutions/delete/delete-todos-id-204", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"api-live-request\" data-method=\"POST\""
+                                + " data-path=\"/todos\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"api-live-request\" data-method=\"DELETE\""
+                                + " data-path=\"/todos/{{lastCreatedTodoId}}\""));
+        Assertions.assertFalse(response.body.contains("data-path=\"/todos/{{firstTodoId}}\""));
+        Assertions.assertTrue(response.body.contains("data-refresh-after-execute=\"false\""));
+        Assertions.assertTrue(response.body.contains("data-resolve-dynamic-on-execute=\"false\""));
+    }
+
+    @Test
+    void solutionLiveRequestSupportsNoChallengerAndAuthTokenFlows() {
+
+        HttpResponseDetails response =
+                http.send("/apichallenges/solutions/create-session/post-challenger-201", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("class=\"api-live-request\""));
+        Assertions.assertTrue(response.body.contains("data-use-challenger=\"false\""));
+
+        response = http.send("/apichallenges/solutions/authorization/get-secret-note-200", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("X-AUTH-TOKEN: {{authToken}}"));
+    }
+
+    @Test
+    void challengeProgressPagesSetCurrentChallengerCookiesForSolutionWidgets() {
+
+        final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
+        apiHttp.clearHeaders();
+        apiHttp.setHeader("Accept", "application/json");
+        final HttpResponseDetails challengerResponse = apiHttp.post("/challenger", "");
+        final String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+
+        final HttpMessageSender guiHttp = new HttpMessageSender(Environment.getBaseUri());
+        guiHttp.clearHeaders();
+        guiHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+        final HttpResponseDetails response = guiHttp.send("/gui/challenges/" + challengerId, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "setCookie('X-THINGIFIER-DATABASE-NAME','" + challengerId + "',365);"));
+        Assertions.assertTrue(
+                response.body.contains("setCookie('X-CHALLENGER','" + challengerId + "',365);"));
+    }
+
+    @Test
+    void challengesPageRedirectsFromCurrentChallengerCookie() {
+
+        final String challengerId = "11111111-2222-4333-8444-555555555555";
+        final HttpMessageSender cookieHttp = new HttpMessageSender(Environment.getBaseUri());
+        cookieHttp.clearHeaders();
+        cookieHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+        cookieHttp.setHeader("Cookie", "X-CHALLENGER=" + challengerId);
+
+        final HttpResponseDetails response = cookieHttp.send("/gui/challenges", "get");
+
+        Assertions.assertEquals(302, response.statusCode);
+        Assertions.assertEquals("/gui/challenges/" + challengerId, response.getHeader("Location"));
     }
 
     @Test

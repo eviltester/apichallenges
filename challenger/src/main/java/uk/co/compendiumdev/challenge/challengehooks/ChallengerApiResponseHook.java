@@ -276,13 +276,13 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         // DELETE
         if (request.getVerb() == HttpApiRequest.VERB.DELETE
                 && request.getPath().matches("todos/.*")
-                && response.getStatusCode() == 200) {
+                && response.getStatusCode() == 204) {
             challengers.pass(challenger, CHALLENGE.DELETE_A_TODO);
         }
 
         if (request.getVerb() == HttpApiRequest.VERB.DELETE
                 && request.getPath().matches("todos/.*")
-                && response.getStatusCode() == 200
+                && response.getStatusCode() == 204
                 && countTodos(challenger) == 0) {
             challengers.pass(challenger, CHALLENGE.DELETE_ALL_TODOS);
         }

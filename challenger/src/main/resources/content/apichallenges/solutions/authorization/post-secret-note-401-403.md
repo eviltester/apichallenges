@@ -41,6 +41,13 @@ Following on from challenge 35 were we successfully amended a post. Now we try t
 - add the `X-CHALLENGER` header to track progress and authenticate the request
 - Receive a 401 response because the `X-AUTH-TOKEN` is missing.
 
+### Try it now
+
+{{<api-live-request method="POST" path="/secret/note" expected-status="401" headers="Accept: application/json" body='{"note":"note without token"}'>}}
+
+{{<api-live-request method="POST" path="/secret/note" expected-status="403" headers="X-AUTH-TOKEN: wrong-token||Accept: application/json" body='{"note":"note with wrong token"}'>}}
+
+
 ## Example Request
 
 ```

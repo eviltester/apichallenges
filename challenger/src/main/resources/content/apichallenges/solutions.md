@@ -65,7 +65,7 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## DELETE Challenges
 
-- [DELETE /todos id (200)](/apichallenges/solutions/delete/delete-todos-id-200)
+- [DELETE /todos id (204)](/apichallenges/solutions/delete/delete-todos-id-204)
 
 ## OPTIONS Challenges
 
@@ -107,7 +107,7 @@ If your goal is API automation, each solution also provides clear assertion targ
   - PATCH /heartbeat (500)
   - TRACE /heartbeat (501)
   - GET /heartbeat (204)
-- [GET /challenges (431) X-CHALLENGER too long](/apichallenges/solutions/status-codes/x-challenger-too-long-431)
+- [GET /heartbeat (431) X-CHALLENGER too long](/apichallenges/solutions/status-codes/x-challenger-too-long-431)
 
 ## HTTP Method Override Challenges
 
@@ -136,5 +136,5 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## Miscellaneous Challenges
 
-- [DELETE /todos/{id} (200) all](/apichallenges/solutions/miscellaneous/delete-all-todos)
+- [DELETE /todos/{id} (204) all](/apichallenges/solutions/miscellaneous/delete-all-todos)
 - [POST /todos (409) max todos](/apichallenges/solutions/miscellaneous/create-maximum-number-todos)

@@ -45,6 +45,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - You should receive a 401 response - meaning you are not authorized
 
+### Try it now
+
+{{<api-live-request method="GET" path="/secret/note" expected-status="401" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

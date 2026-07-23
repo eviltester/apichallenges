@@ -68,6 +68,11 @@ We only need to use the minimum details, but could add a description if we wante
 - check the `Location` header has the endpoint we can use to retrieve the todo, issue a `GET` on that endpoint to retrieve the details of the todo
 
 
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

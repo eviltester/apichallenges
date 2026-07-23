@@ -39,12 +39,15 @@ function forgetGuid(aguid){
     if(getCookie('X-THINGIFIER-DATABASE-NAME')== aguid){
         setCookie('X-THINGIFIER-DATABASE-NAME','',0);
     }
+    if(getCookie('X-CHALLENGER')== aguid){
+        setCookie('X-CHALLENGER','',0);
+    }
 }
 
 function displayLocalGuids(){
     var guids = localStorage.getItem('challenges-guids') || '';
     var guidsArray = guids.match(/\|([^|]*)\|/g);
-    currGuid = getCookie('X-THINGIFIER-DATABASE-NAME');
+    currGuid = getCookie('X-CHALLENGER') || getCookie('X-THINGIFIER-DATABASE-NAME');
     if(currGuid && !guidsArray){
         guidsArray=[];
     }

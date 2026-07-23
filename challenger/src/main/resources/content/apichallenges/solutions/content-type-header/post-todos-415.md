@@ -47,6 +47,11 @@ Extras:
 
 - try setting the 'accept' header to specify the format of the error message in the response
 
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="415" headers="Content-Type: application/gzip||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

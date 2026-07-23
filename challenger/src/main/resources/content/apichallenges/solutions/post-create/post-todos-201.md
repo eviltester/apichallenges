@@ -34,6 +34,11 @@ How to use a POST request to create a todo item in the application and receive a
 - The response status code should be `201` because the todo is created
 - IF you get a different response code, check the body of the message because you made have made a typo. Read the error message in the response to guide you.
 
+### Try it now
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

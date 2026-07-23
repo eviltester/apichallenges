@@ -44,6 +44,13 @@ This challenge is almost a duplicate of the request used in challenge 33
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - You should receive a 200 response and the body of the response will contain the secret note
 
+### Try it now
+
+{{<api-live-request method="GET" path="/secret/note" expected-status="200" headers="Authorization: Bearer {{authToken}}||Accept: application/json">}}
+
+{{<api-live-request method="POST" path="/secret/note" expected-status="200" headers="Authorization: Bearer {{authToken}}||Accept: application/json" body='{"note":"bearer note from solution widget"}'>}}
+
+
 ## Example Request
 
 ```

@@ -29,6 +29,11 @@ How to solve the API challenge and issue a GET request to return all the Todos i
 - The request should have an `X-CHALLENGER` header
 - The response body shows all the todos.
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

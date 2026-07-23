@@ -19,11 +19,11 @@ public class MiscChallenges {
         return aChallenge;
     }
 
-    public static ChallengeDefinitionData deleteAllTodos200(int challengeOrder) {
+    public static ChallengeDefinitionData deleteAllTodos204(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "DELETE /todos/{id} (200) all",
+                        "DELETE /todos/{id} (204) all",
                         "Issue a DELETE request to successfully delete the last todo in system so that there are no more todos in the system");
 
         aChallenge.addHint(

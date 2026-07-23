@@ -3,6 +3,8 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 import java.util.List;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.AdhocDocumentedHttpRouteConfigurer;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
+import uk.co.compendiumdev.thingifier.api.docgen.RoutingDefinition;
+import uk.co.compendiumdev.thingifier.api.docgen.RoutingStatus;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
 import uk.co.compendiumdev.thingifier.api.docgen.ThingifierApiDocumentationDefn;
 
@@ -15,7 +17,15 @@ public class HeartBeatRoutes {
         final AdhocDocumentedHttpRouteConfigurer routeConfig =
                 new AdhocDocumentedHttpRouteConfigurer(apiDefn);
 
-        routeConfig.add(endpoint, RoutingVerb.GET, 204, "Is the server running? YES 204");
+        SimpleHttpRouteCreator.routeStatus(204, endpoint, true, List.of(RoutingVerb.GET.name()));
+        apiDefn.addRouteToDocumentation(
+                new RoutingDefinition(
+                                RoutingVerb.GET,
+                                endpoint,
+                                RoutingStatus.returnValue(204),
+                                null)
+                        .addDocumentation("Is the server running? YES 204")
+                        .addPossibleStatuses(204, 431));
 
         routeConfig.add(endpoint, RoutingVerb.HEAD, 204, "Headers for heartbeat endpoint");
 

@@ -189,7 +189,7 @@ public class ChallengeDefinitions {
 
         storeChallengeAs(
                 CHALLENGE.DELETE_A_TODO,
-                DeleteChallenges.deleteTodosId200(challengeOrder++),
+                DeleteChallenges.deleteTodosId204(challengeOrder++),
                 deleteChallenges);
 
         // OPTIONS
@@ -437,7 +437,7 @@ public class ChallengeDefinitions {
 
         storeChallengeAs(
                 CHALLENGE.DELETE_ALL_TODOS,
-                MiscChallenges.deleteAllTodos200(challengeOrder++),
+                MiscChallenges.deleteAllTodos204(challengeOrder++),
                 miscChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_ALL_TODOS,

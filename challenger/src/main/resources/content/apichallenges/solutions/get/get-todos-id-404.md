@@ -30,6 +30,11 @@ How to receive a 404 status code response by trying to GET a todo item by id for
 - The response status code should be `404` because `{id}` does not exist
 - an error message should be shown in the response body
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos/{{missingTodoId}}" expected-status="404" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

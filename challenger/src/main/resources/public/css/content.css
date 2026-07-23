@@ -153,6 +153,18 @@ div.main-text-content blockquote {
     padding: 0.5em;
 }
 
+div.main-text-content pre {
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+div.main-text-content pre code {
+    white-space: inherit;
+}
+
 div.sponsor-top {
     background-color:#403f4c;
     color: #ffffff;
@@ -206,6 +218,17 @@ a.next-challenge-cta-link:hover {
 .sim-live-title {
     font-weight: 700;
     margin: 0 0 0.75rem;
+}
+
+.api-live-widget {
+    border-color: #9bbf9f;
+    background: #f7fcf7;
+}
+
+.sim-live-expected {
+    color: #334155;
+    font-weight: 600;
+    margin: -0.35rem 0 0.75rem;
 }
 
 .sim-live-tabs,
@@ -285,7 +308,8 @@ a.next-challenge-cta-link:hover {
 
 .sim-live-edit-method,
 .sim-live-edit-url,
-.sim-live-edit-headers {
+.sim-live-edit-headers,
+.sim-live-edit-body {
     border: 1px solid #9bb6cd;
     box-sizing: border-box;
     font: inherit;
@@ -293,7 +317,8 @@ a.next-challenge-cta-link:hover {
     width: 100%;
 }
 
-.sim-live-edit-headers {
+.sim-live-edit-headers,
+.sim-live-edit-body {
     font-family: Consolas, "Courier New", monospace;
     min-height: 7rem;
     resize: vertical;
@@ -307,6 +332,16 @@ a.next-challenge-cta-link:hover {
     font: inherit;
     justify-self: start;
     padding: 0.45rem 0.65rem;
+}
+
+.sim-live-pretty-print {
+    border: 1px solid #8fa7bc;
+    background: #f5f9fc;
+    color: #152536;
+    cursor: pointer;
+    font: inherit;
+    justify-self: start;
+    padding: 0.35rem 0.55rem;
 }
 
 .sim-live-command-panel {

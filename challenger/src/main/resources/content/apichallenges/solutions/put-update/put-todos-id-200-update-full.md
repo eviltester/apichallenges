@@ -63,6 +63,11 @@ NOTE: if you haven't read the documentation and don't know what format to use th
 
 NOTE: because you add an id to the payload you risk triggering an error validation if the id in the payload is different from the id in the URL.
 
+### Try it now
+
+{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"id":"{{firstTodoId}}","title":"full update from widget","doneStatus":true,"description":"updated from the solution page"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

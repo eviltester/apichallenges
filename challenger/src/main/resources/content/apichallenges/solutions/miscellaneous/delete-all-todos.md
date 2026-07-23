@@ -1,10 +1,10 @@
 ---
 date:  2025-01-01T15:26:00Z
 lastmod: 2026-02-18
-title: API Challenges Solution For - Delete /todos/id (200) all
-seo_title: Solution: Delete /todos/id (200) all | API Challenges
+title: API Challenges Solution For - Delete /todos/id (204) all
+seo_title: Solution: Delete /todos/id (204) all | API Challenges
 description: How to solve API challenges to Delete all the todos
-seo_description: Use this walkthrough to solve Delete /todos/id (200) all with request setup, key headers, and expected status codes so you can complete the challenge.
+seo_description: Use this walkthrough to solve Delete /todos/id (204) all with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /gui/challenges
 schema_howto_steps: GET /todos and capture all todo ids currently returned by the API||Send DELETE /todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
 showads: true
@@ -158,3 +158,6 @@ xargs -I % curl --request DELETE \
 {{<youtube-embed key="7Kz97rn7f3I" title="Solution to Delete all Todos in default format">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/119362209)
+### Try it now
+
+{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false">}}

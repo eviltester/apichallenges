@@ -37,6 +37,11 @@ When we issue a GET request we can use the `Accept` header to request a specific
 - Check the `content-type` header in the response has `application/xml`
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml">}}
+
+
 ## Example Request
 
 ~~~~~~~~

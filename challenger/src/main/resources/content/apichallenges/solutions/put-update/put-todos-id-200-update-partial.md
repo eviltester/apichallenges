@@ -68,6 +68,11 @@ NOTE: because you add an id to the payload you risk triggering an error validati
 
 NOTE: PUT is idempotent so the result will always be the same, regardless of the initial values of the todo prior to the update request. As a follow on exercise check that this statement is true.
 
+### Try it now
+
+{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"partial update from widget"}'>}}
+
+
 ## Example Request
 
 ~~~~~~~~

@@ -30,6 +30,11 @@ How to issue a HEAD request and see the results of a GET request without the bod
 - The response status code should be `200` because the end point exists
 - Compare the response with the response from `GET /todos`
 
+### Try it now
+
+{{<api-live-request method="HEAD" path="/todos" expected-status="200" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

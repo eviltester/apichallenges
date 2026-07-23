@@ -40,6 +40,11 @@ When we issue a request with an accept header, we are asking for a specific cont
 Some systems may simply ignore the 'accept' header and return the response in the default format.
 
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/gzip">}}
+
+
 ## Example Request
 
 ~~~~~~~~

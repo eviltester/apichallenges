@@ -48,6 +48,19 @@ How to issue a GET request on a top level entity endpoint and use a query filter
 - If you get a different response code, check the URL or headers of the message because you made have made a typo.
 - If you don't see any todos returned then you may need to create one e.g. [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201)
 
+### Try it now
+
+First Filter:
+
+{{<api-live-request method="GET" path="/todos?doneStatus=true" expected-status="200" headers="Accept: application/json">}}
+
+Create a TODO if necessary:
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done todo for filter","doneStatus":true,"description":"created for filter challenge"}'>}}
+
+
+
+
 ## Example Request
 
 ~~~~~~~~

@@ -41,7 +41,21 @@ The `/challenger/database/{guid}` endpoint can be used to save or restore the TO
 
 
 To track progress when using these endpoints add the `{guid}` in the `X-CHALLENGER` when you use these endpoints.
+### Try it now
 
+Get the current progress for the challenger:
 
+{{<api-live-request method="GET" path="/challenger/{{currentChallenger}}" expected-status="200" headers="Accept: application/json">}}
 
+Restore the progress for the challenger:
+
+{{<api-live-request method="PUT" path="/challenger/{{currentChallenger}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{{currentChallengerJson}}'>}}
+
+Get the current todos for the challenger:
+
+{{<api-live-request method="GET" path="/challenger/database/{{currentChallenger}}" expected-status="200" headers="Accept: application/json">}}
+
+Restore the todos for the challenger:
+
+{{<api-live-request method="PUT" path="/challenger/database/{{currentChallenger}}" expected-status="204" headers="Content-Type: application/json||Accept: application/json" body='{{currentTodosJson}}'>}}
 

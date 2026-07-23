@@ -26,6 +26,11 @@ How to use a GET request with an x-challenger header to get the progress status 
 - The request should have an `X-CHALLENGER` header
 - The response body shows the status of all the challenges.
 
+### Try it now
+
+{{<api-live-request method="GET" path="/challenges" expected-status="200" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

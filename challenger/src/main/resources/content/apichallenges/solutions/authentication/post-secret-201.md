@@ -42,6 +42,11 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response should have an `X-AUTH-TOKEN` header which you will include in the messages for challenges 33, 34, 37 and 38
 
+### Try it now
+
+{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*">}}
+
+
 ## Example Request
 
 ~~~~~~~~

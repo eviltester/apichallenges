@@ -7,6 +7,7 @@ import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpRouteHandler;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.HttpServerRequestToInternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.InternalHttpResponseToHttpServer;
@@ -37,6 +38,8 @@ import uk.co.compendiumdev.thingifier.core.reporting.ValidationReport;
 
 // TODO: This should be using a Thingifier to do the work of XML JSON etc... like the simulation
 public class AuthRoutes {
+    private static final String LIVE_WIDGET_HEADER = "X-API-Challenges-Live-Widget";
+
     private Thingifier secretNoteStore;
     private EntityDefinition secretNote;
     private ThingifierHttpApi httpApi;
@@ -84,7 +87,9 @@ public class AuthRoutes {
 
                     // admin/password as default username:password
                     if (!basicAuth.matches("admin", "password")) {
-                        result.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+                        if (!isLiveWidgetRequest(request)) {
+                            result.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+                        }
                         result.status(401);
                         return "";
                     }
@@ -371,5 +376,9 @@ public class AuthRoutes {
                                 "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.")
                         .addPossibleStatuses(200, 400, 401, 403)
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
+    }
+
+    private boolean isLiveWidgetRequest(final HttpServerRequest request) {
+        return "true".equalsIgnoreCase(request.header(LIVE_WIDGET_HEADER));
     }
 }

@@ -73,8 +73,8 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /challenges (431) X-CHALLENGER too long",
-                        "Issue a GET request on the `/challenges` end point with an X-CHALLENGER header value that is too long and receive 431 (Request Header Fields Too Large).");
+                        "GET /heartbeat (431) X-CHALLENGER too long",
+                        "Issue a GET request on the `/heartbeat` end point with an X-CHALLENGER header value that is too long and receive 431 (Request Header Fields Too Large).");
         aChallenge.addHint(
                 "Start the oversized X-CHALLENGER value with your real challenger GUID, then append extra characters.");
         aChallenge.addHint(

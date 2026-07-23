@@ -790,7 +790,7 @@ public abstract class ChallengeCompleteTest {
         final HttpResponseDetails response =
                 http.send("/todos/" + todo.getFieldValue("id").asString(), "DELETE", headers, "");
 
-        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(204, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.DELETE_A_TODO));
     }
 
@@ -1234,7 +1234,7 @@ public abstract class ChallengeCompleteTest {
                             "DELETE",
                             x_challenger_header,
                             "");
-            Assertions.assertEquals(200, response.statusCode);
+            Assertions.assertEquals(204, response.statusCode);
         }
 
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.DELETE_ALL_TODOS));
@@ -1314,13 +1314,13 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
-    public void canGetChallengesTooLongXChallenger431Pass() {
+    public void canGetHeartbeatTooLongXChallenger431Pass() {
 
         Map<String, String> x_challenger_header =
                 getXChallengerHeader(challenger.getXChallenger() + "x".repeat(101));
 
         final HttpResponseDetails response =
-                http.send("/challenges", "GET", x_challenger_header, "");
+                http.send("/heartbeat", "GET", x_challenger_header, "");
 
         Assertions.assertEquals(431, response.statusCode);
         Assertions.assertTrue(response.body.contains("X-CHALLENGER header is too large"));

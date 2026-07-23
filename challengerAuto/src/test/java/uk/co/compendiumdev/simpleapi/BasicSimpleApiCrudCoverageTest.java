@@ -135,7 +135,7 @@ public class BasicSimpleApiCrudCoverageTest {
                 .accept("application/json")
                 .delete(apiPath("/items/" + deleteId))
                 .then()
-                .statusCode(200);
+                .statusCode(204);
 
         // check it is deleted
         RestAssured.given()

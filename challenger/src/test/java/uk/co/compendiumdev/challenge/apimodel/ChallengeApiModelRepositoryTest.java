@@ -204,7 +204,7 @@ public class ChallengeApiModelRepositoryTest {
 
             ApiResponse delete = thingifier.api().delete("/notes/1", new HttpHeadersBlock());
 
-            Assertions.assertEquals(200, delete.getStatusCode());
+            Assertions.assertEquals(204, delete.getStatusCode());
             Assertions.assertEquals(0, repository.entityQueries().list(note).size());
         }
     }

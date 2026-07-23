@@ -86,7 +86,7 @@ public class TodosApi {
                 .contentType("application/json")
                 .delete(todosEndPoint + "/" + id)
                 .then()
-                .statusCode(200);
+                .statusCode(204);
     }
 
     public Todo getOrCreateAnyExistingTodo() {

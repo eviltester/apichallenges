@@ -29,6 +29,11 @@ How to issue a GET request for an existing todo item using the id of the item an
 - The request should have an `X-CHALLENGER` header
 - The response status code should be `200`
 
+### Try it now
+
+{{<api-live-request method="GET" path="/todos/{{firstTodoId}}" expected-status="200" headers="Accept: application/json">}}
+
+
 ## Example Request
 
 ~~~~~~~~

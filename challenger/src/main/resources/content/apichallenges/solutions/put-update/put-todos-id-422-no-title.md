@@ -21,3 +21,6 @@ Look for the validation message containing:
 ```text
 title : field is mandatory
 ```
+### Try it now
+
+{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"doneStatus":true,"description":"missing title"}'>}}
