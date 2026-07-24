@@ -3,7 +3,7 @@ date:  2021-07-24T08:30:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - forbidden secret note 403
 seo_title: Solution: forbidden secret note 403 | API Challenges
-description: How to solve API challenge 31 - forbidden to access secret note 403
+description: How to solve GET /secret/note (403) - forbidden to access secret note
 seo_description: Use this walkthrough to solve forbidden secret note 403 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-401
 schema_howto_steps: Create a GET request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 403
@@ -16,7 +16,7 @@ When we are not authorized to access information we should receive a status code
 
 ## 	Authorization Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -24,7 +24,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## Challenge 31 Forbidden
+## GET /secret/note (403) - Forbidden
 
 > Issue a GET request on the `/secret/note` end point and receive 403 when `X-AUTH-TOKEN` does not match a valid token
 
@@ -41,7 +41,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
     - if running locally that endpoint would be
         - `{{<ORIGIN_URL>}}/secret/note`
 - The verb should be a `GET`
-- Add a custom header with the name `X-AUTH-TOKEN` the value should be different from the value returned in Challenge 30
+- Add a custom header with the name `X-AUTH-TOKEN`; the value should be different from the value returned by `POST /secret/token (201)`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - You should receive a 403 response - meaning you are not authorized
 
@@ -82,7 +82,6 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 {{<youtube-embed key="77mnUQezdas" title="Solution to Get Forbidden challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54065276)
-
 
 
 

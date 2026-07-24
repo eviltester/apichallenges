@@ -12,11 +12,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SeoTitleContentValidationTest {
+
+    private static final Pattern MUTABLE_CHALLENGE_NUMBER_REFERENCE =
+            Pattern.compile(
+                    "\\b(?:API Testing Challenge|API challenge|[Cc]hallenges?|[Cc]hallenge)\\s+#?\\d+\\b");
 
     @Test
     void allContentMarkdownFilesContainSeoTitleAndMeetQualityChecks() throws IOException {
@@ -195,6 +200,41 @@ public class SeoTitleContentValidationTest {
                 invalidOgImageOverrides.isEmpty(),
                 "og_image override paths not found in public assets: "
                         + String.join("; ", invalidOgImageOverrides));
+    }
+
+    @Test
+    void contentMarkdownDoesNotReferToMutableChallengeNumbers() throws IOException {
+
+        final Path contentRoot = resolveContentRoot();
+        final List<String> mutableChallengeNumberReferences = new ArrayList<>();
+
+        try (Stream<Path> walk = Files.walk(contentRoot)) {
+            final List<Path> markdownFiles =
+                    walk.filter(
+                                    path ->
+                                            Files.isRegularFile(path)
+                                                    && path.toString().endsWith(".md"))
+                            .toList();
+
+            for (Path markdownFile : markdownFiles) {
+                final String relativePath =
+                        contentRoot.relativize(markdownFile).toString().replace("\\", "/");
+                final List<String> lines = Files.readAllLines(markdownFile, StandardCharsets.UTF_8);
+
+                for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
+                    final String line = lines.get(lineIndex);
+                    if (MUTABLE_CHALLENGE_NUMBER_REFERENCE.matcher(line).find()) {
+                        mutableChallengeNumberReferences.add(
+                                relativePath + ":" + (lineIndex + 1) + " -> " + line.trim());
+                    }
+                }
+            }
+        }
+
+        Assertions.assertTrue(
+                mutableChallengeNumberReferences.isEmpty(),
+                "Use stable challenge short titles instead of mutable challenge numbers: "
+                        + String.join("; ", mutableChallengeNumberReferences));
     }
 
     private Path resolveContentRoot() {

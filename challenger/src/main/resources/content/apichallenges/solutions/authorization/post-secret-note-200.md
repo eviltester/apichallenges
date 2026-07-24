@@ -3,7 +3,7 @@ date:  2021-07-25T09:00:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - POST amend secret note 200
 seo_title: Solution: POST amend secret note 200 | API Challenges
-description: How to solve API challenge 34 - amend the secret note with a POST request and receive 200 status code
+description: How to solve POST /secret/note (200) - amend the secret note with a POST request and receive 200 status code
 seo_description: Use this walkthrough to solve POST amend secret note 200 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-401-403
 schema_howto_steps: Create a POST request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
@@ -17,7 +17,7 @@ In the API Challenges we do this by POST request to the user's secrete note endp
 
 ## 	POST Amend Secret Note Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -25,14 +25,14 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## Challenge 34 POST Amend
+## POST /secret/note (200)
 
 > Issue a POST request on the `/secret/note` end point with a note payload e.g. {"note":"my note"} and receive 200 when valid X-AUTH-TOKEN used. Note is maximum length 100 chars and will be truncated when stored.
 
 - `POST` request means use the HTTP Verb POST
   - e.g. `POST /secret/note` sends to the secret note endpoint
 - `with a note payload` include a `JSON` formatted object as the payload    
-- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `/secret/token` response in Challenge 30
+- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `POST /secret/token (201)` response
 - add the `X-CHALLENGER` header to track progress and authenticate the request
 - Receive a 200 response because both `X-CHALLENGER` and `X-AUTH-TOKEN` are for the same user and the payload was well formatted.
 
@@ -106,7 +106,6 @@ Example body of the response:
 {{<youtube-embed key="A9T9yjzEOEE" title="Solution to POST authorization challenge using header">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54090441)
-
 
 
 

@@ -16,21 +16,21 @@ When unauthorized, the API Challenge API will return status codes of 401 and 403
 
 ## 	POST Amend Secret Note Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
 - Authentication is "are you who you say you are" (`X-CHALLENGER`)
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
-Both Challenge 35 and 36 are so similar that we have covered them in one post.
+Both `POST /secret/note (401)` and `POST /secret/note (403)` are so similar that we have covered them in one post.
 
-Following on from challenge 35 were we successfully amended a post. Now we try to repeat the same requests but
+Following on from `POST /secret/note (200)`, where we successfully amended a note, we try to repeat the same requests but
 
-- Challenge POST Amend no AUTH TOKEN - remove the X-AUTH-TOKEN header
-- Challenge POST Amend Invalid AUTH TOKEN - the X-AUTH-TOKEN header has the wrong value
+- `POST /secret/note (401)` - remove the X-AUTH-TOKEN header
+- `POST /secret/note (403)` - the X-AUTH-TOKEN header has the wrong value
 
-## Challenge - POST Amend no AUTH TOKEN
+## POST /secret/note (401) - No AUTH TOKEN
 
 > Issue a POST request on the `/secret/note` end point with a note payload {"note":"my note"} and receive 401 when no X-AUTH-TOKEN present
 
@@ -80,11 +80,11 @@ Following on from challenge 35 were we successfully amended a post. Now we try t
 
 
 
-## Challenge POST Amend Invalid AUTH TOKEN
+## POST /secret/note (403) - Amend Invalid AUTH TOKEN
 
 > Issue a POST request on the `/secret/note` end point with a note payload {"note":"my note"} and receive 403 when X-AUTH-TOKEN does not match a valid token
 
-- same basic message as previous challenge but the `X-AUTH-TOKEN` header is included, but the value does not match the value returned from challenge `/secret/token` request.
+- same basic message as the previous request but the `X-AUTH-TOKEN` header is included, but the value does not match the value returned from the `POST /secret/token (201)` request.
 
 ## Example Request
 
@@ -122,7 +122,6 @@ Following on from challenge 35 were we successfully amended a post. Now we try t
 {{<youtube-embed key="A9T9yjzEOEE" title="Solution to POST unauthorized and forbidden challenges using header">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54091910)
-
 
 
 

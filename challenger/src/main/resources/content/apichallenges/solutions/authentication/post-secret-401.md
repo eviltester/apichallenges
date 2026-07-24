@@ -19,7 +19,7 @@ the wrong details. In response the API returns a status code of 401.
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## Challenge 49 Authentication Failed
+## POST /secret/token (401) - Authentication Failed
 
 > Issue a POST request on the `/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
 
@@ -101,7 +101,6 @@ Although we add an "Authorization" header, really we are trying to "authenticate
 {{<youtube-embed key="RSQGADU3SLA" title="Solution to failed basic auth challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54057993)
-
 
 
 

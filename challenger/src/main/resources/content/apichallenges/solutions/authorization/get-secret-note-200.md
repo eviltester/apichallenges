@@ -3,7 +3,7 @@ date:  2021-07-25T08:45:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - GET authorized secret note 200
 seo_title: Solution: GET authorized secret note 20 | API Challenges
-description: How to solve API challenge 33 - authorized to access secret note 200
+description: How to solve GET /secret/note (200) - authorized to access secret note
 seo_description: Use this walkthrough to solve GET authorized secret note with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-200
 schema_howto_steps: Create a GET request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
@@ -17,7 +17,7 @@ The API Challenge returns a status code of 200 and the secret note when we are a
 
 ## 	Authorization Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -25,13 +25,13 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## Challenge 33 Authorized
+## GET /secret/note (200)
 
 > Issue a GET request on the `/secret/note` end point receive 200 when valid X-AUTH-TOKEN used - response body should contain the note
 
 - `GET` request means use the HTTP Verb GET
     - e.g. `GET /secret/note` sends to the secret note endpoint
-- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `/secret/token` response in Challenge 30
+- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `POST /secret/token (201)` response
 - add the `X-CHALLENGER` header to track progress
 - Receive a 200 response because both `X-CHALLENGER` and `X-AUTH-TOKEN` are for the same user. The Response should contain the content of the secret note.
 
@@ -88,7 +88,6 @@ Example body of the response:
 {{<youtube-embed key="2uRpzr2OmEY" title="Solution to Get authorization challenge using header">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54089625)
-
 
 
 
