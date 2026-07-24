@@ -12,6 +12,7 @@
   const LIVE_WIDGET_HEADER = 'X-API-Challenges-Live-Widget';
   const CHALLENGER_COOKIE = 'X-CHALLENGER';
   const LEGACY_CHALLENGER_COOKIE = 'X-THINGIFIER-DATABASE-NAME';
+  const USE_CURL_EXE_COOKIE = 'USE_CURL_EXE';
   const renderedWidgets = [];
 
   function onReady(callback) {
@@ -77,6 +78,45 @@
       }
     }
     return '';
+  }
+
+  function browserPlatform() {
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+      return navigator.userAgentData.platform;
+    }
+    return navigator.userAgent || '';
+  }
+
+  function isWindowsPlatform() {
+    return /(windows|win32|win64|wow64)/.test(browserPlatform().toLowerCase());
+  }
+
+  function useCurlExePreference() {
+    const storedPreference = getCookie(USE_CURL_EXE_COOKIE).toLowerCase();
+    if (storedPreference === 'true') {
+      return true;
+    }
+    if (storedPreference === 'false') {
+      return false;
+    }
+    return isWindowsPlatform();
+  }
+
+  function setUseCurlExePreference(useCurlExe) {
+    setCookie(USE_CURL_EXE_COOKIE, useCurlExe ? 'true' : 'false', 365);
+  }
+
+  function curlExecutable() {
+    return useCurlExePreference() ? 'curl.exe' : 'curl';
+  }
+
+  function refreshCurlCommands(useCurlExe) {
+    document.querySelectorAll('.sim-live-curl-exe-checkbox').forEach(function (checkbox) {
+      checkbox.checked = useCurlExe;
+    });
+    renderedWidgets.forEach(function (widgetState) {
+      widgetState.updateCommands();
+    });
   }
 
   function currentChallenger() {
@@ -256,7 +296,7 @@
   }
 
   function buildCurlCommand(request) {
-    const parts = ['curl -i', '-X', request.method, `"${request.url}"`];
+    const parts = [`${curlExecutable()} -i`, '-X', request.method, `"${request.url}"`];
     request.headers.forEach(function (header) {
       parts.push(`-H "${header.name}: ${header.value}"`);
     });
@@ -458,9 +498,29 @@
     return headerLines.sort().join('\n');
   }
 
-  function renderCommandPanel(commandText) {
+  function renderCurlExeToggle() {
+    const label = document.createElement('label');
+    label.className = 'sim-live-curl-exe-toggle';
+    label.title = 'Use curl.exe instead of curl in the generated command';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'sim-live-curl-exe-checkbox';
+    checkbox.checked = useCurlExePreference();
+    checkbox.addEventListener('change', function () {
+      setUseCurlExePreference(checkbox.checked);
+      refreshCurlCommands(checkbox.checked);
+    });
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode('.exe'));
+    return label;
+  }
+
+  function renderCommandPanel(commandText, options) {
     const panel = document.createElement('div');
     panel.className = 'sim-live-command-panel';
+    const commandOptions = options || {};
 
     const pre = document.createElement('pre');
     pre.className = 'sim-live-command';
@@ -474,8 +534,15 @@
       copyText(pre.textContent, copyButton);
     });
 
+    const actions = document.createElement('div');
+    actions.className = 'sim-live-command-actions';
+    actions.appendChild(copyButton);
+    if (commandOptions.curlExeToggle) {
+      actions.appendChild(renderCurlExeToggle());
+    }
+
     panel.appendChild(pre);
-    panel.appendChild(copyButton);
+    panel.appendChild(actions);
     return {
       panel: panel,
       pre: pre,
@@ -1098,7 +1165,7 @@
     browserPanel.panel.dataset.panel = 'browser';
     widget.appendChild(browserPanel.panel);
 
-    const curlPanel = renderCommandPanel(buildCurlCommand(request));
+    const curlPanel = renderCommandPanel(buildCurlCommand(request), { curlExeToggle: true });
     curlCommand = curlPanel.pre;
     curlPanel.panel.className += ' sim-live-panel';
     curlPanel.panel.dataset.panel = 'curl';
