@@ -1,0 +1,1218 @@
+{
+  "name": "API From Hell",
+  "description": "A deliberately awkward API for checking how REST clients display bad responses.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/status",
+      "statusCode": 200,
+      "label": "Status - Markdown Documentation",
+      "documentation": "Markdown status text describing the intentionally awkward response set.",
+      "problem": "This is a good response, but it is markdown rather than JSON or XML.",
+      "expectation": "A REST client should show the response body as text/markdown and make the content type visible.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/markdown"
+        }
+      ],
+      "body": "# Mock API From Hell\n\nAn API designed to test and evaluate REST Clients.\n\n- Do the REST Clients help spot the errors?\n- Are error messages readable and helpful?\n- Do the REST Clients flag errors automatically?\n\nAPI Should have a Swagger file to make it easy to import into clients.\n\nUser should be able to execute requests quickly and spot obvious issues.\n\n## Errors covered\n\n- No Error\n   - [x] good endpoints to cover main content types to check REST Client can render and handle them\n- Additional Content Formats\n   - [x] Plain text\n   - [x] HTML\n   - [x] CSV\n   - [x] YAML\n   - [x] Form URL encoded\n   - [x] Octet stream\n- Missing Content-Type\n   - [x] JSON body without Content-Type\n   - [x] XML body without Content-Type\n   - [x] HTML body without Content-Type\n- API Returns malformed JSON\n   - [x] Missing final collection terminator\n   - [x] Trailing comma in array\n   - [x] Trailing comma in object\n   - [x] Unquoted key\n   - [x] Single quoted string\n   - [x] Bad escape sequence\n   - [x] Truncated string\n   - [x] Extra data after document\n   - [x] Missing colon\n   - [x] Leading zero number\n   - [x] NaN value\n   - [x] Unclosed object\n   - [x] Raw control character\n- Problematic JSON\n   - [x] Duplicate keys\n   - [x] Large integer\n   - [x] High precision decimal\n   - [x] Exponent number\n   - [x] Null vs missing field\n   - [x] Escaped Unicode\n   - [x] Empty object\n   - [x] Top-level string\n   - [x] Top-level number\n   - [x] Top-level boolean\n   - [x] Top-level null\n   - [x] Empty body with JSON content type\n   - [x] UTF-8 BOM prefix\n   - [x] NDJSON\n- API Returns malformed XML\n   - [x] Missing final root element closure\n   - [x] Mismatched tag\n   - [x] Unescaped ampersand\n   - [x] Duplicate attribute\n   - [x] Undefined entity\n   - [x] Multiple root elements\n   - [x] Missing attribute quote\n   - [x] Unclosed CDATA\n   - [x] Invalid character\n   - [x] Truncated document\n   - [x] Bad processing instruction\n- Problematic XML\n   - [x] Attributes vs elements\n   - [x] Empty vs missing vs nil\n   - [x] Whitespace significant text\n   - [x] CDATA content\n   - [x] Mixed content\n   - [x] Processing instruction\n   - [x] Comments\n   - [x] Encoding declaration mismatch\n   - [x] DOCTYPE and DTD\n   - [x] Empty body with XML content type\n   - [x] UTF-8 BOM prefix\n- API Returns mismatched content-type e.g. content-type xml, but is json\n   - [x] json-xml\n   - [x] xml-json\n- Status code semantic mismatches\n   - [x] 201 with no Location header\n   - [x] 3xx with no redirect Location\n   - [x] 204 with content\n   - [x] 205 with content\n   - [x] 304 with content\n   - [x] 206 without Content-Range\n   - [x] 401 without WWW-Authenticate\n   - [x] 405 without Allow\n   - [x] 416 without Content-Range\n   - [x] 200 with error body\n   - [x] 500 with success body\n"
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "statusCode": 200,
+      "label": "Version - Missing Content-Type Header",
+      "documentation": "Returns a small JSON-looking version payload.",
+      "problem": "No content type header is explicitly set for the response.",
+      "expectation": "A REST client should still show the raw body and make the missing or defaulted content type obvious.",
+      "headers": [],
+      "body": "{\"version\":\"6\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/good/json",
+      "statusCode": 200,
+      "label": "Good JSON - Valid JSON And Content-Type",
+      "documentation": "Returns valid JSON with a matching application/json content type.",
+      "problem": "Nothing is wrong with this response. It is the control sample.",
+      "expectation": "A REST client should format or inspect this as valid JSON.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]"
+    },
+    {
+      "method": "GET",
+      "path": "/good/xml",
+      "statusCode": 200,
+      "label": "Good XML - Valid XML And Content-Type",
+      "documentation": "Returns valid XML with a matching application/xml content type.",
+      "problem": "Nothing is wrong with this response. It is the XML control sample.",
+      "expectation": "A REST client should format or inspect this as valid XML.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>"
+    },
+    {
+      "method": "GET",
+      "path": "/good/text",
+      "statusCode": 200,
+      "label": "Good Text - Plain Text And Content-Type",
+      "documentation": "Returns plain text with a matching text/plain content type.",
+      "problem": "Nothing is wrong with this response. It is the plain text control sample.",
+      "expectation": "A REST client should show the response as readable text and make the content type visible.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain"
+        }
+      ],
+      "body": "API From Hell plain text response.\nLine two keeps this as normal text."
+    },
+    {
+      "method": "GET",
+      "path": "/good/html",
+      "statusCode": 200,
+      "label": "Good HTML - Valid HTML And Content-Type",
+      "documentation": "Returns simple HTML with a matching text/html content type.",
+      "problem": "Nothing is wrong with this response. It is the HTML control sample.",
+      "expectation": "A REST client should make it clear whether it is showing rendered HTML or raw HTML.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/html"
+        }
+      ],
+      "body": "<!doctype html><html><head><title>API From Hell</title></head><body><h1>HTML response</h1><p>This is valid HTML.</p></body></html>"
+    },
+    {
+      "method": "GET",
+      "path": "/good/csv",
+      "statusCode": 200,
+      "label": "Good CSV - Valid CSV And Content-Type",
+      "documentation": "Returns small comma-separated data with a matching text/csv content type.",
+      "problem": "Nothing is wrong with this response. It is the CSV control sample.",
+      "expectation": "A REST client should show the raw CSV and, if supported, provide a readable table view.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/csv"
+        }
+      ],
+      "body": "id,name,active\n1,Alice,true\n2,Bob,false\n"
+    },
+    {
+      "method": "GET",
+      "path": "/good/yaml",
+      "statusCode": 200,
+      "label": "Good YAML - Valid YAML And Content-Type",
+      "documentation": "Returns a small YAML document with a matching application/yaml content type.",
+      "problem": "Nothing is wrong with this response. It is the YAML control sample.",
+      "expectation": "A REST client should preserve indentation and make the YAML media type visible.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/yaml"
+        }
+      ],
+      "body": "name: API From Hell\nitems:\n  - id: 1\n    active: true\n  - id: 2\n    active: false\n"
+    },
+    {
+      "method": "GET",
+      "path": "/good/form-urlencoded",
+      "statusCode": 200,
+      "label": "Good Form URL Encoded - Valid Form Body And Content-Type",
+      "documentation": "Returns URL-encoded key/value data with a matching application/x-www-form-urlencoded content type.",
+      "problem": "Nothing is wrong with this response. It is the form-urlencoded control sample.",
+      "expectation": "A REST client should show the raw encoded body and ideally decode the key/value pairs clearly.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "body": "name=Alice+Example&role=admin&active=true"
+    },
+    {
+      "method": "GET",
+      "path": "/good/octet-stream",
+      "statusCode": 200,
+      "label": "Good Octet Stream - Binary-Looking Body And Content-Type",
+      "documentation": "Returns a small binary-looking payload with an application/octet-stream content type.",
+      "problem": "Nothing is wrong with this response. It is the octet-stream control sample.",
+      "expectation": "A REST client should make it clear whether it is showing bytes, text, or offering a download.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/octet-stream"
+        }
+      ],
+      "body": "API-FROM-HELL-BYTES:\u0000\u0001\u0002END"
+    },
+    {
+      "method": "GET",
+      "path": "/missing-content-type/json",
+      "statusCode": 200,
+      "label": "Missing Content-Type - JSON Body",
+      "documentation": "Returns a JSON body without declaring a Content-Type header.",
+      "problem": "The body looks like JSON but the server does not declare application/json.",
+      "expectation": "A REST client should show that the content type is missing and avoid hiding how it inferred the format.",
+      "headers": [],
+      "body": "{\"message\":\"json body without content type\",\"ok\":true}"
+    },
+    {
+      "method": "GET",
+      "path": "/missing-content-type/xml",
+      "statusCode": 200,
+      "label": "Missing Content-Type - XML Body",
+      "documentation": "Returns an XML body without declaring a Content-Type header.",
+      "problem": "The body looks like XML but the server does not declare application/xml.",
+      "expectation": "A REST client should show that the content type is missing and avoid hiding how it inferred the format.",
+      "headers": [],
+      "body": "<?xml version=\"1.0\"?><root><message>xml body without content type</message></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/missing-content-type/html",
+      "statusCode": 200,
+      "label": "Missing Content-Type - HTML Body",
+      "documentation": "Returns an HTML body without declaring a Content-Type header.",
+      "problem": "The body looks like HTML but the server does not declare text/html.",
+      "expectation": "A REST client should show that the content type is missing and make rendered-vs-raw behavior obvious.",
+      "headers": [],
+      "body": "<!doctype html><html><body><h1>HTML without content type</h1></body></html>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json",
+      "statusCode": 200,
+      "label": "Malformed JSON - Missing Collection Terminator",
+      "documentation": "Returns a JSON array that starts correctly but never closes the collection.",
+      "problem": "The body is malformed JSON even though the status is 200 and content type says application/json.",
+      "expectation": "A REST client should show a parse/formatting failure and still make the raw body available.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/trailing-comma-array",
+      "statusCode": 200,
+      "label": "Malformed JSON - Trailing Comma In Array",
+      "documentation": "Returns a JSON array with a trailing comma before the closing bracket.",
+      "problem": "JSON does not allow a trailing comma after the final array item.",
+      "expectation": "A REST client should show that JSON parsing failed and still make the raw body available.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "[{\"id\":1,\"name\":\"first\"},]"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/trailing-comma-object",
+      "statusCode": 200,
+      "label": "Malformed JSON - Trailing Comma In Object",
+      "documentation": "Returns a JSON object with a trailing comma before the closing brace.",
+      "problem": "JSON does not allow a trailing comma after the final object property.",
+      "expectation": "A REST client should flag the parse failure near the end of the object.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"id\":1,\"name\":\"first\",}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/unquoted-key",
+      "statusCode": 200,
+      "label": "Malformed JSON - Unquoted Object Key",
+      "documentation": "Returns an object where the property name is not wrapped in double quotes.",
+      "problem": "JSON object keys must be double-quoted strings.",
+      "expectation": "A REST client should not treat JavaScript object literal syntax as valid JSON.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{id:1,\"name\":\"first\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/single-quoted-string",
+      "statusCode": 200,
+      "label": "Malformed JSON - Single Quoted String",
+      "documentation": "Returns JSON-looking data using single quotes for strings.",
+      "problem": "JSON strings must use double quotes, not single quotes.",
+      "expectation": "A REST client should distinguish JSON from JavaScript-like object notation.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{'id':1,'name':'first'}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/bad-escape",
+      "statusCode": 200,
+      "label": "Malformed JSON - Bad Escape Sequence",
+      "documentation": "Returns a string with an unsupported escape sequence.",
+      "problem": "JSON allows only specific escape sequences; \\q is not valid.",
+      "expectation": "A REST client should show where the bad escape sequence breaks parsing.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"path\":\"C:\\temp\\q\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/truncated-string",
+      "statusCode": 200,
+      "label": "Malformed JSON - Truncated String",
+      "documentation": "Returns an object with a string value that never closes.",
+      "problem": "The response ends before the string terminator is present.",
+      "expectation": "A REST client should make it clear that the body was incomplete or truncated.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\":\"unterminated}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/extra-data-after-document",
+      "statusCode": 200,
+      "label": "Malformed JSON - Extra Data After Document",
+      "documentation": "Returns one complete JSON object followed by another value.",
+      "problem": "A JSON response body should contain one complete JSON document, not extra data after it.",
+      "expectation": "A REST client should show that the first object parsed but unexpected data follows.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"ok\":true} {\"extra\":true}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/missing-colon",
+      "statusCode": 200,
+      "label": "Malformed JSON - Missing Colon",
+      "documentation": "Returns an object property without the colon between key and value.",
+      "problem": "JSON object members require a colon between the name and value.",
+      "expectation": "A REST client should identify the structural syntax error.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\" \"hello\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/leading-zero-number",
+      "statusCode": 200,
+      "label": "Malformed JSON - Leading Zero Number",
+      "documentation": "Returns a numeric value with a leading zero.",
+      "problem": "JSON numbers cannot use leading zeroes like 01.",
+      "expectation": "A REST client should reject the number rather than silently accepting non-standard JSON.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"count\":01}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/nan-value",
+      "statusCode": 200,
+      "label": "Malformed JSON - NaN Value",
+      "documentation": "Returns NaN as a value in a JSON-looking object.",
+      "problem": "NaN is not a valid JSON number or literal.",
+      "expectation": "A REST client should not silently accept JavaScript-only numeric values as JSON.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"value\":NaN}"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/unclosed-object",
+      "statusCode": 200,
+      "label": "Malformed JSON - Unclosed Object",
+      "documentation": "Returns an object that never closes with a final brace.",
+      "problem": "The JSON object starts correctly but the closing brace is missing.",
+      "expectation": "A REST client should report the incomplete object and preserve the raw response.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"id\":1,\"name\":\"open\""
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/json/control-character",
+      "statusCode": 200,
+      "label": "Malformed JSON - Raw Control Character",
+      "documentation": "Returns a string containing a raw control character.",
+      "problem": "JSON strings cannot contain unescaped control characters.",
+      "expectation": "A REST client should show that the body is not valid JSON and still allow raw inspection.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\":\"bad\u0001control\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/duplicate-keys",
+      "statusCode": 200,
+      "label": "Problematic JSON - Duplicate Keys",
+      "documentation": "Returns valid JSON syntax with the same object key repeated.",
+      "problem": "Duplicate object keys are ambiguous because parsers disagree on whether the first or last value wins.",
+      "expectation": "A REST client should make duplicate keys visible or warn that values may be overwritten.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"id\":1,\"id\":2,\"name\":\"duplicate key example\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/large-integer",
+      "statusCode": 200,
+      "label": "Problematic JSON - Large Integer",
+      "documentation": "Returns an integer larger than JavaScript can safely represent exactly.",
+      "problem": "Large JSON numbers can lose precision in clients that store all numbers as floating point values.",
+      "expectation": "A REST client should display the exact raw value and avoid silently rounding it.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"safeLimit\":9007199254740991,\"largerThanSafe\":9007199254740993}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/high-precision-decimal",
+      "statusCode": 200,
+      "label": "Problematic JSON - High Precision Decimal",
+      "documentation": "Returns a decimal value with more precision than many clients preserve.",
+      "problem": "Some parsers or viewers round high precision decimal values when rendering or generating code.",
+      "expectation": "A REST client should make the raw numeric text available so precision loss can be spotted.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"amount\":0.12345678901234567890123456789}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/exponent-number",
+      "statusCode": 200,
+      "label": "Problematic JSON - Exponent Number",
+      "documentation": "Returns JSON numbers using exponent notation.",
+      "problem": "Exponent notation is valid JSON, but some clients display, sort, or generate examples awkwardly.",
+      "expectation": "A REST client should show both the raw exponent form and any interpreted value clearly.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"small\":1.23e-10,\"large\":6.022e23}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/null-vs-missing",
+      "statusCode": 200,
+      "label": "Problematic JSON - Null Vs Missing Field",
+      "documentation": "Returns one item with a null field and another item where the same field is missing.",
+      "problem": "Null and missing fields are semantically different but many clients and generated models blur them.",
+      "expectation": "A REST client should make it easy to see that one value is explicit null and another is absent.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"items\":[{\"id\":1,\"nickname\":null},{\"id\":2}]}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/escaped-unicode",
+      "statusCode": 200,
+      "label": "Problematic JSON - Escaped Unicode",
+      "documentation": "Returns escaped Unicode including a zero-width space and a visually similar character.",
+      "problem": "Escaped Unicode can make values look normal while containing hidden or confusable characters.",
+      "expectation": "A REST client should let users inspect raw escapes as well as rendered text.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"normal\":\"user\",\"zeroWidth\":\"us\\u200Ber\",\"confusable\":\"payl\\u043Ead\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/empty-object",
+      "statusCode": 200,
+      "label": "Problematic JSON - Empty Object",
+      "documentation": "Returns an empty JSON object where useful data would usually be expected.",
+      "problem": "An empty object is valid JSON, but it may violate the semantic contract a client expects.",
+      "expectation": "A REST client should make it clear that the response is valid but contains no fields.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/top-level-string",
+      "statusCode": 200,
+      "label": "Problematic JSON - Top-Level String",
+      "documentation": "Returns a top-level JSON string instead of an object or array.",
+      "problem": "Top-level strings are valid JSON but many clients and schemas assume an object or array.",
+      "expectation": "A REST client should show that the complete JSON document is a scalar string.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "\"hello\""
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/top-level-number",
+      "statusCode": 200,
+      "label": "Problematic JSON - Top-Level Number",
+      "documentation": "Returns a top-level JSON number instead of an object or array.",
+      "problem": "Top-level numbers are valid JSON but can surprise clients that expect structured data.",
+      "expectation": "A REST client should show that the entire response body is one scalar number.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "42"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/top-level-boolean",
+      "statusCode": 200,
+      "label": "Problematic JSON - Top-Level Boolean",
+      "documentation": "Returns a top-level JSON boolean.",
+      "problem": "Top-level booleans are valid JSON but can expose assumptions in viewers and generated clients.",
+      "expectation": "A REST client should display the boolean as the whole document, not as missing body content.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "true"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/top-level-null",
+      "statusCode": 200,
+      "label": "Problematic JSON - Top-Level Null",
+      "documentation": "Returns a top-level JSON null value.",
+      "problem": "Top-level null is valid JSON but can be confused with an empty response or missing data.",
+      "expectation": "A REST client should distinguish the literal null body from no body.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "null"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/empty-body",
+      "statusCode": 200,
+      "label": "Problematic JSON - Empty Body With JSON Content-Type",
+      "documentation": "Returns application/json with an empty response body.",
+      "problem": "An empty body is not a valid JSON document, even when the content type says JSON.",
+      "expectation": "A REST client should show the empty body and not pretend it parsed a JSON value.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": ""
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/bom-prefix",
+      "statusCode": 200,
+      "label": "Problematic JSON - UTF-8 BOM Prefix",
+      "documentation": "Returns a JSON object prefixed with a UTF-8 byte order mark.",
+      "problem": "Some JSON parsers tolerate a BOM and others reject or expose it as an unexpected character.",
+      "expectation": "A REST client should preserve enough raw detail to diagnose the prefix if parsing fails.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "\ufeff{\"message\":\"bom prefix\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/json/ndjson",
+      "statusCode": 200,
+      "label": "Problematic JSON - NDJSON Stream",
+      "documentation": "Returns newline-delimited JSON objects rather than a single JSON document.",
+      "problem": "NDJSON is useful as a stream format, but it is not one JSON document and needs different handling.",
+      "expectation": "A REST client should show this as line-delimited data rather than trying to parse it as one object.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/x-ndjson"
+        }
+      ],
+      "body": "{\"id\":1,\"event\":\"started\"}\n{\"id\":2,\"event\":\"finished\"}\n"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml",
+      "statusCode": 200,
+      "label": "Malformed XML - Missing Root Terminator",
+      "documentation": "Returns XML that starts correctly but does not close the document.",
+      "problem": "The body is malformed XML even though the status is 200 and content type says application/xml.",
+      "expectation": "A REST client should show a parse/formatting failure and still make the raw body available.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n\r\n"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/mismatched-tag",
+      "statusCode": 200,
+      "label": "Malformed XML - Mismatched Tag",
+      "documentation": "Returns XML where a child element closes with the wrong tag name.",
+      "problem": "The item element opens as item but closes as thing.",
+      "expectation": "A REST client should show the mismatched closing tag error and raw XML.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><item>one</thing></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/unescaped-ampersand",
+      "statusCode": 200,
+      "label": "Malformed XML - Unescaped Ampersand",
+      "documentation": "Returns XML containing an ampersand that is not escaped as an entity.",
+      "problem": "Ampersands in text content must be escaped as &amp; unless they start a valid entity.",
+      "expectation": "A REST client should show the entity parsing error and raw response text.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><name>Tom & Jerry</name></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/duplicate-attribute",
+      "statusCode": 200,
+      "label": "Malformed XML - Duplicate Attribute",
+      "documentation": "Returns XML with the same attribute declared twice on one element.",
+      "problem": "An XML element cannot have two attributes with the same name.",
+      "expectation": "A REST client should show the duplicate attribute parse error.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><item id=\"1\" id=\"2\">duplicate</item></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/undefined-entity",
+      "statusCode": 200,
+      "label": "Malformed XML - Undefined Entity",
+      "documentation": "Returns XML that references an entity which has not been declared.",
+      "problem": "The &unknown; entity is not predefined or declared in the document.",
+      "expectation": "A REST client should expose the undefined entity error.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><name>&unknown;</name></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/multiple-root-elements",
+      "statusCode": 200,
+      "label": "Malformed XML - Multiple Root Elements",
+      "documentation": "Returns two top-level elements in one XML document.",
+      "problem": "A well-formed XML document must have exactly one root element.",
+      "expectation": "A REST client should show that content appears after the first complete root.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><one></one><two></two>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/missing-attribute-quote",
+      "statusCode": 200,
+      "label": "Malformed XML - Missing Attribute Quote",
+      "documentation": "Returns XML where an attribute value is not quoted.",
+      "problem": "XML attribute values must be wrapped in quotes.",
+      "expectation": "A REST client should identify the attribute syntax error.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><item id=1>missing quote</item></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/unclosed-cdata",
+      "statusCode": 200,
+      "label": "Malformed XML - Unclosed CDATA",
+      "documentation": "Returns XML with a CDATA section that never terminates.",
+      "problem": "CDATA sections must close with ]]>. This response never closes the section.",
+      "expectation": "A REST client should report the unterminated CDATA section.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><![CDATA[unterminated</root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/invalid-character",
+      "statusCode": 200,
+      "label": "Malformed XML - Invalid Character",
+      "documentation": "Returns XML containing a character that is not allowed in XML 1.0 content.",
+      "problem": "The body includes a raw control character inside the text node.",
+      "expectation": "A REST client should show the invalid character problem without losing the raw response.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root>bad\u0001char</root>"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/truncated-document",
+      "statusCode": 200,
+      "label": "Malformed XML - Truncated Document",
+      "documentation": "Returns XML that starts a nested element but ends before closing it.",
+      "problem": "The document is incomplete and ends before the open elements are closed.",
+      "expectation": "A REST client should report the unexpected end of document.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><item>one"
+    },
+    {
+      "method": "GET",
+      "path": "/malformed/xml/bad-processing-instruction",
+      "statusCode": 200,
+      "label": "Malformed XML - Bad Processing Instruction",
+      "documentation": "Returns XML with a processing instruction that never closes.",
+      "problem": "Processing instructions must close with ?> before normal element markup continues.",
+      "expectation": "A REST client should show the processing instruction syntax error.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><?processing instruction</root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/attributes-vs-elements",
+      "statusCode": 200,
+      "label": "Problematic XML - Attributes Vs Elements",
+      "documentation": "Returns the same kind of data in both attributes and child elements.",
+      "problem": "Clients often flatten XML into maps and may hide whether a value came from an attribute or an element.",
+      "expectation": "A REST client should make attributes and elements visibly distinct and avoid silently merging conflicting values.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><user id=\"123\" active=\"true\"><id>456</id><active>false</active><name>Attribute Example</name></user></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/empty-vs-missing-vs-nil",
+      "statusCode": 200,
+      "label": "Problematic XML - Empty Vs Missing Vs Nil",
+      "documentation": "Returns empty, missing, and explicitly nil values in one document.",
+      "problem": "Empty elements, absent elements, and xsi:nil values are different states but clients may render them identically.",
+      "expectation": "A REST client should help users distinguish empty, missing, and nil values.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><item id=\"1\"><nickname/></item><item id=\"2\"></item><item id=\"3\"><nickname xsi:nil=\"true\"/></item></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/whitespace-text",
+      "statusCode": 200,
+      "label": "Problematic XML - Whitespace Significant Text",
+      "documentation": "Returns XML text values with leading, trailing, and multiline whitespace.",
+      "problem": "Pretty printers and object mappers can trim or normalize whitespace that is part of the value.",
+      "expectation": "A REST client should let users inspect the raw text and spot whitespace-preservation issues.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><value>  padded value  </value><multiline>\n  line one\n  line two\n</multiline></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/cdata-content",
+      "statusCode": 200,
+      "label": "Problematic XML - CDATA Content",
+      "documentation": "Returns XML with JSON-looking and HTML-looking text inside CDATA.",
+      "problem": "Clients may hide CDATA boundaries or try to interpret embedded markup as real XML.",
+      "expectation": "A REST client should preserve CDATA content as text and make the raw body available.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><payload><![CDATA[{\"html\":\"<strong>ok</strong>\",\"amp\":\"A & B\"}]]></payload></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/mixed-content",
+      "statusCode": 200,
+      "label": "Problematic XML - Mixed Content",
+      "documentation": "Returns text and child elements mixed inside the same element.",
+      "problem": "Mixed content is valid XML but awkward for clients that convert XML to simple JSON-like objects.",
+      "expectation": "A REST client should show text nodes and child elements without dropping their order.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><message>Hello <em>important</em> world.</message></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/processing-instruction",
+      "statusCode": 200,
+      "label": "Problematic XML - Processing Instruction",
+      "documentation": "Returns a valid processing instruction before the document root.",
+      "problem": "Processing instructions are valid XML but many viewers hide or ignore them.",
+      "expectation": "A REST client should make processing instructions visible in raw or structured views.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><?client-hint render=\"compact\"?><root><status>ok</status></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/comments",
+      "statusCode": 200,
+      "label": "Problematic XML - Comments",
+      "documentation": "Returns XML containing comments between normal elements.",
+      "problem": "Comments may be hidden by formatters or stripped by object conversion.",
+      "expectation": "A REST client should preserve enough raw detail to show whether comments were present.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><root><!-- hidden note --><status>ok</status><!-- after status --></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/encoding-mismatch",
+      "statusCode": 200,
+      "label": "Problematic XML - Encoding Declaration Mismatch",
+      "documentation": "Returns XML where the HTTP charset and XML declaration disagree.",
+      "problem": "The response header says UTF-8 but the XML declaration says ISO-8859-1.",
+      "expectation": "A REST client should expose both the HTTP charset and XML declaration so encoding assumptions are visible.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml; charset=UTF-8"
+        }
+      ],
+      "body": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><root><text>caf&#233;</text></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/doctype-dtd",
+      "statusCode": 200,
+      "label": "Problematic XML - DOCTYPE And DTD",
+      "documentation": "Returns XML with a safe inline DTD declaration.",
+      "problem": "DOCTYPE and DTD declarations are valid XML but clients may block, ignore, or hide them for security reasons.",
+      "expectation": "A REST client should show that the document includes a DTD without attempting unsafe external resolution.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "<?xml version=\"1.0\"?><!DOCTYPE note [<!ELEMENT note (to,body)><!ELEMENT to (#PCDATA)><!ELEMENT body (#PCDATA)>]><note><to>client</to><body>inline doctype only</body></note>"
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/empty-body",
+      "statusCode": 200,
+      "label": "Problematic XML - Empty Body With XML Content-Type",
+      "documentation": "Returns application/xml with an empty response body.",
+      "problem": "An empty body is not an XML document, even when the content type says XML.",
+      "expectation": "A REST client should show the empty body and not pretend it parsed XML.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": ""
+    },
+    {
+      "method": "GET",
+      "path": "/problematic/xml/bom-prefix",
+      "statusCode": 200,
+      "label": "Problematic XML - UTF-8 BOM Prefix",
+      "documentation": "Returns XML prefixed with a UTF-8 byte order mark.",
+      "problem": "Some clients hide the BOM while others expose it as a leading character or parsing issue.",
+      "expectation": "A REST client should preserve enough raw detail to diagnose the prefix if parsing behaves unexpectedly.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "\ufeff<?xml version=\"1.0\"?><root><message>bom prefix</message></root>"
+    },
+    {
+      "method": "GET",
+      "path": "/mismatch/content-type/json-xml",
+      "statusCode": 200,
+      "label": "Content-Type Mismatch - Header JSON Body XML",
+      "documentation": "Returns XML while declaring application/json.",
+      "problem": "The Content-Type header is application/json but the body is XML.",
+      "expectation": "A REST client should make the mismatch visible and allow you to inspect the raw response.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>"
+    },
+    {
+      "method": "GET",
+      "path": "/mismatch/content-type/xml-json",
+      "statusCode": 200,
+      "label": "Content-Type Mismatch - Header XML Body JSON",
+      "documentation": "Returns JSON while declaring application/xml.",
+      "problem": "The Content-Type header is application/xml but the body is JSON.",
+      "expectation": "A REST client should make the mismatch visible and allow you to inspect the raw response.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]"
+    },
+    {
+      "method": "POST",
+      "path": "/status-code/201-no-location",
+      "statusCode": 201,
+      "label": "201 Missing Location Header",
+      "documentation": "Returns a created-looking JSON response.",
+      "problem": "The status is 201 Created, but the response does not include a Location header for the created resource.",
+      "expectation": "A REST client should make the missing Location header easy to spot.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"id\":123,\"message\":\"created without a Location header\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/301-no-location",
+      "statusCode": 301,
+      "label": "301 Missing Location Header",
+      "documentation": "Returns a permanent redirect status.",
+      "problem": "The status is 301 Moved Permanently, but there is no Location header to follow.",
+      "expectation": "A REST client should show that the redirect target is missing.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain"
+        }
+      ],
+      "body": "Moved permanently, but no Location header was supplied."
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/302-no-location",
+      "statusCode": 302,
+      "label": "302 Missing Location Header",
+      "documentation": "Returns a common temporary redirect status.",
+      "problem": "The status is 302 Found, but there is no Location header to follow.",
+      "expectation": "A REST client should show that the redirect target is missing.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain"
+        }
+      ],
+      "body": "Found somewhere else, but no Location header was supplied."
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/307-no-location",
+      "statusCode": 307,
+      "label": "307 Missing Location Header",
+      "documentation": "Returns a temporary redirect status that should preserve the original method.",
+      "problem": "The status is 307 Temporary Redirect, but there is no Location header to follow.",
+      "expectation": "A REST client should show that the redirect target is missing and not silently change method.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain"
+        }
+      ],
+      "body": "Temporary redirect, but no Location header was supplied."
+    },
+    {
+      "method": "DELETE",
+      "path": "/status-code/204-with-body",
+      "statusCode": 204,
+      "label": "204 Body Present Despite No Content",
+      "documentation": "Returns 204 No Content while the catalog defines a JSON response body.",
+      "problem": "The status says no content, but the endpoint attempts to send response content.",
+      "expectation": "A REST client should make it clear whether the body is present, discarded, or hidden by the HTTP stack.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\":\"This body should not be sent with 204 No Content\"}"
+    },
+    {
+      "method": "POST",
+      "path": "/status-code/205-with-body",
+      "statusCode": 205,
+      "label": "205 Body Present Despite Reset Content",
+      "documentation": "Returns 205 Reset Content while the catalog defines a JSON response body.",
+      "problem": "The status tells the client to reset the document view and should not include a response body.",
+      "expectation": "A REST client should make the body/status contradiction visible.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\":\"This body should not be sent with 205 Reset Content\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/304-with-body",
+      "statusCode": 304,
+      "label": "304 Body Present Despite Not Modified",
+      "documentation": "Returns 304 Not Modified while the catalog defines a JSON response body.",
+      "problem": "The status is a cache validation response and should not include a response body.",
+      "expectation": "A REST client should make it clear whether the body is present, discarded, or hidden by cache/status handling.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"message\":\"This body should not be sent with 304 Not Modified\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/206-no-content-range",
+      "statusCode": 206,
+      "label": "206 Missing Content-Range Header",
+      "documentation": "Returns a partial-looking body.",
+      "problem": "The status is 206 Partial Content, but the response does not include Content-Range.",
+      "expectation": "A REST client should make the missing range metadata easy to spot.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"items\":[1,2],\"message\":\"partial content without Content-Range\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/401-no-www-authenticate",
+      "statusCode": 401,
+      "label": "401 Missing WWW-Authenticate Header",
+      "documentation": "Returns an authentication failure body.",
+      "problem": "The status is 401 Unauthorized, but the response does not include WWW-Authenticate.",
+      "expectation": "A REST client should show the missing authentication challenge header.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"error\":\"authentication required but no challenge header was sent\"}"
+    },
+    {
+      "method": "POST",
+      "path": "/status-code/405-no-allow",
+      "statusCode": 405,
+      "label": "405 Missing Allow Header",
+      "documentation": "Returns a method-not-allowed response body.",
+      "problem": "The status is 405 Method Not Allowed, but the response does not include Allow.",
+      "expectation": "A REST client should show the missing allowed-methods metadata.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"error\":\"method not allowed but no Allow header was sent\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/416-no-content-range",
+      "statusCode": 416,
+      "label": "416 Missing Content-Range Header",
+      "documentation": "Returns an unsatisfied range response body.",
+      "problem": "The status is 416 Range Not Satisfiable, but the response does not include Content-Range.",
+      "expectation": "A REST client should show the missing range explanation.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"error\":\"range not satisfiable but no Content-Range header was sent\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/200-error-body",
+      "statusCode": 200,
+      "label": "200 Error-Shaped Body",
+      "documentation": "Returns a normal success status.",
+      "problem": "The status is 200 OK, but the body is shaped like an error response.",
+      "expectation": "A REST client should make it easy to inspect both status and body without assuming the request succeeded.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"error\":\"Everything is broken\",\"code\":\"NOT_OK\"}"
+    },
+    {
+      "method": "GET",
+      "path": "/status-code/500-success-body",
+      "statusCode": 500,
+      "label": "500 Success-Shaped Body",
+      "documentation": "Returns a server error status.",
+      "problem": "The status is 500 Internal Server Error, but the body claims success.",
+      "expectation": "A REST client should make it easy to inspect both status and body without assuming the body is truthful.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"success\":true,\"message\":\"The body says success but the status is 500\"}"
+    }
+  ]
+}

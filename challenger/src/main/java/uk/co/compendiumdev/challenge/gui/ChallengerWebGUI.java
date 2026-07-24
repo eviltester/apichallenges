@@ -111,7 +111,7 @@ public class ChallengerWebGUI {
                                 <!-- TODO include a sample of learning information -->
                             </li>
 
-                            
+
                             <li id='sim-api-root-menu'><a href="/practice-modes/simulation">API Simulator</a>
                                 <ul>
                                     <li><a href="/practice-modes/simulation">About API Simulator</a></li>

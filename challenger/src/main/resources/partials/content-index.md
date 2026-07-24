@@ -13,6 +13,7 @@
     - [API Challenges](/apichallenges)
     - [Mirror Mode](/practice-modes/mirror)
     - [Simulation Mode](/practice-modes/simulation)
+    - [API From Hell](/practice-modes/fromhell)
 - Tools
     - [REST/HTTP Clients](/tools/clients)
       - [Summary Reviews](/tools/clients/summary-reviews)
