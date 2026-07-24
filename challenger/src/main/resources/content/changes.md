@@ -9,7 +9,13 @@ showads: true
 
 # Change Log
 
+## 2026/07/24 - curl.exe and API From Hell
+
+- added the curl.exe checkbox to make working with Windows easier (curl is the inbuilt bad one and curl.exe is the installed good one)
+- expanded the Mockaroo From Hell prototype and made it a built in practice API to challenge REST Clients.
+
 ## 2026/07/23 - Expanded Status Code Range
+
 - Expanded the status codes to cover `431`, `422` and `409`, rather than use `400` for everything
 - Added new challenges for `431` for a Too Long X-Challenger header and `409` mismatched X-Challenger GUIDs
 - Added inline clients into the API Challenges solution pages to make solving within the browser possible (for most challenges).
