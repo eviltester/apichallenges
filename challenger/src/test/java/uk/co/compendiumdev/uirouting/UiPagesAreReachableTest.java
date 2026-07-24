@@ -287,6 +287,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("div.main-text-content pre"));
         Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
+        Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
+        Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
 
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -318,6 +320,12 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("101 - prefix.length"));
         Assertions.assertTrue(response.body.contains("autoCreateFirstTodo"));
         Assertions.assertTrue(response.body.contains("lastCreatedTodoId"));
+        Assertions.assertTrue(response.body.contains("USE_CURL_EXE"));
+        Assertions.assertTrue(response.body.contains("navigator.userAgentData.platform"));
+        Assertions.assertTrue(response.body.contains("isWindowsPlatform"));
+        Assertions.assertTrue(response.body.contains("curl.exe"));
+        Assertions.assertTrue(response.body.contains("sim-live-curl-exe-checkbox"));
+        Assertions.assertTrue(response.body.contains("refreshCurlCommands"));
 
         response = http.send("/favicon/site.webmanifest", "get");
         Assertions.assertEquals(200, response.statusCode);

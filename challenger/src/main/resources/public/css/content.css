@@ -363,6 +363,25 @@ a.next-challenge-cta-link:hover {
     margin-top: 0.5rem;
 }
 
+.sim-live-command-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.sim-live-command-actions .sim-live-copy {
+    margin-top: 0;
+}
+
+.sim-live-curl-exe-toggle {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.25rem;
+    font-weight: 600;
+}
+
 .sim-live-status {
     border-left: 4px solid #1f4e79;
     background: #eef4f9;
