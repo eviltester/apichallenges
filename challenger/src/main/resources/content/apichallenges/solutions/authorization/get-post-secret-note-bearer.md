@@ -16,24 +16,24 @@ Another authentication mechanism is the Bearer Token. Each API Challenger has a 
 
 ## 	Bearer Token Secret Note Challenges
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
 - Authentication is "are you who you say you are" (`X-CHALLENGER`)
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
-Both Challenges 37 and 38 use the Bearer authentication mechanism and are so similar that we have covered them in one post.
+Both `GET /secret/note (Bearer)` and `POST /secret/note (Bearer)` use the Bearer authentication mechanism and are so similar that we have covered them in one post.
 
-Rather than use the `X-AUTH-TOKEN` header, we use the value returned in Challenge 30 for the `X-AUTH-TOKEN` but we add it as `Bearer` token authentication.
+Rather than use the `X-AUTH-TOKEN` header, we use the `X-AUTH-TOKEN` value returned from `POST /secret/token (201)` but we add it as `Bearer` token authentication.
 
-In Insomnia, use the "Auth" tab and select "Bearer" authentication. Then the toke value is the value of the `X-AUTH-TOKEN` from Challenge 30.
+In Insomnia, use the "Auth" tab and select "Bearer" authentication. Then the token value is the value of the `X-AUTH-TOKEN` from `POST /secret/token (201)`.
 
-## Challenge 37 GET /secret/note (Bearer)
+## GET /secret/note (Bearer)
 
 > Issue a GET request on the `/secret/note` end point receive 200 when using the X-AUTH-TOKEN value as an Authorization Bearer token - response body should contain the note
 
-This challenge is almost a duplicate of the request used in challenge 33
+This request is almost a duplicate of the request used in `GET /secret/note (200)`
 
 - Create a new request for the `/secret/note` end point
     - if running locally that endpoint would be
@@ -84,11 +84,11 @@ The response body would contain a "note":
 }
 ```
 
-## Challenge 38 POST /secret/note (Bearer)
+## POST /secret/note (Bearer)
 
 > Issue a POST request on the `/secret/note` end point with a note payload e.g. {"note":"my note"} and receive 200 when valid X-AUTH-TOKEN value used as an Authorization Bearer token. Status code 200 received. Note is maximum length 100 chars and will be truncated when stored.
 
-This is almost a duplicate of challenge 34.
+This is almost a duplicate of `POST /secret/note (200)`.
 
 - Create a new request for the `/secret/note` end point
     - if running locally that endpoint would be
@@ -148,7 +148,6 @@ Sample response body:
 {{<youtube-embed key="8GsMTZxEItw" title="Solution to Bearer Token Challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54091910)
-
 
 
 

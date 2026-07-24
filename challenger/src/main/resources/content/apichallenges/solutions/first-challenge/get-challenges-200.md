@@ -9,7 +9,7 @@ schema_howto_steps: Create a GET request to /challenges||Include X-CHALLENGER so
 showads: true
 ---
 
-# How to complete the challenge `GET /challenges 200`.
+# How to complete the challenge `GET /challenges (200)`.
 
 How to use a GET request with an x-challenger header to get the progress status of all the API Challenges.
 
@@ -81,4 +81,3 @@ How to use a GET request with an x-challenger header to get the progress status 
 {{<youtube-embed key="DrAjk2NaPRo" title="Solution to Get Challenges progress">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/41106708)
-

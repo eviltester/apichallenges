@@ -3,7 +3,7 @@ date:  2021-07-25T08:30:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - unauthorized secret note 401
 seo_title: Solution: unauthorized secret note 401 | API Challenges
-description: How to solve API challenge 32 - unauthorized to access secret note 403
+description: How to solve GET /secret/note (401) - unauthorized to access secret note
 seo_description: Use this walkthrough to solve unauthorized secret note 401 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-200
 schema_howto_steps: Create a GET request to /secret/note||Add an invalid or missing X-AUTH-TOKEN value to trigger unauthorized access||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
@@ -17,7 +17,7 @@ This post and video shows how to complete the unauthorized secret note challenge
 
 ## 	Authorization Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -25,7 +25,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## Challenge 32 Unauthorized
+## GET /secret/note (401)
 
 > Issue a GET request on the `/secret/note` end point and receive 401 when no X-AUTH-TOKEN header present
 
@@ -80,7 +80,6 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 {{<youtube-embed key="__uZlQZ48io" title="Solution to Unauthorized Get challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54089275)
-
 
 
 

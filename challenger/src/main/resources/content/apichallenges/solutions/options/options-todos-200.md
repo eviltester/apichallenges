@@ -3,7 +3,7 @@ date:  2021-04-21T09:30:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - OPTIONS todos 200
 seo_title: Solution: OPTIONS todos 200 Guide | API Challenges
-description: How to solve API challenge 13 OPTIONS todos 200 to identify the allowed verbs for an API End Point.
+description: How to solve OPTIONS /todos (200) to identify the allowed verbs for an API End Point.
 seo_description: Use this walkthrough to solve OPTIONS todos 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-200-xml
 schema_howto_steps: Create an OPTIONS request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
@@ -76,6 +76,5 @@ As a set of follow on exercises:
 {{<youtube-embed key="Ld5h1TSnXWA" title="Solution to see Supported HTTP Verbs using OPTIONS for an endpoint">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/50387322)
-
 
 

@@ -3,7 +3,7 @@ date:  2021-07-24T08:30:00Z
 lastmod: 2026-02-18
 title: API Challenges Solution For - authentication passed 201
 seo_title: Solution: authentication passed 201 | API Challenges
-description: How to solve API challenge 30 - authenticate with username and password for basic auth.
+description: How to solve POST /secret/token (201) - authenticate with username and password for basic auth.
 seo_description: Use this walkthrough to solve authentication passed 201 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-403
 schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with the username and password required by the challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 201||Capture the returned X-AUTH-TOKEN for later authorization challenges
@@ -18,7 +18,7 @@ One way of authenticating a user is through Basic Auth which requires a username
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## Challenge 30 Authentication Passed
+## POST /secret/token (201)
 
 > Issue a POST request on the `/secret/token` end point and receive 201 when Basic auth username/password is admin/password
 
@@ -40,7 +40,7 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 - There should be no payload in the message
 - You should receive a 201 response - meaning the token has been created
 - The request should have an `X-CHALLENGER` header to track challenge completion
-- The response should have an `X-AUTH-TOKEN` header which you will include in the messages for challenges 33, 34, 37 and 38
+- The response should have an `X-AUTH-TOKEN` header which you will include in the messages for `GET /secret/note (200)`, `POST /secret/note (200)`, `GET /secret/note (Bearer)`, and `POST /secret/note (Bearer)`
 
 ### Try it now
 
@@ -98,7 +98,6 @@ The command to encode a string as base64 is `btoa`
 {{<youtube-embed key="J2GQiuEfHkI" title="Solution to Basic Auth update challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54058810)
-
 
 
 

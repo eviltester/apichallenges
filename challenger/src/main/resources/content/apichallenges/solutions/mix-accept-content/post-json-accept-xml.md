@@ -1,7 +1,7 @@
 ---
 date:  2021-07-18T08:00:00Z
 lastmod: 2026-02-18
-title: API Testing Challenge 24 - How To - POST JSON accept XML
+title: How To - POST JSON accept XML
 seo_title: Solution: POST JSON accept XML | API Challenges
 description: How to solve API challenge POST /todos JSON to XML. Creating a todo with JSON and receiving response in XML.
 seo_description: Use this walkthrough to solve POST JSON accept XML with request setup, key headers, and expected status codes so you can complete the challenge confidently.
@@ -111,7 +111,6 @@ Example Response body:
 {{<youtube-embed key="uw1Jq8t1em4" title="Solution to POST using JSON with resopnse in XML">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/53821574)
-
 
 
 
