@@ -627,6 +627,8 @@ public class MarkdownContentManager {
         final String method = attributes.getOrDefault("method", "GET");
         final String path = attributes.getOrDefault("path", "/");
         final String editable = attributes.getOrDefault("editable", defaultEditable);
+        final boolean wrapInDetails = isTruthy(attributes.get("details"));
+        final String summary = attributes.getOrDefault("summary", "Try it now");
 
         final StringBuilder html = new StringBuilder();
         html.append("<div class=\"")
@@ -641,7 +643,11 @@ public class MarkdownContentManager {
 
         for (Map.Entry<String, String> attribute : attributes.entrySet()) {
             final String key = attribute.getKey();
-            if (key.equals("method") || key.equals("path") || key.equals("editable")) {
+            if (key.equals("method")
+                    || key.equals("path")
+                    || key.equals("editable")
+                    || key.equals("details")
+                    || key.equals("summary")) {
                 continue;
             }
             html.append(" data-")
@@ -652,7 +658,23 @@ public class MarkdownContentManager {
         }
 
         html.append("></div>");
-        return html.toString();
+        if (!wrapInDetails) {
+            return html.toString();
+        }
+
+        return "<details class=\"sim-live-request-details\"><summary>"
+                + escapeHtmlAttribute(summary)
+                + "</summary>"
+                + html
+                + "</details>";
+    }
+
+    private boolean isTruthy(final String value) {
+        if (value == null) {
+            return false;
+        }
+        final String trimmed = value.trim().toLowerCase();
+        return trimmed.equals("true") || trimmed.equals("yes") || trimmed.equals("on");
     }
 
     private String getResourceAsString(String fileName) {

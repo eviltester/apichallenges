@@ -274,6 +274,83 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void fromHellPracticeModePageIncludesCollapsedLiveRequestWidgets() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/fromhell", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>API From Hell</h1>"));
+        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "respond with <code>405 Method Not Allowed</code> and an"
+                                + " <code>Allow</code> header"));
+        Assertions.assertEquals(
+                77, response.body.split("class=\"sim-live-request\"", -1).length - 1);
+        Assertions.assertEquals(
+                77, response.body.split("class=\"sim-live-request-details\"", -1).length - 1);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Try it now</summary><div class=\"sim-live-request\""
+                                + " data-method=\"GET\" data-path=\"/fromhell/status\""));
+        Assertions.assertTrue(response.body.contains("<h2>Additional Content Formats</h2>"));
+        Assertions.assertTrue(response.body.contains("<h3>Good CSV</h3>"));
+        Assertions.assertTrue(response.body.contains("data-path=\"/fromhell/good/csv\""));
+        Assertions.assertTrue(response.body.contains("data-path=\"/fromhell/good/octet-stream\""));
+        Assertions.assertTrue(response.body.contains("<h2>Missing Content-Type</h2>"));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/missing-content-type/xml\""));
+        Assertions.assertFalse(response.body.contains("TODO: expand to cover more formats"));
+        Assertions.assertTrue(response.body.contains("<h3>Trailing Comma In Array</h3>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-path=\"/fromhell/malformed/json/trailing-comma-array\""));
+        Assertions.assertTrue(response.body.contains("<h2>Problematic JSON</h2>"));
+        Assertions.assertTrue(response.body.contains("<h3>Duplicate Keys</h3>"));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/problematic/json/duplicate-keys\""));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/problematic/json/ndjson\""));
+        Assertions.assertTrue(response.body.contains("<h3>Undefined Entity</h3>"));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/malformed/xml/undefined-entity\""));
+        Assertions.assertTrue(response.body.contains("<h2>Problematic XML</h2>"));
+        Assertions.assertTrue(response.body.contains("<h3>Attributes Vs Elements</h3>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-path=\"/fromhell/problematic/xml/attributes-vs-elements\""));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/problematic/xml/bom-prefix\""));
+        Assertions.assertTrue(
+                response.body.contains("data-path=\"/fromhell/mismatch/content-type/xml-json\""));
+        Assertions.assertTrue(response.body.contains("<h2>Status Code Semantic Mismatches</h2>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-method=\"POST\""
+                                + " data-path=\"/fromhell/status-code/201-no-location\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-method=\"DELETE\""
+                                + " data-path=\"/fromhell/status-code/204-with-body\""));
+        Assertions.assertTrue(
+                response.body.contains("curl -v</code> reports the response body as excess data"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<code>304</code> is a cache validation response that should not include"
+                                + " content"));
+        Assertions.assertTrue(
+                response.body.contains("Content-Range: bytes 0-99/200"));
+        Assertions.assertTrue(
+                response.body.contains("Content-Range: bytes */200"));
+        Assertions.assertTrue(
+                response.body.contains("WWW-Authenticate: Basic realm"));
+        Assertions.assertTrue(
+                response.body.contains("Allow: GET, HEAD, OPTIONS"));
+        Assertions.assertFalse(
+                response.body.contains("<details class=\"sim-live-request-details\" open"));
+    }
+
+    @Test
     void staticAssetsAreServedBeforeGenericFallbackRoutes() {
 
         HttpResponseDetails response = http.send("/css/default.css", "get");
@@ -289,6 +366,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
         Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
+        Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
+        Assertions.assertTrue(response.body.contains(".sim-live-request-details .sim-live-title"));
 
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -310,7 +389,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("DOMParser"));
         Assertions.assertTrue(response.body.contains("Pretty print body"));
         Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHODS"));
-        Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS"));
+        Assertions.assertTrue(
+                response.body.contains("BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS"));
         Assertions.assertTrue(response.body.contains("x-http-method-override"));
         Assertions.assertTrue(response.body.contains("unsupportedMethodOverrideHeader"));
         Assertions.assertTrue(response.body.contains("X-API-Challenges-Live-Widget"));
@@ -353,6 +433,11 @@ public class UiPagesAreReachableTest {
                         "/mirror/docs/swagger-ui",
                         "/mirror/docs/openapi.json",
                         "Mirror Mode API Documentation | API Challenges Swagger UI"));
+        args.add(
+                Arguments.of(
+                        "/fromhell/docs/swagger-ui",
+                        "/fromhell/docs/openapi.json",
+                        "API From Hell - Swagger UI"));
         return args.stream();
     }
 
@@ -391,7 +476,16 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
+        Assertions.assertFalse(response.body.contains("href=\"/fromhell/docs/swagger-ui\""));
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
+
+        final HttpResponseDetails practiceModeResponse =
+                http.send("/practice-modes/simulation", "get");
+        Assertions.assertEquals(200, practiceModeResponse.statusCode);
+        Assertions.assertTrue(
+                practiceModeResponse.body.contains("href=\"/practice-modes/fromhell\""));
+        Assertions.assertFalse(
+                practiceModeResponse.body.contains("href=\"/fromhell/docs/swagger-ui\""));
     }
 
     @Test
@@ -608,9 +702,7 @@ public class UiPagesAreReachableTest {
                         "href='/apichallenges/solutions/status-codes/x-challenger-too-long-431'"));
 
         response =
-                http.send(
-                        "/apichallenges/solutions/status-codes/x-challenger-too-long-431",
-                        "get");
+                http.send("/apichallenges/solutions/status-codes/x-challenger-too-long-431", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
@@ -637,9 +729,7 @@ public class UiPagesAreReachableTest {
                         "href='/apichallenges/solutions/authorization/post-secret-note-401-403'"));
 
         response =
-                http.send(
-                        "/apichallenges/solutions/authorization/post-secret-note-401-403",
-                        "get");
+                http.send("/apichallenges/solutions/authorization/post-secret-note-401-403", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(

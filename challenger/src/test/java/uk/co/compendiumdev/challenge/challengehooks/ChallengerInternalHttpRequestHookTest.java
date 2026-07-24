@@ -94,7 +94,8 @@ public class ChallengerInternalHttpRequestHookTest {
     }
 
     @Test
-    public void inMultUserModeOversizedXChallengerHeaderOnHeartbeatReturns431AndTracksByGuidPrefix() {
+    public void
+            inMultUserModeOversizedXChallengerHeaderOnHeartbeatReturns431AndTracksByGuidPrefix() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
         final ChallengerAuthData challenger = challengers.createNewChallenger();

@@ -20,10 +20,7 @@ public class HeartBeatRoutes {
         SimpleHttpRouteCreator.routeStatus(204, endpoint, true, List.of(RoutingVerb.GET.name()));
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
-                                RoutingVerb.GET,
-                                endpoint,
-                                RoutingStatus.returnValue(204),
-                                null)
+                                RoutingVerb.GET, endpoint, RoutingStatus.returnValue(204), null)
                         .addDocumentation("Is the server running? YES 204")
                         .addPossibleStatuses(204, 431));
 

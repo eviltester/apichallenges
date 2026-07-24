@@ -290,6 +290,27 @@ a.next-challenge-cta-link:hover {
     padding: 0.2rem 0.4rem;
 }
 
+.sim-live-request-details {
+    border: 1px solid #c9d5df;
+    margin: 0.75rem 0 1rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.sim-live-request-details > summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.sim-live-request-details .sim-live-title {
+    display: none;
+}
+
+.sim-live-request-details .sim-live-widget {
+    border: 0;
+    margin-top: 0.75rem;
+    padding: 0;
+}
+
 .sim-live-request-line code {
     overflow-wrap: anywhere;
 }
