@@ -337,10 +337,7 @@ public class FromHellRoutesTest {
                         "{\"normal\"",
                         "confusable"),
                 Arguments.of(
-                        "/fromhell/problematic/json/empty-object",
-                        "application/json",
-                        "{}",
-                        ""),
+                        "/fromhell/problematic/json/empty-object", "application/json", "{}", ""),
                 Arguments.of(
                         "/fromhell/problematic/json/top-level-string",
                         "application/json",
@@ -361,11 +358,7 @@ public class FromHellRoutesTest {
                         "application/json",
                         "null",
                         ""),
-                Arguments.of(
-                        "/fromhell/problematic/json/empty-body",
-                        "application/json",
-                        "",
-                        ""),
+                Arguments.of("/fromhell/problematic/json/empty-body", "application/json", "", ""),
                 Arguments.of(
                         "/fromhell/problematic/json/bom-prefix",
                         "application/json",
@@ -425,11 +418,7 @@ public class FromHellRoutesTest {
                         "application/xml",
                         "<?xml version=\"1.0\"",
                         "<!DOCTYPE note"),
-                Arguments.of(
-                        "/fromhell/problematic/xml/empty-body",
-                        "application/xml",
-                        "",
-                        ""),
+                Arguments.of("/fromhell/problematic/xml/empty-body", "application/xml", "", ""),
                 Arguments.of(
                         "/fromhell/problematic/xml/bom-prefix",
                         "application/xml",

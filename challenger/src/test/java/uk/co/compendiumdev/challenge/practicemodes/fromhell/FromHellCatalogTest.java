@@ -78,9 +78,7 @@ public class FromHellCatalogTest {
     };
 
     private static final String[] MISSING_CONTENT_TYPE_PATHS = {
-        "/missing-content-type/json",
-        "/missing-content-type/xml",
-        "/missing-content-type/html"
+        "/missing-content-type/json", "/missing-content-type/xml", "/missing-content-type/html"
     };
 
     @Test
@@ -172,9 +170,12 @@ public class FromHellCatalogTest {
                 catalog.endpoint("/malformed/json/trailing-comma-array").body().endsWith(",]"));
         Assertions.assertTrue(
                 catalog.endpoint("/malformed/json/trailing-comma-object").body().endsWith(",}"));
-        Assertions.assertTrue(catalog.endpoint("/malformed/json/bad-escape").body().contains("\\q"));
         Assertions.assertTrue(
-                catalog.endpoint("/malformed/json/truncated-string").body().endsWith("unterminated}"));
+                catalog.endpoint("/malformed/json/bad-escape").body().contains("\\q"));
+        Assertions.assertTrue(
+                catalog.endpoint("/malformed/json/truncated-string")
+                        .body()
+                        .endsWith("unterminated}"));
         Assertions.assertTrue(
                 catalog.endpoint("/malformed/json/extra-data-after-document")
                         .body()
@@ -214,9 +215,7 @@ public class FromHellCatalogTest {
                         .body()
                         .contains("\"nickname\":null"));
         Assertions.assertTrue(
-                catalog.endpoint("/problematic/json/escaped-unicode")
-                        .body()
-                        .contains("zeroWidth"));
+                catalog.endpoint("/problematic/json/escaped-unicode").body().contains("zeroWidth"));
         Assertions.assertTrue(
                 catalog.endpoint("/problematic/json/escaped-unicode")
                         .body()
@@ -224,10 +223,12 @@ public class FromHellCatalogTest {
         Assertions.assertEquals("{}", catalog.endpoint("/problematic/json/empty-object").body());
         Assertions.assertEquals(
                 "\"hello\"", catalog.endpoint("/problematic/json/top-level-string").body());
-        Assertions.assertEquals("42", catalog.endpoint("/problematic/json/top-level-number").body());
+        Assertions.assertEquals(
+                "42", catalog.endpoint("/problematic/json/top-level-number").body());
         Assertions.assertEquals(
                 "true", catalog.endpoint("/problematic/json/top-level-boolean").body());
-        Assertions.assertEquals("null", catalog.endpoint("/problematic/json/top-level-null").body());
+        Assertions.assertEquals(
+                "null", catalog.endpoint("/problematic/json/top-level-null").body());
         Assertions.assertEquals("", catalog.endpoint("/problematic/json/empty-body").body());
         Assertions.assertTrue(
                 catalog.endpoint("/problematic/json/bom-prefix").body().startsWith("\ufeff"));
@@ -252,9 +253,7 @@ public class FromHellCatalogTest {
                         .body()
                         .contains("id=\"1\" id=\"2\""));
         Assertions.assertTrue(
-                catalog.endpoint("/malformed/xml/missing-attribute-quote")
-                        .body()
-                        .contains("id=1"));
+                catalog.endpoint("/malformed/xml/missing-attribute-quote").body().contains("id=1"));
         Assertions.assertTrue(
                 catalog.endpoint("/malformed/xml/unclosed-cdata").body().contains("<![CDATA["));
         Assertions.assertTrue(
@@ -285,7 +284,8 @@ public class FromHellCatalogTest {
         for (String path : MISSING_CONTENT_TYPE_PATHS) {
             Assertions.assertTrue(catalog.endpoint(path).contentType().isEmpty(), path);
         }
-        Assertions.assertTrue(catalog.endpoint("/missing-content-type/json").body().startsWith("{"));
+        Assertions.assertTrue(
+                catalog.endpoint("/missing-content-type/json").body().startsWith("{"));
         Assertions.assertTrue(
                 catalog.endpoint("/missing-content-type/xml").body().startsWith("<?xml"));
         Assertions.assertTrue(

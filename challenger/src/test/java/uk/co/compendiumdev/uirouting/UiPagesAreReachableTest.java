@@ -338,14 +338,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<code>304</code> is a cache validation response that should not include"
                                 + " content"));
-        Assertions.assertTrue(
-                response.body.contains("Content-Range: bytes 0-99/200"));
-        Assertions.assertTrue(
-                response.body.contains("Content-Range: bytes */200"));
-        Assertions.assertTrue(
-                response.body.contains("WWW-Authenticate: Basic realm"));
-        Assertions.assertTrue(
-                response.body.contains("Allow: GET, HEAD, OPTIONS"));
+        Assertions.assertTrue(response.body.contains("Content-Range: bytes 0-99/200"));
+        Assertions.assertTrue(response.body.contains("Content-Range: bytes */200"));
+        Assertions.assertTrue(response.body.contains("WWW-Authenticate: Basic realm"));
+        Assertions.assertTrue(response.body.contains("Allow: GET, HEAD, OPTIONS"));
         Assertions.assertFalse(
                 response.body.contains("<details class=\"sim-live-request-details\" open"));
     }
