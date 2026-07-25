@@ -19,6 +19,7 @@ Known `/fromhell` paths respond with `405 Method Not Allowed` and an `Allow` hea
 
 - [Open API From Hell Swagger UI](/fromhell/docs/swagger-ui)
 - [Download the API From Hell OpenAPI file](/fromhell/docs/swagger)
+- [Direct File Download](/fromhell/docs/openapi.json)
 
 All endpoints are under:
 
@@ -867,10 +868,17 @@ This returns `204 No Content` while the endpoint attempts to send a JSON body.
 A well-formed `204` response should not include a response body. In many APIs it
 also avoids a response `Content-Type`, because there is no content to describe.
 
-Some clients will refuse to show the body because `204` means "No Content".
-For example, `curl -v` reports the response body as excess data rather than
-printing it. Check the headers and raw wire response to see whether your client
-reveals, hides, or rejects the contradiction.
+Different deployment mechanisms can produce different observable results. Running
+the API locally from the `.jar` or Docker image may return the `204` status and
+the body bytes. A deployed production environment may place proxies, gateways, or
+CDNs between the API and the client; those intermediaries may strip or hide the
+body because `204` means "No Content".
+
+Some clients will also refuse to show the body. For example, `curl -v` reports
+the response body as excess data rather than printing it. To understand what is
+really happening, use a proxy between the API and your API client so you can
+inspect the actual response that reaches the client, including headers and raw
+body bytes.
 
 {{<sim-live-request method="DELETE" path="/fromhell/status-code/204-with-body" details="true" summary="Try it now">}}
 

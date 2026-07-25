@@ -113,28 +113,40 @@ public class Challengers {
         final long cutOffTime = System.currentTimeMillis();
         for (ChallengerAuthData data : authData.values()) {
             if (data.expiresAt() < cutOffTime) {
-                logger.warn("PURGING AUTH: {}", data.getXChallenger());
                 deleteMe.add(data.getXChallenger());
             } else {
-                logger.info(
+                logger.debug(
                         "PURGE: {} expires in {}",
                         data.getXChallenger(),
-                        cutOffTime - data.expiresAt());
+                        data.expiresAt() - cutOffTime);
             }
         }
 
+        int deletedDatabases = 0;
         for (String deleteKey : deleteMe) {
+            logger.debug("Purging expired challenger auth: {}", deleteKey);
             delete(deleteKey);
             if (erModel != null) {
                 if (erModel.getDatabaseNames().contains(deleteKey)) {
-                    logger.warn("DELETING DATABASE: {}", deleteKey);
+                    logger.debug("Deleting expired challenger database: {}", deleteKey);
                     erModel.deleteInstanceDatabase(deleteKey);
+                    deletedDatabases++;
                 }
             }
         }
-        logger.info("CURRENT Challenger count: {}", authData.values().size());
         if (erModel != null) {
-            logger.info("CURRENT database count: {}", erModel.getDatabaseNames().size());
+            logger.info(
+                    "Purge complete: purged challengers={}, purged databases={}, current"
+                            + " challengers={}, current databases={}",
+                    deleteMe.size(),
+                    deletedDatabases,
+                    authData.values().size(),
+                    erModel.getDatabaseNames().size());
+        } else {
+            logger.info(
+                    "Purge complete: purged challengers={}, current challengers={}",
+                    deleteMe.size(),
+                    authData.values().size());
         }
     }
 

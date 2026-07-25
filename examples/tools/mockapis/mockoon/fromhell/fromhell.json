@@ -52,7 +52,60 @@
     {
       "uuid": "469e6d4a-b5cf-4afe-b1e0-10fa423786b4",
       "name": "HTTP Semantics",
-      "children": []
+      "children": [
+        {
+          "type": "route",
+          "uuid": "fe39d1d1-e3c7-5278-95b1-313194dd9220"
+        },
+        {
+          "type": "route",
+          "uuid": "158af5e1-1b65-5be0-872b-22db90aace4c"
+        },
+        {
+          "type": "route",
+          "uuid": "88918f79-5739-57af-9d74-575e8604fe81"
+        },
+        {
+          "type": "route",
+          "uuid": "379ba39c-616b-5788-bbcb-ed5d8ec95aec"
+        },
+        {
+          "type": "route",
+          "uuid": "5993e090-6d55-503d-88df-2cac645d4ff2"
+        },
+        {
+          "type": "route",
+          "uuid": "fe2e742b-cbf6-5469-bdeb-e6fbd1b8810d"
+        },
+        {
+          "type": "route",
+          "uuid": "eee918fc-4009-5f0b-a3fe-93bbe177eee2"
+        },
+        {
+          "type": "route",
+          "uuid": "bab671aa-d601-5de6-8e2d-57c14245ef5d"
+        },
+        {
+          "type": "route",
+          "uuid": "d30b03fd-98d8-5ed8-9471-f76b39d4ddeb"
+        },
+        {
+          "type": "route",
+          "uuid": "98fdc41e-d2e4-5c8e-99a0-dc3549cbdbb0"
+        },
+        {
+          "type": "route",
+          "uuid": "a74fe9e4-bacd-58e1-8316-108f339d6169"
+        },
+        {
+          "type": "route",
+          "uuid": "663c51fc-deaa-5773-af57-b47ad9a88f29"
+        },
+        {
+          "type": "route",
+          "uuid": "12267176-dfe7-53c4-8b6e-36028f268904"
+        }
+      ]
     }
   ],
   "routes": [
@@ -312,14 +365,482 @@
       "responses": [
         {
           "uuid": "894be58f-4ff1-45a5-b98b-0bbd852ac62b",
-          "body": "# Mock API From Hell\n\nAn API designed to test and evaluate REST Clients.\n\n- Do the REST Clients help spot the errors?\n- Are error messages readable and helpful?\n- Do the REST Clients flag errors automatically?\n\nAPI Should have a Swagger file to make it easy to import into clients.\n\nUser should be able to execute requests quickly and spot obvious issues.\n\n## Errors covered\n\n- No Error\n   - [x] good endpoints to cover main content types to check REST Client can render and handle them\n   - TODO: expand to cover more formats e.g. xml without header, text, html, etc.\n- API Returns malformed JSON\n   - [x] Missing final collection terminator\n   - TODO: expand to include more Malformed JSON conditions\n- API Returns malformed XML\n   - [x] Missing final root element closure\n   - TODO: expand to include more Malformed XML conditions\n- API Returns mismatched content-type e.g. content-type xml, but is json\n   - [x] json-xml\n   - [x] xml-json\n- Status code semantic mismatches\n   - [] 201 with no location header\n   - [] 3xx with no redirect location\n   - [] 204 with content\n   - TODO: think through and expand\n",
+          "body": "# Mock API From Hell\n\nAn API designed to test and evaluate REST Clients.\n\n- Do the REST Clients help spot the errors?\n- Are error messages readable and helpful?\n- Do the REST Clients flag errors automatically?\n\nAPI Should have a Swagger file to make it easy to import into clients.\n\nUser should be able to execute requests quickly and spot obvious issues.\n\n## Errors covered\n\n- No Error\n   - [x] good endpoints to cover main content types to check REST Client can render and handle them\n- Additional Content Formats\n   - [x] Plain text\n   - [x] HTML\n   - [x] CSV\n   - [x] YAML\n   - [x] Form URL encoded\n   - [x] Octet stream\n- Missing Content-Type\n   - [x] JSON body without Content-Type\n   - [x] XML body without Content-Type\n   - [x] HTML body without Content-Type\n- API Returns malformed JSON\n   - [x] Missing final collection terminator\n   - [x] Trailing comma in array\n   - [x] Trailing comma in object\n   - [x] Unquoted key\n   - [x] Single quoted string\n   - [x] Bad escape sequence\n   - [x] Truncated string\n   - [x] Extra data after document\n   - [x] Missing colon\n   - [x] Leading zero number\n   - [x] NaN value\n   - [x] Unclosed object\n   - [x] Raw control character\n- Problematic JSON\n   - [x] Duplicate keys\n   - [x] Large integer\n   - [x] High precision decimal\n   - [x] Exponent number\n   - [x] Null vs missing field\n   - [x] Escaped Unicode\n   - [x] Empty object\n   - [x] Top-level string\n   - [x] Top-level number\n   - [x] Top-level boolean\n   - [x] Top-level null\n   - [x] Empty body with JSON content type\n   - [x] UTF-8 BOM prefix\n   - [x] NDJSON\n- API Returns malformed XML\n   - [x] Missing final root element closure\n   - [x] Mismatched tag\n   - [x] Unescaped ampersand\n   - [x] Duplicate attribute\n   - [x] Undefined entity\n   - [x] Multiple root elements\n   - [x] Missing attribute quote\n   - [x] Unclosed CDATA\n   - [x] Invalid character\n   - [x] Truncated document\n   - [x] Bad processing instruction\n- Problematic XML\n   - [x] Attributes vs elements\n   - [x] Empty vs missing vs nil\n   - [x] Whitespace significant text\n   - [x] CDATA content\n   - [x] Mixed content\n   - [x] Processing instruction\n   - [x] Comments\n   - [x] Encoding declaration mismatch\n   - [x] DOCTYPE and DTD\n   - [x] Empty body with XML content type\n   - [x] UTF-8 BOM prefix\n- API Returns mismatched content-type e.g. content-type xml, but is json\n   - [x] json-xml\n   - [x] xml-json\n- Status code semantic mismatches\n   - [x] 201 with no Location header\n   - [x] 3xx with no redirect Location\n   - [x] 204 with content\n   - [x] 205 with content\n   - [x] 304 with content\n   - [x] 206 without Content-Range\n   - [x] 401 without WWW-Authenticate\n   - [x] 405 without Allow\n   - [x] 416 without Content-Range\n   - [x] 200 with error body\n   - [x] 500 with success body\n",
           "latency": 0,
           "statusCode": 200,
-          "label": "Curent Status and documentation of the API, used for todo tracking",
+          "label": "Status - Markdown Documentation",
           "headers": [
             {
               "key": "Content-Type",
               "value": "text/markdown"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "fe39d1d1-e3c7-5278-95b1-313194dd9220",
+      "type": "http",
+      "documentation": "Returns a created-looking JSON response.",
+      "method": "post",
+      "endpoint": "status-code/201-no-location",
+      "responses": [
+        {
+          "uuid": "50430292-23bf-522a-8b4d-d007f28e1c9c",
+          "body": "{\"id\":123,\"message\":\"created without a Location header\"}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "201 Missing Location Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "158af5e1-1b65-5be0-872b-22db90aace4c",
+      "type": "http",
+      "documentation": "Returns a permanent redirect status.",
+      "method": "get",
+      "endpoint": "status-code/301-no-location",
+      "responses": [
+        {
+          "uuid": "5cd614ff-6d42-5e8e-b1a1-f8c404b85980",
+          "body": "Moved permanently, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 301,
+          "label": "301 Missing Location Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "88918f79-5739-57af-9d74-575e8604fe81",
+      "type": "http",
+      "documentation": "Returns a common temporary redirect status.",
+      "method": "get",
+      "endpoint": "status-code/302-no-location",
+      "responses": [
+        {
+          "uuid": "18121f4a-8499-5709-b315-956fb7d0c680",
+          "body": "Found somewhere else, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 302,
+          "label": "302 Missing Location Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "379ba39c-616b-5788-bbcb-ed5d8ec95aec",
+      "type": "http",
+      "documentation": "Returns a temporary redirect status that should preserve the original method.",
+      "method": "get",
+      "endpoint": "status-code/307-no-location",
+      "responses": [
+        {
+          "uuid": "66663764-cd76-5748-b6a4-582949efd9bc",
+          "body": "Temporary redirect, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 307,
+          "label": "307 Missing Location Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "5993e090-6d55-503d-88df-2cac645d4ff2",
+      "type": "http",
+      "documentation": "A REST client should make it clear whether the body is present, discarded, or hidden by the HTTP stack. Local .jar or Docker execution may expose the body, while production proxies or gateways may strip it, so use an HTTP proxy between the API and client to inspect the actual response.",
+      "method": "delete",
+      "endpoint": "status-code/204-with-body",
+      "responses": [
+        {
+          "uuid": "56eb94c7-5347-5170-a768-adc0e539bfa1",
+          "body": "{\"message\":\"This body should not be sent with 204 No Content\"}",
+          "latency": 0,
+          "statusCode": 204,
+          "label": "204 Body Present Despite No Content",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "fe2e742b-cbf6-5469-bdeb-e6fbd1b8810d",
+      "type": "http",
+      "documentation": "Returns 205 Reset Content while the catalog defines a JSON response body.",
+      "method": "post",
+      "endpoint": "status-code/205-with-body",
+      "responses": [
+        {
+          "uuid": "f2f672c1-a699-575d-9fb9-7cfb89fdaed6",
+          "body": "{\"message\":\"This body should not be sent with 205 Reset Content\"}",
+          "latency": 0,
+          "statusCode": 205,
+          "label": "205 Body Present Despite Reset Content",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "eee918fc-4009-5f0b-a3fe-93bbe177eee2",
+      "type": "http",
+      "documentation": "Returns 304 Not Modified while the catalog defines a JSON response body.",
+      "method": "get",
+      "endpoint": "status-code/304-with-body",
+      "responses": [
+        {
+          "uuid": "e742fa61-c176-5e4c-8821-db2ebe91029b",
+          "body": "{\"message\":\"This body should not be sent with 304 Not Modified\"}",
+          "latency": 0,
+          "statusCode": 304,
+          "label": "304 Body Present Despite Not Modified",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "bab671aa-d601-5de6-8e2d-57c14245ef5d",
+      "type": "http",
+      "documentation": "Returns a partial-looking body.",
+      "method": "get",
+      "endpoint": "status-code/206-no-content-range",
+      "responses": [
+        {
+          "uuid": "c3924e7c-4b95-5038-9605-da5b7f47c37b",
+          "body": "{\"items\":[1,2],\"message\":\"partial content without Content-Range\"}",
+          "latency": 0,
+          "statusCode": 206,
+          "label": "206 Missing Content-Range Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "d30b03fd-98d8-5ed8-9471-f76b39d4ddeb",
+      "type": "http",
+      "documentation": "Returns an authentication failure body.",
+      "method": "get",
+      "endpoint": "status-code/401-no-www-authenticate",
+      "responses": [
+        {
+          "uuid": "fe192094-e9f1-5329-9674-8f4a1b4ff557",
+          "body": "{\"error\":\"authentication required but no challenge header was sent\"}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "401 Missing WWW-Authenticate Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "98fdc41e-d2e4-5c8e-99a0-dc3549cbdbb0",
+      "type": "http",
+      "documentation": "Returns a method-not-allowed response body.",
+      "method": "post",
+      "endpoint": "status-code/405-no-allow",
+      "responses": [
+        {
+          "uuid": "00c461f8-b20b-577a-9598-dc44a3865f36",
+          "body": "{\"error\":\"method not allowed but no Allow header was sent\"}",
+          "latency": 0,
+          "statusCode": 405,
+          "label": "405 Missing Allow Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a74fe9e4-bacd-58e1-8316-108f339d6169",
+      "type": "http",
+      "documentation": "Returns an unsatisfied range response body.",
+      "method": "get",
+      "endpoint": "status-code/416-no-content-range",
+      "responses": [
+        {
+          "uuid": "469a7f6d-ef6d-5608-8a96-b3e9f512e703",
+          "body": "{\"error\":\"range not satisfiable but no Content-Range header was sent\"}",
+          "latency": 0,
+          "statusCode": 416,
+          "label": "416 Missing Content-Range Header",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "663c51fc-deaa-5773-af57-b47ad9a88f29",
+      "type": "http",
+      "documentation": "Returns a normal success status.",
+      "method": "get",
+      "endpoint": "status-code/200-error-body",
+      "responses": [
+        {
+          "uuid": "f91e1d28-e401-5da6-9270-97a6baa9b1af",
+          "body": "{\"error\":\"Everything is broken\",\"code\":\"NOT_OK\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "200 Error-Shaped Body",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "12267176-dfe7-53c4-8b6e-36028f268904",
+      "type": "http",
+      "documentation": "Returns a server error status.",
+      "method": "get",
+      "endpoint": "status-code/500-success-body",
+      "responses": [
+        {
+          "uuid": "370dca71-0c20-5d8b-ac47-9a8d89ec936a",
+          "body": "{\"success\":true,\"message\":\"The body says success but the status is 500\"}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "500 Success-Shaped Body",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
             }
           ],
           "bodyType": "INLINE",

@@ -1077,7 +1077,7 @@
       "label": "204 Body Present Despite No Content",
       "documentation": "Returns 204 No Content while the catalog defines a JSON response body.",
       "problem": "The status says no content, but the endpoint attempts to send response content.",
-      "expectation": "A REST client should make it clear whether the body is present, discarded, or hidden by the HTTP stack.",
+      "expectation": "A REST client should make it clear whether the body is present, discarded, or hidden by the HTTP stack. Local .jar or Docker execution may expose the body, while production proxies or gateways may strip it, so use an HTTP proxy between the API and client to inspect the actual response.",
       "headers": [
         {
           "name": "Content-Type",

@@ -43,4 +43,21 @@ public class ChallengersTest {
         Assertions.assertTrue(erModel.getDatabaseNames().contains("an-active-user"));
         Assertions.assertFalse(erModel.getDatabaseNames().contains(guid));
     }
+
+    @Test
+    void purgeKeepsActiveUserData() {
+
+        EntityRelModel erModel = new EntityRelModel();
+        Challengers challengers = new Challengers(erModel, Arrays.asList(CHALLENGE.values()));
+        challengers.setMultiPlayerMode();
+
+        ChallengerAuthData challenger = challengers.createNewChallenger();
+        String guid = challenger.getXChallenger();
+        erModel.createInstanceDatabaseIfNotExisting(guid);
+
+        challengers.purgeOldAuthData();
+
+        Assertions.assertNotNull(challengers.getChallenger(guid));
+        Assertions.assertTrue(erModel.getDatabaseNames().contains(guid));
+    }
 }
