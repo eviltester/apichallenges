@@ -109,6 +109,18 @@ https://www.slf4j.org/manual.html
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${maven.multiModuleProjectDirectory}/api-from-hell/catalog</directory>
+                <targetPath>fromhell</targetPath>
+                <includes>
+                    <include>fromhell-catalog.json</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

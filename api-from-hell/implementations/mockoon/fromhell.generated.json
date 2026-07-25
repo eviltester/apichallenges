@@ -1,0 +1,1838 @@
+{
+  "uuid": "api-from-hell-generated",
+  "lastMigration": 32,
+  "name": "API From Hell",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "routes": [
+    {
+      "uuid": "fromhell-get-status",
+      "type": "http",
+      "documentation": "Markdown status text describing the intentionally awkward response set.",
+      "method": "get",
+      "endpoint": "status",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-response",
+          "body": "# Mock API From Hell\n\nAn API designed to test and evaluate REST Clients.\n\n- Do the REST Clients help spot the errors?\n- Are error messages readable and helpful?\n- Do the REST Clients flag errors automatically?\n\nAPI Should have a Swagger file to make it easy to import into clients.\n\nUser should be able to execute requests quickly and spot obvious issues.\n\n## Errors covered\n\n- No Error\n   - [x] good endpoints to cover main content types to check REST Client can render and handle them\n- Additional Content Formats\n   - [x] Plain text\n   - [x] HTML\n   - [x] CSV\n   - [x] YAML\n   - [x] Form URL encoded\n   - [x] Octet stream\n- Missing Content-Type\n   - [x] JSON body without Content-Type\n   - [x] XML body without Content-Type\n   - [x] HTML body without Content-Type\n- API Returns malformed JSON\n   - [x] Missing final collection terminator\n   - [x] Trailing comma in array\n   - [x] Trailing comma in object\n   - [x] Unquoted key\n   - [x] Single quoted string\n   - [x] Bad escape sequence\n   - [x] Truncated string\n   - [x] Extra data after document\n   - [x] Missing colon\n   - [x] Leading zero number\n   - [x] NaN value\n   - [x] Unclosed object\n   - [x] Raw control character\n- Problematic JSON\n   - [x] Duplicate keys\n   - [x] Large integer\n   - [x] High precision decimal\n   - [x] Exponent number\n   - [x] Null vs missing field\n   - [x] Escaped Unicode\n   - [x] Empty object\n   - [x] Top-level string\n   - [x] Top-level number\n   - [x] Top-level boolean\n   - [x] Top-level null\n   - [x] Empty body with JSON content type\n   - [x] UTF-8 BOM prefix\n   - [x] NDJSON\n- API Returns malformed XML\n   - [x] Missing final root element closure\n   - [x] Mismatched tag\n   - [x] Unescaped ampersand\n   - [x] Duplicate attribute\n   - [x] Undefined entity\n   - [x] Multiple root elements\n   - [x] Missing attribute quote\n   - [x] Unclosed CDATA\n   - [x] Invalid character\n   - [x] Truncated document\n   - [x] Bad processing instruction\n- Problematic XML\n   - [x] Attributes vs elements\n   - [x] Empty vs missing vs nil\n   - [x] Whitespace significant text\n   - [x] CDATA content\n   - [x] Mixed content\n   - [x] Processing instruction\n   - [x] Comments\n   - [x] Encoding declaration mismatch\n   - [x] DOCTYPE and DTD\n   - [x] Empty body with XML content type\n   - [x] UTF-8 BOM prefix\n- API Returns mismatched content-type e.g. content-type xml, but is json\n   - [x] json-xml\n   - [x] xml-json\n- Status code semantic mismatches\n   - [x] 201 with no Location header\n   - [x] 3xx with no redirect Location\n   - [x] 204 with content\n   - [x] 205 with content\n   - [x] 304 with content\n   - [x] 206 without Content-Range\n   - [x] 401 without WWW-Authenticate\n   - [x] 405 without Allow\n   - [x] 416 without Content-Range\n   - [x] 200 with error body\n   - [x] 500 with success body\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Status - Markdown Documentation",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/markdown"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-version",
+      "type": "http",
+      "documentation": "Returns a small JSON-looking version payload.",
+      "method": "get",
+      "endpoint": "version",
+      "responses": [
+        {
+          "uuid": "fromhell-get-version-response",
+          "body": "{\"version\":\"6\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Version - Missing Content-Type Header",
+          "headers": []
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-json",
+      "type": "http",
+      "documentation": "Returns valid JSON with a matching application/json content type.",
+      "method": "get",
+      "endpoint": "good/json",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-json-response",
+          "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good JSON - Valid JSON And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-xml",
+      "type": "http",
+      "documentation": "Returns valid XML with a matching application/xml content type.",
+      "method": "get",
+      "endpoint": "good/xml",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-xml-response",
+          "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good XML - Valid XML And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-text",
+      "type": "http",
+      "documentation": "Returns plain text with a matching text/plain content type.",
+      "method": "get",
+      "endpoint": "good/text",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-text-response",
+          "body": "API From Hell plain text response.\nLine two keeps this as normal text.",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good Text - Plain Text And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-html",
+      "type": "http",
+      "documentation": "Returns simple HTML with a matching text/html content type.",
+      "method": "get",
+      "endpoint": "good/html",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-html-response",
+          "body": "<!doctype html><html><head><title>API From Hell</title></head><body><h1>HTML response</h1><p>This is valid HTML.</p></body></html>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good HTML - Valid HTML And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/html"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-csv",
+      "type": "http",
+      "documentation": "Returns small comma-separated data with a matching text/csv content type.",
+      "method": "get",
+      "endpoint": "good/csv",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-csv-response",
+          "body": "id,name,active\n1,Alice,true\n2,Bob,false\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good CSV - Valid CSV And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/csv"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-yaml",
+      "type": "http",
+      "documentation": "Returns a small YAML document with a matching application/yaml content type.",
+      "method": "get",
+      "endpoint": "good/yaml",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-yaml-response",
+          "body": "name: API From Hell\nitems:\n  - id: 1\n    active: true\n  - id: 2\n    active: false\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good YAML - Valid YAML And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/yaml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-form-urlencoded",
+      "type": "http",
+      "documentation": "Returns URL-encoded key/value data with a matching application/x-www-form-urlencoded content type.",
+      "method": "get",
+      "endpoint": "good/form-urlencoded",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-form-urlencoded-response",
+          "body": "name=Alice+Example&role=admin&active=true",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good Form URL Encoded - Valid Form Body And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-good-octet-stream",
+      "type": "http",
+      "documentation": "Returns a small binary-looking payload with an application/octet-stream content type.",
+      "method": "get",
+      "endpoint": "good/octet-stream",
+      "responses": [
+        {
+          "uuid": "fromhell-get-good-octet-stream-response",
+          "body": "API-FROM-HELL-BYTES:\u0000\u0001\u0002END",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Good Octet Stream - Binary-Looking Body And Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/octet-stream"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-missing-content-type-json",
+      "type": "http",
+      "documentation": "Returns a JSON body without declaring a Content-Type header.",
+      "method": "get",
+      "endpoint": "missing-content-type/json",
+      "responses": [
+        {
+          "uuid": "fromhell-get-missing-content-type-json-response",
+          "body": "{\"message\":\"json body without content type\",\"ok\":true}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Missing Content-Type - JSON Body",
+          "headers": []
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-missing-content-type-xml",
+      "type": "http",
+      "documentation": "Returns an XML body without declaring a Content-Type header.",
+      "method": "get",
+      "endpoint": "missing-content-type/xml",
+      "responses": [
+        {
+          "uuid": "fromhell-get-missing-content-type-xml-response",
+          "body": "<?xml version=\"1.0\"?><root><message>xml body without content type</message></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Missing Content-Type - XML Body",
+          "headers": []
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-missing-content-type-html",
+      "type": "http",
+      "documentation": "Returns an HTML body without declaring a Content-Type header.",
+      "method": "get",
+      "endpoint": "missing-content-type/html",
+      "responses": [
+        {
+          "uuid": "fromhell-get-missing-content-type-html-response",
+          "body": "<!doctype html><html><body><h1>HTML without content type</h1></body></html>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Missing Content-Type - HTML Body",
+          "headers": []
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json",
+      "type": "http",
+      "documentation": "Returns a JSON array that starts correctly but never closes the collection.",
+      "method": "get",
+      "endpoint": "malformed/json",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-response",
+          "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Missing Collection Terminator",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-trailing-comma-array",
+      "type": "http",
+      "documentation": "Returns a JSON array with a trailing comma before the closing bracket.",
+      "method": "get",
+      "endpoint": "malformed/json/trailing-comma-array",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-trailing-comma-array-response",
+          "body": "[{\"id\":1,\"name\":\"first\"},]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Trailing Comma In Array",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-trailing-comma-object",
+      "type": "http",
+      "documentation": "Returns a JSON object with a trailing comma before the closing brace.",
+      "method": "get",
+      "endpoint": "malformed/json/trailing-comma-object",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-trailing-comma-object-response",
+          "body": "{\"id\":1,\"name\":\"first\",}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Trailing Comma In Object",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-unquoted-key",
+      "type": "http",
+      "documentation": "Returns an object where the property name is not wrapped in double quotes.",
+      "method": "get",
+      "endpoint": "malformed/json/unquoted-key",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-unquoted-key-response",
+          "body": "{id:1,\"name\":\"first\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Unquoted Object Key",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-single-quoted-string",
+      "type": "http",
+      "documentation": "Returns JSON-looking data using single quotes for strings.",
+      "method": "get",
+      "endpoint": "malformed/json/single-quoted-string",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-single-quoted-string-response",
+          "body": "{'id':1,'name':'first'}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Single Quoted String",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-bad-escape",
+      "type": "http",
+      "documentation": "Returns a string with an unsupported escape sequence.",
+      "method": "get",
+      "endpoint": "malformed/json/bad-escape",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-bad-escape-response",
+          "body": "{\"path\":\"C:\\temp\\q\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Bad Escape Sequence",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-truncated-string",
+      "type": "http",
+      "documentation": "Returns an object with a string value that never closes.",
+      "method": "get",
+      "endpoint": "malformed/json/truncated-string",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-truncated-string-response",
+          "body": "{\"message\":\"unterminated}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Truncated String",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-extra-data-after-document",
+      "type": "http",
+      "documentation": "Returns one complete JSON object followed by another value.",
+      "method": "get",
+      "endpoint": "malformed/json/extra-data-after-document",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-extra-data-after-document-response",
+          "body": "{\"ok\":true} {\"extra\":true}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Extra Data After Document",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-missing-colon",
+      "type": "http",
+      "documentation": "Returns an object property without the colon between key and value.",
+      "method": "get",
+      "endpoint": "malformed/json/missing-colon",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-missing-colon-response",
+          "body": "{\"message\" \"hello\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Missing Colon",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-leading-zero-number",
+      "type": "http",
+      "documentation": "Returns a numeric value with a leading zero.",
+      "method": "get",
+      "endpoint": "malformed/json/leading-zero-number",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-leading-zero-number-response",
+          "body": "{\"count\":01}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Leading Zero Number",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-nan-value",
+      "type": "http",
+      "documentation": "Returns NaN as a value in a JSON-looking object.",
+      "method": "get",
+      "endpoint": "malformed/json/nan-value",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-nan-value-response",
+          "body": "{\"value\":NaN}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - NaN Value",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-unclosed-object",
+      "type": "http",
+      "documentation": "Returns an object that never closes with a final brace.",
+      "method": "get",
+      "endpoint": "malformed/json/unclosed-object",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-unclosed-object-response",
+          "body": "{\"id\":1,\"name\":\"open\"",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Unclosed Object",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-json-control-character",
+      "type": "http",
+      "documentation": "Returns a string containing a raw control character.",
+      "method": "get",
+      "endpoint": "malformed/json/control-character",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-json-control-character-response",
+          "body": "{\"message\":\"bad\u0001control\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed JSON - Raw Control Character",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-duplicate-keys",
+      "type": "http",
+      "documentation": "Returns valid JSON syntax with the same object key repeated.",
+      "method": "get",
+      "endpoint": "problematic/json/duplicate-keys",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-duplicate-keys-response",
+          "body": "{\"id\":1,\"id\":2,\"name\":\"duplicate key example\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Duplicate Keys",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-large-integer",
+      "type": "http",
+      "documentation": "Returns an integer larger than JavaScript can safely represent exactly.",
+      "method": "get",
+      "endpoint": "problematic/json/large-integer",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-large-integer-response",
+          "body": "{\"safeLimit\":9007199254740991,\"largerThanSafe\":9007199254740993}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Large Integer",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-high-precision-decimal",
+      "type": "http",
+      "documentation": "Returns a decimal value with more precision than many clients preserve.",
+      "method": "get",
+      "endpoint": "problematic/json/high-precision-decimal",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-high-precision-decimal-response",
+          "body": "{\"amount\":0.12345678901234567890123456789}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - High Precision Decimal",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-exponent-number",
+      "type": "http",
+      "documentation": "Returns JSON numbers using exponent notation.",
+      "method": "get",
+      "endpoint": "problematic/json/exponent-number",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-exponent-number-response",
+          "body": "{\"small\":1.23e-10,\"large\":6.022e23}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Exponent Number",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-null-vs-missing",
+      "type": "http",
+      "documentation": "Returns one item with a null field and another item where the same field is missing.",
+      "method": "get",
+      "endpoint": "problematic/json/null-vs-missing",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-null-vs-missing-response",
+          "body": "{\"items\":[{\"id\":1,\"nickname\":null},{\"id\":2}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Null Vs Missing Field",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-escaped-unicode",
+      "type": "http",
+      "documentation": "Returns escaped Unicode including a zero-width space and a visually similar character.",
+      "method": "get",
+      "endpoint": "problematic/json/escaped-unicode",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-escaped-unicode-response",
+          "body": "{\"normal\":\"user\",\"zeroWidth\":\"us\\u200Ber\",\"confusable\":\"payl\\u043Ead\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Escaped Unicode",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-empty-object",
+      "type": "http",
+      "documentation": "Returns an empty JSON object where useful data would usually be expected.",
+      "method": "get",
+      "endpoint": "problematic/json/empty-object",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-empty-object-response",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Empty Object",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-top-level-string",
+      "type": "http",
+      "documentation": "Returns a top-level JSON string instead of an object or array.",
+      "method": "get",
+      "endpoint": "problematic/json/top-level-string",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-top-level-string-response",
+          "body": "\"hello\"",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Top-Level String",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-top-level-number",
+      "type": "http",
+      "documentation": "Returns a top-level JSON number instead of an object or array.",
+      "method": "get",
+      "endpoint": "problematic/json/top-level-number",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-top-level-number-response",
+          "body": "42",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Top-Level Number",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-top-level-boolean",
+      "type": "http",
+      "documentation": "Returns a top-level JSON boolean.",
+      "method": "get",
+      "endpoint": "problematic/json/top-level-boolean",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-top-level-boolean-response",
+          "body": "true",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Top-Level Boolean",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-top-level-null",
+      "type": "http",
+      "documentation": "Returns a top-level JSON null value.",
+      "method": "get",
+      "endpoint": "problematic/json/top-level-null",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-top-level-null-response",
+          "body": "null",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Top-Level Null",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-empty-body",
+      "type": "http",
+      "documentation": "Returns application/json with an empty response body.",
+      "method": "get",
+      "endpoint": "problematic/json/empty-body",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-empty-body-response",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - Empty Body With JSON Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-bom-prefix",
+      "type": "http",
+      "documentation": "Returns a JSON object prefixed with a UTF-8 byte order mark.",
+      "method": "get",
+      "endpoint": "problematic/json/bom-prefix",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-bom-prefix-response",
+          "body": "﻿{\"message\":\"bom prefix\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - UTF-8 BOM Prefix",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-json-ndjson",
+      "type": "http",
+      "documentation": "Returns newline-delimited JSON objects rather than a single JSON document.",
+      "method": "get",
+      "endpoint": "problematic/json/ndjson",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-json-ndjson-response",
+          "body": "{\"id\":1,\"event\":\"started\"}\n{\"id\":2,\"event\":\"finished\"}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic JSON - NDJSON Stream",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-ndjson"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml",
+      "type": "http",
+      "documentation": "Returns XML that starts correctly but does not close the document.",
+      "method": "get",
+      "endpoint": "malformed/xml",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-response",
+          "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Missing Root Terminator",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-mismatched-tag",
+      "type": "http",
+      "documentation": "Returns XML where a child element closes with the wrong tag name.",
+      "method": "get",
+      "endpoint": "malformed/xml/mismatched-tag",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-mismatched-tag-response",
+          "body": "<?xml version=\"1.0\"?><root><item>one</thing></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Mismatched Tag",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-unescaped-ampersand",
+      "type": "http",
+      "documentation": "Returns XML containing an ampersand that is not escaped as an entity.",
+      "method": "get",
+      "endpoint": "malformed/xml/unescaped-ampersand",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-unescaped-ampersand-response",
+          "body": "<?xml version=\"1.0\"?><root><name>Tom & Jerry</name></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Unescaped Ampersand",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-duplicate-attribute",
+      "type": "http",
+      "documentation": "Returns XML with the same attribute declared twice on one element.",
+      "method": "get",
+      "endpoint": "malformed/xml/duplicate-attribute",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-duplicate-attribute-response",
+          "body": "<?xml version=\"1.0\"?><root><item id=\"1\" id=\"2\">duplicate</item></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Duplicate Attribute",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-undefined-entity",
+      "type": "http",
+      "documentation": "Returns XML that references an entity which has not been declared.",
+      "method": "get",
+      "endpoint": "malformed/xml/undefined-entity",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-undefined-entity-response",
+          "body": "<?xml version=\"1.0\"?><root><name>&unknown;</name></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Undefined Entity",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-multiple-root-elements",
+      "type": "http",
+      "documentation": "Returns two top-level elements in one XML document.",
+      "method": "get",
+      "endpoint": "malformed/xml/multiple-root-elements",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-multiple-root-elements-response",
+          "body": "<?xml version=\"1.0\"?><one></one><two></two>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Multiple Root Elements",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-missing-attribute-quote",
+      "type": "http",
+      "documentation": "Returns XML where an attribute value is not quoted.",
+      "method": "get",
+      "endpoint": "malformed/xml/missing-attribute-quote",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-missing-attribute-quote-response",
+          "body": "<?xml version=\"1.0\"?><root><item id=1>missing quote</item></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Missing Attribute Quote",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-unclosed-cdata",
+      "type": "http",
+      "documentation": "Returns XML with a CDATA section that never terminates.",
+      "method": "get",
+      "endpoint": "malformed/xml/unclosed-cdata",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-unclosed-cdata-response",
+          "body": "<?xml version=\"1.0\"?><root><![CDATA[unterminated</root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Unclosed CDATA",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-invalid-character",
+      "type": "http",
+      "documentation": "Returns XML containing a character that is not allowed in XML 1.0 content.",
+      "method": "get",
+      "endpoint": "malformed/xml/invalid-character",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-invalid-character-response",
+          "body": "<?xml version=\"1.0\"?><root>bad\u0001char</root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Invalid Character",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-truncated-document",
+      "type": "http",
+      "documentation": "Returns XML that starts a nested element but ends before closing it.",
+      "method": "get",
+      "endpoint": "malformed/xml/truncated-document",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-truncated-document-response",
+          "body": "<?xml version=\"1.0\"?><root><item>one",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Truncated Document",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-malformed-xml-bad-processing-instruction",
+      "type": "http",
+      "documentation": "Returns XML with a processing instruction that never closes.",
+      "method": "get",
+      "endpoint": "malformed/xml/bad-processing-instruction",
+      "responses": [
+        {
+          "uuid": "fromhell-get-malformed-xml-bad-processing-instruction-response",
+          "body": "<?xml version=\"1.0\"?><root><?processing instruction</root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Malformed XML - Bad Processing Instruction",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-attributes-vs-elements",
+      "type": "http",
+      "documentation": "Returns the same kind of data in both attributes and child elements.",
+      "method": "get",
+      "endpoint": "problematic/xml/attributes-vs-elements",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-attributes-vs-elements-response",
+          "body": "<?xml version=\"1.0\"?><root><user id=\"123\" active=\"true\"><id>456</id><active>false</active><name>Attribute Example</name></user></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Attributes Vs Elements",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-empty-vs-missing-vs-nil",
+      "type": "http",
+      "documentation": "Returns empty, missing, and explicitly nil values in one document.",
+      "method": "get",
+      "endpoint": "problematic/xml/empty-vs-missing-vs-nil",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-empty-vs-missing-vs-nil-response",
+          "body": "<?xml version=\"1.0\"?><root xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><item id=\"1\"><nickname/></item><item id=\"2\"></item><item id=\"3\"><nickname xsi:nil=\"true\"/></item></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Empty Vs Missing Vs Nil",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-whitespace-text",
+      "type": "http",
+      "documentation": "Returns XML text values with leading, trailing, and multiline whitespace.",
+      "method": "get",
+      "endpoint": "problematic/xml/whitespace-text",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-whitespace-text-response",
+          "body": "<?xml version=\"1.0\"?><root><value>  padded value  </value><multiline>\n  line one\n  line two\n</multiline></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Whitespace Significant Text",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-cdata-content",
+      "type": "http",
+      "documentation": "Returns XML with JSON-looking and HTML-looking text inside CDATA.",
+      "method": "get",
+      "endpoint": "problematic/xml/cdata-content",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-cdata-content-response",
+          "body": "<?xml version=\"1.0\"?><root><payload><![CDATA[{\"html\":\"<strong>ok</strong>\",\"amp\":\"A & B\"}]]></payload></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - CDATA Content",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-mixed-content",
+      "type": "http",
+      "documentation": "Returns text and child elements mixed inside the same element.",
+      "method": "get",
+      "endpoint": "problematic/xml/mixed-content",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-mixed-content-response",
+          "body": "<?xml version=\"1.0\"?><root><message>Hello <em>important</em> world.</message></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Mixed Content",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-processing-instruction",
+      "type": "http",
+      "documentation": "Returns a valid processing instruction before the document root.",
+      "method": "get",
+      "endpoint": "problematic/xml/processing-instruction",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-processing-instruction-response",
+          "body": "<?xml version=\"1.0\"?><?client-hint render=\"compact\"?><root><status>ok</status></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Processing Instruction",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-comments",
+      "type": "http",
+      "documentation": "Returns XML containing comments between normal elements.",
+      "method": "get",
+      "endpoint": "problematic/xml/comments",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-comments-response",
+          "body": "<?xml version=\"1.0\"?><root><!-- hidden note --><status>ok</status><!-- after status --></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Comments",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-encoding-mismatch",
+      "type": "http",
+      "documentation": "Returns XML where the HTTP charset and XML declaration disagree.",
+      "method": "get",
+      "endpoint": "problematic/xml/encoding-mismatch",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-encoding-mismatch-response",
+          "body": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><root><text>caf&#233;</text></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Encoding Declaration Mismatch",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml; charset=UTF-8"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-doctype-dtd",
+      "type": "http",
+      "documentation": "Returns XML with a safe inline DTD declaration.",
+      "method": "get",
+      "endpoint": "problematic/xml/doctype-dtd",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-doctype-dtd-response",
+          "body": "<?xml version=\"1.0\"?><!DOCTYPE note [<!ELEMENT note (to,body)><!ELEMENT to (#PCDATA)><!ELEMENT body (#PCDATA)>]><note><to>client</to><body>inline doctype only</body></note>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - DOCTYPE And DTD",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-empty-body",
+      "type": "http",
+      "documentation": "Returns application/xml with an empty response body.",
+      "method": "get",
+      "endpoint": "problematic/xml/empty-body",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-empty-body-response",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - Empty Body With XML Content-Type",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-problematic-xml-bom-prefix",
+      "type": "http",
+      "documentation": "Returns XML prefixed with a UTF-8 byte order mark.",
+      "method": "get",
+      "endpoint": "problematic/xml/bom-prefix",
+      "responses": [
+        {
+          "uuid": "fromhell-get-problematic-xml-bom-prefix-response",
+          "body": "﻿<?xml version=\"1.0\"?><root><message>bom prefix</message></root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Problematic XML - UTF-8 BOM Prefix",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-mismatch-content-type-json-xml",
+      "type": "http",
+      "documentation": "Returns XML while declaring application/json.",
+      "method": "get",
+      "endpoint": "mismatch/content-type/json-xml",
+      "responses": [
+        {
+          "uuid": "fromhell-get-mismatch-content-type-json-xml-response",
+          "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Content-Type Mismatch - Header JSON Body XML",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-mismatch-content-type-xml-json",
+      "type": "http",
+      "documentation": "Returns JSON while declaring application/xml.",
+      "method": "get",
+      "endpoint": "mismatch/content-type/xml-json",
+      "responses": [
+        {
+          "uuid": "fromhell-get-mismatch-content-type-xml-json-response",
+          "body": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Content-Type Mismatch - Header XML Body JSON",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-post-status-code-201-no-location",
+      "type": "http",
+      "documentation": "Returns a created-looking JSON response.",
+      "method": "post",
+      "endpoint": "status-code/201-no-location",
+      "responses": [
+        {
+          "uuid": "fromhell-post-status-code-201-no-location-response",
+          "body": "{\"id\":123,\"message\":\"created without a Location header\"}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "201 Missing Location Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-301-no-location",
+      "type": "http",
+      "documentation": "Returns a permanent redirect status.",
+      "method": "get",
+      "endpoint": "status-code/301-no-location",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-301-no-location-response",
+          "body": "Moved permanently, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 301,
+          "label": "301 Missing Location Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-302-no-location",
+      "type": "http",
+      "documentation": "Returns a common temporary redirect status.",
+      "method": "get",
+      "endpoint": "status-code/302-no-location",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-302-no-location-response",
+          "body": "Found somewhere else, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 302,
+          "label": "302 Missing Location Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-307-no-location",
+      "type": "http",
+      "documentation": "Returns a temporary redirect status that should preserve the original method.",
+      "method": "get",
+      "endpoint": "status-code/307-no-location",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-307-no-location-response",
+          "body": "Temporary redirect, but no Location header was supplied.",
+          "latency": 0,
+          "statusCode": 307,
+          "label": "307 Missing Location Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-delete-status-code-204-with-body",
+      "type": "http",
+      "documentation": "Returns 204 No Content while the catalog defines a JSON response body.",
+      "method": "delete",
+      "endpoint": "status-code/204-with-body",
+      "responses": [
+        {
+          "uuid": "fromhell-delete-status-code-204-with-body-response",
+          "body": "{\"message\":\"This body should not be sent with 204 No Content\"}",
+          "latency": 0,
+          "statusCode": 204,
+          "label": "204 Body Present Despite No Content",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-post-status-code-205-with-body",
+      "type": "http",
+      "documentation": "Returns 205 Reset Content while the catalog defines a JSON response body.",
+      "method": "post",
+      "endpoint": "status-code/205-with-body",
+      "responses": [
+        {
+          "uuid": "fromhell-post-status-code-205-with-body-response",
+          "body": "{\"message\":\"This body should not be sent with 205 Reset Content\"}",
+          "latency": 0,
+          "statusCode": 205,
+          "label": "205 Body Present Despite Reset Content",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-304-with-body",
+      "type": "http",
+      "documentation": "Returns 304 Not Modified while the catalog defines a JSON response body.",
+      "method": "get",
+      "endpoint": "status-code/304-with-body",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-304-with-body-response",
+          "body": "{\"message\":\"This body should not be sent with 304 Not Modified\"}",
+          "latency": 0,
+          "statusCode": 304,
+          "label": "304 Body Present Despite Not Modified",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-206-no-content-range",
+      "type": "http",
+      "documentation": "Returns a partial-looking body.",
+      "method": "get",
+      "endpoint": "status-code/206-no-content-range",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-206-no-content-range-response",
+          "body": "{\"items\":[1,2],\"message\":\"partial content without Content-Range\"}",
+          "latency": 0,
+          "statusCode": 206,
+          "label": "206 Missing Content-Range Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-401-no-www-authenticate",
+      "type": "http",
+      "documentation": "Returns an authentication failure body.",
+      "method": "get",
+      "endpoint": "status-code/401-no-www-authenticate",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-401-no-www-authenticate-response",
+          "body": "{\"error\":\"authentication required but no challenge header was sent\"}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "401 Missing WWW-Authenticate Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-post-status-code-405-no-allow",
+      "type": "http",
+      "documentation": "Returns a method-not-allowed response body.",
+      "method": "post",
+      "endpoint": "status-code/405-no-allow",
+      "responses": [
+        {
+          "uuid": "fromhell-post-status-code-405-no-allow-response",
+          "body": "{\"error\":\"method not allowed but no Allow header was sent\"}",
+          "latency": 0,
+          "statusCode": 405,
+          "label": "405 Missing Allow Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-416-no-content-range",
+      "type": "http",
+      "documentation": "Returns an unsatisfied range response body.",
+      "method": "get",
+      "endpoint": "status-code/416-no-content-range",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-416-no-content-range-response",
+          "body": "{\"error\":\"range not satisfiable but no Content-Range header was sent\"}",
+          "latency": 0,
+          "statusCode": 416,
+          "label": "416 Missing Content-Range Header",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-200-error-body",
+      "type": "http",
+      "documentation": "Returns a normal success status.",
+      "method": "get",
+      "endpoint": "status-code/200-error-body",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-200-error-body-response",
+          "body": "{\"error\":\"Everything is broken\",\"code\":\"NOT_OK\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "200 Error-Shaped Body",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "fromhell-get-status-code-500-success-body",
+      "type": "http",
+      "documentation": "Returns a server error status.",
+      "method": "get",
+      "endpoint": "status-code/500-success-body",
+      "responses": [
+        {
+          "uuid": "fromhell-get-status-code-500-success-body-response",
+          "body": "{\"success\":true,\"message\":\"The body says success but the status is 500\"}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "500 Success-Shaped Body",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    }
+  ]
+}

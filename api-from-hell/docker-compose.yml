@@ -1,0 +1,35 @@
+services:
+  fromhell-node-native:
+    build:
+      context: .
+      dockerfile: implementations/node-native-http/Dockerfile
+    ports:
+      - "3001:3001"
+
+  fromhell-node-express:
+    build:
+      context: .
+      dockerfile: implementations/node-express/Dockerfile
+    ports:
+      - "3002:3001"
+
+  fromhell-python-native:
+    build:
+      context: .
+      dockerfile: implementations/python-native-http/Dockerfile
+    ports:
+      - "3003:3001"
+
+  fromhell-python-flask:
+    build:
+      context: .
+      dockerfile: implementations/python-flask/Dockerfile
+    ports:
+      - "3004:3001"
+
+  fromhell-java-javalin:
+    build:
+      context: .
+      dockerfile: implementations/java-javalin/Dockerfile
+    ports:
+      - "3005:3001"
