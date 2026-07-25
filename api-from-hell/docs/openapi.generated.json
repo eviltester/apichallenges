@@ -1,0 +1,2111 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API From Hell",
+    "version": "1.0.0",
+    "description": "A deliberately awkward API for checking how REST clients display bad responses."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "paths": {
+    "/fromhell/status": {
+      "get": {
+        "summary": "Status - Markdown Documentation",
+        "description": "Markdown status text describing the intentionally awkward response set.\n\nProblem: This is a good response, but it is markdown rather than JSON or XML.\n\nExpected client behavior: A REST client should show the response body as text/markdown and make the content type visible.",
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "Markdown status text describing the intentionally awkward response set.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/markdown"
+              }
+            },
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "# Mock API From Hell\n\nAn API designed to test and evaluate REST Clients.\n\n- Do the REST Clients help spot the errors?\n- Are error messages readable and helpful?\n- Do the REST Clients flag errors automatically?\n\nAPI Should have a Swagger file to make it easy to import into clients.\n\nUser should be able to execute requests quickly and spot obvious issues.\n\n## Errors covered\n\n- No Error\n   - [x] good endpoints to cover main content types to check REST Client can render and handle them\n- Additional Content Formats\n   - [x] Plain text\n   - [x] HTML\n   - [x] CSV\n   - [x] YAML\n   - [x] Form URL encoded\n   - [x] Octet stream\n- Missing Content-Type\n   - [x] JSON body without Content-Type\n   - [x] XML body without Content-Type\n   - [x] HTML body without Content-Type\n- API Returns malformed JSON\n   - [x] Missing final collection terminator\n   - [x] Trailing comma in array\n   - [x] Trailing comma in object\n   - [x] Unquoted key\n   - [x] Single quoted string\n   - [x] Bad escape sequence\n   - [x] Truncated string\n   - [x] Extra data after document\n   - [x] Missing colon\n   - [x] Leading zero number\n   - [x] NaN value\n   - [x] Unclosed object\n   - [x] Raw control character\n- Problematic JSON\n   - [x] Duplicate keys\n   - [x] Large integer\n   - [x] High precision decimal\n   - [x] Exponent number\n   - [x] Null vs missing field\n   - [x] Escaped Unicode\n   - [x] Empty object\n   - [x] Top-level string\n   - [x] Top-level number\n   - [x] Top-level boolean\n   - [x] Top-level null\n   - [x] Empty body with JSON content type\n   - [x] UTF-8 BOM prefix\n   - [x] NDJSON\n- API Returns malformed XML\n   - [x] Missing final root element closure\n   - [x] Mismatched tag\n   - [x] Unescaped ampersand\n   - [x] Duplicate attribute\n   - [x] Undefined entity\n   - [x] Multiple root elements\n   - [x] Missing attribute quote\n   - [x] Unclosed CDATA\n   - [x] Invalid character\n   - [x] Truncated document\n   - [x] Bad processing instruction\n- Problematic XML\n   - [x] Attributes vs elements\n   - [x] Empty vs missing vs nil\n   - [x] Whitespace significant text\n   - [x] CDATA content\n   - [x] Mixed content\n   - [x] Processing instruction\n   - [x] Comments\n   - [x] Encoding declaration mismatch\n   - [x] DOCTYPE and DTD\n   - [x] Empty body with XML content type\n   - [x] UTF-8 BOM prefix\n- API Returns mismatched content-type e.g. content-type xml, but is json\n   - [x] json-xml\n   - [x] xml-json\n- Status code semantic mismatches\n   - [x] 201 with no Location header\n   - [x] 3xx with no redirect Location\n   - [x] 204 with content\n   - [x] 205 with content\n   - [x] 304 with content\n   - [x] 206 without Content-Range\n   - [x] 401 without WWW-Authenticate\n   - [x] 405 without Allow\n   - [x] 416 without Content-Range\n   - [x] 200 with error body\n   - [x] 500 with success body\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/version": {
+      "get": {
+        "summary": "Version - Missing Content-Type Header",
+        "description": "Returns a small JSON-looking version payload.\n\nProblem: No content type header is explicitly set for the response.\n\nExpected client behavior: A REST client should still show the raw body and make the missing or defaulted content type obvious.",
+        "operationId": "getVersion",
+        "responses": {
+          "200": {
+            "description": "Returns a small JSON-looking version payload.",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/fromhell/good/json": {
+      "get": {
+        "summary": "Good JSON - Valid JSON And Content-Type",
+        "description": "Returns valid JSON with a matching application/json content type.\n\nProblem: Nothing is wrong with this response. It is the control sample.\n\nExpected client behavior: A REST client should format or inspect this as valid JSON.",
+        "operationId": "getGoodJson",
+        "responses": {
+          "200": {
+            "description": "Returns valid JSON with a matching application/json content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/xml": {
+      "get": {
+        "summary": "Good XML - Valid XML And Content-Type",
+        "description": "Returns valid XML with a matching application/xml content type.\n\nProblem: Nothing is wrong with this response. It is the XML control sample.\n\nExpected client behavior: A REST client should format or inspect this as valid XML.",
+        "operationId": "getGoodXml",
+        "responses": {
+          "200": {
+            "description": "Returns valid XML with a matching application/xml content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/text": {
+      "get": {
+        "summary": "Good Text - Plain Text And Content-Type",
+        "description": "Returns plain text with a matching text/plain content type.\n\nProblem: Nothing is wrong with this response. It is the plain text control sample.\n\nExpected client behavior: A REST client should show the response as readable text and make the content type visible.",
+        "operationId": "getGoodText",
+        "responses": {
+          "200": {
+            "description": "Returns plain text with a matching text/plain content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/plain"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "API From Hell plain text response.\nLine two keeps this as normal text."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/html": {
+      "get": {
+        "summary": "Good HTML - Valid HTML And Content-Type",
+        "description": "Returns simple HTML with a matching text/html content type.\n\nProblem: Nothing is wrong with this response. It is the HTML control sample.\n\nExpected client behavior: A REST client should make it clear whether it is showing rendered HTML or raw HTML.",
+        "operationId": "getGoodHtml",
+        "responses": {
+          "200": {
+            "description": "Returns simple HTML with a matching text/html content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/html"
+              }
+            },
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!doctype html><html><head><title>API From Hell</title></head><body><h1>HTML response</h1><p>This is valid HTML.</p></body></html>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/csv": {
+      "get": {
+        "summary": "Good CSV - Valid CSV And Content-Type",
+        "description": "Returns small comma-separated data with a matching text/csv content type.\n\nProblem: Nothing is wrong with this response. It is the CSV control sample.\n\nExpected client behavior: A REST client should show the raw CSV and, if supported, provide a readable table view.",
+        "operationId": "getGoodCsv",
+        "responses": {
+          "200": {
+            "description": "Returns small comma-separated data with a matching text/csv content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/csv"
+              }
+            },
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "id,name,active\n1,Alice,true\n2,Bob,false\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/yaml": {
+      "get": {
+        "summary": "Good YAML - Valid YAML And Content-Type",
+        "description": "Returns a small YAML document with a matching application/yaml content type.\n\nProblem: Nothing is wrong with this response. It is the YAML control sample.\n\nExpected client behavior: A REST client should preserve indentation and make the YAML media type visible.",
+        "operationId": "getGoodYaml",
+        "responses": {
+          "200": {
+            "description": "Returns a small YAML document with a matching application/yaml content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/yaml"
+              }
+            },
+            "content": {
+              "application/yaml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "name: API From Hell\nitems:\n  - id: 1\n    active: true\n  - id: 2\n    active: false\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/form-urlencoded": {
+      "get": {
+        "summary": "Good Form URL Encoded - Valid Form Body And Content-Type",
+        "description": "Returns URL-encoded key/value data with a matching application/x-www-form-urlencoded content type.\n\nProblem: Nothing is wrong with this response. It is the form-urlencoded control sample.\n\nExpected client behavior: A REST client should show the raw encoded body and ideally decode the key/value pairs clearly.",
+        "operationId": "getGoodFormUrlencoded",
+        "responses": {
+          "200": {
+            "description": "Returns URL-encoded key/value data with a matching application/x-www-form-urlencoded content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/x-www-form-urlencoded"
+              }
+            },
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "name=Alice+Example&role=admin&active=true"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/good/octet-stream": {
+      "get": {
+        "summary": "Good Octet Stream - Binary-Looking Body And Content-Type",
+        "description": "Returns a small binary-looking payload with an application/octet-stream content type.\n\nProblem: Nothing is wrong with this response. It is the octet-stream control sample.\n\nExpected client behavior: A REST client should make it clear whether it is showing bytes, text, or offering a download.",
+        "operationId": "getGoodOctetStream",
+        "responses": {
+          "200": {
+            "description": "Returns a small binary-looking payload with an application/octet-stream content type.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/octet-stream"
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "API-FROM-HELL-BYTES:\u0000\u0001\u0002END"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/missing-content-type/json": {
+      "get": {
+        "summary": "Missing Content-Type - JSON Body",
+        "description": "Returns a JSON body without declaring a Content-Type header.\n\nProblem: The body looks like JSON but the server does not declare application/json.\n\nExpected client behavior: A REST client should show that the content type is missing and avoid hiding how it inferred the format.",
+        "operationId": "getMissingContentTypeJson",
+        "responses": {
+          "200": {
+            "description": "Returns a JSON body without declaring a Content-Type header.",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/fromhell/missing-content-type/xml": {
+      "get": {
+        "summary": "Missing Content-Type - XML Body",
+        "description": "Returns an XML body without declaring a Content-Type header.\n\nProblem: The body looks like XML but the server does not declare application/xml.\n\nExpected client behavior: A REST client should show that the content type is missing and avoid hiding how it inferred the format.",
+        "operationId": "getMissingContentTypeXml",
+        "responses": {
+          "200": {
+            "description": "Returns an XML body without declaring a Content-Type header.",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/fromhell/missing-content-type/html": {
+      "get": {
+        "summary": "Missing Content-Type - HTML Body",
+        "description": "Returns an HTML body without declaring a Content-Type header.\n\nProblem: The body looks like HTML but the server does not declare text/html.\n\nExpected client behavior: A REST client should show that the content type is missing and make rendered-vs-raw behavior obvious.",
+        "operationId": "getMissingContentTypeHtml",
+        "responses": {
+          "200": {
+            "description": "Returns an HTML body without declaring a Content-Type header.",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json": {
+      "get": {
+        "summary": "Malformed JSON - Missing Collection Terminator",
+        "description": "Returns a JSON array that starts correctly but never closes the collection.\n\nProblem: The body is malformed JSON even though the status is 200 and content type says application/json.\n\nExpected client behavior: A REST client should show a parse/formatting failure and still make the raw body available.",
+        "operationId": "getMalformedJson",
+        "responses": {
+          "200": {
+            "description": "Returns a JSON array that starts correctly but never closes the collection.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/trailing-comma-array": {
+      "get": {
+        "summary": "Malformed JSON - Trailing Comma In Array",
+        "description": "Returns a JSON array with a trailing comma before the closing bracket.\n\nProblem: JSON does not allow a trailing comma after the final array item.\n\nExpected client behavior: A REST client should show that JSON parsing failed and still make the raw body available.",
+        "operationId": "getMalformedJsonTrailingCommaArray",
+        "responses": {
+          "200": {
+            "description": "Returns a JSON array with a trailing comma before the closing bracket.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"name\":\"first\"},]"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/trailing-comma-object": {
+      "get": {
+        "summary": "Malformed JSON - Trailing Comma In Object",
+        "description": "Returns a JSON object with a trailing comma before the closing brace.\n\nProblem: JSON does not allow a trailing comma after the final object property.\n\nExpected client behavior: A REST client should flag the parse failure near the end of the object.",
+        "operationId": "getMalformedJsonTrailingCommaObject",
+        "responses": {
+          "200": {
+            "description": "Returns a JSON object with a trailing comma before the closing brace.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":1,\"name\":\"first\",}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/unquoted-key": {
+      "get": {
+        "summary": "Malformed JSON - Unquoted Object Key",
+        "description": "Returns an object where the property name is not wrapped in double quotes.\n\nProblem: JSON object keys must be double-quoted strings.\n\nExpected client behavior: A REST client should not treat JavaScript object literal syntax as valid JSON.",
+        "operationId": "getMalformedJsonUnquotedKey",
+        "responses": {
+          "200": {
+            "description": "Returns an object where the property name is not wrapped in double quotes.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{id:1,\"name\":\"first\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/single-quoted-string": {
+      "get": {
+        "summary": "Malformed JSON - Single Quoted String",
+        "description": "Returns JSON-looking data using single quotes for strings.\n\nProblem: JSON strings must use double quotes, not single quotes.\n\nExpected client behavior: A REST client should distinguish JSON from JavaScript-like object notation.",
+        "operationId": "getMalformedJsonSingleQuotedString",
+        "responses": {
+          "200": {
+            "description": "Returns JSON-looking data using single quotes for strings.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{'id':1,'name':'first'}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/bad-escape": {
+      "get": {
+        "summary": "Malformed JSON - Bad Escape Sequence",
+        "description": "Returns a string with an unsupported escape sequence.\n\nProblem: JSON allows only specific escape sequences; \\q is not valid.\n\nExpected client behavior: A REST client should show where the bad escape sequence breaks parsing.",
+        "operationId": "getMalformedJsonBadEscape",
+        "responses": {
+          "200": {
+            "description": "Returns a string with an unsupported escape sequence.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"path\":\"C:\\temp\\q\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/truncated-string": {
+      "get": {
+        "summary": "Malformed JSON - Truncated String",
+        "description": "Returns an object with a string value that never closes.\n\nProblem: The response ends before the string terminator is present.\n\nExpected client behavior: A REST client should make it clear that the body was incomplete or truncated.",
+        "operationId": "getMalformedJsonTruncatedString",
+        "responses": {
+          "200": {
+            "description": "Returns an object with a string value that never closes.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\":\"unterminated}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/extra-data-after-document": {
+      "get": {
+        "summary": "Malformed JSON - Extra Data After Document",
+        "description": "Returns one complete JSON object followed by another value.\n\nProblem: A JSON response body should contain one complete JSON document, not extra data after it.\n\nExpected client behavior: A REST client should show that the first object parsed but unexpected data follows.",
+        "operationId": "getMalformedJsonExtraDataAfterDocument",
+        "responses": {
+          "200": {
+            "description": "Returns one complete JSON object followed by another value.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"ok\":true} {\"extra\":true}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/missing-colon": {
+      "get": {
+        "summary": "Malformed JSON - Missing Colon",
+        "description": "Returns an object property without the colon between key and value.\n\nProblem: JSON object members require a colon between the name and value.\n\nExpected client behavior: A REST client should identify the structural syntax error.",
+        "operationId": "getMalformedJsonMissingColon",
+        "responses": {
+          "200": {
+            "description": "Returns an object property without the colon between key and value.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\" \"hello\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/leading-zero-number": {
+      "get": {
+        "summary": "Malformed JSON - Leading Zero Number",
+        "description": "Returns a numeric value with a leading zero.\n\nProblem: JSON numbers cannot use leading zeroes like 01.\n\nExpected client behavior: A REST client should reject the number rather than silently accepting non-standard JSON.",
+        "operationId": "getMalformedJsonLeadingZeroNumber",
+        "responses": {
+          "200": {
+            "description": "Returns a numeric value with a leading zero.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"count\":01}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/nan-value": {
+      "get": {
+        "summary": "Malformed JSON - NaN Value",
+        "description": "Returns NaN as a value in a JSON-looking object.\n\nProblem: NaN is not a valid JSON number or literal.\n\nExpected client behavior: A REST client should not silently accept JavaScript-only numeric values as JSON.",
+        "operationId": "getMalformedJsonNanValue",
+        "responses": {
+          "200": {
+            "description": "Returns NaN as a value in a JSON-looking object.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"value\":NaN}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/unclosed-object": {
+      "get": {
+        "summary": "Malformed JSON - Unclosed Object",
+        "description": "Returns an object that never closes with a final brace.\n\nProblem: The JSON object starts correctly but the closing brace is missing.\n\nExpected client behavior: A REST client should report the incomplete object and preserve the raw response.",
+        "operationId": "getMalformedJsonUnclosedObject",
+        "responses": {
+          "200": {
+            "description": "Returns an object that never closes with a final brace.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":1,\"name\":\"open\""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/json/control-character": {
+      "get": {
+        "summary": "Malformed JSON - Raw Control Character",
+        "description": "Returns a string containing a raw control character.\n\nProblem: JSON strings cannot contain unescaped control characters.\n\nExpected client behavior: A REST client should show that the body is not valid JSON and still allow raw inspection.",
+        "operationId": "getMalformedJsonControlCharacter",
+        "responses": {
+          "200": {
+            "description": "Returns a string containing a raw control character.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\":\"bad\u0001control\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/duplicate-keys": {
+      "get": {
+        "summary": "Problematic JSON - Duplicate Keys",
+        "description": "Returns valid JSON syntax with the same object key repeated.\n\nProblem: Duplicate object keys are ambiguous because parsers disagree on whether the first or last value wins.\n\nExpected client behavior: A REST client should make duplicate keys visible or warn that values may be overwritten.",
+        "operationId": "getProblematicJsonDuplicateKeys",
+        "responses": {
+          "200": {
+            "description": "Returns valid JSON syntax with the same object key repeated.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":1,\"id\":2,\"name\":\"duplicate key example\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/large-integer": {
+      "get": {
+        "summary": "Problematic JSON - Large Integer",
+        "description": "Returns an integer larger than JavaScript can safely represent exactly.\n\nProblem: Large JSON numbers can lose precision in clients that store all numbers as floating point values.\n\nExpected client behavior: A REST client should display the exact raw value and avoid silently rounding it.",
+        "operationId": "getProblematicJsonLargeInteger",
+        "responses": {
+          "200": {
+            "description": "Returns an integer larger than JavaScript can safely represent exactly.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"safeLimit\":9007199254740991,\"largerThanSafe\":9007199254740993}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/high-precision-decimal": {
+      "get": {
+        "summary": "Problematic JSON - High Precision Decimal",
+        "description": "Returns a decimal value with more precision than many clients preserve.\n\nProblem: Some parsers or viewers round high precision decimal values when rendering or generating code.\n\nExpected client behavior: A REST client should make the raw numeric text available so precision loss can be spotted.",
+        "operationId": "getProblematicJsonHighPrecisionDecimal",
+        "responses": {
+          "200": {
+            "description": "Returns a decimal value with more precision than many clients preserve.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"amount\":0.12345678901234567890123456789}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/exponent-number": {
+      "get": {
+        "summary": "Problematic JSON - Exponent Number",
+        "description": "Returns JSON numbers using exponent notation.\n\nProblem: Exponent notation is valid JSON, but some clients display, sort, or generate examples awkwardly.\n\nExpected client behavior: A REST client should show both the raw exponent form and any interpreted value clearly.",
+        "operationId": "getProblematicJsonExponentNumber",
+        "responses": {
+          "200": {
+            "description": "Returns JSON numbers using exponent notation.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"small\":1.23e-10,\"large\":6.022e23}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/null-vs-missing": {
+      "get": {
+        "summary": "Problematic JSON - Null Vs Missing Field",
+        "description": "Returns one item with a null field and another item where the same field is missing.\n\nProblem: Null and missing fields are semantically different but many clients and generated models blur them.\n\nExpected client behavior: A REST client should make it easy to see that one value is explicit null and another is absent.",
+        "operationId": "getProblematicJsonNullVsMissing",
+        "responses": {
+          "200": {
+            "description": "Returns one item with a null field and another item where the same field is missing.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"items\":[{\"id\":1,\"nickname\":null},{\"id\":2}]}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/escaped-unicode": {
+      "get": {
+        "summary": "Problematic JSON - Escaped Unicode",
+        "description": "Returns escaped Unicode including a zero-width space and a visually similar character.\n\nProblem: Escaped Unicode can make values look normal while containing hidden or confusable characters.\n\nExpected client behavior: A REST client should let users inspect raw escapes as well as rendered text.",
+        "operationId": "getProblematicJsonEscapedUnicode",
+        "responses": {
+          "200": {
+            "description": "Returns escaped Unicode including a zero-width space and a visually similar character.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"normal\":\"user\",\"zeroWidth\":\"us\\u200Ber\",\"confusable\":\"payl\\u043Ead\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/empty-object": {
+      "get": {
+        "summary": "Problematic JSON - Empty Object",
+        "description": "Returns an empty JSON object where useful data would usually be expected.\n\nProblem: An empty object is valid JSON, but it may violate the semantic contract a client expects.\n\nExpected client behavior: A REST client should make it clear that the response is valid but contains no fields.",
+        "operationId": "getProblematicJsonEmptyObject",
+        "responses": {
+          "200": {
+            "description": "Returns an empty JSON object where useful data would usually be expected.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/top-level-string": {
+      "get": {
+        "summary": "Problematic JSON - Top-Level String",
+        "description": "Returns a top-level JSON string instead of an object or array.\n\nProblem: Top-level strings are valid JSON but many clients and schemas assume an object or array.\n\nExpected client behavior: A REST client should show that the complete JSON document is a scalar string.",
+        "operationId": "getProblematicJsonTopLevelString",
+        "responses": {
+          "200": {
+            "description": "Returns a top-level JSON string instead of an object or array.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "\"hello\""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/top-level-number": {
+      "get": {
+        "summary": "Problematic JSON - Top-Level Number",
+        "description": "Returns a top-level JSON number instead of an object or array.\n\nProblem: Top-level numbers are valid JSON but can surprise clients that expect structured data.\n\nExpected client behavior: A REST client should show that the entire response body is one scalar number.",
+        "operationId": "getProblematicJsonTopLevelNumber",
+        "responses": {
+          "200": {
+            "description": "Returns a top-level JSON number instead of an object or array.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "42"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/top-level-boolean": {
+      "get": {
+        "summary": "Problematic JSON - Top-Level Boolean",
+        "description": "Returns a top-level JSON boolean.\n\nProblem: Top-level booleans are valid JSON but can expose assumptions in viewers and generated clients.\n\nExpected client behavior: A REST client should display the boolean as the whole document, not as missing body content.",
+        "operationId": "getProblematicJsonTopLevelBoolean",
+        "responses": {
+          "200": {
+            "description": "Returns a top-level JSON boolean.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "true"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/top-level-null": {
+      "get": {
+        "summary": "Problematic JSON - Top-Level Null",
+        "description": "Returns a top-level JSON null value.\n\nProblem: Top-level null is valid JSON but can be confused with an empty response or missing data.\n\nExpected client behavior: A REST client should distinguish the literal null body from no body.",
+        "operationId": "getProblematicJsonTopLevelNull",
+        "responses": {
+          "200": {
+            "description": "Returns a top-level JSON null value.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "null"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/empty-body": {
+      "get": {
+        "summary": "Problematic JSON - Empty Body With JSON Content-Type",
+        "description": "Returns application/json with an empty response body.\n\nProblem: An empty body is not a valid JSON document, even when the content type says JSON.\n\nExpected client behavior: A REST client should show the empty body and not pretend it parsed a JSON value.",
+        "operationId": "getProblematicJsonEmptyBody",
+        "responses": {
+          "200": {
+            "description": "Returns application/json with an empty response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/bom-prefix": {
+      "get": {
+        "summary": "Problematic JSON - UTF-8 BOM Prefix",
+        "description": "Returns a JSON object prefixed with a UTF-8 byte order mark.\n\nProblem: Some JSON parsers tolerate a BOM and others reject or expose it as an unexpected character.\n\nExpected client behavior: A REST client should preserve enough raw detail to diagnose the prefix if parsing fails.",
+        "operationId": "getProblematicJsonBomPrefix",
+        "responses": {
+          "200": {
+            "description": "Returns a JSON object prefixed with a UTF-8 byte order mark.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "﻿{\"message\":\"bom prefix\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/json/ndjson": {
+      "get": {
+        "summary": "Problematic JSON - NDJSON Stream",
+        "description": "Returns newline-delimited JSON objects rather than a single JSON document.\n\nProblem: NDJSON is useful as a stream format, but it is not one JSON document and needs different handling.\n\nExpected client behavior: A REST client should show this as line-delimited data rather than trying to parse it as one object.",
+        "operationId": "getProblematicJsonNdjson",
+        "responses": {
+          "200": {
+            "description": "Returns newline-delimited JSON objects rather than a single JSON document.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/x-ndjson"
+              }
+            },
+            "content": {
+              "application/x-ndjson": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":1,\"event\":\"started\"}\n{\"id\":2,\"event\":\"finished\"}\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml": {
+      "get": {
+        "summary": "Malformed XML - Missing Root Terminator",
+        "description": "Returns XML that starts correctly but does not close the document.\n\nProblem: The body is malformed XML even though the status is 200 and content type says application/xml.\n\nExpected client behavior: A REST client should show a parse/formatting failure and still make the raw body available.",
+        "operationId": "getMalformedXml",
+        "responses": {
+          "200": {
+            "description": "Returns XML that starts correctly but does not close the document.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n\r\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/mismatched-tag": {
+      "get": {
+        "summary": "Malformed XML - Mismatched Tag",
+        "description": "Returns XML where a child element closes with the wrong tag name.\n\nProblem: The item element opens as item but closes as thing.\n\nExpected client behavior: A REST client should show the mismatched closing tag error and raw XML.",
+        "operationId": "getMalformedXmlMismatchedTag",
+        "responses": {
+          "200": {
+            "description": "Returns XML where a child element closes with the wrong tag name.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><item>one</thing></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/unescaped-ampersand": {
+      "get": {
+        "summary": "Malformed XML - Unescaped Ampersand",
+        "description": "Returns XML containing an ampersand that is not escaped as an entity.\n\nProblem: Ampersands in text content must be escaped as &amp; unless they start a valid entity.\n\nExpected client behavior: A REST client should show the entity parsing error and raw response text.",
+        "operationId": "getMalformedXmlUnescapedAmpersand",
+        "responses": {
+          "200": {
+            "description": "Returns XML containing an ampersand that is not escaped as an entity.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><name>Tom & Jerry</name></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/duplicate-attribute": {
+      "get": {
+        "summary": "Malformed XML - Duplicate Attribute",
+        "description": "Returns XML with the same attribute declared twice on one element.\n\nProblem: An XML element cannot have two attributes with the same name.\n\nExpected client behavior: A REST client should show the duplicate attribute parse error.",
+        "operationId": "getMalformedXmlDuplicateAttribute",
+        "responses": {
+          "200": {
+            "description": "Returns XML with the same attribute declared twice on one element.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><item id=\"1\" id=\"2\">duplicate</item></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/undefined-entity": {
+      "get": {
+        "summary": "Malformed XML - Undefined Entity",
+        "description": "Returns XML that references an entity which has not been declared.\n\nProblem: The &unknown; entity is not predefined or declared in the document.\n\nExpected client behavior: A REST client should expose the undefined entity error.",
+        "operationId": "getMalformedXmlUndefinedEntity",
+        "responses": {
+          "200": {
+            "description": "Returns XML that references an entity which has not been declared.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><name>&unknown;</name></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/multiple-root-elements": {
+      "get": {
+        "summary": "Malformed XML - Multiple Root Elements",
+        "description": "Returns two top-level elements in one XML document.\n\nProblem: A well-formed XML document must have exactly one root element.\n\nExpected client behavior: A REST client should show that content appears after the first complete root.",
+        "operationId": "getMalformedXmlMultipleRootElements",
+        "responses": {
+          "200": {
+            "description": "Returns two top-level elements in one XML document.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><one></one><two></two>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/missing-attribute-quote": {
+      "get": {
+        "summary": "Malformed XML - Missing Attribute Quote",
+        "description": "Returns XML where an attribute value is not quoted.\n\nProblem: XML attribute values must be wrapped in quotes.\n\nExpected client behavior: A REST client should identify the attribute syntax error.",
+        "operationId": "getMalformedXmlMissingAttributeQuote",
+        "responses": {
+          "200": {
+            "description": "Returns XML where an attribute value is not quoted.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><item id=1>missing quote</item></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/unclosed-cdata": {
+      "get": {
+        "summary": "Malformed XML - Unclosed CDATA",
+        "description": "Returns XML with a CDATA section that never terminates.\n\nProblem: CDATA sections must close with ]]>. This response never closes the section.\n\nExpected client behavior: A REST client should report the unterminated CDATA section.",
+        "operationId": "getMalformedXmlUnclosedCdata",
+        "responses": {
+          "200": {
+            "description": "Returns XML with a CDATA section that never terminates.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><![CDATA[unterminated</root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/invalid-character": {
+      "get": {
+        "summary": "Malformed XML - Invalid Character",
+        "description": "Returns XML containing a character that is not allowed in XML 1.0 content.\n\nProblem: The body includes a raw control character inside the text node.\n\nExpected client behavior: A REST client should show the invalid character problem without losing the raw response.",
+        "operationId": "getMalformedXmlInvalidCharacter",
+        "responses": {
+          "200": {
+            "description": "Returns XML containing a character that is not allowed in XML 1.0 content.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root>bad\u0001char</root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/truncated-document": {
+      "get": {
+        "summary": "Malformed XML - Truncated Document",
+        "description": "Returns XML that starts a nested element but ends before closing it.\n\nProblem: The document is incomplete and ends before the open elements are closed.\n\nExpected client behavior: A REST client should report the unexpected end of document.",
+        "operationId": "getMalformedXmlTruncatedDocument",
+        "responses": {
+          "200": {
+            "description": "Returns XML that starts a nested element but ends before closing it.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><item>one"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/malformed/xml/bad-processing-instruction": {
+      "get": {
+        "summary": "Malformed XML - Bad Processing Instruction",
+        "description": "Returns XML with a processing instruction that never closes.\n\nProblem: Processing instructions must close with ?> before normal element markup continues.\n\nExpected client behavior: A REST client should show the processing instruction syntax error.",
+        "operationId": "getMalformedXmlBadProcessingInstruction",
+        "responses": {
+          "200": {
+            "description": "Returns XML with a processing instruction that never closes.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><?processing instruction</root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/attributes-vs-elements": {
+      "get": {
+        "summary": "Problematic XML - Attributes Vs Elements",
+        "description": "Returns the same kind of data in both attributes and child elements.\n\nProblem: Clients often flatten XML into maps and may hide whether a value came from an attribute or an element.\n\nExpected client behavior: A REST client should make attributes and elements visibly distinct and avoid silently merging conflicting values.",
+        "operationId": "getProblematicXmlAttributesVsElements",
+        "responses": {
+          "200": {
+            "description": "Returns the same kind of data in both attributes and child elements.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><user id=\"123\" active=\"true\"><id>456</id><active>false</active><name>Attribute Example</name></user></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/empty-vs-missing-vs-nil": {
+      "get": {
+        "summary": "Problematic XML - Empty Vs Missing Vs Nil",
+        "description": "Returns empty, missing, and explicitly nil values in one document.\n\nProblem: Empty elements, absent elements, and xsi:nil values are different states but clients may render them identically.\n\nExpected client behavior: A REST client should help users distinguish empty, missing, and nil values.",
+        "operationId": "getProblematicXmlEmptyVsMissingVsNil",
+        "responses": {
+          "200": {
+            "description": "Returns empty, missing, and explicitly nil values in one document.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><item id=\"1\"><nickname/></item><item id=\"2\"></item><item id=\"3\"><nickname xsi:nil=\"true\"/></item></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/whitespace-text": {
+      "get": {
+        "summary": "Problematic XML - Whitespace Significant Text",
+        "description": "Returns XML text values with leading, trailing, and multiline whitespace.\n\nProblem: Pretty printers and object mappers can trim or normalize whitespace that is part of the value.\n\nExpected client behavior: A REST client should let users inspect the raw text and spot whitespace-preservation issues.",
+        "operationId": "getProblematicXmlWhitespaceText",
+        "responses": {
+          "200": {
+            "description": "Returns XML text values with leading, trailing, and multiline whitespace.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><value>  padded value  </value><multiline>\n  line one\n  line two\n</multiline></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/cdata-content": {
+      "get": {
+        "summary": "Problematic XML - CDATA Content",
+        "description": "Returns XML with JSON-looking and HTML-looking text inside CDATA.\n\nProblem: Clients may hide CDATA boundaries or try to interpret embedded markup as real XML.\n\nExpected client behavior: A REST client should preserve CDATA content as text and make the raw body available.",
+        "operationId": "getProblematicXmlCdataContent",
+        "responses": {
+          "200": {
+            "description": "Returns XML with JSON-looking and HTML-looking text inside CDATA.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><payload><![CDATA[{\"html\":\"<strong>ok</strong>\",\"amp\":\"A & B\"}]]></payload></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/mixed-content": {
+      "get": {
+        "summary": "Problematic XML - Mixed Content",
+        "description": "Returns text and child elements mixed inside the same element.\n\nProblem: Mixed content is valid XML but awkward for clients that convert XML to simple JSON-like objects.\n\nExpected client behavior: A REST client should show text nodes and child elements without dropping their order.",
+        "operationId": "getProblematicXmlMixedContent",
+        "responses": {
+          "200": {
+            "description": "Returns text and child elements mixed inside the same element.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><message>Hello <em>important</em> world.</message></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/processing-instruction": {
+      "get": {
+        "summary": "Problematic XML - Processing Instruction",
+        "description": "Returns a valid processing instruction before the document root.\n\nProblem: Processing instructions are valid XML but many viewers hide or ignore them.\n\nExpected client behavior: A REST client should make processing instructions visible in raw or structured views.",
+        "operationId": "getProblematicXmlProcessingInstruction",
+        "responses": {
+          "200": {
+            "description": "Returns a valid processing instruction before the document root.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><?client-hint render=\"compact\"?><root><status>ok</status></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/comments": {
+      "get": {
+        "summary": "Problematic XML - Comments",
+        "description": "Returns XML containing comments between normal elements.\n\nProblem: Comments may be hidden by formatters or stripped by object conversion.\n\nExpected client behavior: A REST client should preserve enough raw detail to show whether comments were present.",
+        "operationId": "getProblematicXmlComments",
+        "responses": {
+          "200": {
+            "description": "Returns XML containing comments between normal elements.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><root><!-- hidden note --><status>ok</status><!-- after status --></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/encoding-mismatch": {
+      "get": {
+        "summary": "Problematic XML - Encoding Declaration Mismatch",
+        "description": "Returns XML where the HTTP charset and XML declaration disagree.\n\nProblem: The response header says UTF-8 but the XML declaration says ISO-8859-1.\n\nExpected client behavior: A REST client should expose both the HTTP charset and XML declaration so encoding assumptions are visible.",
+        "operationId": "getProblematicXmlEncodingMismatch",
+        "responses": {
+          "200": {
+            "description": "Returns XML where the HTTP charset and XML declaration disagree.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml; charset=UTF-8"
+              }
+            },
+            "content": {
+              "application/xml; charset=UTF-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><root><text>caf&#233;</text></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/doctype-dtd": {
+      "get": {
+        "summary": "Problematic XML - DOCTYPE And DTD",
+        "description": "Returns XML with a safe inline DTD declaration.\n\nProblem: DOCTYPE and DTD declarations are valid XML but clients may block, ignore, or hide them for security reasons.\n\nExpected client behavior: A REST client should show that the document includes a DTD without attempting unsafe external resolution.",
+        "operationId": "getProblematicXmlDoctypeDtd",
+        "responses": {
+          "200": {
+            "description": "Returns XML with a safe inline DTD declaration.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\"?><!DOCTYPE note [<!ELEMENT note (to,body)><!ELEMENT to (#PCDATA)><!ELEMENT body (#PCDATA)>]><note><to>client</to><body>inline doctype only</body></note>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/empty-body": {
+      "get": {
+        "summary": "Problematic XML - Empty Body With XML Content-Type",
+        "description": "Returns application/xml with an empty response body.\n\nProblem: An empty body is not an XML document, even when the content type says XML.\n\nExpected client behavior: A REST client should show the empty body and not pretend it parsed XML.",
+        "operationId": "getProblematicXmlEmptyBody",
+        "responses": {
+          "200": {
+            "description": "Returns application/xml with an empty response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/problematic/xml/bom-prefix": {
+      "get": {
+        "summary": "Problematic XML - UTF-8 BOM Prefix",
+        "description": "Returns XML prefixed with a UTF-8 byte order mark.\n\nProblem: Some clients hide the BOM while others expose it as a leading character or parsing issue.\n\nExpected client behavior: A REST client should preserve enough raw detail to diagnose the prefix if parsing behaves unexpectedly.",
+        "operationId": "getProblematicXmlBomPrefix",
+        "responses": {
+          "200": {
+            "description": "Returns XML prefixed with a UTF-8 byte order mark.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "﻿<?xml version=\"1.0\"?><root><message>bom prefix</message></root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/mismatch/content-type/json-xml": {
+      "get": {
+        "summary": "Content-Type Mismatch - Header JSON Body XML",
+        "description": "Returns XML while declaring application/json.\n\nProblem: The Content-Type header is application/json but the body is XML.\n\nExpected client behavior: A REST client should make the mismatch visible and allow you to inspect the raw response.",
+        "operationId": "getMismatchContentTypeJsonXml",
+        "responses": {
+          "200": {
+            "description": "Returns XML while declaring application/json.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n <root>\r\n     <0>\r\n         <id>57ab8bfa-dcad-4649-9442-3b13010e852d</id>\r\n         <username>Damaris76</username>\r\n     </0>\r\n     <1>\r\n         <id>e88067f0-b028-4310-8a33-8cbc03203249</id>\r\n         <username>Modesto_Reichel61</username>\r\n     </1>\r\n     <2>\r\n         <id>fee23d87-721f-4ffa-a598-e350e13385b2</id>\r\n         <username>Abagail_Shanahan</username>\r\n     </2>\r\n     <3>\r\n         <id>987fc185-7cc6-4883-a5f4-3273b1045155</id>\r\n         <username>Joaquin_Funk12</username>\r\n     </3>\r\n     <4>\r\n         <id>0c2744bb-881a-41c0-a577-603b052485d9</id>\r\n         <username>Maverick.Corkery74</username>\r\n     </4>\r\n </root>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/mismatch/content-type/xml-json": {
+      "get": {
+        "summary": "Content-Type Mismatch - Header XML Body JSON",
+        "description": "Returns JSON while declaring application/xml.\n\nProblem: The Content-Type header is application/xml but the body is JSON.\n\nExpected client behavior: A REST client should make the mismatch visible and allow you to inspect the raw response.",
+        "operationId": "getMismatchContentTypeXmlJson",
+        "responses": {
+          "200": {
+            "description": "Returns JSON while declaring application/xml.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/xml"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":\"57ab8bfa-dcad-4649-9442-3b13010e852d\",\"username\":\"Damaris76\"},{\"id\":\"e88067f0-b028-4310-8a33-8cbc03203249\",\"username\":\"Modesto_Reichel61\"},{\"id\":\"fee23d87-721f-4ffa-a598-e350e13385b2\",\"username\":\"Abagail_Shanahan\"},{\"id\":\"987fc185-7cc6-4883-a5f4-3273b1045155\",\"username\":\"Joaquin_Funk12\"},{\"id\":\"0c2744bb-881a-41c0-a577-603b052485d9\",\"username\":\"Maverick.Corkery74\"}]"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/201-no-location": {
+      "post": {
+        "summary": "201 Missing Location Header",
+        "description": "Returns a created-looking JSON response.\n\nProblem: The status is 201 Created, but the response does not include a Location header for the created resource.\n\nExpected client behavior: A REST client should make the missing Location header easy to spot.",
+        "operationId": "postStatusCode201NoLocation",
+        "responses": {
+          "201": {
+            "description": "Returns a created-looking JSON response.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":123,\"message\":\"created without a Location header\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/301-no-location": {
+      "get": {
+        "summary": "301 Missing Location Header",
+        "description": "Returns a permanent redirect status.\n\nProblem: The status is 301 Moved Permanently, but there is no Location header to follow.\n\nExpected client behavior: A REST client should show that the redirect target is missing.",
+        "operationId": "getStatusCode301NoLocation",
+        "responses": {
+          "301": {
+            "description": "Returns a permanent redirect status.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/plain"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Moved permanently, but no Location header was supplied."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/302-no-location": {
+      "get": {
+        "summary": "302 Missing Location Header",
+        "description": "Returns a common temporary redirect status.\n\nProblem: The status is 302 Found, but there is no Location header to follow.\n\nExpected client behavior: A REST client should show that the redirect target is missing.",
+        "operationId": "getStatusCode302NoLocation",
+        "responses": {
+          "302": {
+            "description": "Returns a common temporary redirect status.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/plain"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Found somewhere else, but no Location header was supplied."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/307-no-location": {
+      "get": {
+        "summary": "307 Missing Location Header",
+        "description": "Returns a temporary redirect status that should preserve the original method.\n\nProblem: The status is 307 Temporary Redirect, but there is no Location header to follow.\n\nExpected client behavior: A REST client should show that the redirect target is missing and not silently change method.",
+        "operationId": "getStatusCode307NoLocation",
+        "responses": {
+          "307": {
+            "description": "Returns a temporary redirect status that should preserve the original method.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "text/plain"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Temporary redirect, but no Location header was supplied."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/204-with-body": {
+      "delete": {
+        "summary": "204 Body Present Despite No Content",
+        "description": "Returns 204 No Content while the catalog defines a JSON response body.\n\nProblem: The status says no content, but the endpoint attempts to send response content.\n\nExpected client behavior: A REST client should make it clear whether the body is present, discarded, or hidden by the HTTP stack. Local .jar or Docker execution may expose the body, while production proxies or gateways may strip it, so use an HTTP proxy between the API and client to inspect the actual response.",
+        "operationId": "deleteStatusCode204WithBody",
+        "responses": {
+          "204": {
+            "description": "Returns 204 No Content while the catalog defines a JSON response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\":\"This body should not be sent with 204 No Content\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/205-with-body": {
+      "post": {
+        "summary": "205 Body Present Despite Reset Content",
+        "description": "Returns 205 Reset Content while the catalog defines a JSON response body.\n\nProblem: The status tells the client to reset the document view and should not include a response body.\n\nExpected client behavior: A REST client should make the body/status contradiction visible.",
+        "operationId": "postStatusCode205WithBody",
+        "responses": {
+          "205": {
+            "description": "Returns 205 Reset Content while the catalog defines a JSON response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\":\"This body should not be sent with 205 Reset Content\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/304-with-body": {
+      "get": {
+        "summary": "304 Body Present Despite Not Modified",
+        "description": "Returns 304 Not Modified while the catalog defines a JSON response body.\n\nProblem: The status is a cache validation response and should not include a response body.\n\nExpected client behavior: A REST client should make it clear whether the body is present, discarded, or hidden by cache/status handling.",
+        "operationId": "getStatusCode304WithBody",
+        "responses": {
+          "304": {
+            "description": "Returns 304 Not Modified while the catalog defines a JSON response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"message\":\"This body should not be sent with 304 Not Modified\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/206-no-content-range": {
+      "get": {
+        "summary": "206 Missing Content-Range Header",
+        "description": "Returns a partial-looking body.\n\nProblem: The status is 206 Partial Content, but the response does not include Content-Range.\n\nExpected client behavior: A REST client should make the missing range metadata easy to spot.",
+        "operationId": "getStatusCode206NoContentRange",
+        "responses": {
+          "206": {
+            "description": "Returns a partial-looking body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"items\":[1,2],\"message\":\"partial content without Content-Range\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/401-no-www-authenticate": {
+      "get": {
+        "summary": "401 Missing WWW-Authenticate Header",
+        "description": "Returns an authentication failure body.\n\nProblem: The status is 401 Unauthorized, but the response does not include WWW-Authenticate.\n\nExpected client behavior: A REST client should show the missing authentication challenge header.",
+        "operationId": "getStatusCode401NoWwwAuthenticate",
+        "responses": {
+          "401": {
+            "description": "Returns an authentication failure body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"error\":\"authentication required but no challenge header was sent\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/405-no-allow": {
+      "post": {
+        "summary": "405 Missing Allow Header",
+        "description": "Returns a method-not-allowed response body.\n\nProblem: The status is 405 Method Not Allowed, but the response does not include Allow.\n\nExpected client behavior: A REST client should show the missing allowed-methods metadata.",
+        "operationId": "postStatusCode405NoAllow",
+        "responses": {
+          "405": {
+            "description": "Returns a method-not-allowed response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"error\":\"method not allowed but no Allow header was sent\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/416-no-content-range": {
+      "get": {
+        "summary": "416 Missing Content-Range Header",
+        "description": "Returns an unsatisfied range response body.\n\nProblem: The status is 416 Range Not Satisfiable, but the response does not include Content-Range.\n\nExpected client behavior: A REST client should show the missing range explanation.",
+        "operationId": "getStatusCode416NoContentRange",
+        "responses": {
+          "416": {
+            "description": "Returns an unsatisfied range response body.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"error\":\"range not satisfiable but no Content-Range header was sent\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/200-error-body": {
+      "get": {
+        "summary": "200 Error-Shaped Body",
+        "description": "Returns a normal success status.\n\nProblem: The status is 200 OK, but the body is shaped like an error response.\n\nExpected client behavior: A REST client should make it easy to inspect both status and body without assuming the request succeeded.",
+        "operationId": "getStatusCode200ErrorBody",
+        "responses": {
+          "200": {
+            "description": "Returns a normal success status.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"error\":\"Everything is broken\",\"code\":\"NOT_OK\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fromhell/status-code/500-success-body": {
+      "get": {
+        "summary": "500 Success-Shaped Body",
+        "description": "Returns a server error status.\n\nProblem: The status is 500 Internal Server Error, but the body claims success.\n\nExpected client behavior: A REST client should make it easy to inspect both status and body without assuming the body is truthful.",
+        "operationId": "getStatusCode500SuccessBody",
+        "responses": {
+          "500": {
+            "description": "Returns a server error status.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/json"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"success\":true,\"message\":\"The body says success but the status is 500\"}"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

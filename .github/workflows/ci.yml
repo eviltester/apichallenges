@@ -45,6 +45,34 @@ jobs:
         if: matrix.java == 21
         run: mvn -B -f apichallenges/pom.xml spotless:check
 
+      - name: Check API From Hell standalone assets
+        if: matrix.java == 21
+        run: |
+          python apichallenges/api-from-hell/tooling/catalog-validator/validate_catalog.py \
+            apichallenges/api-from-hell/catalog/fromhell-catalog.json
+          python -m compileall -q \
+            apichallenges/api-from-hell/tooling \
+            apichallenges/api-from-hell/implementations/python-native-http \
+            apichallenges/api-from-hell/implementations/python-flask
+          node --check apichallenges/api-from-hell/implementations/node-native-http/server.js
+          node --check apichallenges/api-from-hell/implementations/node-express/server.js
+          mvn -B -f apichallenges/api-from-hell/implementations/java-javalin/pom.xml test
+          python apichallenges/api-from-hell/tooling/openapi-generator/generate_openapi.py \
+            apichallenges/api-from-hell/catalog/fromhell-catalog.json \
+            --output /tmp/fromhell-openapi.json
+          python apichallenges/api-from-hell/tooling/mockoon-generator/generate_mockoon.py \
+            apichallenges/api-from-hell/catalog/fromhell-catalog.json \
+            --output /tmp/fromhell-mockoon.json
+          PORT=3901 node apichallenges/api-from-hell/implementations/node-native-http/server.js \
+            > /tmp/fromhell-node.log 2>&1 &
+          server_pid=$!
+          trap 'kill ${server_pid} || true; cat /tmp/fromhell-node.log' EXIT
+          sleep 2
+          python apichallenges/api-from-hell/tooling/conformance-tests/run_conformance.py \
+            --base-url http://localhost:3901
+          kill ${server_pid}
+          trap - EXIT
+
       - name: Run API Challenges tests
         run: mvn -B -f apichallenges/pom.xml clean test
 

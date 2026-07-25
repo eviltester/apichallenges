@@ -1,9 +1,12 @@
 package uk.co.compendiumdev.challenge.practicemodes.fromhell;
 
 import com.google.gson.Gson;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,10 +33,32 @@ public final class FromHellCatalog {
     public static FromHellCatalog loadDefault() {
         final InputStream stream =
                 FromHellCatalog.class.getClassLoader().getResourceAsStream(RESOURCE_PATH);
-        if (stream == null) {
+        if (stream != null) {
+            return loadFrom(stream);
+        }
+
+        final InputStream fallbackStream = fallbackCatalogStream();
+        if (fallbackStream == null) {
             throw new IllegalStateException("Could not load " + RESOURCE_PATH);
         }
-        return loadFrom(stream);
+        return loadFrom(fallbackStream);
+    }
+
+    private static InputStream fallbackCatalogStream() {
+        final List<Path> fallbackPaths =
+                List.of(
+                        Path.of("api-from-hell", "catalog", "fromhell-catalog.json"),
+                        Path.of("..", "api-from-hell", "catalog", "fromhell-catalog.json"));
+        for (Path path : fallbackPaths) {
+            if (Files.exists(path)) {
+                try {
+                    return Files.newInputStream(path);
+                } catch (IOException e) {
+                    throw new IllegalStateException("Could not load " + path, e);
+                }
+            }
+        }
+        return null;
     }
 
     static FromHellCatalog loadFrom(final InputStream stream) {
