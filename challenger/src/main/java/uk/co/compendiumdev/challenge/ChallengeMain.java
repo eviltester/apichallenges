@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.apimodel.ChallengeApiModel;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
+import uk.co.compendiumdev.challenge.logging.ApiChallengesLogging;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.MainImplementation;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierHttpApiRoutings;
@@ -15,6 +16,8 @@ public class ChallengeMain {
     static MainImplementation app;
 
     public static void main(String[] args) {
+
+        ApiChallengesLogging.configureConsoleLogging();
 
         Logger logger = LoggerFactory.getLogger(ChallengeMain.class);
 

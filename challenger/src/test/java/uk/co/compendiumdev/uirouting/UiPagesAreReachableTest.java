@@ -280,6 +280,13 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>API From Hell</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<a href=\"/fromhell/docs/swagger\">Download the API From Hell OpenAPI"
+                                + " file</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<a href=\"/fromhell/docs/openapi.json\">Direct File Download</a>"));
         Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -333,7 +340,12 @@ public class UiPagesAreReachableTest {
                         "data-method=\"DELETE\""
                                 + " data-path=\"/fromhell/status-code/204-with-body\""));
         Assertions.assertTrue(
-                response.body.contains("curl -v</code> reports the response body as excess data"));
+                response.body.contains(
+                        "Different deployment mechanisms can produce different observable"
+                                + " results"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "use a proxy between the API and your API client so you can"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<code>304</code> is a cache validation response that should not include"
