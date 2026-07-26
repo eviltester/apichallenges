@@ -2,7 +2,7 @@
 title: API Challenges Simulation Mode
 seo_title: Simulation Mode | API Challenges Practice Mode
 description: A simulated API tutorial - follow the guided instructions and learn how to use your API Tool without any side-effects or risk.
-lastmod: 2026-02-18
+lastmod: 2026-07-26
 seo_description: Use API Challenges Simulation to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced testing.
 ---
 
@@ -282,7 +282,7 @@ OPTIONS {{<ORIGIN_URL>}}/sim/entities
 
 {{<sim-live-request method="OPTIONS" path="/sim/entities">}}
 
-By looking at the `Allow` header in the response we can see that we are allowed to `GET, POST, PUT, HEAD, OPTIONS`
+By looking at the `Allow` header in the response we can see that we are allowed to `GET, QUERY, POST, PUT, HEAD, OPTIONS`
 
 If we tried to `DELETE` or `PATCH` then we should receive an appropriate status code of `405`
 
@@ -343,6 +343,7 @@ If you followed all the Simulator steps then you've managed to use your HTTP API
 If you want to explore the tool more then you could try the experiments below, or move on directly to the [Simple API](/practice-modes/simpleapi)
 
 *   Try changing the Accept header on GET requests to `application/xml` and `application/json`
+*   Try a `QUERY` request on `/sim/entities` with `Content-Type: application/x-www-form-urlencoded` and a body such as `id<3`
 *   POST/PUT an entity listed in the `/sim/entities/id` call is forbidden for id < 10
 *   PATCH and TRACE should be 501 for all end endpoints
 *   any other `/sim/*` endpoints should respond with a 404
@@ -362,7 +363,24 @@ I have created an example set of very simple Java `@Test` methods using RestAssu
 
 ## Swagger OpenAPI File
 
-You can download a simple Swagger [OpenAPI File for simulation mode](/sim/docs/swaggercd ..).
+You can download a simple Swagger [OpenAPI File for simulation mode](/sim/docs/openapi-3.1.json).
+
+Versioned OpenAPI JSON files are also available:
+
+- [OpenAPI 3.0 JSON](/sim/docs/openapi-3.0.json) - [download](/sim/docs/openapi-3.0.json?download)
+- [OpenAPI 3.1 JSON](/sim/docs/openapi-3.1.json) - [download](/sim/docs/openapi-3.1.json?download)
+- [OpenAPI 3.2 JSON](/sim/docs/openapi-3.2.json) - [download](/sim/docs/openapi-3.2.json?download)
+
+
+OpenAPI 3.2 describes `QUERY /sim/entities` as a native method.
+
+```http
+QUERY /sim/entities HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+id<3
+```
 
 ## Simulation Mode Walkthrough - Insomnia
 

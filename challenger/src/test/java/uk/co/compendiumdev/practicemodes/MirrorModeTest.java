@@ -108,6 +108,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/request"));
         args.add(Arguments.of(200, "post", "/mirror/request"));
         args.add(Arguments.of(200, "delete", "/mirror/request"));
+        args.add(Arguments.of(200, "query", "/mirror/request"));
         args.add(Arguments.of(200, "trace", "/mirror/request"));
         return args.stream();
     }
@@ -129,6 +130,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/raw"));
         args.add(Arguments.of(200, "post", "/mirror/raw"));
         args.add(Arguments.of(200, "delete", "/mirror/raw"));
+        args.add(Arguments.of(200, "query", "/mirror/raw"));
         args.add(Arguments.of(200, "trace", "/mirror/raw"));
         return args.stream();
     }
@@ -196,6 +198,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/request"));
         args.add(Arguments.of(200, "delete", "/mirror/request"));
         args.add(Arguments.of(200, "patch", "/mirror/request"));
+        args.add(Arguments.of(200, "query", "/mirror/request"));
         args.add(Arguments.of(200, "trace", "/mirror/request"));
 
         args.add(Arguments.of(200, "get", "/mirror/request/bob"));
@@ -207,6 +210,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/request/bob"));
         args.add(Arguments.of(200, "delete", "/mirror/request/bob"));
         args.add(Arguments.of(200, "patch", "/mirror/request/bob"));
+        args.add(Arguments.of(200, "query", "/mirror/request/bob"));
         args.add(Arguments.of(200, "trace", "/mirror/request/bob"));
         // raw routes
         args.add(Arguments.of(200, "get", "/mirror/raw"));
@@ -218,6 +222,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/raw"));
         args.add(Arguments.of(200, "delete", "/mirror/raw"));
         args.add(Arguments.of(200, "patch", "/mirror/raw"));
+        args.add(Arguments.of(200, "query", "/mirror/raw"));
         args.add(Arguments.of(200, "trace", "/mirror/raw"));
 
         args.add(Arguments.of(200, "get", "/mirror/raw/bob"));
@@ -229,6 +234,7 @@ public class MirrorModeTest {
         args.add(Arguments.of(200, "put", "/mirror/raw/bob"));
         args.add(Arguments.of(200, "delete", "/mirror/raw/bob"));
         args.add(Arguments.of(200, "patch", "/mirror/raw/bob"));
+        args.add(Arguments.of(200, "query", "/mirror/raw/bob"));
         args.add(Arguments.of(200, "trace", "/mirror/raw/bob"));
 
         return args.stream();
@@ -240,6 +246,21 @@ public class MirrorModeTest {
         final HttpResponseDetails response = http.send(url, verb);
 
         Assertions.assertEquals(statusCode, response.statusCode);
+    }
+
+    @Test
+    void queryRawMirrorReflectsQueryMethodAndBody() {
+        final HttpResponseDetails response =
+                http.send(
+                        "/mirror/raw",
+                        "QUERY",
+                        Map.of("Content-Type", "application/x-www-form-urlencoded"),
+                        "doneStatus=true");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("text/plain", response.getHeader("Content-Type"));
+        Assertions.assertTrue(response.body.startsWith("QUERY "));
+        Assertions.assertTrue(response.body.contains("doneStatus=true"));
     }
 
     @Test

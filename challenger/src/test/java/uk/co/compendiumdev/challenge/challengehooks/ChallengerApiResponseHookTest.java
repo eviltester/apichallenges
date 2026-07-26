@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge.challengehooks;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.DELETE;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.GET;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.POST;
+import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.QUERY;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -68,6 +69,48 @@ public class ChallengerApiResponseHookTest {
 
             Assertions.assertFalse(
                     fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void queryFilteredTodosChallengeCompletesWhenDoneAndNotDoneTodosExist(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodo("done", "true");
+            fixture.addTodo("not done", "false");
+
+            fixture.hook.run(
+                    fixture.request("todos", QUERY)
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .setBody("doneStatus=true"),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void queryFilteredTodosChallengeDoesNotCompleteFromUrlFilterOnly(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodo("done", "true");
+            fixture.addTodo("not done", "false");
+
+            fixture.hook.run(
+                    fixture.request("todos", QUERY)
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .setQueryParams(Map.of("doneStatus", "true")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
         }
     }
 

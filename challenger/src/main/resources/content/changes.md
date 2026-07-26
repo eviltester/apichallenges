@@ -9,6 +9,15 @@ showads: true
 
 # Change Log
 
+## 2026/07/26 - QUERY and versioned OpenAPI docs
+
+- Added `QUERY` support for API Challenges, Simple API, Simulation, and Mirror practice modes.
+- Added OpenAPI 3.0, 3.1, and 3.2 JSON endpoints, with `openapi.json` defaulting to OpenAPI 3.1.
+- Added `?permissive` support to the generated versioned OpenAPI JSON endpoints.
+- Added `?download` support to generated OpenAPI JSON endpoints so they can return attachment headers.
+- Added `?download` support to API From Hell OpenAPI JSON endpoints.
+- Added a new final `QUERY /todos (200)` challenge and solution walkthrough.
+
 ## 2026/07/24 - curl.exe and API From Hell
 
 - added the curl.exe checkbox to make working with Windows easier (curl is the inbuilt bad one and curl.exe is the installed good one)

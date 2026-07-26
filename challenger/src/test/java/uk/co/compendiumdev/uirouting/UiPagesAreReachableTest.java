@@ -162,6 +162,57 @@ public class UiPagesAreReachableTest {
         }
     }
 
+    private void assertOpenApiVersion(final String body, final String expectedVersion) {
+        final Matcher matcher = Pattern.compile("\"openapi\"\\s*:\\s*\"([^\"]+)\"").matcher(body);
+        Assertions.assertTrue(matcher.find(), "Expected OpenAPI version in response");
+        if (expectedVersion.endsWith(".")) {
+            Assertions.assertTrue(
+                    matcher.group(1).startsWith(expectedVersion),
+                    "Expected OpenAPI version to start with " + expectedVersion);
+        } else {
+            Assertions.assertEquals(expectedVersion, matcher.group(1));
+        }
+    }
+
+    private int countOccurrences(final String body, final String value) {
+        int count = 0;
+        int index = 0;
+        while ((index = body.indexOf(value, index)) >= 0) {
+            count++;
+            index += value.length();
+        }
+        return count;
+    }
+
+    private void assertOpenApiFilePageLinks(
+            final String body, final String docsPrefix, final String oldSwaggerPath) {
+
+        Assertions.assertTrue(body.contains("currently returns OpenAPI v 3.1"));
+        Assertions.assertFalse(body.contains("Download Normal OpenAPI File"));
+        Assertions.assertFalse(body.contains("Download Permissive OpenAPI File"));
+        Assertions.assertFalse(body.contains("href=\"" + oldSwaggerPath + "\""));
+        Assertions.assertFalse(body.contains("href='" + oldSwaggerPath + "'"));
+        Assertions.assertFalse(body.contains("href=\"" + oldSwaggerPath + "?permissive\""));
+        Assertions.assertFalse(body.contains("href='" + oldSwaggerPath + "?permissive'"));
+
+        for (final String version : List.of("3.0", "3.1", "3.2")) {
+            final String openApiJsonPath = docsPrefix + "/docs/openapi-" + version + ".json";
+            final String normalizedBody = body.replace("&amp;", "&");
+            Assertions.assertTrue(body.contains("OpenAPI v " + version + " JSON"));
+            Assertions.assertTrue(body.contains(openApiJsonPath));
+            Assertions.assertTrue(body.contains(openApiJsonPath + "?download"));
+            Assertions.assertTrue(body.contains(openApiJsonPath + "?permissive"));
+            Assertions.assertTrue(
+                    body.contains(openApiJsonPath + "?permissive&amp;download")
+                            || body.contains(openApiJsonPath + "?permissive&download"));
+            Assertions.assertTrue(
+                    countOccurrences(normalizedBody, openApiJsonPath + "?download") >= 2);
+            Assertions.assertTrue(
+                    countOccurrences(normalizedBody, openApiJsonPath + "?permissive&download")
+                            >= 2);
+        }
+    }
+
     @Test
     void canDownloadSwaggerFile() {
 
@@ -176,7 +227,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(
                 "attachment; filename=\"Simple-Todo-List-swagger.json\"",
                 response.getHeader("Content-Disposition"));
-        Assertions.assertTrue(response.body.contains("\"openapi\" : \"3.0.1\","));
+        assertOpenApiVersion(response.body, "3.1.0");
     }
 
     @Test
@@ -187,7 +238,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertNotNull(response.getHeader("Content-Type"));
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
-        Assertions.assertTrue(response.body.contains("\"openapi\" : \"3.0.1\","));
+        assertOpenApiVersion(response.body, "3.1.0");
         Assertions.assertTrue(
                 response.body.indexOf("\"url\" : \"http://localhost:4567\"")
                         < response.body.indexOf(
@@ -207,10 +258,153 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertNotNull(response.getHeader("Content-Type"));
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
-        Assertions.assertTrue(response.body.contains("\"openapi\" : \"3.0.1\","));
+        assertOpenApiVersion(response.body, "3.1.0");
         Assertions.assertTrue(
                 response.body.indexOf("\"url\" : \"https://apichallenges.eviltester.com\"")
                         < response.body.indexOf("\"url\" : \"http://localhost:4567\""));
+    }
+
+    static Stream<Arguments> versionedOpenApiJsonRoutes() {
+        List<Arguments> args = new ArrayList<>();
+        for (String prefix : List.of("", "/simpleapi", "/sim", "/mirror", "/fromhell")) {
+            args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.0.json", "3.0."));
+        }
+        return args.stream();
+    }
+
+    @ParameterizedTest(name = "openapi json {0} uses {1}")
+    @MethodSource("versionedOpenApiJsonRoutes")
+    void canFetchVersionedOpenApiJsonForSwaggerUi(
+            final String openApiJsonPath, final String expectedVersion) {
+
+        final HttpResponseDetails response = http.send(openApiJsonPath, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertNotNull(response.getHeader("Content-Type"));
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        assertOpenApiVersion(response.body, expectedVersion);
+    }
+
+    static Stream<Arguments> thingifierBackedVersionedOpenApiJsonRoutes() {
+        List<Arguments> args = new ArrayList<>();
+        for (String prefix : List.of("", "/simpleapi", "/sim", "/mirror")) {
+            args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.0.json", "3.0."));
+        }
+        return args.stream();
+    }
+
+    @ParameterizedTest(name = "openapi json {0} has permissive variant")
+    @MethodSource("thingifierBackedVersionedOpenApiJsonRoutes")
+    void versionedOpenApiJsonCanBeGeneratedInPermissiveForm(
+            final String openApiJsonPath, final String expectedVersion) {
+
+        final HttpResponseDetails permissiveResponse =
+                http.send(openApiJsonPath + "?permissive", "get");
+
+        Assertions.assertEquals(200, permissiveResponse.statusCode);
+        assertOpenApiVersion(permissiveResponse.body, expectedVersion);
+    }
+
+    @ParameterizedTest(name = "openapi json {0} can be downloaded")
+    @MethodSource("thingifierBackedVersionedOpenApiJsonRoutes")
+    void versionedOpenApiJsonCanBeDownloaded(
+            final String openApiJsonPath, final String expectedVersion) {
+
+        final HttpResponseDetails downloadResponse =
+                http.send(openApiJsonPath + "?download", "get");
+        final HttpResponseDetails permissiveDownloadResponse =
+                http.send(openApiJsonPath + "?permissive&download", "get");
+
+        Assertions.assertEquals(200, downloadResponse.statusCode);
+        Assertions.assertEquals(200, permissiveDownloadResponse.statusCode);
+        Assertions.assertTrue(
+                downloadResponse.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertTrue(
+                permissiveDownloadResponse.getHeader("Content-Type").contains("application/json"));
+        assertOpenApiVersion(downloadResponse.body, expectedVersion);
+        assertOpenApiVersion(permissiveDownloadResponse.body, expectedVersion);
+
+        final String filename = openApiJsonPath.substring(openApiJsonPath.lastIndexOf("/") + 1);
+        Assertions.assertEquals(
+                "attachment; filename=\"" + filename + "\"",
+                downloadResponse.getHeader("Content-Disposition"));
+        Assertions.assertEquals(
+                "attachment; filename=\"permissive-" + filename + "\"",
+                permissiveDownloadResponse.getHeader("Content-Disposition"));
+    }
+
+    @Test
+    void openApiFilePagesUseVersionedStandardPermissiveAndDownloadLinks() {
+
+        final HttpResponseDetails apiChallengesOpenApiPage =
+                http.send("/apichallenges/openapi", "get");
+
+        Assertions.assertEquals(200, apiChallengesOpenApiPage.statusCode);
+        assertOpenApiFilePageLinks(apiChallengesOpenApiPage.body, "", "/docs/swagger");
+
+        final HttpResponseDetails simpleApiOpenApiPage =
+                http.send("/practice-modes/simpleapi-openapi", "get");
+
+        Assertions.assertEquals(200, simpleApiOpenApiPage.statusCode);
+        assertOpenApiFilePageLinks(
+                simpleApiOpenApiPage.body, "/simpleapi", "/simpleapi/docs/swagger");
+    }
+
+    static Stream<Arguments> expandableThingifierBackedVersionedOpenApiJsonRoutes() {
+        List<Arguments> args = new ArrayList<>();
+        for (String prefix : List.of("", "/simpleapi", "/sim")) {
+            args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
+            args.add(Arguments.of(prefix + "/docs/openapi-3.0.json", "3.0."));
+        }
+        return args.stream();
+    }
+
+    @ParameterizedTest(name = "openapi json {0} expands in permissive form")
+    @MethodSource("expandableThingifierBackedVersionedOpenApiJsonRoutes")
+    void versionedOpenApiJsonPermissiveFormExpandsGeneratedSpec(
+            final String openApiJsonPath, final String expectedVersion) {
+
+        final HttpResponseDetails strictResponse = http.send(openApiJsonPath, "get");
+        final HttpResponseDetails permissiveResponse =
+                http.send(openApiJsonPath + "?permissive", "get");
+
+        Assertions.assertEquals(200, strictResponse.statusCode);
+        Assertions.assertEquals(200, permissiveResponse.statusCode);
+        assertOpenApiVersion(strictResponse.body, expectedVersion);
+        assertOpenApiVersion(permissiveResponse.body, expectedVersion);
+        Assertions.assertNotEquals(strictResponse.body, permissiveResponse.body);
+    }
+
+    @Test
+    void generatedOpenApiDocumentsQueryAccordingToSpecVersion() {
+
+        HttpResponseDetails response = http.send("/docs/openapi-3.2.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("\"/todos\""));
+        Assertions.assertTrue(response.body.contains("\"query\""));
+        Assertions.assertFalse(response.body.contains("\"x-query-operation\""));
+
+        response = http.send("/docs/openapi-3.1.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("\"x-query-operation\""));
+
+        response = http.send("/sim/docs/openapi-3.2.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("\"/sim/entities\""));
+        Assertions.assertTrue(response.body.contains("\"query\""));
+
+        response = http.send("/mirror/docs/openapi-3.2.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("\"/mirror/request\""));
+        Assertions.assertTrue(response.body.contains("\"query\""));
     }
 
     @Test
@@ -282,11 +476,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>API From Hell</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<a href=\"/fromhell/docs/swagger\">Download the API From Hell OpenAPI"
-                                + " file</a>"));
+                        "<a href=\"/fromhell/docs/openapi-3.1.json?download\">download</a>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<a href=\"/fromhell/docs/openapi.json\">Direct File Download</a>"));
+                        "<a href=\"/fromhell/docs/openapi-3.1.json\">OpenAPI 3.1 JSON</a>"));
         Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -471,6 +664,13 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("syntaxHighlight: {activated: false}"));
         Assertions.assertTrue(response.body.contains("SwaggerUIBundle"));
         Assertions.assertTrue(response.body.contains("url: \"" + openApiJsonPath + "\""));
+        Assertions.assertTrue(response.body.contains("openapi-3.1.json"));
+        Assertions.assertTrue(response.body.contains("openapi-3.2.json"));
+        Assertions.assertTrue(response.body.contains("openapi-3.0.json"));
+        Assertions.assertTrue(
+                response.body.contains("\"urls.primaryName\": \"OpenAPI 3.1 default\""));
+        Assertions.assertFalse(response.body.contains("Download OpenAPI JSON"));
+        Assertions.assertFalse(response.body.contains(".swagger-ui .topbar{display:none;}"));
         Assertions.assertTrue(response.body.contains("<h1>" + pageTitle + "</h1>"));
         Assertions.assertTrue(response.body.contains("<title>" + pageTitle + "</title>"));
     }
@@ -484,6 +684,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/sim/docs/openapi.json?download\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/mirror/docs/openapi.json?download\""));
+        Assertions.assertFalse(response.body.contains("href=\"/sim/docs/swagger\""));
+        Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger\""));
         Assertions.assertFalse(response.body.contains("href=\"/fromhell/docs/swagger-ui\""));
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
 
@@ -503,7 +708,8 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
-        Assertions.assertTrue(response.body.contains("href=\"/mirror/docs/swagger\""));
+        Assertions.assertTrue(response.body.contains("OpenAPI 3.2 JSON"));
+        Assertions.assertTrue(response.body.contains("/mirror/docs/openapi-3.2.json?download"));
     }
 
     @Test
@@ -559,7 +765,9 @@ public class UiPagesAreReachableTest {
                 mirrorDocsResponse.body.contains("<meta name='robots' content='noindex,follow'>"));
         Assertions.assertFalse(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger-ui'"));
         Assertions.assertFalse(mirrorDocsResponse.body.contains("Open Swagger UI"));
-        Assertions.assertTrue(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger'"));
+        Assertions.assertTrue(mirrorDocsResponse.body.contains("<li>OpenAPI v 3.2 JSON"));
+        Assertions.assertTrue(
+                mirrorDocsResponse.body.contains("href='/mirror/docs/openapi-3.2.json?download'"));
     }
 
     @Test
@@ -609,6 +817,33 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "\"contentUrl\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\""));
         Assertions.assertFalse(response.body.contains("\"@type\":\"BreadcrumbList\""));
+    }
+
+    @Test
+    void openApiAndSwaggerReferencePagesAreSplitByConcept() {
+
+        final HttpResponseDetails openApiResponse = http.send("/tutorials/openapi", "get");
+
+        Assertions.assertEquals(200, openApiResponse.statusCode);
+        Assertions.assertTrue(openApiResponse.body.contains("<h1>Introduction to OpenAPI</h1>"));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("OpenAPI is a standard specification format"));
+        Assertions.assertTrue(openApiResponse.body.contains("Swagger is one family of tools"));
+        Assertions.assertTrue(openApiResponse.body.contains("href=\"/tutorials/swagger\""));
+        Assertions.assertTrue(openApiResponse.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertFalse(openApiResponse.body.contains("OpenAPI / Swagger"));
+
+        final HttpResponseDetails swaggerResponse = http.send("/tutorials/swagger", "get");
+
+        Assertions.assertEquals(200, swaggerResponse.statusCode);
+        Assertions.assertTrue(swaggerResponse.body.contains("<h1>Introduction to Swagger</h1>"));
+        Assertions.assertTrue(
+                swaggerResponse.body.contains(
+                        "OpenAPI is the standard specification. Swagger is tooling"));
+        Assertions.assertTrue(swaggerResponse.body.contains("Swagger UI"));
+        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/tutorials/swagger\""));
+        Assertions.assertFalse(swaggerResponse.body.contains("OpenAPI / Swagger"));
     }
 
     @Test
@@ -898,6 +1133,15 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.eviltester.com/gui/challenges</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/tutorials/openapi</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/tutorials/swagger</loc>"));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/tutorials/openapi-swagger</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-02-18</lastmod>"));
     }
 
@@ -909,6 +1153,12 @@ public class UiPagesAreReachableTest {
 
         response = http.send("/learning", "head");
         Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tutorials/openapi", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tutorials/swagger", "head");
+        Assertions.assertEquals(200, response.statusCode);
     }
 
     static Stream<Arguments> legacyUrlRedirects() {
@@ -918,6 +1168,11 @@ public class UiPagesAreReachableTest {
                         "/apichallenges/solutions/method-overrides/all-method-overrides",
                         "/apichallenges/solutions/method-override/all-method-overrides"));
         args.add(Arguments.of("/tools/clients/soapyi", "/tools/clients/soapui"));
+        args.add(Arguments.of("/tutorials/openapi-swagger", "/tutorials/openapi"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/query/query-todos-200-filter",
+                        "/apichallenges/solutions/query/query-todos-200"));
         return args.stream();
     }
 

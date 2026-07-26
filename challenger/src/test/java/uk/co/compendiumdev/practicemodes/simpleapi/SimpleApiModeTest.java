@@ -68,6 +68,28 @@ public class SimpleApiModeTest {
     }
 
     @Test
+    public void canQueryFilteredItems() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send("/simpleapi/items", "QUERY", headers, "type=book");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("application/json", response.getHeader("content-type"));
+        Assertions.assertEquals(
+                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
+
+        Items items = new Gson().fromJson(response.body, Items.class);
+        Assertions.assertFalse(items.items.isEmpty());
+        for (Item item : items.items) {
+            Assertions.assertEquals("book", item.type);
+        }
+    }
+
+    @Test
     public void canPostItemAsXmlAndAcceptJson() {
 
         Map<String, String> headers = new HashMap<>();
