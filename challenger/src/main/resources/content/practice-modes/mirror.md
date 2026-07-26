@@ -33,6 +33,8 @@ The `mirror/raw` end point will always send the request back as raw text format.
 
 This endpoint can be very useful for seeing what your HTTP Rest Client is sending to the server. You can spot any additional http headers that the client has added and see if the HTTP Client has combined any headers, or dropped any headers.
 
+Mirror mode also supports `QUERY`, so you can check whether your client can send a safe request with a request body.
+
 ## Accessing The Mirror Mode
 
 To access the mirror mode on the public cloud make requests to:
@@ -146,6 +148,18 @@ Only `options` and `head` respond differently... because `options` and `head` sh
 
 Useful for getting started and getting used to your tooling.
 
+## QUERY
+
+Use `QUERY` when you want to see how your client sends request-body query content.
+
+```http
+QUERY /mirror/raw HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept: text/plain
+
+doneStatus=true
+```
+
 
 ## Why is this Mirror Mode Useful?
 
@@ -170,3 +184,14 @@ The Mirror mode makes it clear that there are multiple systems involved in issui
 ## Swagger OpenAPI File
 
 You can download a simple Swagger [OpenAPI File for mirror mode](/mirror/docs/swagger).
+
+Versioned OpenAPI JSON files are also available:
+
+- [OpenAPI JSON default](/mirror/docs/openapi.json) - currently OpenAPI 3.1
+- [OpenAPI 3.0 JSON](/mirror/docs/openapi-3.0.json)
+- [OpenAPI 3.1 JSON](/mirror/docs/openapi-3.1.json)
+- [OpenAPI 3.2 JSON](/mirror/docs/openapi-3.2.json)
+
+Add `?permissive` to any JSON link to generate the less-validating version, e.g. [OpenAPI 3.2 JSON permissive](/mirror/docs/openapi-3.2.json?permissive).
+
+Add `?download` to any JSON link to download it as an attachment, e.g. [OpenAPI 3.2 JSON download](/mirror/docs/openapi-3.2.json?download). You can combine both as `?permissive&download`.

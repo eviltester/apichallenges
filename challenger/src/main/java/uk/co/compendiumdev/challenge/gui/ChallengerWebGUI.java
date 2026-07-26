@@ -117,7 +117,7 @@ public class ChallengerWebGUI {
                                     <li><a href="/practice-modes/simulation">About API Simulator</a></li>
                                     <li><a href="/sim/docs">API Docs</a></li>
                                     <li><a href="/sim/docs/swagger-ui">Swagger UI</a></li>
-                                    <li><a href="/sim/docs/swagger">[Download Open API File]</a></li>
+                                    <li><a href="/sim/docs/openapi.json?download">[Download Open API File]</a></li>
 
                                 </ul>
                             </li>
@@ -148,7 +148,7 @@ public class ChallengerWebGUI {
                                 <ul>
                                     <li><a href="/practice-modes/mirror">About HTTP Mirror</a></li>
                                     <li><a href="/mirror/docs">Mirror API Docs</a></li>
-                                    <li><a href="/mirror/docs/swagger">[Download Open API File]</a></li>
+                                    <li><a href="/mirror/docs/openapi.json?download">[Download Open API File]</a></li>
 
                                 </ul>
                             </li>
@@ -292,6 +292,20 @@ public class ChallengerWebGUI {
                 "/tools/clients/soapyi",
                 (request, response) -> {
                     response.redirect("/tools/clients/soapui", 301);
+                    return "";
+                });
+
+        get(
+                "/tutorials/openapi-swagger",
+                (request, response) -> {
+                    response.redirect("/tutorials/openapi", 301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/query/query-todos-200-filter",
+                (request, response) -> {
+                    response.redirect("/apichallenges/solutions/query/query-todos-200", 301);
                     return "";
                 });
 

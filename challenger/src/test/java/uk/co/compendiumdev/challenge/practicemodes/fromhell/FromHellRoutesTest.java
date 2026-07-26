@@ -655,6 +655,7 @@ public class FromHellRoutesTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertTrue(response.body.contains("\"openapi\": \"3.1.0\""));
         Assertions.assertTrue(response.body.contains("\"title\": \"API From Hell\""));
         Assertions.assertTrue(response.body.contains("\"/fromhell/status\""));
         Assertions.assertTrue(response.body.contains("\"/fromhell/version\""));
@@ -697,6 +698,48 @@ public class FromHellRoutesTest {
         Assertions.assertTrue(response.body.contains("\"application/xml\""));
     }
 
+    public static Stream<Arguments> openApiVersionedRoutes() {
+        return Stream.of(
+                Arguments.of("/fromhell/docs/openapi.json", "\"openapi\": \"3.1.0\""),
+                Arguments.of("/fromhell/docs/openapi-3.1.json", "\"openapi\": \"3.1.0\""),
+                Arguments.of("/fromhell/docs/openapi-3.2.json", "\"openapi\": \"3.2.0\""),
+                Arguments.of("/fromhell/docs/openapi-3.0.json", "\"openapi\": \"3.0.3\""));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("openApiVersionedRoutes")
+    public void fromHellOpenApiSupportsVersionedEndpoints(
+            final String path, final String expectedVersion) {
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertTrue(response.body.contains(expectedVersion));
+        Assertions.assertFalse(response.body.contains("\"query\""));
+    }
+
+    public static Stream<Arguments> openApiDownloadRoutes() {
+        return Stream.of(
+                Arguments.of("/fromhell/docs/openapi.json?download", "openapi.json"),
+                Arguments.of("/fromhell/docs/openapi-3.1.json?download", "openapi-3.1.json"),
+                Arguments.of("/fromhell/docs/openapi-3.2.json?download", "openapi-3.2.json"),
+                Arguments.of("/fromhell/docs/openapi-3.0.json?download", "openapi-3.0.json"));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("openApiDownloadRoutes")
+    public void fromHellOpenApiSupportsDownloadAttachmentHeaders(
+            final String path, final String filename) {
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertEquals(
+                "attachment; filename=\"" + filename + "\"",
+                response.getHeader("Content-Disposition"));
+        Assertions.assertTrue(response.body.contains("\"title\": \"API From Hell\""));
+    }
+
     @Test
     public void fromHellOpenApiUsesForwardedOriginFirst() {
         final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
@@ -733,8 +776,19 @@ public class FromHellRoutesTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>API From Hell - Swagger UI</h1>"));
         Assertions.assertTrue(response.body.contains("url: \"/fromhell/docs/openapi.json\""));
+        Assertions.assertTrue(response.body.contains("/fromhell/docs/openapi-3.1.json"));
+        Assertions.assertTrue(response.body.contains("/fromhell/docs/openapi-3.2.json"));
+        Assertions.assertTrue(response.body.contains("/fromhell/docs/openapi-3.0.json"));
         Assertions.assertTrue(
                 response.body.contains("https://unpkg.com/swagger-ui-dist/swagger-ui.css"));
+    }
+
+    @Test
+    public void queryOnFromHellCatalogEndpointIsMethodNotAllowed() {
+        final HttpResponseDetails response = http.send("/fromhell/good/json", "QUERY");
+
+        Assertions.assertEquals(405, response.statusCode);
+        Assertions.assertEquals("GET, HEAD, OPTIONS", response.getHeader("Allow"));
     }
 
     private HttpResponseDetails send(final String path, final String method) {

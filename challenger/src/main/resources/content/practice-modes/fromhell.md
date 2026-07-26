@@ -2,7 +2,7 @@
 title: API From Hell
 seo_title: API From Hell Practice Mode for REST Clients | API Challenges
 description: A deliberately awkward hard-coded API for checking how REST clients show malformed and misleading responses.
-lastmod: 2026-07-24
+lastmod: 2026-07-26
 seo_description: Try API From Hell, a hard-coded API practice mode exposing malformed data, problematic JSON/XML, mismatched content types, and missing metadata.
 meta_robots: noindex,follow
 ---
@@ -17,9 +17,17 @@ The API deliberately returns a mix of good responses, malformed responses, valid
 
 Known `/fromhell` paths respond with `405 Method Not Allowed` and an `Allow` header when you call them with the wrong HTTP method, except for the deliberately broken 405 example below.
 
-- [Open API From Hell Swagger UI](/fromhell/docs/swagger-ui)
-- [Download the API From Hell OpenAPI file](/fromhell/docs/swagger)
-- [Direct File Download](/fromhell/docs/openapi.json)
+Use in Swagger UI:
+
+- [From Hell Swagger UI](/fromhell/docs/swagger-ui)
+
+Open API JSON Files
+
+- [OpenAPI 3.0 JSON](/fromhell/docs/openapi-3.0.json) - [download](/fromhell/docs/openapi-3.0.json?download)
+- [OpenAPI 3.1 JSON](/fromhell/docs/openapi-3.1.json) - [download](/fromhell/docs/openapi-3.1.json?download)
+- [OpenAPI 3.2 JSON](/fromhell/docs/openapi-3.2.json) - [download](/fromhell/docs/openapi-3.2.json?download)
+
+The default OpenAPI JSON is currently OpenAPI 3.1. API From Hell is catalog-driven and does not add `QUERY` unless a catalog endpoint explicitly defines it.
 
 All endpoints are under:
 

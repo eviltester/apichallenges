@@ -17,6 +17,9 @@ public final class FromHellRoutes {
     public static final String PREFIX = "/fromhell";
     public static final String ABOUT_PATH = "/practice-modes/fromhell";
     public static final String OPENAPI_JSON_PATH = PREFIX + "/docs/openapi.json";
+    public static final String OPENAPI_30_JSON_PATH = PREFIX + "/docs/openapi-3.0.json";
+    public static final String OPENAPI_31_JSON_PATH = PREFIX + "/docs/openapi-3.1.json";
+    public static final String OPENAPI_32_JSON_PATH = PREFIX + "/docs/openapi-3.2.json";
     public static final String SWAGGER_DOWNLOAD_PATH = PREFIX + "/docs/swagger";
     public static final String SWAGGER_UI_PATH = PREFIX + "/docs/swagger-ui";
 
@@ -161,7 +164,46 @@ public final class FromHellRoutes {
                 (request, response) -> {
                     response.status(200);
                     response.type("application/json");
-                    return openApi.asJsonWithPreferredServer(FromHellRequestOrigin.from(request));
+                    addDownloadHeaderIfRequested(
+                            response, request.queryParam("download"), OPENAPI_JSON_PATH);
+                    return openApi.asJsonWithPreferredServer(
+                            FromHellRequestOrigin.from(request), "3.1.0");
+                });
+
+        route(
+                HttpRouteVerb.GET,
+                OPENAPI_30_JSON_PATH,
+                (request, response) -> {
+                    response.status(200);
+                    response.type("application/json");
+                    addDownloadHeaderIfRequested(
+                            response, request.queryParam("download"), OPENAPI_30_JSON_PATH);
+                    return openApi.asJsonWithPreferredServer(
+                            FromHellRequestOrigin.from(request), "3.0.3");
+                });
+
+        route(
+                HttpRouteVerb.GET,
+                OPENAPI_31_JSON_PATH,
+                (request, response) -> {
+                    response.status(200);
+                    response.type("application/json");
+                    addDownloadHeaderIfRequested(
+                            response, request.queryParam("download"), OPENAPI_31_JSON_PATH);
+                    return openApi.asJsonWithPreferredServer(
+                            FromHellRequestOrigin.from(request), "3.1.0");
+                });
+
+        route(
+                HttpRouteVerb.GET,
+                OPENAPI_32_JSON_PATH,
+                (request, response) -> {
+                    response.status(200);
+                    response.type("application/json");
+                    addDownloadHeaderIfRequested(
+                            response, request.queryParam("download"), OPENAPI_32_JSON_PATH);
+                    return openApi.asJsonWithPreferredServer(
+                            FromHellRequestOrigin.from(request), "3.2.0");
                 });
 
         route(
@@ -173,7 +215,8 @@ public final class FromHellRoutes {
                     response.header(
                             "Content-Disposition",
                             "attachment; filename=\"api-from-hell-openapi.json\"");
-                    return openApi.asJsonWithPreferredServer(FromHellRequestOrigin.from(request));
+                    return openApi.asJsonWithPreferredServer(
+                            FromHellRequestOrigin.from(request), "3.1.0");
                 });
 
         route(
@@ -186,11 +229,23 @@ public final class FromHellRoutes {
                                     docsDefinition(),
                                     guiTemplates,
                                     OPENAPI_JSON_PATH,
+                                    OPENAPI_30_JSON_PATH,
+                                    OPENAPI_31_JSON_PATH,
+                                    OPENAPI_32_JSON_PATH,
                                     ABOUT_PATH,
-                                    SWAGGER_DOWNLOAD_PATH,
                                     SWAGGER_UI_PATH)
                             .html();
                 });
+    }
+
+    private void addDownloadHeaderIfRequested(
+            final HttpServerResponse response, final String download, final String path) {
+        if (download == null) {
+            return;
+        }
+
+        final String filename = path.substring(path.lastIndexOf("/") + 1);
+        response.header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
     }
 
     private ThingifierApiDocumentationDefn docsDefinition() {

@@ -10,11 +10,14 @@ import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiResponseHook;
 import uk.co.compendiumdev.thingifier.api.http.HttpApiRequest;
 import uk.co.compendiumdev.thingifier.api.http.HttpApiResponse;
+import uk.co.compendiumdev.thingifier.api.http.UrlQueryParamParser;
 import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.AcceptHeaderParser;
 import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.ContentTypeHeaderParser;
 import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
+import uk.co.compendiumdev.thingifier.core.query.FilterBy;
+import uk.co.compendiumdev.thingifier.core.query.QueryFilterParams;
 import uk.co.compendiumdev.thingifier.core.repository.EntityInstanceQuery;
 
 public class ChallengerApiResponseHook implements HttpApiResponseHook {
@@ -120,11 +123,18 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getQueryParams().containsKey("doneStatus")
                 && request.getQueryParams().get("doneStatus").contentEquals("true")
                 && response.getStatusCode() == 200) {
-            // only pass if there are done and not done todos
-            final EntityInstance aDoneThing = findTodoByField(challenger, "doneStatus", "true");
-            final EntityInstance aNotDoneThing = findTodoByField(challenger, "doneStatus", "false");
-            if (aDoneThing != null && aNotDoneThing != null) {
+            if (hasDoneAndNotDoneTodos(challenger)) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED);
+            }
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.QUERY
+                && request.getPath().contentEquals("todos")
+                && contentTypeParser.isFormUrlEncoded()
+                && queryBodyContainsDoneStatusTrue(request)
+                && response.getStatusCode() == 200) {
+            if (hasDoneAndNotDoneTodos(challenger)) {
+                challengers.pass(challenger, CHALLENGE.QUERY_TODOS_FILTERED);
             }
         }
 
@@ -299,6 +309,30 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return null;
         }
         return query.findByField(todo, fieldName, fieldValue);
+    }
+
+    private boolean hasDoneAndNotDoneTodos(final ChallengerAuthData challenger) {
+        final EntityInstance aDoneThing = findTodoByField(challenger, "doneStatus", "true");
+        final EntityInstance aNotDoneThing = findTodoByField(challenger, "doneStatus", "false");
+        return aDoneThing != null && aNotDoneThing != null;
+    }
+
+    private boolean queryBodyContainsDoneStatusTrue(final HttpApiRequest request) {
+        final QueryFilterParams queryParams;
+        try {
+            queryParams = new UrlQueryParamParser().parseStrict(request.getBody());
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        for (FilterBy filterBy : queryParams.toList()) {
+            if (filterBy.fieldName.equals("doneStatus")
+                    && filterBy.filterOperation.equals("=")
+                    && filterBy.fieldValue.equals("true")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private EntityInstance findTodoByIdentifier(

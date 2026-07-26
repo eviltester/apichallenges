@@ -927,6 +927,30 @@ public abstract class ChallengeCompleteTest {
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED));
     }
 
+    @Test
+    public void canQueryFilterTodoPass() {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        headers.put("Accept", "application/json");
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+
+        createTodo(todos, "done query fixture", "true");
+        createTodo(todos, "not done query fixture", "false");
+
+        final HttpResponseDetails response =
+                http.send("/todos", "QUERY", headers, "doneStatus=true");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
+    }
+
     /** Heartbeat */
     @Test
     public void can405DeleteHeartbeatPass() {

@@ -6,11 +6,21 @@ import java.util.List;
 import uk.co.compendiumdev.challenge.ChallengerConfig;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.http.routehandlers.HttpApiRequestHandler;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierAutoDocGenRouting;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.HttpServerRequestToInternalHttpRequest;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.InternalHttpResponseToHttpServer;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.routehandlers.HttpApiRequestResponseHandler;
+import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
+import uk.co.compendiumdev.thingifier.adapter.internalhttp.conversion.HttpApiResponseToInternalHttpResponse;
+import uk.co.compendiumdev.thingifier.adapter.internalhttp.conversion.InternalHttpRequestToHttpApiRequest;
 import uk.co.compendiumdev.thingifier.api.docgen.ThingifierApiDocumentationDefn;
 import uk.co.compendiumdev.thingifier.api.http.HttpApiRequest;
+import uk.co.compendiumdev.thingifier.api.http.HttpApiResponse;
+import uk.co.compendiumdev.thingifier.api.http.ThingifierHttpApi;
+import uk.co.compendiumdev.thingifier.api.http.UrlQueryParamParser;
 import uk.co.compendiumdev.thingifier.api.response.ApiResponse;
 import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
 import uk.co.compendiumdev.thingifier.core.EntityRelModel;
@@ -146,7 +156,10 @@ public class SimulationRoutes {
                 apiEndpoint,
                 (request, result) -> {
                     result.status(204);
-                    result.header("Allow", "GET, POST, PUT, HEAD, OPTIONS");
+                    result.header("Allow", "GET, QUERY, POST, PUT, HEAD, OPTIONS");
+                    result.header(
+                            ThingifierHttpApi.ACCEPT_QUERY_HEADER,
+                            ThingifierHttpApi.QUERY_CONTENT_TYPE);
                     return "";
                 });
 
@@ -154,6 +167,7 @@ public class SimulationRoutes {
         new SimpleHttpRouteCreator(apiEndpoint).status(405, true, List.of("delete"));
 
         new SimpleHttpRouteCreator(apiEndpoint + "/*").status(501, true, List.of("patch", "trace"));
+        new SimpleHttpRouteCreator(apiEndpoint + "/*").status(405, true, List.of("query"));
 
         options(
                 apiEndpoint + "/*",
@@ -166,7 +180,7 @@ public class SimulationRoutes {
 
         HttpApiRequestHandler getEntitiesHandler =
                 (HttpApiRequest anHttpApiRequest) -> {
-                    QueryFilterParams queryParams = anHttpApiRequest.getFilterableQueryParams();
+                    QueryFilterParams queryParams = collectionQueryParams(anHttpApiRequest);
                     // id 11 is the special POST-created entity and is not visible in collection
                     // GET.
                     queryParams.add(new FilterBy("id", "!=11"));
@@ -174,7 +188,10 @@ public class SimulationRoutes {
                     List<EntityInstance> instances = entityQuery.list(entityDefn, queryParams);
                     return ApiResponse.success()
                             .returnInstanceCollection(instances)
-                            .resultContainsType(entityDefn);
+                            .resultContainsType(entityDefn)
+                            .setHeader(
+                                    ThingifierHttpApi.ACCEPT_QUERY_HEADER,
+                                    ThingifierHttpApi.QUERY_CONTENT_TYPE);
                 };
 
         get(
@@ -182,6 +199,19 @@ public class SimulationRoutes {
                 (request, result) -> {
                     return new HttpApiRequestResponseHandler(request, result, simulation)
                             .usingHandler(getEntitiesHandler)
+                            .handle();
+                });
+
+        query(
+                apiEndpoint,
+                (request, result) -> {
+                    String validationResponse = rejectInvalidQueryRequest(request, result);
+                    if (validationResponse != null) {
+                        return validationResponse;
+                    }
+                    return new HttpApiRequestResponseHandler(request, result, simulation)
+                            .usingHandler(getEntitiesHandler)
+                            .validateRequestSyntax(false)
                             .handle();
                 });
 
@@ -357,5 +387,32 @@ public class SimulationRoutes {
         if (simulation != null) {
             simulation.close();
         }
+    }
+
+    private QueryFilterParams collectionQueryParams(final HttpApiRequest request) {
+        QueryFilterParams queryParams = new QueryFilterParams();
+        queryParams.addAll(request.getFilterableQueryParams());
+        if (request.getVerb() == HttpApiRequest.VERB.QUERY) {
+            queryParams.addAll(new UrlQueryParamParser().parseStrict(request.getBody()));
+        }
+        return queryParams;
+    }
+
+    private String rejectInvalidQueryRequest(
+            final HttpServerRequest request, final HttpServerResponse result) {
+        final InternalHttpRequest internalRequest =
+                HttpServerRequestToInternalHttpRequest.convert(request);
+        final HttpApiRequest apiRequest =
+                InternalHttpRequestToHttpApiRequest.convert(internalRequest);
+        final HttpApiResponse response =
+                new ThingifierHttpApi(simulation)
+                        .validateRequestSyntax(apiRequest, ThingifierHttpApi.HttpVerb.QUERY);
+
+        if (response == null) {
+            return null;
+        }
+
+        return InternalHttpResponseToHttpServer.convert(
+                HttpApiResponseToInternalHttpResponse.convert(response), result);
     }
 }

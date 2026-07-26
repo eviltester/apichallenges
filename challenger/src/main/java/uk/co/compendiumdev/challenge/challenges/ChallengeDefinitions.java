@@ -441,8 +441,19 @@ public class ChallengeDefinitions {
                 miscChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_ALL_TODOS,
-                MiscChallenges.postAllTodos409(challengeOrder),
+                MiscChallenges.postAllTodos409(challengeOrder++),
                 miscChallenges);
+
+        ChallengeSection queryChallenges =
+                new ChallengeSection(
+                        "QUERY Challenges",
+                        "A QUERY request is a safe read request which allows query content in the request body.");
+        sections.add(queryChallenges);
+
+        storeChallengeAs(
+                CHALLENGE.QUERY_TODOS_FILTERED,
+                QueryChallenges.queryTodosFiltered200(challengeOrder),
+                queryChallenges);
 
         Set challengeNames = new HashSet();
         for (ChallengeDefinitionData challenge : orderedChallenges) {

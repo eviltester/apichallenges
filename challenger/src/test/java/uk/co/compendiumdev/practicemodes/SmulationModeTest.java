@@ -1,7 +1,9 @@
 package uk.co.compendiumdev.practicemodes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,6 +54,39 @@ public class SmulationModeTest {
         final HttpResponseDetails response = http.send(url, verb);
 
         Assertions.assertEquals(statusCode, response.statusCode);
+    }
+
+    @Test
+    void canQuerySimulatedEntitiesThroughRepository() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+
+        HttpResponseDetails response =
+                http.send("/sim/entities?id%3C3", "QUERY", headers, "name*=entity%20number%20*");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals(
+                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
+        Assertions.assertTrue(response.body.contains("\"id\":1,"));
+        Assertions.assertTrue(response.body.contains("\"id\":2,"));
+        Assertions.assertFalse(response.body.contains("\"id\":3,"));
+        Assertions.assertFalse(response.body.contains("\"id\":11,"));
+    }
+
+    @Test
+    void querySimulatedEntitiesRequiresQueryContentType() {
+
+        http.clearHeaders();
+        http.setHeader("Accept", "application/json");
+
+        HttpResponseDetails response = http.send("/sim/entities", "QUERY");
+
+        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertEquals(
+                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
     }
 
     @Test
@@ -363,7 +398,9 @@ public class SmulationModeTest {
         HttpResponseDetails response = http.options("/sim/entities");
         Assertions.assertEquals(204, response.statusCode);
         Assertions.assertEquals(
-                "GET, POST, PUT, HEAD, OPTIONS", response.getHeader("allow").toUpperCase());
+                "GET, QUERY, POST, PUT, HEAD, OPTIONS", response.getHeader("allow").toUpperCase());
+        Assertions.assertEquals(
+                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
     }
 
     @Test

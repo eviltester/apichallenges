@@ -46,7 +46,8 @@ public class MirrorRoutes {
                     (request, result) -> {
                         result.status(204);
                         result.header(
-                                "Allow", "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, TRACE");
+                                "Allow",
+                                "GET, POST, PUT, DELETE, PATCH, QUERY, HEAD, OPTIONS, TRACE");
                         return "";
                     };
             if (anEndpoint.endsWith("/*")) {
@@ -74,7 +75,8 @@ public class MirrorRoutes {
 
         RoutingVerb[] verbs200status = {
             RoutingVerb.GET, RoutingVerb.POST, RoutingVerb.PUT,
-            RoutingVerb.DELETE, RoutingVerb.PATCH, RoutingVerb.TRACE
+            RoutingVerb.DELETE, RoutingVerb.PATCH, RoutingVerb.QUERY,
+            RoutingVerb.TRACE
         };
 
         for (String anEndpoint : verbEndpoints) {

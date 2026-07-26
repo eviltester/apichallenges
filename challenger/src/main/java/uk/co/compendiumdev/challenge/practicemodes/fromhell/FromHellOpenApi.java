@@ -22,8 +22,13 @@ public final class FromHellOpenApi {
     }
 
     public String asJsonWithPreferredServer(final String preferredServer) {
+        return asJsonWithPreferredServer(preferredServer, "3.1.0");
+    }
+
+    public String asJsonWithPreferredServer(
+            final String preferredServer, final String openApiVersion) {
         final Map<String, Object> openApi = new LinkedHashMap<>();
-        openApi.put("openapi", "3.0.0");
+        openApi.put("openapi", openApiVersion);
         openApi.put("info", info());
         openApi.put("servers", servers(preferredServer));
         openApi.put("paths", paths());
