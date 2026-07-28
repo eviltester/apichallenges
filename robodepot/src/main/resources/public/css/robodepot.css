@@ -1,0 +1,166 @@
+body {
+    background: #f6f8fb;
+    color: #172033;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+a {
+    color: #1f4e79;
+}
+
+main {
+    background: #ffffff;
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 980px;
+    padding: 1.25rem;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #aab8c5;
+    padding: 0.5rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: #e8eef3;
+}
+
+code {
+    background: #eef3f7;
+    padding: 0.1rem 0.2rem;
+}
+
+.robodepot-nav {
+    background: #172033;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+    padding: 0.75rem;
+}
+
+.robodepot-nav a {
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.45rem 0.65rem;
+    text-decoration: none;
+}
+
+.robodepot-nav a:hover {
+    background: #2f6f9f;
+}
+
+.robodepot-hero {
+    background: #e8f3f2;
+    border-left: 4px solid #2f6f6a;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.robodepot-hero h1 {
+    margin-top: 0;
+}
+
+.robodepot-flowchart {
+    align-items: stretch;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    margin: 1rem 0;
+}
+
+.robodepot-flow-step {
+    background: #f7fafc;
+    border: 1px solid #b9c9d6;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 7rem;
+    padding: 0.75rem;
+}
+
+.robodepot-flow-step strong {
+    color: #172033;
+}
+
+.robodepot-flow-step span {
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.robodepot-flow-arrow {
+    align-items: center;
+    color: #1f4e79;
+    display: flex;
+    font-weight: 700;
+    justify-content: center;
+}
+
+.robodepot-visualisation {
+    background: #f7fafc;
+    border: 1px solid #b9c9d6;
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+}
+
+.robodepot-visualisation-header {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.robodepot-visualisation-header h3 {
+    margin: 0 0 0.25rem;
+}
+
+.robodepot-visualisation-status,
+.robodepot-visualisation-summary {
+    color: #334155;
+    margin: 0;
+}
+
+.robodepot-refresh-now {
+    background: #1f4e79;
+    border: 1px solid #1f4e79;
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    padding: 0.45rem 0.65rem;
+}
+
+.robodepot-refresh-now:hover {
+    background: #163858;
+}
+
+#robodepot-canvas {
+    background: #f3f6f8;
+    border: 1px solid #8fa7bc;
+    box-sizing: border-box;
+    display: block;
+    height: auto;
+    margin-bottom: 0.75rem;
+    max-width: 100%;
+    width: 100%;
+}
+
+.robodepot-footer {
+    color: #566579;
+    font-size: 0.9rem;
+    margin: 1rem auto;
+    max-width: 980px;
+    padding: 0 1.25rem;
+}

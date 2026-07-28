@@ -31,6 +31,7 @@
     <modules>
         <module>challenger</module>
         <module>challengerAuto</module>
+        <module>robodepot</module>
     </modules>
 
     <build>

@@ -38,23 +38,26 @@ public class ResourceContentScanner {
                     .getResourcesWithExtension(extension)
                     .forEach(
                             (Resource res) -> {
-                                final LocalDate dateFromFrontMatter =
-                                        extractDateFromFrontMatter(res);
+                                final FrontMatterMetadata metadata =
+                                        extractFrontMatterMetadata(res);
+                                if (!metadata.includeInSitemap()) {
+                                    return;
+                                }
                                 urlsWithLastModDates.put(
                                         res.getPath()
                                                 .replaceFirst(folder, "")
                                                 .replace("." + extension, ""),
-                                        dateFromFrontMatter == null
+                                        metadata.date() == null
                                                 ? Instant.ofEpochMilli(res.getLastModified())
                                                         .atZone(ZoneId.systemDefault())
                                                         .toLocalDate()
-                                                : dateFromFrontMatter);
+                                                : metadata.date());
                             });
         }
         return urlsWithLastModDates;
     }
 
-    private LocalDate extractDateFromFrontMatter(final Resource res) {
+    private FrontMatterMetadata extractFrontMatterMetadata(final Resource res) {
 
         try (BufferedReader reader =
                 new BufferedReader(new InputStreamReader(res.open(), StandardCharsets.UTF_8))) {
@@ -63,6 +66,7 @@ public class ResourceContentScanner {
             boolean inHeader = false;
             String lastmod = "";
             String date = "";
+            boolean includeInSitemap = true;
 
             while ((line = reader.readLine()) != null) {
                 if (line.equals("---") && !inHeader) {
@@ -83,17 +87,28 @@ public class ResourceContentScanner {
                 if (line.startsWith("date: ")) {
                     date = line.replaceFirst("^date:\\s*", "").trim();
                 }
+                if (line.startsWith("sitemap: ")) {
+                    includeInSitemap = !isFalseValue(line.replaceFirst("^sitemap:\\s*", "").trim());
+                }
             }
 
             final LocalDate parsedLastmod = parseDateValue(lastmod);
             if (parsedLastmod != null) {
-                return parsedLastmod;
+                return new FrontMatterMetadata(parsedLastmod, includeInSitemap);
             }
-            return parseDateValue(date);
+            return new FrontMatterMetadata(parseDateValue(date), includeInSitemap);
 
         } catch (IOException ignored) {
-            return null;
+            return new FrontMatterMetadata(null, true);
         }
+    }
+
+    private boolean isFalseValue(final String rawValue) {
+        if (rawValue == null) {
+            return false;
+        }
+        final String value = rawValue.trim().toLowerCase();
+        return value.equals("false") || value.equals("no") || value.equals("off");
     }
 
     private LocalDate parseDateValue(final String rawDateValue) {
@@ -118,4 +133,6 @@ public class ResourceContentScanner {
     public void addPathsToAvailableContent(List<String> pathsToFileContent) {
         availableContent.addAll(pathsToFileContent);
     }
+
+    private record FrontMatterMetadata(LocalDate date, boolean includeInSitemap) {}
 }
