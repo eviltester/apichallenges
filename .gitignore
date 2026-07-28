@@ -7,3 +7,5 @@ target/
 .DS_Store
 challengersessions/
 examples/tools/voiden.md/.voiden
+.playwright-cli
+/output

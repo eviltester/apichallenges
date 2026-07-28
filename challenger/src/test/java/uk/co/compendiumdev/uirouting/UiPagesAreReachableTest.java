@@ -631,6 +631,11 @@ public class UiPagesAreReachableTest {
                         "API Simulator - Swagger UI"));
         args.add(
                 Arguments.of(
+                        "/shop/docs/swagger-ui",
+                        "/shop/docs/openapi.json",
+                        "Buggy API - Swagger UI"));
+        args.add(
+                Arguments.of(
                         "/mirror/docs/swagger-ui",
                         "/mirror/docs/openapi.json",
                         "Mirror Mode API Documentation | API Challenges Swagger UI"));
@@ -683,6 +688,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/shop/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/shop/gui/entities\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/openapi.json?download\""));
         Assertions.assertTrue(
@@ -747,6 +754,17 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 simpleApiDocsResponse.body.contains(
                         "<meta property='og:url' content='https://apichallenges.eviltester.com/simpleapi/docs'>"));
+
+        final HttpResponseDetails shopDocsResponse = http.send("/shop/docs", "get");
+        Assertions.assertEquals(200, shopDocsResponse.statusCode);
+        Assertions.assertTrue(
+                shopDocsResponse.body.contains(
+                        "<title>Buggy API Documentation | API Challenges</title>"));
+        Assertions.assertTrue(
+                shopDocsResponse.body.contains("<meta name='robots' content='index,follow'>"));
+        Assertions.assertTrue(
+                shopDocsResponse.body.contains(
+                        "<meta property='og:url' content='https://apichallenges.eviltester.com/shop/docs'>"));
 
         final HttpResponseDetails simDocsResponse = http.send("/sim/docs", "get");
         Assertions.assertEquals(200, simDocsResponse.statusCode);

@@ -8,6 +8,7 @@ import uk.co.compendiumdev.challenge.gui.ChallengerWebGUI;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
 import uk.co.compendiumdev.challenge.practicemodes.fromhell.FromHellRoutes;
 import uk.co.compendiumdev.challenge.practicemodes.mirror.MirrorRoutes;
+import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartRoutes;
 import uk.co.compendiumdev.challenge.practicemodes.simpleapi.SimpleApiRoutes;
 import uk.co.compendiumdev.challenge.practicemodes.simulation.SimulationRoutes;
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -128,6 +129,8 @@ public class ChallengeRouteHandler {
         simulationRoutes.configure();
 
         new SimpleApiRoutes(guiTemplates).configure();
+
+        new ShoppingCartRoutes(guiTemplates, config.getShoppingCartBugMode()).configure();
 
         new FromHellRoutes(guiTemplates).configure();
 

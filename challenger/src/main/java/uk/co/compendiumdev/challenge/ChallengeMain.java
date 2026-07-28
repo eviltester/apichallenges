@@ -41,9 +41,11 @@ public class ChallengeMain {
         // configure via args
         ChallengerConfig config = new ChallengerConfig();
         config.setSimulationRepositoryFromArgs(args);
+        config.setShoppingCartBugModeFromArgs(args);
         logger.info(
                 "Using Simulation repository {}",
                 config.getSimulationRepositoryConfig().describe());
+        logger.info("Using Shopping Cart bug mode {}", config.getShoppingCartBugMode());
 
         for (String arg : args) {
             if (arg.toLowerCase().startsWith("-multiplayer")

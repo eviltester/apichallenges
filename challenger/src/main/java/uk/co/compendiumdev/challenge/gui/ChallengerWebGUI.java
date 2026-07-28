@@ -74,6 +74,8 @@ public class ChallengerWebGUI {
                         urlMapping = [
                             ['/simpleapi/', 'simple-api-root-menu'],
                             ['/practice-modes/simpleapi', 'simple-api-root-menu'],
+                            ['/shop/', 'shop-api-root-menu'],
+                            ['/practice-modes/shoppingcart', 'shop-api-root-menu'],
                             ['/gui/', 'api-challenges-root-menu'],
                             ['/docs', 'api-challenges-root-menu'],
                             ['/apichallenges', 'api-challenges-root-menu'],
@@ -141,6 +143,16 @@ public class ChallengerWebGUI {
                                     <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
                                     <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
                                     <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
+                                </ul>
+                            </li>
+
+                            <li id='shop-api-root-menu'><a href="/practice-modes/shoppingcart">Buggy API</a>
+                                <ul>
+                                    <li><a href="/practice-modes/shoppingcart">About Buggy API</a>
+                                    <li><a href="/shop/docs">API Docs</a>
+                                    <li><a href="/shop/docs/swagger-ui">Swagger UI</a>
+                                    <li><a href="/shop/gui/entities">Data Explorer</a></li>
+                                    <li><a href="/practice-modes/shoppingcart-openapi">OpenAPI File</a>
                                 </ul>
                             </li>
 
