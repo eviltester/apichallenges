@@ -28,8 +28,7 @@ public final class ShoppingCartThingifier {
         final Thingifier shop = new Thingifier(model);
 
         shop.setDocumentation(
-                "Buggy API",
-                "A deliberately buggy shopping cart API for API testing practice.");
+                "Buggy API", "A deliberately buggy shopping cart API for API testing practice.");
 
         final EntityDefinition product =
                 shop.defineThing("product", "products", MAX_PRODUCTS)
@@ -171,8 +170,7 @@ public final class ShoppingCartThingifier {
                 .route(RoutingVerb.POST, "/carts/{cartId}/items")
                 .entityView("AddedCartItem")
                 .secureWithBearerAuth()
-                .addDocumentation(
-                        "add a product line to a cart using the cart bearer token")
+                .addDocumentation("add a product line to a cart using the cart bearer token")
                 .requestPayload("create_AddedCartItem");
         shop.apiSpec()
                 .route(RoutingVerb.DELETE, "/carts/{cartId}/items/{itemId}")

@@ -44,7 +44,8 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
         }
 
         if (isCartItemRelationshipDelete(request, segments)) {
-            return handleCartItemRelationshipDelete(request, config, segments.get(1), segments.get(3));
+            return handleCartItemRelationshipDelete(
+                    request, config, segments.get(1), segments.get(3));
         }
 
         if (isCartDelete(request, segments)) {
@@ -102,12 +103,9 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
     }
 
     private HttpApiResponse handleCartItemCreate(
-            final HttpApiRequest request,
-            final ThingifierApiConfig config,
-            final String cartId) {
+            final HttpApiRequest request, final ThingifierApiConfig config, final String cartId) {
         final ThingStore store = ShoppingCartSupport.store(thingifier);
-        final EntityInstance cart =
-                ShoppingCartSupport.findById(thingifier, store, "cart", cartId);
+        final EntityInstance cart = ShoppingCartSupport.findById(thingifier, store, "cart", cartId);
         if (cart == null) {
             return ShoppingCartSupport.error(request, config, 404, "Cart not found");
         }
@@ -203,7 +201,7 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
                     store.entities()
                             .create(
                                     EntityInstanceDraft.forEntity(
-                                            ShoppingCartSupport.definition(
+                                                    ShoppingCartSupport.definition(
                                                             thingifier, "cartitem"))
                                             .withField("productId", String.valueOf(body.productId))
                                             .withField("quantity", String.valueOf(body.quantity))

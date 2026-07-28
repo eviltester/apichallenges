@@ -3,6 +3,7 @@ package uk.co.compendiumdev.robodepot;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -1511,7 +1512,10 @@ class RoboDepotApiTest {
     }
 
     private ThingifierHttpApi api(final Thingifier thingifier, final HttpApiRequestHook... hooks) {
-        return new ThingifierHttpApi(thingifier, Arrays.asList(hooks), null);
+        List<HttpApiRequestHook> registeredHooks = new ArrayList<>();
+        registeredHooks.add(new DefaultDatabaseOnlyHook());
+        registeredHooks.addAll(Arrays.asList(hooks));
+        return new ThingifierHttpApi(thingifier, registeredHooks, null);
     }
 
     private Thingifier emptyRoboDepot() {

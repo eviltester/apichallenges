@@ -54,7 +54,6 @@ class ShoppingCartApiTest {
         Assertions.assertEquals(200, queryCarts.statusCode);
         Assertions.assertFalse(queryCarts.body.contains("token"));
         Assertions.assertFalse(queryCarts.body.contains(cart.token));
-
     }
 
     @Test
@@ -214,7 +213,8 @@ class ShoppingCartApiTest {
         final Product mug = api.productByCode("MUG_TESTER");
         final RegisterResponse negativeCreateCart = api.registerCart();
         Assertions.assertEquals(
-                201, api.addItem(negativeCreateCart.cartId, negativeCreateCart.token, mug.id, -3)
+                201,
+                api.addItem(negativeCreateCart.cartId, negativeCreateCart.token, mug.id, -3)
                         .statusCode);
         final CheckoutResponse negativeCheckout =
                 api.checkoutOk(negativeCreateCart.cartId, negativeCreateCart.token);
@@ -244,8 +244,7 @@ class ShoppingCartApiTest {
                 api.addItemOk(zeroUpdateCart.cartId, zeroUpdateCart.token, mug.id, 1);
         Assertions.assertEquals(
                 200,
-                api.updateItem(zeroUpdateCart.cartId, zeroUpdateCart.token, item.id, 0)
-                        .statusCode);
+                api.updateItem(zeroUpdateCart.cartId, zeroUpdateCart.token, item.id, 0).statusCode);
     }
 
     @Test
@@ -272,10 +271,11 @@ class ShoppingCartApiTest {
         final RegisterResponse staleCart = api.registerCart();
         final RegisterResponse stockReducerCart = api.registerCart();
 
-        Assertions.assertEquals(201, api.addItem(staleCart.cartId, staleCart.token, book.id, 10)
-                .statusCode);
         Assertions.assertEquals(
-                201, api.addItem(stockReducerCart.cartId, stockReducerCart.token, book.id, 8)
+                201, api.addItem(staleCart.cartId, staleCart.token, book.id, 10).statusCode);
+        Assertions.assertEquals(
+                201,
+                api.addItem(stockReducerCart.cartId, stockReducerCart.token, book.id, 8)
                         .statusCode);
         Assertions.assertEquals(
                 200, api.checkout(stockReducerCart.cartId, stockReducerCart.token).statusCode);
@@ -304,8 +304,8 @@ class ShoppingCartApiTest {
 
         final Product cd = api.productByCode("CD_STATUS");
         final RegisterResponse cart = api.registerCart();
-        Assertions.assertEquals(201, api.addItem(cart.cartId, cart.token, cd.id, cd.stock + 5)
-                .statusCode);
+        Assertions.assertEquals(
+                201, api.addItem(cart.cartId, cart.token, cd.id, cd.stock + 5).statusCode);
 
         Assertions.assertEquals(200, api.checkout(cart.cartId, cart.token).statusCode);
         Assertions.assertTrue(api.product(cd.id).stock < 0);
