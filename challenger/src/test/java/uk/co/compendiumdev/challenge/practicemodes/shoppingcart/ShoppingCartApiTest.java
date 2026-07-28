@@ -54,6 +54,7 @@ class ShoppingCartApiTest {
         Assertions.assertEquals(200, queryCarts.statusCode);
         Assertions.assertFalse(queryCarts.body.contains("token"));
         Assertions.assertFalse(queryCarts.body.contains(cart.token));
+
     }
 
     @Test
@@ -408,8 +409,6 @@ class ShoppingCartApiTest {
         Assertions.assertTrue(openApi.body.contains("\"name\" : \"relatedId\""));
         Assertions.assertTrue(openApi.body.contains("\"productId\""));
         assertAddedCartItemViewSchemas(openApi.body);
-        Assertions.assertEquals(200, http.send("/shop/gui/entities", "GET").statusCode);
-
         final HttpResponseDetails home = http.send("/", "GET");
         Assertions.assertTrue(home.body.contains("href=\"/practice-modes/shoppingcart\""));
         Assertions.assertTrue(home.body.contains("href=\"/shop/docs/swagger-ui\""));

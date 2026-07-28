@@ -88,6 +88,11 @@ public final class ShoppingCartThingifier {
                         .withDescription("Internal tick when checkout last completed.")
                         .withMinMaxValues(0, 999999)
                         .withDefaultValue("0"));
+        cart.defineView("PublicCart")
+                .hideRequestFields("token")
+                .hideResponseFields("token")
+                .disallowInputFields("token");
+        shop.guiConfig().dataExplorer().responseView("cart", "PublicCart");
 
         final EntityDefinition cartItem =
                 shop.defineThing("cartitem", "cartitems", MAX_CART_ITEMS)

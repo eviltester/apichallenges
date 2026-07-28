@@ -37,6 +37,18 @@ class ShoppingCartModelTest {
         Assertions.assertEquals(FieldType.INTEGER, cart.getField("createdTick").getType());
         Assertions.assertEquals(FieldType.INTEGER, cart.getField("updatedTick").getType());
         Assertions.assertEquals(FieldType.INTEGER, cart.getField("checkoutTick").getType());
+        Assertions.assertTrue(cart.hasViewNamed("PublicCart"));
+        Assertions.assertEquals(
+                "PublicCart", shop.guiConfig().dataExplorer().responseViewNameFor(cart).orElse(""));
+        final EntityViewDefinition publicCart = cart.getViewNamed("PublicCart");
+        Assertions.assertTrue(publicCart.isResponseVisible("id"));
+        Assertions.assertTrue(publicCart.isResponseVisible("state"));
+        Assertions.assertTrue(publicCart.isResponseVisible("createdTick"));
+        Assertions.assertTrue(publicCart.isResponseVisible("updatedTick"));
+        Assertions.assertTrue(publicCart.isResponseVisible("checkoutTick"));
+        Assertions.assertFalse(publicCart.isResponseVisible("token"));
+        Assertions.assertFalse(publicCart.isRequestVisible("token"));
+        Assertions.assertFalse(publicCart.isInputAllowed("token"));
 
         Assertions.assertEquals(FieldType.INTEGER, cartItem.getField("productId").getType());
         Assertions.assertEquals(FieldType.INTEGER, cartItem.getField("quantity").getType());
