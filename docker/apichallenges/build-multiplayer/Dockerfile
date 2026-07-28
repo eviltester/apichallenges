@@ -7,9 +7,11 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 ARG APICHALLENGES_THINGIFIER_REF=master
-# Railway can reuse Docker layers aggressively. Bump this value when the
-# source-built Thingifier dependency must be refreshed from the same ref.
-ARG APICHALLENGES_THINGIFIER_CACHE_BUST=20260726-thingifier-87526f3d
+# Railway exposes this build-time variable for GitHub deploys. Referencing it
+# in the clone layer refreshes Thingifier whenever API Challenges is deployed.
+ARG RAILWAY_GIT_COMMIT_SHA=local
+# Manual fallback if the same API Challenges commit needs a forced refresh.
+ARG APICHALLENGES_THINGIFIER_CACHE_BUST=manual
 
 WORKDIR /workspace
 
@@ -17,7 +19,8 @@ RUN apt-get update \
         && apt-get install -y --no-install-recommends git ca-certificates \
         && rm -rf /var/lib/apt/lists/*
 
-RUN echo "Thingifier ref: ${APICHALLENGES_THINGIFIER_REF}" \
+RUN echo "API Challenges deploy SHA: ${RAILWAY_GIT_COMMIT_SHA}" \
+        && echo "Thingifier ref: ${APICHALLENGES_THINGIFIER_REF}" \
         && echo "Thingifier cache bust: ${APICHALLENGES_THINGIFIER_CACHE_BUST}" \
         && git clone --depth 1 --branch ${APICHALLENGES_THINGIFIER_REF} https://github.com/eviltester/thingifier.git thingifier \
         && git -C thingifier log -1 --oneline

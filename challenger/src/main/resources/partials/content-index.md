@@ -10,10 +10,11 @@
     - [Swagger](/tutorials/swagger)
     - [Summary](/tutorials/summary)
 - Practice Modes
-    - [Simple API](/practice-modes/simpleapi)
-    - [API Challenges](/apichallenges)
-    - [Mirror Mode](/practice-modes/mirror)
     - [Simulation Mode](/practice-modes/simulation)
+    - [API Challenges](/apichallenges)
+    - [Simple API](/practice-modes/simpleapi)
+    - [Buggy API](/practice-modes/shoppingcart)
+    - [Mirror Mode](/practice-modes/mirror)
     - [API From Hell](/practice-modes/fromhell)
 - Tools
     - [REST/HTTP Clients](/tools/clients)

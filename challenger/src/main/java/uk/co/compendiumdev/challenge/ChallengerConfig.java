@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
+import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartBugMode;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStoreProviderConfig;
 
 public class ChallengerConfig {
@@ -19,6 +20,7 @@ public class ChallengerConfig {
             new PersistenceLayer(PersistenceLayer.StorageType.LOCAL);
     private ThingStoreProviderConfig simulationRepositoryConfig =
             defaultSimulationRepositoryConfig();
+    private ShoppingCartBugMode shoppingCartBugMode = ShoppingCartBugMode.CLASSIC;
 
     public static ThingStoreProviderConfig defaultSimulationRepositoryConfig() {
         return new ThingStoreProviderConfig(
@@ -48,6 +50,14 @@ public class ChallengerConfig {
 
     public ThingStoreProviderConfig getSimulationRepositoryConfig() {
         return simulationRepositoryConfig;
+    }
+
+    public void setShoppingCartBugModeFromArgs(final String[] args) {
+        shoppingCartBugMode = ShoppingCartBugMode.fromArgs(args);
+    }
+
+    public ShoppingCartBugMode getShoppingCartBugMode() {
+        return shoppingCartBugMode;
     }
 
     public void setToMultiPlayerMode() {

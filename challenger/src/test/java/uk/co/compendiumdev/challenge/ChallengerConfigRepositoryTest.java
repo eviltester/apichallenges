@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartBugMode;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStoreProvider;
 import uk.co.compendiumdev.thingifier.core.repository.inmemory.InMemoryThingStoreProvider;
 import uk.co.compendiumdev.thingifier.core.repository.sqlite.SqliteThingStoreProvider;
@@ -74,5 +75,18 @@ public class ChallengerConfigRepositoryTest {
         Assertions.assertEquals(
                 Path.of("target/simulation-repository-test"),
                 config.getSimulationRepositoryConfig().getSqliteDirectory());
+    }
+
+    @Test
+    void shoppingCartBugsAreEnabledByDefaultAndOnlyNoneDisablesThem() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setShoppingCartBugModeFromArgs(new String[] {});
+        Assertions.assertEquals(ShoppingCartBugMode.CLASSIC, config.getShoppingCartBugMode());
+
+        config.setShoppingCartBugModeFromArgs(new String[] {"-shopbugs=none"});
+        Assertions.assertEquals(ShoppingCartBugMode.NONE, config.getShoppingCartBugMode());
+
+        config.setShoppingCartBugModeFromArgs(new String[] {"-shopbugs=unknown"});
+        Assertions.assertEquals(ShoppingCartBugMode.CLASSIC, config.getShoppingCartBugMode());
     }
 }

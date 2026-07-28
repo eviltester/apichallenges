@@ -34,6 +34,8 @@ We provide:
    - [follow our step by step guide](/practice-modes/simulation)
 - Experiment with a Real API
    - our [Simple API](/practice-modes/simpleapi) does not require any authentication and supports all HTTP Requests
+- Explore business-rule testing
+   - our [Buggy API](/practice-modes/shoppingcart) has deliberately buggy stock, cart, and checkout behaviour
 - Work through the API Challenges
    - [solve each of the API Challenges](/gui/challenges) to gain practical experience of Testing APIs
 - Experiment with other APIs
@@ -114,5 +116,3 @@ This application is sponsored by [EvilTester.com](https://eviltester.com) - a bl
 For a full list of corporate sponsors and how you can sponsor and support this application check out our [sponsorship page](/sponsors)
 
 Individuals can support this project through [Patreon](https://patreon.com/eviltester), or Github Sponsors
-
-

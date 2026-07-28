@@ -11,6 +11,7 @@ public final class RoboDepotHookConfigurator {
             final ThingifierHttpApiRoutings routings,
             final Thingifier thingifier,
             final String bugModeValue) {
+        routings.registerHttpApiRequestHook(new DefaultDatabaseOnlyHook());
         routings.registerHttpApiRequestHook(new CatalogWriteBlockHook());
 
         RoboDepotBugMode bugMode = RoboDepotBugMode.fromValue(bugModeValue);
