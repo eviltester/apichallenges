@@ -835,6 +835,15 @@ html[data-theme] .sub-menu li ul {
     z-index: 25;
 }
 
+html[data-theme] .sub-menu li ul::before {
+    content: "";
+    height: 1rem;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -1rem;
+}
+
 html[data-theme] .sub-menu li:hover ul,
 html[data-theme] .sub-menu li.dropped ul {
     background: var(--surface);
