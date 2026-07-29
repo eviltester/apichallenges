@@ -1345,6 +1345,13 @@ public class UiPagesAreReachableTest {
                         "setCookie('X-THINGIFIER-DATABASE-NAME','" + challengerId + "',365);"));
         Assertions.assertTrue(
                 response.body.contains("setCookie('X-CHALLENGER','" + challengerId + "',365);"));
+        Assertions.assertTrue(response.body.contains("<script>showAchievements()</script>"));
+
+        final int achievements = response.body.indexOf("<script>showAchievements()</script>");
+        final int gettingStarted =
+                response.body.indexOf("<h2 id='gettingstarted'>Getting Started</h2>");
+        Assertions.assertTrue(achievements > 0);
+        Assertions.assertTrue(gettingStarted > achievements);
     }
 
     @Test
@@ -1370,7 +1377,14 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<h2 id='gettingstarted'>Getting Started</h2>"));
         assertBodyContainsVersionedScript(response, "/js/challengerui.js");
         Assertions.assertTrue(response.body.contains("<script>showCurrentStatus()</script>"));
+        Assertions.assertTrue(response.body.contains("<script>showAchievements()</script>"));
         Assertions.assertTrue(response.body.contains("<script>displayLocalGuids()</script>"));
+
+        final int achievements = response.body.indexOf("<script>showAchievements()</script>");
+        final int gettingStarted =
+                response.body.indexOf("<h2 id='gettingstarted'>Getting Started</h2>");
+        Assertions.assertTrue(achievements > 0);
+        Assertions.assertTrue(gettingStarted > achievements);
     }
 
     @Test

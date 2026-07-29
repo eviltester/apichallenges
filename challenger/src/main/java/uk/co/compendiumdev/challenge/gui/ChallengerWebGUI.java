@@ -387,7 +387,6 @@ public class ChallengerWebGUI {
                     // List<ChallengeData> reportOn = new ArrayList<>();
 
                     if (single_player_mode) {
-                        html.append(playerChallengesIntro());
                         // reportOn = new ChallengesPayload(challengeDefinitions,
                         // challengers.SINGLE_PLAYER).getAsChallenges();
                         String json = "{}";
@@ -402,6 +401,8 @@ public class ChallengerWebGUI {
                                                     EntityRelModel.DEFAULT_DATABASE_NAME);
                         }
                         html.append(outputChallengeDataAsJS(challengers.SINGLE_PLAYER, json));
+                        html.append(showAchievements());
+                        html.append(playerChallengesIntro());
                         html.append(
                                 renderChallengeData(
                                         challengeDefinitions, challengers.SINGLE_PLAYER));
@@ -410,10 +411,12 @@ public class ChallengerWebGUI {
                                 storeThingifierDatabaseNameCookie(
                                         challengers.SINGLE_PLAYER.getXChallenger()));
                     } else {
+                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(showAchievements());
+                        html.append(playerChallengesIntro());
                         html.append(
                                 "<div style='clear:both'><p><strong>Unknown Challenger ID</strong></p></div>");
                         html.append(unknownChallengerActions());
-                        html.append(outputChallengeDataAsJS(challengers.SINGLE_PLAYER, "{}"));
                         html.append(
                                 multiUserShortHelp(
                                         persistenceLayer
@@ -451,7 +454,6 @@ public class ChallengerWebGUI {
                     html.append(guiManagement.getMenuAsHTML());
                     html.append("<h1>API Challenges Progress</h1>");
                     html.append(guiManagement.getStartOfMainContentMarker());
-                    html.append(playerChallengesIntro());
 
                     // List<ChallengeData> reportOn = null;
 
@@ -482,6 +484,10 @@ public class ChallengerWebGUI {
                     }
 
                     if (challenger == null) {
+                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(showAchievements());
+                        html.append(playerChallengesIntro());
+
                         String persistenceReason = "";
                         if (persistence != null) {
                             persistenceReason = persistence.getErrorMessage();
@@ -503,7 +509,6 @@ public class ChallengerWebGUI {
                                         persistenceLayer.autoSaveAfterCompletedChallenges()));
                         html.append(injectCookieFunctions());
                         html.append(showPreviousGuids());
-                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
                         html.append(
                                 renderChallengeData(
                                         challengeDefinitions, challengers.DEFAULT_PLAYER_DATA));
@@ -515,6 +520,8 @@ public class ChallengerWebGUI {
                             json = challengers.getErModel().exportInstanceDataAsJson(xChallenger);
                         }
                         html.append(outputChallengeDataAsJS(challenger, json));
+                        html.append(showAchievements());
+                        html.append(playerChallengesIntro());
 
                         if (!single_player_mode) {
                             html.append(storeThingifierDatabaseNameCookie(xChallenger));
@@ -676,6 +683,10 @@ public class ChallengerWebGUI {
         return "<script>showCurrentStatus()</script>";
     }
 
+    private String showAchievements() {
+        return "<script>showAchievements()</script>";
+    }
+
     private String santitizeChallengerGuid(String xChallenger) {
         return xChallenger.replaceAll("[^\\-a-zA-Z0-9]", "");
     }
@@ -734,6 +745,7 @@ public class ChallengerWebGUI {
     private String playerChallengesIntro() {
         final StringBuilder html = new StringBuilder();
         html.append("<div style='clear:both'>");
+        html.append("<h2 id='gettingstarted'>Getting Started</h2>");
         html.append(
                 "<p>Use the Descriptions of the challenges below to explore the API and solve the challenges."
                         + " Remember to use the API documentation to see the format of POST requests.</p>"

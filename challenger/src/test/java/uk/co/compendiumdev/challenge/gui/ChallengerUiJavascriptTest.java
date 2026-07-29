@@ -133,6 +133,26 @@ public class ChallengerUiJavascriptTest {
     }
 
     @Test
+    void definesCompactProgressAchievements() throws IOException {
+        String javascript = challengerUiJavascript();
+
+        Assertions.assertTrue(javascript.contains("const ACHIEVEMENT_DEFINITIONS"));
+        Assertions.assertTrue(javascript.contains("A New Challenger"));
+        Assertions.assertTrue(javascript.contains("You Got This"));
+        Assertions.assertTrue(javascript.contains("In the Race"));
+        Assertions.assertTrue(javascript.contains("Reward Unlocked: Server session storage"));
+        Assertions.assertTrue(javascript.contains("Completist"));
+        Assertions.assertTrue(javascript.contains("challengeKey: \"CREATE_NEW_CHALLENGER\""));
+        Assertions.assertTrue(javascript.contains("challengeKey: \"GET_CHALLENGES\""));
+        Assertions.assertTrue(javascript.contains("threshold: 60"));
+        Assertions.assertTrue(javascript.contains("allChallenges: true"));
+        Assertions.assertTrue(javascript.contains("function showAchievements()"));
+        Assertions.assertTrue(javascript.contains("achievement-rail-panel"));
+        Assertions.assertTrue(javascript.contains("addEventListener(\"mouseenter\""));
+        Assertions.assertTrue(javascript.contains("addEventListener(\"click\""));
+    }
+
+    @Test
     void successfulRestoreRefreshesLocalProgressBeforeRedirect() throws IOException {
         String javascript = challengerUiJavascript();
 

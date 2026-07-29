@@ -128,6 +128,72 @@ function closeChallengerGuidDialog(){
 
 const SINGLE_PLAYER_CHALLENGER_GUID = "rest-api-challenges-single-player";
 const PREVIOUS_CHALLENGER_GUIDS_MAX = 5;
+const ACHIEVEMENT_DEFINITIONS = [
+    {
+        title: "A New Challenger",
+        icon: "ID",
+        tier: "new",
+        condition: "Created an X-CHALLENGER session",
+        challengeKey: "CREATE_NEW_CHALLENGER"
+    },
+    {
+        title: "You Got This",
+        icon: "GET",
+        tier: "first",
+        condition: "Passed GET /challenges (200)",
+        challengeKey: "GET_CHALLENGES"
+    },
+    {
+        title: "In the Race",
+        icon: "10",
+        tier: "race",
+        condition: "10 challenges passed",
+        threshold: 10,
+        reward: "Reward Unlocked: Server session storage"
+    },
+    {
+        title: "Moving on",
+        icon: "20",
+        tier: "bronze",
+        condition: "Pass 20 challenges",
+        threshold: 20
+    },
+    {
+        title: "Dedicated Player",
+        icon: "30",
+        tier: "silver",
+        condition: "Pass 30 challenges",
+        threshold: 30
+    },
+    {
+        title: "Better than the Rest",
+        icon: "40",
+        tier: "gold",
+        condition: "Pass 40 challenges",
+        threshold: 40
+    },
+    {
+        title: "Among the Best",
+        icon: "50",
+        tier: "platinum",
+        condition: "Pass 50 challenges",
+        threshold: 50
+    },
+    {
+        title: "Better than the Best",
+        icon: "60",
+        tier: "elite",
+        condition: "Pass 60 challenges",
+        threshold: 60
+    },
+    {
+        title: "Completist",
+        icon: "ALL",
+        tier: "complete",
+        condition: "Pass every challenge",
+        allChallenges: true
+    }
+];
 
 function forgetGuid(aguid){
     if(isProtectedSinglePlayerGuid(aguid)){
@@ -306,6 +372,146 @@ function setCookieSaveLocally(){
 
 function deleteCookieSaveLocally(){
     setCookie("auto-save-x-challenger-locally","")
+}
+
+function escapeHtml(value){
+    return String(value || "").replace(/[&<>"']/g, function(character){
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#39;"
+        }[character];
+    });
+}
+
+function challengeStatuses(challengerData){
+    return (challengerData && challengerData.challengeStatus) ? challengerData.challengeStatus : {};
+}
+
+function completedChallengeCount(challengeStatus){
+    return Object.values(challengeStatus).filter(status => status===true).length;
+}
+
+function totalChallengeCount(challengeStatus){
+    return Object.values(challengeStatus).length;
+}
+
+function isAchievementUnlocked(definition, challengeStatus, doneCount, totalCount){
+    if(definition.challengeKey){
+        return challengeStatus[definition.challengeKey]===true;
+    }
+    if(definition.allChallenges){
+        return totalCount>0 && doneCount>=totalCount;
+    }
+    return doneCount>=definition.threshold;
+}
+
+function achievementsForChallenger(challengerData){
+    const status = challengeStatuses(challengerData);
+    const doneCount = completedChallengeCount(status);
+    const totalCount = totalChallengeCount(status);
+    const achievements = ACHIEVEMENT_DEFINITIONS.map(function(definition){
+        return Object.assign({}, definition, {
+            unlocked: isAchievementUnlocked(definition, status, doneCount, totalCount)
+        });
+    });
+    const nextIndex = achievements.findIndex(achievement => !achievement.unlocked);
+    return achievements.map(function(achievement, index){
+        const state = achievement.unlocked ? "Unlocked" : (index===nextIndex ? "Next" : "Locked");
+        return Object.assign({}, achievement, {
+            state,
+            next: index===nextIndex
+        });
+    });
+}
+
+function selectedAchievementIndex(achievements){
+    const unlockedIndexes = achievements
+        .map((achievement, index) => achievement.unlocked ? index : -1)
+        .filter(index => index>=0);
+    if(unlockedIndexes.length>0){
+        return unlockedIndexes[unlockedIndexes.length-1];
+    }
+    return achievements.findIndex(achievement => achievement.next);
+}
+
+function achievementDetailHtml(achievement){
+    const reward = (achievement.reward && achievement.unlocked) ? achievement.reward : "";
+    return `<span class='achievement-detail-status'>${escapeHtml(achievement.state)}</span>` +
+        `<div><h3 class='achievement-detail-title'>${escapeHtml(achievement.title)}</h3>` +
+        `<p class='achievement-detail-condition'>${escapeHtml(achievement.condition)}</p></div>` +
+        `<div class='achievement-detail-reward'>${escapeHtml(reward)}</div>`;
+}
+
+function achievementMedalHtml(achievement, index, selectedIndex){
+    const classes = [
+        "achievement-medal",
+        achievement.unlocked ? "" : "is-locked",
+        achievement.next ? "is-next" : "",
+        index===selectedIndex ? "is-selected" : ""
+    ].filter(Boolean).join(" ");
+    const label = `${achievement.title}, ${achievement.state.toLowerCase()}`;
+    const title = `${achievement.title}: ${achievement.condition}`;
+    return `<button type='button' class='${classes}' data-achievement-index='${index}' ` +
+        `data-tier='${escapeHtml(achievement.tier)}' aria-label='${escapeHtml(label)}' ` +
+        `aria-pressed='${index===selectedIndex}' title='${escapeHtml(title)}'>` +
+        `${escapeHtml(achievement.icon)}</button>`;
+}
+
+function setAchievementDetails(medal){
+    const panel = medal.closest(".achievement-rail-panel");
+    const detail = panel ? panel.querySelector(".achievement-detail") : null;
+    if(!panel || !detail){
+        return;
+    }
+    const achievements = achievementsForChallenger(document.challengerData);
+    const index = parseInt(medal.dataset.achievementIndex, 10);
+    const achievement = achievements[index];
+    if(!achievement){
+        return;
+    }
+    panel.querySelectorAll(".achievement-medal").forEach(function(item){
+        item.classList.remove("is-selected");
+        item.setAttribute("aria-pressed", "false");
+    });
+    medal.classList.add("is-selected");
+    medal.setAttribute("aria-pressed", "true");
+    detail.innerHTML = achievementDetailHtml(achievement);
+}
+
+function initialiseAchievementRail(){
+    document.querySelectorAll(".achievement-rail-panel").forEach(function(panel){
+        panel.querySelectorAll(".achievement-medal").forEach(function(medal){
+            medal.addEventListener("mouseenter", function(){ setAchievementDetails(medal); });
+            medal.addEventListener("focus", function(){ setAchievementDetails(medal); });
+            medal.addEventListener("click", function(){ setAchievementDetails(medal); });
+        });
+    });
+}
+
+function showAchievements(){
+    const achievements = achievementsForChallenger(document.challengerData);
+    const unlockedCount = achievements.filter(achievement => achievement.unlocked).length;
+    const selectedIndex = selectedAchievementIndex(achievements);
+    const selectedAchievement = achievements[selectedIndex] || achievements[0];
+
+    document.writeln("<section class='achievement-rail-panel' aria-label='Achievements'>");
+    document.writeln("<div class='achievement-rail-header'>");
+    document.writeln("<h2 class='achievement-rail-title'>Achievements</h2>");
+    document.writeln(`<div class='achievement-rail-meta'>${unlockedCount} of ${achievements.length} unlocked</div>`);
+    document.writeln("</div>");
+    document.writeln("<div class='achievement-rail-track' role='list' aria-label='Achievement medals'>");
+    achievements.forEach(function(achievement, index){
+        document.writeln(achievementMedalHtml(achievement, index, selectedIndex));
+    });
+    document.writeln("</div>");
+    document.writeln("<div class='achievement-detail' aria-live='polite'>");
+    document.writeln(achievementDetailHtml(selectedAchievement));
+    document.writeln("</div>");
+    document.writeln("</section>");
+    setTimeout(initialiseAchievementRail, 0);
 }
 
 function showCurrentStatus(){
