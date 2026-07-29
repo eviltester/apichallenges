@@ -1,11 +1,23 @@
 package uk.co.compendiumdev.challenge.persistence;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.ChallengerState;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.api.ermodelconversion.JsonPopulator;
 
-public class PersistenceLayer {
+public class PersistenceLayer implements AutoCloseable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceLayer.class);
 
     private StorageType storeOn;
 
@@ -19,9 +31,14 @@ public class PersistenceLayer {
     ChallengerPersistenceMechanism file = new ChallengerFileStorage();
     DatabaseContentPersistenceMechanism dbfile = (DatabaseContentPersistenceMechanism) file;
 
-    static ChallengerPersistenceMechanism aws;
+    private ChallengerPersistenceMechanism aws;
+    private DatabaseContentPersistenceMechanism awsdb;
+    private AwsS3Storage awsS3Storage;
+    private S3StorageConfig s3Config;
     boolean allowSaveToS3 = false;
     boolean allowLoadFromS3 = false;
+    private ScheduledExecutorService cleanupExecutor;
+    private ScheduledFuture<?> cleanupFuture;
 
     public PersistenceResponse tryToLoadChallenger(
             final Challengers challengers, final String xChallengerGuid) {
@@ -65,22 +82,30 @@ public class PersistenceLayer {
     };
 
     public PersistenceLayer(StorageType storeWhere) {
+        this(storeWhere, System.getenv(), null);
+    }
+
+    PersistenceLayer(
+            final StorageType storeWhere,
+            final Map<String, String> environment,
+            final S3ObjectStore s3ObjectStore) {
         this.storeOn = storeWhere;
 
         if (this.storeOn == StorageType.CLOUD) {
 
-            String allow_save = System.getenv("AWS_ALLOW_SAVE");
-            if (allow_save != null && allow_save.toLowerCase().trim().equals("true")) {
-                allowSaveToS3 = false;
-            }
+            allowSaveToS3 = S3StorageConfig.booleanValue(environment, "AWS_ALLOW_SAVE", false);
+            allowLoadFromS3 = S3StorageConfig.booleanValue(environment, "AWS_ALLOW_LOAD", false);
 
-            String allow_load = System.getenv("AWS_ALLOW_LOAD");
-            if (allow_load != null && allow_load.toLowerCase().trim().equals("true")) {
-                allowLoadFromS3 = false;
-            }
-
-            String bucketName = System.getenv("AWSBUCKET");
-            aws = new AwsS3Storage(allowSaveToS3, allowLoadFromS3, bucketName);
+            s3Config = S3StorageConfig.from(environment);
+            awsS3Storage =
+                    new AwsS3Storage(
+                            allowSaveToS3,
+                            allowLoadFromS3,
+                            s3Config,
+                            s3ObjectStore,
+                            java.time.Clock.systemUTC());
+            aws = awsS3Storage;
+            awsdb = awsS3Storage;
         }
     }
 
@@ -101,7 +126,27 @@ public class PersistenceLayer {
         }
 
         if (storeOn == StorageType.CLOUD && aws != null) {
-            return aws.saveChallengerStatus(data);
+            if (allowSaveToS3
+                    && data.completedChallengeCount() < s3Config.saveAfterCompletedChallenges()) {
+                return new PersistenceResponse()
+                        .withSuccess(true)
+                        .withErrorMessage(
+                                String.format(
+                                        "S3 save skipped until %d completed challenges",
+                                        s3Config.saveAfterCompletedChallenges()))
+                        .withDatabaseContents(databaseContents)
+                        .withChallengerAuthData(data);
+            }
+
+            PersistenceResponse s3StoreChallenger = aws.saveChallengerStatus(data);
+            PersistenceResponse s3StoreDatabase =
+                    awsdb.saveDatabaseContent(data.getXChallenger(), databaseContents);
+            return new PersistenceResponse()
+                    .withSuccess(s3StoreChallenger.isSuccess() && s3StoreDatabase.isSuccess())
+                    .withErrorMessage(
+                            s3StoreChallenger.getErrorMessage() + s3StoreDatabase.getErrorMessage())
+                    .withDatabaseContents(s3StoreDatabase.getDatabaseContents())
+                    .withChallengerAuthData(s3StoreChallenger.getAuthData());
         }
 
         // if(storeOn==StorageType.NONE){
@@ -161,5 +206,68 @@ public class PersistenceLayer {
         }
 
         return false;
+    }
+
+    public int autoSaveAfterCompletedChallenges() {
+        if (storeOn == StorageType.CLOUD && allowSaveToS3 && s3Config != null) {
+            return s3Config.saveAfterCompletedChallenges();
+        }
+
+        return 0;
+    }
+
+    public void startCloudCleanup(final Supplier<Set<String>> activeSessionIds) {
+        if (storeOn != StorageType.CLOUD
+                || awsS3Storage == null
+                || !awsS3Storage.cleanupEnabled()) {
+            return;
+        }
+
+        if (cleanupFuture != null) {
+            return;
+        }
+
+        Runnable cleanup =
+                () -> {
+                    try {
+                        Set<String> suppliedActiveIds =
+                                activeSessionIds == null ? Set.of() : activeSessionIds.get();
+                        Set<String> activeIds =
+                                suppliedActiveIds == null
+                                        ? Set.of()
+                                        : new HashSet<>(suppliedActiveIds);
+                        awsS3Storage.cleanupInactiveSessions(activeIds);
+                    } catch (Exception e) {
+                        LOGGER.warn("S3 challenger session cleanup failed", e);
+                    }
+                };
+
+        cleanup.run();
+        cleanupExecutor =
+                Executors.newSingleThreadScheduledExecutor(
+                        runnable -> {
+                            Thread thread = new Thread(runnable, "api-challenges-s3-cleanup");
+                            thread.setDaemon(true);
+                            return thread;
+                        });
+        cleanupFuture =
+                cleanupExecutor.scheduleWithFixedDelay(
+                        cleanup,
+                        awsS3Storage.cleanupInterval().toHours(),
+                        awsS3Storage.cleanupInterval().toHours(),
+                        TimeUnit.HOURS);
+    }
+
+    @Override
+    public void close() {
+        if (cleanupFuture != null) {
+            cleanupFuture.cancel(false);
+        }
+        if (cleanupExecutor != null) {
+            cleanupExecutor.shutdownNow();
+        }
+        if (awsS3Storage != null) {
+            awsS3Storage.close();
+        }
     }
 }

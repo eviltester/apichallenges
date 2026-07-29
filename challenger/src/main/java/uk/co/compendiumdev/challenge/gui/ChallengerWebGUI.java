@@ -412,7 +412,8 @@ public class ChallengerWebGUI {
                                         persistenceLayer
                                                 .willAutoSaveChallengerStatusToPersistenceLayer(),
                                         persistenceLayer
-                                                .willAutoLoadChallengerStatusFromPersistenceLayer()));
+                                                .willAutoLoadChallengerStatusFromPersistenceLayer(),
+                                        persistenceLayer.autoSaveAfterCompletedChallenges()));
                         html.append(injectCookieFunctions());
                         html.append(showPreviousGuids());
                         html.append(inputAChallengeGuidScript());
@@ -491,7 +492,8 @@ public class ChallengerWebGUI {
                                         persistenceLayer
                                                 .willAutoSaveChallengerStatusToPersistenceLayer(),
                                         persistenceLayer
-                                                .willAutoLoadChallengerStatusFromPersistenceLayer()));
+                                                .willAutoLoadChallengerStatusFromPersistenceLayer(),
+                                        persistenceLayer.autoSaveAfterCompletedChallenges()));
                         html.append(injectCookieFunctions());
                         html.append(showPreviousGuids());
                         html.append(inputAChallengeGuidScript());
@@ -729,7 +731,9 @@ public class ChallengerWebGUI {
     }
 
     private String multiUserShortHelp(
-            Boolean canSaveToPersistence, boolean canRestoreFromPersistence) {
+            Boolean canSaveToPersistence,
+            boolean canRestoreFromPersistence,
+            int saveAfterCompletedChallenges) {
         final StringBuilder html = new StringBuilder();
         html.append("<div style='clear:both' class='headertextblock'>");
         html.append(
@@ -739,7 +743,14 @@ public class ChallengerWebGUI {
         html.append(
                 "<p>Challenger sessions are purged from the server memory after 10 minutes of inactivity.</p>");
         if (canSaveToPersistence) {
-            html.append("Challenger progress is configured to saved on the server.<p>");
+            if (saveAfterCompletedChallenges > 0) {
+                html.append(
+                        String.format(
+                                "Challenger progress is configured to save on the server after %d challenges are completed.<p>",
+                                saveAfterCompletedChallenges));
+            } else {
+                html.append("Challenger progress is configured to save on the server.<p>");
+            }
         } else {
             html.append(
                     "Challenger progress is not configured to automatically save on the server. Use the GUI or UI to save progress locally.<p>");

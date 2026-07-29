@@ -40,6 +40,23 @@ public class ChallengeAuthDataTest {
     }
 
     @Test
+    void countsUniquelyCompletedChallenges() {
+
+        ChallengerAuthData authData = new ChallengerAuthData(Arrays.asList(CHALLENGE.values()));
+
+        Assertions.assertEquals(0, authData.completedChallengeCount());
+
+        authData.pass(CHALLENGE.GET_CHALLENGES);
+        Assertions.assertEquals(1, authData.completedChallengeCount());
+
+        authData.pass(CHALLENGE.GET_CHALLENGES);
+        Assertions.assertEquals(1, authData.completedChallengeCount());
+
+        authData.pass(CHALLENGE.GET_HEARTBEAT_204);
+        Assertions.assertEquals(2, authData.completedChallengeCount());
+    }
+
+    @Test
     void canPassAllChallenges() {
 
         ChallengerAuthData authData = new ChallengerAuthData(Arrays.asList(CHALLENGE.values()));

@@ -8,4 +8,4 @@ COPY challenger/target/apichallenges.jar /opt/app/apichallenges.jar
 EXPOSE 4567
 
 ENTRYPOINT ["java", "-jar", "/opt/app/apichallenges.jar"]
-CMD ["-model=challengeapi", "-noshutdown", "-multiplayer"]
+CMD ["-model=challengeapi", "-noshutdown", "-multiplayer", "-cloudstorage"]
