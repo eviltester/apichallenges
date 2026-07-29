@@ -104,6 +104,24 @@ public class ChallengeMain {
         <link rel="manifest" href="/favicon/site.webmanifest">
         <link rel="stylesheet" href="/css/toc.css">
         <link rel="stylesheet" href="/css/content.css">
+        <script>
+        (function(){
+            const themes = ['clean-docs', 'learning-platform', 'dark-lab'];
+            const systemTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-lab' : 'clean-docs';
+            let theme = systemTheme;
+            try {
+                const storedTheme = localStorage.getItem('apichallenges-css-theme');
+                if (themes.includes(storedTheme)) {
+                    theme = storedTheme;
+                }
+            } catch (error) {
+                theme = systemTheme;
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+        <link rel="stylesheet" href="/css/theme-experiments.css">
+        <script src="/js/theme-switcher.js" defer></script>
             """);
         app.getGuiManagement()
                 .appendToCustomHeadContent(PlausibleAnalyticsHead.fromEnvironment().asHtml());

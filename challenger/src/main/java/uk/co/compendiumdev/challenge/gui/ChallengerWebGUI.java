@@ -720,7 +720,7 @@ public class ChallengerWebGUI {
 
     private String getChallengesFooter() {
         return """
-                <p>&nbsp;</p><hr/><div class='footer'><p>Copyright Compendium Developments Ltd 2020 - 2025</p>
+                <p>&nbsp;</p><hr/><div class='footer'><p>Copyright Compendium Developments Ltd 2020 - 2026</p>
                 <ul class='footerlinks'><li><a href='https://eviltester.com/apichallenges'>API Challenges Info</a></li>
                 <li><a href='https://eviltester.com'>EvilTester.com</a></li>
                 <li><a href='https://linkedin.com/in/eviltester'>Contact</a></li>
