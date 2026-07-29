@@ -38,7 +38,8 @@ schema_video_id: OpisB0UZq0c     # force specific YouTube id when needed
 - If `seo_description` is not set, `description` is used.
 - `lastmod` is used as the page update date for sitemap `<lastmod>` and schema `dateModified`.
 - If `lastmod` is not set, schema `dateModified` falls back to `date`.
-- If `og_image` is not set, the global default social image is used.
+- If `og_image` is not set, the global default social image is
+  `/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg`.
 - If `meta_robots` is not set, `index,follow` is used.
 - `seo_title` is used for the HTML `<title>` tag; `title` remains the human-facing page label.
 - If `schema_type` is not set, content pages default to `Article` and index pages default to `WebPage`.

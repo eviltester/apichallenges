@@ -2,11 +2,19 @@
 title: API Challenges Simulation Mode
 seo_title: Simulation Mode | API Challenges Practice Mode
 description: A simulated API tutorial - follow the guided instructions and learn how to use your API Tool without any side-effects or risk.
-lastmod: 2026-07-26
+lastmod: 2026-07-29
 seo_description: Use API Challenges Simulation to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced testing.
+og_image: /images/hero/api-simulator-browser-requests-1600x720.jpg
+og_image_alt: Simulation Mode hero image showing live in-browser HTTP request examples and the Simulator request widget.
+schema_image: /images/hero/api-simulator-browser-requests-1600x720.jpg
+twitter_card: summary_large_image
 ---
 
 # Simulation Mode
+
+<figure class="content-hero-figure simulator-hero-image">
+  <img src="/images/hero/api-simulator-browser-requests-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="Simulation Mode hero image showing live in-browser HTTP request examples and the Simulator request widget.">
+</figure>
 
 The API has a simulation mode, it uses hard coded data in responses, but tries to mimic some conditions.
 

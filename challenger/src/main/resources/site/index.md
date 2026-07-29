@@ -2,12 +2,16 @@
 title: The API Challenges - API Tutorials and API Testing Practice Exercises
 seo_title: API Challenges Tutorials and Testing Practice
 description: A practice API application with tutorials for HTTP and REST APIs. Guided exercises and gamification hands on learning path.
-lastmod: 2026-02-18
+lastmod: 2026-07-29
 template: index
 canonical: https://apichallenges.eviltester.com
 ---
 
 # The API Challenges
+
+<figure class="site-hero-figure">
+  <img src="/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="API Challenges overview showing the Simulator, Learning Zone, API Challenges progress board, Simple API, Buggy API, HTTP Mirror, Tool Reviews, Practice Sites, and API From Hell.">
+</figure>
 
 ## A learning environment to experiment, explore, and play with API Testing and Tooling
 

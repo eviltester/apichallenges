@@ -2,11 +2,19 @@
 title: Buggy API
 seo_title: Buggy API Practice Mode for Testers | API Challenges
 description: A deliberately buggy shopping cart API for practising API testing with auth, cart, stock, and checkout rules.
-lastmod: 2026-07-28
+lastmod: 2026-07-29
 seo_description: Practise API testing against a deliberately buggy shopping cart API with bearer-token cart changes, catalogue stock management, and checkout rules.
+og_image: /images/hero/buggy-api-shopping-cart-1600x720.jpg
+og_image_alt: Buggy API hero image showing the Buggy API ER Model with the headline Break a shopping cart on purpose.
+schema_image: /images/hero/buggy-api-shopping-cart-1600x720.jpg
+twitter_card: summary_large_image
 ---
 
 # Buggy API
+
+<figure class="content-hero-figure buggy-api-hero-image">
+  <img src="/images/hero/buggy-api-shopping-cart-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="Buggy API hero image showing the Buggy API ER Model with the headline Break a shopping cart on purpose.">
+</figure>
 
 The Buggy API is a small public Shopping Cart practice API mounted at `/shop`.
 

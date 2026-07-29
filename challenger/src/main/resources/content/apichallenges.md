@@ -4,10 +4,17 @@ seo_title: Learn API Testing with Hands-On Challenges and Tutorials
 description: A brief overview of the API challenges and how to use them as a self-guided learning path for API Testing
 lastmod: 2026-02-18
 seo_description: Learn API testing by doing with guided challenges, practical tutorials, and realistic exercises that build confidence with real requests and responses.
+og_image: /images/hero/api-challenges-api-session-progress-1600x720.jpg
+og_image_alt: API Challenges API hero image showing session creation endpoints, TODO requests, docs, and visible pass fail progress.
+schema_image: /images/hero/api-challenges-api-session-progress-1600x720.jpg
 showads: true
 ---
 
 # API Challenges
+
+<figure class="content-hero-figure api-challenges-api-hero-image">
+  <img src="/images/hero/api-challenges-api-session-progress-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="API Challenges API hero image showing session creation endpoints, TODO requests, docs, and visible pass fail progress.">
+</figure>
 
 The API Challenges API is used for managing a To-Do list.
 
@@ -71,5 +78,4 @@ To track your challenges and use the gamification tracking to view your progress
 - and your progress will be tracked in the system memory
 
 Full details are included in the [multi-user](/gui/multiuser) instructions. And in the information on the [challenges list page](/gui/challenges).
-
 

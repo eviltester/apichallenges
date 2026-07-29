@@ -25,6 +25,8 @@ public class MarkdownContentManager {
     private static final String DEFAULT_CANONICAL_HOST = "https://apichallenges.eviltester.com";
     private static final String DEFAULT_SITE_NAME = "API Challenges";
     private static final String DEFAULT_OG_IMAGE_PATH =
+            "/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg";
+    private static final String DEFAULT_SCHEMA_LOGO_PATH =
             "/images/social/apichallenges-og-1200x630.png";
     private static final String DEFAULT_OG_TYPE_CONTENT = "article";
     private static final String DEFAULT_OG_TYPE_WEBSITE = "website";
@@ -147,6 +149,8 @@ public class MarkdownContentManager {
 
         String state = "EXPECTING_HEADER";
         boolean addedToc = false;
+        boolean tocPendingAfterFirstHeading = false;
+        boolean readingLeadFigureBeforeToc = false;
         String firstYouTubeVideoId = "";
         boolean liveRequestWidgetUsed = false;
 
@@ -189,6 +193,18 @@ public class MarkdownContentManager {
                     firstYouTubeVideoId = extractYouTubeVideoId(line);
                 }
 
+                if (!mdheaders.contains("template: index")
+                        && tocPendingAfterFirstHeading
+                        && !addedToc
+                        && !readingLeadFigureBeforeToc) {
+                    String trimmedLine = line.trim();
+                    if (!trimmedLine.isEmpty() && !trimmedLine.startsWith("<figure")) {
+                        mdcontent.append("\n<div id='toc'></div>\n");
+                        addedToc = true;
+                        tocPendingAfterFirstHeading = false;
+                    }
+                }
+
                 if (line.contains("youtube.com/watch")) {
                     if (youtubeHeaderInject.isEmpty()) {
                         // only import the facade if we are rendering youtube
@@ -203,8 +219,18 @@ public class MarkdownContentManager {
                 if (!mdheaders.contains("template: index")) {
                     // inject table of contents
                     if (line.startsWith("# ") && !addedToc) {
-                        addedToc = true;
-                        mdcontent.append("\n<div id='toc'></div>\n");
+                        tocPendingAfterFirstHeading = true;
+                    } else if (tocPendingAfterFirstHeading && !addedToc) {
+                        String trimmedLine = line.trim();
+                        if (trimmedLine.startsWith("<figure")) {
+                            readingLeadFigureBeforeToc = true;
+                        }
+                        if (readingLeadFigureBeforeToc && trimmedLine.equals("</figure>")) {
+                            readingLeadFigureBeforeToc = false;
+                            tocPendingAfterFirstHeading = false;
+                            addedToc = true;
+                            mdcontent.append("\n<div id='toc'></div>\n");
+                        }
                     }
                 }
             }
@@ -753,7 +779,7 @@ public class MarkdownContentManager {
                 getEnvironmentOrDefault("SEO_SCHEMA_WEBSITE_NAME", DEFAULT_SITE_NAME);
         final String logoUrl =
                 absolutizeUrl(
-                        getEnvironmentOrDefault("SEO_SCHEMA_LOGO_URL", DEFAULT_OG_IMAGE_PATH),
+                        getEnvironmentOrDefault("SEO_SCHEMA_LOGO_URL", DEFAULT_SCHEMA_LOGO_PATH),
                         canonicalHost);
 
         final List<String> sameAsLinks =

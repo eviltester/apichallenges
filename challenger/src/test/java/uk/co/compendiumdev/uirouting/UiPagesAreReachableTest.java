@@ -57,6 +57,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("\"@type\":\"Organization\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"WebSite\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"WebPage\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg"));
         assertContainsHeaderAndFooter(response);
     }
 
@@ -458,6 +461,105 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void learningZonePageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/learning", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Learning API Testing</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/learning-zone-api-testing-path-1600x720.jpg"));
+        Assertions.assertTrue(
+                response.body.contains("content-hero-figure learning-zone-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
+        final int learningTitle = response.body.indexOf("<h1>Learning API Testing</h1>");
+        final int learningHero =
+                response.body.indexOf("content-hero-figure learning-zone-hero-image");
+        final int learningToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(learningTitle < learningHero);
+        Assertions.assertTrue(learningHero < learningToc);
+    }
+
+    @Test
+    void apiChallengesPageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/apichallenges", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>API Challenges</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "/images/hero/api-challenges-api-session-progress-1600x720.jpg"));
+        Assertions.assertTrue(
+                response.body.contains("content-hero-figure api-challenges-api-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
+        final int apiChallengesTitle = response.body.indexOf("<h1>API Challenges</h1>");
+        final int apiChallengesHero =
+                response.body.indexOf("content-hero-figure api-challenges-api-hero-image");
+        final int apiChallengesToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(apiChallengesTitle < apiChallengesHero);
+        Assertions.assertTrue(apiChallengesHero < apiChallengesToc);
+    }
+
+    @Test
+    void simpleApiPracticeModePageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/simpleapi", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Simple API</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/simple-api-no-auth-practice-1600x720.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure simple-api-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
+        final int simpleApiTitle = response.body.indexOf("<h1>Simple API</h1>");
+        final int simpleApiHero =
+                response.body.indexOf("content-hero-figure simple-api-hero-image");
+        final int simpleApiToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(simpleApiTitle < simpleApiHero);
+        Assertions.assertTrue(simpleApiHero < simpleApiToc);
+    }
+
+    @Test
+    void simulationModePageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Simulation Mode</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/api-simulator-browser-requests-1600x720.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure simulator-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+        final int simulationTitle = response.body.indexOf("<h1>Simulation Mode</h1>");
+        final int simulationHero =
+                response.body.indexOf("content-hero-figure simulator-hero-image");
+        final int simulationToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(simulationTitle < simulationHero);
+        Assertions.assertTrue(simulationHero < simulationToc);
+    }
+
+    @Test
     void simulationModePageIncludesLiveRequestWidgetsForEachStep() {
 
         final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
@@ -488,12 +590,72 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void mirrorModePageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/mirror", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Mirror Mode</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/http-mirror-client-evidence-1600x720.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure mirror-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
+        final int mirrorTitle = response.body.indexOf("<h1>Mirror Mode</h1>");
+        final int mirrorHero = response.body.indexOf("content-hero-figure mirror-hero-image");
+        final int mirrorToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(mirrorTitle < mirrorHero);
+        Assertions.assertTrue(mirrorHero < mirrorToc);
+    }
+
+    @Test
+    void buggyApiPracticeModePageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response = http.send("/practice-modes/shoppingcart", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Buggy API</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/buggy-api-shopping-cart-1600x720.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure buggy-api-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
+        final int buggyApiTitle = response.body.indexOf("<h1>Buggy API</h1>");
+        final int buggyApiHero = response.body.indexOf("content-hero-figure buggy-api-hero-image");
+        final int buggyApiToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(buggyApiTitle < buggyApiHero);
+        Assertions.assertTrue(buggyApiHero < buggyApiToc);
+    }
+
+    @Test
     void fromHellPracticeModePageIncludesCollapsedLiveRequestWidgets() {
 
         final HttpResponseDetails response = http.send("/practice-modes/fromhell", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>API From Hell</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/api-from-hell-burning-1200x630.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure fromhell-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
+        final int fromHellTitle = response.body.indexOf("<h1>API From Hell</h1>");
+        final int fromHellHero = response.body.indexOf("content-hero-figure fromhell-hero-image");
+        final int fromHellToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(fromHellTitle < fromHellHero);
+        Assertions.assertTrue(fromHellHero < fromHellToc);
         Assertions.assertTrue(
                 response.body.contains(
                         "<a href=\"/fromhell/docs/openapi-3.1.json?download\">download</a>"));
@@ -951,9 +1113,12 @@ public class UiPagesAreReachableTest {
                         "<meta property='og:url' content='https://apichallenges.eviltester.com'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/social/apichallenges-og-1200x630.png'>"));
+                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains("<meta name='twitter:card' content='summary_large_image'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
         Assertions.assertTrue(response.body.contains("\"@type\":\"WebPage\""));
     }
 
