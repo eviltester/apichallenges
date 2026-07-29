@@ -166,7 +166,7 @@ final class ShoppingCartCheckout {
     }
 
     private int availableForBuggyStockCheck(final CheckoutLine line) {
-        if (STALE_STOCK_PRODUCT.equals(line.productCode())) {
+        if (STALE_STOCK_PRODUCT.equals(line.productCode()) || line.currentStock() == 0) {
             return line.stockAtAdd();
         }
         return line.currentStock();
@@ -174,11 +174,7 @@ final class ShoppingCartCheckout {
 
     private double totalFor(final List<CheckoutLine> lines) {
         double total = 0;
-        for (int index = 0; index < lines.size(); index++) {
-            if (bugMode.bugsEnabled() && index == lines.size() - 1 && lines.size() > 1) {
-                continue;
-            }
-            final CheckoutLine line = lines.get(index);
+        for (CheckoutLine line : lines) {
             total += line.quantity() * line.unitPriceAtAdd();
         }
         return total;

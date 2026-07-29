@@ -2,7 +2,7 @@
 title: Buggy API Deliberate Bugs
 seo_title: Buggy API Deliberate Bugs for Testers | API Challenges
 description: Maintainer notes for the deliberate Buggy API bugs.
-lastmod: 2026-07-28
+lastmod: 2026-07-29
 seo_description: Maintainer notes for Buggy API deliberate bugs, trigger examples, clean-mode expectations, and regression coverage ideas.
 sitemap: false
 ---
@@ -21,11 +21,11 @@ The Buggy API is buggy by default. Start with `-shopbugs=none` to switch bugs of
 - Cart item create/update accepts zero quantities.
 - Cart item creation accepts hidden `unitPriceAtAdd` and `stockAtAdd` fields even though they are not advertised in the request schema.
 - `BOOK_API` checkout can use `stockAtAdd` instead of current stock for availability checks.
+- Checkout can use `stockAtAdd` instead of current stock when a product's current stock reaches zero after the item was added to a cart.
 - `DVD_BUGS` checkout decrements product stock by 1 per line instead of by quantity.
 - `CD_STATUS` checkout can allow stock to become negative.
 - Closed carts can still be modified.
 - A cart can be checked out more than once, reducing stock again.
-- Checkout total ignores the final cart line when a cart has multiple lines.
 - `POST /shop/carts/{cartId}/items` accepts a valid bearer token from another cart when the body updates an existing `id`.
 
 ## Clean Behaviour Reference
@@ -44,6 +44,6 @@ When started with `-shopbugs=none`:
 
 - Use `POST /shop/register` twice to create two carts and compare bearer-token behaviour.
 - Use `GET /shop/products` to identify `BOOK_API`, `DVD_BUGS`, and `CD_STATUS`.
+- Add an item to one cart, use another cart to reduce that product stock to zero, then checkout the first cart.
 - Add more `CD_STATUS` units than are in stock, then checkout to observe negative stock.
 - Checkout a cart, then try to modify it or checkout again.
-- Add two cart lines, then compare expected total with checkout total.

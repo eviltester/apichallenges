@@ -135,6 +135,28 @@ class ShoppingCartApiTest {
     }
 
     @Test
+    void cleanModeRejectsCheckoutWhenPreviouslyAddedProductStockReachesZero() {
+        startApp("-shopbugs=none");
+
+        final Product mug = api.productByCode("MUG_TESTER");
+        final RegisterResponse staleCart = api.registerCart();
+        final RegisterResponse stockReducerCart = api.registerCart();
+
+        Assertions.assertEquals(
+                201, api.addItem(staleCart.cartId, staleCart.token, mug.id, 1).statusCode);
+        Assertions.assertEquals(
+                201,
+                api.addItem(stockReducerCart.cartId, stockReducerCart.token, mug.id, mug.stock)
+                        .statusCode);
+        Assertions.assertEquals(
+                200, api.checkout(stockReducerCart.cartId, stockReducerCart.token).statusCode);
+        Assertions.assertEquals(0, api.product(mug.id).stock);
+
+        Assertions.assertEquals(409, api.checkout(staleCart.cartId, staleCart.token).statusCode);
+        Assertions.assertEquals(0, api.product(mug.id).stock);
+    }
+
+    @Test
     void cleanModeCheckoutTotalIncludesEveryLine() {
         startApp("-shopbugs=none");
 
@@ -286,6 +308,34 @@ class ShoppingCartApiTest {
     }
 
     @Test
+    void defaultBugModeAllowsCheckoutWhenPreviouslyAddedProductStockReachesZero() {
+        startApp();
+
+        final Product mug = api.productByCode("MUG_TESTER");
+        final RegisterResponse staleCart = api.registerCart();
+        final RegisterResponse stockReducerCart = api.registerCart();
+
+        Assertions.assertEquals(
+                201, api.addItem(staleCart.cartId, staleCart.token, mug.id, 1).statusCode);
+        Assertions.assertEquals(
+                201,
+                api.addItem(stockReducerCart.cartId, stockReducerCart.token, mug.id, mug.stock)
+                        .statusCode);
+        Assertions.assertEquals(
+                200, api.checkout(stockReducerCart.cartId, stockReducerCart.token).statusCode);
+        Assertions.assertEquals(0, api.product(mug.id).stock);
+
+        final CheckoutResponse checkout = api.checkoutOk(staleCart.cartId, staleCart.token);
+        final var stockChange = checkout.stockChanges.get(0);
+
+        Assertions.assertEquals(mug.unitPrice, checkout.total, 0.001f);
+        Assertions.assertEquals(0, stockChange.before);
+        Assertions.assertEquals(1, stockChange.reducedBy);
+        Assertions.assertEquals(-1, stockChange.after);
+        Assertions.assertEquals(-1, api.product(mug.id).stock);
+    }
+
+    @Test
     void defaultBugModeReducesDvdStockByOnePerLine() {
         startApp();
 
@@ -338,7 +388,7 @@ class ShoppingCartApiTest {
     }
 
     @Test
-    void defaultBugModeCheckoutTotalIgnoresFinalLine() {
+    void defaultBugModeCheckoutTotalIncludesEveryLine() {
         startApp();
 
         final RegisterResponse cart = api.registerCart();
@@ -348,7 +398,7 @@ class ShoppingCartApiTest {
         api.addItemOk(cart.cartId, cart.token, cable.id, 1);
 
         final CheckoutResponse checkout = api.checkoutOk(cart.cartId, cart.token);
-        Assertions.assertEquals(mug.unitPrice, checkout.total, 0.001f);
+        Assertions.assertEquals(mug.unitPrice + cable.unitPrice, checkout.total, 0.001f);
     }
 
     @Test
