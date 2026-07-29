@@ -102,8 +102,8 @@ public class ChallengeMain {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
         <link rel="manifest" href="/favicon/site.webmanifest">
-        <link rel="stylesheet" href="/css/toc.css">
-        <link rel="stylesheet" href="/css/content.css">
+        <link rel="stylesheet" href="%s">
+        <link rel="stylesheet" href="%s">
         <script>
         (function(){
             const themes = ['clean-docs', 'learning-platform', 'dark-lab'];
@@ -120,14 +120,20 @@ public class ChallengeMain {
             document.documentElement.setAttribute('data-theme', theme);
         })();
         </script>
-        <link rel="stylesheet" href="/css/theme-experiments.css">
-        <script src="/js/theme-switcher.js" defer></script>
-            """);
+        <link rel="stylesheet" href="%s">
+        <script src="%s" defer></script>
+            """
+                                .formatted(
+                                        AssetVersion.versionedPath("/css/toc.css"),
+                                        AssetVersion.versionedPath("/css/content.css"),
+                                        AssetVersion.versionedPath("/css/theme-experiments.css"),
+                                        AssetVersion.versionedPath("/js/theme-switcher.js")));
         app.getGuiManagement()
                 .appendToCustomHeadContent(PlausibleAnalyticsHead.fromEnvironment().asHtml());
 
         challenger.setupGui(app.getGuiManagement());
         challenger.configureRoutes();
+        CdnCachePolicy.install();
 
         if (challenger.isSinglePlayerMode()) {
             logger.info("Running in Single User Mode");

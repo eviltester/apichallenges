@@ -15,6 +15,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.compendiumdev.challenge.AssetVersion;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 // TODO: consider adding caching for generated markdown pages
@@ -221,7 +222,11 @@ public class MarkdownContentManager {
 
         headerInject = headerInject + youtubeHeaderInject;
         if (liveRequestWidgetUsed) {
-            headerInject = headerInject + "<script src='/js/sim-live-request.js' defer></script>";
+            headerInject =
+                    headerInject
+                            + "<script src='"
+                            + AssetVersion.versionedPath("/js/sim-live-request.js")
+                            + "' defer></script>";
         }
 
         String markdownFromResource = mdcontent.toString();
@@ -480,9 +485,13 @@ public class MarkdownContentManager {
                 guiManagement.getPageStart(
                         htmlTitle,
                         """
-        <script src='/js/toc.js'></script>
-        <script src='/js/externalize-links.js'></script>
+        <script src='%s'></script>
+        <script src='%s'></script>
         """
+                                        .formatted(
+                                                AssetVersion.versionedPath("/js/toc.js"),
+                                                AssetVersion.versionedPath(
+                                                        "/js/externalize-links.js"))
                                 + headerInject,
                         canonicalAbsoluteUrl));
 
