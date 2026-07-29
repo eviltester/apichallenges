@@ -579,6 +579,67 @@ html[data-theme] input[type="submit"]:hover {
     color: var(--cta-text);
 }
 
+html[data-theme] .sponsor-logo-panel {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 1.35rem;
+}
+
+html[data-theme] .sponsor-logo-card {
+    align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    box-shadow: none;
+    box-sizing: border-box;
+    color: var(--text);
+    display: inline-flex;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0.2rem;
+    text-decoration: none;
+    transition:
+        border-color 140ms ease,
+        filter 140ms ease,
+        transform 140ms ease;
+}
+
+html[data-theme] .sponsor-logo-card:hover,
+html[data-theme] .sponsor-logo-card:focus-visible {
+    background: transparent;
+    border-color: transparent;
+    filter: drop-shadow(0 0 0.65rem color-mix(in srgb, var(--accent) 24%, transparent));
+    color: var(--text);
+    transform: translateY(-1px);
+}
+
+html[data-theme] .sponsor-logo-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+html[data-theme] .sponsor-logo-card--platinum {
+    width: min(100%, 18rem);
+}
+
+html[data-theme] .sponsor-logo-card--gold {
+    width: min(100%, 13rem);
+}
+
+html[data-theme] .sponsor-logo-image {
+    display: block;
+    height: auto;
+    max-height: 19rem;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+html[data-theme] .sponsor-logo-card--gold .sponsor-logo-image {
+    max-height: 11rem;
+}
+
 html[data-theme] .achievement-rail-panel {
     background: color-mix(in srgb, var(--surface-soft) 42%, var(--surface));
     border: 1px solid var(--border);

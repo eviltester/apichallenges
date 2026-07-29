@@ -21,13 +21,21 @@ If you are a company or corporation that would like to sponsor the project then 
 
 ## Current Platinum sponsor
 
-[![EvilTester.com log](https://www.eviltester.com/siteimages/evil_laugh_cleaned_transparent_h300.png)](https://eviltester.com)
+<div class="sponsor-logo-panel sponsor-logo-panel--platinum">
+  <a class="sponsor-logo-card sponsor-logo-card--platinum" href="https://eviltester.com" aria-label="Visit EvilTester.com">
+    <img class="sponsor-logo-image" src="/images/sponsors/eviltester-logo-white-blob.png" alt="EvilTester.com logo">
+  </a>
+</div>
 
 - [EvilTester.com](https://eviltester.com) free online training and books related to Software Testing and Development. Also including The Evil Tester Show podcast, and YouTube video channel.
 
 ## Gold Sponsors
 
-[![Bespoke Software Development Consultancy and Training](https://compendiumdev.co.uk/images/cut_down_logo_152_171_e.png)](https://compendiumdev.co.uk)
+<div class="sponsor-logo-panel sponsor-logo-panel--gold">
+  <a class="sponsor-logo-card sponsor-logo-card--gold" href="https://compendiumdev.co.uk" aria-label="Visit Compendium Developments">
+    <img class="sponsor-logo-image" src="/images/sponsors/compendiumdev-logo-white-circle.png" alt="Compendium Developments logo">
+  </a>
+</div>
 
 [Want to become a corporate sponsor of API Challenges?](https://eviltester.com/page/sponsor/corporate/)
 
