@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.compendiumdev.challenge.AssetVersion;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
@@ -34,7 +35,9 @@ public class ChallengerWebGUI {
     String getChallengesPageHtmlHeader() {
         return guiManagement.getPageStart(
                 "API Challenges - Improve your API Skills",
-                "<script src='/js/challengerui.js'></script>"
+                "<script src='"
+                        + AssetVersion.versionedPath("/js/challengerui.js")
+                        + "'></script>"
                         + "<meta name='description' content='A free online set of gamified REST API Challenges to practice and improve your API Testing Skills'>",
                 "/gui/challenges");
     }

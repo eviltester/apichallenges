@@ -162,6 +162,26 @@ public class UiPagesAreReachableTest {
         }
     }
 
+    private void assertCacheControl(final HttpResponseDetails response, final String expected) {
+        Assertions.assertEquals(expected, response.getHeader("Cache-Control"));
+    }
+
+    private void assertBodyContainsVersionedScript(
+            final HttpResponseDetails response, final String scriptPath) {
+        Assertions.assertTrue(
+                response.body.matches(
+                        "(?s).*src=['\"]" + Pattern.quote(scriptPath) + "\\?v=[^'\"]+['\"].*"),
+                "Expected versioned script " + scriptPath);
+    }
+
+    private void assertBodyContainsVersionedStylesheet(
+            final HttpResponseDetails response, final String stylesheetPath) {
+        Assertions.assertTrue(
+                response.body.matches(
+                        "(?s).*href=['\"]" + Pattern.quote(stylesheetPath) + "\\?v=[^'\"]+['\"].*"),
+                "Expected versioned stylesheet " + stylesheetPath);
+    }
+
     private void assertOpenApiVersion(final String body, final String expectedVersion) {
         final Matcher matcher = Pattern.compile("\"openapi\"\\s*:\\s*\"([^\"]+)\"").matcher(body);
         Assertions.assertTrue(matcher.find(), "Expected OpenAPI version in response");
@@ -443,7 +463,7 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
         Assertions.assertEquals(
                 14, response.body.split("class=\"sim-live-request\"", -1).length - 1);
         Assertions.assertTrue(
@@ -480,7 +500,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<a href=\"/fromhell/docs/openapi-3.1.json\">OpenAPI 3.1 JSON</a>"));
-        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
                         "respond with <code>405 Method Not Allowed</code> and an"
@@ -557,11 +577,13 @@ public class UiPagesAreReachableTest {
         HttpResponseDetails response = http.send("/css/default.css", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains(".rootmenu"));
 
         response = http.send("/css/content.css", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("div.main-text-content pre"));
         Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
@@ -573,11 +595,13 @@ public class UiPagesAreReachableTest {
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("htmlTableOfContents"));
 
         response = http.send("/js/sim-live-request.js", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("buildCurlCommand"));
         Assertions.assertTrue(response.body.contains("api-live-request"));
         Assertions.assertTrue(response.body.contains("currentChallenger"));
@@ -611,7 +635,48 @@ public class UiPagesAreReachableTest {
         response = http.send("/favicon/site.webmanifest", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("manifest+json"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("icons"));
+    }
+
+    @Test
+    void docsAndDynamicRoutesDeclareCdnCachePolicy() {
+
+        HttpResponseDetails response = http.send("/learning", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        assertCacheControl(
+                response,
+                "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+
+        response = http.send("/learning", "head");
+        Assertions.assertEquals(200, response.statusCode);
+        assertCacheControl(
+                response,
+                "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+
+        response = http.send("/docs/swagger-ui", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        assertCacheControl(
+                response,
+                "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+
+        response = http.send("/docs/openapi.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        assertCacheControl(
+                response,
+                "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+
+        for (final String dynamicPath :
+                List.of(
+                        "/gui/challenges",
+                        "/todos",
+                        "/challenges",
+                        "/simpleapi/items",
+                        "/mirror/request")) {
+            response = http.send(dynamicPath, "get");
+            Assertions.assertEquals(200, response.statusCode, dynamicPath);
+            assertCacheControl(response, "no-store");
+        }
     }
 
     static Stream<Arguments> swaggerUiPageRoutes() {
@@ -686,6 +751,10 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails response = http.send("/", "get");
 
         Assertions.assertEquals(200, response.statusCode);
+        assertBodyContainsVersionedStylesheet(response, "/css/default.css");
+        assertBodyContainsVersionedStylesheet(response, "/css/content.css");
+        assertBodyContainsVersionedStylesheet(response, "/css/theme-experiments.css");
+        assertBodyContainsVersionedScript(response, "/js/theme-switcher.js");
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/shop/docs/swagger-ui\""));
@@ -1019,7 +1088,11 @@ public class UiPagesAreReachableTest {
 
             Assertions.assertEquals(200, response.statusCode, solutionLink);
             Assertions.assertTrue(
-                    response.body.contains("src='/js/sim-live-request.js'"), solutionLink);
+                    response.body.matches(
+                            "(?s).*src='"
+                                    + Pattern.quote("/js/sim-live-request.js")
+                                    + "\\?v=[^']+'.*"),
+                    solutionLink);
             Assertions.assertTrue(
                     response.body.contains("class=\"api-live-request\""), solutionLink);
         }
@@ -1032,7 +1105,7 @@ public class UiPagesAreReachableTest {
                 http.send("/apichallenges/solutions/post-create/post-todos-201", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(response.body.contains("src='/js/sim-live-request.js'"));
+        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"api-live-request\" data-method=\"POST\""
@@ -1130,8 +1203,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<a href='#gettingstarted'>Create Challenger</a>"));
         Assertions.assertTrue(
                 response.body.contains("<h2 id='gettingstarted'>Getting Started</h2>"));
-        Assertions.assertTrue(
-                response.body.contains("<script src='/js/challengerui.js'></script>"));
+        assertBodyContainsVersionedScript(response, "/js/challengerui.js");
         Assertions.assertTrue(response.body.contains("<script>showCurrentStatus()</script>"));
         Assertions.assertTrue(response.body.contains("<script>displayLocalGuids()</script>"));
     }
