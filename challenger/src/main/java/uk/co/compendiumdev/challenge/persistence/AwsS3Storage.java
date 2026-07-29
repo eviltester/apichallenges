@@ -128,6 +128,23 @@ public class AwsS3Storage
         }
     }
 
+    public boolean hasChallengerStatus(final String guid) {
+        if (!allowSave && !allowLoad) {
+            return false;
+        }
+
+        if (!config.hasBucketName()) {
+            return false;
+        }
+
+        try {
+            return firstExistingLastModified(challengerLoadKeys(guid)).isPresent();
+        } catch (Exception e) {
+            logger.warn("Could not check S3 challenger status for guid: {}", guid, e);
+            return false;
+        }
+    }
+
     @Override
     public PersistenceResponse saveDatabaseContent(
             final String guid, final String databaseContents) {
@@ -251,6 +268,16 @@ public class AwsS3Storage
             Optional<S3ObjectDetails> data = objectStore().get(key);
             if (data.isPresent()) {
                 return data;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Instant> firstExistingLastModified(final List<String> keys) {
+        for (String key : keys) {
+            Optional<Instant> lastModified = objectStore().lastModified(key);
+            if (lastModified.isPresent()) {
+                return lastModified;
             }
         }
         return Optional.empty();

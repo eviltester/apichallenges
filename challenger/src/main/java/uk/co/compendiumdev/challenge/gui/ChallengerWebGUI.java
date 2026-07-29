@@ -23,6 +23,7 @@ public class ChallengerWebGUI {
     Logger logger = LoggerFactory.getLogger(ChallengerWebGUI.class);
     private final DefaultGUIHTML guiManagement;
     private final boolean guiStayAlive;
+    private PersistenceLayer persistenceLayer;
 
     public ChallengerWebGUI(final DefaultGUIHTML defaultGui, final boolean guiStayAlive) {
         this.guiManagement = defaultGui;
@@ -59,6 +60,8 @@ public class ChallengerWebGUI {
             final ChallengeDefinitions challengeDefinitions,
             final PersistenceLayer persistenceLayer,
             final boolean single_player_mode) {
+
+        this.persistenceLayer = persistenceLayer;
 
         guiManagement.appendMenuItem("Home", "/");
         guiManagement.appendMenuItem("Entities Explorer", "/gui/entities");
@@ -406,6 +409,7 @@ public class ChallengerWebGUI {
                     } else {
                         html.append(
                                 "<div style='clear:both'><p><strong>Unknown Challenger ID</strong></p></div>");
+                        html.append(unknownChallengerActions());
                         html.append(outputChallengeDataAsJS(challengers.SINGLE_PLAYER, "{}"));
                         html.append(
                                 multiUserShortHelp(
@@ -416,7 +420,6 @@ public class ChallengerWebGUI {
                                         persistenceLayer.autoSaveAfterCompletedChallenges()));
                         html.append(injectCookieFunctions());
                         html.append(showPreviousGuids());
-                        html.append(inputAChallengeGuidScript());
 
                         // reportOn = new ChallengesPayload(challengeDefinitions,
                         // challengers.DEFAULT_PLAYER_DATA).getAsChallenges();
@@ -485,6 +488,7 @@ public class ChallengerWebGUI {
                                 String.format(
                                         "<p><strong>Unknown Challenger ID %s</strong></p>",
                                         persistenceReason));
+                        html.append(unknownChallengerActions());
                         html.append(showCurrentStatus());
                         html.append("</div>");
                         html.append(
@@ -496,7 +500,6 @@ public class ChallengerWebGUI {
                                         persistenceLayer.autoSaveAfterCompletedChallenges()));
                         html.append(injectCookieFunctions());
                         html.append(showPreviousGuids());
-                        html.append(inputAChallengeGuidScript());
                         html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
                         html.append(
                                 renderChallengeData(
@@ -517,13 +520,12 @@ public class ChallengerWebGUI {
                             html.append("<div class='standoutblock'>");
                             html.append(
                                     String.format(
-                                            "<p><strong>Progress For Challenger ID %s</strong></p>",
-                                            xChallenger));
+                                            "<p><strong>%s</strong></p>",
+                                            activeChallengerProgressHeading(xChallenger)));
                             // keep challenge session alive when refresh
                             challenger.touch();
                             html.append(showCurrentStatus());
                             html.append(showPreviousGuids());
-                            html.append(inputAChallengeGuidScript());
                             html.append("</div>");
                         } else {
                             html.append(storeThingifierDatabaseNameCookie(xChallenger));
@@ -675,6 +677,13 @@ public class ChallengerWebGUI {
         return xChallenger.replaceAll("[^\\-a-zA-Z0-9]", "");
     }
 
+    private String activeChallengerProgressHeading(final String xChallenger) {
+        final String savedStatus = persistenceLayer.savedStatusTextFor(xChallenger);
+        final String storageStatus = savedStatus.isEmpty() ? "" : " - " + savedStatus;
+        return String.format(
+                "Progress For Challenger ID %s - Active%s", xChallenger, storageStatus);
+    }
+
     private String injectCookieFunctions() {
         return "";
     }
@@ -700,8 +709,9 @@ public class ChallengerWebGUI {
                 + "</script>";
     }
 
-    private String inputAChallengeGuidScript() {
-        return "<p><button onclick=inputChallengeGuid()>Input a Challenger GUID to use</button></p>";
+    private String unknownChallengerActions() {
+        return "<p><button onclick=inputChallengeGuid()>Input Challenger GUID</button>"
+                + " <a href='#gettingstarted'>Create Challenger</a></p>";
     }
 
     private String showPreviousGuids() {

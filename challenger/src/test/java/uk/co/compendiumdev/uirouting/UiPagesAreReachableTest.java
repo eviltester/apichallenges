@@ -1101,10 +1101,39 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
+                response.body.contains("Progress For Challenger ID " + challengerId + " - Active"));
+        Assertions.assertTrue(
                 response.body.contains(
                         "setCookie('X-THINGIFIER-DATABASE-NAME','" + challengerId + "',365);"));
         Assertions.assertTrue(
                 response.body.contains("setCookie('X-CHALLENGER','" + challengerId + "',365);"));
+    }
+
+    @Test
+    void unknownChallengeProgressPageIncludesLocalAutoRestoreHooks() {
+
+        final String challengerId = "11111111-2222-4333-8444-555555555555";
+        final HttpMessageSender guiHttp = new HttpMessageSender(Environment.getBaseUri());
+        guiHttp.clearHeaders();
+        guiHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+
+        final HttpResponseDetails response = guiHttp.send("/gui/challenges/" + challengerId, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("Unknown Challenger ID"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<button onclick=inputChallengeGuid()>Input Challenger GUID</button>"));
+        Assertions.assertTrue(
+                response.body.contains("<a href='#gettingstarted'>Create Challenger</a>"));
+        Assertions.assertTrue(
+                response.body.contains("<h2 id='gettingstarted'>Getting Started</h2>"));
+        Assertions.assertTrue(
+                response.body.contains("<script src='/js/challengerui.js'></script>"));
+        Assertions.assertTrue(response.body.contains("<script>showCurrentStatus()</script>"));
+        Assertions.assertTrue(response.body.contains("<script>displayLocalGuids()</script>"));
     }
 
     @Test

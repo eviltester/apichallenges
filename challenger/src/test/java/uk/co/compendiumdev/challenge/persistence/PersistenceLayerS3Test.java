@@ -54,6 +54,17 @@ public class PersistenceLayerS3Test {
     }
 
     @Test
+    void cloudSavedStatusIsBlankBeforeProgressIsSaved() {
+        FakeS3ObjectStore store = new FakeS3ObjectStore();
+        PersistenceLayer layer =
+                new PersistenceLayer(PersistenceLayer.StorageType.CLOUD, cloudEnvironment(), store);
+        ChallengerAuthData challenger = new ChallengerAuthData(Arrays.asList(CHALLENGE.values()));
+
+        Assertions.assertEquals("", layer.savedStatusTextFor(challenger.getXChallenger()));
+        layer.close();
+    }
+
+    @Test
     void cloudPersistenceWritesS3ObjectsAtCompletedChallengeThreshold() {
         FakeS3ObjectStore store = new FakeS3ObjectStore();
         PersistenceLayer layer =
@@ -68,6 +79,7 @@ public class PersistenceLayerS3Test {
         Assertions.assertTrue(store.contains(managedKey(guid, ".data.txt")));
         Assertions.assertTrue(store.contains(managedKey(guid, ".content.txt")));
         Assertions.assertTrue(store.contains(managedKey(guid, ".activity.txt")));
+        Assertions.assertEquals("S3 Saved", layer.savedStatusTextFor(guid));
         layer.close();
     }
 
@@ -128,6 +140,25 @@ public class PersistenceLayerS3Test {
             Assertions.assertTrue(loaded.isSuccess());
             Assertions.assertEquals(guid, loaded.getAuthData().getXChallenger());
             Assertions.assertEquals(databaseContents, loaded.getDatabaseContents());
+        } finally {
+            deleteLocalSessionFiles(guid);
+            layer.close();
+        }
+    }
+
+    @Test
+    void localSavedStatusReflectsLocalProgressFile() {
+        PersistenceLayer layer = new PersistenceLayer(PersistenceLayer.StorageType.LOCAL);
+        ChallengerAuthData challenger = new ChallengerAuthData(Arrays.asList(CHALLENGE.values()));
+        String guid = challenger.getXChallenger();
+
+        try {
+            Assertions.assertEquals("", layer.savedStatusTextFor(guid));
+
+            PersistenceResponse saved = layer.saveChallengerStatus(challenger, "{\"todos\":[]}");
+
+            Assertions.assertTrue(saved.isSuccess());
+            Assertions.assertEquals("Local Saved", layer.savedStatusTextFor(guid));
         } finally {
             deleteLocalSessionFiles(guid);
             layer.close();

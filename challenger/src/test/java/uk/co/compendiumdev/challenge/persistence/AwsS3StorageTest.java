@@ -55,6 +55,18 @@ public class AwsS3StorageTest {
     }
 
     @Test
+    void savedStatusRecognisesLegacyRootLevelChallengerObject() {
+        FakeS3ObjectStore store = new FakeS3ObjectStore();
+        AwsS3Storage storage = storage(store, NOW);
+        ChallengerAuthData challenger = challenger();
+        String guid = challenger.getXChallenger();
+
+        store.seed(guid, new Gson().toJson(challenger), NOW.minusSeconds(60));
+
+        Assertions.assertTrue(storage.hasChallengerStatus(guid));
+    }
+
+    @Test
     void cleanupDeletesOldInactiveSessionObjects() {
         FakeS3ObjectStore store = new FakeS3ObjectStore();
         AwsS3Storage storage = storage(store, NOW);

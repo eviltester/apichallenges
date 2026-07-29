@@ -17,7 +17,7 @@ public class ChallengerFileStorage
         File folder = new File(System.getProperty("User.dir"), "challengersessions");
         folder.mkdirs();
 
-        File file = new File(folder, getFileNameFor(data.getXChallenger()));
+        File file = getStatusFileFor(data.getXChallenger());
 
         if (!file.exists()) {
             logger.warn("Creating new challenger status file: {}", file.getAbsolutePath());
@@ -37,9 +37,17 @@ public class ChallengerFileStorage
         return guid + ".data.txt";
     }
 
-    public PersistenceResponse loadChallengerStatus(final String guid) {
+    public boolean hasChallengerStatus(final String guid) {
+        return getStatusFileFor(guid).exists();
+    }
+
+    private File getStatusFileFor(final String guid) {
         File folder = new File(System.getProperty("User.dir"), "challengersessions");
-        File file = new File(folder, getFileNameFor(guid));
+        return new File(folder, getFileNameFor(guid));
+    }
+
+    public PersistenceResponse loadChallengerStatus(final String guid) {
+        File file = getStatusFileFor(guid);
 
         if (!file.exists()) {
             String message = "Could not find challenger status file: " + file.getAbsolutePath();

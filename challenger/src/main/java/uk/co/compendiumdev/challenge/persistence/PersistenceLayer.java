@@ -208,6 +208,28 @@ public class PersistenceLayer implements AutoCloseable {
         return false;
     }
 
+    public String savedStatusTextFor(final String guid) {
+        if (guid == null || guid.trim().isEmpty()) {
+            return "";
+        }
+
+        String trimmedGuid = guid.trim();
+
+        if (storeOn == StorageType.LOCAL
+                && file instanceof ChallengerFileStorage
+                && ((ChallengerFileStorage) file).hasChallengerStatus(trimmedGuid)) {
+            return "Local Saved";
+        }
+
+        if (storeOn == StorageType.CLOUD
+                && awsS3Storage != null
+                && awsS3Storage.hasChallengerStatus(trimmedGuid)) {
+            return "S3 Saved";
+        }
+
+        return "";
+    }
+
     public int autoSaveAfterCompletedChallenges() {
         if (storeOn == StorageType.CLOUD && allowSaveToS3 && s3Config != null) {
             return s3Config.saveAfterCompletedChallenges();
