@@ -39,18 +39,14 @@
             <artifactId>gson</artifactId>
             <version>${gson-version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
-        <!-- experimental cloud storage of challenger sessions -->
-        <!-- todo: split into two apps, one aws enabled, one with local persistance only -->
-        <!-- 180 meg!
-        -->
-        <!--
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.261</version>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
         </dependency>
-        -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>url-connection-client</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.github.classgraph</groupId>

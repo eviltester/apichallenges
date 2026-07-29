@@ -115,6 +115,16 @@ public class ChallengerAuthData {
         }
     }
 
+    public int completedChallengeCount() {
+        int completed = 0;
+        for (Boolean status : challengeStatus.values()) {
+            if (Boolean.TRUE.equals(status)) {
+                completed++;
+            }
+        }
+        return completed;
+    }
+
     public void setXChallengerGUID(final String guid) {
         this.xChallenger = guid;
     }

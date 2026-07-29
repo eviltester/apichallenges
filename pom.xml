@@ -26,6 +26,7 @@
         <maven-pmd-plugin.version>3.28.0</maven-pmd-plugin.version>
         <spotless.version>3.8.0</spotless.version>
         <google-java-format.version>1.35.0</google-java-format.version>
+        <aws.sdk.version>2.49.5</aws.sdk.version>
     </properties>
 
     <modules>
@@ -33,6 +34,18 @@
         <module>challengerAuto</module>
         <module>robodepot</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

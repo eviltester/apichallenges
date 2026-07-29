@@ -79,6 +79,7 @@ public class ChallengeRouteHandler {
                 new Challengers(
                         thingifier.getERmodel(), challengeDefinitions.getDefinedChallenges());
         challengers.setPersistenceLayer(persistenceLayer);
+        persistenceLayer.startCloudCleanup(challengers::getChallengerGuids);
         if (!single_player_mode) {
             challengers.setMultiPlayerMode();
         }
@@ -173,6 +174,7 @@ public class ChallengeRouteHandler {
         if (simulationRoutes != null) {
             simulationRoutes.close();
         }
+        persistenceLayer.close();
         thingifier.close();
     }
 
