@@ -115,6 +115,126 @@ public class ChallengerApiResponseHookTest {
         }
     }
 
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void sortedAscendingTodosChallengeCompletesForSingleTodoField(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_sortBy", "title")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_ASCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_DESCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void sortedDescendingTodosChallengeCompletesForSingleTodoField(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_sortBy", "-id")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_ASCENDING));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_DESCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void sortedMultipleFieldsTodosChallengeCompletesForCommaSeparatedTodoFields(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_sortBy", "+doneStatus,-id")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_ASCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_DESCENDING));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredAndSortedTodosChallengeCompletesForFilterAndSort(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("doneStatus", "false", "_sortBy", "-id")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_AND_SORTED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredAndSortedTodosChallengeRequiresFilterAndSort(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_sortBy", "-id")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_AND_SORTED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void sortedTodosChallengesDoNotCompleteForUnknownFields(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_sortBy", "missing")),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_ASCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_DESCENDING));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_AND_SORTED));
+        }
+    }
+
     @ParameterizedTest(name = "{0} {1}")
     @MethodSource("patchChallengeContentTypes")
     public void patchTodoChallengeCompletesForMatchingContentType(

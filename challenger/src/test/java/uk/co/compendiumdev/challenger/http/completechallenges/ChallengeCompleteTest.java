@@ -928,6 +928,56 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
+    public void canSortTodosAscendingPass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos?_sortBy=title", "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_ASCENDING));
+    }
+
+    @Test
+    public void canSortTodosDescendingPass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos?_sortBy=-id", "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_DESCENDING));
+    }
+
+    @Test
+    public void canSortTodosMultipleFieldsPass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos?_sortBy=doneStatus,-id", "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS));
+    }
+
+    @Test
+    public void canFilterAndSortTodosPass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos?doneStatus=false&_sortBy=-id", "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_AND_SORTED));
+    }
+
+    @Test
     public void canQueryFilterTodoPass() {
 
         Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());

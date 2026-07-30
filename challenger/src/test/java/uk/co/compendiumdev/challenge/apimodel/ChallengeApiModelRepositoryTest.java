@@ -89,7 +89,7 @@ public class ChallengeApiModelRepositoryTest {
             Assertions.assertEquals(9, idRangeTodos.getReturnedInstanceCollection().size());
 
             QueryFilterParams sortByDescendingId = new QueryFilterParams();
-            sortByDescendingId.put("sortBy", "-id");
+            sortByDescendingId.put("_sortBy", "-id");
             ApiResponse sortedTodos =
                     thingifier.api().get("/todos", sortByDescendingId, new HttpHeadersBlock());
             Assertions.assertEquals(200, sortedTodos.getStatusCode());

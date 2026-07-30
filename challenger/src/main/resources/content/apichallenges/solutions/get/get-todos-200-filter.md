@@ -5,7 +5,7 @@ title: API Challenges Solution For - GET todos 200 filter
 seo_title: Solution: GET todos 200 filter | API Challenges
 description: How to solve API challenge GET todos 200 filter to use URL parameters to filter the results.
 seo_description: Use this walkthrough to solve GET todos 200 filter with request setup, key headers, and expected status codes so you can complete the challenge confidently.
-next_challenge: /apichallenges/solutions/head/head-todos-200
+next_challenge: /apichallenges/solutions/get/get-todos-200-sort-ascending
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add the required query parameters and confirm the filtered todo results||Send the request and verify the response status is 200
 showads: true
 ---
@@ -105,4 +105,3 @@ Returned body:
 {{<youtube-embed key="G-sLuhyPMuw" title="Solution to Get todos with query filter challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/46603286)
-
