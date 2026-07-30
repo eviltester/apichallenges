@@ -76,7 +76,6 @@ public class ChallengeDefinitions {
         storeChallengeAs(
                 CHALLENGE.GET_TODO_404, GetChallenges.getTodo404(challengeOrder++), getChallenges);
 
-
         ChallengeSection getFilterChallenges =
                 new ChallengeSection(
                         "GET Filter Challenges",
@@ -87,8 +86,6 @@ public class ChallengeDefinitions {
                 CHALLENGE.GET_TODOS_FILTERED,
                 GetChallenges.getTodosFiltered200(challengeOrder++),
                 getFilterChallenges);
-
-
 
         ChallengeSection getSortedChallenges =
                 new ChallengeSection(
