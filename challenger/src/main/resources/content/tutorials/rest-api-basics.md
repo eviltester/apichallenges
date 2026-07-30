@@ -189,7 +189,7 @@ Expect 'discussions' and 'debates' on a team.
 - [PATCH](https://tools.ietf.org/html/rfc5789) - An 'Update' method which provides a set of changes
 - Contentious [see](http://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/)
 - Proposed standard for [JSON Merge Patch format](https://tools.ietf.org/html/rfc7396)
-- Promosed standard for [XML Patch Using XPath](https://tools.ietf.org/html/rfc5261)
+- Proposed standard for [XML Patch Using XPath](https://tools.ietf.org/html/rfc5261)
 
 Most web services just use `POST` or `PUT`
 
