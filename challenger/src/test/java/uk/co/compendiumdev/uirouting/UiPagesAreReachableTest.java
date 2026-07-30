@@ -436,8 +436,7 @@ public class UiPagesAreReachableTest {
     void generatedApiDocsDocumentPatchInstanceRoutesAsSupported() {
 
         assertPatchRouteDocumentedAsSupported("/docs", "/todos/:id", "todo");
-        assertPatchRouteDocumentedAsSupported(
-                "/simpleapi/docs", "/simpleapi/items/:id", "item");
+        assertPatchRouteDocumentedAsSupported("/simpleapi/docs", "/simpleapi/items/:id", "item");
     }
 
     @Test
@@ -486,7 +485,8 @@ public class UiPagesAreReachableTest {
                         .get("description")
                         .getAsString()
                         .startsWith(expectedDocumentationPrefix));
-        Assertions.assertNotEquals("method not allowed", patchOperation.get("summary").getAsString());
+        Assertions.assertNotEquals(
+                "method not allowed", patchOperation.get("summary").getAsString());
         Assertions.assertNotEquals(
                 "method not allowed", patchOperation.get("description").getAsString());
         final JsonObject content =
@@ -508,8 +508,7 @@ public class UiPagesAreReachableTest {
                         + " with a body containing the patch details";
 
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(
-                response.body.contains("<strong>PATCH " + routePath + "</strong>"));
+        Assertions.assertTrue(response.body.contains("<strong>PATCH " + routePath + "</strong>"));
         Assertions.assertTrue(response.body.contains(expectedDocumentation));
         Assertions.assertFalse(
                 response.body.contains(
