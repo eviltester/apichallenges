@@ -951,6 +951,84 @@ public abstract class ChallengeCompleteTest {
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
     }
 
+    @Test
+    public void canPatchTodosPartial200AmendPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+        final EntityInstance todo = createTodo(todos, "patch partial fixture");
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/" + todo.getFieldValue("id").asString(),
+                        "PATCH",
+                        headers,
+                        "{\"title\":\"patched partial\"}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PATCH_TODOS_PARTIAL_200));
+    }
+
+    @Test
+    public void canPatchTodosMergePatch200AmendPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+        final EntityInstance todo = createTodo(todos, "patch merge fixture");
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Content-Type", "application/merge-patch+json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/" + todo.getFieldValue("id").asString(),
+                        "PATCH",
+                        headers,
+                        "{\"description\":\"patched merge\"}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PATCH_TODOS_MERGE_PATCH_200));
+    }
+
+    @Test
+    public void canPatchTodosJsonPatch200AmendPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+        final EntityInstance todo = createTodo(todos, "patch json fixture");
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Content-Type", "application/json-patch+json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/" + todo.getFieldValue("id").asString(),
+                        "PATCH",
+                        headers,
+                        "[{\"op\":\"replace\",\"path\":\"/title\",\"value\":\"patched json\"}]");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PATCH_TODOS_JSON_PATCH_200));
+    }
+
     /** Heartbeat */
     @Test
     public void can405DeleteHeartbeatPass() {

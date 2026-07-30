@@ -4,6 +4,7 @@ seo_title: Solution: QUERY todos 200 Body Filter | API Challenges
 description: How to solve API challenge QUERY todos 200 using form-encoded query content in the request body.
 lastmod: 2026-07-26
 seo_description: Use this walkthrough to solve QUERY todos 200 with request setup, headers, body content, and expected status code.
+next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-partial
 schema_howto_steps: Create a QUERY request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/x-www-form-urlencoded||Send doneStatus=true in the request body and verify the response status is 200
 showads: true
 ---

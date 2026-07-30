@@ -283,6 +283,21 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             challengers.pass(challenger, CHALLENGE.POST_UPDATE_TODO);
         }
 
+        if (request.getVerb() == HttpApiRequest.VERB.PATCH
+                && request.getPath().matches("todos/.*")
+                && response.getStatusCode() == 200) {
+            String patchContentType = contentTypeParser.mediaType();
+            if (patchContentType.contentEquals("application/json")) {
+                challengers.pass(challenger, CHALLENGE.PATCH_TODOS_PARTIAL_200);
+            }
+            if (patchContentType.contentEquals("application/merge-patch+json")) {
+                challengers.pass(challenger, CHALLENGE.PATCH_TODOS_MERGE_PATCH_200);
+            }
+            if (patchContentType.contentEquals("application/json-patch+json")) {
+                challengers.pass(challenger, CHALLENGE.PATCH_TODOS_JSON_PATCH_200);
+            }
+        }
+
         // DELETE
         if (request.getVerb() == HttpApiRequest.VERB.DELETE
                 && request.getPath().matches("todos/.*")

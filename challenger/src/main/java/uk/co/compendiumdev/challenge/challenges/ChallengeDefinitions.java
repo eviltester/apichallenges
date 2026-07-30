@@ -452,8 +452,27 @@ public class ChallengeDefinitions {
 
         storeChallengeAs(
                 CHALLENGE.QUERY_TODOS_FILTERED,
-                QueryChallenges.queryTodosFiltered200(challengeOrder),
+                QueryChallenges.queryTodosFiltered200(challengeOrder++),
                 queryChallenges);
+
+        ChallengeSection patchChallenges =
+                new ChallengeSection(
+                        "PATCH Challenges",
+                        "A PATCH request can be used to amend part of an existing entity. These challenges cover partial JSON updates, JSON Merge Patch, and JSON Patch.");
+        sections.add(patchChallenges);
+
+        storeChallengeAs(
+                CHALLENGE.PATCH_TODOS_PARTIAL_200,
+                PatchChallenges.patchTodosPartial200(challengeOrder++),
+                patchChallenges);
+        storeChallengeAs(
+                CHALLENGE.PATCH_TODOS_MERGE_PATCH_200,
+                PatchChallenges.patchTodosMergePatch200(challengeOrder++),
+                patchChallenges);
+        storeChallengeAs(
+                CHALLENGE.PATCH_TODOS_JSON_PATCH_200,
+                PatchChallenges.patchTodosJsonPatch200(challengeOrder),
+                patchChallenges);
 
         Set challengeNames = new HashSet();
         for (ChallengeDefinitionData challenge : orderedChallenges) {

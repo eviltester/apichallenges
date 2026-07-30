@@ -199,7 +199,7 @@ public class MarkdownContentManager {
                         && !readingLeadFigureBeforeToc) {
                     String trimmedLine = line.trim();
                     if (!trimmedLine.isEmpty() && !trimmedLine.startsWith("<figure")) {
-                        mdcontent.append("\n<div id='toc'></div>\n");
+                        mdcontent.append("\n<div id='toc'></div>\n\n");
                         addedToc = true;
                         tocPendingAfterFirstHeading = false;
                     }
@@ -229,7 +229,7 @@ public class MarkdownContentManager {
                             readingLeadFigureBeforeToc = false;
                             tocPendingAfterFirstHeading = false;
                             addedToc = true;
-                            mdcontent.append("\n<div id='toc'></div>\n");
+                            mdcontent.append("\n<div id='toc'></div>\n\n");
                         }
                     }
                 }

@@ -458,6 +458,7 @@ class ShoppingCartApiTest {
         Assertions.assertTrue(openApi.body.contains("\"name\" : \"id\""));
         Assertions.assertTrue(openApi.body.contains("\"name\" : \"relatedId\""));
         Assertions.assertTrue(openApi.body.contains("\"productId\""));
+        Assertions.assertFalse(openApi.body.contains("\"patch\""));
         assertAddedCartItemViewSchemas(openApi.body);
         final HttpResponseDetails home = http.send("/", "GET");
         Assertions.assertTrue(home.body.contains("href=\"/practice-modes/shoppingcart\""));
@@ -556,6 +557,19 @@ class ShoppingCartApiTest {
                                         "Accept",
                                         "application/json"),
                                 "{\"id\":1}")
+                        .statusCode);
+
+        Assertions.assertEquals(
+                405,
+                http.send(
+                                "/shop/products/" + product.id,
+                                "PATCH",
+                                java.util.Map.of(
+                                        "Content-Type",
+                                        "application/json",
+                                        "Accept",
+                                        "application/json"),
+                                "{\"stock\":1}")
                         .statusCode);
     }
 

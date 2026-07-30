@@ -2,7 +2,7 @@
 title: HTTP Verbs - Tutorial
 seo_title: Tutorial: HTTP Verbs Tutorial | API Challenges
 description: Basic HTTP Verbs and Methods tutorial what they do and how to use them.
-lastmod: 2026-02-18
+lastmod: 2026-07-30
 seo_description: Learn HTTP Verbs with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -13,7 +13,7 @@ showads: true
 
 ## HTTP GET Verb
 
-- [GET](https://tools.ietf.org/html/rfc7231#section-4.3.1)  - retrieve data
+- [GET](https://www.rfc-editor.org/rfc/rfc9110.html#name-get) - retrieve data
 - GET verbs can be issued by a browser
     - click on link
     - visit a site
@@ -54,9 +54,83 @@ accept: application/xml
 
 ---
 
+## HTTP HEAD Verb
+
+- [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#name-head) - request the same headers as GET without a response body
+- HEAD is useful for checking whether a resource exists, checking caching headers, or validating metadata without transferring the representation
+- A HEAD response should not include a body
+
+---
+
+### HTTP HEAD Verb Example
+
+~~~~~~~~
+curl -I {{<ORIGIN_URL>}}/todos
+~~~~~~~~
+
+~~~~~~~~
+HEAD {{<ORIGIN_URL>}}/todos HTTP/1.1
+User-Agent: curl/8.0.0
+Host: localhost:4567
+Accept: */*
+~~~~~~~~
+
+---
+
+### Common HTTP Status codes in response to a HEAD
+
+- **200** - OK, the resource exists
+- **204** - OK, no content
+- **404** - resource not found
+- **405** - method not allowed for this endpoint
+
+
+---
+
+## HTTP QUERY Verb
+
+- [QUERY](https://www.rfc-editor.org/rfc/rfc10008.html) - safely retrieve data using query content in the request body
+- QUERY is intended for safe, read-only requests where the query content is too large, complex, or structured for a URI query string
+- A server can advertise supported QUERY request content types with `Accept-Query`
+- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded`
+
+---
+
+### HTTP QUERY Verb Example
+
+~~~~~~~~
+curl -X QUERY {{<ORIGIN_URL>}}/todos ^
+-H "Content-Type: application/x-www-form-urlencoded" ^
+-H "Accept: application/json" ^
+-d "doneStatus=true"
+~~~~~~~~
+
+~~~~~~~~
+QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
+User-Agent: curl/8.0.0
+Host: localhost:4567
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+Content-Length: 15
+
+doneStatus=true
+~~~~~~~~
+
+---
+
+### Common HTTP Status codes in response to a QUERY
+
+- **200** - OK, returned the matching representation
+- **400** - invalid query content
+- **405** - method not allowed for this endpoint
+- **415** - unsupported query content type
+
+
+---
+
 ## HTTP POST Verb
 
-- [POST](https://tools.ietf.org/html/rfc7231#section-4.3.3)  amend/create from partial information
+- [POST](https://www.rfc-editor.org/rfc/rfc9110.html#name-post) - amend/create from partial information
 
 - send a 'body' format of content in the 'content-type' header
 - usually used to create or amend data
@@ -133,7 +207,7 @@ Content-Length: 171
 
 ## HTTP PUT Verb
 
-- [PUT](https://tools.ietf.org/html/rfc7231#section-4.3.4) - create or replace from full information
+- [PUT](https://www.rfc-editor.org/rfc/rfc9110.html#name-put) - create or replace from full information
 
 Full information means it should be idempotent - send it again and get exactly the same request
 
@@ -195,9 +269,93 @@ Content-Length: 0
 
 ---
 
+## HTTP PATCH Verb
+
+- [PATCH](https://www.rfc-editor.org/rfc/rfc5789) - apply a set of changes to an existing resource
+- PATCH is often used when a client wants to update selected fields without replacing the whole resource
+- Servers can advertise supported PATCH request content types with `Accept-Patch`
+- Common JSON PATCH styles:
+    - [JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396) with `Content-Type: application/merge-patch+json`
+    - [JSON Patch](https://www.rfc-editor.org/rfc/rfc6902) with `Content-Type: application/json-patch+json`
+- Some APIs also support partial JSON object updates with `Content-Type: application/json`
+
+---
+
+### HTTP PATCH Send Example
+
+~~~~~~~~
+curl -X PATCH {{<ORIGIN_URL>}}/todos/3 ^
+-H "Content-Type: application/json" ^
+-H "Accept: application/json" ^
+-d "{\"title\":\"patched title\"}"
+~~~~~~~~
+
+---
+
+### HTTP PATCH Partial JSON Example
+
+~~~~~~~~
+PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+User-Agent: rest-client
+Host: localhost:4567
+Content-Type: application/json
+Accept: application/json
+
+{"title":"patched title"}
+~~~~~~~~
+
+---
+
+### HTTP PATCH JSON Merge Patch Example
+
+~~~~~~~~
+PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+User-Agent: rest-client
+Host: localhost:4567
+Content-Type: application/merge-patch+json
+Accept: application/json
+
+{"description":"patched description"}
+~~~~~~~~
+
+The merge-patch may look similar to the `application/json` patch. But the main difference is the standard handling.
+
+An API can use whatever conventions it wants to handle an `application/json` patch. APIs might choose to ignore a field you try to set as `null` or they might throw an error. It is their choice.
+
+But in a `merge-patch+json` standard, a `null` is a delete, so if you try to delete a field value then it must be `nullable` and if not you'll see an error. So it is important when you test an application that supports `merge-patch+json` that you double check the processing against the standard. [JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396)
+
+---
+
+### HTTP PATCH JSON Patch Example
+
+~~~~~~~~
+PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+User-Agent: rest-client
+Host: localhost:4567
+Content-Type: application/json-patch+json
+Accept: application/json
+
+[{"op":"replace","path":"/title","value":"patched title"}]
+~~~~~~~~
+
+---
+
+### Common HTTP Status codes in response to a PATCH
+
+- **200** - OK, resource was updated and a representation was returned
+- **204** - OK, resource was updated and no body was returned
+- **404** - target resource was not found
+- **405** - method not allowed for this endpoint
+- **409** - conflict applying the patch
+- **415** - unsupported patch document content type
+- **422** - patch content was understood but could not be applied
+
+
+---
+
 ## HTTP DELETE Verb
 
-- [DELETE](https://tools.ietf.org/html/rfc7231#section-4.3.5) - delete items
+- [DELETE](https://www.rfc-editor.org/rfc/rfc9110.html#name-delete) - delete items
 
 Demo
 
@@ -253,7 +411,7 @@ Server: Jetty(9.4.4.v20170414)
 
 ## HTTP OPTIONS Verb
 
-- [OPTIONS](https://tools.ietf.org/html/rfc7231#section-4.3.7) - shows the verbs available on this url
+- [OPTIONS](https://www.rfc-editor.org/rfc/rfc9110.html#name-options) - shows the verbs available on this url
 - returns an `Allow` header describing the allowed HTTP Verbs
 
 ---
@@ -298,7 +456,4 @@ Content-Length: 0
 
 - **200** - OK, did whatever I was supposed to
 - **404** - I can't post to that url it is not found
-
-
-
 

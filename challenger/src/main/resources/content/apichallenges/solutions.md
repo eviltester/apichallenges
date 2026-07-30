@@ -2,7 +2,7 @@
 title: API Challenges Solution Index
 seo_title: Solution Index and Walkthroughs | API Challenges
 description: A list of all the solutions for the API Challenges. Try them yourself, but if you get stuck, we have instructions and solution videos.
-lastmod: 2026-07-26
+lastmod: 2026-07-30
 seo_description: Explore API Challenges Solution with practical guidance and actionable next steps designed to improve API testing skills through hands-on practice.
 showads: true
 ---
@@ -11,7 +11,7 @@ showads: true
 
 Use this API challenge walkthrough index to find step-by-step REST API challenge solutions for every major topic in the API Challenges app. Each page focuses on a single outcome and shows the exact request method, endpoint, headers, payload constraints, and expected status code. If you are learning API testing, this gives you a practical way to understand why requests pass, why they fail, and how to debug quickly.
 
-Treat this page as your API testing roadmap. Start with session setup and challenge tracking, then progress through GET, POST, PUT, DELETE, HEAD, and OPTIONS behavior. Continue into content negotiation (`Accept` and `Content-Type`), then move into authentication, authorization, method override scenarios, and status-code edge cases. Following this order builds durable test design skills and helps you avoid random trial-and-error testing.
+Treat this page as your API testing roadmap. Start with session setup and challenge tracking, then progress through GET, POST, PUT, DELETE, HEAD, OPTIONS, QUERY, and PATCH behavior. Continue into content negotiation (`Accept` and `Content-Type`), then move into authentication, authorization, method override scenarios, and status-code edge cases. Following this order builds durable test design skills and helps you avoid random trial-and-error testing.
 
 These API test walkthroughs are designed for real hands-on execution in tools like Postman, Insomnia, Bruno, or cURL. Send the request yourself first, compare the response to the expected result, then use the solution details to close gaps in your approach.
 
@@ -142,3 +142,9 @@ If your goal is API automation, each solution also provides clear assertion targ
 ## QUERY Challenges
 
 - [QUERY /todos (200)](/apichallenges/solutions/query/query-todos-200)
+
+## PATCH Challenges
+
+- [PATCH /todos/{id} (200) partial](/apichallenges/solutions/patch/patch-todos-id-200-partial)
+- [PATCH /todos/{id} (200) merge-patch](/apichallenges/solutions/patch/patch-todos-id-200-merge-patch)
+- [PATCH /todos/{id} (200) json-patch](/apichallenges/solutions/patch/patch-todos-id-200-json-patch)

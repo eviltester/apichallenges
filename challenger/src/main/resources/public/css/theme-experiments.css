@@ -1298,6 +1298,12 @@ html[data-theme] .sim-live-response-panel {
     font-family: var(--mono-font);
 }
 
+html[data-theme="dark-lab"] .sim-live-status {
+    background: var(--surface-soft);
+    border-left-color: var(--accent);
+    color: var(--text);
+}
+
 html[data-theme] .theme-switcher {
     align-items: center;
     background: var(--surface);

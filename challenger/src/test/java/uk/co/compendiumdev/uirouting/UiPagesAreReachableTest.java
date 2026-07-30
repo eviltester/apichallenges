@@ -1,5 +1,7 @@
 package uk.co.compendiumdev.uirouting;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -431,6 +433,92 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void generatedApiDocsDocumentPatchInstanceRoutesAsSupported() {
+
+        assertPatchRouteDocumentedAsSupported("/docs", "/todos/:id", "todo");
+        assertPatchRouteDocumentedAsSupported(
+                "/simpleapi/docs", "/simpleapi/items/:id", "item");
+    }
+
+    @Test
+    void generatedOpenApiDocumentsPatchForEntityInstanceRoutesOnly() {
+
+        HttpResponseDetails response = http.send("/docs/openapi.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+
+        JsonObject todoCollection = openApiPath(response.body, "/todos");
+        JsonObject todoInstance = openApiPath(response.body, "/todos/{id}");
+        Assertions.assertFalse(todoCollection.has("patch"));
+        Assertions.assertTrue(todoInstance.has("patch"));
+        assertPatchRequestBodiesAndAcceptPatch(todoInstance);
+        Assertions.assertFalse(todoCollection.toString().contains("Accept-Patch"));
+
+        response = http.send("/simpleapi/docs/openapi.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+
+        JsonObject itemCollection = openApiPath(response.body, "/simpleapi/items");
+        JsonObject itemInstance = openApiPath(response.body, "/simpleapi/items/{id}");
+        Assertions.assertFalse(itemCollection.has("patch"));
+        Assertions.assertTrue(itemInstance.has("patch"));
+        assertPatchRequestBodiesAndAcceptPatch(itemInstance);
+        Assertions.assertFalse(itemCollection.toString().contains("Accept-Patch"));
+    }
+
+    private JsonObject openApiPath(final String body, final String path) {
+        final JsonObject paths =
+                JsonParser.parseString(body).getAsJsonObject().getAsJsonObject("paths");
+        Assertions.assertTrue(paths.has(path), "Expected OpenAPI path " + path);
+        return paths.getAsJsonObject(path);
+    }
+
+    private void assertPatchRequestBodiesAndAcceptPatch(final JsonObject instancePath) {
+        final JsonObject patchOperation = instancePath.getAsJsonObject("patch");
+        final String expectedDocumentationPrefix = "patch a specific instance of ";
+        Assertions.assertTrue(patchOperation.has("summary"));
+        Assertions.assertTrue(patchOperation.has("description"));
+        Assertions.assertTrue(
+                patchOperation
+                        .get("summary")
+                        .getAsString()
+                        .startsWith(expectedDocumentationPrefix));
+        Assertions.assertTrue(
+                patchOperation
+                        .get("description")
+                        .getAsString()
+                        .startsWith(expectedDocumentationPrefix));
+        Assertions.assertNotEquals("method not allowed", patchOperation.get("summary").getAsString());
+        Assertions.assertNotEquals(
+                "method not allowed", patchOperation.get("description").getAsString());
+        final JsonObject content =
+                patchOperation.getAsJsonObject("requestBody").getAsJsonObject("content");
+
+        Assertions.assertTrue(content.has("application/json"));
+        Assertions.assertTrue(content.has("application/merge-patch+json"));
+        Assertions.assertTrue(content.has("application/json-patch+json"));
+        Assertions.assertTrue(instancePath.toString().contains("Accept-Patch"));
+    }
+
+    private void assertPatchRouteDocumentedAsSupported(
+            final String docsPath, final String routePath, final String entityName) {
+
+        final HttpResponseDetails response = http.send(docsPath, "get");
+        final String expectedDocumentation =
+                "patch a specific instance of "
+                        + entityName
+                        + " with a body containing the patch details";
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains("<strong>PATCH " + routePath + "</strong>"));
+        Assertions.assertTrue(response.body.contains(expectedDocumentation));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<strong>PATCH "
+                                + routePath
+                                + "</strong><ul><li class='normal'>method not allowed</li></ul>"));
+    }
+
+    @Test
     void simulationModePageUsesLocalOriginByDefault() {
 
         final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
@@ -753,6 +841,15 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details .sim-live-title"));
+
+        response = http.send("/css/theme-experiments.css", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
+        Assertions.assertTrue(
+                response.body.contains("html[data-theme=\"dark-lab\"] .sim-live-status"));
+        Assertions.assertTrue(response.body.contains("border-left-color: var(--accent)"));
+        Assertions.assertTrue(response.body.contains("color: var(--text)"));
 
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1181,6 +1278,24 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<aside class='next-challenge-cta'"));
         Assertions.assertTrue(response.body.contains("class='next-challenge-cta-link'"));
         Assertions.assertTrue(response.body.contains("Try the next challenge walkthrough"));
+    }
+
+    @Test
+    void generatedTocDoesNotPreventFollowingParagraphMarkdownRendering() {
+
+        final HttpResponseDetails response =
+                http.send("/apichallenges/solutions/patch/patch-todos-id-200-merge-patch", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<p>Use <code>PATCH</code> with <code>Content-Type:"
+                                + " application/merge-patch+json</code>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<a href=\"https://www.rfc-editor.org/rfc/rfc7396\">JSON Merge"
+                                + " Patch</a> document.</p>"));
+        Assertions.assertFalse(response.body.contains("[JSON Merge Patch](https://"));
     }
 
     @Test

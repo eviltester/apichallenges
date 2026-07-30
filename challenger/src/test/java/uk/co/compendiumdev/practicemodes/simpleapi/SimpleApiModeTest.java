@@ -41,8 +41,7 @@ public class SimpleApiModeTest {
         args.add(Arguments.of(200, "get", "/simpleapi/items"));
         args.add(Arguments.of(200, "head", "/simpleapi/items"));
         args.add(Arguments.of(204, "options", "/simpleapi/items"));
-        // deliberate 'bug' of 501 instead of 405
-        args.add(Arguments.of(501, "patch", "/simpleapi/items"));
+        args.add(Arguments.of(405, "patch", "/simpleapi/items"));
         args.add(Arguments.of(501, "trace", "/simpleapi/items"));
         args.add(Arguments.of(405, "delete", "/simpleapi/items"));
         args.add(Arguments.of(405, "put", "/simpleapi/items"));
@@ -363,6 +362,72 @@ public class SimpleApiModeTest {
     }
 
     @Test
+    public void canPatchItemUsingPartialJson() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id, "PATCH", headers, "{\"price\":9.99}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Item patched = new Gson().fromJson(response.body, Item.class);
+        Assertions.assertEquals(9.99f, patched.price);
+        Assertions.assertEquals(createdItem.type, patched.type);
+        Assertions.assertEquals(createdItem.isbn13, patched.isbn13);
+    }
+
+    @Test
+    public void canPatchItemUsingJsonMergePatch() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/merge-patch+json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PATCH",
+                        headers,
+                        "{\"numberinstock\":7}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Item patched = new Gson().fromJson(response.body, Item.class);
+        Assertions.assertEquals(7, patched.numberinstock);
+        Assertions.assertEquals(createdItem.price, patched.price);
+        Assertions.assertEquals(createdItem.isbn13, patched.isbn13);
+    }
+
+    @Test
+    public void canPatchItemUsingJsonPatch() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json-patch+json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PATCH",
+                        headers,
+                        "[{\"op\":\"replace\",\"path\":\"/numberinstock\",\"value\":11}]");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Item patched = new Gson().fromJson(response.body, Item.class);
+        Assertions.assertEquals(11, patched.numberinstock);
+        Assertions.assertEquals(createdItem.price, patched.price);
+        Assertions.assertEquals(createdItem.isbn13, patched.isbn13);
+    }
+
+    @Test
     public void canCreateAnItemAndThenDeleteIt() {
 
         Item itemToCreate = new Item();
@@ -500,5 +565,14 @@ public class SimpleApiModeTest {
         Assertions.assertEquals(4, item.numberinstock);
         Assertions.assertEquals(isbn, item.isbn13);
         Assertions.assertEquals("book", item.type);
+    }
+
+    private Item createPatchTarget() {
+        Item itemToCreate = new Item();
+        itemToCreate.isbn13 = Item.randomIsbn(new Random());
+        itemToCreate.price = 1.23f;
+        itemToCreate.numberinstock = 3;
+        itemToCreate.type = "book";
+        return api.apiCreateItem(itemToCreate);
     }
 }

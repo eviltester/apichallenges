@@ -79,11 +79,11 @@ Server: Jetty(9.4.4.v20170414)
 
 ## Basic HTTP Verbs
 
-- [GET](https://tools.ietf.org/html/rfc7231#section-4.3.1)  - retrieve data
-- [POST](https://tools.ietf.org/html/rfc7231#section-4.3.3)  amend/create from partial information
-- [PUT](https://tools.ietf.org/html/rfc7231#section-4.3.4) - create or replace from full information
-- [DELETE](https://tools.ietf.org/html/rfc7231#section-4.3.5) - delete items
-- [OPTIONS](https://tools.ietf.org/html/rfc7231#section-4.3.7) - verbs available on this url
+- [GET](https://www.rfc-editor.org/rfc/rfc9110.html#name-get)  - retrieve data
+- [POST](https://www.rfc-editor.org/rfc/rfc9110.html#name-post)  amend/create from partial information
+- [PUT](https://www.rfc-editor.org/rfc/rfc9110.html#name-put) - create or replace from full information
+- [DELETE](https://www.rfc-editor.org/rfc/rfc9110.html#name-delete) - delete items
+- [OPTIONS](https://www.rfc-editor.org/rfc/rfc9110.html#name-options) - verbs available on this url
 
 ---
 
@@ -91,7 +91,7 @@ Server: Jetty(9.4.4.v20170414)
 
 
 - [W3c Standard](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
-- [IETF standard](https://tools.ietf.org/html/rfc7231)
+- [HTTP Semantics standard](https://www.rfc-editor.org/rfc/rfc9110)
 - [httpstatuses.com](https://httpstatuses.com)
 - http://www.restapitutorial.com/lessons/httpmethods.html
 
@@ -277,7 +277,7 @@ https://en.wikipedia.org/wiki/Query_string
 
 ## HTTP Standards?
 
-- rfc7231 [(HTTP/1.1): Semantics and Content](https://tools.ietf.org/html/rfc7231)
+- rfc9110 [HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110)
 - rfc7230 [(HTTP/1.1): Message Syntax and Routing](https://tools.ietf.org/html/rfc7230)
 
 ---

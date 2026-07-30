@@ -3,6 +3,9 @@ package uk.co.compendiumdev.challenger.payloads;
 public class ChallengeStatus {
     public Boolean POST_TODOS_TOO_LONG_DESCRIPTION_LENGTH;
     public Boolean PUT_TODOS_PARTIAL_200;
+    public Boolean PATCH_TODOS_PARTIAL_200;
+    public Boolean PATCH_TODOS_MERGE_PATCH_200;
+    public Boolean PATCH_TODOS_JSON_PATCH_200;
     public Boolean GET_CHALLENGES;
     public Boolean POST_UPDATE_TODO;
     public Boolean OPTIONS_TODOS;

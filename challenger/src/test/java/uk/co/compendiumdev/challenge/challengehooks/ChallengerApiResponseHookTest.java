@@ -2,6 +2,7 @@ package uk.co.compendiumdev.challenge.challengehooks;
 
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.DELETE;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.GET;
+import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.PATCH;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.POST;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.QUERY;
 
@@ -112,6 +113,38 @@ public class ChallengerApiResponseHookTest {
             Assertions.assertFalse(
                     fixture.challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
         }
+    }
+
+    @ParameterizedTest(name = "{0} {1}")
+    @MethodSource("patchChallengeContentTypes")
+    public void patchTodoChallengeCompletesForMatchingContentType(
+            final String contentType, final CHALLENGE expectedChallenge) {
+
+        try (HookFixture fixture = new HookFixture(new InMemoryThingStoreProvider())) {
+            fixture.hook.run(
+                    fixture.request("todos/1", PATCH).addHeader("Content-Type", contentType),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(fixture.challenger.statusOfChallenge(expectedChallenge));
+            for (CHALLENGE challenge :
+                    new CHALLENGE[] {
+                        CHALLENGE.PATCH_TODOS_PARTIAL_200,
+                        CHALLENGE.PATCH_TODOS_MERGE_PATCH_200,
+                        CHALLENGE.PATCH_TODOS_JSON_PATCH_200
+                    }) {
+                if (challenge != expectedChallenge) {
+                    Assertions.assertFalse(fixture.challenger.statusOfChallenge(challenge));
+                }
+            }
+        }
+    }
+
+    private static Stream<Arguments> patchChallengeContentTypes() {
+        return Stream.of(
+                Arguments.of("application/json", CHALLENGE.PATCH_TODOS_PARTIAL_200),
+                Arguments.of("application/merge-patch+json", CHALLENGE.PATCH_TODOS_MERGE_PATCH_200),
+                Arguments.of("application/json-patch+json", CHALLENGE.PATCH_TODOS_JSON_PATCH_200));
     }
 
     @ParameterizedTest(name = "{0}")
