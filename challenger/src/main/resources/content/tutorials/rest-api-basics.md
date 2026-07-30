@@ -2,7 +2,7 @@
 title: REST API - Tutorial
 seo_title: Tutorial: REST API Tutorial for API Testing | API Challenges
 description: Basic REST API tutorial to learn what is a REST API and how they work.
-lastmod: 2026-02-18
+lastmod: 2026-07-30
 seo_description: Learn REST API with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -11,7 +11,7 @@ showads: true
 
 - What is a REST API?
 - CRUD and REST
-- HTTP Verbs - HEAD, PATCH
+- HTTP Verbs - HEAD, PATCH, QUERY
 - Authentication and Authorisation
 
 ---
@@ -178,18 +178,21 @@ Expect 'discussions' and 'debates' on a team.
 
 ### Verb - Head
 
-- [HEAD](https://tools.ietf.org/html/rfc7231#section-4.3.2)
+- [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#name-head)
 - same as GET but does not return a 'body'
 - can be useful for checking 'existence' of an endpoint or entity
+- see the [HTTP HEAD verb tutorial](/tutorials/http-verbs#http-head-verb)
 
 ---
 
 ### Verb - Patch
 
-- [PATCH](https://tools.ietf.org/html/rfc5789) - An 'Update' method which provides a set of changes
+- [PATCH](https://www.rfc-editor.org/rfc/rfc5789) - An 'Update' method which provides a set of changes
 - Contentious [see](http://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/)
-- Proposed standard for [JSON Merge Patch format](https://tools.ietf.org/html/rfc7396)
+- Standard for [JSON Merge Patch format](https://www.rfc-editor.org/rfc/rfc7396)
+- Standard for [JSON Patch format](https://www.rfc-editor.org/rfc/rfc6902)
 - Proposed standard for [XML Patch Using XPath](https://tools.ietf.org/html/rfc5261)
+- see the [HTTP PATCH verb tutorial](/tutorials/http-verbs#http-patch-verb)
 
 Most web services just use `POST` or `PUT`
 

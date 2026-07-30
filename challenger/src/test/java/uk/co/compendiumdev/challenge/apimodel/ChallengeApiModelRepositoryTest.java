@@ -1,5 +1,9 @@
 package uk.co.compendiumdev.challenge.apimodel;
 
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_MERGE_PATCH_RFC7396;
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_PATCH_RFC6902;
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.PARTIAL_JSON_UPDATE;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -91,6 +95,85 @@ public class ChallengeApiModelRepositoryTest {
             Assertions.assertEquals(200, sortedTodos.getStatusCode());
             Assertions.assertEquals(
                     "10", sortedTodos.getReturnedInstanceCollection().get(0).getPrimaryKeyValue());
+        }
+    }
+
+    @Test
+    public void challengeApiSupportsAllPatchUpdateStyles() {
+        Thingifier thingifier = new ChallengeApiModel().get();
+        try {
+            EntityDefinition todo = thingifier.getDefinitionNamed("todo");
+            ThingStore repository = thingifier.getStore(EntityRelModel.DEFAULT_DATABASE_NAME);
+            EntityInstance firstTodo = repository.entityQueries().findByQueryIdentifier(todo, "1");
+            String id = firstTodo.getPrimaryKeyValue();
+
+            ApiResponse partialPatch =
+                    patch(
+                            thingifier,
+                            "/todos/" + id,
+                            "{\"title\":\"patched partial\"}",
+                            PARTIAL_JSON_UPDATE.mediaType());
+            Assertions.assertEquals(200, partialPatch.getStatusCode());
+            Assertions.assertEquals(
+                    "patched partial",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("title")
+                            .asString());
+            Assertions.assertEquals(
+                    "",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("description")
+                            .asString());
+
+            ApiResponse mergePatch =
+                    patch(
+                            thingifier,
+                            "/todos/" + id,
+                            "{\"description\":\"patched merge\"}",
+                            JSON_MERGE_PATCH_RFC7396.mediaType());
+            Assertions.assertEquals(200, mergePatch.getStatusCode());
+            Assertions.assertEquals(
+                    "patched partial",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("title")
+                            .asString());
+            Assertions.assertEquals(
+                    "patched merge",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("description")
+                            .asString());
+
+            ApiResponse jsonPatch =
+                    patch(
+                            thingifier,
+                            "/todos/" + id,
+                            "[{\"op\":\"replace\",\"path\":\"/title\",\"value\":\"patched json patch\"}]",
+                            JSON_PATCH_RFC6902.mediaType());
+            Assertions.assertEquals(200, jsonPatch.getStatusCode());
+            Assertions.assertEquals(
+                    "patched json patch",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("title")
+                            .asString());
+            Assertions.assertEquals(
+                    "patched merge",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("description")
+                            .asString());
+        } finally {
+            thingifier.close();
         }
     }
 
@@ -258,5 +341,15 @@ public class ChallengeApiModelRepositoryTest {
     private BodyParser bodyParser(final Thingifier thingifier, final String json) {
         return new BodyParser(
                 new HttpApiRequest("/path").setBody(json), thingifier.getThingNames());
+    }
+
+    private ApiResponse patch(
+            final Thingifier thingifier,
+            final String path,
+            final String body,
+            final String contentType) {
+        HttpHeadersBlock headers = new HttpHeadersBlock();
+        headers.put("Content-Type", contentType);
+        return thingifier.api().patch(path, body, headers);
     }
 }

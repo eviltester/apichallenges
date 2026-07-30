@@ -2,12 +2,19 @@
 title: API Challenges Change Log
 seo_title: Change Log Guide for API Testing | API Challenges Guide
 description: Change log for the API Challenges
-lastmod: 2026-07-17
+lastmod: 2026-07-30
 seo_description: Track API Challenges updates, including new guides, improvements, and feature changes that help you learn API testing more effectively over time.
 showads: true
 ---
 
 # Change Log
+
+## 2026/07/30 - PATCH support
+
+- Added `PATCH` support for API Challenges todo instance routes and Simple API item instance routes.
+- Added partial JSON, JSON Merge Patch, and JSON Patch update styles.
+- Added three final `PATCH /todos/{id} (200)` challenges and solution walkthroughs.
+- Expanded HTTP verb tutorials with HEAD, PATCH, and QUERY notes and current RFC links.
 
 ## 2026/07/26 - QUERY and versioned OpenAPI docs
 

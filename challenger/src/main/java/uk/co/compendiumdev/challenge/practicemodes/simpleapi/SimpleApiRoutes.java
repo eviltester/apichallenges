@@ -1,6 +1,9 @@
 package uk.co.compendiumdev.challenge.practicemodes.simpleapi;
 
 import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.*;
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_MERGE_PATCH_RFC7396;
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_PATCH_RFC6902;
+import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.PARTIAL_JSON_UPDATE;
 
 import java.util.List;
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -76,6 +79,11 @@ public class SimpleApiRoutes {
         simplethings.apiConfig().setApiToEnforceDeclaredTypesInInput(false);
         // single items should be single items
         simplethings.apiConfig().setReturnSingleGetItemsAsCollection(false);
+        simplethings
+                .apiDefaults()
+                .writeMethods()
+                .entities()
+                .patchCan(PARTIAL_JSON_UPDATE, JSON_MERGE_PATCH_RFC7396, JSON_PATCH_RFC6902);
 
         // TODO: should probably have a support multiple databases config somewhere
         simplethings.getERmodel().populateDatabase(EntityRelModel.DEFAULT_DATABASE_NAME);
@@ -103,7 +111,7 @@ public class SimpleApiRoutes {
         apiDocDefn.setOgType("website");
         apiDocDefn.setTwitterCard("summary_large_image");
 
-        new SimpleHttpRouteCreator("/simpleapi/items").status(501, true, List.of("patch", "trace"));
+        new SimpleHttpRouteCreator("/simpleapi/items").status(501, true, List.of("trace"));
 
         get(
                 "/simpleapi/randomisbn",
