@@ -6,7 +6,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.CHALLENGE;
@@ -154,6 +158,109 @@ public abstract class ChallengeCompleteTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("todoExportFormats")
+    public void canExportTodosInAllFormats(
+            final String format,
+            final String expectedContentType,
+            final String expectedFilename,
+            final String expectedBodyFragment,
+            final CHALLENGE completedChallenge) {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos/export?format=" + format, "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").startsWith(expectedContentType));
+        Assertions.assertEquals(
+                "attachment; filename=\"" + expectedFilename + "\"",
+                response.getHeader("Content-Disposition"));
+        Assertions.assertTrue(response.body.contains(expectedBodyFragment));
+        if (completedChallenge != null) {
+            Assertions.assertTrue(challenger.statusOfChallenge(completedChallenge));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("clientAcceptHeaders")
+    public void todoExportFormatControlsResponseForAllClientAcceptHeaders(
+            final String acceptHeader) {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", acceptHeader);
+
+        final HttpResponseDetails response =
+                http.send("/todos/export?format=csv", "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").startsWith("text/csv"));
+        Assertions.assertEquals(
+                "attachment; filename=\"todos.csv\"", response.getHeader("Content-Disposition"));
+    }
+
+    @Test
+    public void cannotExportTodosWithUnsupportedFormat() {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send("/todos/export?format=pdf", "GET", headers, "");
+
+        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertTrue(response.body.contains("Unsupported export format"));
+    }
+
+    private static Stream<Arguments> todoExportFormats() {
+        return Stream.of(
+                Arguments.of("json", "application/json", "todos.json", "\"todos\"", null),
+                Arguments.of("xml", "application/xml", "todos.xml", "<todos", null),
+                Arguments.of(
+                        "csv",
+                        "text/csv",
+                        "todos.csv",
+                        "id,title,doneStatus,description",
+                        CHALLENGE.GET_TODOS_EXPORT_CSV_CONTENT_DISPOSITION),
+                Arguments.of("text", "text/plain", "todos.txt", "id=", null),
+                Arguments.of(
+                        "html",
+                        "text/html",
+                        "todos.html",
+                        "<table>",
+                        CHALLENGE.GET_TODOS_EXPORT_HTML_CONTENT_DISPOSITION),
+                Arguments.of("ndjson", "application/x-ndjson", "todos.ndjson", "{\"id\":", null),
+                Arguments.of("jsonl", "application/jsonl", "todos.jsonl", "{\"id\":", null),
+                Arguments.of("json-seq", "application/json-seq", "todos.json-seq", "\u001E", null),
+                Arguments.of(
+                        "tsv",
+                        "text/tab-separated-values",
+                        "todos.tsv",
+                        "id\ttitle\tdoneStatus\tdescription",
+                        CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION),
+                Arguments.of(
+                        "tab-delimited",
+                        "text/tab-separated-values",
+                        "todos.tsv",
+                        "id\ttitle\tdoneStatus\tdescription",
+                        CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION));
+    }
+
+    private static Stream<String> clientAcceptHeaders() {
+        return Stream.of(
+                "application/json",
+                "application/xml",
+                "text/csv",
+                "text/plain",
+                "text/html",
+                "application/x-ndjson",
+                "application/jsonl",
+                "application/json-seq",
+                "text/tab-separated-values",
+                "*/*",
+                "application/gzip");
     }
 
     @Test

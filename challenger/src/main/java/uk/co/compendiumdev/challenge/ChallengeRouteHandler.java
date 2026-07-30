@@ -119,6 +119,7 @@ public class ChallengeRouteHandler {
                         apiChallengesDocumentationDefn,
                         challengeDefinitions);
         new HeartBeatRoutes().configure(apiChallengesDocumentationDefn);
+        new TodoExportRoutes().configure(thingifier, apiChallengesDocumentationDefn);
         new AuthRoutes().configure(challengers, apiChallengesDocumentationDefn);
 
         // Mirror routes should not show up in the apichallenges apiDefn

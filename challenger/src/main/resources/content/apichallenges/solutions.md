@@ -98,6 +98,12 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [POST /todos JSON](/apichallenges/solutions/content-type-header/post-todos-json)
 - [POST /todos (415)](/apichallenges/solutions/content-type-header/post-todos-415)
 
+## Content-Disposition Header Challenges
+
+- [GET /todos/export (200) CSV download](/apichallenges/solutions/content-disposition-header/get-todos-export-csv)
+- [GET /todos/export (200) HTML download](/apichallenges/solutions/content-disposition-header/get-todos-export-html)
+- [GET /todos/export (200) tab-delimited download](/apichallenges/solutions/content-disposition-header/get-todos-export-tsv)
+
 ## Fancy a Break? Restore your session
 
 - [Solve the Save and Restore Session Challenges](/apichallenges/solutions/manage-session/save-restore-session)

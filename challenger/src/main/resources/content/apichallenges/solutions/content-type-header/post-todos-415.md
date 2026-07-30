@@ -5,7 +5,7 @@ title: API Challenges Solution For - POST todos (415)
 seo_title: Solution: POST todos (415) Guide | API Challenges
 description: How to solve API challenge POST todos 415. Failing to creating a todo due to unsupported content format.
 seo_description: Use this walkthrough to solve POST todos (415) with request setup, key headers, and expected status codes so you can complete the challenge confidently.
-next_challenge: /apichallenges/solutions/manage-session/save-restore-session
+next_challenge: /apichallenges/solutions/content-disposition-header/get-todos-export-csv
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 415
 showads: true
 ---
@@ -99,7 +99,6 @@ Example Response body:
 {{<youtube-embed key="L8H-vkbXyr0" title="Solution to unsupported content type challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/53795763)
-
 
 
 
