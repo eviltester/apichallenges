@@ -1,6 +1,8 @@
 package uk.co.compendiumdev.challenge.challengehooks;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.CHALLENGE;
@@ -125,6 +127,24 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && response.getStatusCode() == 200) {
             if (hasDoneAndNotDoneTodos(challenger)) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED);
+            }
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.GET
+                && request.getPath().contentEquals("todos")
+                && response.getStatusCode() == 200) {
+            List<SortCriterion> sortCriteria = sortCriteriaFrom(request);
+            if (isSingleFieldAscendingSort(sortCriteria)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_SORTED_ASCENDING);
+            }
+            if (isSingleFieldDescendingSort(sortCriteria)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_SORTED_DESCENDING);
+            }
+            if (isMultipleFieldSort(sortCriteria)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS);
+            }
+            if (hasTodoFilter(request) && hasValidSort(sortCriteria)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_AND_SORTED);
             }
         }
 
@@ -326,6 +346,124 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         return query.findByField(todo, fieldName, fieldValue);
     }
 
+    private boolean isSingleFieldAscendingSort(final List<SortCriterion> sortCriteria) {
+        return sortCriteria.size() == 1
+                && sortCriteria.get(0).ascending
+                && isTodoField(sortCriteria.get(0).fieldName);
+    }
+
+    private boolean isSingleFieldDescendingSort(final List<SortCriterion> sortCriteria) {
+        return sortCriteria.size() == 1
+                && !sortCriteria.get(0).ascending
+                && isTodoField(sortCriteria.get(0).fieldName);
+    }
+
+    private boolean isMultipleFieldSort(final List<SortCriterion> sortCriteria) {
+        if (sortCriteria.size() < 2) {
+            return false;
+        }
+
+        for (SortCriterion criterion : sortCriteria) {
+            if (!isTodoField(criterion.fieldName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean hasValidSort(final List<SortCriterion> sortCriteria) {
+        if (sortCriteria.isEmpty()) {
+            return false;
+        }
+
+        for (SortCriterion criterion : sortCriteria) {
+            if (!isTodoField(criterion.fieldName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean hasTodoFilter(final HttpApiRequest request) {
+        for (FilterBy filterBy : request.getFilterableQueryParams().toList()) {
+            if (!filterBy.fieldName.equals("_sortBy") && isTodoField(filterBy.fieldName)) {
+                return true;
+            }
+        }
+
+        for (String queryParamName : request.getQueryParams().keySet()) {
+            if (!queryParamName.equals("_sortBy") && isTodoField(queryParamName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isTodoField(final String fieldName) {
+        EntityDefinition todo = todoDefinition();
+        return todo != null && todo.hasFieldNameDefined(fieldName);
+    }
+
+    private List<SortCriterion> sortCriteriaFrom(final HttpApiRequest request) {
+        List<String> sortByValues = sortByValuesFrom(request);
+        List<SortCriterion> criteria = new ArrayList<>();
+
+        for (String sortByValue : sortByValues) {
+            for (String rawCriterion : sortByValue.split(",")) {
+                SortCriterion criterion = sortCriterionFrom(rawCriterion);
+                if (criterion != null) {
+                    criteria.add(criterion);
+                }
+            }
+        }
+
+        return criteria;
+    }
+
+    private List<String> sortByValuesFrom(final HttpApiRequest request) {
+        List<String> values = new ArrayList<>();
+
+        for (FilterBy filterBy : request.getFilterableQueryParams().toList()) {
+            if (filterBy.fieldName.equals("_sortBy")) {
+                values.add(filterBy.fieldValue);
+            }
+        }
+
+        if (!values.isEmpty()) {
+            return values;
+        }
+
+        if (request.getQueryParams().containsKey("_sortBy")) {
+            values.add(request.getQueryParams().get("_sortBy"));
+        }
+
+        return values;
+    }
+
+    private SortCriterion sortCriterionFrom(final String rawCriterion) {
+        String criterion = rawCriterion.trim();
+        if (criterion.isEmpty()) {
+            return null;
+        }
+
+        boolean ascending = true;
+        if (criterion.startsWith("-")) {
+            ascending = false;
+            criterion = criterion.substring(1).trim();
+        } else if (criterion.startsWith("+")) {
+            criterion = criterion.substring(1).trim();
+        }
+
+        if (criterion.isEmpty()) {
+            return null;
+        }
+
+        return new SortCriterion(criterion, ascending);
+    }
+
     private boolean hasDoneAndNotDoneTodos(final ChallengerAuthData challenger) {
         final EntityInstance aDoneThing = findTodoByField(challenger, "doneStatus", "true");
         final EntityInstance aNotDoneThing = findTodoByField(challenger, "doneStatus", "false");
@@ -384,5 +522,15 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             collated.append(" ");
         }
         return collated.toString();
+    }
+
+    private static class SortCriterion {
+        private final String fieldName;
+        private final boolean ascending;
+
+        SortCriterion(final String fieldName, final boolean ascending) {
+            this.fieldName = fieldName;
+            this.ascending = ascending;
+        }
     }
 }

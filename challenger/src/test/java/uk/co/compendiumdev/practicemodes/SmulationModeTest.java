@@ -139,7 +139,7 @@ public class SmulationModeTest {
         http.clearHeaders();
         http.setHeader("Accept", "application/json");
 
-        HttpResponseDetails response = http.get("/sim/entities?sortBy=-id");
+        HttpResponseDetails response = http.get("/sim/entities?_sortBy=-id");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(

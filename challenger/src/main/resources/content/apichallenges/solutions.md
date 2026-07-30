@@ -32,6 +32,10 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /todos id (200)](/apichallenges/solutions/get/get-todos-id-200)
 - [GET /todos id (404)](/apichallenges/solutions/get/get-todos-id-404)
 - [GET /todos ?filter (200)](/apichallenges/solutions/get/get-todos-200-filter)
+- [GET /todos ?_sortBy ascending (200)](/apichallenges/solutions/get/get-todos-200-sort-ascending)
+- [GET /todos ?_sortBy descending (200)](/apichallenges/solutions/get/get-todos-200-sort-descending)
+- [GET /todos ?_sortBy multiple (200)](/apichallenges/solutions/get/get-todos-200-sort-multiple)
+- [GET /todos ?filter and ?_sortBy (200)](/apichallenges/solutions/get/get-todos-200-filter-sort)
 
 ## HEAD Challenges
 

@@ -44,6 +44,10 @@ public class ChallengeStatus {
     public Boolean GET_SECRET_NOTE_200;
     public Boolean PUT_TODOS_422_NO_AMEND_ID;
     public Boolean GET_TODOS_FILTERED;
+    public Boolean GET_TODOS_SORTED_ASCENDING;
+    public Boolean GET_TODOS_SORTED_DESCENDING;
+    public Boolean GET_TODOS_SORTED_MULTIPLE_FIELDS;
+    public Boolean GET_TODOS_FILTERED_AND_SORTED;
     public Boolean QUERY_TODOS_FILTERED;
     public Boolean POST_TODOS_BAD_DONE_STATUS;
     public Boolean GET_TODO_404;

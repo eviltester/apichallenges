@@ -56,19 +56,9 @@ public class ChallengesRoutes {
                                                 challenger);
                                         QueryFilterParams queryParams =
                                                 anHttpApiRequest.getFilterableQueryParams();
-                                        // final Map<String, String> queryParams =
-                                        // anHttpApiRequest.getQueryParams();
                                         if (!queryParams.hasSortBy()) {
-                                            queryParams.add(new FilterBy("sort_by", "+ID"));
+                                            queryParams.add(new FilterBy("_sortBy", "+id"));
                                         }
-                                        //
-                                        // if(!queryParams.containsKey("sortBy") &&
-                                        //
-                                        // !queryParams.containsKey("sort_by")){
-                                        //                            // force a sort
-                                        //
-                                        // queryParams.put("sort_by","+ID");
-                                        //                        }
                                         return new RestApiGetHandler(
                                                         challengeThingifier.challengeThingifier)
                                                 .handle(

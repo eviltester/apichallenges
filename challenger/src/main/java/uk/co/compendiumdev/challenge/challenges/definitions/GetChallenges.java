@@ -120,6 +120,83 @@ public class GetChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData getTodosSortedAscending200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_sortBy ascending",
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos ascending by a field.");
+
+        aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
+        aChallenge.addHint("Use a field name to sort ascending, e.g. `?_sortBy=title`.");
+        aChallenge.addHint(
+                "You can also prefix the field with `+` for ascending, e.g. `?_sortBy=+title`.");
+        aChallenge.addHint("Make sure you sort by a field that exists on a todo.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-sort-ascending");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosSortedDescending200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_sortBy descending",
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos descending by a field.");
+
+        aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
+        aChallenge.addHint("Prefix a field name with `-` to sort descending.");
+        aChallenge.addHint("For example, use `?_sortBy=-id` to sort by id descending.");
+        aChallenge.addHint("Make sure you sort by a field that exists on a todo.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-sort-descending");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosSortedMultipleFields200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_sortBy multiple",
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos by multiple fields.");
+
+        aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
+        aChallenge.addHint("Separate multiple sort fields with commas.");
+        aChallenge.addHint(
+                "For example, `?_sortBy=+doneStatus,-id` sorts by doneStatus, then id descending.");
+        aChallenge.addHint("Make sure every sort field exists on a todo.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-sort-multiple");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredAndSorted200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter&_sortBy",
+                        "Issue a GET request on the `/todos` end point with a query filter and a query parameter to sort the filtered todos.");
+
+        aChallenge.addHint("Use a todo field as a URL parameter to filter the collection.");
+        aChallenge.addHint("Use `_sortBy` to sort the filtered results.");
+        aChallenge.addHint(
+                "For example, `?doneStatus=false&_sortBy=-id` filters not done todos and sorts them by id descending.");
+        aChallenge.addHint("Make sure the filter field and sort field both exist on a todo.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution", "HREF", "/apichallenges/solutions/get/get-todos-200-filter-sort");
+        return aChallenge;
+    }
+
     /*
        ACCEPT HEADERS
     */

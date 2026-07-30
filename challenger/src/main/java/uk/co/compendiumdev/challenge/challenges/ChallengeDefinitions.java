@@ -79,6 +79,22 @@ public class ChallengeDefinitions {
                 CHALLENGE.GET_TODOS_FILTERED,
                 GetChallenges.getTodosFiltered200(challengeOrder++),
                 getChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_SORTED_ASCENDING,
+                GetChallenges.getTodosSortedAscending200(challengeOrder++),
+                getChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_SORTED_DESCENDING,
+                GetChallenges.getTodosSortedDescending200(challengeOrder++),
+                getChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS,
+                GetChallenges.getTodosSortedMultipleFields200(challengeOrder++),
+                getChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_FILTERED_AND_SORTED,
+                GetChallenges.getTodosFilteredAndSorted200(challengeOrder++),
+                getChallenges);
 
         // HEAD
         ChallengeSection headChallenges =
