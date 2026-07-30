@@ -109,8 +109,7 @@ public class GetTodosSorted200Test extends RestAssuredBaseTest {
         for (int index = 1; index < todos.size(); index++) {
             Todo previous = todos.get(index - 1);
             Todo current = todos.get(index);
-            int doneStatusComparison =
-                    Boolean.compare(previous.doneStatus, current.doneStatus);
+            int doneStatusComparison = Boolean.compare(previous.doneStatus, current.doneStatus);
             if (doneStatusComparison > 0) {
                 return false;
             }
