@@ -37,6 +37,14 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /todos ?_sortBy multiple (200)](/apichallenges/solutions/get/get-todos-200-sort-multiple)
 - [GET /todos ?filter and ?_sortBy (200)](/apichallenges/solutions/get/get-todos-200-filter-sort)
 
+## GET Pagination Challenges
+
+- [GET /todos ?_limit (200)](/apichallenges/solutions/get/get-todos-200-pagination-limit)
+- [GET /todos ?_limit and ?_offset (200)](/apichallenges/solutions/get/get-todos-200-pagination-limit-offset)
+- [GET /todos ?_limit too high (400)](/apichallenges/solutions/get/get-todos-400-pagination-limit-too-high)
+- [GET /todos ?_sortBy and pagination (200)](/apichallenges/solutions/get/get-todos-200-pagination-sort)
+- [GET /todos ?filter and pagination (200)](/apichallenges/solutions/get/get-todos-200-pagination-filter)
+
 ## HEAD Challenges
 
 - [HEAD /todos id (200)](/apichallenges/solutions/head/head-todos-200)

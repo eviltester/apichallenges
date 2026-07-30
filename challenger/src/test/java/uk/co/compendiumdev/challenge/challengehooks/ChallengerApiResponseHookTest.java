@@ -214,6 +214,331 @@ public class ChallengerApiResponseHookTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("repositoryProviders")
+    public void paginatedLimitTodosChallengeCompletesForEightTodos(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(8);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "8")),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4, 5, 6, 7, 8)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTodosChallengeCompletesForShortCurrentPage(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "8")),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTodosChallengeRequiresCurrentPageSize(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "8")),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4, 5)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTodosChallengeRequiresLimit(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4, 5, 6, 7, 8)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTodosChallengeRequiresOkStatus(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "8")),
+                    fixture.apiResponseWithBody(400, todosJson(1, 2, 3, 4, 5, 6, 7, 8)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedOffsetTodosChallengeCompletesForLimitAndOffset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(10);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(200, todosJson(6, 7, 8, 9, 10)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedOffsetTodosChallengeCompletesForShortCurrentPage(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(7);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(200, todosJson(6, 7)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedOffsetTodosChallengeRequiresOkStatus(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(400, todosJson(6, 7, 8, 9, 10)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedOffsetTodosChallengeRequiresOffset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "5")),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4, 5)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTooHighChallengeCompletesForBadRequest(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "21")),
+                    fixture.apiResponse(400),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedLimitTooHighChallengeRequiresBadRequest(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setQueryParams(Map.of("_limit", "21")),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3, 4, 5)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedSortedTodosChallengeCompletesForDescendingIdPage(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(10);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(
+                                    Map.of("_sortBy", "-id", "_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(200, todosJson(15, 14, 13, 12, 11)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_SORTED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedSortedTodosChallengeRequiresSort(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(200, todosJson(15, 14, 13, 12, 11)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_SORTED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedSortedTodosChallengeRequiresOkStatus(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(
+                                    Map.of("_sortBy", "-id", "_limit", "5", "_offset", "5")),
+                    fixture.apiResponseWithBody(400, todosJson(15, 14, 13, 12, 11)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_SORTED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedFilteredTodosChallengeCompletesForFalseDoneStatusPage(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(3);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(
+                                    Map.of("doneStatus", "false", "_limit", "2", "_offset", "1")),
+                    fixture.apiResponseWithBody(200, todosJson(2, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedFilteredTodosChallengeCompletesForShortCurrentPage(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(2);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(
+                                    Map.of("doneStatus", "false", "_limit", "2", "_offset", "1")),
+                    fixture.apiResponseWithBody(200, todosJson(2)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedFilteredTodosChallengeRequiresOkStatus(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(
+                                    Map.of("doneStatus", "false", "_limit", "2", "_offset", "1")),
+                    fixture.apiResponseWithBody(400, todosJson(2, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void paginatedFilteredTodosChallengeRequiresFilter(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setQueryParams(Map.of("_limit", "2", "_offset", "1")),
+                    fixture.apiResponseWithBody(200, todosJson(2, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
     public void sortedTodosChallengesDoNotCompleteForUnknownFields(
             final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
 
@@ -334,6 +659,24 @@ public class ChallengerApiResponseHookTest {
         }
     }
 
+    private static String todosJson(final int... ids) {
+        StringBuilder json = new StringBuilder("{\"todos\":[");
+
+        for (int index = 0; index < ids.length; index++) {
+            if (index > 0) {
+                json.append(",");
+            }
+            json.append("{\"id\":")
+                    .append(ids[index])
+                    .append(",\"title\":\"todo ")
+                    .append(ids[index])
+                    .append("\",\"doneStatus\":false,\"description\":\"\"}");
+        }
+
+        json.append("]}");
+        return json.toString();
+    }
+
     private static Stream<Arguments> repositoryProviders() {
         return Stream.of(
                 Arguments.of(
@@ -374,6 +717,12 @@ public class ChallengerApiResponseHookTest {
             return addTodo(title, doneStatus, "");
         }
 
+        void addTodos(final int count) {
+            for (int index = 1; index <= count; index++) {
+                addTodo("todo " + index, "false");
+            }
+        }
+
         EntityInstance addTodo(
                 final String title, final String doneStatus, final String description) {
             return repository
@@ -393,6 +742,12 @@ public class ChallengerApiResponseHookTest {
 
         HttpApiResponse apiResponse(final int statusCode) {
             return apiResponse(new ApiResponse(statusCode));
+        }
+
+        HttpApiResponse apiResponseWithBody(final int statusCode, final String body) {
+            ApiResponse response = new ApiResponse(statusCode);
+            response.setBody(body);
+            return apiResponse(response);
         }
 
         HttpApiResponse apiResponse(final ApiResponse apiResponse) {

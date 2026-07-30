@@ -24,9 +24,14 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
     @Override
     public HttpApiResponse run(final HttpApiRequest request, final ThingifierApiConfig config) {
 
+        final boolean paginationLimitTooHigh = isTodosPaginationLimitTooHigh(request, config);
+
         ChallengerAuthData challenger =
                 challengers.getChallenger(request.getHeader("X-CHALLENGER"));
         if (challenger == null) {
+            if (paginationLimitTooHigh) {
+                return rejectPaginationLimitTooHigh(request, config);
+            }
 
             // if there is no x-challenger and we are in multi-player mode then do not allow any
             // POST, DELETE, PUT, PATCH through to the API as this would amend the default database
@@ -60,6 +65,11 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
         // add challenger guid as session id to request
         request.addHeader(HTTP_SESSION_HEADER_NAME, challenger.getXChallenger());
 
+        if (paginationLimitTooHigh) {
+            challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH);
+            return rejectPaginationLimitTooHigh(request, config);
+        }
+
         if (request.getVerb() == HttpApiRequest.VERB.GET
                 && request.getPath().contentEquals("todos")
                 && request.getQueryParams().size() == 0) {
@@ -73,5 +83,47 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
         }
 
         return null;
+    }
+
+    private boolean isTodosPaginationLimitTooHigh(
+            final HttpApiRequest request, final ThingifierApiConfig config) {
+        return request.getVerb() == HttpApiRequest.VERB.GET
+                && request.getPath().contentEquals("todos")
+                && config.forParams().willAllowPagingThroughUrlParams()
+                && queryParamIntegerGreaterThan(
+                        request, "_limit", config.forParams().maxPagingLimit());
+    }
+
+    private boolean queryParamIntegerGreaterThan(
+            final HttpApiRequest request, final String paramName, final int minimumValue) {
+        Integer actualValue = queryParamInteger(request, paramName);
+        return actualValue != null && actualValue > minimumValue;
+    }
+
+    private Integer queryParamInteger(final HttpApiRequest request, final String paramName) {
+        if (!request.getQueryParams().containsKey(paramName)) {
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(request.getQueryParams().get(paramName));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private HttpApiResponse rejectPaginationLimitTooHigh(
+            final HttpApiRequest request, final ThingifierApiConfig config) {
+        return new HttpApiResponse(
+                request.getHeaders(),
+                new ApiResponse(
+                        400,
+                        true,
+                        List.of(
+                                String.format(
+                                        "_limit must be no more than %d",
+                                        config.forParams().maxPagingLimit()))),
+                new JsonThing(config.jsonOutput()),
+                config);
     }
 }

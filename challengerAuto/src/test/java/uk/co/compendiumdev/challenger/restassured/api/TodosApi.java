@@ -38,7 +38,7 @@ public class TodosApi {
     }
 
     public List<Todo> getTodos() {
-        String todosEndPoint = Environment.getEnv("/todos");
+        String todosEndPoint = Environment.getEnv("/todos?_limit=20");
 
         Todos todosList =
                 RestAssured.given()

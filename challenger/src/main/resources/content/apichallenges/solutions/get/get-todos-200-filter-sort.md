@@ -5,7 +5,7 @@ title: API Challenges Solution For - GET todos 200 filter and sort
 seo_title: "Solution: GET todos 200 filter and sort | API Challenges"
 description: How to solve API challenge GET todos 200 filter and sort using a query filter with the _sortBy query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 filter and sort with a query filter, _sortBy, and expected status 200.
-next_challenge: /apichallenges/solutions/head/head-todos-200
+next_challenge: /apichallenges/solutions/get/get-todos-200-pagination-limit
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add a todo query filter and _sortBy to sort the filtered results||Send the request and verify the response status is 200
 showads: true
 ---

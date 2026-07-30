@@ -197,6 +197,100 @@ public class GetChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData getTodosPaginatedLimit200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_limit",
+                        "Issue a GET request on the `/todos` end point with a query parameter to limit the returned todos to 8 items.");
+
+        aChallenge.addHint(
+                "Pagination is controlled by the `_limit` and `_offset` URL parameters.");
+        aChallenge.addHint("Use `_limit=8` to return at most 8 todos.");
+        aChallenge.addHint(
+                "Send an `Accept: application/json` header so you can inspect the returned collection.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-pagination-limit");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosPaginatedLimitOffset200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_limit&_offset",
+                        "Issue a GET request on the `/todos` end point with query parameters to limit the returned todos to 5 items starting from offset 5.");
+
+        aChallenge.addHint("Use `_limit=5` to set the page size.");
+        aChallenge.addHint("Use `_offset=5` to skip the first 5 todos.");
+        aChallenge.addHint("The default `_offset` is 0 when it is not supplied.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-pagination-limit-offset");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosPaginatedLimitTooHigh400(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (400) ?_limit too high",
+                        "Issue a GET request on the `/todos` end point with a pagination limit above the configured maximum to receive a 400 status code.");
+
+        aChallenge.addHint("The configured maximum `_limit` for todos is 20.");
+        aChallenge.addHint("Use `_limit=21` to request more than the maximum page size.");
+        aChallenge.addHint("The API should reject a pagination limit that is too high.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-400-pagination-limit-too-high");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosPaginatedAndSorted200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?_sortBy&_limit&_offset",
+                        "Issue a GET request on the `/todos` end point with query parameters to sort todos by id descending, then return a page of 5 todos from offset 5.");
+
+        aChallenge.addHint("Use `_sortBy=-id` to sort todos by id descending.");
+        aChallenge.addHint(
+                "Use `_limit=5&_offset=5` to request the second page of 5 sorted todos.");
+        aChallenge.addHint("Sorting should be applied before pagination.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-pagination-sort");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosPaginatedAndFiltered200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter&_limit&_offset",
+                        "Issue a GET request on the `/todos` end point with query parameters to filter todos with doneStatus=false, then return a page of 2 todos from offset 1.");
+
+        aChallenge.addHint("Use `doneStatus=false` to filter the collection.");
+        aChallenge.addHint(
+                "Use `_limit=2&_offset=1` to request 2 filtered todos after skipping the first match.");
+        aChallenge.addHint("Filtering should be applied before pagination.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-pagination-filter");
+        return aChallenge;
+    }
+
     /*
        ACCEPT HEADERS
     */
