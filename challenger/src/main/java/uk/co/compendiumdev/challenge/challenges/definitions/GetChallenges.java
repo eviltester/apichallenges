@@ -389,4 +389,61 @@ public class GetChallenges {
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "QzfbegkY1ok");
         return aChallenge;
     }
+
+    public static ChallengeDefinitionData getTodosExportCsvContentDisposition200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos/export (200) CSV download",
+                        "Issue a GET request on the `/todos/export?format=csv` end point and receive a CSV response with a `Content-Disposition` header for `todos.csv`");
+
+        aChallenge.addHint("Use the `format=csv` query parameter.");
+        aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");
+        aChallenge.addHint("The filename should be `todos.csv`.");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/content-disposition-header/get-todos-export-csv");
+
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosExportHtmlContentDisposition200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos/export (200) HTML download",
+                        "Issue a GET request on the `/todos/export?format=html` end point and receive an HTML response with a `Content-Disposition` header for `todos.html`");
+
+        aChallenge.addHint("Use the `format=html` query parameter.");
+        aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");
+        aChallenge.addHint("The filename should be `todos.html`.");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/content-disposition-header/get-todos-export-html");
+
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosExportTsvContentDisposition200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos/export (200) tab-delimited download",
+                        "Issue a GET request on the `/todos/export?format=tsv` end point and receive a tab-delimited response with a `Content-Disposition` header for `todos.tsv`");
+
+        aChallenge.addHint("Use the `format=tsv` or `format=tab-delimited` query parameter.");
+        aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");
+        aChallenge.addHint("The filename should be `todos.tsv`.");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/content-disposition-header/get-todos-export-tsv");
+
+        return aChallenge;
+    }
 }

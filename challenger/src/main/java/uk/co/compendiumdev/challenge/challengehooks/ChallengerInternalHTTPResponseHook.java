@@ -205,6 +205,24 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
             challengers.pass(challenger, CHALLENGE.OPTIONS_TODOS);
         }
 
+        if (request.getVerb() == GET
+                && request.getPath().contentEquals("todos/export")
+                && response.getStatusCode() == 200) {
+            String contentDisposition = response.getHeader("Content-Disposition");
+            if (contentDisposition.contains("attachment")
+                    && contentDisposition.contains("filename=\"todos.csv\"")) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_EXPORT_CSV_CONTENT_DISPOSITION);
+            }
+            if (contentDisposition.contains("attachment")
+                    && contentDisposition.contains("filename=\"todos.html\"")) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_EXPORT_HTML_CONTENT_DISPOSITION);
+            }
+            if (contentDisposition.contains("attachment")
+                    && contentDisposition.contains("filename=\"todos.tsv\"")) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION);
+            }
+        }
+
         if (request.getVerb() == PUT
                 && request.getPath().matches("todos/.*")
                 && response.getStatusCode() == 422) {

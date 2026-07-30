@@ -1,8 +1,12 @@
 package uk.co.compendiumdev.challenge.challengehooks;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
@@ -181,6 +185,74 @@ public class ChallengerInternalHttpResponseHookTest {
         hook.run(request, response);
 
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.OPTIONS_TODOS));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("exportContentDispositionChallenges")
+    public void todoExportContentDispositionPassesChallenge(
+            final String contentDisposition, final CHALLENGE expectedChallenge) {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        challengers.setMultiPlayerMode();
+
+        ChallengerInternalHTTPResponseHook hook =
+                new ChallengerInternalHTTPResponseHook(challengers);
+
+        final ChallengerAuthData challenger = challengers.createNewChallenger();
+
+        InternalHttpRequest request =
+                new InternalHttpRequest("/todos/export")
+                        .setVerb("GET")
+                        .addHeader("X-CHALLENGER", challenger.getXChallenger());
+
+        InternalHttpResponse response =
+                new InternalHttpResponse()
+                        .setStatus(200)
+                        .setHeader("Content-Disposition", contentDisposition);
+
+        hook.run(request, response);
+
+        Assertions.assertTrue(challenger.statusOfChallenge(expectedChallenge));
+    }
+
+    @Test
+    public void todoExportContentDispositionChallengeRequiresAttachmentFilename() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        challengers.setMultiPlayerMode();
+
+        ChallengerInternalHTTPResponseHook hook =
+                new ChallengerInternalHTTPResponseHook(challengers);
+
+        final ChallengerAuthData challenger = challengers.createNewChallenger();
+
+        InternalHttpRequest request =
+                new InternalHttpRequest("/todos/export")
+                        .setVerb("GET")
+                        .addHeader("X-CHALLENGER", challenger.getXChallenger());
+
+        InternalHttpResponse response =
+                new InternalHttpResponse()
+                        .setStatus(200)
+                        .setHeader("Content-Disposition", "inline; filename=\"todos.csv\"");
+
+        hook.run(request, response);
+
+        Assertions.assertFalse(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_EXPORT_CSV_CONTENT_DISPOSITION));
+    }
+
+    private static Stream<Arguments> exportContentDispositionChallenges() {
+        return Stream.of(
+                Arguments.of(
+                        "attachment; filename=\"todos.csv\"",
+                        CHALLENGE.GET_TODOS_EXPORT_CSV_CONTENT_DISPOSITION),
+                Arguments.of(
+                        "attachment; filename=\"todos.html\"",
+                        CHALLENGE.GET_TODOS_EXPORT_HTML_CONTENT_DISPOSITION),
+                Arguments.of(
+                        "attachment; filename=\"todos.tsv\"",
+                        CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION));
     }
 
     @Test

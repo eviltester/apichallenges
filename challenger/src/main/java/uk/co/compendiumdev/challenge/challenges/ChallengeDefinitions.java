@@ -311,6 +311,25 @@ public class ChallengeDefinitions {
                 PostChallenges.postCreateUnsupportedContentType415(challengeOrder++),
                 contentTypeChallenges);
 
+        ChallengeSection contentDispositionChallenges =
+                new ChallengeSection(
+                        "Content-Disposition Challenges",
+                        "The `Content-Disposition` header can tell a client to treat a response as a file download, and can suggest the filename to use.");
+        sections.add(contentDispositionChallenges);
+
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_EXPORT_CSV_CONTENT_DISPOSITION,
+                GetChallenges.getTodosExportCsvContentDisposition200(challengeOrder++),
+                contentDispositionChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_EXPORT_HTML_CONTENT_DISPOSITION,
+                GetChallenges.getTodosExportHtmlContentDisposition200(challengeOrder++),
+                contentDispositionChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION,
+                GetChallenges.getTodosExportTsvContentDisposition200(challengeOrder++),
+                contentDispositionChallenges);
+
         // adjust the take a break challenges based on the app configuration
         ChallengeSection restoreChallenger =
                 new ChallengeSection(

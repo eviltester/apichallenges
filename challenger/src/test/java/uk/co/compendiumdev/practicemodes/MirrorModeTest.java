@@ -274,7 +274,7 @@ public class MirrorModeTest {
                 http.send("/mirror/request", "post", headers.asMap(), stringOfLength(24000 + 1));
 
         Assertions.assertEquals(413, response.statusCode);
-        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals("text/plain", response.getHeader("Content-Type"));
         Assertions.assertTrue(
                 response.body.contains("Error: request too large, max allowed is 24000 bytes"));
     }
