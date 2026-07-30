@@ -52,6 +52,9 @@ public class ChallengeApiModel {
         todoList.generateData(EntityRelModel.DEFAULT_DATABASE_NAME);
 
         todoList.apiConfig().setApiToShowPrimaryKeyHeaderInResponse(false);
+        todoList.apiConfig().forParams().setAllowPagingThroughUrlParams(true);
+        todoList.apiConfig().forParams().setDefaultPagingLimit(10);
+        todoList.apiConfig().forParams().setMaxPagingLimit(20);
         todoList.apiConfig().statusCodes().setMaxRequestBodyLengthBytes(5000);
         todoList.apiConfig().setReturnSingleGetItemsAsCollection(true);
         todoList.apiDefaults()

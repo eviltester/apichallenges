@@ -75,26 +75,70 @@ public class ChallengeDefinitions {
                 CHALLENGE.GET_TODO, GetChallenges.getTodo200(challengeOrder++), getChallenges);
         storeChallengeAs(
                 CHALLENGE.GET_TODO_404, GetChallenges.getTodo404(challengeOrder++), getChallenges);
+
+
+        ChallengeSection getFilterChallenges =
+                new ChallengeSection(
+                        "GET Filter Challenges",
+                        "To retrieve, or read information from an API we issue GET requests and we can control the results using query parameters. This section has a bunch of GET request challenges to try out filtering.");
+        sections.add(getFilterChallenges);
+
         storeChallengeAs(
                 CHALLENGE.GET_TODOS_FILTERED,
                 GetChallenges.getTodosFiltered200(challengeOrder++),
-                getChallenges);
+                getFilterChallenges);
+
+
+
+        ChallengeSection getSortedChallenges =
+                new ChallengeSection(
+                        "GET Sorted Challenges",
+                        "To retrieve, or read information from an API we issue GET requests and we can sort the results using query parameters. This section has a bunch of GET request challenges to try out sorting.");
+        sections.add(getSortedChallenges);
+
         storeChallengeAs(
                 CHALLENGE.GET_TODOS_SORTED_ASCENDING,
                 GetChallenges.getTodosSortedAscending200(challengeOrder++),
-                getChallenges);
+                getSortedChallenges);
         storeChallengeAs(
                 CHALLENGE.GET_TODOS_SORTED_DESCENDING,
                 GetChallenges.getTodosSortedDescending200(challengeOrder++),
-                getChallenges);
+                getSortedChallenges);
         storeChallengeAs(
                 CHALLENGE.GET_TODOS_SORTED_MULTIPLE_FIELDS,
                 GetChallenges.getTodosSortedMultipleFields200(challengeOrder++),
-                getChallenges);
+                getSortedChallenges);
         storeChallengeAs(
                 CHALLENGE.GET_TODOS_FILTERED_AND_SORTED,
                 GetChallenges.getTodosFilteredAndSorted200(challengeOrder++),
-                getChallenges);
+                getSortedChallenges);
+
+        ChallengeSection getPaginationChallenges =
+                new ChallengeSection(
+                        "GET Pagination Challenges",
+                        "Pagination lets us retrieve a collection in smaller pages using limit and offset query parameters. These challenges use GET requests to practise paging by itself, and with filtering and sorting.");
+        sections.add(getPaginationChallenges);
+
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_PAGINATED_LIMIT,
+                GetChallenges.getTodosPaginatedLimit200(challengeOrder++),
+                getPaginationChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET,
+                GetChallenges.getTodosPaginatedLimitOffset200(challengeOrder++),
+                getPaginationChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH,
+                GetChallenges.getTodosPaginatedLimitTooHigh400(challengeOrder++),
+                getPaginationChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_PAGINATED_SORTED,
+                GetChallenges.getTodosPaginatedAndSorted200(challengeOrder++),
+                getPaginationChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODOS_PAGINATED_FILTERED,
+                GetChallenges.getTodosPaginatedAndFiltered200(challengeOrder++),
+                getPaginationChallenges);
 
         // HEAD
         ChallengeSection headChallenges =

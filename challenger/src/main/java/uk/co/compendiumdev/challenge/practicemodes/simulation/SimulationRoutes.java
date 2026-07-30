@@ -97,6 +97,7 @@ public class SimulationRoutes {
         createManagedEntityNamed("bob");
 
         ThingifierApiConfig customApiconfig = new ThingifierApiConfig("/sim");
+        customApiconfig.forParams().setAllowPagingThroughUrlParams(false);
         simulation.apiConfig().setFrom(customApiconfig);
     }
 

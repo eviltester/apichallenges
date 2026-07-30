@@ -1,5 +1,9 @@
 package uk.co.compendiumdev.challenge.challengehooks;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -145,6 +149,49 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             }
             if (hasTodoFilter(request) && hasValidSort(sortCriteria)) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_AND_SORTED);
+            }
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.GET
+                && request.getPath().contentEquals("todos")
+                && queryParamIntegerGreaterThan(
+                        request, "_limit", config.forParams().maxPagingLimit())
+                && response.getStatusCode() == 400) {
+            challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH);
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.GET
+                && request.getPath().contentEquals("todos")
+                && response.getStatusCode() == 200) {
+            List<JsonObject> responseTodos = todosFromJsonResponse(response);
+            List<SortCriterion> sortCriteria = sortCriteriaFrom(request);
+
+            if (queryParamIntegerEquals(request, "_limit", 8)
+                    && responseTodos.size() == expectedPaginatedTodoCount(challenger, 8, 0)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_LIMIT);
+            }
+
+            if (queryParamIntegerEquals(request, "_limit", 5)
+                    && queryParamIntegerEquals(request, "_offset", 5)
+                    && responseTodos.size() == expectedPaginatedTodoCount(challenger, 5, 5)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET);
+            }
+
+            if (queryParamIntegerEquals(request, "_limit", 5)
+                    && queryParamIntegerEquals(request, "_offset", 5)
+                    && isDescendingIdSort(sortCriteria)
+                    && responseTodos.size() == expectedPaginatedTodoCount(challenger, 5, 5)
+                    && idsAreDescending(responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_SORTED);
+            }
+
+            if (queryParamIntegerEquals(request, "_limit", 2)
+                    && queryParamIntegerEquals(request, "_offset", 1)
+                    && queryParamEquals(request, "doneStatus", "false")
+                    && responseTodos.size()
+                            == expectedFilteredPaginatedTodoCount(challenger, "false", 2, 1)
+                    && allDoneStatusFalse(responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_FILTERED);
             }
         }
 
@@ -386,6 +433,12 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         return true;
     }
 
+    private boolean isDescendingIdSort(final List<SortCriterion> sortCriteria) {
+        return sortCriteria.size() == 1
+                && sortCriteria.get(0).fieldName.equals("id")
+                && !sortCriteria.get(0).ascending;
+    }
+
     private boolean hasTodoFilter(final HttpApiRequest request) {
         for (FilterBy filterBy : request.getFilterableQueryParams().toList()) {
             if (!filterBy.fieldName.equals("_sortBy") && isTodoField(filterBy.fieldName)) {
@@ -400,6 +453,121 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         }
 
         return false;
+    }
+
+    private boolean queryParamEquals(
+            final HttpApiRequest request, final String paramName, final String expectedValue) {
+        return request.getQueryParams().containsKey(paramName)
+                && request.getQueryParams().get(paramName).contentEquals(expectedValue);
+    }
+
+    private boolean queryParamIntegerEquals(
+            final HttpApiRequest request, final String paramName, final int expectedValue) {
+        Integer actualValue = queryParamInteger(request, paramName);
+        return actualValue != null && actualValue == expectedValue;
+    }
+
+    private boolean queryParamIntegerGreaterThan(
+            final HttpApiRequest request, final String paramName, final int minimumValue) {
+        Integer actualValue = queryParamInteger(request, paramName);
+        return actualValue != null && actualValue > minimumValue;
+    }
+
+    private Integer queryParamInteger(final HttpApiRequest request, final String paramName) {
+        if (!request.getQueryParams().containsKey(paramName)) {
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(request.getQueryParams().get(paramName));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private List<JsonObject> todosFromJsonResponse(final HttpApiResponse response) {
+        List<JsonObject> todos = new ArrayList<>();
+        String body = response.getBody();
+
+        if (body == null || body.trim().isEmpty()) {
+            return todos;
+        }
+
+        try {
+            JsonElement parsed = JsonParser.parseString(body);
+            if (!parsed.isJsonObject()) {
+                return todos;
+            }
+
+            JsonElement todosElement = parsed.getAsJsonObject().get("todos");
+            if (todosElement == null || !todosElement.isJsonArray()) {
+                return todos;
+            }
+
+            JsonArray todosArray = todosElement.getAsJsonArray();
+            for (JsonElement todoElement : todosArray) {
+                if (todoElement.isJsonObject()) {
+                    todos.add(todoElement.getAsJsonObject());
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Error parsing todos response body for pagination challenge", e);
+        }
+
+        return todos;
+    }
+
+    private boolean idsAreDescending(final List<JsonObject> todos) {
+        for (int index = 1; index < todos.size(); index++) {
+            Integer previousId = todoId(todos.get(index - 1));
+            Integer currentId = todoId(todos.get(index));
+            if (previousId == null || currentId == null || previousId < currentId) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Integer todoId(final JsonObject todo) {
+        try {
+            return todo.get("id").getAsInt();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private boolean allDoneStatusFalse(final List<JsonObject> todos) {
+        for (JsonObject todo : todos) {
+            try {
+                if (todo.get("doneStatus").getAsBoolean()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int expectedPaginatedTodoCount(
+            final ChallengerAuthData challenger, final int limit, final int offset) {
+        return expectedPageSize(countTodos(challenger), limit, offset);
+    }
+
+    private int expectedFilteredPaginatedTodoCount(
+            final ChallengerAuthData challenger,
+            final String doneStatus,
+            final int limit,
+            final int offset) {
+        return expectedPageSize(
+                countTodosByField(challenger, "doneStatus", doneStatus), limit, offset);
+    }
+
+    private int expectedPageSize(final int availableCount, final int limit, final int offset) {
+        if (availableCount < 0) {
+            return -1;
+        }
+        return Math.max(0, Math.min(limit, availableCount - offset));
     }
 
     private boolean isTodoField(final String fieldName) {
@@ -505,6 +673,24 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return -1;
         }
         return query.count(todo);
+    }
+
+    private int countTodosByField(
+            final ChallengerAuthData challenger, final String fieldName, final String fieldValue) {
+        EntityDefinition todo = todoDefinition();
+        EntityInstanceQuery query = queryFor(challenger);
+        if (todo == null || query == null) {
+            return -1;
+        }
+
+        int count = 0;
+        for (EntityInstance todoInstance : query.list(todo)) {
+            if (todoInstance.getFieldValue(fieldName) != null
+                    && todoInstance.getFieldValue(fieldName).asString().equals(fieldValue)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private EntityInstanceQuery queryFor(final ChallengerAuthData challenger) {

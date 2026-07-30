@@ -2,6 +2,7 @@ package uk.co.compendiumdev.challenger.http.completechallenges;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -585,6 +586,74 @@ public abstract class ChallengeCompleteTest {
                                 .withField("doneStatus", doneStatus));
     }
 
+    private EntityDefinition todoDefinition() {
+        return ChallengeMain.getChallenger()
+                .getThingifier()
+                .getERmodel()
+                .getSchema()
+                .getDefinitionWithSingularOrPluralNamed("todo");
+    }
+
+    private ThingStore todoRepository() {
+        return ChallengeMain.getChallenger().getThingifier().getStore(challenger.getXChallenger());
+    }
+
+    private void ensureAtLeastXTodoAvailable(final int minimum) {
+        final EntityDefinition todos = todoDefinition();
+        ThingStore repository = todoRepository();
+
+        while (repository.entityQueries().count(todos) < minimum) {
+            createTodo(todos, "pagination fixture " + repository.entityQueries().count(todos));
+        }
+    }
+
+    private void ensureAtLeastXFalseTodosAvailable(final int minimum) {
+        ensureAtLeastXTodoAvailable(minimum);
+
+        final EntityDefinition todos = todoDefinition();
+        ThingStore repository = todoRepository();
+        int falseTodoCount = countFalseTodos(repository.entityQueries().list(todos));
+
+        for (EntityInstance todo : repository.entityQueries().list(todos)) {
+            if (falseTodoCount >= minimum) {
+                return;
+            }
+
+            if (todoIsDone(todo)) {
+                repository
+                        .entities()
+                        .patch(
+                                todo,
+                                EntityInstanceDraft.forEntity(todos)
+                                        .withField("doneStatus", "false"));
+                falseTodoCount++;
+            }
+        }
+
+        while (falseTodoCount < minimum) {
+            createTodo(todos, "pagination false fixture " + falseTodoCount, "false");
+            falseTodoCount++;
+        }
+    }
+
+    private int countFalseTodos(final Collection<EntityInstance> todos) {
+        int falseTodoCount = 0;
+        for (EntityInstance todo : todos) {
+            if (!todoIsDone(todo)) {
+                falseTodoCount++;
+            }
+        }
+        return falseTodoCount;
+    }
+
+    private boolean todoIsDone(final EntityInstance todo) {
+        try {
+            return Boolean.parseBoolean(todo.getFieldValue("doneStatus").asString());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test
     public void canPostTodosUpdatePass() {
 
@@ -975,6 +1044,79 @@ public abstract class ChallengeCompleteTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_AND_SORTED));
+    }
+
+    @Test
+    public void canGetTodosWithLimitPass() {
+
+        ensureAtLeastXTodoAvailable(8);
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response = http.send("/todos?_limit=8", "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT));
+    }
+
+    @Test
+    public void canGetTodosWithLimitAndOffsetPass() {
+
+        ensureAtLeastXTodoAvailable(10);
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send("/todos?_limit=5&_offset=5", "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT_OFFSET));
+    }
+
+    @Test
+    public void canGetTodosWithLimitTooHighPass() {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response = http.send("/todos?_limit=21", "GET", headers, "");
+
+        Assertions.assertEquals(400, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH));
+    }
+
+    @Test
+    public void canGetTodosSortedAndPaginatedPass() {
+
+        ensureAtLeastXTodoAvailable(10);
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send("/todos?_sortBy=-id&_limit=5&_offset=5", "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_SORTED));
+    }
+
+    @Test
+    public void canGetTodosFilteredAndPaginatedPass() {
+
+        ensureAtLeastXFalseTodosAvailable(3);
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send("/todos?doneStatus=false&_limit=2&_offset=1", "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
     }
 
     @Test

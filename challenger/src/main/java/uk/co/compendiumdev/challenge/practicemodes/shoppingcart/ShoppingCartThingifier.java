@@ -156,6 +156,7 @@ public final class ShoppingCartThingifier {
 
     private static void configurePublicApi(final ThingifierApiConfig config) {
         config.setFrom(new ThingifierApiConfig("/shop"));
+        config.forParams().setAllowPagingThroughUrlParams(false);
         config.setReturnSingleGetItemsAsCollection(false);
         config.setApiToEnforceDeclaredTypesInInput(true);
         config.setApiToShowPrimaryKeyHeaderInResponse(true);

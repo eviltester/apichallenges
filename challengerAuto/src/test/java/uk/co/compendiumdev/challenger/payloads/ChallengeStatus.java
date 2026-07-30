@@ -48,6 +48,11 @@ public class ChallengeStatus {
     public Boolean GET_TODOS_SORTED_DESCENDING;
     public Boolean GET_TODOS_SORTED_MULTIPLE_FIELDS;
     public Boolean GET_TODOS_FILTERED_AND_SORTED;
+    public Boolean GET_TODOS_PAGINATED_LIMIT;
+    public Boolean GET_TODOS_PAGINATED_LIMIT_OFFSET;
+    public Boolean GET_TODOS_PAGINATED_LIMIT_TOO_HIGH;
+    public Boolean GET_TODOS_PAGINATED_SORTED;
+    public Boolean GET_TODOS_PAGINATED_FILTERED;
     public Boolean QUERY_TODOS_FILTERED;
     public Boolean POST_TODOS_BAD_DONE_STATUS;
     public Boolean GET_TODO_404;
