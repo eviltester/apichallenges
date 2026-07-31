@@ -36,7 +36,7 @@ How to use a POST request to create a todo item in the application and receive a
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo" open="true">}}
 
 
 ## Example Request

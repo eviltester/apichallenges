@@ -302,7 +302,50 @@ public class ChallengerWebGUI {
                 "/apichallenges/solutions/method-overrides/all-method-overrides",
                 (request, response) -> {
                     response.redirect(
-                            "/apichallenges/solutions/method-override/all-method-overrides", 301);
+                            "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/manage-session/save-restore-session",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/status-codes/delete-heartbeat-405", 301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/method-override/all-method-overrides",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/authorization/post-secret-note-401-403",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/authorization/post-secret-note-401", 301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/authorization/get-post-secret-note-bearer",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/authorization/get-secret-note-bearer", 301);
                     return "";
                 });
 

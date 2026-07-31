@@ -31,7 +31,7 @@ How to solve the API challenge and issue a GET request to return all the Todos i
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to list all todos" open="true">}}
 
 
 ## Example Request

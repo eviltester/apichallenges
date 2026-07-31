@@ -36,7 +36,7 @@ How to issue a GET request on a top level entity endpoint and combine sorting wi
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_sortBy=-id&_limit=5&_offset=5" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?_sortBy=-id&_limit=5&_offset=5" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_sortBy=-id&_limit=5&_offset=5 to sort and paginate todos" open="true">}}
 
 ## Example Request
 

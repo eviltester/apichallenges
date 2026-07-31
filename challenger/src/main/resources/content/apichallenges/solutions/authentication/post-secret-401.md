@@ -44,7 +44,7 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*">}}
+{{<api-live-request method="POST" path="/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*" details="true" summary="POST /secret/token with invalid credentials to trigger 401" open="true">}}
 
 
 ## Example Request

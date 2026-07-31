@@ -57,7 +57,7 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"{{title50}}","doneStatus":true,"description":"{{description200}}"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"{{title50}}","doneStatus":true,"description":"{{description200}}"}' details="true" summary="POST /todos with maximum valid field lengths to create a todo" open="true">}}
 
 
 ## Example Request

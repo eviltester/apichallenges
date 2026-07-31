@@ -33,7 +33,7 @@ How to issue a GET request on a top level entity endpoint with a pagination limi
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_limit=21" expected-status="400" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?_limit=21" expected-status="400" headers="Accept: application/json" details="true" summary="GET /todos?_limit=21 to trigger validation for a high limit" open="true">}}
 
 ## Example Request
 

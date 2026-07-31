@@ -662,7 +662,8 @@ public class MarkdownContentManager {
         final String method = attributes.getOrDefault("method", "GET");
         final String path = attributes.getOrDefault("path", "/");
         final String editable = attributes.getOrDefault("editable", defaultEditable);
-        final boolean wrapInDetails = isTruthy(attributes.get("details"));
+        final boolean openDetails = isTruthy(attributes.get("open"));
+        final boolean wrapInDetails = openDetails || isTruthy(attributes.get("details"));
         final String summary = attributes.getOrDefault("summary", "Try it now");
 
         final StringBuilder html = new StringBuilder();
@@ -682,7 +683,8 @@ public class MarkdownContentManager {
                     || key.equals("path")
                     || key.equals("editable")
                     || key.equals("details")
-                    || key.equals("summary")) {
+                    || key.equals("summary")
+                    || key.equals("open")) {
                 continue;
             }
             html.append(" data-")
@@ -697,7 +699,9 @@ public class MarkdownContentManager {
             return html.toString();
         }
 
-        return "<details class=\"sim-live-request-details\"><summary>"
+        return "<details class=\"sim-live-request-details\""
+                + (openDetails ? " open" : "")
+                + "><summary>"
                 + escapeHtmlAttribute(summary)
                 + "</summary>"
                 + html

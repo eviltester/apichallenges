@@ -47,7 +47,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json">}}
+If you do not already have an auth token, create one with `POST /secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
+
+{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /secret/token to create an auth token">}}
+
+{{<api-live-request method="GET" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" details="true" summary="GET /secret/note with X-AUTH-TOKEN to read the secret note" open="true">}}
 
 
 ## Example Request
@@ -88,6 +92,5 @@ Example body of the response:
 {{<youtube-embed key="2uRpzr2OmEY" title="Solution to Get authorization challenge using header">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54089625)
-
 
 

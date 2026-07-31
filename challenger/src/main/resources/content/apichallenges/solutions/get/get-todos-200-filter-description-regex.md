@@ -37,13 +37,13 @@ How to issue a GET request on a top level entity endpoint and filter todos by ma
 
 ### Try it now
 
-Create a TODO with a matching description if necessary:
+If you need a matching todo, create one with a non-empty description containing `fixture`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"regex filter fixture","doneStatus":false,"description":"created fixture for regex filter"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"regex filter fixture","doneStatus":false,"description":"created fixture for regex filter"}' details="true" summary="POST /todos to create a regex filter fixture">}}
 
 Filter by regular expression:
 
-{{<api-live-request method="GET" path="/todos?description~=.*fixture.*" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?description~=.*fixture.*" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?description~=.*fixture.* to filter descriptions by regex" open="true">}}
 
 ## Example Request
 

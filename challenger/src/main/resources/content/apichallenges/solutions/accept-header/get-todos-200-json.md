@@ -39,7 +39,7 @@ How to complete the challenge `GET /todos JSON (200)` to successfully GET all th
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos with Accept: application/json to request JSON" open="true">}}
 
 
 ## Example Request

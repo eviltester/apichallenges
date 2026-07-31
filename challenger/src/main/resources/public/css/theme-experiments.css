@@ -1362,11 +1362,40 @@ html[data-theme] .sim-live-pretty-print {
 }
 
 html[data-theme] .sim-live-tab.active,
-html[data-theme] .sim-live-response-tab.active,
-html[data-theme] .sim-live-execute {
+html[data-theme] .sim-live-response-tab.active {
     background: var(--cta-bg);
     border-color: var(--cta-bg);
     color: var(--cta-text);
+}
+
+html[data-theme] .sim-live-execute {
+    background: #16803a;
+    border-color: #16803a;
+    color: #ffffff;
+}
+
+html[data-theme] .sim-live-execute:hover,
+html[data-theme] .sim-live-execute:focus-visible {
+    background: #116830;
+    border-color: #116830;
+}
+
+html[data-theme="dark-lab"] .sim-live-execute {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #04130a;
+}
+
+html[data-theme="dark-lab"] .sim-live-execute:hover,
+html[data-theme="dark-lab"] .sim-live-execute:focus-visible {
+    background: #4ade80;
+    border-color: #4ade80;
+}
+
+html[data-theme] .sim-live-execute:disabled {
+    background: #6f7f8f;
+    border-color: #6f7f8f;
+    color: #ffffff;
 }
 
 html[data-theme] .sim-live-command,

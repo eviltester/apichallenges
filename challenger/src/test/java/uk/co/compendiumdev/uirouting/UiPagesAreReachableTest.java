@@ -840,10 +840,12 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("div.main-text-content pre"));
         Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
+        Assertions.assertTrue(response.body.contains(".sim-live-edit-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details .sim-live-title"));
+        Assertions.assertTrue(response.body.contains("background: #16803a"));
 
         response = http.send("/css/theme-experiments.css", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -851,6 +853,9 @@ public class UiPagesAreReachableTest {
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(
                 response.body.contains("html[data-theme=\"dark-lab\"] .sim-live-status"));
+        Assertions.assertTrue(
+                response.body.contains("html[data-theme=\"dark-lab\"] .sim-live-execute"));
+        Assertions.assertTrue(response.body.contains("background: #22c55e"));
         Assertions.assertTrue(response.body.contains("border-left-color: var(--accent)"));
         Assertions.assertTrue(response.body.contains("color: var(--text)"));
 
@@ -1305,9 +1310,7 @@ public class UiPagesAreReachableTest {
     void statusCodeSolutionsLinkToHeaderTooLargeSolutionBeforeMethodOverride() {
 
         HttpResponseDetails response =
-                http.send(
-                        "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
-                        "get");
+                http.send("/apichallenges/solutions/status-codes/get-heartbeat-204", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
@@ -1320,7 +1323,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/method-override/all-method-overrides'"));
+                        "href='/apichallenges/solutions/method-override/post-heartbeat-as-delete-405'"));
     }
 
     @Test
@@ -1339,15 +1342,21 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/authorization/post-secret-note-401-403'"));
+                        "href='/apichallenges/solutions/authorization/post-secret-note-401'"));
 
-        response =
-                http.send("/apichallenges/solutions/authorization/post-secret-note-401-403", "get");
+        response = http.send("/apichallenges/solutions/authorization/post-secret-note-401", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/authorization/get-post-secret-note-bearer'"));
+                        "href='/apichallenges/solutions/authorization/post-secret-note-403'"));
+
+        response = http.send("/apichallenges/solutions/authorization/post-secret-note-403", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/authorization/get-secret-note-bearer'"));
     }
 
     @Test
@@ -1391,6 +1400,10 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
+                        "<details class=\"sim-live-request-details\" open><summary>POST /todos to"
+                                + " create a todo</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "class=\"api-live-request\" data-method=\"POST\""
                                 + " data-path=\"/todos\" data-editable=\"true\""
                                 + " data-expected-status=\"201\""));
@@ -1404,23 +1417,29 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void deleteSolutionUsesVisibleSetupAndDoesNotAutoCreateTodoDuringDelete() {
+    void deleteSolutionUsesCollapsedHelpersAndOpenChallengeRequestWithoutAutoCreate() {
 
         final HttpResponseDetails response =
                 http.send("/apichallenges/solutions/delete/delete-todos-id-204", "get");
 
         Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(3, countOccurrences(response.body, "class=\"api-live-request\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "class=\"api-live-request\" data-method=\"POST\""
-                                + " data-path=\"/todos\""));
+                        "<summary>GET /todos to see what todos are available now</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>POST /todos to create a todo item for deletion</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<details class=\"sim-live-request-details\" open><summary>DELETE"
+                                + " /todos/{id} to delete a specific todo</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"api-live-request\" data-method=\"DELETE\""
-                                + " data-path=\"/todos/{{lastCreatedTodoId}}\""));
-        Assertions.assertFalse(response.body.contains("data-path=\"/todos/{{firstTodoId}}\""));
+                                + " data-path=\"/todos/{{firstTodoId}}\""));
+        Assertions.assertTrue(response.body.contains("data-auto-create-first-todo=\"false\""));
         Assertions.assertTrue(response.body.contains("data-refresh-after-execute=\"false\""));
-        Assertions.assertTrue(response.body.contains("data-resolve-dynamic-on-execute=\"false\""));
     }
 
     @Test
@@ -1585,7 +1604,27 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         "/apichallenges/solutions/method-overrides/all-method-overrides",
-                        "/apichallenges/solutions/method-override/all-method-overrides"));
+                        "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/method-override/all-method-overrides",
+                        "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
+                        "/apichallenges/solutions/status-codes/delete-heartbeat-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/manage-session/save-restore-session",
+                        "/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/authorization/post-secret-note-401-403",
+                        "/apichallenges/solutions/authorization/post-secret-note-401"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/authorization/get-post-secret-note-bearer",
+                        "/apichallenges/solutions/authorization/get-secret-note-bearer"));
         args.add(Arguments.of("/tools/clients/soapyi", "/tools/clients/soapui"));
         args.add(Arguments.of("/tutorials/openapi-swagger", "/tutorials/openapi"));
         args.add(

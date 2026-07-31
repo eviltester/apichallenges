@@ -43,7 +43,7 @@ The chained Accept header `application/xml,application/json` asks for XML as fir
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml,application/json">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml,application/json" details="true" summary="GET /todos with XML preferred over JSON" open="true">}}
 
 
 ## Example Request

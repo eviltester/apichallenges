@@ -278,10 +278,16 @@ a.next-challenge-cta-link:hover {
 }
 
 .sim-live-execute {
-    background: #2f6f3e;
-    border-color: #2f6f3e;
+    background: #16803a;
+    border-color: #16803a;
     color: #ffffff;
     margin: 0.75rem 0;
+}
+
+.sim-live-execute:hover,
+.sim-live-execute:focus-visible {
+    background: #116830;
+    border-color: #116830;
 }
 
 .sim-live-execute:disabled {
@@ -364,13 +370,19 @@ a.next-challenge-cta-link:hover {
     resize: vertical;
 }
 
+.sim-live-edit-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
 .sim-live-reset {
     border: 1px solid #8fa7bc;
     background: #ffffff;
     color: #152536;
     cursor: pointer;
     font: inherit;
-    justify-self: start;
     padding: 0.45rem 0.65rem;
 }
 
@@ -380,8 +392,7 @@ a.next-challenge-cta-link:hover {
     color: #152536;
     cursor: pointer;
     font: inherit;
-    justify-self: start;
-    padding: 0.35rem 0.55rem;
+    padding: 0.45rem 0.65rem;
 }
 
 .sim-live-command-panel {

@@ -5,7 +5,7 @@ title: API Challenges Solution For - GET todos export tab-delimited download
 seo_title: Solution: GET todos export tab-delimited download | API Challenges
 description: How to solve API challenge GET todos export tab-delimited download by using format=tsv and checking the Content-Disposition response header.
 seo_description: Export todos as tab-separated values, verify the response is a file attachment, and check the Content-Disposition filename todos.tsv to complete the challenge.
-next_challenge: /apichallenges/solutions/manage-session/save-restore-session
+next_challenge: /apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200
 schema_howto_steps: Create a GET request to /todos/export?format=tsv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/tab-separated-values||Check the Content-Disposition header is attachment with filename todos.tsv
 showads: true
 ---
@@ -41,7 +41,7 @@ The `format` query parameter controls the export type for this endpoint. For thi
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/export?format=tsv" expected-status="200" headers="Accept: text/tab-separated-values">}}
+{{<api-live-request method="GET" path="/todos/export?format=tsv" expected-status="200" headers="Accept: text/tab-separated-values" details="true" summary="GET /todos/export?format=tsv to download todos as TSV" open="true">}}
 
 ## Example Request
 

@@ -71,7 +71,7 @@ We only need to use the minimum details, but could add a description if we wante
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/xml||Accept: application/xml" body='<todo><title>xml solution widget</title><doneStatus>true</doneStatus><description>created from XML</description></todo>'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/xml||Accept: application/xml" body='<todo><title>xml solution widget</title><doneStatus>true</doneStatus><description>created from XML</description></todo>' details="true" summary="POST /todos with XML to create a todo" open="true">}}
 
 
 ## Example Request

@@ -44,7 +44,7 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*">}}
+{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /secret/token with valid credentials to create an auth token" open="true">}}
 
 
 ## Example Request

@@ -36,7 +36,17 @@ How to issue a GET request on a top level entity endpoint and filter by one todo
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?id=3" expected-status="200" headers="Accept: application/json">}}
+If you need to check which todo ids are available, use `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see the available todo ids">}}
+
+If you do not have more than one todo, create another one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"single result comparison fixture","doneStatus":false,"description":"created for id filtering"}' details="true" summary="POST /todos to create another todo item">}}
+
+The sample below uses `id=3`; edit the id if your current data uses a different todo id.
+
+{{<api-live-request method="GET" path="/todos?id=3" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?id=3 to return one matching todo" open="true">}}
 
 ## Example Request
 

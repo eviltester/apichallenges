@@ -114,7 +114,7 @@ public class SecretTokenChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/authorization/post-secret-note-401-403");
+                "/apichallenges/solutions/authorization/post-secret-note-401");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "76U5TEvLzLI");
         return aChallenge;
     }
@@ -131,7 +131,7 @@ public class SecretTokenChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/authorization/post-secret-note-401-403");
+                "/apichallenges/solutions/authorization/post-secret-note-403");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "76U5TEvLzLI");
         return aChallenge;
     }
@@ -148,7 +148,7 @@ public class SecretTokenChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/authorization/get-post-secret-note-bearer");
+                "/apichallenges/solutions/authorization/get-secret-note-bearer");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "8GsMTZxEItw");
         return aChallenge;
     }
@@ -165,7 +165,7 @@ public class SecretTokenChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/authorization/get-post-secret-note-bearer");
+                "/apichallenges/solutions/authorization/post-secret-note-bearer");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "8GsMTZxEItw");
         return aChallenge;
     }

@@ -45,7 +45,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/get-challenger-guid-200");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
         return aChallenge;
@@ -71,7 +71,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/post-challenger-existing-x-challenger-200");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 
@@ -91,7 +91,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200");
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 
         return aChallenge;
@@ -116,7 +116,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/put-challenger-guid-restore-200");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 
@@ -161,7 +161,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/put-challenger-guid-create-201");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 
@@ -179,7 +179,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/get-challenger-database-guid-200");
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 
         return aChallenge;
@@ -202,7 +202,7 @@ public class ChallengerChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/manage-session/save-restore-session");
+                "/apichallenges/solutions/manage-session/put-challenger-database-guid-204");
 
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "tNGuZMQgHxw");
 

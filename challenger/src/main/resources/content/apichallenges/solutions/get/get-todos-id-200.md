@@ -31,7 +31,15 @@ How to issue a GET request for an existing todo item using the id of the item an
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/{{firstTodoId}}" expected-status="200" headers="Accept: application/json">}}
+If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+
+If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+
+{{<api-live-request method="GET" path="/todos/{{firstTodoId}}" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos/{id} to retrieve a specific todo" open="true">}}
 
 
 ## Example Request
@@ -78,4 +86,3 @@ How to issue a GET request for an existing todo item using the id of the item an
 {{<youtube-embed key="JDbbSY3U_rY" title="Solution to Get Specific Todo by ID">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/41108384)
-

@@ -19,7 +19,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204");
+                "/apichallenges/solutions/status-codes/delete-heartbeat-405");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -38,7 +38,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204");
+                "/apichallenges/solutions/status-codes/patch-heartbeat-500");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -58,7 +58,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204");
+                "/apichallenges/solutions/status-codes/trace-heartbeat-501");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -75,9 +75,7 @@ public class StatusCodeChallenges {
         aChallenge.addHint("A 204 response means success with no response body.");
 
         aChallenge.addSolutionLink(
-                "Read Solution",
-                "HREF",
-                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204");
+                "Read Solution", "HREF", "/apichallenges/solutions/status-codes/get-heartbeat-204");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -120,7 +118,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/method-override/all-method-overrides");
+                "/apichallenges/solutions/method-override/post-heartbeat-as-patch-500");
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -141,7 +139,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/method-override/all-method-overrides");
+                "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405");
         // aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;
     }
@@ -162,7 +160,7 @@ public class StatusCodeChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
-                "/apichallenges/solutions/method-override/all-method-overrides");
+                "/apichallenges/solutions/method-override/post-heartbeat-as-trace-501");
 
         //        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "SGfKVFdylVI");
         return aChallenge;

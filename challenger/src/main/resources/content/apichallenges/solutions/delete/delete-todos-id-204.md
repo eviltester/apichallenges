@@ -37,14 +37,21 @@ How to complete the challenge `DELETE /todos/id (204)` to successfully delete a 
 
 ### Try it now
 
-If you do not have a todo to delete, create one first:
+Delete an existing todo.
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created so the delete request has an existing todo"}'>}}
+If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-Then delete an existing todo:
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
 
-{{<api-live-request method="DELETE" path="/todos/{{lastCreatedTodoId}}" expected-status="204" headers="Accept: application/json" refresh-after-execute="false" resolve-dynamic-on-execute="false">}}
+If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created from the delete solution page"}' details="true" summary="POST /todos to create a todo item for deletion">}}
+
+Then, delete an existing todo:
+
+{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" refresh-after-execute="false" details="true" summary="DELETE /todos/{id} to delete a specific todo" open="true">}}
+
+After you've deleted something. You should really check that it has been deleted by issuing a `GET /todos/{id}` request and make sure the item has been deleted.
 
 ## Example Request
 
@@ -66,8 +73,6 @@ Then delete an existing todo:
 < Server: Jetty(9.4.z-SNAPSHOT)
 < Via: 1.1 vegur
 ~~~~~~~~
-
-
 
 
 

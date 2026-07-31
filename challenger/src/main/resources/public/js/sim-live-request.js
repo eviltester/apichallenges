@@ -644,6 +644,7 @@
 
     let bodyTextarea = null;
     let bodyLabel = null;
+    let prettyPrintButton = null;
     if (request.bodyEditable && request.body) {
       bodyLabel = document.createElement('label');
       bodyLabel.textContent = 'Body';
@@ -653,7 +654,7 @@
       bodyTextarea.value = formatRequestBody(request);
       bodyLabel.appendChild(bodyTextarea);
 
-      const prettyPrintButton = document.createElement('button');
+      prettyPrintButton = document.createElement('button');
       prettyPrintButton.type = 'button';
       prettyPrintButton.className = 'sim-live-pretty-print';
       prettyPrintButton.textContent = 'Pretty print body';
@@ -665,13 +666,18 @@
         bodyTextarea.value = request.body;
         notifyChanged();
       });
-      bodyLabel.appendChild(prettyPrintButton);
     }
 
     const resetButton = document.createElement('button');
     resetButton.type = 'button';
     resetButton.className = 'sim-live-reset';
     resetButton.textContent = 'Reset';
+    const editActions = document.createElement('div');
+    editActions.className = 'sim-live-edit-actions';
+    editActions.appendChild(resetButton);
+    if (prettyPrintButton) {
+      editActions.appendChild(prettyPrintButton);
+    }
 
     function syncRequestFromControls() {
       request.userEdited = true;
@@ -712,7 +718,7 @@
     if (bodyLabel) {
       controls.appendChild(bodyLabel);
     }
-    controls.appendChild(resetButton);
+    controls.appendChild(editActions);
     return {
       element: controls,
       methodSelect: methodSelect,
@@ -790,6 +796,27 @@
     return `${challenger.substring(0, challenger.length - 1)}${replacement}`;
   }
 
+  function restoredChallenger() {
+    return mismatchedChallenger();
+  }
+
+  function currentChallengerJsonForRestoredChallenger() {
+    const challenger = currentChallenger();
+    const restored = restoredChallenger();
+    if (!challenger) {
+      return Promise.resolve('{}');
+    }
+    return currentChallengerJson().then(function (text) {
+      try {
+        const json = JSON.parse(text);
+        json.xChallenger = restored;
+        return JSON.stringify(json, null, 2);
+      } catch (ignored) {
+        return text.split(challenger).join(restored);
+      }
+    });
+  }
+
   function createTodoForCurrentChallenger() {
     return fetch(absoluteUrl('/todos'), {
       method: 'POST',
@@ -854,16 +881,21 @@
       usesPlaceholder(request, 'lastCreatedTodoId')
         ? Promise.resolve(currentLastCreatedTodoId())
         : Promise.resolve(''),
+      usesPlaceholder(request, 'currentChallengerJsonForRestoredChallenger')
+        ? currentChallengerJsonForRestoredChallenger()
+        : Promise.resolve(''),
     ]).then(function (values) {
       return {
         currentChallenger: challenger,
         mismatchedChallenger: mismatchedChallenger(),
+        restoredChallenger: restoredChallenger(),
         authToken: currentAuthToken(),
         firstTodoId: values[0],
         missingTodoId: values[1],
         currentChallengerJson: values[2],
         currentTodosJson: values[3],
         lastCreatedTodoId: values[4],
+        currentChallengerJsonForRestoredChallenger: values[5],
         oversizedChallenger: oversizedChallengerValue(challenger),
         title50: '2*4*6*8*11*14*17*20*23*26*29*32*35*38*41*44*47*50*',
         title51: '*3*5*7*9*12*15*18*21*24*27*30*33*36*39*42*45*48*51*',

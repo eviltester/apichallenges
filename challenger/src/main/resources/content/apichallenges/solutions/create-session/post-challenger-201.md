@@ -30,7 +30,7 @@ How to complete the challenge `POST /challenger 201`.
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/challenger" expected-status="201" use-challenger="false" headers="Accept: application/json">}}
+{{<api-live-request method="POST" path="/challenger" expected-status="201" use-challenger="false" headers="Accept: application/json" details="true" summary="POST /challenger to create a new challenger session" open="true">}}
 
 
 ## Example Request

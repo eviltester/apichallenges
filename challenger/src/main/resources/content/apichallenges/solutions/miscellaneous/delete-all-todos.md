@@ -160,4 +160,14 @@ xargs -I % curl --request DELETE \
 [Patreon ad free version](https://www.patreon.com/posts/119362209)
 ### Try it now
 
-{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false">}}
+If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+
+If there are no todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created from the delete all solution page"}' details="true" summary="POST /todos to create a todo item to delete">}}
+
+Use the delete request repeatedly until `GET /todos` returns an empty todo list.
+
+{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" details="true" summary="DELETE /todos/{id} to remove each todo until none remain" open="true">}}

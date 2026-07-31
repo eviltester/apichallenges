@@ -43,7 +43,7 @@ As a set of follow on exercises:
 
 ### Try it now
 
-{{<api-live-request method="OPTIONS" path="/todos" expected-status="200" headers="Accept: */*">}}
+{{<api-live-request method="OPTIONS" path="/todos" expected-status="200" headers="Accept: */*" details="true" summary="OPTIONS /todos to inspect allowed methods" open="true">}}
 
 
 ## Example Request

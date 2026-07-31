@@ -36,7 +36,13 @@ How to issue a GET request on a top level entity endpoint and filter todos by id
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?id<6" expected-status="200" headers="Accept: application/json">}}
+If you need to check which todo ids are available, use `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see the available todo ids">}}
+
+The sample below uses `id<6`; edit the threshold if your current data needs a different subset.
+
+{{<api-live-request method="GET" path="/todos?id<6" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?id<6 to return todos with ids less than 6" open="true">}}
 
 ## Example Request
 

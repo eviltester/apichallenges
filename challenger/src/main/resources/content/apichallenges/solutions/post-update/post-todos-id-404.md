@@ -54,7 +54,7 @@ How to use a POST request to try to update a todo item in the application, but t
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos/{{missingTodoId}}" expected-status="404" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+{{<api-live-request method="POST" path="/todos/{{missingTodoId}}" expected-status="404" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos/{id} to update a missing todo and trigger 404" open="true">}}
 
 
 ## Example Request

@@ -27,4 +27,4 @@ The response should be `422 Unprocessable Content` with this message:
 ```
 ### Try it now
 
-{{<api-live-request method="PUT" path="/todos/11" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":false,"description":"created from the solution page"}'>}}
+{{<api-live-request method="PUT" path="/todos/11" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":false,"description":"created from the solution page"}' details="true" summary="PUT /todos/{id} to attempt creating a todo and trigger 422" open="true">}}

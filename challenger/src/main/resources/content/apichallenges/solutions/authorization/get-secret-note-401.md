@@ -47,7 +47,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/secret/note" expected-status="401" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/secret/note" expected-status="401" headers="Accept: application/json" details="true" summary="GET /secret/note without an auth token to trigger 401" open="true">}}
 
 
 ## Example Request

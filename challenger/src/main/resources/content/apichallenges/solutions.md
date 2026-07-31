@@ -28,35 +28,41 @@ If your goal is API automation, each solution also provides clear assertion targ
 ## GET Challenges
 
 - [GET /todos (200)](/apichallenges/solutions/get/get-todos-200)
-- [GET /todo (404)](/apichallenges/solutions/get/get-todo-404)
-- [GET /todos id (200)](/apichallenges/solutions/get/get-todos-id-200)
-- [GET /todos id (404)](/apichallenges/solutions/get/get-todos-id-404)
-- [GET /todos ?filter (200)](/apichallenges/solutions/get/get-todos-200-filter)
-- [GET /todos ?filter id greater than (200)](/apichallenges/solutions/get/get-todos-200-filter-id-greater-than)
-- [GET /todos ?filter id less than (200)](/apichallenges/solutions/get/get-todos-200-filter-id-less-than)
-- [GET /todos ?filter id single result (200)](/apichallenges/solutions/get/get-todos-200-filter-id-single-result)
-- [GET /todos ?filter description regex (200)](/apichallenges/solutions/get/get-todos-200-filter-description-regex)
-- [GET /todos ?filter description wildcard (200)](/apichallenges/solutions/get/get-todos-200-filter-description-wildcard)
-- [GET /todos ?_sortBy ascending (200)](/apichallenges/solutions/get/get-todos-200-sort-ascending)
-- [GET /todos ?_sortBy descending (200)](/apichallenges/solutions/get/get-todos-200-sort-descending)
-- [GET /todos ?_sortBy multiple (200)](/apichallenges/solutions/get/get-todos-200-sort-multiple)
-- [GET /todos ?filter and ?_sortBy (200)](/apichallenges/solutions/get/get-todos-200-filter-sort)
+- [GET /todo (404) not plural](/apichallenges/solutions/get/get-todo-404)
+- [GET /todos/{id} (200)](/apichallenges/solutions/get/get-todos-id-200)
+- [GET /todos/{id} (404)](/apichallenges/solutions/get/get-todos-id-404)
+
+## GET Filter Challenges
+
+- [GET /todos (200) ?filter](/apichallenges/solutions/get/get-todos-200-filter)
+- [GET /todos (200) ?filter id greater than](/apichallenges/solutions/get/get-todos-200-filter-id-greater-than)
+- [GET /todos (200) ?filter id less than](/apichallenges/solutions/get/get-todos-200-filter-id-less-than)
+- [GET /todos (200) ?filter id single result](/apichallenges/solutions/get/get-todos-200-filter-id-single-result)
+- [GET /todos (200) ?filter description regex](/apichallenges/solutions/get/get-todos-200-filter-description-regex)
+- [GET /todos (200) ?filter description wildcard](/apichallenges/solutions/get/get-todos-200-filter-description-wildcard)
+
+## GET Sorted Challenges
+
+- [GET /todos (200) ?_sortBy ascending](/apichallenges/solutions/get/get-todos-200-sort-ascending)
+- [GET /todos (200) ?_sortBy descending](/apichallenges/solutions/get/get-todos-200-sort-descending)
+- [GET /todos (200) ?_sortBy multiple](/apichallenges/solutions/get/get-todos-200-sort-multiple)
+- [GET /todos (200) ?filter&_sortBy](/apichallenges/solutions/get/get-todos-200-filter-sort)
 
 ## GET Pagination Challenges
 
-- [GET /todos ?_limit (200)](/apichallenges/solutions/get/get-todos-200-pagination-limit)
-- [GET /todos ?_limit and ?_offset (200)](/apichallenges/solutions/get/get-todos-200-pagination-limit-offset)
-- [GET /todos ?_limit too high (400)](/apichallenges/solutions/get/get-todos-400-pagination-limit-too-high)
-- [GET /todos ?_sortBy and pagination (200)](/apichallenges/solutions/get/get-todos-200-pagination-sort)
-- [GET /todos ?filter and pagination (200)](/apichallenges/solutions/get/get-todos-200-pagination-filter)
+- [GET /todos (200) ?_limit](/apichallenges/solutions/get/get-todos-200-pagination-limit)
+- [GET /todos (200) ?_limit&_offset](/apichallenges/solutions/get/get-todos-200-pagination-limit-offset)
+- [GET /todos (400) ?_limit too high](/apichallenges/solutions/get/get-todos-400-pagination-limit-too-high)
+- [GET /todos (200) ?_sortBy&_limit&_offset](/apichallenges/solutions/get/get-todos-200-pagination-sort)
+- [GET /todos (200) ?filter&_limit&_offset](/apichallenges/solutions/get/get-todos-200-pagination-filter)
 
 ## HEAD Challenges
 
-- [HEAD /todos id (200)](/apichallenges/solutions/head/head-todos-200)
+- [HEAD /todos (200)](/apichallenges/solutions/head/head-todos-200)
 
 ## Creation Challenges with POST
 
-- [POST /todos id (201)](/apichallenges/solutions/post-create/post-todos-201)
+- [POST /todos (201)](/apichallenges/solutions/post-create/post-todos-201)
 - [POST /todos (422) doneStatus](/apichallenges/solutions/post-create/post-todos-422)
 - [POST /todos (422) title too long](/apichallenges/solutions/post-create/post-todos-422-title-too-long)
 - [POST /todos (422) description too long](/apichallenges/solutions/post-create/post-todos-422-description-too-long)
@@ -70,7 +76,7 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## Update Challenges with POST
 
-- [POST /todos id (200)](/apichallenges/solutions/post-update/post-todos-id-200)
+- [POST /todos/{id} (200)](/apichallenges/solutions/post-update/post-todos-id-200)
 - [POST /todos/{id} (404)](/apichallenges/solutions/post-update/post-todos-id-404)
 
 ## Update Challenges with PUT
@@ -82,13 +88,23 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## DELETE Challenges
 
-- [DELETE /todos id (204)](/apichallenges/solutions/delete/delete-todos-id-204)
+- [DELETE /todos/{id} (204)](/apichallenges/solutions/delete/delete-todos-id-204)
+
+## QUERY Challenges
+
+- [QUERY /todos (200)](/apichallenges/solutions/query/query-todos-200)
+
+## PATCH Challenges
+
+- [PATCH /todos/{id} (200) partial](/apichallenges/solutions/patch/patch-todos-id-200-partial)
+- [PATCH /todos/{id} (200) merge-patch](/apichallenges/solutions/patch/patch-todos-id-200-merge-patch)
+- [PATCH /todos/{id} (200) json-patch](/apichallenges/solutions/patch/patch-todos-id-200-json-patch)
 
 ## OPTIONS Challenges
 
 - [OPTIONS /todos (200)](/apichallenges/solutions/options/options-todos-200)
 
-## Accept Header Challenges
+## Accept Challenges
 
 - [GET /todos (200) XML](/apichallenges/solutions/accept-header/get-todos-200-xml)
 - [GET /todos (200) JSON](/apichallenges/solutions/accept-header/get-todos-200-json)
@@ -97,13 +113,13 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /todos (200) no accept](/apichallenges/solutions/accept-header/get-todos-200-no-accept)
 - [GET /todos (406)](/apichallenges/solutions/accept-header/get-todos-406)
 
-## Content-Type Header Challenges
+## Content-Type Challenges
 
 - [POST /todos XML](/apichallenges/solutions/content-type-header/post-todos-xml)
 - [POST /todos JSON](/apichallenges/solutions/content-type-header/post-todos-json)
 - [POST /todos (415)](/apichallenges/solutions/content-type-header/post-todos-415)
 
-## Content-Disposition Header Challenges
+## Content-Disposition Challenges
 
 - [GET /todos/export (200) CSV download](/apichallenges/solutions/content-disposition-header/get-todos-export-csv)
 - [GET /todos/export (200) HTML download](/apichallenges/solutions/content-disposition-header/get-todos-export-html)
@@ -111,12 +127,14 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## Fancy a Break? Restore your session
 
-- [Solve the Save and Restore Session Challenges](/apichallenges/solutions/manage-session/save-restore-session)
-   - GET /challenger/guid (existing X-CHALLENGER)
-   - PUT /challenger/guid RESTORE
-   - PUT /challenger/guid (409) mismatch
-   - GET /challenger/database/guid (200)
-   - PUT /challenger/database/guid (Update)
+- [GET /challenger/guid (200)](/apichallenges/solutions/manage-session/get-challenger-guid-200)
+- [POST /challenger (existing X-CHALLENGER)](/apichallenges/solutions/manage-session/post-challenger-existing-x-challenger-200)
+- [GET /challenger/guid (existing X-CHALLENGER)](/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200)
+- [PUT /challenger/guid RESTORE](/apichallenges/solutions/manage-session/put-challenger-guid-restore-200)
+- [PUT /challenger/guid (409) mismatch](/apichallenges/solutions/manage-session/put-challenger-guid-409-mismatch)
+- [PUT /challenger/guid CREATE](/apichallenges/solutions/manage-session/put-challenger-guid-create-201)
+- [GET /challenger/database/guid (200)](/apichallenges/solutions/manage-session/get-challenger-database-guid-200)
+- [PUT /challenger/database/guid (Update)](/apichallenges/solutions/manage-session/put-challenger-database-guid-204)
 
 ## Mix Accept and Content-Type Challenges
 
@@ -125,19 +143,17 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 ## Status Code Challenges
 
-- [Solve the 405, 500, 501 and 204 Status Code Challenges](/apichallenges/solutions/status-codes/status-codes-405-500-501-204)
-  - DELETE /heartbeat (405)
-  - PATCH /heartbeat (500)
-  - TRACE /heartbeat (501)
-  - GET /heartbeat (204)
+- [DELETE /heartbeat (405)](/apichallenges/solutions/status-codes/delete-heartbeat-405)
+- [PATCH /heartbeat (500)](/apichallenges/solutions/status-codes/patch-heartbeat-500)
+- [TRACE /heartbeat (501)](/apichallenges/solutions/status-codes/trace-heartbeat-501)
+- [GET /heartbeat (204)](/apichallenges/solutions/status-codes/get-heartbeat-204)
 - [GET /heartbeat (431) X-CHALLENGER too long](/apichallenges/solutions/status-codes/x-challenger-too-long-431)
 
 ## HTTP Method Override Challenges
 
-- [Solve the /heartbeat Method Override Challenges](/apichallenges/solutions/method-override/all-method-overrides)
-  - POST /heartbeat as DELETE (405)
-  - POST /heartbeat as PATCH (500)
-  - POST /heartbeat as Trace (501)
+- [POST /heartbeat as DELETE (405)](/apichallenges/solutions/method-override/post-heartbeat-as-delete-405)
+- [POST /heartbeat as PATCH (500)](/apichallenges/solutions/method-override/post-heartbeat-as-patch-500)
+- [POST /heartbeat as Trace (501)](/apichallenges/solutions/method-override/post-heartbeat-as-trace-501)
 
 ## Authentication Challenges
 
@@ -150,24 +166,12 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /secret/note (401)](/apichallenges/solutions/authorization/get-secret-note-401)
 - [GET /secret/note (200)](/apichallenges/solutions/authorization/get-secret-note-200)
 - [POST /secret/note (200)](/apichallenges/solutions/authorization/post-secret-note-200)
-- [POST /secret/note (401) && (403)](/apichallenges/solutions/authorization/post-secret-note-401-403)
-  - POST /secret/note (401)
-  - POST /secret/note (403)
-- [GET && POST /secret/note (Bearer)](/apichallenges/solutions/authorization/get-post-secret-note-bearer)
-  - GET /secret/note (Bearer)
-  - POST /secret/note (Bearer)
+- [POST /secret/note (401)](/apichallenges/solutions/authorization/post-secret-note-401)
+- [POST /secret/note (403)](/apichallenges/solutions/authorization/post-secret-note-403)
+- [GET /secret/note (Bearer)](/apichallenges/solutions/authorization/get-secret-note-bearer)
+- [POST /secret/note (Bearer)](/apichallenges/solutions/authorization/post-secret-note-bearer)
 
 ## Miscellaneous Challenges
 
 - [DELETE /todos/{id} (204) all](/apichallenges/solutions/miscellaneous/delete-all-todos)
 - [POST /todos (409) max todos](/apichallenges/solutions/miscellaneous/create-maximum-number-todos)
-
-## QUERY Challenges
-
-- [QUERY /todos (200)](/apichallenges/solutions/query/query-todos-200)
-
-## PATCH Challenges
-
-- [PATCH /todos/{id} (200) partial](/apichallenges/solutions/patch/patch-todos-id-200-partial)
-- [PATCH /todos/{id} (200) merge-patch](/apichallenges/solutions/patch/patch-todos-id-200-merge-patch)
-- [PATCH /todos/{id} (200) json-patch](/apichallenges/solutions/patch/patch-todos-id-200-json-patch)

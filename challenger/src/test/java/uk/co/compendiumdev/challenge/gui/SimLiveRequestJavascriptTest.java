@@ -23,6 +23,30 @@ public class SimLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("return fetch(request.url, options);"));
     }
 
+    @Test
+    void liveRequestWidgetsSupportRestoredChallengerPlaceholders() throws IOException {
+        String javascript = simLiveRequestJavascript();
+
+        Assertions.assertTrue(javascript.contains("function restoredChallenger()"));
+        Assertions.assertTrue(
+                javascript.contains("function currentChallengerJsonForRestoredChallenger()"));
+        Assertions.assertTrue(javascript.contains("json.xChallenger = restored"));
+        Assertions.assertTrue(javascript.contains("restoredChallenger: restoredChallenger()"));
+        Assertions.assertTrue(
+                javascript.contains("currentChallengerJsonForRestoredChallenger: values[5]"));
+    }
+
+    @Test
+    void editableRequestControlsPlaceResetBeforePrettyPrintInSharedActionRow() throws IOException {
+        String javascript = simLiveRequestJavascript();
+
+        Assertions.assertTrue(
+                javascript.contains("editActions.className = 'sim-live-edit-actions'"));
+        Assertions.assertTrue(
+                javascript.indexOf("editActions.appendChild(resetButton)")
+                        < javascript.indexOf("editActions.appendChild(prettyPrintButton)"));
+    }
+
     private String simLiveRequestJavascript() throws IOException {
         try (InputStream stream =
                 getClass().getResourceAsStream("/public/js/sim-live-request.js")) {

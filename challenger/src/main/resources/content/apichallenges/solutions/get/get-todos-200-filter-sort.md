@@ -35,7 +35,7 @@ How to issue a GET request on a top level entity endpoint, filter the returned t
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?doneStatus=false&_sortBy=-id" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?doneStatus=false&_sortBy=-id" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?doneStatus=false&_sortBy=-id to filter and sort todos" open="true">}}
 
 ## Example Request
 

@@ -58,7 +58,7 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="413" headers="Content-Type: application/json||Accept: application/json" body='{"title":"too much content","doneStatus":true,"description":"{{description5000}}"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="413" headers="Content-Type: application/json||Accept: application/json" body='{"title":"too much content","doneStatus":true,"description":"{{description5000}}"}' details="true" summary="POST /todos with an oversized body to trigger 413" open="true">}}
 
 
 ## Example Request
