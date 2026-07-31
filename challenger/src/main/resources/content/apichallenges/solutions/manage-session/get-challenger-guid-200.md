@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - GET challenger guid 200
 seo_title: Solution: GET challenger guid 200 | API Challenges
 description: How to solve GET /challenger/guid (200) by restoring an existing saved challenger from persistence.
-seo_description: Use this walkthrough to restore a saved challenger with GET /challenger/{guid} and verify the 200 response.
+seo_description: Use this walkthrough to restore a saved challenger with GET /challenger/{guid}, verify the 200 response, and confirm the active session changes.
 next_challenge: /apichallenges/solutions/manage-session/post-challenger-existing-x-challenger-200
 schema_howto_steps: Create a challenger session||Allow or arrange for that saved challenger to be absent from memory||Send GET /challenger/{guid} with the saved challenger id||Verify the response status is 200
 showads: true

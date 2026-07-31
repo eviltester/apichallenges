@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - GET challenger guid existing X-CHALLENGER
 seo_title: Solution: GET challenger guid existing X-CHALLENGER | API Challenges
 description: How to solve GET /challenger/guid (existing X-CHALLENGER) and export challenger progress.
-seo_description: Use this walkthrough to GET challenger progress as JSON for the current challenger session.
+seo_description: Use this walkthrough to GET challenger progress as JSON for the current challenger session, verify the 200 response, and review the saved status.
 next_challenge: /apichallenges/solutions/manage-session/put-challenger-guid-restore-200
 schema_howto_steps: Create or use an active challenger session||Send GET /challenger/{guid} for that challenger||Include X-CHALLENGER so the action is tracked||Save the JSON response for later restore requests
 showads: true

@@ -2,9 +2,9 @@
 date:  2026-07-31T11:30:00Z
 lastmod: 2026-07-31
 title: API Challenges Solution For - GET heartbeat 204
-seo_title: Solution: GET heartbeat 204 | API Challenges
+seo_title: Solution: GET heartbeat 204 no content | API Challenges
 description: How to solve GET /heartbeat (204) and verify the no-content success response.
-seo_description: Use this walkthrough to send GET /heartbeat and verify the 204 response.
+seo_description: Use this walkthrough to send GET /heartbeat, verify the 204 no-content response, and confirm the request body stays empty for the challenge.
 next_challenge: /apichallenges/solutions/status-codes/x-challenger-too-long-431
 schema_howto_steps: Create a GET request to /heartbeat||Include X-CHALLENGER so progress is tracked||Send the request||Verify the response status is 204 and the body is empty
 showads: true

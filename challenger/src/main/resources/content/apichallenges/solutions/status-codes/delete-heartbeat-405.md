@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - DELETE heartbeat 405
 seo_title: Solution: DELETE heartbeat 405 | API Challenges
 description: How to solve DELETE /heartbeat (405) and trigger Method Not Allowed.
-seo_description: Use this walkthrough to send DELETE /heartbeat and verify the 405 response.
+seo_description: Use this walkthrough to send DELETE /heartbeat, verify the 405 response, and understand why heartbeat only supports the intended safe methods.
 next_challenge: /apichallenges/solutions/status-codes/patch-heartbeat-500
 schema_howto_steps: Create a DELETE request to /heartbeat||Include X-CHALLENGER so progress is tracked||Send the request||Verify the response status is 405
 showads: true

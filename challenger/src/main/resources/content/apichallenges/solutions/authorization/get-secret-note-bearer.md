@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - GET secret note Bearer
 seo_title: Solution: GET secret note Bearer | API Challenges
 description: How to solve GET /secret/note (Bearer) with an Authorization Bearer token.
-seo_description: Use this walkthrough to send GET /secret/note with Authorization Bearer and verify the 200 response.
+seo_description: Use this walkthrough to send GET /secret/note with Authorization Bearer, check the authenticated 200 response, and confirm progress is tracked.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-bearer
 schema_howto_steps: Authenticate with POST /secret/token to obtain X-AUTH-TOKEN||Create a GET request to /secret/note||Use Authorization Bearer with that token value||Verify the response status is 200
 showads: true

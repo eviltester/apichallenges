@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - GET challenger database guid 200
 seo_title: Solution: GET challenger database guid 200 | API Challenges
 description: How to solve GET /challenger/database/guid (200) by exporting the current todo database.
-seo_description: Use this walkthrough to GET the current todo database for a challenger and verify the 200 response.
+seo_description: Use this walkthrough to GET the current todo database for a challenger, verify the 200 response, and save the body for later restore practice.
 next_challenge: /apichallenges/solutions/manage-session/put-challenger-database-guid-204
 schema_howto_steps: Use an active challenger session||Send GET /challenger/database/{guid}||Save the returned todos database JSON||Verify the response status is 200
 showads: true

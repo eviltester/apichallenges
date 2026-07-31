@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - PUT challenger guid RESTORE
 seo_title: Solution: PUT challenger guid RESTORE | API Challenges
 description: How to solve PUT /challenger/guid RESTORE by restoring challenger progress from a saved JSON payload.
-seo_description: Use this walkthrough to PUT saved challenger progress back to /challenger/{guid} and verify the 200 response.
+seo_description: Use this walkthrough to PUT saved challenger progress back to /challenger/{guid}, verify the 200 response, and restore challenge completion.
 next_challenge: /apichallenges/solutions/manage-session/put-challenger-guid-409-mismatch
 schema_howto_steps: GET your challenger progress JSON||Send PUT /challenger/{guid} using that JSON as the request body||Use Content-Type application/json||Verify the response status is 200
 showads: true

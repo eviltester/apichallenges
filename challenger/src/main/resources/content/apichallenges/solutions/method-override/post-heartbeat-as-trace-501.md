@@ -4,7 +4,7 @@ lastmod: 2026-07-31
 title: API Challenges Solution For - POST heartbeat as TRACE 501
 seo_title: Solution: POST heartbeat as TRACE 501 | API Challenges
 description: How to solve POST /heartbeat as TRACE using X-HTTP-Method-Override.
-seo_description: Use this walkthrough to send POST /heartbeat with X-HTTP-Method-Override TRACE and verify the 501 response.
+seo_description: Use this walkthrough to send POST /heartbeat with X-HTTP-Method-Override TRACE, verify the 501 response, and complete the method override challenge.
 next_challenge: /apichallenges/solutions/authentication/post-secret-401
 schema_howto_steps: Create a POST request to /heartbeat||Add X-HTTP-Method-Override TRACE||Include X-CHALLENGER so progress is tracked||Verify the response status is 501
 showads: true
