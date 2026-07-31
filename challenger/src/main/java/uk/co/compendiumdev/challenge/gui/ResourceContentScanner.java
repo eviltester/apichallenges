@@ -66,6 +66,7 @@ public class ResourceContentScanner {
             boolean inHeader = false;
             String lastmod = "";
             String date = "";
+            String metaRobots = "";
             boolean includeInSitemap = true;
 
             while ((line = reader.readLine()) != null) {
@@ -90,9 +91,13 @@ public class ResourceContentScanner {
                 if (line.startsWith("sitemap: ")) {
                     includeInSitemap = !isFalseValue(line.replaceFirst("^sitemap:\\s*", "").trim());
                 }
+                if (line.startsWith("meta_robots: ")) {
+                    metaRobots = line.replaceFirst("^meta_robots:\\s*", "").trim();
+                }
             }
 
             final LocalDate parsedLastmod = parseDateValue(lastmod);
+            includeInSitemap = includeInSitemap && !hasNoIndexDirective(metaRobots);
             if (parsedLastmod != null) {
                 return new FrontMatterMetadata(parsedLastmod, includeInSitemap);
             }
@@ -109,6 +114,15 @@ public class ResourceContentScanner {
         }
         final String value = rawValue.trim().toLowerCase();
         return value.equals("false") || value.equals("no") || value.equals("off");
+    }
+
+    private boolean hasNoIndexDirective(final String metaRobots) {
+        if (metaRobots == null) {
+            return false;
+        }
+        return Arrays.stream(metaRobots.toLowerCase().split(","))
+                .map(String::trim)
+                .anyMatch("noindex"::equals);
     }
 
     private LocalDate parseDateValue(final String rawDateValue) {

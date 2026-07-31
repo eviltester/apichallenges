@@ -19,3 +19,5 @@ Disallow: /secret/*
 # Disallow: /todos
 # Disallow: /challenges
 # Disallow: /heartbeat
+
+Sitemap: https://apichallenges.eviltester.com/sitemap.xml
