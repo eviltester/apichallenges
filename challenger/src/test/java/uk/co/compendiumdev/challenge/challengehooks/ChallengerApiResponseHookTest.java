@@ -75,6 +75,419 @@ public class ChallengerApiResponseHookTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("repositoryProviders")
+    public void filteredTodosIdGreaterThanChallengeCompletesForMatchingSubset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id>2"),
+                    fixture.apiResponseWithBody(200, todosJson(3, 4)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdGreaterThanChallengeRequiresGreaterThanOperator(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id>=2"),
+                    fixture.apiResponseWithBody(200, todosJson(2, 3, 4)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdGreaterThanChallengeRequiresNonEmptyMatchingSubset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id>2"),
+                    fixture.apiResponseWithBody(200, todosJson(1, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdGreaterThanChallengeRequiresIntegerThreshold(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id>bob"),
+                    fixture.apiResponseWithBody(200, todosJson(3, 4)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdGreaterThanChallengeRequiresReturnedTodos(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id>2"),
+                    fixture.apiResponseWithBody(200, todosJson()),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdLessThanChallengeCompletesForMatchingSubset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id<3"),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdLessThanChallengeRequiresLessThanOperator(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id<=3"),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdLessThanChallengeRequiresMatchingSubset(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id<3"),
+                    fixture.apiResponseWithBody(200, todosJson(1, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdLessThanChallengeRequiresIntegerThreshold(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(4);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id<bob"),
+                    fixture.apiResponseWithBody(200, todosJson(1, 2)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdSingleResultChallengeCompletesForOneTodoAmongMany(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(3);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id=2"),
+                    fixture.apiResponseWithBody(200, todosJson(2)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdSingleResultChallengeRequiresSingleReturnedTodo(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(3);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id=2"),
+                    fixture.apiResponseWithBody(200, todosJson(2, 3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdSingleResultChallengeRequiresMultipleTodosInDatabase(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(1);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id=1"),
+                    fixture.apiResponseWithBody(200, todosJson(1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosIdSingleResultChallengeRequiresMatchingId(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodos(3);
+
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("id=2"),
+                    fixture.apiResponseWithBody(200, todosJson(3)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionRegexChallengeCompletesForMatchingDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description~=.*fixture.*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("regex fixture description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionRegexChallengeRequiresRegexOperator(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description*=*fixture*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("regex fixture description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionRegexChallengeRequiresMatchingDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description~=.*fixture.*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("different description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionRegexChallengeRequiresNonEmptyDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("description~=.*"),
+                    fixture.apiResponseWithBody(200, todosJson(1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionRegexChallengeRequiresValidRegex(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("description~=["),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("regex fixture description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionWildcardChallengeCompletesForMatchingDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description*=*fixture*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("wildcard fixture description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionWildcardChallengeRequiresWildcardOperator(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description~=.*fixture.*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("wildcard fixture description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionWildcardChallengeRequiresMatchingDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET)
+                            .setFilterableQueryParams("description*=*fixture*"),
+                    fixture.apiResponseWithBody(
+                            200, todosJsonWithDescription("different description", 1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void filteredTodosDescriptionWildcardChallengeRequiresNonEmptyDescriptions(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", GET).setFilterableQueryParams("description*=*"),
+                    fixture.apiResponseWithBody(200, todosJson(1)),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
     public void queryFilteredTodosChallengeCompletesWhenDoneAndNotDoneTodosExist(
             final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
 
@@ -671,6 +1084,26 @@ public class ChallengerApiResponseHookTest {
                     .append(",\"title\":\"todo ")
                     .append(ids[index])
                     .append("\",\"doneStatus\":false,\"description\":\"\"}");
+        }
+
+        json.append("]}");
+        return json.toString();
+    }
+
+    private static String todosJsonWithDescription(final String description, final int... ids) {
+        StringBuilder json = new StringBuilder("{\"todos\":[");
+
+        for (int index = 0; index < ids.length; index++) {
+            if (index > 0) {
+                json.append(",");
+            }
+            json.append("{\"id\":")
+                    .append(ids[index])
+                    .append(",\"title\":\"todo ")
+                    .append(ids[index])
+                    .append("\",\"doneStatus\":false,\"description\":\"")
+                    .append(description)
+                    .append("\"}");
         }
 
         json.append("]}");

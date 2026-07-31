@@ -162,7 +162,9 @@ public class ChallengerUiJavascriptTest {
                 javascript.indexOf("refreshLocalChallengerProgressFromSystem(sanitizedGuid)");
         int localProgressSave =
                 javascript.indexOf("saveChallengerProgressToLocalStorage(challenger)");
-        int redirect = javascript.indexOf("location.href = `/gui/challenges/${sanitizedGuid}`");
+        int redirect =
+                javascript.indexOf(
+                        "location.href = `/gui/challenges/${sanitizedGuid}${location.hash || \"\"}`");
 
         Assertions.assertTrue(progressRestore > 0);
         Assertions.assertTrue(progressRefresh > progressRestore);

@@ -809,7 +809,7 @@ function restoreLocalChallenger(guid, button){
         .then(() => {
             setLocalRestoreMessage("Restored locally saved session. Loading...", sanitizedGuid);
             setRestoreButtonState(button, "restored", true);
-            location.href = `/gui/challenges/${sanitizedGuid}`;
+            location.href = `/gui/challenges/${sanitizedGuid}${location.hash || ""}`;
             return true;
         })
         .catch((error) => {

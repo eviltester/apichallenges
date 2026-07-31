@@ -2,7 +2,7 @@
 title: API Challenges Solution Index
 seo_title: Solution Index and Walkthroughs | API Challenges
 description: A list of all the solutions for the API Challenges. Try them yourself, but if you get stuck, we have instructions and solution videos.
-lastmod: 2026-07-30
+lastmod: 2026-07-31
 seo_description: Explore API Challenges Solution with practical guidance and actionable next steps designed to improve API testing skills through hands-on practice.
 showads: true
 ---
@@ -32,6 +32,11 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /todos id (200)](/apichallenges/solutions/get/get-todos-id-200)
 - [GET /todos id (404)](/apichallenges/solutions/get/get-todos-id-404)
 - [GET /todos ?filter (200)](/apichallenges/solutions/get/get-todos-200-filter)
+- [GET /todos ?filter id greater than (200)](/apichallenges/solutions/get/get-todos-200-filter-id-greater-than)
+- [GET /todos ?filter id less than (200)](/apichallenges/solutions/get/get-todos-200-filter-id-less-than)
+- [GET /todos ?filter id single result (200)](/apichallenges/solutions/get/get-todos-200-filter-id-single-result)
+- [GET /todos ?filter description regex (200)](/apichallenges/solutions/get/get-todos-200-filter-description-regex)
+- [GET /todos ?filter description wildcard (200)](/apichallenges/solutions/get/get-todos-200-filter-description-wildcard)
 - [GET /todos ?_sortBy ascending (200)](/apichallenges/solutions/get/get-todos-200-sort-ascending)
 - [GET /todos ?_sortBy descending (200)](/apichallenges/solutions/get/get-todos-200-sort-descending)
 - [GET /todos ?_sortBy multiple (200)](/apichallenges/solutions/get/get-todos-200-sort-multiple)

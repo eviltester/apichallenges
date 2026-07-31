@@ -1,11 +1,11 @@
 ---
 date:  2021-01-30T09:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-07-31
 title: API Challenges Solution For - GET todos 200 filter
 seo_title: Solution: GET todos 200 filter | API Challenges
 description: How to solve API challenge GET todos 200 filter to use URL parameters to filter the results.
 seo_description: Use this walkthrough to solve GET todos 200 filter with request setup, key headers, and expected status codes so you can complete the challenge confidently.
-next_challenge: /apichallenges/solutions/get/get-todos-200-sort-ascending
+next_challenge: /apichallenges/solutions/get/get-todos-200-filter-id-greater-than
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add the required query parameters and confirm the filtered todo results||Send the request and verify the response status is 200
 showads: true
 ---

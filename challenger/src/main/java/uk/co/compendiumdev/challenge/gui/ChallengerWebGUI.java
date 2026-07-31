@@ -411,7 +411,7 @@ public class ChallengerWebGUI {
                                 storeThingifierDatabaseNameCookie(
                                         challengers.SINGLE_PLAYER.getXChallenger()));
                     } else {
-                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(outputEmptyChallengeDataAsJS());
                         html.append(showAchievements());
                         html.append(playerChallengesIntro());
                         html.append(
@@ -484,7 +484,7 @@ public class ChallengerWebGUI {
                     }
 
                     if (challenger == null) {
-                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(outputEmptyChallengeDataAsJS());
                         html.append(showAchievements());
                         html.append(playerChallengesIntro());
 
@@ -893,6 +893,11 @@ public class ChallengerWebGUI {
         html.append("<script>document.databaseData=" + json + ";</script>");
 
         return html.toString();
+    }
+
+    private String outputEmptyChallengeDataAsJS() {
+        return "<script>document.challengerData={};</script>"
+                + "<script>document.databaseData={};</script>";
     }
 
     private String renderChallengeData(

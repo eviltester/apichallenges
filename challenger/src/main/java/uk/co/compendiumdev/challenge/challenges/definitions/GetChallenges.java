@@ -120,6 +120,100 @@ public class GetChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData getTodosFilteredIdGreaterThan200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id greater than",
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value.");
+
+        aChallenge.addHint("Use the `id` field with the greater than operator.");
+        aChallenge.addHint("For example, `?id>5` returns todos with an id greater than 5.");
+        aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-greater-than");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredIdLessThan200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id less than",
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id less than a supplied value.");
+
+        aChallenge.addHint("Use the `id` field with the less than operator.");
+        aChallenge.addHint("For example, `?id<6` returns todos with an id less than 6.");
+        aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-less-than");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredIdSingleResult200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id single result",
+                        "Issue a GET request on the `/todos` end point with an id filter that returns one todo while multiple todos exist in the database.");
+
+        aChallenge.addHint("Use the `id` field with an exact value.");
+        aChallenge.addHint("For example, `?id=3` returns the todo with id 3.");
+        aChallenge.addHint("Make sure there is more than one todo in the database.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-single-result");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredDescriptionRegex200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter description regex",
+                        "Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions.");
+
+        aChallenge.addHint(
+                "Use the `description` field with the regular expression operator `~=`.");
+        aChallenge.addHint(
+                "For example, `?description~=.*fixture.*` returns descriptions that match the regular expression.");
+        aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-description-regex");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredDescriptionWildcard200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter description wildcard",
+                        "Issue a GET request on the `/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions.");
+
+        aChallenge.addHint("Use the `description` field with the wildcard operator `*=`.");
+        aChallenge.addHint(
+                "For example, `?description*=*fixture*` matches descriptions containing fixture.");
+        aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-description-wildcard");
+        return aChallenge;
+    }
+
     public static ChallengeDefinitionData getTodosSortedAscending200(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(

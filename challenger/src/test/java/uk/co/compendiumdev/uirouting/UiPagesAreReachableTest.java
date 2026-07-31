@@ -250,9 +250,11 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals(
-                "attachment; filename=\"Simple-Todo-List-swagger.json\"",
+                "attachment; filename=\"API-Challenges-Simple-Todo-List-swagger.json\"",
                 response.getHeader("Content-Disposition"));
         assertOpenApiVersion(response.body, "3.1.0");
+        Assertions.assertTrue(
+                response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
     }
 
     @Test
@@ -264,6 +266,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertNotNull(response.getHeader("Content-Type"));
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
         assertOpenApiVersion(response.body, "3.1.0");
+        Assertions.assertTrue(
+                response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
         Assertions.assertTrue(
                 response.body.indexOf("\"url\" : \"http://localhost:4567\"")
                         < response.body.indexOf(
@@ -1482,6 +1486,9 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("Unknown Challenger ID"));
+        Assertions.assertTrue(
+                response.body.contains("<script>document.challengerData={};</script>"));
+        Assertions.assertTrue(response.body.contains("<script>document.databaseData={};</script>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<button onclick=inputChallengeGuid()>Input Challenger GUID</button>"));

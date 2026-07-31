@@ -27,6 +27,14 @@
     return new URL(path, window.location.origin).toString();
   }
 
+  function readableUrl(url) {
+    return String(url || '')
+      .replace(/%3E/gi, '>')
+      .replace(/%3C/gi, '<')
+      .replace(/%7E/gi, '~')
+      .replace(/%2A/gi, '*');
+  }
+
   function pathFromUrl(url) {
     try {
       return new URL(url, window.location.origin).pathname;
@@ -296,7 +304,7 @@
   }
 
   function buildCurlCommand(request) {
-    const parts = [`${curlExecutable()} -i`, '-X', request.method, `"${request.url}"`];
+    const parts = [`${curlExecutable()} -i`, '-X', request.method, `"${readableUrl(request.url)}"`];
     request.headers.forEach(function (header) {
       parts.push(`-H "${header.name}: ${header.value}"`);
     });
@@ -317,7 +325,7 @@
     if (request.body && request.method !== 'GET' && request.method !== 'HEAD') {
       parts.push(`--body-data='${escapeShellSingleQuotes(request.body)}'`);
     }
-    parts.push(`"${request.url}"`);
+    parts.push(`"${readableUrl(request.url)}"`);
     return parts.join(' ');
   }
 
@@ -623,7 +631,7 @@
     const urlInput = document.createElement('input');
     urlInput.className = 'sim-live-edit-url';
     urlInput.type = 'url';
-    urlInput.value = request.url;
+    urlInput.value = readableUrl(request.url);
     urlLabel.appendChild(urlInput);
 
     const headersLabel = document.createElement('label');
@@ -669,7 +677,7 @@
       request.userEdited = true;
       request.method = methodSelect.value;
       request.url = absoluteUrl(urlInput.value);
-      urlInput.value = request.url;
+      urlInput.value = readableUrl(request.url);
       request.headers = parseEditableHeaders(headersTextarea.value);
       if (bodyTextarea) {
         request.body = bodyTextarea.value;
@@ -690,7 +698,7 @@
       request.body = defaultRequest.body;
       request.headers = cloneHeaders(defaultRequest.headers);
       methodSelect.value = request.method;
-      urlInput.value = request.url;
+      urlInput.value = readableUrl(request.url);
       headersTextarea.value = headersToEditableText(request.headers);
       if (bodyTextarea) {
         bodyTextarea.value = formatRequestBody(request);
@@ -903,7 +911,7 @@
     method.textContent = request.method;
 
     const url = document.createElement('code');
-    url.textContent = request.url;
+    url.textContent = readableUrl(request.url);
 
     requestLine.appendChild(method);
     requestLine.appendChild(url);
@@ -913,7 +921,7 @@
     if (request.editable) {
       controls = renderEditableControls(request, defaultRequest, function () {
         method.textContent = request.method;
-        url.textContent = request.url;
+        url.textContent = readableUrl(request.url);
         notifyChanged();
       });
       panel.appendChild(controls.element);
@@ -956,9 +964,9 @@
               && (request.resolveDynamicOnExecute || unresolvedDynamicUrl)) {
             return resolveDynamicRequest(request).then(function () {
               method.textContent = request.method;
-              url.textContent = request.url;
+              url.textContent = readableUrl(request.url);
               if (controls) {
-                controls.urlInput.value = request.url;
+                controls.urlInput.value = readableUrl(request.url);
                 controls.headersTextarea.value = headersToEditableText(request.headers);
                 if (controls.bodyTextarea) {
                   controls.bodyTextarea.value = request.body;
@@ -1054,10 +1062,10 @@
 
   function updateRequestView(widgetState) {
     widgetState.method.textContent = widgetState.request.method;
-    widgetState.url.textContent = widgetState.request.url;
+    widgetState.url.textContent = readableUrl(widgetState.request.url);
     if (widgetState.controls) {
       widgetState.controls.methodSelect.value = widgetState.request.method;
-      widgetState.controls.urlInput.value = widgetState.request.url;
+      widgetState.controls.urlInput.value = readableUrl(widgetState.request.url);
       widgetState.controls.headersTextarea.value = headersToEditableText(
         widgetState.request.headers);
       if (widgetState.controls.bodyTextarea) {
