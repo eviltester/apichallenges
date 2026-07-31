@@ -59,10 +59,20 @@ public class SimLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("Challenge Not Passed Yet"));
         Assertions.assertTrue(javascript.contains("function updateChallengeCompletedBanners()"));
         Assertions.assertTrue(javascript.contains("function showChallengeCompletedBanner"));
+        Assertions.assertTrue(javascript.contains("function showChallengeFireworks()"));
+        Assertions.assertTrue(javascript.contains("prefers-reduced-motion: reduce"));
+        Assertions.assertTrue(javascript.contains(".sim-live-fireworks"));
+        Assertions.assertTrue(javascript.contains("sim-live-firework-ring"));
+        Assertions.assertTrue(javascript.contains("sim-live-firework-confetti"));
+        Assertions.assertTrue(javascript.contains("for (let index = 0; index < 90; index += 1)"));
+        Assertions.assertTrue(javascript.contains("}, 4600);"));
         Assertions.assertTrue(
                 javascript.contains(".solution-challenge-completed[data-challenge-id]"));
         Assertions.assertTrue(javascript.contains("updateChallengeCompletedBanners();"));
         Assertions.assertTrue(javascript.contains("}, 10000);"));
+        Assertions.assertTrue(javascript.contains("let wasChallengePassedBeforeRequest = false"));
+        Assertions.assertTrue(javascript.contains("wasChallengePassedBeforeRequest ="));
+        Assertions.assertTrue(javascript.contains("if (!wasChallengePassedBeforeRequest)"));
         Assertions.assertTrue(javascript.contains("if (!requestWasSent || !request.challengeId)"));
     }
 

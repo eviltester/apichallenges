@@ -337,6 +337,186 @@ a.next-challenge-cta-link:hover {
     padding: 0.65rem 0.85rem;
 }
 
+.sim-live-fireworks {
+    animation: sim-live-firework-overlay 4200ms ease-out forwards;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    z-index: 9999;
+}
+
+.sim-live-fireworks::before {
+    animation: sim-live-firework-glow 1800ms ease-out forwards;
+    background:
+        radial-gradient(circle at 50% 35%, rgb(255 255 255 / 35%), transparent 22rem),
+        radial-gradient(circle at 20% 25%, rgb(24 160 88 / 24%), transparent 18rem),
+        radial-gradient(circle at 80% 22%, rgb(245 158 11 / 24%), transparent 18rem),
+        radial-gradient(circle at 50% 65%, rgb(219 39 119 / 18%), transparent 20rem);
+    content: "";
+    inset: 0;
+    opacity: 0;
+    position: absolute;
+}
+
+.sim-live-firework-burst {
+    animation: sim-live-firework-burst 1800ms ease-out forwards;
+    animation-delay: var(--delay);
+    display: block;
+    height: 0;
+    left: var(--x);
+    position: absolute;
+    top: var(--y);
+    transform: scale(var(--size));
+    width: 0;
+}
+
+.sim-live-firework-ring {
+    animation: sim-live-firework-ring 1500ms ease-out forwards;
+    animation-delay: var(--delay);
+    border: 0.2rem solid var(--color);
+    border-radius: 999px;
+    box-shadow:
+        0 0 1.25rem var(--color),
+        inset 0 0 1rem var(--color);
+    display: block;
+    height: 1rem;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%) scale(0.15);
+    width: 1rem;
+}
+
+.sim-live-firework-spark {
+    animation: sim-live-firework-spark 1500ms cubic-bezier(0.16, 0.85, 0.34, 1) forwards;
+    animation-delay: var(--delay);
+    background: linear-gradient(90deg, rgb(255 255 255 / 92%), var(--color), transparent);
+    border-radius: 999px;
+    box-shadow: 0 0 1rem var(--color);
+    display: block;
+    height: 0.34rem;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) scaleX(0.25);
+    transform-origin: 0 50%;
+    width: 2rem;
+}
+
+.sim-live-firework-confetti {
+    animation: sim-live-firework-confetti var(--duration) ease-in forwards;
+    animation-delay: var(--delay);
+    background: var(--color);
+    border-radius: 0.12rem;
+    box-shadow: 0 0 0.6rem rgb(255 255 255 / 40%);
+    display: block;
+    height: 0.75rem;
+    left: var(--left);
+    opacity: 0;
+    position: absolute;
+    top: -12vh;
+    transform: translate3d(0, 0, 0) rotate(0);
+    width: 0.45rem;
+}
+
+@keyframes sim-live-firework-overlay {
+    0%,
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes sim-live-firework-glow {
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes sim-live-firework-spark {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) scaleX(0.25);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translate(-50%, -50%)
+            rotate(var(--angle))
+            translateX(var(--distance))
+            scaleX(0.05);
+    }
+}
+
+@keyframes sim-live-firework-ring {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.15);
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(11);
+    }
+}
+
+@keyframes sim-live-firework-burst {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes sim-live-firework-confetti {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    78% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--drift), 118vh, 0) rotate(var(--spin));
+    }
+}
+
 .sim-live-request-line {
     align-items: baseline;
     display: flex;

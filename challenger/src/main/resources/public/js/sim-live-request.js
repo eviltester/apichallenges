@@ -523,6 +523,87 @@
     }, 10000);
   }
 
+  function showChallengeFireworks() {
+    if (window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const previousFireworks = document.querySelector('.sim-live-fireworks');
+    if (previousFireworks) {
+      previousFireworks.remove();
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sim-live-fireworks';
+    overlay.setAttribute('aria-hidden', 'true');
+
+    const colors = [
+      '#18a058',
+      '#f59e0b',
+      '#2563eb',
+      '#db2777',
+      '#7c3aed',
+      '#ef4444',
+      '#06b6d4',
+      '#facc15',
+    ];
+    const bursts = [
+      { x: 18, y: 24, delay: 0, size: 1.15 },
+      { x: 78, y: 20, delay: 180, size: 1.1 },
+      { x: 48, y: 30, delay: 360, size: 1.35 },
+      { x: 28, y: 52, delay: 560, size: 1 },
+      { x: 70, y: 50, delay: 760, size: 1.2 },
+      { x: 52, y: 66, delay: 980, size: 0.95 },
+    ];
+
+    bursts.forEach(function (burst, burstIndex) {
+      const burstElement = document.createElement('span');
+      burstElement.className = 'sim-live-firework-burst';
+      burstElement.style.setProperty('--x', `${burst.x}vw`);
+      burstElement.style.setProperty('--y', `${burst.y}vh`);
+      burstElement.style.setProperty('--delay', `${burst.delay}ms`);
+      burstElement.style.setProperty('--size', burst.size);
+
+      const ring = document.createElement('span');
+      ring.className = 'sim-live-firework-ring';
+      ring.style.setProperty('--color', colors[burstIndex % colors.length]);
+      ring.style.setProperty('--delay', `${burst.delay}ms`);
+      burstElement.appendChild(ring);
+
+      for (let index = 0; index < 28; index += 1) {
+        const spark = document.createElement('span');
+        const angle = ((Math.PI * 2) / 28) * index;
+        const distance = 86 + ((index + burstIndex) % 7) * 13;
+        spark.className = 'sim-live-firework-spark';
+        spark.style.setProperty('--angle', `${angle}rad`);
+        spark.style.setProperty('--distance', `${distance}px`);
+        spark.style.setProperty('--color', colors[(index + burstIndex) % colors.length]);
+        spark.style.setProperty('--delay', `${burst.delay}ms`);
+        burstElement.appendChild(spark);
+      }
+
+      overlay.appendChild(burstElement);
+    });
+
+    for (let index = 0; index < 90; index += 1) {
+      const confetti = document.createElement('span');
+      confetti.className = 'sim-live-firework-confetti';
+      confetti.style.setProperty('--left', `${(index * 37) % 100}vw`);
+      confetti.style.setProperty('--delay', `${260 + ((index * 53) % 1600)}ms`);
+      confetti.style.setProperty('--duration', `${2200 + ((index * 41) % 1100)}ms`);
+      confetti.style.setProperty('--drift', `${-80 + ((index * 29) % 160)}px`);
+      confetti.style.setProperty('--spin', `${360 + ((index * 43) % 540)}deg`);
+      confetti.style.setProperty('--color', colors[index % colors.length]);
+      overlay.appendChild(confetti);
+    }
+
+    document.body.appendChild(overlay);
+    window.setTimeout(function () {
+      overlay.remove();
+    }, 4600);
+  }
+
   function showChallengeCompletedBanner(challengeId) {
     if (!challengeId) {
       return;
@@ -1099,6 +1180,7 @@
 
     executeButton.addEventListener('click', function () {
       executeButton.disabled = true;
+      let wasChallengePassedBeforeRequest = false;
       clearChallengeFeedback(challengeFeedback);
       responseArea.status.textContent = 'Running...';
       responseArea.bodyPanel.textContent = '';
@@ -1126,6 +1208,13 @@
           return null;
         })
         .then(function () {
+          if (!request.challengeId) {
+            return false;
+          }
+          return checkChallengePassed(request);
+        })
+        .then(function (passedBeforeRequest) {
+          wasChallengePassedBeforeRequest = passedBeforeRequest === true;
           const unsupportedRequestMessage = browserUnsupportedRequestMessage(request);
           if (unsupportedRequestMessage) {
             responseArea.status.textContent = 'Cannot execute in browser';
@@ -1190,6 +1279,9 @@
             showChallengeFeedback(challengeFeedback, passed);
             if (passed) {
               showChallengeCompletedBanner(request.challengeId);
+              if (!wasChallengePassedBeforeRequest) {
+                showChallengeFireworks();
+              }
             }
           });
         })

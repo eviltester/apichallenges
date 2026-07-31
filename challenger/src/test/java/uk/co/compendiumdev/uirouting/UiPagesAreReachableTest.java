@@ -878,6 +878,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-execute-row"));
         Assertions.assertTrue(response.body.contains(".sim-live-challenge-feedback"));
         Assertions.assertTrue(response.body.contains(".solution-challenge-completed"));
+        Assertions.assertTrue(response.body.contains(".sim-live-fireworks"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-spark"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-ring"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-confetti"));
         Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
