@@ -138,7 +138,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":3,
                             "isbn13": "1234567890123",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .stripIndent());
@@ -171,7 +171,7 @@ public class SimpleApiModeTest {
                           "price": 2.00,
                           "numberinstock": %s,
                           "isbn13": "%s",
-                          "type": book
+                          "type": "book"
                         }
                         """
                                 .formatted(numberInStock, Item.randomIsbn(new Random()))
@@ -205,7 +205,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(aRandomIsbn)
@@ -221,7 +221,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(aRandomIsbn.replace("-", dupeSynonymReplace))
@@ -269,7 +269,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(anItem.isbn13)
@@ -318,7 +318,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(anItem.isbn13.replace("-", dupeSynonymReplace))
@@ -352,7 +352,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "1234567890123",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .stripIndent());
@@ -604,7 +604,7 @@ public class SimpleApiModeTest {
                             "price":3.00,
                             "numberinstock":4,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(isbn)
