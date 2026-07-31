@@ -208,6 +208,36 @@ html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux {
     color: var(--text) !important;
 }
 
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header h3,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content h4,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content p,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content span,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content strong,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .auth-container,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .auth-container h4,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .auth-container label,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .auth-container code {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header {
+    border-color: var(--border) !important;
+}
+
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header button,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-content .btn {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header button svg,
+html[data-theme="dark-lab"] .swagger-ui .dialog-ux .modal-ux-header button svg * {
+    fill: var(--text) !important;
+}
+
 html[data-theme="dark-lab"] .swagger-ui .topbar,
 html[data-theme="dark-lab"] .swagger-ui .scheme-container,
 html[data-theme="dark-lab"] .swagger-ui .opblock .opblock-section-header {
