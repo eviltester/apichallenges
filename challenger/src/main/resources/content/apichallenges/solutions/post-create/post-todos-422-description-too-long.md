@@ -19,4 +19,4 @@ The response should be `422 Unprocessable Content` and include a validation erro
 Keep the JSON syntax valid; the point of the challenge is entity validation, not malformed JSON.
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"description too long","doneStatus":true,"description":"{{description201}}"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"description too long","doneStatus":true,"description":"{{description201}}"}' details="true" summary="POST /todos with a long description to trigger 422" open="true">}}

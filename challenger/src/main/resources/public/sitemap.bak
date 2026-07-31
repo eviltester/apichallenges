@@ -55,13 +55,13 @@
       <priority>0.5</priority>
    </url>
    <url>
-      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/authorization/post-secret-note-401-403</loc>
+      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/authorization/post-secret-note-401</loc>
       <lastmod>2024-03-22</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
    </url>
    <url>
-      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/authorization/get-post-secret-note-bearer</loc>
+      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/authorization/get-secret-note-bearer</loc>
       <lastmod>2024-03-22</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
@@ -157,7 +157,7 @@
       <priority>0.5</priority>
    </url>
    <url>
-      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/status-codes/status-codes-405-500-501-204</loc>
+      <loc>https://apichallenges.eviltester.com/apichallenges/solutions/status-codes/delete-heartbeat-405</loc>
       <lastmod>2024-03-22</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>

@@ -42,7 +42,7 @@ Some systems may simply ignore the 'accept' header and return the response in th
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/gzip">}}
+{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/gzip" details="true" summary="GET /todos with an unsupported Accept header to trigger 406" open="true">}}
 
 
 ## Example Request

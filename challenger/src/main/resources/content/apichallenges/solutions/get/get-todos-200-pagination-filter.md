@@ -36,7 +36,7 @@ How to issue a GET request on a top level entity endpoint and combine a todo fie
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?doneStatus=false&_limit=2&_offset=1" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?doneStatus=false&_limit=2&_offset=1" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?doneStatus=false&_limit=2&_offset=1 to filter and paginate todos" open="true">}}
 
 ## Example Request
 

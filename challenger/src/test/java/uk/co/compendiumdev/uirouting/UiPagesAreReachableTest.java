@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import uk.co.compendiumdev.challenge.ChallengerConfig;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitions;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpMessageSender;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpResponseDetails;
 import uk.co.compendiumdev.serverstart.Environment;
@@ -209,6 +212,37 @@ public class UiPagesAreReachableTest {
         return count;
     }
 
+    private String challengeIdFor(final String challengeName) {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        for (ChallengeDefinitionData challenge : new ChallengeDefinitions(config).getChallenges()) {
+            if (challenge.name.equals(challengeName)) {
+                return challenge.id;
+            }
+        }
+        Assertions.fail("Could not find challenge " + challengeName);
+        return "";
+    }
+
+    private String normalizedChallengeId(final String challengeId) {
+        return challengeId.replaceFirst("^0+(?!$)", "");
+    }
+
+    private void assertChallengeStatus(
+            final HttpMessageSender statusHttp,
+            final String challengeId,
+            final boolean expectedStatus) {
+
+        final HttpResponseDetails response =
+                statusHttp.send("/gui/challenge-status/" + challengeId, "get");
+        Assertions.assertEquals(200, response.statusCode);
+        final JsonObject json = JsonParser.parseString(response.body).getAsJsonObject();
+        Assertions.assertTrue(json.get("known").getAsBoolean());
+        Assertions.assertEquals(normalizedChallengeId(challengeId), json.get("id").getAsString());
+        Assertions.assertEquals(expectedStatus, json.get("status").getAsBoolean());
+    }
+
     private void assertOpenApiFilePageLinks(
             final String body, final String docsPrefix, final String oldSwaggerPath) {
 
@@ -250,9 +284,11 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals(
-                "attachment; filename=\"Simple-Todo-List-swagger.json\"",
+                "attachment; filename=\"API-Challenges-Simple-Todo-List-swagger.json\"",
                 response.getHeader("Content-Disposition"));
         assertOpenApiVersion(response.body, "3.1.0");
+        Assertions.assertTrue(
+                response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
     }
 
     @Test
@@ -264,6 +300,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertNotNull(response.getHeader("Content-Type"));
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
         assertOpenApiVersion(response.body, "3.1.0");
+        Assertions.assertTrue(
+                response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
         Assertions.assertTrue(
                 response.body.indexOf("\"url\" : \"http://localhost:4567\"")
                         < response.body.indexOf(
@@ -836,10 +874,19 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("div.main-text-content pre"));
         Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
+        Assertions.assertTrue(response.body.contains(".sim-live-edit-actions"));
+        Assertions.assertTrue(response.body.contains(".sim-live-execute-row"));
+        Assertions.assertTrue(response.body.contains(".sim-live-challenge-feedback"));
+        Assertions.assertTrue(response.body.contains(".solution-challenge-completed"));
+        Assertions.assertTrue(response.body.contains(".sim-live-fireworks"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-spark"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-ring"));
+        Assertions.assertTrue(response.body.contains("@keyframes sim-live-firework-confetti"));
         Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details .sim-live-title"));
+        Assertions.assertTrue(response.body.contains("background: #16803a"));
 
         response = http.send("/css/theme-experiments.css", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -847,6 +894,9 @@ public class UiPagesAreReachableTest {
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(
                 response.body.contains("html[data-theme=\"dark-lab\"] .sim-live-status"));
+        Assertions.assertTrue(
+                response.body.contains("html[data-theme=\"dark-lab\"] .sim-live-execute"));
+        Assertions.assertTrue(response.body.contains("background: #22c55e"));
         Assertions.assertTrue(response.body.contains("border-left-color: var(--accent)"));
         Assertions.assertTrue(response.body.contains("color: var(--text)"));
 
@@ -871,6 +921,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("formatXml"));
         Assertions.assertTrue(response.body.contains("DOMParser"));
         Assertions.assertTrue(response.body.contains("Pretty print body"));
+        Assertions.assertTrue(response.body.contains("checkChallengePassed"));
+        Assertions.assertTrue(response.body.contains("Challenge Not Passed Yet"));
+        Assertions.assertTrue(response.body.contains("updateChallengeCompletedBanners"));
         Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHODS"));
         Assertions.assertTrue(
                 response.body.contains("BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS"));
@@ -1301,9 +1354,7 @@ public class UiPagesAreReachableTest {
     void statusCodeSolutionsLinkToHeaderTooLargeSolutionBeforeMethodOverride() {
 
         HttpResponseDetails response =
-                http.send(
-                        "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
-                        "get");
+                http.send("/apichallenges/solutions/status-codes/get-heartbeat-204", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
@@ -1316,7 +1367,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/method-override/all-method-overrides'"));
+                        "href='/apichallenges/solutions/method-override/post-heartbeat-as-delete-405'"));
     }
 
     @Test
@@ -1335,15 +1386,21 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/authorization/post-secret-note-401-403'"));
+                        "href='/apichallenges/solutions/authorization/post-secret-note-401'"));
 
-        response =
-                http.send("/apichallenges/solutions/authorization/post-secret-note-401-403", "get");
+        response = http.send("/apichallenges/solutions/authorization/post-secret-note-401", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "href='/apichallenges/solutions/authorization/get-post-secret-note-bearer'"));
+                        "href='/apichallenges/solutions/authorization/post-secret-note-403'"));
+
+        response = http.send("/apichallenges/solutions/authorization/post-secret-note-403", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href='/apichallenges/solutions/authorization/get-secret-note-bearer'"));
     }
 
     @Test
@@ -1387,9 +1444,20 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
+                        "<details class=\"sim-live-request-details\" open><summary>POST /todos to"
+                                + " create a todo</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<aside class=\"solution-challenge-completed\" data-challenge-id=\""));
+        Assertions.assertTrue(
+                response.body.indexOf("solution-challenge-completed")
+                        < response.body.indexOf("<h1"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "class=\"api-live-request\" data-method=\"POST\""
                                 + " data-path=\"/todos\" data-editable=\"true\""
                                 + " data-expected-status=\"201\""));
+        Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "data-headers=\"Content-Type: application/json||Accept:"
@@ -1400,23 +1468,29 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void deleteSolutionUsesVisibleSetupAndDoesNotAutoCreateTodoDuringDelete() {
+    void deleteSolutionUsesCollapsedHelpersAndOpenChallengeRequestWithoutAutoCreate() {
 
         final HttpResponseDetails response =
                 http.send("/apichallenges/solutions/delete/delete-todos-id-204", "get");
 
         Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(3, countOccurrences(response.body, "class=\"api-live-request\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "class=\"api-live-request\" data-method=\"POST\""
-                                + " data-path=\"/todos\""));
+                        "<summary>GET /todos to see what todos are available now</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>POST /todos to create a todo item for deletion</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<details class=\"sim-live-request-details\" open><summary>DELETE"
+                                + " /todos/{id} to delete a specific todo</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"api-live-request\" data-method=\"DELETE\""
-                                + " data-path=\"/todos/{{lastCreatedTodoId}}\""));
-        Assertions.assertFalse(response.body.contains("data-path=\"/todos/{{firstTodoId}}\""));
+                                + " data-path=\"/todos/{{firstTodoId}}\""));
+        Assertions.assertTrue(response.body.contains("data-auto-create-first-todo=\"false\""));
         Assertions.assertTrue(response.body.contains("data-refresh-after-execute=\"false\""));
-        Assertions.assertTrue(response.body.contains("data-resolve-dynamic-on-execute=\"false\""));
     }
 
     @Test
@@ -1469,6 +1543,36 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void challengeStatusEndpointReportsCompletionWithoutCompletingChallengesListChallenge() {
+
+        final String getTodosChallengeId = challengeIdFor("GET /todos (200)");
+        final String getChallengesChallengeId = challengeIdFor("GET /challenges (200)");
+
+        final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
+        apiHttp.clearHeaders();
+        apiHttp.setHeader("Accept", "application/json");
+        final HttpResponseDetails challengerResponse = apiHttp.post("/challenger", "");
+        final String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+
+        final HttpMessageSender statusHttp = new HttpMessageSender(Environment.getBaseUri());
+        statusHttp.clearHeaders();
+        statusHttp.setHeader("Accept", "application/json");
+        statusHttp.setHeader("X-CHALLENGER", challengerId);
+
+        assertChallengeStatus(statusHttp, getTodosChallengeId, false);
+        assertChallengeStatus(statusHttp, normalizedChallengeId(getTodosChallengeId), false);
+
+        apiHttp.setHeader("X-CHALLENGER", challengerId);
+        final HttpResponseDetails todosResponse = apiHttp.send("/todos", "get");
+
+        Assertions.assertEquals(200, todosResponse.statusCode);
+        Assertions.assertEquals(challengerId, todosResponse.getHeader("X-CHALLENGER"));
+
+        assertChallengeStatus(statusHttp, getTodosChallengeId, true);
+        assertChallengeStatus(statusHttp, getChallengesChallengeId, false);
+    }
+
+    @Test
     void unknownChallengeProgressPageIncludesLocalAutoRestoreHooks() {
 
         final String challengerId = "11111111-2222-4333-8444-555555555555";
@@ -1482,6 +1586,9 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("Unknown Challenger ID"));
+        Assertions.assertTrue(
+                response.body.contains("<script>document.challengerData={};</script>"));
+        Assertions.assertTrue(response.body.contains("<script>document.databaseData={};</script>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<button onclick=inputChallengeGuid()>Input Challenger GUID</button>"));
@@ -1578,7 +1685,27 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         "/apichallenges/solutions/method-overrides/all-method-overrides",
-                        "/apichallenges/solutions/method-override/all-method-overrides"));
+                        "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/method-override/all-method-overrides",
+                        "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
+                        "/apichallenges/solutions/status-codes/delete-heartbeat-405"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/manage-session/save-restore-session",
+                        "/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/authorization/post-secret-note-401-403",
+                        "/apichallenges/solutions/authorization/post-secret-note-401"));
+        args.add(
+                Arguments.of(
+                        "/apichallenges/solutions/authorization/get-post-secret-note-bearer",
+                        "/apichallenges/solutions/authorization/get-secret-note-bearer"));
         args.add(Arguments.of("/tools/clients/soapyi", "/tools/clients/soapui"));
         args.add(Arguments.of("/tutorials/openapi-swagger", "/tutorials/openapi"));
         args.add(

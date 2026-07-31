@@ -37,7 +37,7 @@ How to issue a GET request on a top level entity endpoint and sort the returned 
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_sortBy=title" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?_sortBy=title" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_sortBy=title to sort todos by title" open="true">}}
 
 ## Example Request
 

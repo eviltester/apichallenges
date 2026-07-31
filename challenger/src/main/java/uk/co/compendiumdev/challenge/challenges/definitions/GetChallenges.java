@@ -57,6 +57,10 @@ public class GetChallenges {
                         "GET /todo (404) not plural",
                         "Issue a GET request on the `/todo` end point should 404 because nouns should be plural");
 
+        aChallenge.addHint("Use the singular `/todo` endpoint, not `/todos`.");
+        aChallenge.addHint(
+                "No todo id is needed for this request; the challenge is the 404 route.");
+
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/get/get-todo-404");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "gAJzqgcN9dc");
@@ -117,6 +121,100 @@ public class GetChallenges {
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/get/get-todos-200-filter");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "G-sLuhyPMuw");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredIdGreaterThan200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id greater than",
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value.");
+
+        aChallenge.addHint("Use the `id` field with the greater than operator.");
+        aChallenge.addHint("For example, `?id>5` returns todos with an id greater than 5.");
+        aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-greater-than");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredIdLessThan200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id less than",
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id less than a supplied value.");
+
+        aChallenge.addHint("Use the `id` field with the less than operator.");
+        aChallenge.addHint("For example, `?id<6` returns todos with an id less than 6.");
+        aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-less-than");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredIdSingleResult200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter id single result",
+                        "Issue a GET request on the `/todos` end point with an id filter that returns one todo while multiple todos exist in the database.");
+
+        aChallenge.addHint("Use the `id` field with an exact value.");
+        aChallenge.addHint("For example, `?id=3` returns the todo with id 3.");
+        aChallenge.addHint("Make sure there is more than one todo in the database.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-id-single-result");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredDescriptionRegex200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter description regex",
+                        "Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions.");
+
+        aChallenge.addHint(
+                "Use the `description` field with the regular expression operator `~=`.");
+        aChallenge.addHint(
+                "For example, `?description~=.*fixture.*` returns descriptions that match the regular expression.");
+        aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-description-regex");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosFilteredDescriptionWildcard200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) ?filter description wildcard",
+                        "Issue a GET request on the `/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions.");
+
+        aChallenge.addHint("Use the `description` field with the wildcard operator `*=`.");
+        aChallenge.addHint(
+                "For example, `?description*=*fixture*` matches descriptions containing fixture.");
+        aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/get/get-todos-200-filter-description-wildcard");
         return aChallenge;
     }
 
@@ -309,6 +407,9 @@ public class GetChallenges {
                         "GET /todos (200) XML",
                         "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml` to receive results in XML format");
 
+        aChallenge.addHint("Set the `Accept` header to `application/xml`.");
+        aChallenge.addHint("The request path is still `/todos`; only the response format changes.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -323,6 +424,9 @@ public class GetChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) JSON",
                         "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json` to receive results in JSON format");
+
+        aChallenge.addHint("Set the `Accept` header to `application/json`.");
+        aChallenge.addHint("Use a GET request; there is no request body for this challenge.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -339,6 +443,9 @@ public class GetChallenges {
                         "GET /todos (200) ANY",
                         "Issue a GET request on the `/todos` end point with an `Accept` header of `*/*` to receive results in default JSON format");
 
+        aChallenge.addHint("Set the `Accept` header to `*/*`.");
+        aChallenge.addHint("The API default response format for `/todos` is JSON.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -353,6 +460,9 @@ public class GetChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) XML pref",
                         "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml, application/json` to receive results in the preferred XML format");
+
+        aChallenge.addHint("Send both media types in the `Accept` header.");
+        aChallenge.addHint("Put `application/xml` before `application/json` to prefer XML.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -369,6 +479,10 @@ public class GetChallenges {
                         "GET /todos (200) no accept",
                         "Issue a GET request on the `/todos` end point with no `Accept` header present in the message to receive results in default JSON format");
 
+        aChallenge.addHint("Remove the `Accept` header from the request.");
+        aChallenge.addHint(
+                "Some API clients add an `Accept` header automatically, so check the raw request.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -383,6 +497,9 @@ public class GetChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (406)",
                         "Issue a GET request on the `/todos` end point with an `Accept` header `application/gzip` to receive 406 'NOT ACCEPTABLE' status code");
+
+        aChallenge.addHint("Set the `Accept` header to a response type the API does not support.");
+        aChallenge.addHint("e.g. `application/gzip` could trigger a 406 response.");
 
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/accept-header/get-todos-406");

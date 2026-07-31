@@ -222,7 +222,7 @@ public class ChallengerWebGUI {
 
         // add an endpoint for each markdown content file
         MarkdownContentManager contentManager =
-                new MarkdownContentManager(pathsToFileContent, guiManagement);
+                new MarkdownContentManager(pathsToFileContent, guiManagement, challengeDefinitions);
         for (String pathToMarkdownFile : pathsToFileContent) {
             String endPointForMarkdownFile =
                     pathToMarkdownFile.replaceFirst("content/", "/").replace(".md", "");
@@ -302,7 +302,50 @@ public class ChallengerWebGUI {
                 "/apichallenges/solutions/method-overrides/all-method-overrides",
                 (request, response) -> {
                     response.redirect(
-                            "/apichallenges/solutions/method-override/all-method-overrides", 301);
+                            "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/manage-session/save-restore-session",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/status-codes/status-codes-405-500-501-204",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/status-codes/delete-heartbeat-405", 301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/method-override/all-method-overrides",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/method-override/post-heartbeat-as-delete-405",
+                            301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/authorization/post-secret-note-401-403",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/authorization/post-secret-note-401", 301);
+                    return "";
+                });
+
+        get(
+                "/apichallenges/solutions/authorization/get-post-secret-note-bearer",
+                (request, response) -> {
+                    response.redirect(
+                            "/apichallenges/solutions/authorization/get-secret-note-bearer", 301);
                     return "";
                 });
 
@@ -411,7 +454,7 @@ public class ChallengerWebGUI {
                                 storeThingifierDatabaseNameCookie(
                                         challengers.SINGLE_PLAYER.getXChallenger()));
                     } else {
-                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(outputEmptyChallengeDataAsJS());
                         html.append(showAchievements());
                         html.append(playerChallengesIntro());
                         html.append(
@@ -440,6 +483,19 @@ public class ChallengerWebGUI {
                     html.append(guiManagement.getPageFooter());
                     html.append(guiManagement.getPageEnd());
                     return html.toString();
+                });
+
+        get(
+                "/gui/challenge-status/*",
+                (request, result) -> {
+                    result.type("application/json");
+                    result.status(200);
+                    return renderChallengeStatusJson(
+                            request.splat(),
+                            request,
+                            challengers,
+                            challengeDefinitions,
+                            single_player_mode);
                 });
 
         // multi user
@@ -484,7 +540,7 @@ public class ChallengerWebGUI {
                     }
 
                     if (challenger == null) {
-                        html.append(outputChallengeDataAsJS(challengers.DEFAULT_PLAYER_DATA, "{}"));
+                        html.append(outputEmptyChallengeDataAsJS());
                         html.append(showAchievements());
                         html.append(playerChallengesIntro());
 
@@ -677,6 +733,99 @@ public class ChallengerWebGUI {
 
     private boolean hasText(final String value) {
         return value != null && !value.trim().isEmpty();
+    }
+
+    private String renderChallengeStatusJson(
+            final String rawChallengeId,
+            final HttpServerRequest request,
+            final Challengers challengers,
+            final ChallengeDefinitions challengeDefinitions,
+            final boolean singlePlayerMode) {
+
+        final Optional<ChallengeDefinitionData> challenge =
+                challengeDefinitionForId(rawChallengeId, challengeDefinitions);
+        if (challenge.isEmpty()) {
+            return "{\"id\":\""
+                    + escapeJsonValue(rawChallengeId)
+                    + "\",\"status\":false,\"known\":false}";
+        }
+
+        final ChallengerAuthData challenger =
+                challengerForStatusRequest(request, challengers, singlePlayerMode);
+        boolean passed = false;
+        if (challenger != null) {
+            final CHALLENGE challengeKey = challengeDefinitions.getChallenge(challenge.get().name);
+            passed = challengeKey != null && challenger.statusOfChallenge(challengeKey);
+        }
+
+        return "{\"id\":\""
+                + normalizeChallengeId(challenge.get().id)
+                + "\",\"status\":"
+                + passed
+                + ",\"known\":true}";
+    }
+
+    private Optional<ChallengeDefinitionData> challengeDefinitionForId(
+            final String rawChallengeId, final ChallengeDefinitions challengeDefinitions) {
+        if (!hasText(rawChallengeId)) {
+            return Optional.empty();
+        }
+
+        final String challengeId = normalizeChallengeId(rawChallengeId);
+        for (ChallengeDefinitionData challenge : challengeDefinitions.getChallenges()) {
+            if (challenge.id.equals(rawChallengeId.trim())
+                    || normalizeChallengeId(challenge.id).equals(challengeId)) {
+                return Optional.of(challenge);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private String normalizeChallengeId(final String rawChallengeId) {
+        if (rawChallengeId == null) {
+            return "";
+        }
+        return rawChallengeId.trim().replaceFirst("^0+(?!$)", "");
+    }
+
+    private ChallengerAuthData challengerForStatusRequest(
+            final HttpServerRequest request,
+            final Challengers challengers,
+            final boolean singlePlayerMode) {
+
+        String xChallenger = request.header("X-CHALLENGER");
+        if (!hasText(xChallenger)) {
+            xChallenger = request.header("X-Challenger");
+        }
+        if (!hasText(xChallenger)) {
+            xChallenger = request.cookie("X-CHALLENGER");
+        }
+        if (!hasText(xChallenger)) {
+            xChallenger = request.cookie("X-THINGIFIER-DATABASE-NAME");
+        }
+
+        if (hasText(xChallenger)) {
+            return challengers.getChallenger(santitizeChallengerGuid(xChallenger));
+        }
+
+        if (singlePlayerMode) {
+            return challengers.SINGLE_PLAYER;
+        }
+
+        return null;
+    }
+
+    private String escapeJsonValue(final String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 
     private String showCurrentStatus() {
@@ -893,6 +1042,11 @@ public class ChallengerWebGUI {
         html.append("<script>document.databaseData=" + json + ";</script>");
 
         return html.toString();
+    }
+
+    private String outputEmptyChallengeDataAsJS() {
+        return "<script>document.challengerData={};</script>"
+                + "<script>document.databaseData={};</script>";
     }
 
     private String renderChallengeData(

@@ -64,6 +64,10 @@ final class ShoppingCartApiClient {
                 gson.toJson(Map.of("productId", productId, "quantity", quantity)));
     }
 
+    HttpResponseDetails addItemRaw(final int cartId, final String token, final String body) {
+        return http.send("/shop/carts/" + cartId + "/items", "POST", bearerJson(token), body);
+    }
+
     CartItemResponse addItemOk(
             final int cartId, final String token, final int productId, final int quantity) {
         return gson.fromJson(

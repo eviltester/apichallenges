@@ -5,7 +5,7 @@ title: API Challenges Solution For - POST amend secret note 200
 seo_title: Solution: POST amend secret note 200 | API Challenges
 description: How to solve POST /secret/note (200) - amend the secret note with a POST request and receive 200 status code
 seo_description: Use this walkthrough to solve POST amend secret note 200 with request setup, key headers, and expected status codes so you can complete the challenge.
-next_challenge: /apichallenges/solutions/authorization/post-secret-note-401-403
+next_challenge: /apichallenges/solutions/authorization/post-secret-note-401
 schema_howto_steps: Create a POST request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
@@ -54,7 +54,11 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}'>}}
+If you do not already have an auth token, create one with `POST /secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
+
+{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /secret/token to create an auth token">}}
+
+{{<api-live-request method="POST" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}' details="true" summary="POST /secret/note with X-AUTH-TOKEN to update the secret note" open="true">}}
 
 
 ## Example Request
@@ -106,6 +110,4 @@ Example body of the response:
 {{<youtube-embed key="A9T9yjzEOEE" title="Solution to POST authorization challenge using header">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54090441)
-
-
 

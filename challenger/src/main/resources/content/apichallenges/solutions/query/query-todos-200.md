@@ -36,13 +36,15 @@ doneStatus=true
 
 ### Try it now
 
-Create a done TODO if necessary:
+If you need fixture data, create one done todo and one not-done todo first. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done todo for query","doneStatus":true,"description":"created for query challenge"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done query fixture","doneStatus":true,"description":"created for QUERY filtering"}' details="true" summary="POST /todos to create a done todo fixture">}}
 
-Then issue the QUERY request with the filter in the body:
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"not done query comparison","doneStatus":false,"description":"created for QUERY filtering"}' details="true" summary="POST /todos to create a not-done comparison todo">}}
 
-{{<api-live-request method="QUERY" path="/todos" expected-status="200" headers="Content-Type: application/x-www-form-urlencoded||Accept: application/json" body='doneStatus=true'>}}
+Issue the QUERY request with the filter in the body:
+
+{{<api-live-request method="QUERY" path="/todos" expected-status="200" headers="Content-Type: application/x-www-form-urlencoded||Accept: application/json" body='doneStatus=true' details="true" summary="QUERY /todos with doneStatus=true to return only done todos" open="true">}}
 
 ## Example Request
 

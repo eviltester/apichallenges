@@ -32,7 +32,7 @@ How to issue a HEAD request and see the results of a GET request without the bod
 
 ### Try it now
 
-{{<api-live-request method="HEAD" path="/todos" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="HEAD" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="HEAD /todos to read response headers without a body" open="true">}}
 
 
 ## Example Request

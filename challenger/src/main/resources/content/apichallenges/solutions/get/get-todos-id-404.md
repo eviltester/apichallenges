@@ -32,7 +32,7 @@ How to receive a 404 status code response by trying to GET a todo item by id for
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/{{missingTodoId}}" expected-status="404" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos/{{missingTodoId}}" expected-status="404" headers="Accept: application/json" details="true" summary="GET /todos/{id} to request a missing todo" open="true">}}
 
 
 ## Example Request

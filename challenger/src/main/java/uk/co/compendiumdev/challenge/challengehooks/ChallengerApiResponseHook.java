@@ -7,6 +7,8 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.CHALLENGE;
@@ -165,6 +167,26 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && response.getStatusCode() == 200) {
             List<JsonObject> responseTodos = todosFromJsonResponse(response);
             List<SortCriterion> sortCriteria = sortCriteriaFrom(request);
+
+            if (idFilterResponseIsProperSubset(request, responseTodos, challenger, ">")) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN);
+            }
+
+            if (idFilterResponseIsProperSubset(request, responseTodos, challenger, "<")) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN);
+            }
+
+            if (idSingleResultFilterResponseMatches(request, responseTodos, challenger)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT);
+            }
+
+            if (descriptionRegexFilterResponseMatches(request, responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX);
+            }
+
+            if (descriptionWildcardFilterResponseMatches(request, responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD);
+            }
 
             if (queryParamIntegerEquals(request, "_limit", 8)
                     && responseTodos.size() == expectedPaginatedTodoCount(challenger, 8, 0)) {
@@ -483,6 +505,160 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    private boolean idFilterResponseIsProperSubset(
+            final HttpApiRequest request,
+            final List<JsonObject> responseTodos,
+            final ChallengerAuthData challenger,
+            final String filterOperation) {
+
+        FilterBy filterBy = filterBy(request, "id", filterOperation);
+        Integer filterValue = filterIntegerValue(filterBy);
+        if (filterValue == null || !isNonEmptyProperSubset(responseTodos, challenger)) {
+            return false;
+        }
+
+        if (filterOperation.equals(">")) {
+            return allTodoIdsGreaterThan(responseTodos, filterValue);
+        }
+        if (filterOperation.equals("<")) {
+            return allTodoIdsLessThan(responseTodos, filterValue);
+        }
+        return false;
+    }
+
+    private boolean idSingleResultFilterResponseMatches(
+            final HttpApiRequest request,
+            final List<JsonObject> responseTodos,
+            final ChallengerAuthData challenger) {
+
+        FilterBy filterBy = filterBy(request, "id", "=");
+        Integer expectedId = filterIntegerValue(filterBy);
+        if (expectedId == null || countTodos(challenger) <= 1 || responseTodos.size() != 1) {
+            return false;
+        }
+
+        Integer actualId = todoId(responseTodos.get(0));
+        return actualId != null && actualId.equals(expectedId);
+    }
+
+    private boolean descriptionRegexFilterResponseMatches(
+            final HttpApiRequest request, final List<JsonObject> responseTodos) {
+
+        FilterBy filterBy = filterBy(request, "description", "~=");
+        if (filterBy == null || responseTodos.isEmpty()) {
+            return false;
+        }
+
+        final Pattern pattern;
+        try {
+            pattern = Pattern.compile(filterBy.fieldValue);
+        } catch (PatternSyntaxException e) {
+            return false;
+        }
+
+        for (JsonObject todo : responseTodos) {
+            String description = todoDescription(todo);
+            if (description.isEmpty() || !pattern.matcher(description).matches()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean descriptionWildcardFilterResponseMatches(
+            final HttpApiRequest request, final List<JsonObject> responseTodos) {
+
+        FilterBy filterBy = filterBy(request, "description", "*=");
+        if (filterBy == null || responseTodos.isEmpty()) {
+            return false;
+        }
+
+        Pattern wildcardPattern = Pattern.compile(wildcardPatternAsRegex(filterBy.fieldValue));
+        for (JsonObject todo : responseTodos) {
+            String description = todoDescription(todo);
+            if (description.isEmpty() || !wildcardPattern.matcher(description).matches()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private FilterBy filterBy(
+            final HttpApiRequest request, final String fieldName, final String filterOperation) {
+        for (FilterBy filterBy : request.getFilterableQueryParams().toList()) {
+            if (filterBy.fieldName.equals(fieldName)
+                    && filterBy.filterOperation.equals(filterOperation)) {
+                return filterBy;
+            }
+        }
+        return null;
+    }
+
+    private Integer filterIntegerValue(final FilterBy filterBy) {
+        if (filterBy == null) {
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(filterBy.fieldValue);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private boolean isNonEmptyProperSubset(
+            final List<JsonObject> responseTodos, final ChallengerAuthData challenger) {
+        int todoCount = countTodos(challenger);
+        return !responseTodos.isEmpty() && todoCount > responseTodos.size();
+    }
+
+    private boolean allTodoIdsGreaterThan(final List<JsonObject> todos, final int value) {
+        for (JsonObject todo : todos) {
+            Integer id = todoId(todo);
+            if (id == null || id <= value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean allTodoIdsLessThan(final List<JsonObject> todos, final int value) {
+        for (JsonObject todo : todos) {
+            Integer id = todoId(todo);
+            if (id == null || id >= value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String todoDescription(final JsonObject todo) {
+        try {
+            JsonElement description = todo.get("description");
+            if (description == null || description.isJsonNull()) {
+                return "";
+            }
+            return description.getAsString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private String wildcardPatternAsRegex(final String wildcard) {
+        StringBuilder regex = new StringBuilder();
+        for (int index = 0; index < wildcard.length(); index++) {
+            char character = wildcard.charAt(index);
+            if (character == '*') {
+                regex.append(".*");
+            } else if (character == '?') {
+                regex.append(".");
+            } else {
+                regex.append(Pattern.quote(String.valueOf(character)));
+            }
+        }
+        return regex.toString();
     }
 
     private List<JsonObject> todosFromJsonResponse(final HttpApiResponse response) {

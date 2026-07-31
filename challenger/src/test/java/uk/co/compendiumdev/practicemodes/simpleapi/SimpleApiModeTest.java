@@ -138,7 +138,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":3,
                             "isbn13": "1234567890123",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .stripIndent());
@@ -151,6 +151,36 @@ public class SimpleApiModeTest {
         Assertions.assertEquals(3, item.numberinstock);
         Assertions.assertEquals("1234567890123", item.isbn13);
         Assertions.assertEquals("book", item.type);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"\"2\"", "\"2.0\""})
+    public void canNotPostItemWithStringValueForIntegerField(final String numberInStock) {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items",
+                        "POST",
+                        headers,
+                        """
+                        {
+                          "price": 2.00,
+                          "numberinstock": %s,
+                          "isbn13": "%s",
+                          "type": "book"
+                        }
+                        """
+                                .formatted(numberInStock, Item.randomIsbn(new Random()))
+                                .stripIndent());
+
+        Assertions.assertEquals(422, response.statusCode, response.body);
+        Assertions.assertTrue(
+                response.body.contains("numberinstock should be INTEGER but was STRING"),
+                response.body);
     }
 
     @ParameterizedTest
@@ -175,7 +205,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(aRandomIsbn)
@@ -191,7 +221,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(aRandomIsbn.replace("-", dupeSynonymReplace))
@@ -239,7 +269,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(anItem.isbn13)
@@ -288,7 +318,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(anItem.isbn13.replace("-", dupeSynonymReplace))
@@ -322,7 +352,7 @@ public class SimpleApiModeTest {
                             "price":2.00,
                             "numberinstock":2,
                             "isbn13": "1234567890123",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .stripIndent());
@@ -379,6 +409,29 @@ public class SimpleApiModeTest {
         Assertions.assertEquals(9.99f, patched.price);
         Assertions.assertEquals(createdItem.type, patched.type);
         Assertions.assertEquals(createdItem.isbn13, patched.isbn13);
+    }
+
+    @Test
+    public void canNotPatchItemWithStringValueForIntegerField() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PATCH",
+                        headers,
+                        "{\"numberinstock\":\"2\"}");
+
+        Assertions.assertEquals(422, response.statusCode, response.body);
+        Assertions.assertTrue(
+                response.body.contains("numberinstock should be INTEGER but was STRING"),
+                response.body);
+        Assertions.assertEquals(3, api.apiGetItem(createdItem.id).numberinstock);
     }
 
     @Test
@@ -551,7 +604,7 @@ public class SimpleApiModeTest {
                             "price":3.00,
                             "numberinstock":4,
                             "isbn13": "%s",
-                            "type":book
+                            "type":"book"
                         }
                         """
                                 .formatted(isbn)

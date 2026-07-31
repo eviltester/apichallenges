@@ -5,7 +5,7 @@ title: API Challenges Solution For - POST /todos (409) max todos
 seo_title: Solution: POST /todos (409) max todos | API Challenges
 description: How to solve API challenges to Create maximum number of todos
 seo_description: Use this walkthrough to solve POST /todos (409) max todos with request setup, key headers, and expected status codes so you can complete the challenge.
-next_challenge: /apichallenges/solutions/miscellaneous/delete-all-todos
+next_challenge: /gui/challenges
 schema_howto_steps: Create todos repeatedly with POST /todos until the maximum limit is reached||Use valid JSON payloads and include X-CHALLENGER for every create request||Track successful creations so you can confirm the max-count boundary||Verify the final allowed create response and behavior at the limit||Check challenge status and confirm maximum todo creation is complete
 showads: true
 ---
@@ -77,4 +77,4 @@ Some tools have the ability to issue Data Driven requests, so if you can parse t
 Most of the API client tools also have the ability to create scripts to achieve this.
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos after maxing out todos to trigger 409" open="true">}}

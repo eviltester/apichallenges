@@ -216,6 +216,10 @@ public class PostChallenges {
                         "POST /todos XML",
                         "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/xml`, and Accepting only XML ie. Accept header of `application/xml`");
 
+        aChallenge.addHint("Set `Content-Type` to `application/xml` for the request body.");
+        aChallenge.addHint("Set `Accept` to `application/xml` for the response format.");
+        aChallenge.addHint("Send an XML todo payload with at least a title.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -232,6 +236,10 @@ public class PostChallenges {
                         "POST /todos JSON",
                         "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/json`, and Accepting only JSON ie. Accept header of `application/json`");
 
+        aChallenge.addHint("Set `Content-Type` to `application/json` for the request body.");
+        aChallenge.addHint("Set `Accept` to `application/json` for the response format.");
+        aChallenge.addHint("Send a JSON todo payload with at least a title.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -247,6 +255,9 @@ public class PostChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "POST /todos (415)",
                         "Issue a POST request on the `/todos` end point with an unsupported content type to generate a 415 status code");
+
+        aChallenge.addHint("Send a POST request to `/todos` with a body.");
+        aChallenge.addHint("Use a `Content-Type` the API does not support, such as `text/plain`.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -268,6 +279,10 @@ public class PostChallenges {
                         "POST /todos XML to JSON",
                         "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/xml` but Accept `application/json`");
 
+        aChallenge.addHint(
+                "Set `Content-Type` to `application/xml` because the request body is XML.");
+        aChallenge.addHint("Set `Accept` to `application/json` because you want JSON back.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -283,6 +298,10 @@ public class PostChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "POST /todos JSON to XML",
                         "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/json` but Accept `application/xml`");
+
+        aChallenge.addHint(
+                "Set `Content-Type` to `application/json` because the request body is JSON.");
+        aChallenge.addHint("Set `Accept` to `application/xml` because you want XML back.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",

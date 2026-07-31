@@ -16,6 +16,9 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.AssetVersion;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitions;
+import uk.co.compendiumdev.challenge.challenges.ChallengeSolutionLink;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 // TODO: consider adding caching for generated markdown pages
@@ -46,6 +49,7 @@ public class MarkdownContentManager {
             "partials/next-challenge-cta.html";
 
     private final DefaultGUIHTML guiManagement;
+    private final Map<String, String> solutionChallengeIds;
     Logger logger = LoggerFactory.getLogger(MarkdownContentManager.class);
     private final Set<String> markdownContentPaths;
     private final Properties schemaAuthorDefaults;
@@ -53,14 +57,35 @@ public class MarkdownContentManager {
     private String sideMenuText;
 
     public MarkdownContentManager(
-            final List<String> pathsToFileContent, final DefaultGUIHTML defaultGui) {
+            final List<String> pathsToFileContent,
+            final DefaultGUIHTML defaultGui,
+            final ChallengeDefinitions challengeDefinitions) {
         markdownContentPaths = new HashSet<>();
         markdownContentPaths.addAll(pathsToFileContent);
         this.guiManagement = defaultGui;
+        this.solutionChallengeIds = buildSolutionChallengeIds(challengeDefinitions);
         this.schemaAuthorDefaults = loadPropertiesFromResource(DEFAULT_SCHEMA_AUTHOR_RESOURCE);
         this.schemaPublisherDefaults =
                 loadPropertiesFromResource(DEFAULT_SCHEMA_PUBLISHER_RESOURCE);
         sideMenuText = "";
+    }
+
+    private Map<String, String> buildSolutionChallengeIds(
+            final ChallengeDefinitions challengeDefinitions) {
+        final Map<String, String> challengeIds = new HashMap<>();
+        if (challengeDefinitions == null) {
+            return challengeIds;
+        }
+
+        for (ChallengeDefinitionData challenge : challengeDefinitions.getChallenges()) {
+            for (ChallengeSolutionLink solution : challenge.solutions) {
+                if ("HREF".equals(solution.linkType)
+                        && solution.linkData.startsWith("/apichallenges/solutions/")) {
+                    challengeIds.put(solution.linkData, challenge.id);
+                }
+            }
+        }
+        return challengeIds;
     }
 
     // TODO: this is currently a hacked in solution for experimenting, pull it out into classes and
@@ -187,7 +212,7 @@ public class MarkdownContentManager {
                 }
 
                 // process any macros
-                line = processMacrosInContentLine(line, params);
+                line = processMacrosInContentLine(line, params, contentPath);
 
                 if (firstYouTubeVideoId.isEmpty()) {
                     firstYouTubeVideoId = extractYouTubeVideoId(line);
@@ -255,7 +280,7 @@ public class MarkdownContentManager {
                             + "' defer></script>";
         }
 
-        String markdownFromResource = mdcontent.toString();
+        String markdownFromResource = solutionChallengeCompletedMessage(contentPath) + mdcontent;
         Node document = parser.parse(markdownFromResource);
 
         HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
@@ -570,7 +595,8 @@ public class MarkdownContentManager {
        Others like youtube-embed have been hard coded here
 
     */
-    private String processMacrosInContentLine(String line, Map<String, String> params) {
+    private String processMacrosInContentLine(
+            String line, Map<String, String> params, String contentPath) {
 
         if (!line.contains("{{<")) {
             return line;
@@ -598,8 +624,12 @@ public class MarkdownContentManager {
                 "\\{\\{<youtube-embed key=\"([a-zA-Z0-9_-]+)\" title=\"(.+)\">}}";
         line = line.replaceAll(youtubeMacroRegex, youTubeHtmlBlock);
 
-        line = processLiveRequestMacro(line, "sim-live-request", "sim-live-request", "false");
-        line = processLiveRequestMacro(line, "api-live-request", "api-live-request", "true");
+        line =
+                processLiveRequestMacro(
+                        line, "sim-live-request", "sim-live-request", "false", contentPath);
+        line =
+                processLiveRequestMacro(
+                        line, "api-live-request", "api-live-request", "true", contentPath);
 
         if (line.contains("{{<PARTIAL_SNIPPET")) {
             String partialMacroRegex = "\\{\\{<PARTIAL_SNIPPET filename=\"(.+)\">}}";
@@ -623,7 +653,8 @@ public class MarkdownContentManager {
             final String line,
             final String macroName,
             final String placeholderClass,
-            final String defaultEditable) {
+            final String defaultEditable,
+            final String contentPath) {
         if (!line.contains("{{<" + macroName)) {
             return line;
         }
@@ -634,7 +665,8 @@ public class MarkdownContentManager {
         while (macroMatcher.find()) {
             final Map<String, String> attributes = parseMacroAttributes(macroMatcher.group(1));
             final String replacement =
-                    renderLiveRequestPlaceholder(attributes, placeholderClass, defaultEditable);
+                    renderLiveRequestPlaceholder(
+                            attributes, placeholderClass, defaultEditable, contentPath);
             macroMatcher.appendReplacement(processedLine, Matcher.quoteReplacement(replacement));
         }
         macroMatcher.appendTail(processedLine);
@@ -658,12 +690,17 @@ public class MarkdownContentManager {
     private String renderLiveRequestPlaceholder(
             final Map<String, String> attributes,
             final String placeholderClass,
-            final String defaultEditable) {
+            final String defaultEditable,
+            final String contentPath) {
         final String method = attributes.getOrDefault("method", "GET");
         final String path = attributes.getOrDefault("path", "/");
         final String editable = attributes.getOrDefault("editable", defaultEditable);
-        final boolean wrapInDetails = isTruthy(attributes.get("details"));
+        final boolean openDetails = isTruthy(attributes.get("open"));
+        final boolean wrapInDetails = openDetails || isTruthy(attributes.get("details"));
         final String summary = attributes.getOrDefault("summary", "Try it now");
+        if (isSolutionApiSolvingRequest(placeholderClass, openDetails, contentPath)) {
+            attributes.putIfAbsent("challenge-id", solutionChallengeIds.get(contentPath));
+        }
 
         final StringBuilder html = new StringBuilder();
         html.append("<div class=\"")
@@ -682,7 +719,8 @@ public class MarkdownContentManager {
                     || key.equals("path")
                     || key.equals("editable")
                     || key.equals("details")
-                    || key.equals("summary")) {
+                    || key.equals("summary")
+                    || key.equals("open")) {
                 continue;
             }
             html.append(" data-")
@@ -697,7 +735,9 @@ public class MarkdownContentManager {
             return html.toString();
         }
 
-        return "<details class=\"sim-live-request-details\"><summary>"
+        return "<details class=\"sim-live-request-details\""
+                + (openDetails ? " open" : "")
+                + "><summary>"
                 + escapeHtmlAttribute(summary)
                 + "</summary>"
                 + html
@@ -710,6 +750,24 @@ public class MarkdownContentManager {
         }
         final String trimmed = value.trim().toLowerCase();
         return trimmed.equals("true") || trimmed.equals("yes") || trimmed.equals("on");
+    }
+
+    private boolean isSolutionApiSolvingRequest(
+            final String placeholderClass, final boolean openDetails, final String contentPath) {
+        return "api-live-request".equals(placeholderClass)
+                && openDetails
+                && contentPath != null
+                && solutionChallengeIds.containsKey(contentPath);
+    }
+
+    private String solutionChallengeCompletedMessage(final String contentPath) {
+        if (contentPath == null || !solutionChallengeIds.containsKey(contentPath)) {
+            return "";
+        }
+
+        return "<aside class=\"solution-challenge-completed\" data-challenge-id=\""
+                + escapeHtmlAttribute(solutionChallengeIds.get(contentPath))
+                + "\" hidden role=\"status\"><strong>Challenge Completed</strong></aside>\n\n";
     }
 
     private String getResourceAsString(String fileName) {

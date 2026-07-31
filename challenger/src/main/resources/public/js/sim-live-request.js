@@ -27,6 +27,14 @@
     return new URL(path, window.location.origin).toString();
   }
 
+  function readableUrl(url) {
+    return String(url || '')
+      .replace(/%3E/gi, '>')
+      .replace(/%3C/gi, '<')
+      .replace(/%7E/gi, '~')
+      .replace(/%2A/gi, '*');
+  }
+
   function pathFromUrl(url) {
     try {
       return new URL(url, window.location.origin).pathname;
@@ -296,7 +304,7 @@
   }
 
   function buildCurlCommand(request) {
-    const parts = [`${curlExecutable()} -i`, '-X', request.method, `"${request.url}"`];
+    const parts = [`${curlExecutable()} -i`, '-X', request.method, `"${readableUrl(request.url)}"`];
     request.headers.forEach(function (header) {
       parts.push(`-H "${header.name}: ${header.value}"`);
     });
@@ -317,7 +325,7 @@
     if (request.body && request.method !== 'GET' && request.method !== 'HEAD') {
       parts.push(`--body-data='${escapeShellSingleQuotes(request.body)}'`);
     }
-    parts.push(`"${request.url}"`);
+    parts.push(`"${readableUrl(request.url)}"`);
     return parts.join(' ');
   }
 
@@ -498,6 +506,185 @@
     return headerLines.sort().join('\n');
   }
 
+  function showChallengeFeedback(feedback, passed) {
+    if (!feedback) {
+      return;
+    }
+    if (feedback.hideTimer) {
+      window.clearTimeout(feedback.hideTimer);
+    }
+    feedback.element.textContent = passed ? 'Challenge Passed' : 'Challenge Not Passed Yet';
+    feedback.element.className = passed
+      ? 'sim-live-challenge-feedback is-passed'
+      : 'sim-live-challenge-feedback is-not-passed';
+    feedback.element.hidden = false;
+    feedback.hideTimer = window.setTimeout(function () {
+      feedback.element.hidden = true;
+    }, 10000);
+  }
+
+  function showChallengeFireworks() {
+    if (window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const previousFireworks = document.querySelector('.sim-live-fireworks');
+    if (previousFireworks) {
+      previousFireworks.remove();
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sim-live-fireworks';
+    overlay.setAttribute('aria-hidden', 'true');
+
+    const colors = [
+      '#18a058',
+      '#f59e0b',
+      '#2563eb',
+      '#db2777',
+      '#7c3aed',
+      '#ef4444',
+      '#06b6d4',
+      '#facc15',
+    ];
+    const bursts = [
+      { x: 18, y: 24, delay: 0, size: 1.15 },
+      { x: 78, y: 20, delay: 180, size: 1.1 },
+      { x: 48, y: 30, delay: 360, size: 1.35 },
+      { x: 28, y: 52, delay: 560, size: 1 },
+      { x: 70, y: 50, delay: 760, size: 1.2 },
+      { x: 52, y: 66, delay: 980, size: 0.95 },
+    ];
+
+    bursts.forEach(function (burst, burstIndex) {
+      const burstElement = document.createElement('span');
+      burstElement.className = 'sim-live-firework-burst';
+      burstElement.style.setProperty('--x', `${burst.x}vw`);
+      burstElement.style.setProperty('--y', `${burst.y}vh`);
+      burstElement.style.setProperty('--delay', `${burst.delay}ms`);
+      burstElement.style.setProperty('--size', burst.size);
+
+      const ring = document.createElement('span');
+      ring.className = 'sim-live-firework-ring';
+      ring.style.setProperty('--color', colors[burstIndex % colors.length]);
+      ring.style.setProperty('--delay', `${burst.delay}ms`);
+      burstElement.appendChild(ring);
+
+      for (let index = 0; index < 28; index += 1) {
+        const spark = document.createElement('span');
+        const angle = ((Math.PI * 2) / 28) * index;
+        const distance = 86 + ((index + burstIndex) % 7) * 13;
+        spark.className = 'sim-live-firework-spark';
+        spark.style.setProperty('--angle', `${angle}rad`);
+        spark.style.setProperty('--distance', `${distance}px`);
+        spark.style.setProperty('--color', colors[(index + burstIndex) % colors.length]);
+        spark.style.setProperty('--delay', `${burst.delay}ms`);
+        burstElement.appendChild(spark);
+      }
+
+      overlay.appendChild(burstElement);
+    });
+
+    for (let index = 0; index < 90; index += 1) {
+      const confetti = document.createElement('span');
+      confetti.className = 'sim-live-firework-confetti';
+      confetti.style.setProperty('--left', `${(index * 37) % 100}vw`);
+      confetti.style.setProperty('--delay', `${260 + ((index * 53) % 1600)}ms`);
+      confetti.style.setProperty('--duration', `${2200 + ((index * 41) % 1100)}ms`);
+      confetti.style.setProperty('--drift', `${-80 + ((index * 29) % 160)}px`);
+      confetti.style.setProperty('--spin', `${360 + ((index * 43) % 540)}deg`);
+      confetti.style.setProperty('--color', colors[index % colors.length]);
+      overlay.appendChild(confetti);
+    }
+
+    document.body.appendChild(overlay);
+    window.setTimeout(function () {
+      overlay.remove();
+    }, 4600);
+  }
+
+  function showChallengeCompletedBanner(challengeId) {
+    if (!challengeId) {
+      return;
+    }
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        if (banner.dataset.challengeId === String(challengeId)) {
+          banner.hidden = false;
+        }
+      });
+  }
+
+  function hideChallengeCompletedBanner(challengeId) {
+    if (!challengeId) {
+      return;
+    }
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        if (banner.dataset.challengeId === String(challengeId)) {
+          banner.hidden = true;
+        }
+      });
+  }
+
+  function updateChallengeCompletedBanners() {
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        const challengeId = banner.dataset.challengeId || '';
+        if (!challengeId) {
+          return;
+        }
+        checkChallengePassed({ challengeId: challengeId }).then(function (passed) {
+          if (passed) {
+            showChallengeCompletedBanner(challengeId);
+          } else {
+            hideChallengeCompletedBanner(challengeId);
+          }
+        });
+      });
+  }
+
+  function clearChallengeFeedback(feedback) {
+    if (!feedback) {
+      return;
+    }
+    if (feedback.hideTimer) {
+      window.clearTimeout(feedback.hideTimer);
+    }
+    feedback.element.hidden = true;
+    feedback.element.textContent = '';
+    feedback.element.className = 'sim-live-challenge-feedback';
+  }
+
+  function checkChallengePassed(request) {
+    const challenger = currentChallenger();
+    if (!request.challengeId || !challenger) {
+      return Promise.resolve(false);
+    }
+
+    return fetch(absoluteUrl(`/gui/challenge-status/${encodeURIComponent(request.challengeId)}`), {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'X-CHALLENGER': challenger,
+        [LIVE_WIDGET_HEADER]: 'true',
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return false;
+        }
+        return response.json();
+      })
+      .then(function (json) {
+        return json && json.status === true;
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
   function renderCurlExeToggle() {
     const label = document.createElement('label');
     label.className = 'sim-live-curl-exe-toggle';
@@ -623,7 +810,7 @@
     const urlInput = document.createElement('input');
     urlInput.className = 'sim-live-edit-url';
     urlInput.type = 'url';
-    urlInput.value = request.url;
+    urlInput.value = readableUrl(request.url);
     urlLabel.appendChild(urlInput);
 
     const headersLabel = document.createElement('label');
@@ -636,6 +823,7 @@
 
     let bodyTextarea = null;
     let bodyLabel = null;
+    let prettyPrintButton = null;
     if (request.bodyEditable && request.body) {
       bodyLabel = document.createElement('label');
       bodyLabel.textContent = 'Body';
@@ -645,7 +833,7 @@
       bodyTextarea.value = formatRequestBody(request);
       bodyLabel.appendChild(bodyTextarea);
 
-      const prettyPrintButton = document.createElement('button');
+      prettyPrintButton = document.createElement('button');
       prettyPrintButton.type = 'button';
       prettyPrintButton.className = 'sim-live-pretty-print';
       prettyPrintButton.textContent = 'Pretty print body';
@@ -657,19 +845,24 @@
         bodyTextarea.value = request.body;
         notifyChanged();
       });
-      bodyLabel.appendChild(prettyPrintButton);
     }
 
     const resetButton = document.createElement('button');
     resetButton.type = 'button';
     resetButton.className = 'sim-live-reset';
     resetButton.textContent = 'Reset';
+    const editActions = document.createElement('div');
+    editActions.className = 'sim-live-edit-actions';
+    editActions.appendChild(resetButton);
+    if (prettyPrintButton) {
+      editActions.appendChild(prettyPrintButton);
+    }
 
     function syncRequestFromControls() {
       request.userEdited = true;
       request.method = methodSelect.value;
       request.url = absoluteUrl(urlInput.value);
-      urlInput.value = request.url;
+      urlInput.value = readableUrl(request.url);
       request.headers = parseEditableHeaders(headersTextarea.value);
       if (bodyTextarea) {
         request.body = bodyTextarea.value;
@@ -690,7 +883,7 @@
       request.body = defaultRequest.body;
       request.headers = cloneHeaders(defaultRequest.headers);
       methodSelect.value = request.method;
-      urlInput.value = request.url;
+      urlInput.value = readableUrl(request.url);
       headersTextarea.value = headersToEditableText(request.headers);
       if (bodyTextarea) {
         bodyTextarea.value = formatRequestBody(request);
@@ -704,7 +897,7 @@
     if (bodyLabel) {
       controls.appendChild(bodyLabel);
     }
-    controls.appendChild(resetButton);
+    controls.appendChild(editActions);
     return {
       element: controls,
       methodSelect: methodSelect,
@@ -782,6 +975,27 @@
     return `${challenger.substring(0, challenger.length - 1)}${replacement}`;
   }
 
+  function restoredChallenger() {
+    return mismatchedChallenger();
+  }
+
+  function currentChallengerJsonForRestoredChallenger() {
+    const challenger = currentChallenger();
+    const restored = restoredChallenger();
+    if (!challenger) {
+      return Promise.resolve('{}');
+    }
+    return currentChallengerJson().then(function (text) {
+      try {
+        const json = JSON.parse(text);
+        json.xChallenger = restored;
+        return JSON.stringify(json, null, 2);
+      } catch (ignored) {
+        return text.split(challenger).join(restored);
+      }
+    });
+  }
+
   function createTodoForCurrentChallenger() {
     return fetch(absoluteUrl('/todos'), {
       method: 'POST',
@@ -846,16 +1060,21 @@
       usesPlaceholder(request, 'lastCreatedTodoId')
         ? Promise.resolve(currentLastCreatedTodoId())
         : Promise.resolve(''),
+      usesPlaceholder(request, 'currentChallengerJsonForRestoredChallenger')
+        ? currentChallengerJsonForRestoredChallenger()
+        : Promise.resolve(''),
     ]).then(function (values) {
       return {
         currentChallenger: challenger,
         mismatchedChallenger: mismatchedChallenger(),
+        restoredChallenger: restoredChallenger(),
         authToken: currentAuthToken(),
         firstTodoId: values[0],
         missingTodoId: values[1],
         currentChallengerJson: values[2],
         currentTodosJson: values[3],
         lastCreatedTodoId: values[4],
+        currentChallengerJsonForRestoredChallenger: values[5],
         oversizedChallenger: oversizedChallengerValue(challenger),
         title50: '2*4*6*8*11*14*17*20*23*26*29*32*35*38*41*44*47*50*',
         title51: '*3*5*7*9*12*15*18*21*24*27*30*33*36*39*42*45*48*51*',
@@ -903,7 +1122,7 @@
     method.textContent = request.method;
 
     const url = document.createElement('code');
-    url.textContent = request.url;
+    url.textContent = readableUrl(request.url);
 
     requestLine.appendChild(method);
     requestLine.appendChild(url);
@@ -913,7 +1132,7 @@
     if (request.editable) {
       controls = renderEditableControls(request, defaultRequest, function () {
         method.textContent = request.method;
-        url.textContent = request.url;
+        url.textContent = readableUrl(request.url);
         notifyChanged();
       });
       panel.appendChild(controls.element);
@@ -926,6 +1145,9 @@
       panel.appendChild(body);
     }
 
+    const executeRow = document.createElement('div');
+    executeRow.className = 'sim-live-execute-row';
+
     const executeButton = document.createElement('button');
     executeButton.type = 'button';
     executeButton.className = 'sim-live-execute';
@@ -935,7 +1157,21 @@
     executeIcon.textContent = '▶';
     executeButton.appendChild(executeIcon);
     executeButton.appendChild(document.createTextNode('Execute request'));
-    panel.appendChild(executeButton);
+    executeRow.appendChild(executeButton);
+
+    let challengeFeedback = null;
+    if (request.challengeId) {
+      const feedbackElement = document.createElement('span');
+      feedbackElement.className = 'sim-live-challenge-feedback';
+      feedbackElement.setAttribute('role', 'status');
+      feedbackElement.hidden = true;
+      challengeFeedback = {
+        element: feedbackElement,
+        hideTimer: null,
+      };
+      executeRow.appendChild(feedbackElement);
+    }
+    panel.appendChild(executeRow);
 
     const responseArea = renderResponseArea(widget);
     responseArea.elements.forEach(function (element) {
@@ -944,6 +1180,8 @@
 
     executeButton.addEventListener('click', function () {
       executeButton.disabled = true;
+      let wasChallengePassedBeforeRequest = false;
+      clearChallengeFeedback(challengeFeedback);
       responseArea.status.textContent = 'Running...';
       responseArea.bodyPanel.textContent = '';
       responseArea.headersPanel.textContent = '';
@@ -956,9 +1194,9 @@
               && (request.resolveDynamicOnExecute || unresolvedDynamicUrl)) {
             return resolveDynamicRequest(request).then(function () {
               method.textContent = request.method;
-              url.textContent = request.url;
+              url.textContent = readableUrl(request.url);
               if (controls) {
-                controls.urlInput.value = request.url;
+                controls.urlInput.value = readableUrl(request.url);
                 controls.headersTextarea.value = headersToEditableText(request.headers);
                 if (controls.bodyTextarea) {
                   controls.bodyTextarea.value = request.body;
@@ -970,6 +1208,13 @@
           return null;
         })
         .then(function () {
+          if (!request.challengeId) {
+            return false;
+          }
+          return checkChallengePassed(request);
+        })
+        .then(function (passedBeforeRequest) {
+          wasChallengePassedBeforeRequest = passedBeforeRequest === true;
           const unsupportedRequestMessage = browserUnsupportedRequestMessage(request);
           if (unsupportedRequestMessage) {
             responseArea.status.textContent = 'Cannot execute in browser';
@@ -991,7 +1236,7 @@
         })
         .then(function (response) {
           if (!response) {
-            return;
+            return false;
           }
 
           const contentType = response.headers.get('content-type') || '';
@@ -1023,6 +1268,21 @@
           responseArea.headersPanel.textContent = responseHeadersToText(response);
           return response.text().then(function (text) {
             responseArea.bodyPanel.textContent = formatBody(text, contentType);
+            return true;
+          });
+        })
+        .then(function (requestWasSent) {
+          if (!requestWasSent || !request.challengeId) {
+            return;
+          }
+          return checkChallengePassed(request).then(function (passed) {
+            showChallengeFeedback(challengeFeedback, passed);
+            if (passed) {
+              showChallengeCompletedBanner(request.challengeId);
+              if (!wasChallengePassedBeforeRequest) {
+                showChallengeFireworks();
+              }
+            }
           });
         })
         .catch(function (error) {
@@ -1054,10 +1314,10 @@
 
   function updateRequestView(widgetState) {
     widgetState.method.textContent = widgetState.request.method;
-    widgetState.url.textContent = widgetState.request.url;
+    widgetState.url.textContent = readableUrl(widgetState.request.url);
     if (widgetState.controls) {
       widgetState.controls.methodSelect.value = widgetState.request.method;
-      widgetState.controls.urlInput.value = widgetState.request.url;
+      widgetState.controls.urlInput.value = readableUrl(widgetState.request.url);
       widgetState.controls.headersTextarea.value = headersToEditableText(
         widgetState.request.headers);
       if (widgetState.controls.bodyTextarea) {
@@ -1092,6 +1352,7 @@
       autoCreateFirstTodo: placeholder.dataset.autoCreateFirstTodo !== 'false',
       refreshAfterExecute: placeholder.dataset.refreshAfterExecute !== 'false',
       resolveDynamicOnExecute: placeholder.dataset.resolveDynamicOnExecute !== 'false',
+      challengeId: placeholder.dataset.challengeId || '',
       userEdited: false,
     };
     request.url = absoluteUrl(request.rawPath);
@@ -1208,5 +1469,6 @@
 
   onReady(function () {
     document.querySelectorAll(WIDGET_SELECTOR).forEach(renderWidget);
+    updateChallengeCompletedBanners();
   });
 }());

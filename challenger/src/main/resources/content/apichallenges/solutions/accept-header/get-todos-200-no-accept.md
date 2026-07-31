@@ -65,7 +65,7 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="" details="true" summary="GET /todos without Accept to use the default response format" open="true">}}
 
 
 ## Example Request

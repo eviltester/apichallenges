@@ -29,7 +29,7 @@ public class ChallengeApiModel {
 
         para.append("A Simple todo list");
 
-        todoList.setDocumentation("Simple Todo List", para.toString());
+        todoList.setDocumentation("API Challenges Simple Todo List", para.toString());
 
         // can create a maximum of 20 todos in the challenge todos list
         EntityDefinition todo = todoList.defineThing("todo", "todos", 20);
@@ -56,6 +56,7 @@ public class ChallengeApiModel {
         todoList.apiConfig().forParams().setDefaultPagingLimit(10);
         todoList.apiConfig().forParams().setMaxPagingLimit(20);
         todoList.apiConfig().statusCodes().setMaxRequestBodyLengthBytes(5000);
+        todoList.apiConfig().setApiToEnforceDeclaredTypesInInput(true);
         todoList.apiConfig().setReturnSingleGetItemsAsCollection(true);
         todoList.apiDefaults()
                 .writeMethods()

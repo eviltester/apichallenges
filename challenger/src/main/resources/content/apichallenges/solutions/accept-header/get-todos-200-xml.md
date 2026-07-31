@@ -39,7 +39,7 @@ When we issue a GET request we can use the `Accept` header to request a specific
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml" details="true" summary="GET /todos with Accept: application/xml to request XML" open="true">}}
 
 
 ## Example Request

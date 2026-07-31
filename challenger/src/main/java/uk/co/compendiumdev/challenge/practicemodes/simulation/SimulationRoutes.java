@@ -98,6 +98,7 @@ public class SimulationRoutes {
 
         ThingifierApiConfig customApiconfig = new ThingifierApiConfig("/sim");
         customApiconfig.forParams().setAllowPagingThroughUrlParams(false);
+        customApiconfig.setApiToEnforceDeclaredTypesInInput(true);
         simulation.apiConfig().setFrom(customApiconfig);
     }
 

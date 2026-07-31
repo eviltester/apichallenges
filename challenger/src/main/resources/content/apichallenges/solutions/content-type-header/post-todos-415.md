@@ -49,7 +49,7 @@ Extras:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="415" headers="Content-Type: application/gzip||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="415" headers="Content-Type: application/gzip||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos with an unsupported Content-Type to trigger 415" open="true">}}
 
 
 ## Example Request

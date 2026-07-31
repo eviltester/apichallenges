@@ -65,7 +65,15 @@ NOTE: because you add an id to the payload you risk triggering an error validati
 
 ### Try it now
 
-{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"id":"{{firstTodoId}}","title":"full update from widget","doneStatus":true,"description":"updated from the solution page"}'>}}
+If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+
+If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+
+{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"id":"{{firstTodoId}}","title":"full update from widget","doneStatus":true,"description":"updated from the solution page"}' details="true" summary="PUT /todos/{id} with a full body to update a todo" open="true">}}
 
 
 ## Example Request
@@ -111,7 +119,6 @@ Returned body:
   "description": "updated description"
 }
 ```
-
 
 
 

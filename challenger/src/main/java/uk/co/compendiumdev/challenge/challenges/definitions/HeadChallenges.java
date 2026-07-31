@@ -11,6 +11,9 @@ public class HeadChallenges {
                         "HEAD /todos (200)",
                         "Issue a HEAD request on the `/todos` end point");
 
+        aChallenge.addHint("Use the HEAD method rather than GET.");
+        aChallenge.addHint("A HEAD response should include headers but no response body.");
+
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/head/head-todos-200");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "zKbytTelP84");

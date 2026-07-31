@@ -683,6 +683,14 @@ public abstract class ChallengeCompleteTest {
 
     private EntityInstance createTodo(
             final EntityDefinition todos, final String title, final String doneStatus) {
+        return createTodo(todos, title, doneStatus, "");
+    }
+
+    private EntityInstance createTodo(
+            final EntityDefinition todos,
+            final String title,
+            final String doneStatus,
+            final String description) {
         return ChallengeMain.getChallenger()
                 .getThingifier()
                 .getStore(challenger.getXChallenger())
@@ -690,7 +698,8 @@ public abstract class ChallengeCompleteTest {
                 .create(
                         EntityInstanceDraft.forEntity(todos)
                                 .withField("title", title)
-                                .withField("doneStatus", doneStatus));
+                                .withField("doneStatus", doneStatus)
+                                .withField("description", description));
     }
 
     private EntityDefinition todoDefinition() {
@@ -759,6 +768,44 @@ public abstract class ChallengeCompleteTest {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private void ensureTodoWithDescription(final String description) {
+        ensureAtLeastXTodoAvailable(2);
+
+        final EntityDefinition todos = todoDefinition();
+        EntityInstance todo = new ArrayList<>(todoRepository().entityQueries().list(todos)).get(0);
+
+        todoRepository()
+                .entities()
+                .patch(
+                        todo,
+                        EntityInstanceDraft.forEntity(todos).withField("description", description));
+    }
+
+    private int firstTodoId() {
+        return todoId(
+                new ArrayList<>(todoRepository().entityQueries().list(todoDefinition())).get(0));
+    }
+
+    private int minimumTodoId() {
+        int minimumId = Integer.MAX_VALUE;
+        for (EntityInstance todo : todoRepository().entityQueries().list(todoDefinition())) {
+            minimumId = Math.min(minimumId, todoId(todo));
+        }
+        return minimumId;
+    }
+
+    private int maximumTodoId() {
+        int maximumId = Integer.MIN_VALUE;
+        for (EntityInstance todo : todoRepository().entityQueries().list(todoDefinition())) {
+            maximumId = Math.max(maximumId, todoId(todo));
+        }
+        return maximumId;
+    }
+
+    private int todoId(final EntityInstance todo) {
+        return Integer.parseInt(todo.getFieldValue("id").asString());
     }
 
     @Test
@@ -1101,6 +1148,88 @@ public abstract class ChallengeCompleteTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED));
+    }
+
+    @Test
+    public void canFilterTodosByIdGreaterThanPass() {
+
+        ensureAtLeastXTodoAvailable(2);
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        int threshold = minimumTodoId();
+
+        final HttpResponseDetails response =
+                http.send("/todos?id%3E" + threshold, "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN));
+    }
+
+    @Test
+    public void canFilterTodosByIdLessThanPass() {
+
+        ensureAtLeastXTodoAvailable(2);
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        int threshold = maximumTodoId();
+
+        final HttpResponseDetails response =
+                http.send("/todos?id%3C" + threshold, "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN));
+    }
+
+    @Test
+    public void canFilterTodosByIdToSingleResultPass() {
+
+        ensureAtLeastXTodoAvailable(2);
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        int id = firstTodoId();
+
+        final HttpResponseDetails response =
+                http.send("/todos?id=" + id, "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_ID_SINGLE_RESULT));
+    }
+
+    @Test
+    public void canFilterTodosByDescriptionRegexPass() {
+
+        ensureTodoWithDescription("regexfixture description");
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos?description%7E=.%2Aregexfixture.%2A",
+                        "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_REGEX));
+    }
+
+    @Test
+    public void canFilterTodosByDescriptionWildcardPass() {
+
+        ensureTodoWithDescription("wildcardfixture description");
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos?description%2A=%2Awildcardfixture%2A",
+                        "GET", x_challenger_header, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODOS_FILTERED_DESCRIPTION_WILDCARD));
     }
 
     @Test

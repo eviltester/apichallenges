@@ -11,6 +11,9 @@ public class OptionsChallenges {
                         "OPTIONS /todos (200)",
                         "Issue an OPTIONS request on the `/todos` end point. You might want to manually check the 'Allow' header in the response is as expected.");
 
+        aChallenge.addHint("Use the OPTIONS method on `/todos`.");
+        aChallenge.addHint("Inspect the `Allow` response header to see the supported methods.");
+
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/options/options-todos-200");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "Ld5h1TSnXWA");

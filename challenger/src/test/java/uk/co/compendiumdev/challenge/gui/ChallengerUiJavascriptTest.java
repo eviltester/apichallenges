@@ -141,15 +141,44 @@ public class ChallengerUiJavascriptTest {
         Assertions.assertTrue(javascript.contains("You Got This"));
         Assertions.assertTrue(javascript.contains("In the Race"));
         Assertions.assertTrue(javascript.contains("Reward Unlocked: Server session storage"));
+        Assertions.assertTrue(javascript.contains("Clearance Granted"));
+        Assertions.assertTrue(
+                javascript.contains("Complete Authentication and Authorization challenges 71-80"));
+        Assertions.assertTrue(javascript.contains("Misc Mastery"));
+        Assertions.assertTrue(javascript.contains("Complete Miscellaneous challenges 81 and 82"));
         Assertions.assertTrue(javascript.contains("Completist"));
         Assertions.assertTrue(javascript.contains("challengeKey: \"CREATE_NEW_CHALLENGER\""));
         Assertions.assertTrue(javascript.contains("challengeKey: \"GET_CHALLENGES\""));
+        Assertions.assertTrue(javascript.contains("challengeKeys: ["));
+        Assertions.assertTrue(javascript.contains("\"CREATE_SECRET_TOKEN_401\""));
+        Assertions.assertTrue(javascript.contains("\"POST_SECRET_NOTE_BEARER_200\""));
+        Assertions.assertTrue(javascript.contains("\"DELETE_ALL_TODOS\""));
+        Assertions.assertTrue(javascript.contains("\"POST_ALL_TODOS\""));
         Assertions.assertTrue(javascript.contains("threshold: 60"));
+        Assertions.assertTrue(javascript.contains("function areChallengeKeysComplete"));
+        Assertions.assertTrue(javascript.contains("challengeKeys.every"));
         Assertions.assertTrue(javascript.contains("allChallenges: true"));
         Assertions.assertTrue(javascript.contains("function showAchievements()"));
         Assertions.assertTrue(javascript.contains("achievement-rail-panel"));
-        Assertions.assertTrue(javascript.contains("addEventListener(\"mouseenter\""));
+        Assertions.assertTrue(javascript.contains("function selectAchievementMedal"));
+        Assertions.assertTrue(javascript.contains("function setSelectedAchievementDetails"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "addEventListener(\"mouseenter\", function(){ setAchievementDetails(medal, false); })"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "addEventListener(\"mouseleave\", function(){ setSelectedAchievementDetails(panel); })"));
         Assertions.assertTrue(javascript.contains("addEventListener(\"click\""));
+        Assertions.assertTrue(javascript.contains("setAchievementDetails(medal, true)"));
+
+        Assertions.assertTrue(javascript.indexOf("Better than the Best") > 0);
+        Assertions.assertTrue(
+                javascript.indexOf("Clearance Granted")
+                        > javascript.indexOf("Better than the Best"));
+        Assertions.assertTrue(
+                javascript.indexOf("Misc Mastery") > javascript.indexOf("Clearance Granted"));
+        Assertions.assertTrue(
+                javascript.indexOf("Completist") > javascript.indexOf("Misc Mastery"));
     }
 
     @Test
@@ -162,7 +191,9 @@ public class ChallengerUiJavascriptTest {
                 javascript.indexOf("refreshLocalChallengerProgressFromSystem(sanitizedGuid)");
         int localProgressSave =
                 javascript.indexOf("saveChallengerProgressToLocalStorage(challenger)");
-        int redirect = javascript.indexOf("location.href = `/gui/challenges/${sanitizedGuid}`");
+        int redirect =
+                javascript.indexOf(
+                        "location.href = `/gui/challenges/${sanitizedGuid}${location.hash || \"\"}`");
 
         Assertions.assertTrue(progressRestore > 0);
         Assertions.assertTrue(progressRefresh > progressRestore);

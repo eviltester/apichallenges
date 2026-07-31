@@ -5,7 +5,7 @@ title: API Challenges Solution For - Delete /todos/id (204) all
 seo_title: Solution: Delete /todos/id (204) all | API Challenges
 description: How to solve API challenges to Delete all the todos
 seo_description: Use this walkthrough to solve Delete /todos/id (204) all with request setup, key headers, and expected status codes so you can complete the challenge.
-next_challenge: /gui/challenges
+next_challenge: /apichallenges/solutions/miscellaneous/create-maximum-number-todos
 schema_howto_steps: GET /todos and capture all todo ids currently returned by the API||Send DELETE /todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
 showads: true
 ---
@@ -160,4 +160,14 @@ xargs -I % curl --request DELETE \
 [Patreon ad free version](https://www.patreon.com/posts/119362209)
 ### Try it now
 
-{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false">}}
+If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+
+If there are no todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created from the delete all solution page"}' details="true" summary="POST /todos to create a todo item to delete">}}
+
+Use the delete request repeatedly until `GET /todos` returns an empty todo list.
+
+{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" details="true" summary="DELETE /todos/{id} to remove each todo until none remain" open="true">}}

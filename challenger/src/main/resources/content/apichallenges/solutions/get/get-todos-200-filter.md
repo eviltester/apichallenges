@@ -1,11 +1,11 @@
 ---
 date:  2021-01-30T09:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-07-31
 title: API Challenges Solution For - GET todos 200 filter
 seo_title: Solution: GET todos 200 filter | API Challenges
 description: How to solve API challenge GET todos 200 filter to use URL parameters to filter the results.
 seo_description: Use this walkthrough to solve GET todos 200 filter with request setup, key headers, and expected status codes so you can complete the challenge confidently.
-next_challenge: /apichallenges/solutions/get/get-todos-200-sort-ascending
+next_challenge: /apichallenges/solutions/get/get-todos-200-filter-id-greater-than
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add the required query parameters and confirm the filtered todo results||Send the request and verify the response status is 200
 showads: true
 ---
@@ -42,21 +42,23 @@ How to issue a GET request on a top level entity endpoint and use a query filter
     },
 ```
 - we want to use the `doneStatus` attribute as a URL parameter
-- if you don't see any todos in the list with a `"doneStatus": true` then you will need to issue a `POST` request to create or amend a todo item. e.g. [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201)
+- if you don't see any todos in the list with a `"doneStatus": true` then you will need to issue a `POST` request to create or amend a todo item. e.g. [challenge POST todos 201](/apichallenges/solutions/post-create/post-todos-201)
 - Issue a `GET` request with a URL parameter `/todos?doneStatus=true`
 - The response status code should be `200` because the request is accepted
 - If you get a different response code, check the URL or headers of the message because you made have made a typo.
-- If you don't see any todos returned then you may need to create one e.g. [challenge post secret 201](/apichallenges/solutions/authentication/post-secret-201)
+- If you don't see any todos returned then you may need to create one e.g. [challenge POST todos 201](/apichallenges/solutions/post-create/post-todos-201)
 
 ### Try it now
 
-First Filter:
+If you need fixture data, create one done todo and one not-done todo first. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="GET" path="/todos?doneStatus=true" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done filter fixture","doneStatus":true,"description":"created for filtering"}' details="true" summary="POST /todos to create a done todo fixture">}}
 
-Create a TODO if necessary:
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"not done comparison fixture","doneStatus":false,"description":"created for filtering"}' details="true" summary="POST /todos to create a not-done comparison todo">}}
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done todo for filter","doneStatus":true,"description":"created for filter challenge"}'>}}
+Filter for done todos:
+
+{{<api-live-request method="GET" path="/todos?doneStatus=true" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?doneStatus=true to return only done todos" open="true">}}
 
 
 

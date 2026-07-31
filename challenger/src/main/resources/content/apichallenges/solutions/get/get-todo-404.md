@@ -30,7 +30,7 @@ How to solve challenge GET todo 404 by issuing a GET request on a non-existent e
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todo" expected-status="404" headers="Accept: */*">}}
+{{<api-live-request method="GET" path="/todo" expected-status="404" headers="Accept: */*" details="true" summary="GET /todo to trigger 404 for the singular endpoint" open="true">}}
 
 
 ## Example Request

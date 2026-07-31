@@ -36,7 +36,7 @@ How to issue a GET request on a top level entity endpoint and use pagination to 
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_limit=5&_offset=5" expected-status="200" headers="Accept: application/json">}}
+{{<api-live-request method="GET" path="/todos?_limit=5&_offset=5" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_limit=5&_offset=5 to request the next page of todos" open="true">}}
 
 ## Example Request
 

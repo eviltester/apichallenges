@@ -70,7 +70,7 @@ We only need to use the minimum details, but could add a description if we wante
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}'>}}
+{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos with JSON to create a todo" open="true">}}
 
 
 ## Example Request

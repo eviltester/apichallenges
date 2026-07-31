@@ -39,7 +39,7 @@ How to complete the challenge `GET /todos ANY (200)` to successfully GET all the
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: */*">}}
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: */*" details="true" summary="GET /todos with Accept: */* to request any supported format" open="true">}}
 
 
 ## Example Request

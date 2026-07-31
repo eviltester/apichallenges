@@ -5,7 +5,7 @@ title: API Challenges Solution For - GET heartbeat 431 X-CHALLENGER too long
 seo_title: Solution: GET heartbeat 431 X-CHALLENGER too long | API Challenges
 description: How to solve API challenge GET heartbeat 431 X-CHALLENGER too long.
 seo_description: Use this walkthrough to solve GET heartbeat 431 X-CHALLENGER too long with request setup, key headers, and expected status codes.
-next_challenge: /apichallenges/solutions/method-override/all-method-overrides
+next_challenge: /apichallenges/solutions/method-override/post-heartbeat-as-delete-405
 schema_howto_steps: Start with your real X-CHALLENGER value||Append enough characters to make the header longer than 100 characters||GET /heartbeat and verify the response status is 431
 showads: true
 ---
@@ -33,4 +33,4 @@ The response should be `431 Request Header Fields Too Large`.
 ```
 ### Try it now
 
-{{<api-live-request method="GET" path="/heartbeat" expected-status="431" headers="X-CHALLENGER: {{oversizedChallenger}}||Accept: application/json" use-challenger="false">}}
+{{<api-live-request method="GET" path="/heartbeat" expected-status="431" headers="X-CHALLENGER: {{oversizedChallenger}}||Accept: application/json" use-challenger="false" details="true" summary="GET /heartbeat with an oversized X-CHALLENGER to trigger 431" open="true">}}

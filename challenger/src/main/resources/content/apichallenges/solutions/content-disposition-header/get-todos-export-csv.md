@@ -40,7 +40,7 @@ The `format` query parameter controls the export type for this endpoint, so this
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/export?format=csv" expected-status="200" headers="Accept: text/csv">}}
+{{<api-live-request method="GET" path="/todos/export?format=csv" expected-status="200" headers="Accept: text/csv" details="true" summary="GET /todos/export?format=csv to download todos as CSV" open="true">}}
 
 ## Example Request
 
