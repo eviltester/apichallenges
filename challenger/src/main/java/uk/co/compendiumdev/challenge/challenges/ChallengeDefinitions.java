@@ -567,7 +567,7 @@ public class ChallengeDefinitions {
                 miscChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_ALL_TODOS,
-                MiscChallenges.postAllTodos409(challengeOrder++),
+                MiscChallenges.postAllTodos409(challengeOrder),
                 miscChallenges);
 
         Set challengeNames = new HashSet();

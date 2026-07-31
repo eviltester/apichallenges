@@ -83,7 +83,7 @@ public class MarkdownContentManagerChallengeStatusTest {
     }
 
     private int countOccurrences(final String value, final String substring) {
-        return value.split(java.util.regex.Pattern.quote(substring), -1).length - 1;
+        return value.split(Pattern.quote(substring), -1).length - 1;
     }
 
     private int countMatches(final String value, final String regex) {
