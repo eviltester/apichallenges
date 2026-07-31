@@ -76,8 +76,7 @@ public class SimpleApiRoutes {
 
         simplethings.apiConfig().setFrom(new ThingifierApiConfig("/simpleapi"));
         simplethings.apiConfig().forParams().setAllowPagingThroughUrlParams(false);
-        // do  not convert floats to int
-        simplethings.apiConfig().setApiToEnforceDeclaredTypesInInput(false);
+        simplethings.apiConfig().setApiToEnforceDeclaredTypesInInput(true);
         // single items should be single items
         simplethings.apiConfig().setReturnSingleGetItemsAsCollection(false);
         simplethings

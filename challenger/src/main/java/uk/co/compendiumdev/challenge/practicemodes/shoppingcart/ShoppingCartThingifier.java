@@ -158,7 +158,8 @@ public final class ShoppingCartThingifier {
         config.setFrom(new ThingifierApiConfig("/shop"));
         config.forParams().setAllowPagingThroughUrlParams(false);
         config.setReturnSingleGetItemsAsCollection(false);
-        config.setApiToEnforceDeclaredTypesInInput(true);
+        // Buggy API deliberately keeps coercive input typing.
+        config.setApiToEnforceDeclaredTypesInInput(false);
         config.setApiToShowPrimaryKeyHeaderInResponse(true);
         config.setApiToAllowXmlForResponses(false);
         config.setApiToAllowXmlForContentType(false);

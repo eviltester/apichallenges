@@ -154,6 +154,36 @@ public class SimpleApiModeTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = {"\"2\"", "\"2.0\""})
+    public void canNotPostItemWithStringValueForIntegerField(final String numberInStock) {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items",
+                        "POST",
+                        headers,
+                        """
+                        {
+                          "price": 2.00,
+                          "numberinstock": %s,
+                          "isbn13": "%s",
+                          "type": book
+                        }
+                        """
+                                .formatted(numberInStock, Item.randomIsbn(new Random()))
+                                .stripIndent());
+
+        Assertions.assertEquals(422, response.statusCode, response.body);
+        Assertions.assertTrue(
+                response.body.contains("numberinstock should be INTEGER but was STRING"),
+                response.body);
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = {"", "-"})
     public void canNotPostCreateItemsWithDuplicateISBN(String dupeSynonymReplace) {
 
@@ -379,6 +409,29 @@ public class SimpleApiModeTest {
         Assertions.assertEquals(9.99f, patched.price);
         Assertions.assertEquals(createdItem.type, patched.type);
         Assertions.assertEquals(createdItem.isbn13, patched.isbn13);
+    }
+
+    @Test
+    public void canNotPatchItemWithStringValueForIntegerField() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PATCH",
+                        headers,
+                        "{\"numberinstock\":\"2\"}");
+
+        Assertions.assertEquals(422, response.statusCode, response.body);
+        Assertions.assertTrue(
+                response.body.contains("numberinstock should be INTEGER but was STRING"),
+                response.body);
+        Assertions.assertEquals(3, api.apiGetItem(createdItem.id).numberinstock);
     }
 
     @Test

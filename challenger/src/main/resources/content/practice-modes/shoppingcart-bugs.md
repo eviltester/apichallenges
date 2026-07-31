@@ -2,7 +2,7 @@
 title: Buggy API Deliberate Bugs
 seo_title: Buggy API Deliberate Bugs for Testers | API Challenges
 description: Maintainer notes for the deliberate Buggy API bugs.
-lastmod: 2026-07-29
+lastmod: 2026-07-31
 seo_description: Maintainer notes for Buggy API deliberate bugs, trigger examples, clean-mode expectations, and regression coverage ideas.
 sitemap: false
 ---
@@ -27,6 +27,7 @@ The Buggy API is buggy by default. Start with `-shopbugs=none` to switch bugs of
 - Closed carts can still be modified.
 - A cart can be checked out more than once, reducing stock again.
 - `POST /shop/carts/{cartId}/items` accepts a valid bearer token from another cart when the body updates an existing `id`.
+- JSON input types are not fully validated against the domain model; for example, an integer such as `4` can be accepted for a STRING field because it can be converted to `"4"`.
 
 ## Clean Behaviour Reference
 

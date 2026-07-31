@@ -200,6 +200,33 @@ class ShoppingCartApiTest {
     }
 
     @Test
+    void defaultBugModeCoercesStringNumbersForCartItemIntegerFields() {
+        startApp();
+
+        final RegisterResponse cart = api.registerCart();
+        final Product book = api.productByCode("BOOK_API");
+        Assertions.assertEquals(1, book.id);
+
+        final HttpResponseDetails response =
+                api.addItemRaw(
+                        cart.cartId,
+                        cart.token,
+                        """
+                        {
+                          "productId": "1.0",
+                          "quantity": "2"
+                        }
+                        """
+                                .stripIndent());
+
+        Assertions.assertEquals(201, response.statusCode, response.body);
+        final CartItemResponse item =
+                ShoppingCartSupport.GSON.fromJson(response.body, CartItemResponse.class);
+        Assertions.assertEquals(book.id, item.productId);
+        Assertions.assertEquals(2, item.quantity);
+    }
+
+    @Test
     void defaultBugModeAllowsCreateAndUpdateQuantitiesGreaterThanStock() {
         startApp();
 
