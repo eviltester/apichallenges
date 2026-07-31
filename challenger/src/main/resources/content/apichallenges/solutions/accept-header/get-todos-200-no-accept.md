@@ -1,6 +1,6 @@
 ---
 date:  2021-05-29T10:32:00Z
-lastmod: 2026-02-18
+lastmod: 2026-07-31
 title: API Challenges Solution For - GET todos No Accept Header 200
 seo_title: Solution GET todos No Accept Header 200 | API Challenges
 description: How to solve API challenge GET todos No Accept 200 to GET the todos with no accept header present.
@@ -65,7 +65,9 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="" details="true" summary="GET /todos without Accept to use the default response format" open="true">}}
+The HTTP client below will send the request, but the browser will add an `Accept` header. You cannot complete this challenge from the client below; try it and see for yourself.
+
+{{<api-live-request method="GET" path="/todos" expected-status="200" headers="" details="true" challenge-request="true" summary="GET /todos without Accept to use the default response format">}}
 
 
 ## Example Request
@@ -103,7 +105,5 @@ Example Response body:
 {{<youtube-embed key="CSVP2PcvOdg" title="Solution to Get all Todos in defaulted format">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/51831718)
-
-
 
 

@@ -30,6 +30,8 @@ public class SolutionNextChallengeChainTest {
             Pattern.compile("\\bdetails=(\"true\"|'true')", Pattern.CASE_INSENSITIVE);
     private static final Pattern OPEN_TRUE_PATTERN =
             Pattern.compile("\\bopen=(\"true\"|'true')", Pattern.CASE_INSENSITIVE);
+    private static final Pattern CHALLENGE_REQUEST_TRUE_PATTERN =
+            Pattern.compile("\\bchallenge-request=(\"true\"|'true')", Pattern.CASE_INSENSITIVE);
     private static final Pattern SUMMARY_PATTERN =
             Pattern.compile("\\bsummary=(\"([^\"]+)\"|'([^']+)')", Pattern.CASE_INSENSITIVE);
 
@@ -142,7 +144,7 @@ public class SolutionNextChallengeChainTest {
         Assertions.assertTrue(
                 pagesWithInvalidWidgets.isEmpty(),
                 "Each solution API live request should have a semantic details summary, and each"
-                        + " solution page should have one default-open main request:\n"
+                        + " solution page should have one main challenge request:\n"
                         + String.join("\n", pagesWithInvalidWidgets));
     }
 
@@ -236,7 +238,7 @@ public class SolutionNextChallengeChainTest {
 
     private Optional<String> validateApiLiveRequestWidgets(final Path path, final String content) {
         int widgetCount = 0;
-        int openWidgetCount = 0;
+        int mainWidgetCount = 0;
         List<String> errors = new ArrayList<>();
         Matcher matcher = API_LIVE_REQUEST_PATTERN.matcher(content);
         while (matcher.find()) {
@@ -260,8 +262,9 @@ public class SolutionNextChallengeChainTest {
                     errors.add("summary exposes template placeholder");
                 }
             }
-            if (OPEN_TRUE_PATTERN.matcher(attributes).find()) {
-                openWidgetCount++;
+            if (OPEN_TRUE_PATTERN.matcher(attributes).find()
+                    || CHALLENGE_REQUEST_TRUE_PATTERN.matcher(attributes).find()) {
+                mainWidgetCount++;
             }
         }
 
@@ -269,8 +272,10 @@ public class SolutionNextChallengeChainTest {
             return Optional.empty();
         }
 
-        if (openWidgetCount != 1) {
-            errors.add("expected one open=true main widget but found " + openWidgetCount);
+        if (mainWidgetCount != 1) {
+            errors.add(
+                    "expected one open=true or challenge-request=true main widget but found "
+                            + mainWidgetCount);
         }
 
         if (errors.isEmpty()) {

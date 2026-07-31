@@ -697,9 +697,11 @@ public class MarkdownContentManager {
         final String path = attributes.getOrDefault("path", "/");
         final String editable = attributes.getOrDefault("editable", defaultEditable);
         final boolean openDetails = isTruthy(attributes.get("open"));
+        final boolean challengeRequest = isTruthy(attributes.get("challenge-request"));
         final boolean wrapInDetails = openDetails || isTruthy(attributes.get("details"));
         final String summary = attributes.getOrDefault("summary", "Try it now");
-        if (isSolutionApiSolvingRequest(placeholderClass, openDetails, contentPath)) {
+        if (isSolutionApiSolvingRequest(
+                placeholderClass, openDetails, challengeRequest, contentPath)) {
             attributes.putIfAbsent("challenge-id", solutionChallengeIds.get(contentPath));
         }
 
@@ -721,7 +723,8 @@ public class MarkdownContentManager {
                     || key.equals("editable")
                     || key.equals("details")
                     || key.equals("summary")
-                    || key.equals("open")) {
+                    || key.equals("open")
+                    || key.equals("challenge-request")) {
                 continue;
             }
             html.append(" data-")
@@ -754,9 +757,12 @@ public class MarkdownContentManager {
     }
 
     private boolean isSolutionApiSolvingRequest(
-            final String placeholderClass, final boolean openDetails, final String contentPath) {
+            final String placeholderClass,
+            final boolean openDetails,
+            final boolean challengeRequest,
+            final String contentPath) {
         return "api-live-request".equals(placeholderClass)
-                && openDetails
+                && (openDetails || challengeRequest)
                 && contentPath != null
                 && solutionChallengeIds.containsKey(contentPath);
     }

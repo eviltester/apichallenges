@@ -15,7 +15,8 @@ public class PutChallenges {
         aChallenge.addHint(
                 "If you don't know the format of the payload, use the response from a GET /todos/{id} request and amend it",
                 "");
-        aChallenge.addHint("Do not include an 'id' in the payload", "");
+        aChallenge.addHint(
+                "Include an 'id' in the payload that matches the missing id in the URL", "");
         aChallenge.addHint("The id in the URL should not exist", "");
         aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
 
