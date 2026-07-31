@@ -4,7 +4,7 @@ seo_title: API From Hell Practice Mode for REST Clients | API Challenges
 description: A deliberately awkward hard-coded API for checking how REST clients show malformed and misleading responses.
 lastmod: 2026-07-29
 seo_description: Try API From Hell, a hard-coded API practice mode exposing malformed data, problematic JSON/XML, mismatched content types, and missing metadata.
-meta_robots: noindex,follow
+meta_robots: nofollow
 og_image: /images/hero/api-from-hell-burning-1200x630.jpg
 og_image_alt: API From Hell burning hero image showing malformed JSON, misleading status codes, missing content types, and the live API From Hell page.
 schema_image: /images/hero/api-from-hell-burning-1200x630.jpg
