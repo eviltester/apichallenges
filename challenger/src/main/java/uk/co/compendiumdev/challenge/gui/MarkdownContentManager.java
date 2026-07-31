@@ -511,6 +511,7 @@ public class MarkdownContentManager {
                 buildSchemaJsonLd(
                         canonicalHost,
                         canonicalAbsoluteUrl,
+                        contentFolder,
                         contentPath,
                         breadcrumbs,
                         htmlTitle,
@@ -812,6 +813,7 @@ public class MarkdownContentManager {
     private String buildSchemaJsonLd(
             final String canonicalHost,
             final String canonicalAbsoluteUrl,
+            final String contentFolder,
             final String contentPath,
             final String[] breadcrumbs,
             final String htmlTitle,
@@ -908,7 +910,8 @@ public class MarkdownContentManager {
         final boolean includeBreadcrumb =
                 schemaBreadcrumbEnabled == null || schemaBreadcrumbEnabled;
         if (includeBreadcrumb) {
-            final String breadcrumbJson = buildBreadcrumbListJson(canonicalHost, breadcrumbs);
+            final String breadcrumbJson =
+                    buildBreadcrumbListJson(canonicalHost, contentFolder, contentPath, breadcrumbs);
             scripts.append(toJsonLdScript(breadcrumbJson));
         }
 
@@ -1154,8 +1157,15 @@ public class MarkdownContentManager {
         return json.toString();
     }
 
-    private String buildBreadcrumbListJson(final String canonicalHost, final String[] breadcrumbs) {
+    private String buildBreadcrumbListJson(
+            final String canonicalHost,
+            final String contentFolder,
+            final String contentPath,
+            final String[] breadcrumbs) {
         if (breadcrumbs == null || breadcrumbs.length == 0) {
+            return "";
+        }
+        if ("/index".equals(contentPath)) {
             return "";
         }
 
@@ -1178,6 +1188,10 @@ public class MarkdownContentManager {
                 continue;
             }
             path = path + "/" + crumb;
+            if (!path.equals(contentPath)
+                    && !markdownContentPaths.contains(contentFolder + path + ".md")) {
+                continue;
+            }
             json.append(",{\"@type\":\"ListItem\",\"position\":")
                     .append(position++)
                     .append(",\"name\":\"")

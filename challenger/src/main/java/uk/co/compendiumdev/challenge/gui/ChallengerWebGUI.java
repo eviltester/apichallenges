@@ -283,9 +283,6 @@ public class ChallengerWebGUI {
         siteMap.addUrl("https://apichallenges.eviltester.com", SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl("https://apichallenges.eviltester.com/docs", SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl(
-                "https://apichallenges.eviltester.com/docs/swagger-ui",
-                SEO_FIXED_LASTMOD.toString());
-        siteMap.addUrl(
                 "https://apichallenges.eviltester.com/gui/challenges",
                 SEO_FIXED_LASTMOD.toString());
 

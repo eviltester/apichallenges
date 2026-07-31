@@ -21,8 +21,18 @@ public final class CdnCachePolicy {
         after(
                 (request, response) -> {
                     versionLocalHtmlAssets(response);
+                    applyRobotsPolicy(request, response);
                     apply(request, response);
                 });
+    }
+
+    static void applyRobotsPolicy(
+            final HttpServerRequest request, final HttpServerResponse response) {
+        if (response.status() >= 200
+                && response.status() < 400
+                && isSwaggerUiPath(request.path())) {
+            response.header("X-Robots-Tag", "noindex, follow");
+        }
     }
 
     static void apply(final HttpServerRequest request, final HttpServerResponse response) {
@@ -102,6 +112,11 @@ public final class CdnCachePolicy {
                 || path.startsWith("/docs/")
                 || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs($|/.*)")
                 || isContentDocumentationPath(path);
+    }
+
+    private static boolean isSwaggerUiPath(final String path) {
+        return path.equals("/docs/swagger-ui")
+                || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs/swagger-ui$");
     }
 
     private static boolean isContentDocumentationPath(final String path) {

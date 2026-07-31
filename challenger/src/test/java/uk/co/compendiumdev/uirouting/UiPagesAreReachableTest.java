@@ -1033,6 +1033,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertNotNull(response.getHeader("Content-Type"));
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/html"));
+        Assertions.assertEquals("noindex, follow", response.getHeader("X-Robots-Tag"));
         assertContainsHeaderAndFooter(response);
         Assertions.assertTrue(
                 response.body.contains("https://unpkg.com/swagger-ui-dist/swagger-ui.css"));
@@ -1646,7 +1647,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<loc>https://apichallenges.eviltester.com</loc>"));
         Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.eviltester.com/docs</loc>"));
-        Assertions.assertTrue(
+        Assertions.assertFalse(
                 response.body.contains(
                         "<loc>https://apichallenges.eviltester.com/docs/swagger-ui</loc>"));
         Assertions.assertTrue(
@@ -1662,6 +1663,20 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<loc>https://apichallenges.eviltester.com/tutorials/openapi-swagger</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-02-18</lastmod>"));
+    }
+
+    @Test
+    void sitemapExcludesNoindexAndExplicitlyExcludedContentPages() {
+
+        final HttpResponseDetails response = http.send("/sitemap.xml", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/seo-metadata-test-page</loc>"));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/practice-modes/shoppingcart-bugs</loc>"));
     }
 
     @Test

@@ -16,6 +16,7 @@ lastmod: 2026-02-18
 ```yaml
 seo_description: Optional override for meta description text
 meta_robots: index,follow   # e.g. noindex,nofollow for non-public pages
+sitemap: false              # omit an otherwise indexable page from sitemap.xml
 canonical: https://apichallenges.eviltester.com/path
 og_image: /images/social/apichallenges-og-1200x630.png
 og_image_alt: Image alt text for social previews
@@ -37,6 +38,8 @@ schema_video_id: OpisB0UZq0c     # force specific YouTube id when needed
 
 - If `seo_description` is not set, `description` is used.
 - `lastmod` is used as the page update date for sitemap `<lastmod>` and schema `dateModified`.
+- Pages with a `noindex` value in `meta_robots` are excluded from the sitemap.
+- Use `sitemap: false` to exclude an otherwise indexable page from the sitemap.
 - If `lastmod` is not set, schema `dateModified` falls back to `date`.
 - If `og_image` is not set, the global default social image is
   `/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg`.
