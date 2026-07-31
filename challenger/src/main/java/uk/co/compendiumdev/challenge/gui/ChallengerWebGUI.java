@@ -222,7 +222,7 @@ public class ChallengerWebGUI {
 
         // add an endpoint for each markdown content file
         MarkdownContentManager contentManager =
-                new MarkdownContentManager(pathsToFileContent, guiManagement);
+                new MarkdownContentManager(pathsToFileContent, guiManagement, challengeDefinitions);
         for (String pathToMarkdownFile : pathsToFileContent) {
             String endPointForMarkdownFile =
                     pathToMarkdownFile.replaceFirst("content/", "/").replace(".md", "");
@@ -485,6 +485,19 @@ public class ChallengerWebGUI {
                     return html.toString();
                 });
 
+        get(
+                "/gui/challenge-status/*",
+                (request, result) -> {
+                    result.type("application/json");
+                    result.status(200);
+                    return renderChallengeStatusJson(
+                            request.splat(),
+                            request,
+                            challengers,
+                            challengeDefinitions,
+                            single_player_mode);
+                });
+
         // multi user
         get(
                 "/gui/challenges/*",
@@ -720,6 +733,99 @@ public class ChallengerWebGUI {
 
     private boolean hasText(final String value) {
         return value != null && !value.trim().isEmpty();
+    }
+
+    private String renderChallengeStatusJson(
+            final String rawChallengeId,
+            final HttpServerRequest request,
+            final Challengers challengers,
+            final ChallengeDefinitions challengeDefinitions,
+            final boolean singlePlayerMode) {
+
+        final Optional<ChallengeDefinitionData> challenge =
+                challengeDefinitionForId(rawChallengeId, challengeDefinitions);
+        if (challenge.isEmpty()) {
+            return "{\"id\":\""
+                    + escapeJsonValue(rawChallengeId)
+                    + "\",\"status\":false,\"known\":false}";
+        }
+
+        final ChallengerAuthData challenger =
+                challengerForStatusRequest(request, challengers, singlePlayerMode);
+        boolean passed = false;
+        if (challenger != null) {
+            final CHALLENGE challengeKey = challengeDefinitions.getChallenge(challenge.get().name);
+            passed = challengeKey != null && challenger.statusOfChallenge(challengeKey);
+        }
+
+        return "{\"id\":\""
+                + normalizeChallengeId(challenge.get().id)
+                + "\",\"status\":"
+                + passed
+                + ",\"known\":true}";
+    }
+
+    private Optional<ChallengeDefinitionData> challengeDefinitionForId(
+            final String rawChallengeId, final ChallengeDefinitions challengeDefinitions) {
+        if (!hasText(rawChallengeId)) {
+            return Optional.empty();
+        }
+
+        final String challengeId = normalizeChallengeId(rawChallengeId);
+        for (ChallengeDefinitionData challenge : challengeDefinitions.getChallenges()) {
+            if (challenge.id.equals(rawChallengeId.trim())
+                    || normalizeChallengeId(challenge.id).equals(challengeId)) {
+                return Optional.of(challenge);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private String normalizeChallengeId(final String rawChallengeId) {
+        if (rawChallengeId == null) {
+            return "";
+        }
+        return rawChallengeId.trim().replaceFirst("^0+(?!$)", "");
+    }
+
+    private ChallengerAuthData challengerForStatusRequest(
+            final HttpServerRequest request,
+            final Challengers challengers,
+            final boolean singlePlayerMode) {
+
+        String xChallenger = request.header("X-CHALLENGER");
+        if (!hasText(xChallenger)) {
+            xChallenger = request.header("X-Challenger");
+        }
+        if (!hasText(xChallenger)) {
+            xChallenger = request.cookie("X-CHALLENGER");
+        }
+        if (!hasText(xChallenger)) {
+            xChallenger = request.cookie("X-THINGIFIER-DATABASE-NAME");
+        }
+
+        if (hasText(xChallenger)) {
+            return challengers.getChallenger(santitizeChallengerGuid(xChallenger));
+        }
+
+        if (singlePlayerMode) {
+            return challengers.SINGLE_PLAYER;
+        }
+
+        return null;
+    }
+
+    private String escapeJsonValue(final String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 
     private String showCurrentStatus() {

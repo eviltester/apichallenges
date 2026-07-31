@@ -506,6 +506,104 @@
     return headerLines.sort().join('\n');
   }
 
+  function showChallengeFeedback(feedback, passed) {
+    if (!feedback) {
+      return;
+    }
+    if (feedback.hideTimer) {
+      window.clearTimeout(feedback.hideTimer);
+    }
+    feedback.element.textContent = passed ? 'Challenge Passed' : 'Challenge Not Passed Yet';
+    feedback.element.className = passed
+      ? 'sim-live-challenge-feedback is-passed'
+      : 'sim-live-challenge-feedback is-not-passed';
+    feedback.element.hidden = false;
+    feedback.hideTimer = window.setTimeout(function () {
+      feedback.element.hidden = true;
+    }, 10000);
+  }
+
+  function showChallengeCompletedBanner(challengeId) {
+    if (!challengeId) {
+      return;
+    }
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        if (banner.dataset.challengeId === String(challengeId)) {
+          banner.hidden = false;
+        }
+      });
+  }
+
+  function hideChallengeCompletedBanner(challengeId) {
+    if (!challengeId) {
+      return;
+    }
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        if (banner.dataset.challengeId === String(challengeId)) {
+          banner.hidden = true;
+        }
+      });
+  }
+
+  function updateChallengeCompletedBanners() {
+    document.querySelectorAll('.solution-challenge-completed[data-challenge-id]')
+      .forEach(function (banner) {
+        const challengeId = banner.dataset.challengeId || '';
+        if (!challengeId) {
+          return;
+        }
+        checkChallengePassed({ challengeId: challengeId }).then(function (passed) {
+          if (passed) {
+            showChallengeCompletedBanner(challengeId);
+          } else {
+            hideChallengeCompletedBanner(challengeId);
+          }
+        });
+      });
+  }
+
+  function clearChallengeFeedback(feedback) {
+    if (!feedback) {
+      return;
+    }
+    if (feedback.hideTimer) {
+      window.clearTimeout(feedback.hideTimer);
+    }
+    feedback.element.hidden = true;
+    feedback.element.textContent = '';
+    feedback.element.className = 'sim-live-challenge-feedback';
+  }
+
+  function checkChallengePassed(request) {
+    const challenger = currentChallenger();
+    if (!request.challengeId || !challenger) {
+      return Promise.resolve(false);
+    }
+
+    return fetch(absoluteUrl(`/gui/challenge-status/${encodeURIComponent(request.challengeId)}`), {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'X-CHALLENGER': challenger,
+        [LIVE_WIDGET_HEADER]: 'true',
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return false;
+        }
+        return response.json();
+      })
+      .then(function (json) {
+        return json && json.status === true;
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
   function renderCurlExeToggle() {
     const label = document.createElement('label');
     label.className = 'sim-live-curl-exe-toggle';
@@ -966,6 +1064,9 @@
       panel.appendChild(body);
     }
 
+    const executeRow = document.createElement('div');
+    executeRow.className = 'sim-live-execute-row';
+
     const executeButton = document.createElement('button');
     executeButton.type = 'button';
     executeButton.className = 'sim-live-execute';
@@ -975,7 +1076,21 @@
     executeIcon.textContent = '▶';
     executeButton.appendChild(executeIcon);
     executeButton.appendChild(document.createTextNode('Execute request'));
-    panel.appendChild(executeButton);
+    executeRow.appendChild(executeButton);
+
+    let challengeFeedback = null;
+    if (request.challengeId) {
+      const feedbackElement = document.createElement('span');
+      feedbackElement.className = 'sim-live-challenge-feedback';
+      feedbackElement.setAttribute('role', 'status');
+      feedbackElement.hidden = true;
+      challengeFeedback = {
+        element: feedbackElement,
+        hideTimer: null,
+      };
+      executeRow.appendChild(feedbackElement);
+    }
+    panel.appendChild(executeRow);
 
     const responseArea = renderResponseArea(widget);
     responseArea.elements.forEach(function (element) {
@@ -984,6 +1099,7 @@
 
     executeButton.addEventListener('click', function () {
       executeButton.disabled = true;
+      clearChallengeFeedback(challengeFeedback);
       responseArea.status.textContent = 'Running...';
       responseArea.bodyPanel.textContent = '';
       responseArea.headersPanel.textContent = '';
@@ -1031,7 +1147,7 @@
         })
         .then(function (response) {
           if (!response) {
-            return;
+            return false;
           }
 
           const contentType = response.headers.get('content-type') || '';
@@ -1063,6 +1179,18 @@
           responseArea.headersPanel.textContent = responseHeadersToText(response);
           return response.text().then(function (text) {
             responseArea.bodyPanel.textContent = formatBody(text, contentType);
+            return true;
+          });
+        })
+        .then(function (requestWasSent) {
+          if (!requestWasSent || !request.challengeId) {
+            return;
+          }
+          return checkChallengePassed(request).then(function (passed) {
+            showChallengeFeedback(challengeFeedback, passed);
+            if (passed) {
+              showChallengeCompletedBanner(request.challengeId);
+            }
           });
         })
         .catch(function (error) {
@@ -1132,6 +1260,7 @@
       autoCreateFirstTodo: placeholder.dataset.autoCreateFirstTodo !== 'false',
       refreshAfterExecute: placeholder.dataset.refreshAfterExecute !== 'false',
       resolveDynamicOnExecute: placeholder.dataset.resolveDynamicOnExecute !== 'false',
+      challengeId: placeholder.dataset.challengeId || '',
       userEdited: false,
     };
     request.url = absoluteUrl(request.rawPath);
@@ -1248,5 +1377,6 @@
 
   onReady(function () {
     document.querySelectorAll(WIDGET_SELECTOR).forEach(renderWidget);
+    updateChallengeCompletedBanners();
   });
 }());

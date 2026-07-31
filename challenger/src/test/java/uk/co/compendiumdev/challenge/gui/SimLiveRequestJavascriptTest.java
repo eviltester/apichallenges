@@ -47,6 +47,25 @@ public class SimLiveRequestJavascriptTest {
                         < javascript.indexOf("editActions.appendChild(prettyPrintButton)"));
     }
 
+    @Test
+    void solvingRequestWidgetsCheckChallengeStatusAndShowTemporaryFeedback() throws IOException {
+        String javascript = simLiveRequestJavascript();
+
+        Assertions.assertTrue(javascript.contains("placeholder.dataset.challengeId || ''"));
+        Assertions.assertTrue(javascript.contains("function checkChallengePassed(request)"));
+        Assertions.assertTrue(javascript.contains("/gui/challenge-status/"));
+        Assertions.assertTrue(javascript.contains("'X-CHALLENGER': challenger"));
+        Assertions.assertTrue(javascript.contains("Challenge Passed"));
+        Assertions.assertTrue(javascript.contains("Challenge Not Passed Yet"));
+        Assertions.assertTrue(javascript.contains("function updateChallengeCompletedBanners()"));
+        Assertions.assertTrue(javascript.contains("function showChallengeCompletedBanner"));
+        Assertions.assertTrue(
+                javascript.contains(".solution-challenge-completed[data-challenge-id]"));
+        Assertions.assertTrue(javascript.contains("updateChallengeCompletedBanners();"));
+        Assertions.assertTrue(javascript.contains("}, 10000);"));
+        Assertions.assertTrue(javascript.contains("if (!requestWasSent || !request.challengeId)"));
+    }
+
     private String simLiveRequestJavascript() throws IOException {
         try (InputStream stream =
                 getClass().getResourceAsStream("/public/js/sim-live-request.js")) {

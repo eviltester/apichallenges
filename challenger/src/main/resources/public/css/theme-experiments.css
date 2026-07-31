@@ -1398,6 +1398,25 @@ html[data-theme] .sim-live-execute:disabled {
     color: #ffffff;
 }
 
+html[data-theme] .sim-live-challenge-feedback.is-passed {
+    background: var(--done-row-bg);
+    border-color: var(--done-row-border);
+    color: color-mix(in srgb, var(--done-row-border) 62%, var(--text));
+}
+
+html[data-theme] .sim-live-challenge-feedback.is-not-passed {
+    background: var(--todo-row-bg);
+    border-color: var(--todo-row-border);
+    color: var(--todo-status-text);
+}
+
+html[data-theme] .solution-challenge-completed {
+    background: var(--done-row-bg);
+    border-color: var(--done-row-border);
+    border-radius: var(--radius);
+    color: color-mix(in srgb, var(--done-row-border) 62%, var(--text));
+}
+
 html[data-theme] .sim-live-command,
 html[data-theme] .sim-live-request-body,
 html[data-theme] .sim-live-response-panel {

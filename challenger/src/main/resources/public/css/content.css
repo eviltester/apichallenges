@@ -281,7 +281,7 @@ a.next-challenge-cta-link:hover {
     background: #16803a;
     border-color: #16803a;
     color: #ffffff;
-    margin: 0.75rem 0;
+    margin: 0;
 }
 
 .sim-live-execute:hover,
@@ -299,6 +299,42 @@ a.next-challenge-cta-link:hover {
 .sim-live-execute-icon {
     display: inline-block;
     margin-right: 0.4rem;
+}
+
+.sim-live-execute-row {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+}
+
+.sim-live-challenge-feedback {
+    border: 1px solid #8fa7bc;
+    border-radius: 999px;
+    font-weight: 700;
+    padding: 0.35rem 0.65rem;
+}
+
+.sim-live-challenge-feedback.is-passed {
+    background: #e3f8ec;
+    border-color: #18a058;
+    color: #0b5f2a;
+}
+
+.sim-live-challenge-feedback.is-not-passed {
+    background: #fff3d0;
+    border-color: #d97706;
+    color: #7c2d12;
+}
+
+.solution-challenge-completed {
+    background: #e3f8ec;
+    border: 1px solid #18a058;
+    color: #0b5f2a;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    padding: 0.65rem 0.85rem;
 }
 
 .sim-live-request-line {

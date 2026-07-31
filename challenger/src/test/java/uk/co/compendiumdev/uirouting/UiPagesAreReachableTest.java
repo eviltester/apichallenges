@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import uk.co.compendiumdev.challenge.ChallengerConfig;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
+import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitions;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpMessageSender;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpResponseDetails;
 import uk.co.compendiumdev.serverstart.Environment;
@@ -207,6 +210,37 @@ public class UiPagesAreReachableTest {
             index += value.length();
         }
         return count;
+    }
+
+    private String challengeIdFor(final String challengeName) {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        for (ChallengeDefinitionData challenge : new ChallengeDefinitions(config).getChallenges()) {
+            if (challenge.name.equals(challengeName)) {
+                return challenge.id;
+            }
+        }
+        Assertions.fail("Could not find challenge " + challengeName);
+        return "";
+    }
+
+    private String normalizedChallengeId(final String challengeId) {
+        return challengeId.replaceFirst("^0+(?!$)", "");
+    }
+
+    private void assertChallengeStatus(
+            final HttpMessageSender statusHttp,
+            final String challengeId,
+            final boolean expectedStatus) {
+
+        final HttpResponseDetails response =
+                statusHttp.send("/gui/challenge-status/" + challengeId, "get");
+        Assertions.assertEquals(200, response.statusCode);
+        final JsonObject json = JsonParser.parseString(response.body).getAsJsonObject();
+        Assertions.assertTrue(json.get("known").getAsBoolean());
+        Assertions.assertEquals(normalizedChallengeId(challengeId), json.get("id").getAsString());
+        Assertions.assertEquals(expectedStatus, json.get("status").getAsBoolean());
     }
 
     private void assertOpenApiFilePageLinks(
@@ -841,6 +875,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("white-space: pre-wrap"));
         Assertions.assertTrue(response.body.contains(".sim-live-pretty-print"));
         Assertions.assertTrue(response.body.contains(".sim-live-edit-actions"));
+        Assertions.assertTrue(response.body.contains(".sim-live-execute-row"));
+        Assertions.assertTrue(response.body.contains(".sim-live-challenge-feedback"));
+        Assertions.assertTrue(response.body.contains(".solution-challenge-completed"));
         Assertions.assertTrue(response.body.contains(".sim-live-command-actions"));
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
@@ -880,6 +917,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("formatXml"));
         Assertions.assertTrue(response.body.contains("DOMParser"));
         Assertions.assertTrue(response.body.contains("Pretty print body"));
+        Assertions.assertTrue(response.body.contains("checkChallengePassed"));
+        Assertions.assertTrue(response.body.contains("Challenge Not Passed Yet"));
+        Assertions.assertTrue(response.body.contains("updateChallengeCompletedBanners"));
         Assertions.assertTrue(response.body.contains("BROWSER_UNSUPPORTED_METHODS"));
         Assertions.assertTrue(
                 response.body.contains("BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS"));
@@ -1404,9 +1444,16 @@ public class UiPagesAreReachableTest {
                                 + " create a todo</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
+                        "<aside class=\"solution-challenge-completed\" data-challenge-id=\""));
+        Assertions.assertTrue(
+                response.body.indexOf("solution-challenge-completed")
+                        < response.body.indexOf("<h1"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "class=\"api-live-request\" data-method=\"POST\""
                                 + " data-path=\"/todos\" data-editable=\"true\""
                                 + " data-expected-status=\"201\""));
+        Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "data-headers=\"Content-Type: application/json||Accept:"
@@ -1489,6 +1536,36 @@ public class UiPagesAreReachableTest {
                 response.body.indexOf("<h2 id='gettingstarted'>Getting Started</h2>");
         Assertions.assertTrue(achievements > 0);
         Assertions.assertTrue(gettingStarted > achievements);
+    }
+
+    @Test
+    void challengeStatusEndpointReportsCompletionWithoutCompletingChallengesListChallenge() {
+
+        final String getTodosChallengeId = challengeIdFor("GET /todos (200)");
+        final String getChallengesChallengeId = challengeIdFor("GET /challenges (200)");
+
+        final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
+        apiHttp.clearHeaders();
+        apiHttp.setHeader("Accept", "application/json");
+        final HttpResponseDetails challengerResponse = apiHttp.post("/challenger", "");
+        final String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+
+        final HttpMessageSender statusHttp = new HttpMessageSender(Environment.getBaseUri());
+        statusHttp.clearHeaders();
+        statusHttp.setHeader("Accept", "application/json");
+        statusHttp.setHeader("X-CHALLENGER", challengerId);
+
+        assertChallengeStatus(statusHttp, getTodosChallengeId, false);
+        assertChallengeStatus(statusHttp, normalizedChallengeId(getTodosChallengeId), false);
+
+        apiHttp.setHeader("X-CHALLENGER", challengerId);
+        final HttpResponseDetails todosResponse = apiHttp.send("/todos", "get");
+
+        Assertions.assertEquals(200, todosResponse.statusCode);
+        Assertions.assertEquals(challengerId, todosResponse.getHeader("X-CHALLENGER"));
+
+        assertChallengeStatus(statusHttp, getTodosChallengeId, true);
+        assertChallengeStatus(statusHttp, getChallengesChallengeId, false);
     }
 
     @Test
