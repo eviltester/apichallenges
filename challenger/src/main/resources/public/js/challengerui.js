@@ -187,6 +187,34 @@ const ACHIEVEMENT_DEFINITIONS = [
         threshold: 60
     },
     {
+        title: "Clearance Granted",
+        icon: "AUTH",
+        tier: "clearance",
+        condition: "Complete Authentication and Authorization challenges 71-80",
+        challengeKeys: [
+            "CREATE_SECRET_TOKEN_401",
+            "CREATE_SECRET_TOKEN_201",
+            "GET_SECRET_NOTE_403",
+            "GET_SECRET_NOTE_401",
+            "GET_SECRET_NOTE_200",
+            "POST_SECRET_NOTE_200",
+            "POST_SECRET_NOTE_401",
+            "POST_SECRET_NOTE_403",
+            "GET_SECRET_NOTE_BEARER_200",
+            "POST_SECRET_NOTE_BEARER_200"
+        ]
+    },
+    {
+        title: "Misc Mastery",
+        icon: "MISC",
+        tier: "final",
+        condition: "Complete Miscellaneous challenges 81 and 82",
+        challengeKeys: [
+            "DELETE_ALL_TODOS",
+            "POST_ALL_TODOS"
+        ]
+    },
+    {
         title: "Completist",
         icon: "ALL",
         tier: "complete",
@@ -398,9 +426,18 @@ function totalChallengeCount(challengeStatus){
     return Object.values(challengeStatus).length;
 }
 
+function areChallengeKeysComplete(challengeStatus, challengeKeys){
+    return Array.isArray(challengeKeys) &&
+        challengeKeys.length>0 &&
+        challengeKeys.every(challengeKey => challengeStatus[challengeKey]===true);
+}
+
 function isAchievementUnlocked(definition, challengeStatus, doneCount, totalCount){
     if(definition.challengeKey){
         return challengeStatus[definition.challengeKey]===true;
+    }
+    if(definition.challengeKeys){
+        return areChallengeKeysComplete(challengeStatus, definition.challengeKeys);
     }
     if(definition.allChallenges){
         return totalCount>0 && doneCount>=totalCount;
@@ -460,7 +497,25 @@ function achievementMedalHtml(achievement, index, selectedIndex){
         `${escapeHtml(achievement.icon)}</button>`;
 }
 
-function setAchievementDetails(medal){
+function selectAchievementMedal(panel, medal){
+    panel.dataset.selectedAchievementIndex = medal.dataset.achievementIndex;
+    panel.querySelectorAll(".achievement-medal").forEach(function(item){
+        item.classList.remove("is-selected");
+        item.setAttribute("aria-pressed", "false");
+    });
+    medal.classList.add("is-selected");
+    medal.setAttribute("aria-pressed", "true");
+}
+
+function setSelectedAchievementDetails(panel){
+    const selectedIndex = panel.dataset.selectedAchievementIndex;
+    const medal = panel.querySelector(`.achievement-medal[data-achievement-index='${selectedIndex}']`);
+    if(medal){
+        setAchievementDetails(medal, false);
+    }
+}
+
+function setAchievementDetails(medal, selectMedal){
     const panel = medal.closest(".achievement-rail-panel");
     const detail = panel ? panel.querySelector(".achievement-detail") : null;
     if(!panel || !detail){
@@ -472,21 +527,20 @@ function setAchievementDetails(medal){
     if(!achievement){
         return;
     }
-    panel.querySelectorAll(".achievement-medal").forEach(function(item){
-        item.classList.remove("is-selected");
-        item.setAttribute("aria-pressed", "false");
-    });
-    medal.classList.add("is-selected");
-    medal.setAttribute("aria-pressed", "true");
+    if(selectMedal){
+        selectAchievementMedal(panel, medal);
+    }
     detail.innerHTML = achievementDetailHtml(achievement);
 }
 
 function initialiseAchievementRail(){
     document.querySelectorAll(".achievement-rail-panel").forEach(function(panel){
         panel.querySelectorAll(".achievement-medal").forEach(function(medal){
-            medal.addEventListener("mouseenter", function(){ setAchievementDetails(medal); });
-            medal.addEventListener("focus", function(){ setAchievementDetails(medal); });
-            medal.addEventListener("click", function(){ setAchievementDetails(medal); });
+            medal.addEventListener("mouseenter", function(){ setAchievementDetails(medal, false); });
+            medal.addEventListener("mouseleave", function(){ setSelectedAchievementDetails(panel); });
+            medal.addEventListener("focus", function(){ setAchievementDetails(medal, false); });
+            medal.addEventListener("blur", function(){ setSelectedAchievementDetails(panel); });
+            medal.addEventListener("click", function(){ setAchievementDetails(medal, true); });
         });
     });
 }
@@ -497,7 +551,7 @@ function showAchievements(){
     const selectedIndex = selectedAchievementIndex(achievements);
     const selectedAchievement = achievements[selectedIndex] || achievements[0];
 
-    document.writeln("<section class='achievement-rail-panel' aria-label='Achievements'>");
+    document.writeln(`<section class='achievement-rail-panel' aria-label='Achievements' data-selected-achievement-index='${selectedIndex}'>`);
     document.writeln("<div class='achievement-rail-header'>");
     document.writeln("<h2 class='achievement-rail-title'>Achievements</h2>");
     document.writeln(`<div class='achievement-rail-meta'>${unlockedCount} of ${achievements.length} unlocked</div>`);
