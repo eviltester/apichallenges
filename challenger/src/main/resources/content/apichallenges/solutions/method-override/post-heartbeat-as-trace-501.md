@@ -22,4 +22,6 @@ The server treats the request as TRACE and returns `501 Not Implemented`.
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/heartbeat" expected-status="501" headers="X-HTTP-Method-Override: TRACE||Accept: */*" details="true" summary="POST /heartbeat with TRACE override to trigger 501" open="true">}}
+Browser HTTP clients cannot send `TRACE` methods. The HTTP client below is closed by default because it cannot complete this challenge from the browser; try it for yourself to see.
+
+{{<api-live-request method="POST" path="/heartbeat" expected-status="501" headers="X-HTTP-Method-Override: TRACE||Accept: */*" details="true" challenge-request="true" summary="POST /heartbeat with TRACE override to trigger 501">}}

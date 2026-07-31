@@ -18,4 +18,6 @@ Some clients hide uncommon HTTP methods. If yours does, look for a custom method
 
 ### Try it now
 
-{{<api-live-request method="TRACE" path="/heartbeat" expected-status="501" headers="Accept: */*" details="true" summary="TRACE /heartbeat to trigger 501" open="true">}}
+Browser HTTP clients cannot send `TRACE` methods. The HTTP client below is closed by default because it cannot complete this challenge from the browser; try it for yourself to see.
+
+{{<api-live-request method="TRACE" path="/heartbeat" expected-status="501" headers="Accept: */*" details="true" challenge-request="true" summary="TRACE /heartbeat to trigger 501">}}
