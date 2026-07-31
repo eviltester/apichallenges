@@ -4,7 +4,7 @@ seo_title: Solution: PATCH todos/id 200 JSON Patch | API Challenges
 description: How to solve API challenge PATCH todos/id 200 using JSON Patch operations.
 lastmod: 2026-07-30
 seo_description: Use this walkthrough to solve PATCH todos/id 200 with JSON Patch request setup, headers, body content, and expected status code.
-next_challenge: /gui/challenges
+next_challenge: /apichallenges/solutions/options/options-todos-200
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json-patch+json||Send a JSON Patch operation array and verify the response status is 200
 showads: true
 ---

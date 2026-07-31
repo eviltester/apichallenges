@@ -5,7 +5,7 @@ title: API Challenges Solution For - Use Bearer Tokens
 seo_title: Solution: Use Bearer Tokens Guide | API Challenges
 description: How to solve API challenge - Use bearer token as authorization mechanism
 seo_description: Use this walkthrough to solve Use Bearer Tokens with request setup, key headers, and expected status codes so you can complete the challenge confidently.
-next_challenge: /apichallenges/solutions/miscellaneous/create-maximum-number-todos
+next_challenge: /apichallenges/solutions/miscellaneous/delete-all-todos
 schema_howto_steps: Create a GET or POST request to /secret/note||Add an Authorization Bearer token for the protected endpoint request||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
@@ -148,6 +148,5 @@ Sample response body:
 {{<youtube-embed key="8GsMTZxEItw" title="Solution to Bearer Token Challenge">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/54091910)
-
 
 

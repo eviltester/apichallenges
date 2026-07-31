@@ -5,7 +5,7 @@ title: API Challenges Solution For - PUT challenger guid 409 mismatch
 seo_title: Solution: PUT challenger guid 409 mismatch | API Challenges
 description: How to solve API challenge PUT challenger guid 409 mismatch.
 seo_description: Use this walkthrough to solve PUT challenger guid 409 mismatch with request setup, key headers, and expected status codes.
-next_challenge: /apichallenges/solutions/manage-session/save-restore-session
+next_challenge: /apichallenges/solutions/mix-accept-content/post-xml-accept-json
 schema_howto_steps: GET your challenger state||PUT it to /challenger/{different-guid} while the payload keeps your real X-CHALLENGER||Verify the response status is 409
 showads: true
 ---

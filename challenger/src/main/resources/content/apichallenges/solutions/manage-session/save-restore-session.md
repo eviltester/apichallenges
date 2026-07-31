@@ -5,7 +5,7 @@ title: API Challenges Solution For - Save and Restore Sessions
 seo_title: Solution: Save and Restore Sessions | API Challenges
 description: How to solve API challenges for Saving and Restoring Challenge and Data.
 seo_description: Use this walkthrough to solve Save and Restore Sessions with request setup, key headers, and expected status codes so you can complete the challenge.
-next_challenge: /apichallenges/solutions/mix-accept-content/post-xml-accept-json
+next_challenge: /apichallenges/solutions/manage-session/put-challenger-guid-409-mismatch
 schema_howto_steps: Create a challenger session and keep the active challenger GUID||GET /challenger/{guid} to export challenge progress as JSON backup data||PUT /challenger/{guid} with the saved JSON to restore challenge progress||GET and PUT /challenger/database/{guid} to back up and restore todo data||Verify restored challenge progress and todos in the GUI before continuing
 showads: true
 ---
@@ -58,4 +58,3 @@ Get the current todos for the challenger:
 Restore the todos for the challenger:
 
 {{<api-live-request method="PUT" path="/challenger/database/{{currentChallenger}}" expected-status="204" headers="Content-Type: application/json||Accept: application/json" body='{{currentTodosJson}}'>}}
-
