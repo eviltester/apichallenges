@@ -13,6 +13,9 @@ public class StatusCodeChallenges {
                         "DELETE /heartbeat (405)",
                         "Issue a DELETE request on the `/heartbeat` end point and receive 405 (Method Not Allowed)");
 
+        aChallenge.addHint("Use the DELETE method on `/heartbeat`.");
+        aChallenge.addHint("The endpoint exists, but DELETE is not allowed for it.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -28,6 +31,9 @@ public class StatusCodeChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "PATCH /heartbeat (500)",
                         "Issue a PATCH request on the `/heartbeat` end point and receive 500 (internal server error)");
+
+        aChallenge.addHint("Use the PATCH method on `/heartbeat`.");
+        aChallenge.addHint("This endpoint deliberately returns 500 for PATCH requests.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -45,6 +51,10 @@ public class StatusCodeChallenges {
                         "TRACE /heartbeat (501)",
                         "Issue a TRACE request on the `/heartbeat` end point and receive 501 (Not Implemented)");
 
+        aChallenge.addHint("Use the TRACE method on `/heartbeat`.");
+        aChallenge.addHint(
+                "If your API client cannot send TRACE, use one that supports custom methods.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -60,6 +70,9 @@ public class StatusCodeChallenges {
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /heartbeat (204)",
                         "Issue a GET request on the `/heartbeat` end point and receive 204 when server is running");
+
+        aChallenge.addHint("Use the GET method on `/heartbeat`.");
+        aChallenge.addHint("A 204 response means success with no response body.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",

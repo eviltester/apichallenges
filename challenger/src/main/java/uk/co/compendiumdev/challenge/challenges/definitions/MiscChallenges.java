@@ -11,6 +11,10 @@ public class MiscChallenges {
                         "POST /todos (409) max todos",
                         "Issue as many POST requests as it takes to exceed the maximum number of TODOS allowed for a user. The maximum number should be listed in the documentation.");
 
+        aChallenge.addHint("The maximum number of todos is listed in the API documentation.");
+        aChallenge.addHint("Use `GET /todos` to see how many todos already exist.");
+        aChallenge.addHint("Keep creating todos until the API rejects the next one with a 409.");
+
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
