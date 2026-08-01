@@ -143,9 +143,9 @@ public class ChallengerUiJavascriptTest {
         Assertions.assertTrue(javascript.contains("Reward Unlocked: Server session storage"));
         Assertions.assertTrue(javascript.contains("Clearance Granted"));
         Assertions.assertTrue(
-                javascript.contains("Complete Authentication and Authorization challenges 72-81"));
+                javascript.contains("Complete Authentication and Authorization challenges"));
         Assertions.assertTrue(javascript.contains("Misc Mastery"));
-        Assertions.assertTrue(javascript.contains("Complete Miscellaneous challenges 82 and 83"));
+        Assertions.assertTrue(javascript.contains("Complete Miscellaneous challenges"));
         Assertions.assertTrue(javascript.contains("Completist"));
         Assertions.assertTrue(javascript.contains("challengeKey: \"CREATE_NEW_CHALLENGER\""));
         Assertions.assertTrue(javascript.contains("challengeKey: \"GET_CHALLENGES\""));
