@@ -264,6 +264,13 @@ public class UiPagesAreReachableTest {
         return challengeId.replaceFirst("^0+(?!$)", "");
     }
 
+    private int definedChallengeCount() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        return new ChallengeDefinitions(config).getChallenges().size();
+    }
+
     private void assertChallengeStatus(
             final HttpMessageSender statusHttp,
             final String challengeId,
@@ -944,6 +951,19 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-validation"));
         Assertions.assertTrue(response.body.contains(".sim-live-edit-query"));
         Assertions.assertTrue(response.body.contains("background: #16803a"));
+        Assertions.assertTrue(response.body.contains(".challenge-progress-table"));
+        Assertions.assertTrue(response.body.contains("@media (max-width: 800px)"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "grid-template-columns: minmax(2.5rem, auto) minmax(0, 1fr)"
+                                + " minmax(4rem, auto);"));
+        Assertions.assertTrue(response.body.contains(".challenge-description-cell"));
+        Assertions.assertTrue(response.body.contains("grid-column: 1 / -1;"));
+        Assertions.assertTrue(response.body.contains(".challenge-description-cell::before"));
+        Assertions.assertTrue(response.body.contains("content: \"Description\";"));
+        Assertions.assertTrue(response.body.contains("overflow-wrap: anywhere;"));
+        Assertions.assertTrue(
+                response.body.contains(".challenge-progress-table .api-live-request"));
 
         response = http.send("/css/theme-experiments.css", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1633,7 +1653,18 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-path=\"/challenger\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id='"));
+        Assertions.assertTrue(response.body.contains("<table class='challenge-progress-table'>"));
+        Assertions.assertTrue(response.body.contains("class='challenge-id-cell'"));
+        Assertions.assertTrue(response.body.contains("class='challenge-name-cell'"));
         Assertions.assertTrue(response.body.contains("class='challenge-done-status'"));
+        Assertions.assertTrue(response.body.contains("class='challenge-description-cell'"));
+        Assertions.assertEquals(
+                definedChallengeCount(), countOccurrences(response.body, "data-challenge-id='"));
+        final int solveNowWidgets = countOccurrences(response.body, "<summary>Solve Now</summary>");
+        final int progressLiveRequestWidgets =
+                countOccurrences(response.body, "class=\"api-live-request\"");
+        Assertions.assertTrue(solveNowWidgets > 0);
+        Assertions.assertEquals(solveNowWidgets, progressLiveRequestWidgets);
         Assertions.assertFalse(
                 response.body.contains("<button onclick=location.reload()>Refresh Status"));
 

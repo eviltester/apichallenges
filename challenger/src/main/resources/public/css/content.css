@@ -13,6 +13,96 @@
     background:palegreen;
 }
 
+.challenge-progress-table{
+    width: 100%;
+}
+
+.challenge-progress-table th,
+.challenge-progress-table td{
+    vertical-align: top;
+}
+
+.challenge-progress-table .challenge-description-cell,
+.challenge-progress-table .challenge-description-cell *{
+    max-width: 100%;
+}
+
+.challenge-progress-table .challenge-name-cell,
+.challenge-progress-table .challenge-description-cell{
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.challenge-progress-table .sim-live-request-details,
+.challenge-progress-table .api-live-request{
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 800px) {
+    .challenge-progress-table,
+    .challenge-progress-table thead,
+    .challenge-progress-table tbody{
+        display: block;
+        width: 100%;
+    }
+
+    .challenge-progress-table thead tr,
+    .challenge-progress-table tr[data-challenge-id]{
+        display: grid;
+        grid-template-columns: minmax(2.5rem, auto) minmax(0, 1fr) minmax(4rem, auto);
+        gap: 0.35rem 0.5rem;
+        width: 100%;
+    }
+
+    .challenge-progress-table tr[data-challenge-id]{
+        box-sizing: border-box;
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    .challenge-progress-table th,
+    .challenge-progress-table td{
+        box-sizing: border-box;
+        display: block;
+        min-width: 0;
+    }
+
+    .challenge-progress-table .challenge-description-heading{
+        display: none;
+    }
+
+    .challenge-progress-table .challenge-id-cell,
+    .challenge-progress-table .challenge-id-heading{
+        grid-column: 1;
+    }
+
+    .challenge-progress-table .challenge-name-cell,
+    .challenge-progress-table .challenge-name-heading{
+        grid-column: 2;
+    }
+
+    .challenge-progress-table .challenge-done-status,
+    .challenge-progress-table .challenge-done-heading{
+        grid-column: 3;
+        text-align: center;
+    }
+
+    .challenge-progress-table .challenge-description-cell{
+        border-top: 1px solid rgba(0, 0, 0, 0.18);
+        grid-column: 1 / -1;
+        padding-top: 0.5rem;
+    }
+
+    .challenge-progress-table .challenge-description-cell::before{
+        content: "Description";
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.35rem;
+    }
+}
+
 .challenge-status-newly-completed{
     animation: challenge-status-complete-flash 1.5s ease-in-out 3;
 }

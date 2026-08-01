@@ -1202,13 +1202,13 @@ public class ChallengerWebGUI {
     private String renderChallengeData(final List<ChallengeDefinitionData> reportOn) {
         StringBuilder html = new StringBuilder();
 
-        html.append("<table>");
+        html.append("<table class='challenge-progress-table'>");
         html.append("<thead>");
         html.append("<tr>");
-        html.append("<th>ID</th>");
-        html.append("<th>Challenge</th>");
-        html.append("<th>Done</th>");
-        html.append("<th>Description</th>");
+        html.append("<th class='challenge-id-heading'>ID</th>");
+        html.append("<th class='challenge-name-heading'>Challenge</th>");
+        html.append("<th class='challenge-done-heading'>Done</th>");
+        html.append("<th class='challenge-description-heading'>Description</th>");
         html.append("</tr>");
         html.append("</thead>");
         html.append("<tbody>");
@@ -1218,8 +1218,8 @@ public class ChallengerWebGUI {
                     String.format(
                             "<tr class='status%b' data-challenge-id='%s'>",
                             challenge.status, escapeHtmlAttribute(challenge.id)));
-            html.append(String.format("<td>%s</td>", challenge.id));
-            html.append(String.format("<td>%s</td>", challenge.name));
+            html.append(String.format("<td class='challenge-id-cell'>%s</td>", challenge.id));
+            html.append(String.format("<td class='challenge-name-cell'>%s</td>", challenge.name));
             html.append(
                     String.format("<td class='challenge-done-status'>%b</td>", challenge.status));
 
@@ -1265,7 +1265,9 @@ public class ChallengerWebGUI {
                 descriptionHTML = descriptionHTML + "</details>";
             }
 
-            html.append(String.format("<td>%s</td>", descriptionHTML));
+            html.append(
+                    String.format(
+                            "<td class='challenge-description-cell'>%s</td>", descriptionHTML));
             html.append("</tr>");
         }
 
