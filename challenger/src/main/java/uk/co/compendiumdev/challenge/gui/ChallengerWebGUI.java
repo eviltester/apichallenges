@@ -4,6 +4,8 @@ import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.AssetVersion;
@@ -19,6 +21,8 @@ import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 public class ChallengerWebGUI {
     private static final LocalDate SEO_FIXED_LASTMOD = LocalDate.parse("2026-02-18");
+    private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
+            "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
 
     private final PageNotFoundResponse pageNotFoundHtmlResponse;
     Logger logger = LoggerFactory.getLogger(ChallengerWebGUI.class);
@@ -38,6 +42,9 @@ public class ChallengerWebGUI {
                 "<script src='"
                         + AssetVersion.versionedPath("/js/challengerui.js")
                         + "'></script>"
+                        + "<script src='"
+                        + AssetVersion.versionedPath("/js/api-live-request.js")
+                        + "' defer></script>"
                         + "<meta name='description' content='A free online set of gamified REST API Challenges to practice and improve your API Testing Skills'>",
                 "/gui/challenges");
     }
@@ -131,36 +138,39 @@ public class ChallengerWebGUI {
                             </li>
 
                             <li id='api-challenges-root-menu'><a href="/gui/challenges">API Challenges</a>
-                                <ul>
-                                    <li><a href="/apichallenges">About API Challenges</a></li>
-                                    <li><a href="/docs">API Docs</a></li>
-                                    <li><a href="/docs/swagger-ui">Swagger UI</a></li>
-                                    <li><a href="/gui/challenges">Progress</a></li>
-                                    <li><a href="/gui/entities">Data Explorer</a></li>
-                                    <li><a href="/apichallenges/solutions">Solutions</a></li>
-                                    <li><a href="/apichallenges/openapi">OpenAPI File</a>
-                                </ul>
-                            </li>
+                                    <ul>
+                                        <li><a href="/apichallenges">About API Challenges</a></li>
+                                        <li><a href="/docs">API Docs</a></li>
+                                        <li><a href="/docs/swagger-ui">Swagger UI</a></li>
+                                        <li><a href="/apichallenges/client">API Client</a></li>
+                                        <li><a href="/gui/challenges">Progress</a></li>
+                                        <li><a href="/gui/entities">Data Explorer</a></li>
+                                        <li><a href="/apichallenges/solutions">Solutions</a></li>
+                                        <li><a href="/apichallenges/openapi">OpenAPI File</a>
+                                    </ul>
+                                </li>
 
-                            <li id='simple-api-root-menu'><a href="/practice-modes/simpleapi">Simple API</a>
-                                <ul>
-                                    <li><a href="/practice-modes/simpleapi">About Simple API</a>
-                                    <li><a href="/simpleapi/docs">API Docs</a>
-                                    <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
-                                    <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
-                                    <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
-                                </ul>
-                            </li>
+                                <li id='simple-api-root-menu'><a href="/practice-modes/simpleapi">Simple API</a>
+                                    <ul>
+                                        <li><a href="/practice-modes/simpleapi">About Simple API</a>
+                                        <li><a href="/simpleapi/docs">API Docs</a>
+                                        <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
+                                        <li><a href="/simpleapi/client">API Client</a></li>
+                                        <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
+                                        <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
+                                    </ul>
+                                </li>
 
-                            <li id='shop-api-root-menu'><a href="/practice-modes/shoppingcart">Buggy API</a>
-                                <ul>
-                                    <li><a href="/practice-modes/shoppingcart">About Buggy API</a>
-                                    <li><a href="/shop/docs">API Docs</a>
-                                    <li><a href="/shop/docs/swagger-ui">Swagger UI</a>
-                                    <li><a href="/shop/gui/entities">Data Explorer</a></li>
-                                    <li><a href="/practice-modes/shoppingcart-openapi">OpenAPI File</a>
-                                </ul>
-                            </li>
+                                <li id='shop-api-root-menu'><a href="/practice-modes/shoppingcart">Buggy API</a>
+                                    <ul>
+                                        <li><a href="/practice-modes/shoppingcart">About Buggy API</a>
+                                        <li><a href="/shop/docs">API Docs</a>
+                                        <li><a href="/shop/docs/swagger-ui">Swagger UI</a>
+                                        <li><a href="/shop/client">API Client</a></li>
+                                        <li><a href="/shop/gui/entities">Data Explorer</a></li>
+                                        <li><a href="/practice-modes/shoppingcart-openapi">OpenAPI File</a>
+                                    </ul>
+                                </li>
 
                             <li id='mirror-api-root-menu'><a href="/practice-modes/mirror">HTTP Mirror</a>
                                 <ul>
@@ -271,6 +281,8 @@ public class ChallengerWebGUI {
                         return "";
                     }));
         }
+
+        registerApiClientRoutes();
 
         // using the ResourceContentScanner, we can build the sitemap.xml automatically
         SiteMapXml siteMap = new SiteMapXml();
@@ -655,6 +667,94 @@ public class ChallengerWebGUI {
                 });
     }
 
+    private record ApiClientPage(
+            String path,
+            String title,
+            String heading,
+            String defaultMethod,
+            String defaultPath,
+            String allowedPathPrefixes,
+            boolean useChallenger) {}
+
+    private void registerApiClientRoutes() {
+        final List<ApiClientPage> pages =
+                List.of(
+                        new ApiClientPage(
+                                "/apichallenges/client",
+                                "API Challenges Client",
+                                "API Challenges Client",
+                                "GET",
+                                "/todos",
+                                API_CHALLENGE_ALLOWED_PATH_PREFIXES,
+                                true),
+                        new ApiClientPage(
+                                "/simpleapi/client",
+                                "Simple API Client",
+                                "Simple API Client",
+                                "GET",
+                                "/simpleapi/items",
+                                "/simpleapi",
+                                false),
+                        new ApiClientPage(
+                                "/shop/client",
+                                "Buggy API Client",
+                                "Buggy API Client",
+                                "GET",
+                                "/shop/products",
+                                "/shop",
+                                false));
+
+        for (ApiClientPage page : pages) {
+            get(
+                    page.path(),
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return renderApiClientPage(page);
+                    });
+            head(
+                    page.path(),
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return "";
+                    });
+        }
+    }
+
+    private String renderApiClientPage(final ApiClientPage page) {
+        final StringBuilder html = new StringBuilder();
+        html.append(
+                guiManagement.getPageStart(
+                        page.title(),
+                        "<script src='"
+                                + AssetVersion.versionedPath("/js/api-live-request.js")
+                                + "' defer></script>",
+                        page.path()));
+        html.append(guiManagement.getMenuAsHTML());
+        html.append(guiManagement.getStartOfMainContentMarker());
+        html.append("<div class=\"main-text-content\">");
+        html.append("<h1>").append(escapeHtmlAttribute(page.heading())).append("</h1>");
+        html.append(renderApiClientWidget(page));
+        html.append("</div>");
+        html.append(guiManagement.getEndOfMainContentMarker());
+        html.append(guiManagement.getPageFooter());
+        html.append(guiManagement.getPageEnd());
+        return html.toString();
+    }
+
+    private String renderApiClientWidget(final ApiClientPage page) {
+        return "<div class=\"api-live-request\" data-method=\""
+                + escapeHtmlAttribute(page.defaultMethod())
+                + "\" data-path=\""
+                + escapeHtmlAttribute(page.defaultPath())
+                + "\" data-editable=\"true\" data-edit-mode=\"adhoc\" data-allowed-path-prefixes=\""
+                + escapeHtmlAttribute(page.allowedPathPrefixes())
+                + "\" data-use-challenger=\""
+                + page.useChallenger()
+                + "\" data-headers=\"Accept: application/json\"></div>";
+    }
+
     private Map<String, String> getMarkdownParamsFromRequest(HttpServerRequest request) {
         final String originUrl = originUrlFrom(request);
         final String hostUrl = hostFrom(request);
@@ -730,6 +830,17 @@ public class ChallengerWebGUI {
 
     private boolean hasText(final String value) {
         return value != null && !value.trim().isEmpty();
+    }
+
+    private String escapeHtmlAttribute(final String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("&", "&amp;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
     }
 
     private String renderChallengeStatusJson(
@@ -1006,6 +1117,10 @@ public class ChallengerWebGUI {
                 descriptionHTML = descriptionHTML + hintHtml + "</ul>";
                 descriptionHTML = descriptionHTML + "</details>";
             }
+            String solveNowHtml = solveNowWidgetFor(challenge);
+            if (!solveNowHtml.isEmpty()) {
+                descriptionHTML = descriptionHTML + solveNowHtml;
+            }
             if (challenge.hasSolutionLinks()) {
 
                 descriptionHTML = descriptionHTML + "<details><summary>Solution</summary>";
@@ -1026,6 +1141,141 @@ public class ChallengerWebGUI {
         html.append("</table>");
 
         return html.toString();
+    }
+
+    private String solveNowWidgetFor(final ChallengeDefinitionData challenge) {
+        final Map<String, String> mainRequestAttributes =
+                mainApiSolvingRequestAttributesFor(challenge);
+        if (mainRequestAttributes.isEmpty()) {
+            return "";
+        }
+
+        final Map<String, String> solveNowAttributes = new LinkedHashMap<>(mainRequestAttributes);
+        solveNowAttributes.remove("open");
+        solveNowAttributes.remove("details");
+        solveNowAttributes.remove("summary");
+        solveNowAttributes.remove("challenge-request");
+        solveNowAttributes.put("editable", "true");
+        solveNowAttributes.put("edit-mode", "adhoc");
+        solveNowAttributes.put("allowed-path-prefixes", API_CHALLENGE_ALLOWED_PATH_PREFIXES);
+        solveNowAttributes.put("challenge-id", challenge.id);
+
+        return "<details class=\"sim-live-request-details\"><summary>Solve Now</summary>"
+                + renderApiLiveRequestPlaceholder(solveNowAttributes)
+                + "</details>";
+    }
+
+    private Map<String, String> mainApiSolvingRequestAttributesFor(
+            final ChallengeDefinitionData challenge) {
+        if (challenge == null || !challenge.hasSolutionLinks()) {
+            return Collections.emptyMap();
+        }
+
+        for (ChallengeSolutionLink solution : challenge.solutions) {
+            if (!"HREF".equals(solution.linkType)
+                    || !solution.linkData.startsWith("/apichallenges/solutions/")) {
+                continue;
+            }
+
+            final String markdown = resourceAsStringOrEmpty("content" + solution.linkData + ".md");
+            if (markdown.isEmpty()) {
+                continue;
+            }
+
+            final Pattern macroPattern =
+                    Pattern.compile("\\{\\{<api-live-request\\s+([\\s\\S]*?)>}}");
+            final Matcher matcher = macroPattern.matcher(markdown);
+            while (matcher.find()) {
+                final Map<String, String> attributes = parseMacroAttributes(matcher.group(1));
+                if (isTruthy(attributes.get("open"))
+                        || isTruthy(attributes.get("challenge-request"))) {
+                    return attributes;
+                }
+            }
+        }
+
+        return Collections.emptyMap();
+    }
+
+    private Map<String, String> parseMacroAttributes(final String rawAttributes) {
+        final Map<String, String> attributes = new LinkedHashMap<>();
+        final Pattern attributePattern =
+                Pattern.compile("([a-zA-Z][a-zA-Z0-9-]*)=(\"([^\"]*)\"|'([^']*)')");
+        final Matcher attributeMatcher = attributePattern.matcher(rawAttributes);
+        while (attributeMatcher.find()) {
+            final String key = attributeMatcher.group(1);
+            final String doubleQuotedValue = attributeMatcher.group(3);
+            final String singleQuotedValue = attributeMatcher.group(4);
+            attributes.put(key, doubleQuotedValue == null ? singleQuotedValue : doubleQuotedValue);
+        }
+        return attributes;
+    }
+
+    private boolean isTruthy(final String value) {
+        if (value == null) {
+            return false;
+        }
+        final String trimmed = value.trim().toLowerCase();
+        return trimmed.equals("true") || trimmed.equals("yes") || trimmed.equals("on");
+    }
+
+    private String renderApiLiveRequestPlaceholder(final Map<String, String> attributes) {
+        final String method = attributes.getOrDefault("method", "GET");
+        final String path = attributes.getOrDefault("path", "/");
+        final String editable = attributes.getOrDefault("editable", "true");
+        final String editMode = attributes.getOrDefault("edit-mode", "fixed");
+        final String allowedPathPrefixes =
+                attributes.getOrDefault(
+                        "allowed-path-prefixes", API_CHALLENGE_ALLOWED_PATH_PREFIXES);
+
+        final StringBuilder html = new StringBuilder();
+        html.append("<div class=\"api-live-request\" data-method=\"")
+                .append(escapeHtmlAttribute(method))
+                .append("\" data-path=\"")
+                .append(escapeHtmlAttribute(path))
+                .append("\" data-editable=\"")
+                .append(escapeHtmlAttribute(editable))
+                .append("\" data-edit-mode=\"")
+                .append(escapeHtmlAttribute(editMode))
+                .append("\" data-allowed-path-prefixes=\"")
+                .append(escapeHtmlAttribute(allowedPathPrefixes))
+                .append("\"");
+
+        for (Map.Entry<String, String> attribute : attributes.entrySet()) {
+            final String key = attribute.getKey();
+            if (key.equals("method")
+                    || key.equals("path")
+                    || key.equals("editable")
+                    || key.equals("edit-mode")
+                    || key.equals("allowed-path-prefixes")
+                    || key.equals("details")
+                    || key.equals("summary")
+                    || key.equals("open")
+                    || key.equals("challenge-request")) {
+                continue;
+            }
+            html.append(" data-")
+                    .append(escapeHtmlAttribute(key))
+                    .append("=\"")
+                    .append(escapeHtmlAttribute(attribute.getValue()))
+                    .append("\"");
+        }
+        html.append("></div>");
+        return html.toString();
+    }
+
+    private String resourceAsStringOrEmpty(final String resourceName) {
+        try (Scanner scanner =
+                new Scanner(
+                                Objects.requireNonNull(
+                                        ChallengerWebGUI.class
+                                                .getClassLoader()
+                                                .getResourceAsStream(resourceName)))
+                        .useDelimiter("\\A")) {
+            return scanner.hasNext() ? scanner.next() : "";
+        } catch (Exception ignored) {
+            return "";
+        }
     }
 
     private String outputChallengeDataAsJS(final ChallengerAuthData challenger, String json) {

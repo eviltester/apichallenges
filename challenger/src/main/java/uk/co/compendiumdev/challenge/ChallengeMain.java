@@ -120,14 +120,19 @@ public class ChallengeMain {
             document.documentElement.setAttribute('data-theme', theme);
         })();
         </script>
-        <link rel="stylesheet" href="%s">
-        <script src="%s" defer></script>
-            """
+            <link rel="stylesheet" href="%s">
+            <script src="%s" defer></script>
+            <script src="%s" defer></script>
+            <script src="%s" defer></script>
+                """
                                 .formatted(
                                         AssetVersion.versionedPath("/css/toc.css"),
                                         AssetVersion.versionedPath("/css/content.css"),
                                         AssetVersion.versionedPath("/css/theme-experiments.css"),
-                                        AssetVersion.versionedPath("/js/theme-switcher.js")));
+                                        AssetVersion.versionedPath("/js/theme-switcher.js"),
+                                        AssetVersion.versionedPath("/js/api-live-request.js"),
+                                        AssetVersion.versionedPath(
+                                                "/js/api-docs-live-request.js")));
         app.getGuiManagement()
                 .appendToCustomHeadContent(PlausibleAnalyticsHead.fromEnvironment().asHtml());
 

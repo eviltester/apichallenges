@@ -118,6 +118,9 @@ public class UiPagesAreReachableTest {
 
         // Challenges
         args.add(Arguments.of(200, "API Challenges - Improve your API Skills", "/gui/challenges"));
+        args.add(Arguments.of(200, "API Challenges Client", "/apichallenges/client"));
+        args.add(Arguments.of(200, "Simple API Client", "/simpleapi/client"));
+        args.add(Arguments.of(200, "Buggy API Client", "/shop/client"));
         args.add(
                 Arguments.of(
                         200,
@@ -155,6 +158,37 @@ public class UiPagesAreReachableTest {
                 response.body.contains(String.format("<title>%s</title>", title)),
                 String.format("Title not found %s", title));
         assertContainsHeaderAndFooter(response);
+    }
+
+    @Test
+    void restrictedApiClientPagesUseAdhocLiveRequestWidgets() {
+        assertClientPage(
+                "/apichallenges/client",
+                "/todos",
+                "/todos||/todo||/challenges||/challenger||/secret||/heartbeat",
+                "true");
+        assertClientPage("/simpleapi/client", "/simpleapi/items", "/simpleapi", "false");
+        assertClientPage("/shop/client", "/shop/products", "/shop", "false");
+    }
+
+    private void assertClientPage(
+            final String path,
+            final String defaultPath,
+            final String allowedPathPrefixes,
+            final String useChallenger) {
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
+        Assertions.assertTrue(response.body.contains("class=\"api-live-request\""));
+        Assertions.assertTrue(response.body.contains("data-method=\"GET\""));
+        Assertions.assertTrue(response.body.contains("data-path=\"" + defaultPath + "\""));
+        Assertions.assertTrue(response.body.contains("data-edit-mode=\"adhoc\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-allowed-path-prefixes=\"" + allowedPathPrefixes + "\""));
+        Assertions.assertTrue(
+                response.body.contains("data-use-challenger=\"" + useChallenger + "\""));
     }
 
     private void assertContainsHeaderAndFooter(HttpResponseDetails response) {
@@ -690,7 +724,7 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertEquals(
                 14, response.body.split("class=\"sim-live-request\"", -1).length - 1);
         Assertions.assertTrue(
@@ -787,7 +821,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<a href=\"/fromhell/docs/openapi-3.1.json\">OpenAPI 3.1 JSON</a>"));
-        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
                         "respond with <code>405 Method Not Allowed</code> and an"
@@ -886,6 +920,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-curl-exe-toggle"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details"));
         Assertions.assertTrue(response.body.contains(".sim-live-request-details .sim-live-title"));
+        Assertions.assertTrue(response.body.contains(".sim-live-validation"));
+        Assertions.assertTrue(response.body.contains(".sim-live-edit-query"));
         Assertions.assertTrue(response.body.contains("background: #16803a"));
 
         response = http.send("/css/theme-experiments.css", "get");
@@ -906,7 +942,7 @@ public class UiPagesAreReachableTest {
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("htmlTableOfContents"));
 
-        response = http.send("/js/sim-live-request.js", "get");
+        response = http.send("/js/api-live-request.js", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
         assertCacheControl(response, "public, max-age=31536000, immutable");
@@ -942,6 +978,20 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("curl.exe"));
         Assertions.assertTrue(response.body.contains("sim-live-curl-exe-checkbox"));
         Assertions.assertTrue(response.body.contains("refreshCurlCommands"));
+        Assertions.assertTrue(response.body.contains("dataset.editMode"));
+        Assertions.assertTrue(response.body.contains("allowedPathPrefixes"));
+        Assertions.assertTrue(response.body.contains("ApiChallengesLiveRequest"));
+
+        response = http.send("/js/api-docs-live-request.js", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
+        Assertions.assertTrue(response.body.contains("'/docs'"));
+        Assertions.assertTrue(response.body.contains("'/simpleapi/docs'"));
+        Assertions.assertTrue(response.body.contains("'/shop/docs'"));
+        Assertions.assertFalse(response.body.contains("'/sim/docs'"));
+        Assertions.assertFalse(response.body.contains("'/mirror/docs'"));
+        Assertions.assertFalse(response.body.contains("'/fromhell/docs'"));
 
         response = http.send("/favicon/site.webmanifest", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1068,8 +1118,11 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedStylesheet(response, "/css/theme-experiments.css");
         assertBodyContainsVersionedScript(response, "/js/theme-switcher.js");
         Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/apichallenges/client\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/simpleapi/client\""));
         Assertions.assertTrue(response.body.contains("href=\"/shop/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/shop/client\""));
         Assertions.assertTrue(response.body.contains("href=\"/shop/gui/entities\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/openapi.json?download\""));
@@ -1079,6 +1132,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger\""));
         Assertions.assertFalse(response.body.contains("href=\"/fromhell/docs/swagger-ui\""));
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
+        Assertions.assertFalse(response.body.contains("href=\"/sim/client\""));
+        Assertions.assertFalse(response.body.contains("href=\"/mirror/client\""));
+        Assertions.assertFalse(response.body.contains("href=\"/fromhell/client\""));
 
         final HttpResponseDetails practiceModeResponse =
                 http.send("/practice-modes/simulation", "get");
@@ -1105,6 +1161,8 @@ public class UiPagesAreReachableTest {
 
         final HttpResponseDetails docsResponse = http.send("/docs", "get");
         Assertions.assertEquals(200, docsResponse.statusCode);
+        assertBodyContainsVersionedScript(docsResponse, "/js/api-live-request.js");
+        assertBodyContainsVersionedScript(docsResponse, "/js/api-docs-live-request.js");
         Assertions.assertTrue(docsResponse.body.contains("Open Swagger UI"));
         Assertions.assertTrue(docsResponse.body.contains("href='/docs/swagger-ui'"));
         Assertions.assertTrue(
@@ -1127,6 +1185,8 @@ public class UiPagesAreReachableTest {
 
         final HttpResponseDetails simpleApiDocsResponse = http.send("/simpleapi/docs", "get");
         Assertions.assertEquals(200, simpleApiDocsResponse.statusCode);
+        assertBodyContainsVersionedScript(simpleApiDocsResponse, "/js/api-live-request.js");
+        assertBodyContainsVersionedScript(simpleApiDocsResponse, "/js/api-docs-live-request.js");
         Assertions.assertTrue(
                 simpleApiDocsResponse.body.contains(
                         "<title>Simple API Documentation | API Challenges</title>"));
@@ -1138,6 +1198,8 @@ public class UiPagesAreReachableTest {
 
         final HttpResponseDetails shopDocsResponse = http.send("/shop/docs", "get");
         Assertions.assertEquals(200, shopDocsResponse.statusCode);
+        assertBodyContainsVersionedScript(shopDocsResponse, "/js/api-live-request.js");
+        assertBodyContainsVersionedScript(shopDocsResponse, "/js/api-docs-live-request.js");
         Assertions.assertTrue(
                 shopDocsResponse.body.contains(
                         "<title>Buggy API Documentation | API Challenges</title>"));
@@ -1427,7 +1489,7 @@ public class UiPagesAreReachableTest {
             Assertions.assertTrue(
                     response.body.matches(
                             "(?s).*src='"
-                                    + Pattern.quote("/js/sim-live-request.js")
+                                    + Pattern.quote("/js/api-live-request.js")
                                     + "\\?v=[^']+'.*"),
                     solutionLink);
             Assertions.assertTrue(
@@ -1442,7 +1504,7 @@ public class UiPagesAreReachableTest {
                 http.send("/apichallenges/solutions/post-create/post-todos-201", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        assertBodyContainsVersionedScript(response, "/js/sim-live-request.js");
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
                         "<details class=\"sim-live-request-details\" open><summary>POST /todos to"
@@ -1454,10 +1516,16 @@ public class UiPagesAreReachableTest {
                 response.body.indexOf("solution-challenge-completed")
                         < response.body.indexOf("<h1"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "class=\"api-live-request\" data-method=\"POST\""
+                response.body.matches(
+                        "(?s).*class=\"api-live-request\" data-method=\"POST\""
                                 + " data-path=\"/todos\" data-editable=\"true\""
-                                + " data-expected-status=\"201\""));
+                                + " data-edit-mode=\"fixed\" data-allowed-path-prefixes=\""
+                                + Pattern.quote(
+                                        "/todos||/todo||/challenges||/challenger||/secret||/heartbeat")
+                                + "\"[^>]* data-expected-status=\"201\".*"));
+        Assertions.assertTrue(
+                response.body.contains("<summary>Experiment with this endpoint</summary>"));
+        Assertions.assertTrue(response.body.contains("data-edit-mode=\"adhoc\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
         Assertions.assertTrue(
                 response.body.contains(
@@ -1475,7 +1543,7 @@ public class UiPagesAreReachableTest {
                 http.send("/apichallenges/solutions/delete/delete-todos-id-204", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertEquals(3, countOccurrences(response.body, "class=\"api-live-request\""));
+        Assertions.assertEquals(4, countOccurrences(response.body, "class=\"api-live-request\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "<summary>GET /todos to see what todos are available now</summary>"));
@@ -1492,6 +1560,9 @@ public class UiPagesAreReachableTest {
                                 + " data-path=\"/todos/{{firstTodoId}}\""));
         Assertions.assertTrue(response.body.contains("data-auto-create-first-todo=\"false\""));
         Assertions.assertTrue(response.body.contains("data-refresh-after-execute=\"false\""));
+        Assertions.assertTrue(
+                response.body.contains("<summary>Experiment with this endpoint</summary>"));
+        Assertions.assertEquals(2, countOccurrences(response.body, "data-challenge-id=\""));
     }
 
     @Test
@@ -1535,6 +1606,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("setCookie('X-CHALLENGER','" + challengerId + "',365);"));
         Assertions.assertTrue(response.body.contains("<script>showAchievements()</script>"));
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
+        Assertions.assertTrue(response.body.contains("<summary>Solve Now</summary>"));
+        Assertions.assertTrue(response.body.contains("data-edit-mode=\"adhoc\""));
+        Assertions.assertTrue(response.body.contains("data-path=\"/challenger\""));
+        Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
 
         final int achievements = response.body.indexOf("<script>showAchievements()</script>");
         final int gettingStarted =

@@ -47,6 +47,8 @@ public class MarkdownContentManager {
             "partials/author-bio-snippet.html";
     private static final String DEFAULT_NEXT_CHALLENGE_CTA_RESOURCE =
             "partials/next-challenge-cta.html";
+    private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
+            "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
 
     private final DefaultGUIHTML guiManagement;
     private final Map<String, String> solutionChallengeIds;
@@ -263,6 +265,12 @@ public class MarkdownContentManager {
             logger.error("Markdown parsing error", e);
         }
 
+        final String solutionExperiment = solutionEndpointExperiment(contentFolder, contentPath);
+        if (!solutionExperiment.isEmpty()) {
+            liveRequestWidgetUsed = true;
+            mdcontent.append("\n").append(solutionExperiment).append("\n");
+        }
+
         if (mdheaders.contains("showads: true")) {
             // this did render google ads
             //            headerInject = headerInject +
@@ -276,7 +284,7 @@ public class MarkdownContentManager {
             headerInject =
                     headerInject
                             + "<script src='"
-                            + AssetVersion.versionedPath("/js/sim-live-request.js")
+                            + AssetVersion.versionedPath("/js/api-live-request.js")
                             + "' defer></script>";
         }
 
@@ -696,6 +704,12 @@ public class MarkdownContentManager {
         final String method = attributes.getOrDefault("method", "GET");
         final String path = attributes.getOrDefault("path", "/");
         final String editable = attributes.getOrDefault("editable", defaultEditable);
+        final String editMode =
+                attributes.getOrDefault(
+                        "edit-mode", defaultEditModeFor(placeholderClass, editable));
+        final String allowedPathPrefixes =
+                attributes.getOrDefault(
+                        "allowed-path-prefixes", defaultAllowedPathPrefixesFor(placeholderClass));
         final boolean openDetails = isTruthy(attributes.get("open"));
         final boolean challengeRequest = isTruthy(attributes.get("challenge-request"));
         final boolean wrapInDetails = openDetails || isTruthy(attributes.get("details"));
@@ -714,13 +728,22 @@ public class MarkdownContentManager {
                 .append(escapeHtmlAttribute(path))
                 .append("\" data-editable=\"")
                 .append(escapeHtmlAttribute(editable))
+                .append("\" data-edit-mode=\"")
+                .append(escapeHtmlAttribute(editMode))
                 .append("\"");
+        if (!allowedPathPrefixes.isEmpty()) {
+            html.append(" data-allowed-path-prefixes=\"")
+                    .append(escapeHtmlAttribute(allowedPathPrefixes))
+                    .append("\"");
+        }
 
         for (Map.Entry<String, String> attribute : attributes.entrySet()) {
             final String key = attribute.getKey();
             if (key.equals("method")
                     || key.equals("path")
                     || key.equals("editable")
+                    || key.equals("edit-mode")
+                    || key.equals("allowed-path-prefixes")
                     || key.equals("details")
                     || key.equals("summary")
                     || key.equals("open")
@@ -746,6 +769,63 @@ public class MarkdownContentManager {
                 + "</summary>"
                 + html
                 + "</details>";
+    }
+
+    private String defaultEditModeFor(final String placeholderClass, final String editable) {
+        if ("api-live-request".equals(placeholderClass)) {
+            return "fixed";
+        }
+        return isTruthy(editable) ? "adhoc" : "readonly";
+    }
+
+    private String defaultAllowedPathPrefixesFor(final String placeholderClass) {
+        if ("api-live-request".equals(placeholderClass)) {
+            return API_CHALLENGE_ALLOWED_PATH_PREFIXES;
+        }
+        return "";
+    }
+
+    private String solutionEndpointExperiment(
+            final String contentFolder, final String contentPath) {
+        if (contentPath == null || !solutionChallengeIds.containsKey(contentPath)) {
+            return "";
+        }
+
+        final Map<String, String> mainRequestAttributes =
+                mainApiSolvingRequestAttributes(contentFolder, contentPath);
+        if (mainRequestAttributes.isEmpty()) {
+            return "";
+        }
+
+        final Map<String, String> experimentAttributes = new LinkedHashMap<>(mainRequestAttributes);
+        experimentAttributes.remove("open");
+        experimentAttributes.remove("challenge-request");
+        experimentAttributes.remove("challenge-id");
+        experimentAttributes.put("details", "true");
+        experimentAttributes.put("summary", "Experiment with this endpoint");
+        experimentAttributes.put("editable", "true");
+        experimentAttributes.put("edit-mode", "adhoc");
+        experimentAttributes.put("allowed-path-prefixes", API_CHALLENGE_ALLOWED_PATH_PREFIXES);
+        return renderLiveRequestPlaceholder(experimentAttributes, "api-live-request", "true", null);
+    }
+
+    private Map<String, String> mainApiSolvingRequestAttributes(
+            final String contentFolder, final String contentPath) {
+        final String contentResource = contentFolder + contentPath + ".md";
+        if (!markdownContentPaths.contains(contentResource)) {
+            return Collections.emptyMap();
+        }
+
+        final String markdown = getResourceAsString(contentResource);
+        final Pattern macroPattern = Pattern.compile("\\{\\{<api-live-request\\s+([\\s\\S]*?)>}}");
+        final Matcher matcher = macroPattern.matcher(markdown);
+        while (matcher.find()) {
+            final Map<String, String> attributes = parseMacroAttributes(matcher.group(1));
+            if (isTruthy(attributes.get("open")) || isTruthy(attributes.get("challenge-request"))) {
+                return attributes;
+            }
+        }
+        return Collections.emptyMap();
     }
 
     private boolean isTruthy(final String value) {

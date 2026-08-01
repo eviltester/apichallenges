@@ -2,7 +2,9 @@
   'use strict';
 
   const WIDGET_SELECTOR = '.sim-live-request, .api-live-request';
-  const DEFAULT_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD', 'TRACE'];
+  const DEFAULT_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD', 'TRACE', 'QUERY'];
+  const BODY_METHODS = ['POST', 'PUT', 'PATCH', 'QUERY'];
+  const EDIT_MODES = ['readonly', 'fixed', 'adhoc'];
   const BROWSER_UNSUPPORTED_METHODS = ['CONNECT', 'TRACE', 'TRACK'];
   const BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS = [
     'x-http-method',
@@ -27,6 +29,14 @@
     return new URL(path, window.location.origin).toString();
   }
 
+  function normalizeMethod(method) {
+    return (method || 'GET').trim().toUpperCase();
+  }
+
+  function methodAllowsBody(method) {
+    return BODY_METHODS.indexOf(normalizeMethod(method)) !== -1;
+  }
+
   function readableUrl(url) {
     return String(url || '')
       .replace(/%3E/gi, '>')
@@ -41,6 +51,102 @@
     } catch (error) {
       return '';
     }
+  }
+
+  function pathAndQueryFromUrl(url) {
+    try {
+      const parsed = new URL(url, window.location.origin);
+      return `${parsed.pathname}${parsed.search}`;
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function queryFromUrl(url) {
+    try {
+      return new URL(url, window.location.origin).search.replace(/^\?/, '');
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function urlWithQuery(url, query) {
+    const parsed = new URL(url, window.location.origin);
+    const trimmedQuery = (query || '').trim();
+    parsed.search = trimmedQuery
+      ? (trimmedQuery.charAt(0) === '?' ? trimmedQuery : `?${trimmedQuery}`)
+      : '';
+    return parsed.toString();
+  }
+
+  function parseAllowedPathPrefixes(value) {
+    return (value || '').split('||')
+      .map(function (prefix) {
+        return prefix.trim();
+      })
+      .filter(function (prefix) {
+        return prefix.length > 0;
+      });
+  }
+
+  function pathMatchesPrefix(path, prefix) {
+    return path === prefix || path.indexOf(`${prefix}/`) === 0;
+  }
+
+  function hasUnresolvedPathParameter(path) {
+    return /\/:[^/?#]+/.test(path);
+  }
+
+  function validateRequestTarget(request) {
+    if (!request.allowedPathPrefixes || request.allowedPathPrefixes.length === 0) {
+      return { valid: true, message: '' };
+    }
+
+    let parsed;
+    try {
+      parsed = new URL(request.url, window.location.origin);
+    } catch (error) {
+      return { valid: false, message: 'Request blocked: enter a valid same-origin URL.' };
+    }
+
+    if (parsed.origin !== window.location.origin) {
+      return { valid: false, message: 'Request blocked: live clients only send same-origin requests.' };
+    }
+
+    if (hasUnresolvedPathParameter(parsed.pathname)) {
+      return {
+        valid: false,
+        message: 'Request blocked: replace any path parameters such as :id before sending.',
+      };
+    }
+
+    const allowed = request.allowedPathPrefixes.some(function (prefix) {
+      return pathMatchesPrefix(parsed.pathname, prefix);
+    });
+    if (!allowed) {
+      return {
+        valid: false,
+        message: `Request blocked: path must start with ${request.allowedPathPrefixes.join(', ')}.`,
+      };
+    }
+
+    return { valid: true, message: '' };
+  }
+
+  function editModeFor(placeholder) {
+    const explicitMode = (placeholder.dataset.editMode || '').trim().toLowerCase();
+    if (EDIT_MODES.indexOf(explicitMode) !== -1) {
+      return explicitMode;
+    }
+    return placeholder.dataset.editable === 'true' ? 'adhoc' : 'readonly';
+  }
+
+  function requestBodyAllowed(request) {
+    return request.bodyEditable && methodAllowsBody(request.method);
+  }
+
+  function bodyForRequest(request) {
+    return requestBodyAllowed(request) ? request.body : '';
   }
 
   function todoIdFromLocation(location) {
@@ -308,8 +414,9 @@
     request.headers.forEach(function (header) {
       parts.push(`-H "${header.name}: ${header.value}"`);
     });
-    if (request.body && request.method !== 'GET' && request.method !== 'HEAD') {
-      parts.push(`--data '${escapeShellSingleQuotes(request.body)}'`);
+    const body = bodyForRequest(request);
+    if (body) {
+      parts.push(`--data '${escapeShellSingleQuotes(body)}'`);
     }
     return parts.join(' ');
   }
@@ -322,11 +429,20 @@
     request.headers.forEach(function (header) {
       parts.push(`--header="${header.name}: ${header.value}"`);
     });
-    if (request.body && request.method !== 'GET' && request.method !== 'HEAD') {
-      parts.push(`--body-data='${escapeShellSingleQuotes(request.body)}'`);
+    const body = bodyForRequest(request);
+    if (body) {
+      parts.push(`--body-data='${escapeShellSingleQuotes(body)}'`);
     }
     parts.push(`"${readableUrl(request.url)}"`);
     return parts.join(' ');
+  }
+
+  function buildRestrictedCommand(request, builder) {
+    const validation = validateRequestTarget(request);
+    if (!validation.valid) {
+      return `${validation.message} Fix the request target before copying a command.`;
+    }
+    return builder(request);
   }
 
   function copyText(value, button) {
@@ -792,26 +908,48 @@
     const controls = document.createElement('div');
     controls.className = 'sim-live-edit-controls';
 
-    const methodLabel = document.createElement('label');
-    methodLabel.textContent = 'Verb';
-    const methodSelect = document.createElement('select');
-    methodSelect.className = 'sim-live-edit-method';
-    DEFAULT_METHODS.forEach(function (method) {
-      const option = document.createElement('option');
-      option.value = method;
-      option.textContent = method;
-      methodSelect.appendChild(option);
-    });
-    methodSelect.value = request.method;
-    methodLabel.appendChild(methodSelect);
+    let methodLabel = null;
+    let methodSelect = null;
+    let urlLabel = null;
+    let urlInput = null;
+    let queryLabel = null;
+    let queryTextarea = null;
+    let lockedFields = null;
+    if (request.editMode === 'adhoc') {
+      methodLabel = document.createElement('label');
+      methodLabel.textContent = 'Verb';
+      methodSelect = document.createElement('select');
+      methodSelect.className = 'sim-live-edit-method';
+      DEFAULT_METHODS.forEach(function (method) {
+        const option = document.createElement('option');
+        option.value = method;
+        option.textContent = method;
+        methodSelect.appendChild(option);
+      });
+      methodSelect.value = request.method;
+      methodLabel.appendChild(methodSelect);
 
-    const urlLabel = document.createElement('label');
-    urlLabel.textContent = 'URL';
-    const urlInput = document.createElement('input');
-    urlInput.className = 'sim-live-edit-url';
-    urlInput.type = 'url';
-    urlInput.value = readableUrl(request.url);
-    urlLabel.appendChild(urlInput);
+      urlLabel = document.createElement('label');
+      urlLabel.textContent = 'URL';
+      urlInput = document.createElement('input');
+      urlInput.className = 'sim-live-edit-url';
+      urlInput.type = 'url';
+      urlInput.value = readableUrl(request.url);
+      urlLabel.appendChild(urlInput);
+    } else {
+      lockedFields = document.createElement('div');
+      lockedFields.className = 'sim-live-locked-fields';
+      lockedFields.textContent = `${request.method} ${pathAndQueryFromUrl(request.url)}`;
+      controls.appendChild(lockedFields);
+
+      queryLabel = document.createElement('label');
+      queryLabel.textContent = 'Query string';
+      queryTextarea = document.createElement('textarea');
+      queryTextarea.className = 'sim-live-edit-query';
+      queryTextarea.rows = 2;
+      queryTextarea.value = queryFromUrl(request.url);
+      queryLabel.appendChild(queryTextarea);
+    }
 
     const headersLabel = document.createElement('label');
     headersLabel.textContent = 'Headers';
@@ -824,7 +962,7 @@
     let bodyTextarea = null;
     let bodyLabel = null;
     let prettyPrintButton = null;
-    if (request.bodyEditable && request.body) {
+    if (request.bodyEditable) {
       bodyLabel = document.createElement('label');
       bodyLabel.textContent = 'Body';
       bodyTextarea = document.createElement('textarea');
@@ -843,6 +981,7 @@
         request.body = bodyTextarea.value;
         request.body = formatRequestBody(request);
         bodyTextarea.value = request.body;
+        syncBodyControlVisibility();
         notifyChanged();
       });
     }
@@ -858,20 +997,52 @@
       editActions.appendChild(prettyPrintButton);
     }
 
+    function syncBodyControlVisibility() {
+      if (!bodyLabel) {
+        return;
+      }
+      const showBody = requestBodyAllowed(request);
+      bodyLabel.hidden = !showBody;
+      if (prettyPrintButton) {
+        prettyPrintButton.hidden = !showBody;
+      }
+    }
+
+    function syncLockedFields() {
+      if (lockedFields) {
+        lockedFields.textContent = `${request.method} ${pathAndQueryFromUrl(request.url)}`;
+      }
+    }
+
     function syncRequestFromControls() {
       request.userEdited = true;
-      request.method = methodSelect.value;
-      request.url = absoluteUrl(urlInput.value);
-      urlInput.value = readableUrl(request.url);
+      if (methodSelect) {
+        request.method = normalizeMethod(methodSelect.value);
+      }
+      if (urlInput) {
+        request.url = absoluteUrl(urlInput.value);
+        urlInput.value = readableUrl(request.url);
+      } else if (queryTextarea) {
+        request.url = urlWithQuery(request.url, queryTextarea.value);
+      }
       request.headers = parseEditableHeaders(headersTextarea.value);
       if (bodyTextarea) {
         request.body = bodyTextarea.value;
       }
+      syncLockedFields();
+      syncBodyControlVisibility();
       notifyChanged();
     }
 
-    methodSelect.addEventListener('change', syncRequestFromControls);
-    urlInput.addEventListener('change', syncRequestFromControls);
+    if (methodSelect) {
+      methodSelect.addEventListener('change', syncRequestFromControls);
+    }
+    if (urlInput) {
+      urlInput.addEventListener('change', syncRequestFromControls);
+    }
+    if (queryTextarea) {
+      queryTextarea.addEventListener('input', syncRequestFromControls);
+    }
     headersTextarea.addEventListener('input', syncRequestFromControls);
     if (bodyTextarea) {
       bodyTextarea.addEventListener('input', syncRequestFromControls);
@@ -882,17 +1053,33 @@
       request.url = defaultRequest.url;
       request.body = defaultRequest.body;
       request.headers = cloneHeaders(defaultRequest.headers);
-      methodSelect.value = request.method;
-      urlInput.value = readableUrl(request.url);
+      if (methodSelect) {
+        methodSelect.value = request.method;
+      }
+      if (urlInput) {
+        urlInput.value = readableUrl(request.url);
+      }
+      if (queryTextarea) {
+        queryTextarea.value = queryFromUrl(request.url);
+      }
       headersTextarea.value = headersToEditableText(request.headers);
       if (bodyTextarea) {
         bodyTextarea.value = formatRequestBody(request);
       }
+      syncLockedFields();
+      syncBodyControlVisibility();
       notifyChanged();
     });
 
-    controls.appendChild(methodLabel);
-    controls.appendChild(urlLabel);
+    if (methodLabel) {
+      controls.appendChild(methodLabel);
+    }
+    if (urlLabel) {
+      controls.appendChild(urlLabel);
+    }
+    if (queryLabel) {
+      controls.appendChild(queryLabel);
+    }
     controls.appendChild(headersLabel);
     if (bodyLabel) {
       controls.appendChild(bodyLabel);
@@ -904,6 +1091,9 @@
       urlInput: urlInput,
       headersTextarea: headersTextarea,
       bodyTextarea: bodyTextarea,
+      queryTextarea: queryTextarea,
+      syncLockedFields: syncLockedFields,
+      syncBodyControlVisibility: syncBodyControlVisibility,
     };
   }
 
@@ -1128,17 +1318,32 @@
     requestLine.appendChild(url);
     panel.appendChild(requestLine);
 
+    const validationMessage = document.createElement('div');
+    validationMessage.className = 'sim-live-validation';
+    validationMessage.setAttribute('role', 'status');
+    validationMessage.hidden = true;
+    panel.appendChild(validationMessage);
+
+    function refreshRequestDisplay() {
+      method.textContent = request.method;
+      url.textContent = readableUrl(request.url);
+      const validation = validateRequestTarget(request);
+      validationMessage.textContent = validation.message;
+      validationMessage.hidden = validation.valid;
+    }
+
     let controls = null;
     if (request.editable) {
       controls = renderEditableControls(request, defaultRequest, function () {
-        method.textContent = request.method;
-        url.textContent = readableUrl(request.url);
+        refreshRequestDisplay();
         notifyChanged();
       });
       panel.appendChild(controls.element);
     }
 
-    if (request.body && !request.bodyEditable) {
+    refreshRequestDisplay();
+
+    if (request.body && !requestBodyAllowed(request)) {
       const body = document.createElement('pre');
       body.className = 'sim-live-request-body';
       body.textContent = request.body;
@@ -1196,12 +1401,20 @@
               method.textContent = request.method;
               url.textContent = readableUrl(request.url);
               if (controls) {
-                controls.urlInput.value = readableUrl(request.url);
+                if (controls.urlInput) {
+                  controls.urlInput.value = readableUrl(request.url);
+                }
+                if (controls.queryTextarea) {
+                  controls.queryTextarea.value = queryFromUrl(request.url);
+                }
                 controls.headersTextarea.value = headersToEditableText(request.headers);
                 if (controls.bodyTextarea) {
                   controls.bodyTextarea.value = request.body;
                 }
+                controls.syncLockedFields();
+                controls.syncBodyControlVisibility();
               }
+              refreshRequestDisplay();
               notifyChanged();
             });
           }
@@ -1215,6 +1428,15 @@
         })
         .then(function (passedBeforeRequest) {
           wasChallengePassedBeforeRequest = passedBeforeRequest === true;
+          const requestTargetValidation = validateRequestTarget(request);
+          if (!requestTargetValidation.valid) {
+            responseArea.status.textContent = 'Request blocked';
+            responseArea.bodyPanel.textContent = requestTargetValidation.message;
+            responseArea.headersPanel.textContent = '(request was not sent)';
+            refreshRequestDisplay();
+            return null;
+          }
+
           const unsupportedRequestMessage = browserUnsupportedRequestMessage(request);
           if (unsupportedRequestMessage) {
             responseArea.status.textContent = 'Cannot execute in browser';
@@ -1228,8 +1450,9 @@
             headers: browserRequestHeaders(request.headers),
           };
 
-          if (request.body && request.method !== 'GET' && request.method !== 'HEAD') {
-            options.body = request.body;
+          const body = bodyForRequest(request);
+          if (body) {
+            options.body = body;
           }
 
           return fetch(request.url, options);
@@ -1316,14 +1539,23 @@
     widgetState.method.textContent = widgetState.request.method;
     widgetState.url.textContent = readableUrl(widgetState.request.url);
     if (widgetState.controls) {
-      widgetState.controls.methodSelect.value = widgetState.request.method;
-      widgetState.controls.urlInput.value = readableUrl(widgetState.request.url);
+      if (widgetState.controls.methodSelect) {
+        widgetState.controls.methodSelect.value = widgetState.request.method;
+      }
+      if (widgetState.controls.urlInput) {
+        widgetState.controls.urlInput.value = readableUrl(widgetState.request.url);
+      }
+      if (widgetState.controls.queryTextarea) {
+        widgetState.controls.queryTextarea.value = queryFromUrl(widgetState.request.url);
+      }
       widgetState.controls.headersTextarea.value = headersToEditableText(
         widgetState.request.headers);
       if (widgetState.controls.bodyTextarea) {
         widgetState.request.body = formatRequestBody(widgetState.request);
         widgetState.controls.bodyTextarea.value = widgetState.request.body;
       }
+      widgetState.controls.syncLockedFields();
+      widgetState.controls.syncBodyControlVisibility();
     }
     widgetState.updateCommands();
   }
@@ -1341,13 +1573,16 @@
 
   function renderWidget(placeholder) {
     const isApiRequest = placeholder.classList.contains('api-live-request');
+    const editMode = editModeFor(placeholder);
     const request = {
-      method: placeholder.dataset.method,
-      rawPath: placeholder.dataset.path,
+      method: normalizeMethod(placeholder.dataset.method),
+      rawPath: placeholder.dataset.path || '/',
       rawBody: placeholder.dataset.body || '',
       expectedStatus: placeholder.dataset.expectedStatus || '',
-      editable: placeholder.dataset.editable === 'true',
-      bodyEditable: isApiRequest && placeholder.dataset.bodyEditable !== 'false',
+      editable: editMode !== 'readonly',
+      editMode: editMode,
+      bodyEditable: placeholder.dataset.bodyEditable !== 'false',
+      allowedPathPrefixes: parseAllowedPathPrefixes(placeholder.dataset.allowedPathPrefixes),
       useChallenger: isApiRequest && placeholder.dataset.useChallenger !== 'false',
       autoCreateFirstTodo: placeholder.dataset.autoCreateFirstTodo !== 'false',
       refreshAfterExecute: placeholder.dataset.refreshAfterExecute !== 'false',
@@ -1414,10 +1649,10 @@
     let wgetCommand;
     const updateCommands = function () {
       if (curlCommand) {
-        curlCommand.textContent = buildCurlCommand(request);
+        curlCommand.textContent = buildRestrictedCommand(request, buildCurlCommand);
       }
       if (wgetCommand) {
-        wgetCommand.textContent = buildWgetCommand(request);
+        wgetCommand.textContent = buildRestrictedCommand(request, buildWgetCommand);
       }
     };
 
@@ -1426,14 +1661,15 @@
     browserPanel.panel.dataset.panel = 'browser';
     widget.appendChild(browserPanel.panel);
 
-    const curlPanel = renderCommandPanel(buildCurlCommand(request), { curlExeToggle: true });
+    const curlPanel = renderCommandPanel(
+      buildRestrictedCommand(request, buildCurlCommand), { curlExeToggle: true });
     curlCommand = curlPanel.pre;
     curlPanel.panel.className += ' sim-live-panel';
     curlPanel.panel.dataset.panel = 'curl';
     curlPanel.panel.hidden = true;
     widget.appendChild(curlPanel.panel);
 
-    const wgetPanel = renderCommandPanel(buildWgetCommand(request));
+    const wgetPanel = renderCommandPanel(buildRestrictedCommand(request, buildWgetCommand));
     wgetCommand = wgetPanel.pre;
     wgetPanel.panel.className += ' sim-live-panel';
     wgetPanel.panel.dataset.panel = 'wget';
@@ -1467,8 +1703,13 @@
     }
   }
 
-  onReady(function () {
+  function renderAll() {
     document.querySelectorAll(WIDGET_SELECTOR).forEach(renderWidget);
     updateChallengeCompletedBanners();
-  });
+  }
+
+  window.ApiChallengesLiveRequest = window.ApiChallengesLiveRequest || {};
+  window.ApiChallengesLiveRequest.renderAll = renderAll;
+
+  onReady(renderAll);
 }());
