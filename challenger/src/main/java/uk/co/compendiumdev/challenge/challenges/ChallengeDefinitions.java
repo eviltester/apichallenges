@@ -249,8 +249,24 @@ public class ChallengeDefinitions {
                 PutChallenges.putTodosIdPartial200(challengeOrder++),
                 putUpdateChallenges);
         storeChallengeAs(
+                CHALLENGE.PUT_TODOS_BODY_ID_200,
+                PutChallenges.putTodosBodyId200(challengeOrder++),
+                putUpdateChallenges);
+        storeChallengeAs(
+                CHALLENGE.PUT_TODOS_ID_NO_BODY_ID_200,
+                PutChallenges.putTodosIdNoBodyId200(challengeOrder++),
+                putUpdateChallenges);
+        storeChallengeAs(
                 CHALLENGE.PUT_TODOS_MISSING_TITLE_422,
                 PutChallenges.putTodosIdNoTitle422(challengeOrder++),
+                putUpdateChallenges);
+        storeChallengeAs(
+                CHALLENGE.PUT_TODOS_NO_ID_422,
+                PutChallenges.putTodosNoId422(challengeOrder++),
+                putUpdateChallenges);
+        storeChallengeAs(
+                CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404,
+                PutChallenges.putTodosIdNotFound404(challengeOrder++),
                 putUpdateChallenges);
         storeChallengeAs(
                 CHALLENGE.PUT_TODOS_422_NO_AMEND_ID,

@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge.apimodel;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_MERGE_PATCH_RFC7396;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_PATCH_RFC6902;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.PARTIAL_JSON_UPDATE;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIONAL;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -172,6 +173,57 @@ public class ChallengeApiModelRepositoryTest {
                             .findByQueryIdentifier(todo, id)
                             .getFieldValue("description")
                             .asString());
+        } finally {
+            thingifier.close();
+        }
+    }
+
+    @Test
+    public void challengeApiSupportsPutUpdateWithIdentifierInPayload() {
+        Thingifier thingifier = new ChallengeApiModel().get();
+        try {
+            EntityDefinition todo = thingifier.getDefinitionNamed("todo");
+            ThingStore repository = thingifier.getStore(EntityRelModel.DEFAULT_DATABASE_NAME);
+            EntityInstance firstTodo = repository.entityQueries().findByQueryIdentifier(todo, "1");
+            String id = firstTodo.getPrimaryKeyValue();
+
+            Assertions.assertEquals(
+                    OPTIONAL,
+                    thingifier.apiConfig().writeMethods().entities().putIdentifierInUri());
+            Assertions.assertEquals(
+                    OPTIONAL,
+                    thingifier.apiConfig().writeMethods().entities().putIdentifierInPayload());
+
+            ApiResponse putByPayloadId =
+                    thingifier
+                            .api()
+                            .put(
+                                    "/todos",
+                                    bodyParser(
+                                            thingifier,
+                                            "{\"id\":"
+                                                    + id
+                                                    + ",\"title\":\"put by body id\",\"doneStatus\":true,\"description\":\"updated\"}"),
+                                    new HttpHeadersBlock());
+
+            Assertions.assertEquals(200, putByPayloadId.getStatusCode());
+            Assertions.assertEquals(
+                    "put by body id",
+                    repository
+                            .entityQueries()
+                            .findByQueryIdentifier(todo, id)
+                            .getFieldValue("title")
+                            .asString());
+
+            ApiResponse putWithoutIdentifier =
+                    thingifier
+                            .api()
+                            .put(
+                                    "/todos",
+                                    bodyParser(thingifier, "{\"title\":\"missing id\"}"),
+                                    new HttpHeadersBlock());
+
+            Assertions.assertEquals(422, putWithoutIdentifier.getStatusCode());
         } finally {
             thingifier.close();
         }

@@ -412,6 +412,75 @@ public class SimpleApiModeTest {
     }
 
     @Test
+    public void canPutItemWithoutIdInPayload() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PUT",
+                        headers,
+                        """
+                        {
+                          "price": 4.56,
+                          "numberinstock": 8,
+                          "isbn13": "%s",
+                          "type": "dvd"
+                        }
+                        """
+                                .formatted(createdItem.isbn13)
+                                .stripIndent());
+
+        Assertions.assertEquals(200, response.statusCode, response.body);
+        Item amended = new Gson().fromJson(response.body, Item.class);
+        Assertions.assertEquals(createdItem.id, amended.id);
+        Assertions.assertEquals(4.56f, amended.price);
+        Assertions.assertEquals(8, amended.numberinstock);
+        Assertions.assertEquals("dvd", amended.type);
+        Assertions.assertEquals(createdItem.isbn13, amended.isbn13);
+    }
+
+    @Test
+    public void canPutItemWithMatchingIdInPayload() {
+
+        Item createdItem = createPatchTarget();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/simpleapi/items/" + createdItem.id,
+                        "PUT",
+                        headers,
+                        """
+                        {
+                          "id": %d,
+                          "price": 7.89,
+                          "numberinstock": 12,
+                          "isbn13": "%s",
+                          "type": "cd"
+                        }
+                        """
+                                .formatted(createdItem.id, createdItem.isbn13)
+                                .stripIndent());
+
+        Assertions.assertEquals(200, response.statusCode, response.body);
+        Item amended = new Gson().fromJson(response.body, Item.class);
+        Assertions.assertEquals(createdItem.id, amended.id);
+        Assertions.assertEquals(7.89f, amended.price);
+        Assertions.assertEquals(12, amended.numberinstock);
+        Assertions.assertEquals("cd", amended.type);
+        Assertions.assertEquals(createdItem.isbn13, amended.isbn13);
+    }
+
+    @Test
     public void canNotPatchItemWithStringValueForIntegerField() {
 
         Item createdItem = createPatchTarget();

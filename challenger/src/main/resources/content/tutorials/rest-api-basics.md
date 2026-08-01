@@ -2,7 +2,7 @@
 title: REST API - Tutorial
 seo_title: Tutorial: REST API Tutorial for API Testing | API Challenges
 description: Basic REST API tutorial to learn what is a REST API and how they work.
-lastmod: 2026-07-30
+lastmod: 2026-08-01
 seo_description: Learn REST API with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -11,7 +11,7 @@ showads: true
 
 - What is a REST API?
 - CRUD and REST
-- HTTP Verbs - HEAD, PATCH, QUERY
+- HTTP Verbs - HEAD, PUT, PATCH, QUERY
 - Authentication and Authorisation
 
 ---
@@ -185,6 +185,31 @@ Expect 'discussions' and 'debates' on a team.
 
 ---
 
+### Verb - Put
+
+- [PUT](https://www.rfc-editor.org/rfc/rfc9110.html#name-put) is usually used to create or replace the state of a resource
+- PUT should be idempotent, so sending the same request repeatedly should leave the server in the same state
+- Teams often choose one of three identifier styles for update requests:
+    - `PUT /todos/{id}` with no id in the payload
+    - `PUT /todos/{id}` with a matching id in the payload
+    - `PUT /todos` with the id in the payload    
+- Each style has tradeoffs:
+    - URL ids make routing and logs easy to read
+    - body ids can match object models and message contracts
+        - but duplicating id in URL and body might feel like duplication
+        - the API must reject mismatched ids clearly
+    - ID only in the payload might not be considered RESTful because the URI (URL) no longer uniquely identifies the resource. It also makes routing and caching less straightforward.
+
+For API testing, check which style the API supports, then test the edge cases:
+
+- no id in either URL or payload
+- id in the URL but not in the payload
+- id in the payload but not in the URL
+- id in both places and matching
+- id in both places and different
+
+---
+
 ### Verb - Patch
 
 - [PATCH](https://www.rfc-editor.org/rfc/rfc5789) - An 'Update' method which provides a set of changes
@@ -196,6 +221,26 @@ Expect 'discussions' and 'debates' on a team.
 
 Most web services just use `POST` or `PUT`
 
+
+## General REST guidelines
+
+Basics:
+
+- URL `->` Which resource?
+- HTTP method `->` What operation?
+- Body `->` What should its state become?
+
+General Recommendations:
+
+For a new REST API I would recommend:
+
+- `POST /items` `->` create a new item (server assigns or accepts an ID depending on your design)
+- `GET /items/{id}` `->` retrieve an item
+- `PUT /items/{id}` `->` replace/update an item
+- `PATCH /items/{id}` `->` partially update an item
+- `DELETE /items/{id}` `->` delete an item
+
+For PUT and PATCH, make the URL authoritative for the resource ID. If your object model includes an id field in the payload, either ignore it or validate that it matches the URL and reject mismatches. This avoids ambiguity while remaining compatible with clients that serialize complete objects.
 
 ## Recommended Reading
 

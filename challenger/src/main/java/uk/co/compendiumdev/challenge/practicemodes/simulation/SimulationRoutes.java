@@ -1,6 +1,8 @@
 package uk.co.compendiumdev.challenge.practicemodes.simulation;
 
 import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.*;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.MANDATORY;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIONAL;
 
 import java.util.List;
 import uk.co.compendiumdev.challenge.ChallengerConfig;
@@ -97,6 +99,11 @@ public class SimulationRoutes {
         createManagedEntityNamed("bob");
 
         ThingifierApiConfig customApiconfig = new ThingifierApiConfig("/sim");
+        customApiconfig
+                .writeMethods()
+                .entities()
+                .putIdentifierInUri(MANDATORY)
+                .putIdentifierInPayload(OPTIONAL);
         customApiconfig.forParams().setAllowPagingThroughUrlParams(false);
         customApiconfig.setApiToEnforceDeclaredTypesInInput(true);
         simulation.apiConfig().setFrom(customApiconfig);
@@ -158,7 +165,7 @@ public class SimulationRoutes {
                 apiEndpoint,
                 (request, result) -> {
                     result.status(204);
-                    result.header("Allow", "GET, QUERY, POST, PUT, HEAD, OPTIONS");
+                    result.header("Allow", "GET, QUERY, POST, HEAD, OPTIONS");
                     result.header(
                             ThingifierHttpApi.ACCEPT_QUERY_HEADER,
                             ThingifierHttpApi.QUERY_CONTENT_TYPE);
@@ -166,7 +173,7 @@ public class SimulationRoutes {
                 });
 
         new SimpleHttpRouteCreator(apiEndpoint).status(501, true, List.of("patch", "trace"));
-        new SimpleHttpRouteCreator(apiEndpoint).status(405, true, List.of("delete"));
+        new SimpleHttpRouteCreator(apiEndpoint).status(405, true, List.of("delete", "put"));
 
         new SimpleHttpRouteCreator(apiEndpoint + "/*").status(501, true, List.of("patch", "trace"));
         new SimpleHttpRouteCreator(apiEndpoint + "/*").status(405, true, List.of("query"));

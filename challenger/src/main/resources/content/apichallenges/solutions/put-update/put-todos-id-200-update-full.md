@@ -1,6 +1,6 @@
 ---
 date:  2025-01-01T12:53:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-01
 title: API Challenges Solution For - PUT todos/id 200 full update
 seo_title: Solution: PUT todos/id 200 full update | API Challenges
 description: How to solve API challenge PUT todos/id 200 to update a todo in the application with a full payload.
@@ -23,9 +23,10 @@ PUT request updates are idempotent so should generate the same response each tim
 - `PUT` request will update a todo if the provided `id` exists `/todos/id` end point
     - e.g. `PUT /todos/3` for a todo with `id==3`
 - `200` is an success code, in this case it means the todo was updated
-- The body of the message should be a `json` or `xml` partial set of `todo` details,
+- The body of the message should be a `json` or `xml` full set of `todo` details,
 -  and the `json` or `xml` should be defined in the `content-type` header
-- the id can optionally be included in the payload, but all other fields must be
+- the id can optionally be included in the payload, but if it is then it should match the id in the url
+- all required fields must be included
 
 
 ## Basic Instructions
@@ -40,7 +41,7 @@ PUT request updates are idempotent so should generate the same response each tim
 
 ```json
 {
-  "id": 3
+  "id": 3,
   "title": "updated title",
   "doneStatus": false,
   "description": "updated description"
@@ -119,7 +120,6 @@ Returned body:
   "description": "updated description"
 }
 ```
-
 
 
 

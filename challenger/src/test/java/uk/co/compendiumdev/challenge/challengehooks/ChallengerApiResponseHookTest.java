@@ -4,6 +4,7 @@ import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.DELETE
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.GET;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.PATCH;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.POST;
+import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.PUT;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.QUERY;
 
 import java.util.Arrays;
@@ -1158,6 +1159,97 @@ public class ChallengerApiResponseHookTest {
                 Arguments.of("application/json", CHALLENGE.PATCH_TODOS_PARTIAL_200),
                 Arguments.of("application/merge-patch+json", CHALLENGE.PATCH_TODOS_MERGE_PATCH_200),
                 Arguments.of("application/json-patch+json", CHALLENGE.PATCH_TODOS_JSON_PATCH_200));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void putTodoBodyIdChallengeCompletesForCollectionPut(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", PUT)
+                            .setBody(
+                                    "{\"id\":1,\"title\":\"put by body id\",\"doneStatus\":true,\"description\":\"done\"}"),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_BODY_ID_200));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void putTodoUrlIdNoBodyIdChallengeCompletesForInstancePut(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos/1", PUT).setBody("{\"title\":\"put by url id\"}"),
+                    fixture.apiResponse(200),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_ID_NO_BODY_ID_200));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void putTodoNoIdChallengeCompletesForCollectionPutWithoutIdentifier(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.hook.run(
+                    fixture.request("todos", PUT).setBody("{\"title\":\"missing id\"}"),
+                    fixture.apiResponse(422),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_NO_ID_422));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void putTodoMissingUrlIdWithoutBodyIdReturns404(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiResponse amendedResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/999999", PUT)
+                                    .setBody("{\"title\":\"missing todo\"}"),
+                            fixture.apiResponse(422),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNotNull(amendedResponse);
+            Assertions.assertEquals(404, amendedResponse.getStatusCode());
+            Assertions.assertTrue(amendedResponse.getBody().contains("No such todo"));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void putTodoMissingUrlIdWithMatchingBodyIdRemainsCreateValidation(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiResponse amendedResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/999999", PUT)
+                                    .setBody(
+                                            "{\"id\":999999,\"title\":\"create attempt\",\"doneStatus\":false,\"description\":\"\"}"),
+                            fixture.apiResponse(422),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNull(amendedResponse);
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404));
+        }
     }
 
     @ParameterizedTest(name = "{0}")

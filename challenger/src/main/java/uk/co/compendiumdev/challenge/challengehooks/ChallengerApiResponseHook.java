@@ -61,6 +61,12 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return calendarResponse;
         }
 
+        HttpApiResponse putNotFoundResponse =
+                putTodoNotFoundResponseFor(request, response, challenger, config);
+        if (putNotFoundResponse != null) {
+            return putNotFoundResponse;
+        }
+
         // READ
         if (request.getVerb() == HttpApiRequest.VERB.GET
                 && request.getPath().matches("todos/.*")
@@ -379,6 +385,34 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             challengers.pass(challenger, CHALLENGE.POST_UPDATE_TODO);
         }
 
+        if (request.getVerb() == HttpApiRequest.VERB.PUT
+                && request.getPath().contentEquals("todos")
+                && response.getStatusCode() == 200
+                && requestBodyHasIdField(request)) {
+            challengers.pass(challenger, CHALLENGE.PUT_TODOS_BODY_ID_200);
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.PUT
+                && request.getPath().matches("todos/.*")
+                && response.getStatusCode() == 200
+                && !requestBodyHasIdField(request)) {
+            challengers.pass(challenger, CHALLENGE.PUT_TODOS_ID_NO_BODY_ID_200);
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.PUT
+                && request.getPath().contentEquals("todos")
+                && response.getStatusCode() == 422
+                && !requestBodyHasIdField(request)) {
+            challengers.pass(challenger, CHALLENGE.PUT_TODOS_NO_ID_422);
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.PUT
+                && request.getPath().matches("todos/.*")
+                && response.getStatusCode() == 404
+                && !requestBodyHasIdField(request)) {
+            challengers.pass(challenger, CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404);
+        }
+
         if (request.getVerb() == HttpApiRequest.VERB.PATCH
                 && request.getPath().matches("todos/.*")
                 && response.getStatusCode() == 200) {
@@ -410,6 +444,34 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
         // do not interfere with api and return null
         return null;
+    }
+
+    private HttpApiResponse putTodoNotFoundResponseFor(
+            final HttpApiRequest request,
+            final HttpApiResponse response,
+            final ChallengerAuthData challenger,
+            final ThingifierApiConfig config) {
+
+        String todoIdentifier = todoInstanceIdentifierFromPath(request);
+        if (request.getVerb() != HttpApiRequest.VERB.PUT
+                || todoIdentifier == null
+                || requestBodyHasIdField(request)
+                || (response.getStatusCode() != 422 && response.getStatusCode() != 404)
+                || findTodoByIdentifier(challenger, todoIdentifier) != null) {
+            return null;
+        }
+
+        challengers.pass(challenger, CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404);
+        if (response.getStatusCode() == 404) {
+            return null;
+        }
+
+        return httpResponseFor(
+                request,
+                ApiResponse.error404("No such todo entity instance with id == " + todoIdentifier),
+                config,
+                "application/json",
+                challenger);
     }
 
     private HttpApiResponse todoCalendarResponseFor(
@@ -447,6 +509,13 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 || !request.getPath().startsWith("todos/")) {
             return null;
         }
+        return todoInstanceIdentifierFromPath(request);
+    }
+
+    private String todoInstanceIdentifierFromPath(final HttpApiRequest request) {
+        if (!request.getPath().startsWith("todos/")) {
+            return null;
+        }
         String identifier = request.getPath().substring("todos/".length());
         if (identifier.isEmpty()
                 || identifier.contains("/")
@@ -454,6 +523,20 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return null;
         }
         return identifier;
+    }
+
+    private boolean requestBodyHasIdField(final HttpApiRequest request) {
+        String body = request.getBody();
+        if (body == null || body.trim().isEmpty()) {
+            return false;
+        }
+
+        try {
+            JsonElement parsed = JsonParser.parseString(body);
+            return parsed.isJsonObject() && parsed.getAsJsonObject().has("id");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean prefersTextCalendar(final String acceptHeader) {

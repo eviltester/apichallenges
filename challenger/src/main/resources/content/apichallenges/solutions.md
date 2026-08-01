@@ -83,7 +83,11 @@ If your goal is API automation, each solution also provides clear assertion targ
 
 - [PUT /todos/{id} full (200)](/apichallenges/solutions/put-update/put-todos-id-200-update-full)
 - [PUT /todos/{id} partial (200)](/apichallenges/solutions/put-update/put-todos-id-200-update-partial)
+- [PUT /todos body id (200)](/apichallenges/solutions/put-update/put-todos-200-body-id)
+- [PUT /todos/{id} no body id (200)](/apichallenges/solutions/put-update/put-todos-id-200-no-body-id)
 - [PUT /todos/{id} no title (422)](/apichallenges/solutions/put-update/put-todos-id-422-no-title)
+- [PUT /todos no id (422)](/apichallenges/solutions/put-update/put-todos-422-no-id)
+- [PUT /todos/{id} not found (404)](/apichallenges/solutions/put-update/put-todos-id-404-not-found)
 - [PUT /todos/{id} no amend id (422)](/apichallenges/solutions/put-update/put-todos-id-422-no-amend-id)
 
 ## DELETE Challenges

@@ -4,6 +4,8 @@ import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.*;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_MERGE_PATCH_RFC7396;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_PATCH_RFC6902;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.PARTIAL_JSON_UPDATE;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.MANDATORY;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIONAL;
 
 import java.util.List;
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -74,7 +76,13 @@ public class SimpleApiRoutes {
 
         simplethings.setDataGenerator(new SimpleAPITestDataPopulator());
 
-        simplethings.apiConfig().setFrom(new ThingifierApiConfig("/simpleapi"));
+        ThingifierApiConfig simpleApiConfig = new ThingifierApiConfig("/simpleapi");
+        simpleApiConfig
+                .writeMethods()
+                .entities()
+                .putIdentifierInUri(MANDATORY)
+                .putIdentifierInPayload(OPTIONAL);
+        simplethings.apiConfig().setFrom(simpleApiConfig);
         simplethings.apiConfig().forParams().setAllowPagingThroughUrlParams(false);
         simplethings.apiConfig().setApiToEnforceDeclaredTypesInInput(true);
         // single items should be single items
@@ -83,6 +91,8 @@ public class SimpleApiRoutes {
                 .apiDefaults()
                 .writeMethods()
                 .entities()
+                .putIdentifierInUri(MANDATORY)
+                .putIdentifierInPayload(OPTIONAL)
                 .patchCan(PARTIAL_JSON_UPDATE, JSON_MERGE_PATCH_RFC7396, JSON_PATCH_RFC6902);
 
         // TODO: should probably have a support multiple databases config somewhere

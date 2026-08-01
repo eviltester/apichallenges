@@ -1,0 +1,40 @@
+---
+date:  2026-08-01T09:00:00Z
+lastmod: 2026-08-01
+title: API Challenges Solution For - PUT todos/id not found 404
+seo_title: Solution: PUT todos/id not found 404 | API Challenges
+description: How to solve API challenge PUT todos/id not found 404.
+seo_description: Use this walkthrough to solve PUT /todos/{id} not found 404 by using a missing URL id and no id in the request body.
+next_challenge: /apichallenges/solutions/put-update/put-todos-id-422-no-amend-id
+schema_howto_steps: Find an id that does not exist||Create a PUT request to /todos/{id} with that missing URL id||Send a valid JSON payload without an id field||Send the request and verify the response status is 404
+showads: true
+---
+
+# How to complete the challenge `PUT /todos/{id} not found (404)`
+
+Issue a `PUT` request to `/todos/{id}` where the URL id does not exist, and do not include an `id` in the request body.
+
+This is an update attempt against a specific URL resource. Since that resource does not exist, the response should be `404 Not Found`.
+
+## Basic Instructions
+
+- Send `PUT /todos/{id}` where `{id}` does not exist
+- Add an `X-CHALLENGER` header to track challenge completion
+- Set `Content-Type` to `application/json`
+- Do not include an `id` field in the JSON payload
+- Include a valid `title`
+- Verify the response status is `404`
+
+Example body:
+
+```json
+{
+  "title": "missing todo",
+  "doneStatus": false,
+  "description": "URL id does not exist"
+}
+```
+
+### Try it now
+
+{{<api-live-request method="PUT" path="/todos/{{missingTodoId}}" expected-status="404" headers="Content-Type: application/json||Accept: application/json" body='{"title":"missing todo","doneStatus":false,"description":"URL id does not exist"}' details="true" summary="PUT /todos/{id} with a missing URL id and no body id" open="true">}}

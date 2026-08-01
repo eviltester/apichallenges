@@ -319,6 +319,8 @@ public abstract class ChallengeCompleteTest {
     @Test
     public void canPostTodosPass() {
 
+        ensureAtMostXTodoAvailable(19);
+
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
         Map<String, String> headers = new HashMap<>();
@@ -424,6 +426,70 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
+    public void canPutTodosBodyId200AmendPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Content-Type", "application/json");
+
+        ThingStore repository =
+                ChallengeMain.getChallenger().getThingifier().getStore(challenger.getXChallenger());
+        EntityInstance aTodo = new ArrayList<>(repository.entityQueries().list(todos)).get(0);
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos",
+                        "PUT",
+                        headers,
+                        String.format(
+                                "{\"id\":%s,\"title\":\"my body id put todo\",\"description\":\"a put description\",\"doneStatus\":true}",
+                                aTodo.getPrimaryKeyValue()));
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_BODY_ID_200));
+    }
+
+    @Test
+    public void canPutTodosUrlIdNoBodyId200AmendPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Content-Type", "application/json");
+
+        ThingStore repository =
+                ChallengeMain.getChallenger().getThingifier().getStore(challenger.getXChallenger());
+        EntityInstance aTodo = new ArrayList<>(repository.entityQueries().list(todos)).get(0);
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/" + aTodo.getPrimaryKeyValue(),
+                        "PUT",
+                        headers,
+                        "{\"title\":\"my url id put todo\",\"description\":\"a put description\",\"doneStatus\":false}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_ID_NO_BODY_ID_200));
+    }
+
+    @Test
     public void canPutTodos422MissingTitleAmendPass() {
 
         final EntityDefinition todos =
@@ -454,6 +520,46 @@ public abstract class ChallengeCompleteTest {
 
         Assertions.assertEquals(422, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_MISSING_TITLE_422));
+    }
+
+    @Test
+    public void canPutTodosNoId422Pass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos",
+                        "PUT",
+                        headers,
+                        "{\"title\":\"my no id put todo\",\"description\":\"a put description\",\"doneStatus\":false}");
+
+        Assertions.assertEquals(422, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_NO_ID_422));
+    }
+
+    @Test
+    public void canPutTodosIdNotFound404Pass() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/99999999",
+                        "PUT",
+                        headers,
+                        "{\"title\":\"my missing put todo\",\"description\":\"a put description\",\"doneStatus\":false}");
+
+        Assertions.assertEquals(404, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PUT_TODOS_ID_NOT_FOUND_404));
     }
 
     @Test
@@ -593,6 +699,8 @@ public abstract class ChallengeCompleteTest {
 
     @Test
     public void canPostTodosWithMaxTitleAndDescriptionLengths() {
+
+        ensureAtMostXTodoAvailable(19);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -842,6 +950,8 @@ public abstract class ChallengeCompleteTest {
     @Test
     public void canPostTodosAsJsonAndAcceptXmlPass() {
 
+        ensureAtMostXTodoAvailable(19);
+
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
         Map<String, String> headers = new HashMap<>();
@@ -862,6 +972,8 @@ public abstract class ChallengeCompleteTest {
 
     @Test
     public void canPostTodosAsJsonAndAcceptJSONPass() {
+
+        ensureAtMostXTodoAvailable(19);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -884,6 +996,8 @@ public abstract class ChallengeCompleteTest {
     @Test
     public void canPostTodosAsXmlAndAcceptJsonPass() {
 
+        ensureAtMostXTodoAvailable(19);
+
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
         Map<String, String> headers = new HashMap<>();
@@ -904,6 +1018,8 @@ public abstract class ChallengeCompleteTest {
 
     @Test
     public void canPostTodosAsXml() {
+
+        ensureAtMostXTodoAvailable(19);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -969,6 +1085,8 @@ public abstract class ChallengeCompleteTest {
         Assertions.assertTrue(
                 response.body.contains("ERROR: Cannot add instance, maximum limit of 20 reached"));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_ALL_TODOS));
+
+        ensureAtMostXTodoAvailable(10);
     }
 
     public void ensureAtMostXTodoAvailable(int x) {

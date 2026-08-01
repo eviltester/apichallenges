@@ -290,9 +290,9 @@ OPTIONS {{<ORIGIN_URL>}}/sim/entities
 
 {{<sim-live-request method="OPTIONS" path="/sim/entities">}}
 
-By looking at the `Allow` header in the response we can see that we are allowed to `GET, QUERY, POST, PUT, HEAD, OPTIONS`
+By looking at the `Allow` header in the response we can see that we are allowed to `GET, QUERY, POST, HEAD, OPTIONS`
 
-If we tried to `DELETE` or `PATCH` then we should receive an appropriate status code of `405`
+If we tried to `DELETE`, `PUT` or `PATCH` then we should receive an appropriate status code of `405`
 
 Try and see:
 

@@ -33,6 +33,7 @@ public class SmulationModeTest {
         args.add(Arguments.of(204, "options", "/sim/entities"));
         args.add(Arguments.of(501, "patch", "/sim/entities"));
         args.add(Arguments.of(501, "trace", "/sim/entities"));
+        args.add(Arguments.of(405, "put", "/sim/entities"));
 
         args.add(Arguments.of(200, "get", "/sim/entities/1"));
         args.add(Arguments.of(200, "head", "/sim/entities/1"));
@@ -299,6 +300,23 @@ public class SmulationModeTest {
     }
 
     @Test
+    void canSimulatePutAmendOfEntity10WithMatchingBodyId() {
+
+        http.clearHeaders();
+        http.setHeader("Accept", "application/json");
+
+        HttpResponseDetails response =
+                http.put("/sim/entities/10", "{\"id\":10,\"name\":\"eris\"}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals(
+                null, response.getHeader("Location"), "expected no location header on amend");
+        String entity11 = "{\"id\":10,\"name\":\"eris\",\"description\":\"\"}";
+        Assertions.assertEquals(entity11, response.body);
+    }
+
+    @Test
     void canSimulatePostAmendErrors() {
 
         http.clearHeaders();
@@ -398,7 +416,7 @@ public class SmulationModeTest {
         HttpResponseDetails response = http.options("/sim/entities");
         Assertions.assertEquals(204, response.statusCode);
         Assertions.assertEquals(
-                "GET, QUERY, POST, PUT, HEAD, OPTIONS", response.getHeader("allow").toUpperCase());
+                "GET, QUERY, POST, HEAD, OPTIONS", response.getHeader("allow").toUpperCase());
         Assertions.assertEquals(
                 "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
     }

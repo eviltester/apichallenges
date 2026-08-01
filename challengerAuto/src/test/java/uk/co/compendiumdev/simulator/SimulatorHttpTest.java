@@ -242,7 +242,7 @@ public class SimulatorHttpTest extends RestAssuredBaseTest {
                         .header("Allow")
                         .split(",");
 
-        Assertions.assertEquals(6, verbs.length);
+        Assertions.assertEquals(5, verbs.length);
 
         List<String> verbsList = new ArrayList<>();
 
@@ -252,7 +252,6 @@ public class SimulatorHttpTest extends RestAssuredBaseTest {
 
         Assertions.assertTrue(verbsList.contains("GET"));
         Assertions.assertTrue(verbsList.contains("POST"));
-        Assertions.assertTrue(verbsList.contains("PUT"));
         Assertions.assertTrue(verbsList.contains("QUERY"));
         Assertions.assertTrue(verbsList.contains("HEAD"));
         Assertions.assertTrue(verbsList.contains("OPTIONS"));

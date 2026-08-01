@@ -1,6 +1,6 @@
 ---
 date:  2026-07-20T09:00:00Z
-lastmod: 2026-07-20
+lastmod: 2026-08-01
 title: API Challenges Solution For - PUT todos/id no amend id 422
 seo_title: Solution: PUT todos/id no amend id 422 | API Challenges
 description: How to solve API challenge PUT todos/id no amend id 422.

@@ -1,11 +1,11 @@
 ---
 date:  2026-07-20T09:00:00Z
-lastmod: 2026-07-20
+lastmod: 2026-08-01
 title: API Challenges Solution For - PUT todos/id no title 422
 seo_title: Solution: PUT todos/id no title 422 | API Challenges
 description: How to solve API challenge PUT todos/id no title 422.
 seo_description: Use this walkthrough to solve PUT todos/id no title 422 with request setup, key headers, and expected status codes.
-next_challenge: /apichallenges/solutions/put-update/put-todos-id-422-no-amend-id
+next_challenge: /apichallenges/solutions/put-update/put-todos-422-no-id
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Omit the mandatory title field||Send the request and verify the response status is 422
 showads: true
 ---

@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge.apimodel;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_MERGE_PATCH_RFC7396;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.JSON_PATCH_RFC6902;
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityPatchUpdateStyle.PARTIAL_JSON_UPDATE;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIONAL;
 import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType.STRING;
 
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -58,9 +59,17 @@ public class ChallengeApiModel {
         todoList.apiConfig().statusCodes().setMaxRequestBodyLengthBytes(5000);
         todoList.apiConfig().setApiToEnforceDeclaredTypesInInput(true);
         todoList.apiConfig().setReturnSingleGetItemsAsCollection(true);
+        todoList.apiConfig()
+                .writeMethods()
+                .entities()
+                .putIdentifierInUri(OPTIONAL)
+                .putIdentifierInPayload(OPTIONAL)
+                .patchCan(PARTIAL_JSON_UPDATE, JSON_MERGE_PATCH_RFC7396, JSON_PATCH_RFC6902);
         todoList.apiDefaults()
                 .writeMethods()
                 .entities()
+                .putIdentifierInUri(OPTIONAL)
+                .putIdentifierInPayload(OPTIONAL)
                 .patchCan(PARTIAL_JSON_UPDATE, JSON_MERGE_PATCH_RFC7396, JSON_PATCH_RFC6902);
 
         return todoList;

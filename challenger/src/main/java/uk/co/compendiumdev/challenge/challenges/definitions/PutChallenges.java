@@ -90,6 +90,51 @@ public class PutChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData putTodosBodyId200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "PUT /todos body id (200)",
+                        "Issue a PUT request to update an existing todo using an id in the payload.");
+
+        aChallenge.addHint("Use the /todos endpoint without an id in the URL", "");
+        aChallenge.addHint("Add a JSON payload with an id for an existing todo", "");
+        aChallenge.addHint(
+                "Include a title because PUT requests replace the todo state for this API", "");
+        aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
+
+        aChallenge.addSolutionLink(
+                "Send a PUT request to /todos with an existing todo id in the payload.", "", "");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/put-update/put-todos-200-body-id");
+
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData putTodosIdNoBodyId200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "PUT /todos/{id} no body id (200)",
+                        "Issue a PUT request to update an existing todo using the URL id and no id in the payload.");
+
+        aChallenge.addHint("Use /todos/{id} where the id is an existing todo", "");
+        aChallenge.addHint("Do not include an id field in the JSON payload", "");
+        aChallenge.addHint("Include a valid title field in the payload", "");
+        aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
+
+        aChallenge.addSolutionLink(
+                "Send a PUT request to /todos/{id} with no id field in the payload.", "", "");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/put-update/put-todos-id-200-no-body-id");
+
+        return aChallenge;
+    }
+
     public static ChallengeDefinitionData putTodosIdNoTitle422(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
@@ -108,6 +153,51 @@ public class PutChallenges {
                 "/apichallenges/solutions/put-update/put-todos-id-422-no-title");
 
         // todo: create solution video for PUT todos partial 200 challenge
+
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData putTodosNoId422(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "PUT /todos no id (422)",
+                        "Issue a PUT request to fail to update a todo because no id is provided in the URL or payload.");
+
+        aChallenge.addHint("Use the /todos endpoint without an id in the URL", "");
+        aChallenge.addHint("Do not include an id field in the JSON payload", "");
+        aChallenge.addHint("Include a valid title so the missing id is the important error", "");
+        aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
+
+        aChallenge.addSolutionLink(
+                "Send a PUT request to /todos with no id in the URL or payload.", "", "");
+        aChallenge.addSolutionLink(
+                "Read Solution", "HREF", "/apichallenges/solutions/put-update/put-todos-422-no-id");
+
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData putTodosIdNotFound404(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "PUT /todos/{id} not found (404)",
+                        "Issue a PUT request to fail to update a todo because the URL id does not exist.");
+
+        aChallenge.addHint("Use /todos/{id} where the id does not exist", "");
+        aChallenge.addHint("Do not include an id field in the JSON payload", "");
+        aChallenge.addHint(
+                "This is an update attempt, so the API reports the missing todo as a 404", "");
+        aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
+
+        aChallenge.addSolutionLink(
+                "Send a PUT request to /todos/{id} where the URL id does not exist and the payload has no id.",
+                "",
+                "");
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/put-update/put-todos-id-404-not-found");
 
         return aChallenge;
     }

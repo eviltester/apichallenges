@@ -1,5 +1,8 @@
 package uk.co.compendiumdev.challenge.practicemodes;
 
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.MANDATORY;
+import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIONAL;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.co.compendiumdev.challenge.apimodel.ChallengeApiModel;
@@ -46,5 +49,67 @@ class ApiDeclaredTypesInputConfigTest {
                         .get()
                         .apiConfig()
                         .willApiEnforceDeclaredTypesInInput());
+    }
+
+    @Test
+    void apiChallengesAllowsPutIdentifiersInUriOrPayload() {
+        Assertions.assertEquals(
+                OPTIONAL,
+                new ChallengeApiModel()
+                        .get()
+                        .apiConfig()
+                        .writeMethods()
+                        .entities()
+                        .putIdentifierInUri());
+        Assertions.assertEquals(
+                OPTIONAL,
+                new ChallengeApiModel()
+                        .get()
+                        .apiConfig()
+                        .writeMethods()
+                        .entities()
+                        .putIdentifierInPayload());
+    }
+
+    @Test
+    void simpleApiRequiresPutIdentifiersInUriAndAllowsThemInPayload() {
+        Assertions.assertEquals(
+                MANDATORY,
+                new SimpleApiRoutes(new DefaultGUIHTML())
+                        .simplethings
+                        .apiConfig()
+                        .writeMethods()
+                        .entities()
+                        .putIdentifierInUri());
+        Assertions.assertEquals(
+                OPTIONAL,
+                new SimpleApiRoutes(new DefaultGUIHTML())
+                        .simplethings
+                        .apiConfig()
+                        .writeMethods()
+                        .entities()
+                        .putIdentifierInPayload());
+    }
+
+    @Test
+    void simulatorRequiresPutIdentifiersInUriAndAllowsThemInPayload() {
+        SimulationRoutes routes = new SimulationRoutes(new DefaultGUIHTML());
+
+        try {
+            routes.setUpData();
+
+            Assertions.assertEquals(
+                    MANDATORY,
+                    routes.simulation.apiConfig().writeMethods().entities().putIdentifierInUri());
+            Assertions.assertEquals(
+                    OPTIONAL,
+                    routes.simulation
+                            .apiConfig()
+                            .writeMethods()
+                            .entities()
+                            .putIdentifierInPayload());
+        } finally {
+            routes.close();
+        }
     }
 }
