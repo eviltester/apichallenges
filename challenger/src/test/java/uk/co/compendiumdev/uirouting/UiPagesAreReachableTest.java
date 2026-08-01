@@ -1539,6 +1539,64 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void calendarAcceptSolutionPageRendersHelpersAndFixedMainRequest() {
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/apichallenges/solutions/accept-header/get-todos-id-200-calendar", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
+        Assertions.assertTrue(response.body.contains("GET /todos/{id} (200) text/calendar"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET /todos to see what todos are available now</summary>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>POST /todos to create a todo for the calendar request</summary>"));
+        Assertions.assertTrue(
+                response.body.matches(
+                        "(?s).*<div class=\"api-live-request\""
+                                + "(?=[^>]*data-method=\"GET\")"
+                                + "(?=[^>]*data-path=\"/todos/\\{\\{firstTodoId}}\")"
+                                + "(?=[^>]*data-edit-mode=\"fixed\")"
+                                + "(?=[^>]*data-headers=\"Accept: text/calendar\")"
+                                + "(?=[^>]*data-expected-status=\"200\")[^>]*>.*"));
+        Assertions.assertEquals(2, countOccurrences(response.body, "data-challenge-id=\""));
+        Assertions.assertTrue(
+                response.body.contains("<summary>Experiment with this endpoint</summary>"));
+    }
+
+    @Test
+    void progressSolveNowForCalendarChallengeDefaultsToCalendarRequest() {
+
+        final String calendarChallengeId = challengeIdFor("GET /todos/{id} (200) text/calendar");
+
+        final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
+        apiHttp.clearHeaders();
+        apiHttp.setHeader("Accept", "application/json");
+        final HttpResponseDetails challengerResponse = apiHttp.post("/challenger", "");
+        final String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+
+        final HttpMessageSender guiHttp = new HttpMessageSender(Environment.getBaseUri());
+        guiHttp.clearHeaders();
+        guiHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+
+        final HttpResponseDetails response = guiHttp.send("/gui/challenges/" + challengerId, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.matches(
+                        "(?s).*data-challenge-id='"
+                                + Pattern.quote(calendarChallengeId)
+                                + "'.*<summary>Solve Now</summary>.*"
+                                + "data-path=\"/todos/\\{\\{firstTodoId}}\".*"
+                                + "data-headers=\"Accept: text/calendar\".*"));
+    }
+
+    @Test
     void solutionLiveRequestMacroRendersEscapedRequestAttributes() {
 
         final HttpResponseDetails response =

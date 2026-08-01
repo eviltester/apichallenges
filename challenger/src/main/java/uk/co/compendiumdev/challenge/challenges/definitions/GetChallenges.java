@@ -507,6 +507,24 @@ public class GetChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData getTodoAcceptTextCalendar200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos/{id} (200) text/calendar",
+                        "Issue a GET request on the `/todos/{id}` end point with an `Accept` header of `text/calendar` to receive the todo as a VTODO.");
+
+        aChallenge.addHint("Use an id for a todo that already exists.");
+        aChallenge.addHint("Set the `Accept` header to `text/calendar`.");
+        aChallenge.addHint("The request is for one todo instance, e.g. `/todos/1`, not `/todos`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-id-200-calendar");
+        return aChallenge;
+    }
+
     public static ChallengeDefinitionData getTodosExportCsvContentDisposition200(
             int challengeOrder) {
         ChallengeDefinitionData aChallenge =

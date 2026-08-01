@@ -341,6 +341,10 @@ public class ChallengeDefinitions {
                 CHALLENGE.GET_UNSUPPORTED_ACCEPT_406,
                 GetChallenges.getTodosUnavailableAccept406(challengeOrder++),
                 acceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR,
+                GetChallenges.getTodoAcceptTextCalendar200(challengeOrder++),
+                acceptChallenges);
 
         ChallengeSection contentTypeChallenges =
                 new ChallengeSection(

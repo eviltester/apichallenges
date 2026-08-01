@@ -112,6 +112,7 @@ If your goal is API automation, each solution also provides clear assertion targ
 - [GET /todos (200) XML pref](/apichallenges/solutions/accept-header/get-todos-200-xml-pref)
 - [GET /todos (200) no accept](/apichallenges/solutions/accept-header/get-todos-200-no-accept)
 - [GET /todos (406)](/apichallenges/solutions/accept-header/get-todos-406)
+- [GET /todos/{id} (200) text/calendar](/apichallenges/solutions/accept-header/get-todos-id-200-calendar)
 
 ## Content-Type Challenges
 

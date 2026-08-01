@@ -190,7 +190,7 @@ const ACHIEVEMENT_DEFINITIONS = [
         title: "Clearance Granted",
         icon: "AUTH",
         tier: "clearance",
-        condition: "Complete Authentication and Authorization challenges 71-80",
+        condition: "Complete Authentication and Authorization challenges 72-81",
         challengeKeys: [
             "CREATE_SECRET_TOKEN_401",
             "CREATE_SECRET_TOKEN_201",
@@ -208,7 +208,7 @@ const ACHIEVEMENT_DEFINITIONS = [
         title: "Misc Mastery",
         icon: "MISC",
         tier: "final",
-        condition: "Complete Miscellaneous challenges 81 and 82",
+        condition: "Complete Miscellaneous challenges 82 and 83",
         challengeKeys: [
             "DELETE_ALL_TODOS",
             "POST_ALL_TODOS"

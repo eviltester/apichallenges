@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerConfig;
 
 public class ChallengeDefinitionsTest {
@@ -31,6 +32,36 @@ public class ChallengeDefinitionsTest {
         assertAllChallengesHaveHints(config);
     }
 
+    @Test
+    void textCalendarTodoInstanceChallengeIsInAcceptSectionAfterUnsupportedAccept() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        ChallengeDefinitions definitions = new ChallengeDefinitions(config);
+
+        List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
+        ChallengeDefinitionData calendarChallenge =
+                challengeNamed(challenges, "GET /todos/{id} (200) text/calendar");
+
+        Assertions.assertEquals(
+                CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR,
+                definitions.getChallenge("GET /todos/{id} (200) text/calendar"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "GET /todos (406)")
+                        < indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar")
+                        < indexOfChallenge(challenges, "POST /todos XML"));
+        Assertions.assertTrue(
+                calendarChallenge.description.contains("Accept` header of `text/calendar`"));
+        Assertions.assertTrue(
+                calendarChallenge.solutions.stream()
+                        .anyMatch(
+                                solution ->
+                                        solution.linkData.equals(
+                                                "/apichallenges/solutions/accept-header/get-todos-id-200-calendar")));
+    }
+
     private void assertAllChallengesHaveHints(final ChallengerConfig config) {
         Collection<ChallengeDefinitionData> challenges =
                 new ChallengeDefinitions(config).getChallenges();
@@ -45,5 +76,27 @@ public class ChallengeDefinitionsTest {
         Assertions.assertTrue(
                 missingHints.isEmpty(),
                 "Challenges missing hints: " + String.join(", ", missingHints));
+    }
+
+    private ChallengeDefinitionData challengeNamed(
+            final List<ChallengeDefinitionData> challenges, final String name) {
+        for (ChallengeDefinitionData challenge : challenges) {
+            if (challenge.name.equals(name)) {
+                return challenge;
+            }
+        }
+        Assertions.fail("Missing challenge " + name);
+        return null;
+    }
+
+    private int indexOfChallenge(
+            final List<ChallengeDefinitionData> challenges, final String name) {
+        for (int index = 0; index < challenges.size(); index++) {
+            if (challenges.get(index).name.equals(name)) {
+                return index;
+            }
+        }
+        Assertions.fail("Missing challenge " + name);
+        return -1;
     }
 }

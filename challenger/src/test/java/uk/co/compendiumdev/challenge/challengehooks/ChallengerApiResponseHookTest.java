@@ -38,6 +38,161 @@ public class ChallengerApiResponseHookTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("repositoryProviders")
+    public void textCalendarTodoChallengeCompletesForExistingTodoInstance(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            EntityInstance todo =
+                    fixture.addTodo(
+                            "summary, with; characters \\ and\nline",
+                            "false",
+                            "description, with; newline\r\nsecond \\ end");
+
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/" + todo.getPrimaryKeyValue(), GET)
+                                    .addHeader("Accept", "text/calendar"),
+                            fixture.apiResponse(406),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNotNull(calendarResponse);
+            Assertions.assertEquals(200, calendarResponse.getStatusCode());
+            Assertions.assertEquals(
+                    "text/calendar", calendarResponse.getHeaders().get("Content-Type"));
+
+            String body = calendarResponse.getBody();
+            Assertions.assertTrue(body.contains("BEGIN:VCALENDAR"));
+            Assertions.assertTrue(body.contains("BEGIN:VTODO"));
+            Assertions.assertTrue(
+                    body.contains("UID:todo-" + todo.getPrimaryKeyValue() + "@apichallenges"));
+            Assertions.assertTrue(
+                    body.contains("SUMMARY:summary\\, with\\; characters \\\\ and\\nline"));
+            Assertions.assertTrue(
+                    body.contains("DESCRIPTION:description\\, with\\; newline\\nsecond \\\\ end"));
+            Assertions.assertTrue(body.contains("STATUS:NEEDS-ACTION"));
+            Assertions.assertTrue(body.contains("END:VTODO"));
+            Assertions.assertTrue(body.contains("END:VCALENDAR"));
+            Assertions.assertTrue(fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void textCalendarTodoResponseUsesCompletedStatusForDoneTodo(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            EntityInstance todo = fixture.addTodo("done todo", "true", "");
+
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/" + todo.getPrimaryKeyValue(), GET)
+                                    .addHeader("Accept", "text/calendar"),
+                            fixture.apiResponse(406),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNotNull(calendarResponse);
+            Assertions.assertTrue(calendarResponse.getBody().contains("STATUS:COMPLETED"));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void textCalendarTodoResponseHonoursAcceptQualityPreference(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            EntityInstance todo = fixture.addTodo("preferred calendar todo", "false", "");
+
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/" + todo.getPrimaryKeyValue(), GET)
+                                    .addHeader(
+                                            "Accept",
+                                            "application/json;q=0.1, text/calendar;q=0.9"),
+                            fixture.apiResponse(200),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNotNull(calendarResponse);
+            Assertions.assertEquals(200, calendarResponse.getStatusCode());
+            Assertions.assertEquals(
+                    "text/calendar", calendarResponse.getHeaders().get("Content-Type"));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void textCalendarTodoResponseIgnoresZeroQualityAccept(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            EntityInstance todo = fixture.addTodo("zero quality calendar todo", "false", "");
+
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/" + todo.getPrimaryKeyValue(), GET)
+                                    .addHeader("Accept", "text/calendar;q=0, application/json"),
+                            fixture.apiResponse(200),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNull(calendarResponse);
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void textCalendarCollectionRequestRemainsUnsupportedAcceptChallenge(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos", GET).addHeader("Accept", "text/calendar"),
+                            fixture.apiResponse(406),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNull(calendarResponse);
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_UNSUPPORTED_ACCEPT_406));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void missingTodoTextCalendarRequestReturns404WithoutCalendarChallenge(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiResponse calendarResponse =
+                    fixture.hook.run(
+                            fixture.request("todos/999999", GET)
+                                    .addHeader("Accept", "text/calendar"),
+                            fixture.apiResponse(406),
+                            fixture.thingifier.apiConfig());
+
+            Assertions.assertNotNull(calendarResponse);
+            Assertions.assertEquals(404, calendarResponse.getStatusCode());
+            Assertions.assertEquals(
+                    "application/json", calendarResponse.getHeaders().get("Content-Type"));
+            Assertions.assertTrue(calendarResponse.getBody().contains("No such todo"));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+            Assertions.assertTrue(fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_404));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
     public void filteredTodosChallengeCompletesWhenDoneAndNotDoneTodosExist(
             final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
 

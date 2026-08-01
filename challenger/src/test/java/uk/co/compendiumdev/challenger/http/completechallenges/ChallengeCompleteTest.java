@@ -259,6 +259,7 @@ public abstract class ChallengeCompleteTest {
                 "application/jsonl",
                 "application/json-seq",
                 "text/tab-separated-values",
+                "text/calendar",
                 "*/*",
                 "application/gzip");
     }
@@ -1102,6 +1103,41 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
+    public void canGetTodoTextCalendarPass() {
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+        final EntityInstance todo =
+                createTodo(todos, "calendar, fixture", "false", "calendar; description");
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Accept", "text/calendar");
+
+        final HttpResponseDetails response =
+                http.send("/todos/" + todo.getFieldValue("id").asString(), "GET", headers, "");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").startsWith("text/calendar"));
+        Assertions.assertTrue(response.body.contains("BEGIN:VCALENDAR"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "UID:todo-" + todo.getFieldValue("id").asString() + "@apichallenges"));
+        Assertions.assertTrue(response.body.contains("SUMMARY:calendar\\, fixture"));
+        Assertions.assertTrue(response.body.contains("DESCRIPTION:calendar\\; description"));
+        Assertions.assertTrue(response.body.contains("STATUS:NEEDS-ACTION"));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODO));
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
+    }
+
+    @Test
     public void canGetTodosNotAcceptGzip() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
@@ -1109,6 +1145,21 @@ public abstract class ChallengeCompleteTest {
         Map<String, String> headers = new HashMap<>();
         headers.putAll(x_challenger_header);
         headers.put("Accept", "application/gzip");
+
+        final HttpResponseDetails response = http.send("/todos", "GET", headers, "");
+
+        Assertions.assertEquals(406, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_UNSUPPORTED_ACCEPT_406));
+    }
+
+    @Test
+    public void cannotGetTodosCollectionAsTextCalendar() {
+
+        Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.putAll(x_challenger_header);
+        headers.put("Accept", "text/calendar");
 
         final HttpResponseDetails response = http.send("/todos", "GET", headers, "");
 
