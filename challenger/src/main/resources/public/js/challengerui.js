@@ -426,6 +426,11 @@ function totalChallengeCount(challengeStatus){
     return Object.values(challengeStatus).length;
 }
 
+const CHALLENGE_PROGRESS_REFRESH_INTERVAL_MS = 60000;
+const CHALLENGE_PROGRESS_AUTO_MONITOR_MS = 30 * 60 * 1000;
+var challengeProgressAutoMonitorIntervalId = null;
+var challengeProgressAutoMonitorTimeoutId = null;
+
 function areChallengeKeysComplete(challengeStatus, challengeKeys){
     return Array.isArray(challengeKeys) &&
         challengeKeys.length>0 &&
@@ -545,41 +550,43 @@ function initialiseAchievementRail(){
     });
 }
 
-function showAchievements(){
-    const achievements = achievementsForChallenger(document.challengerData);
+function achievementRailHtml(challengerData){
+    const achievements = achievementsForChallenger(challengerData);
     const unlockedCount = achievements.filter(achievement => achievement.unlocked).length;
     const selectedIndex = selectedAchievementIndex(achievements);
     const selectedAchievement = achievements[selectedIndex] || achievements[0];
 
-    document.writeln(`<section class='achievement-rail-panel' aria-label='Achievements' data-selected-achievement-index='${selectedIndex}'>`);
-    document.writeln("<div class='achievement-rail-header'>");
-    document.writeln("<h2 class='achievement-rail-title'>Achievements</h2>");
-    document.writeln(`<div class='achievement-rail-meta'>${unlockedCount} of ${achievements.length} unlocked</div>`);
-    document.writeln("</div>");
-    document.writeln("<div class='achievement-rail-track' role='list' aria-label='Achievement medals'>");
-    achievements.forEach(function(achievement, index){
-        document.writeln(achievementMedalHtml(achievement, index, selectedIndex));
-    });
-    document.writeln("</div>");
-    document.writeln("<div class='achievement-detail' aria-live='polite'>");
-    document.writeln(achievementDetailHtml(selectedAchievement));
-    document.writeln("</div>");
-    document.writeln("</section>");
+    return `<section class='achievement-rail-panel' aria-label='Achievements' data-selected-achievement-index='${selectedIndex}'>` +
+        "<div class='achievement-rail-header'>" +
+        "<h2 class='achievement-rail-title'>Achievements</h2>" +
+        `<div class='achievement-rail-meta'>${unlockedCount} of ${achievements.length} unlocked</div>` +
+        "</div>" +
+        "<div class='achievement-rail-track' role='list' aria-label='Achievement medals'>" +
+        achievements.map(function(achievement, index){
+            return achievementMedalHtml(achievement, index, selectedIndex);
+        }).join("") +
+        "</div>" +
+        "<div class='achievement-detail' aria-live='polite'>" +
+        achievementDetailHtml(selectedAchievement) +
+        "</div>" +
+        "</section>";
+}
+
+function showAchievements(){
+    document.writeln(achievementRailHtml(document.challengerData));
     setTimeout(initialiseAchievementRail, 0);
 }
 
-function showCurrentStatus(){
-    const challengerData = document.challengerData;
-    const databaseData = document.databaseData;
+function updateAchievements(){
+    const panel = document.querySelector(".achievement-rail-panel");
+    if(panel){
+        panel.outerHTML = achievementRailHtml(document.challengerData);
+        initialiseAchievementRail();
+    }
+}
 
-    document.writeln("<div>");
-
-    document.writeln(`<p><button onclick=location.reload()>Refresh Status</button>`);
-
-    // issue if immediately autosave then it will wipe out any saved
-    // use a session cookie to force setting for everyone
-    // and have a last-auto-saved-guid and only switch on auto save if current guid matches last autosaved
-    var lastAutoSavedGuid = getCookie("last-auto-saved-x-challenger")
+function autoSaveLocallyHtml(challengerData, databaseData){
+    var lastAutoSavedGuid = getCookie("last-auto-saved-x-challenger");
     var currentChallengerGuid = "";
     var canAutoSaveChallenger = false;
     if(challengerData && challengerData.xChallenger){
@@ -594,53 +601,271 @@ function showCurrentStatus(){
         autoSave=true;
     }
 
-    var autoSaveOn = autoSave ? "checked" : ""
-    var autoSaveOnChange = autoSave ? "'deleteCookieSaveLocally();location.reload();'" : "'setCookieSaveLocally();location.reload()'"
-    var autoSaveLocallyHtml = ` <input type='checkbox' id='auto-save-locally-check' name='auto-save-locally-check' value='auto-save-locally-check' ${autoSaveOn} onchange=${autoSaveOnChange}><label for='auto-save-locally-check'> Auto Save Todos and Progress Locally on refresh</label>`
-    document.writeln(autoSaveLocallyHtml);
+    var autoSaveOn = autoSave ? "checked" : "";
+    var autoSaveOnChange = autoSave ? "deleteCookieSaveLocally();location.reload();" : "setCookieSaveLocally();location.reload();";
+    return ` <input type='checkbox' id='auto-save-locally-check' name='auto-save-locally-check' value='auto-save-locally-check' ${autoSaveOn} onchange="${autoSaveOnChange}"><label for='auto-save-locally-check'> Auto Save Todos and Progress Locally on refresh</label>`;
+}
 
-    document.writeln("</p>");
+function autoMonitorHtml(challengerData){
+    if(!(challengerData && challengerData.xChallenger)){
+        return "";
+    }
+    var checked = isChallengeProgressAutoMonitorActive() ? "checked" : "";
+    return ` <input type='checkbox' id='auto-monitor-challenge-progress' name='auto-monitor-challenge-progress' value='auto-monitor-challenge-progress' ${checked}><label for='auto-monitor-challenge-progress'> Auto monitor challenge progress for 30 minutes</label>`;
+}
 
+function challengeProgressRefreshControlsHtml(challengerData, databaseData){
+    return `<p><button type='button' id='refresh-challenge-status'>Refresh Status</button>` +
+        autoSaveLocallyHtml(challengerData, databaseData) +
+        autoMonitorHtml(challengerData) +
+        ` <span id='challenge-progress-refresh-message' class='challenge-progress-refresh-message' role='status' aria-live='polite'></span></p>`;
+}
+
+function currentStatusHtml(challengerData, databaseData){
+    var html = "<div>";
+    html += challengeProgressRefreshControlsHtml(challengerData, databaseData);
 
     if(challengerData && challengerData.xChallenger){
         var xChallengerGuid = challengerData.xChallenger;
         sessionStorage.removeItem(autoRestoreGuardKey(xChallengerGuid));
 
-
         if(challengerData.challengeStatus){
-            var status = challengerData.challengeStatus;
-            var doneCount = Object.values(challengerData.challengeStatus).filter(x=>x).length;
-            var totalCount = Object.values(challengerData.challengeStatus).length;
+            var doneCount = completedChallengeCount(challengerData.challengeStatus);
+            var totalCount = totalChallengeCount(challengerData.challengeStatus);
             var percentComplete = totalCount===0 ? 0 : Math.round((doneCount/totalCount)*100);
             var todoCount = (databaseData && databaseData.todos) ? databaseData.todos.length : 0;
 
-            if(autoSave){
+            if(getCookie("auto-save-x-challenger-locally")!='' &&
+                    xChallengerGuid===getCookie("last-auto-saved-x-challenger")){
                 saveCurrentChallengerToLocalStorage(challengerData, databaseData);
             }
 
-            document.writeln(`<p>${doneCount} / ${totalCount} Challenges: ${percentComplete}% complete - ${todoCount} todos <a href='/gui/instances?entity=todo'>View Todos</a> - `);
-            if(autoSave || isCurrentChallengerSavedLocally(challengerData, databaseData)){
-                document.writeln(`<button disabled>Saved Locally</button>`);
+            html += `<p>${doneCount} / ${totalCount} Challenges: ${percentComplete}% complete - ${todoCount} todos <a href='/gui/instances?entity=todo'>View Todos</a> - `;
+            if(isCurrentChallengerSavedLocally(challengerData, databaseData)){
+                html += `<button disabled>Saved Locally</button>`;
             }else{
-                document.writeln(`<button onclick="saveCurrentChallengerToLocalStorage(document.challengerData,document.databaseData);this.innerText='Saved Locally';this.setAttribute('disabled',true)">Save Locally</button>`);
+                html += `<button onclick="saveCurrentChallengerToLocalStorage(document.challengerData,document.databaseData);this.innerText='Saved Locally';this.setAttribute('disabled',true)">Save Locally</button>`;
             }
-            document.writeln(`</p>`);
+            html += `</p>`;
         }
     }else{
-        // if we have a guid in the url then allow restoring
         var possibleUuid = challengerGuidFromLocation();
 
         if(hasLocalSavedProgress(possibleUuid)){
-            document.writeln(`<p id='local-restore-status'>Restoring locally saved session...</p>`);
+            html += `<p id='local-restore-status'>Restoring locally saved session...</p>`;
             setTimeout(function(){autoRestoreLocalChallenger(possibleUuid);}, 0);
         }else if(hasLocalSavedTodos(possibleUuid)){
-            document.writeln(`<p id='local-restore-status'>Saved todos found for ${possibleUuid}, but saved progress is needed to restore the challenger.</p>`);
+            html += `<p id='local-restore-status'>Saved todos found for ${escapeHtml(possibleUuid)}, but saved progress is needed to restore the challenger.</p>`;
         }
 
     }
-    document.writeln("</div>");
-    // if we haven't managed to create the challenger yet
+    html += "</div>";
+    return html;
 }
+
+function showCurrentStatus(){
+    document.writeln(`<div id='challenge-progress-status'>${currentStatusHtml(document.challengerData, document.databaseData)}</div>`);
+}
+
+function updateCurrentStatus(){
+    const status = document.getElementById("challenge-progress-status");
+    if(status){
+        status.innerHTML = currentStatusHtml(document.challengerData, document.databaseData);
+    }
+}
+
+function currentChallengerForProgressRefresh(){
+    if(document.challengerData && document.challengerData.xChallenger){
+        return document.challengerData.xChallenger;
+    }
+    return getCookie("X-CHALLENGER") || getCookie("X-THINGIFIER-DATABASE-NAME") || "";
+}
+
+function fetchChallengeProgressStatus(){
+    const headers = { "Accept": "application/json" };
+    const challenger = currentChallengerForProgressRefresh();
+    if(challenger){
+        headers["X-CHALLENGER"] = challenger;
+    }
+
+    return fetch("/gui/challenge-status", {
+        method: "GET",
+        headers
+    }).then(function(response){
+        if(!response.ok){
+            throw new Error(`Could not refresh progress (${response.status})`);
+        }
+        return response.json();
+    }).then(function(progress){
+        if(!progress || progress.known!==true){
+            throw new Error("Challenger progress is no longer available.");
+        }
+        return progress;
+    });
+}
+
+function setChallengeProgressRefreshMessage(message, isError){
+    const messageElement = document.getElementById("challenge-progress-refresh-message");
+    if(messageElement){
+        messageElement.textContent = message || "";
+        messageElement.className = isError ?
+            "challenge-progress-refresh-message is-error" :
+            "challenge-progress-refresh-message";
+    }
+}
+
+function challengeRowFor(challengeId){
+    return Array.from(document.querySelectorAll("tr[data-challenge-id]")).find(function(row){
+        return row.dataset.challengeId === String(challengeId);
+    });
+}
+
+function updateChallengeRows(challenges){
+    if(!Array.isArray(challenges)){
+        return;
+    }
+    challenges.forEach(function(challenge){
+        const row = challengeRowFor(challenge.id);
+        if(!row){
+            return;
+        }
+        const done = challenge.status === true;
+        const wasDone = row.classList.contains("statustrue");
+        row.classList.remove("statustrue", "statusfalse");
+        row.classList.add(done ? "statustrue" : "statusfalse");
+        const doneCell = row.querySelector(".challenge-done-status");
+        if(doneCell){
+            doneCell.textContent = done ? "true" : "false";
+        }
+        if(done && !wasDone){
+            row.classList.add("challenge-status-newly-completed");
+            window.setTimeout(function(){
+                row.classList.remove("challenge-status-newly-completed");
+            }, 4500);
+        }
+    });
+}
+
+function doneCountFromChallengeProgress(progress){
+    if(progress && progress.summary && typeof progress.summary.doneCount === "number"){
+        return progress.summary.doneCount;
+    }
+    if(progress && progress.challengerData && progress.challengerData.challengeStatus){
+        return completedChallengeCount(progress.challengerData.challengeStatus);
+    }
+    return 0;
+}
+
+function currentProgressDoneCount(){
+    return doneCountFromChallengeProgress({
+        challengerData: document.challengerData || {}
+    });
+}
+
+function showProgressRefreshChallengeFireworks(){
+    if(window.ApiChallengesLiveRequest &&
+            typeof window.ApiChallengesLiveRequest.showFireworks === "function"){
+        window.ApiChallengesLiveRequest.showFireworks();
+    }
+}
+
+function applyChallengeProgressStatus(progress, options){
+    const newDoneCount = doneCountFromChallengeProgress(progress);
+    if(options &&
+            options.fireworksOnProgressIncrease === true &&
+            newDoneCount > options.previousDoneCount){
+        showProgressRefreshChallengeFireworks();
+    }
+    document.challengerData = progress.challengerData || {};
+    document.databaseData = progress.databaseData || {};
+    updateChallengeRows(progress.challenges || []);
+    updateAchievements();
+    updateCurrentStatus();
+    setChallengeProgressRefreshMessage("Progress refreshed.", false);
+    return progress;
+}
+
+function isChallengeProgressAutoMonitorActive(){
+    return challengeProgressAutoMonitorIntervalId !== null;
+}
+
+function stopChallengeProgressAutoMonitor(message, isError){
+    if(challengeProgressAutoMonitorIntervalId){
+        window.clearInterval(challengeProgressAutoMonitorIntervalId);
+        challengeProgressAutoMonitorIntervalId = null;
+    }
+    if(challengeProgressAutoMonitorTimeoutId){
+        window.clearTimeout(challengeProgressAutoMonitorTimeoutId);
+        challengeProgressAutoMonitorTimeoutId = null;
+    }
+    const checkbox = document.getElementById("auto-monitor-challenge-progress");
+    if(checkbox){
+        checkbox.checked = false;
+    }
+    if(message){
+        setChallengeProgressRefreshMessage(message, isError === true);
+    }
+}
+
+function refreshChallengeProgress(options){
+    const isAuto = options && options.auto === true;
+    const shouldShowFireworksOnProgressIncrease =
+        isAuto || (options && options.fireworksOnProgressIncrease === true);
+    const previousDoneCount = currentProgressDoneCount();
+    setChallengeProgressRefreshMessage("Checking progress...", false);
+    return fetchChallengeProgressStatus()
+        .then(function(progress){
+            return applyChallengeProgressStatus(progress, {
+                auto: isAuto,
+                previousDoneCount: previousDoneCount,
+                fireworksOnProgressIncrease: shouldShowFireworksOnProgressIncrease
+            });
+        })
+        .catch(function(error){
+            const message = error && error.message ? error.message : "Could not refresh progress.";
+            if(isAuto || isChallengeProgressAutoMonitorActive()){
+                stopChallengeProgressAutoMonitor(`Auto monitor stopped: ${message}`, true);
+            }else{
+                setChallengeProgressRefreshMessage(message, true);
+            }
+            return false;
+        });
+}
+
+function startChallengeProgressAutoMonitor(){
+    stopChallengeProgressAutoMonitor("", false);
+    challengeProgressAutoMonitorIntervalId = window.setInterval(function(){
+        refreshChallengeProgress({auto: true});
+    }, CHALLENGE_PROGRESS_REFRESH_INTERVAL_MS);
+    challengeProgressAutoMonitorTimeoutId = window.setTimeout(function(){
+        stopChallengeProgressAutoMonitor("Auto monitor stopped after 30 minutes.", false);
+    }, CHALLENGE_PROGRESS_AUTO_MONITOR_MS);
+    const checkbox = document.getElementById("auto-monitor-challenge-progress");
+    if(checkbox){
+        checkbox.checked = true;
+    }
+    refreshChallengeProgress({auto: true});
+}
+
+document.addEventListener("click", function(event){
+    if(event.target && event.target.id === "refresh-challenge-status"){
+        refreshChallengeProgress({auto: false, fireworksOnProgressIncrease: true});
+    }
+});
+
+document.addEventListener("change", function(event){
+    if(event.target && event.target.id === "auto-monitor-challenge-progress"){
+        if(event.target.checked){
+            startChallengeProgressAutoMonitor();
+        }else{
+            stopChallengeProgressAutoMonitor("Auto monitor switched off.", false);
+        }
+    }
+});
+
+window.addEventListener("apiChallenges:challenge-passed", function(){
+    refreshChallengeProgress({auto: false});
+});
 
     // get challenger progress and save to local storage
     // get challenger todos and save to local storage

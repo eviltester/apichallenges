@@ -2,6 +2,11 @@ package uk.co.compendiumdev.challenge.gui;
 
 import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.*;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -23,6 +28,7 @@ public class ChallengerWebGUI {
     private static final LocalDate SEO_FIXED_LASTMOD = LocalDate.parse("2026-02-18");
     private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
             "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
+    private static final Gson GSON = new Gson();
 
     private final PageNotFoundResponse pageNotFoundHtmlResponse;
     Logger logger = LoggerFactory.getLogger(ChallengerWebGUI.class);
@@ -495,6 +501,15 @@ public class ChallengerWebGUI {
                 });
 
         get(
+                "/gui/challenge-status",
+                (request, result) -> {
+                    result.type("application/json");
+                    result.status(200);
+                    return renderChallengeProgressStatusJson(
+                            request, challengers, challengeDefinitions, single_player_mode);
+                });
+
+        get(
                 "/gui/challenge-status/*",
                 (request, result) -> {
                     result.type("application/json");
@@ -873,6 +888,119 @@ public class ChallengerWebGUI {
                 + ",\"known\":true}";
     }
 
+    private String renderChallengeProgressStatusJson(
+            final HttpServerRequest request,
+            final Challengers challengers,
+            final ChallengeDefinitions challengeDefinitions,
+            final boolean singlePlayerMode) {
+
+        final ChallengerAuthData challenger =
+                challengerForStatusRequest(request, challengers, singlePlayerMode);
+        if (challenger == null) {
+            return unknownChallengeProgressStatusJson(challengeDefinitions);
+        }
+
+        challenger.touch();
+
+        final JsonObject databaseData = databaseDataFor(challenger, challengers);
+        final JsonArray challenges = challengeProgressArray(challenger, challengeDefinitions);
+        final int doneCount = completedChallengeCount(challenges);
+        final int totalCount = challenges.size();
+        final int percentComplete =
+                totalCount == 0 ? 0 : Math.round((doneCount * 100.0f) / totalCount);
+        final int todoCount =
+                databaseData.has("todos") && databaseData.get("todos").isJsonArray()
+                        ? databaseData.getAsJsonArray("todos").size()
+                        : 0;
+
+        final JsonObject summary = new JsonObject();
+        summary.addProperty("doneCount", doneCount);
+        summary.addProperty("totalCount", totalCount);
+        summary.addProperty("percentComplete", percentComplete);
+        summary.addProperty("todoCount", todoCount);
+
+        final JsonObject root = new JsonObject();
+        root.addProperty("known", true);
+        root.add("challengerData", JsonParser.parseString(challenger.asJson()).getAsJsonObject());
+        root.add("databaseData", databaseData);
+        root.add("summary", summary);
+        root.add("challenges", challenges);
+        return GSON.toJson(root);
+    }
+
+    private String unknownChallengeProgressStatusJson(
+            final ChallengeDefinitions challengeDefinitions) {
+        final JsonObject summary = new JsonObject();
+        summary.addProperty("doneCount", 0);
+        summary.addProperty("totalCount", challengeDefinitions.getChallenges().size());
+        summary.addProperty("percentComplete", 0);
+        summary.addProperty("todoCount", 0);
+
+        final JsonObject root = new JsonObject();
+        root.addProperty("known", false);
+        root.add("challengerData", new JsonObject());
+        root.add("databaseData", new JsonObject());
+        root.add("summary", summary);
+        root.add("challenges", new JsonArray());
+        return GSON.toJson(root);
+    }
+
+    private int completedChallengeCount(final JsonArray challenges) {
+        int count = 0;
+        for (JsonElement challenge : challenges) {
+            if (challenge.getAsJsonObject().get("status").getAsBoolean()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private JsonObject databaseDataFor(
+            final ChallengerAuthData challenger, final Challengers challengers) {
+
+        String databaseName = challenger.getXChallenger();
+        if (Challengers.SINGLE_PLAYER_GUID.equals(databaseName)) {
+            databaseName = EntityRelModel.DEFAULT_DATABASE_NAME;
+        }
+
+        if (challengers.getErModel().getDatabaseNames().contains(databaseName)) {
+            return parseJsonObjectOrEmpty(
+                    challengers.getErModel().exportInstanceDataAsJson(databaseName));
+        }
+
+        return new JsonObject();
+    }
+
+    private JsonObject parseJsonObjectOrEmpty(final String json) {
+        try {
+            final JsonElement element = JsonParser.parseString(json);
+            if (element != null && element.isJsonObject()) {
+                return element.getAsJsonObject();
+            }
+        } catch (Exception ignored) {
+            // Return empty JSON below.
+        }
+        return new JsonObject();
+    }
+
+    private JsonArray challengeProgressArray(
+            final ChallengerAuthData challenger, final ChallengeDefinitions challengeDefinitions) {
+
+        final JsonArray challenges = new JsonArray();
+        for (ChallengeDefinitionData challenge : challengeDefinitions.getChallenges()) {
+            final CHALLENGE challengeKey = challengeDefinitions.getChallenge(challenge.name);
+            final boolean passed =
+                    challengeKey != null && challenger.statusOfChallenge(challengeKey);
+
+            final JsonObject challengeStatus = new JsonObject();
+            challengeStatus.addProperty("id", challenge.id);
+            challengeStatus.addProperty("name", challenge.name);
+            challengeStatus.addProperty("status", passed);
+            challenges.add(challengeStatus);
+        }
+        return challenges;
+    }
+
     private Optional<ChallengeDefinitionData> challengeDefinitionForId(
             final String rawChallengeId, final ChallengeDefinitions challengeDefinitions) {
         if (!hasText(rawChallengeId)) {
@@ -1086,10 +1214,14 @@ public class ChallengerWebGUI {
         html.append("<tbody>");
 
         for (ChallengeDefinitionData challenge : reportOn) {
-            html.append(String.format("<tr class='status%b'>", challenge.status));
+            html.append(
+                    String.format(
+                            "<tr class='status%b' data-challenge-id='%s'>",
+                            challenge.status, escapeHtmlAttribute(challenge.id)));
             html.append(String.format("<td>%s</td>", challenge.id));
             html.append(String.format("<td>%s</td>", challenge.name));
-            html.append(String.format("<td>%b</td>", challenge.status));
+            html.append(
+                    String.format("<td class='challenge-done-status'>%b</td>", challenge.status));
 
             String descriptionHTML = String.format("<p>%s</p>", challenge.description);
             if (challenge.hasHints() || challenge.hasSolutionLinks()) {

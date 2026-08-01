@@ -201,6 +201,86 @@ public class ChallengerUiJavascriptTest {
         Assertions.assertTrue(redirect > progressRefresh);
     }
 
+    @Test
+    void progressRefreshUsesXhrAndUpdatesExistingPageContent() throws IOException {
+        String javascript = challengerUiJavascript();
+
+        Assertions.assertTrue(
+                javascript.contains("const CHALLENGE_PROGRESS_REFRESH_INTERVAL_MS = 60000"));
+        Assertions.assertTrue(
+                javascript.contains("const CHALLENGE_PROGRESS_AUTO_MONITOR_MS = 30 * 60 * 1000"));
+        Assertions.assertTrue(javascript.contains("function fetchChallengeProgressStatus()"));
+        Assertions.assertTrue(javascript.contains("fetch(\"/gui/challenge-status\""));
+        Assertions.assertTrue(javascript.contains("headers[\"X-CHALLENGER\"] = challenger"));
+        Assertions.assertTrue(javascript.contains("progress.known!==true"));
+        Assertions.assertTrue(javascript.contains("function applyChallengeProgressStatus"));
+        Assertions.assertTrue(javascript.contains("function doneCountFromChallengeProgress"));
+        Assertions.assertTrue(javascript.contains("function currentProgressDoneCount"));
+        Assertions.assertTrue(
+                javascript.contains("document.challengerData = progress.challengerData || {}"));
+        Assertions.assertTrue(
+                javascript.contains("document.databaseData = progress.databaseData || {}"));
+        Assertions.assertTrue(javascript.contains("function updateChallengeRows"));
+        Assertions.assertTrue(javascript.contains("tr[data-challenge-id]"));
+        Assertions.assertTrue(javascript.contains(".challenge-done-status"));
+        Assertions.assertTrue(javascript.contains("challenge-status-newly-completed"));
+        Assertions.assertTrue(javascript.contains("function updateCurrentStatus"));
+        Assertions.assertTrue(javascript.contains("function updateAchievements"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "<button type='button' id='refresh-challenge-status'>Refresh Status</button>"));
+        Assertions.assertFalse(
+                javascript.contains("<button onclick=location.reload()>Refresh Status"));
+    }
+
+    @Test
+    void progressAutoMonitorStopsOnFailuresAndChallengePassedEventsRefresh() throws IOException {
+        String javascript = challengerUiJavascript();
+
+        Assertions.assertTrue(javascript.contains("id='auto-monitor-challenge-progress'"));
+        Assertions.assertTrue(
+                javascript.contains("Auto monitor challenge progress for 30 minutes"));
+        Assertions.assertTrue(javascript.contains("function startChallengeProgressAutoMonitor()"));
+        Assertions.assertTrue(
+                javascript.contains("challengeProgressAutoMonitorIntervalId = window.setInterval"));
+        Assertions.assertTrue(javascript.contains("}, CHALLENGE_PROGRESS_REFRESH_INTERVAL_MS);"));
+        Assertions.assertTrue(
+                javascript.contains("challengeProgressAutoMonitorTimeoutId = window.setTimeout"));
+        Assertions.assertTrue(javascript.contains("}, CHALLENGE_PROGRESS_AUTO_MONITOR_MS);"));
+        Assertions.assertTrue(javascript.contains("function stopChallengeProgressAutoMonitor"));
+        Assertions.assertTrue(javascript.contains("checkbox.checked = false"));
+        Assertions.assertTrue(javascript.contains("Auto monitor stopped: ${message}"));
+        Assertions.assertTrue(
+                javascript.contains("isAuto || isChallengeProgressAutoMonitorActive()"));
+        Assertions.assertTrue(
+                javascript.contains("const previousDoneCount = currentProgressDoneCount();"));
+        Assertions.assertTrue(javascript.contains("auto: isAuto"));
+        Assertions.assertTrue(javascript.contains("previousDoneCount: previousDoneCount"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "const shouldShowFireworksOnProgressIncrease =\n"
+                                + "        isAuto || (options && options.fireworksOnProgressIncrease"
+                                + " === true);"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "fireworksOnProgressIncrease:" + " shouldShowFireworksOnProgressIncrease"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "options.fireworksOnProgressIncrease === true &&\n"
+                                + "            newDoneCount > options.previousDoneCount"));
+        Assertions.assertTrue(
+                javascript.contains("function showProgressRefreshChallengeFireworks"));
+        Assertions.assertTrue(
+                javascript.contains("window.ApiChallengesLiveRequest.showFireworks();"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "refreshChallengeProgress({auto: false,"
+                                + " fireworksOnProgressIncrease: true});"));
+        Assertions.assertTrue(
+                javascript.contains("window.addEventListener(\"apiChallenges:challenge-passed\""));
+        Assertions.assertTrue(javascript.contains("refreshChallengeProgress({auto: false});"));
+    }
+
     private String challengerUiJavascript() throws IOException {
         try (InputStream stream = getClass().getResourceAsStream("/public/js/challengerui.js")) {
             Assertions.assertNotNull(stream);

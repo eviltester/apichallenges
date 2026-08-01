@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.uirouting;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.ArrayList;
@@ -275,6 +276,26 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(json.get("known").getAsBoolean());
         Assertions.assertEquals(normalizedChallengeId(challengeId), json.get("id").getAsString());
         Assertions.assertEquals(expectedStatus, json.get("status").getAsBoolean());
+    }
+
+    private JsonObject wholeChallengeStatus(final HttpMessageSender statusHttp) {
+        final HttpResponseDetails response = statusHttp.send("/gui/challenge-status", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        return JsonParser.parseString(response.body).getAsJsonObject();
+    }
+
+    private boolean challengeStatusInProgress(
+            final JsonObject progress, final String challengeId, final boolean expectedStatus) {
+
+        final JsonArray challenges = progress.getAsJsonArray("challenges");
+        for (int index = 0; index < challenges.size(); index++) {
+            final JsonObject challenge = challenges.get(index).getAsJsonObject();
+            if (challengeId.equals(challenge.get("id").getAsString())) {
+                return challenge.get("status").getAsBoolean() == expectedStatus;
+            }
+        }
+        return false;
     }
 
     private void assertOpenApiFilePageLinks(
@@ -1611,6 +1632,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-edit-mode=\"adhoc\""));
         Assertions.assertTrue(response.body.contains("data-path=\"/challenger\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
+        Assertions.assertTrue(response.body.contains("data-challenge-id='"));
+        Assertions.assertTrue(response.body.contains("class='challenge-done-status'"));
+        Assertions.assertFalse(
+                response.body.contains("<button onclick=location.reload()>Refresh Status"));
 
         final int achievements = response.body.indexOf("<script>showAchievements()</script>");
         final int gettingStarted =
@@ -1639,14 +1664,53 @@ public class UiPagesAreReachableTest {
         assertChallengeStatus(statusHttp, getTodosChallengeId, false);
         assertChallengeStatus(statusHttp, normalizedChallengeId(getTodosChallengeId), false);
 
+        final JsonObject initialProgress = wholeChallengeStatus(statusHttp);
+        Assertions.assertTrue(initialProgress.get("known").getAsBoolean());
+        Assertions.assertEquals(
+                challengerId,
+                initialProgress.getAsJsonObject("challengerData").get("xChallenger").getAsString());
+        Assertions.assertTrue(
+                initialProgress.getAsJsonObject("summary").get("totalCount").getAsInt() > 0);
+        Assertions.assertTrue(
+                challengeStatusInProgress(initialProgress, getTodosChallengeId, false));
+        final int initialDoneCount =
+                initialProgress.getAsJsonObject("summary").get("doneCount").getAsInt();
+
         apiHttp.setHeader("X-CHALLENGER", challengerId);
         final HttpResponseDetails todosResponse = apiHttp.send("/todos", "get");
 
         Assertions.assertEquals(200, todosResponse.statusCode);
         Assertions.assertEquals(challengerId, todosResponse.getHeader("X-CHALLENGER"));
 
+        final JsonObject refreshedProgress = wholeChallengeStatus(statusHttp);
+        Assertions.assertTrue(refreshedProgress.get("known").getAsBoolean());
+        Assertions.assertTrue(
+                refreshedProgress.getAsJsonObject("summary").get("doneCount").getAsInt()
+                        > initialDoneCount);
+        Assertions.assertTrue(refreshedProgress.getAsJsonObject("summary").has("percentComplete"));
+        Assertions.assertTrue(refreshedProgress.getAsJsonObject("summary").has("todoCount"));
+        Assertions.assertTrue(
+                challengeStatusInProgress(refreshedProgress, getTodosChallengeId, true));
+
         assertChallengeStatus(statusHttp, getTodosChallengeId, true);
         assertChallengeStatus(statusHttp, getChallengesChallengeId, false);
+    }
+
+    @Test
+    void wholeChallengeStatusEndpointReportsUnknownChallenger() {
+
+        final HttpMessageSender statusHttp = new HttpMessageSender(Environment.getBaseUri());
+        statusHttp.clearHeaders();
+        statusHttp.setHeader("Accept", "application/json");
+        statusHttp.setHeader("X-CHALLENGER", "11111111-2222-4333-8444-555555555555");
+
+        final JsonObject progress = wholeChallengeStatus(statusHttp);
+
+        Assertions.assertFalse(progress.get("known").getAsBoolean());
+        Assertions.assertEquals(0, progress.getAsJsonArray("challenges").size());
+        Assertions.assertEquals(0, progress.getAsJsonObject("summary").get("doneCount").getAsInt());
+        Assertions.assertTrue(progress.has("challengerData"));
+        Assertions.assertTrue(progress.has("databaseData"));
     }
 
     @Test

@@ -732,6 +732,15 @@
       });
   }
 
+  function dispatchChallengePassedEvent(challengeId) {
+    if (!challengeId) {
+      return;
+    }
+    window.dispatchEvent(new CustomEvent('apiChallenges:challenge-passed', {
+      detail: { challengeId: String(challengeId) },
+    }));
+  }
+
   function hideChallengeCompletedBanner(challengeId) {
     if (!challengeId) {
       return;
@@ -1502,6 +1511,7 @@
             showChallengeFeedback(challengeFeedback, passed);
             if (passed) {
               showChallengeCompletedBanner(request.challengeId);
+              dispatchChallengePassedEvent(request.challengeId);
               if (!wasChallengePassedBeforeRequest) {
                 showChallengeFireworks();
               }
@@ -1710,6 +1720,7 @@
 
   window.ApiChallengesLiveRequest = window.ApiChallengesLiveRequest || {};
   window.ApiChallengesLiveRequest.renderAll = renderAll;
+  window.ApiChallengesLiveRequest.showFireworks = showChallengeFireworks;
 
   onReady(renderAll);
 }());

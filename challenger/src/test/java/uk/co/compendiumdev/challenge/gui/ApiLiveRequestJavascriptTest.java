@@ -59,6 +59,13 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("Challenge Not Passed Yet"));
         Assertions.assertTrue(javascript.contains("function updateChallengeCompletedBanners()"));
         Assertions.assertTrue(javascript.contains("function showChallengeCompletedBanner"));
+        Assertions.assertTrue(javascript.contains("function dispatchChallengePassedEvent"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "window.dispatchEvent(new CustomEvent('apiChallenges:challenge-passed'"));
+        Assertions.assertTrue(javascript.contains("detail: { challengeId: String(challengeId) }"));
+        Assertions.assertTrue(
+                javascript.contains("dispatchChallengePassedEvent(request.challengeId)"));
         Assertions.assertTrue(javascript.contains("function showChallengeFireworks()"));
         Assertions.assertTrue(javascript.contains("prefers-reduced-motion: reduce"));
         Assertions.assertTrue(javascript.contains(".sim-live-fireworks"));
@@ -126,6 +133,9 @@ public class ApiLiveRequestJavascriptTest {
                         "window.ApiChallengesLiveRequest = window.ApiChallengesLiveRequest || {};"));
         Assertions.assertTrue(
                 javascript.contains("window.ApiChallengesLiveRequest.renderAll = renderAll;"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "window.ApiChallengesLiveRequest.showFireworks = showChallengeFireworks;"));
         Assertions.assertTrue(javascript.contains("onReady(renderAll);"));
     }
 
