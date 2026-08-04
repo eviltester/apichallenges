@@ -1,13 +1,13 @@
 ---
-title: REST API Testing Tutorial
-seo_title: How to Test REST APIs: Coverage, Data, Security and Automation
-description: Basic Testing REST API tutorial and how to think when thinking about testing an API.
+title: API Testing Concepts and Coverage
+seo_title: API Testing Concepts: Coverage, Data, Security and Risk
+description: Reference guide for API testing coverage, risk, data, security, capacity, and evidence.
 lastmod: 2026-08-04
-seo_description: Learn Testing APIs with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
+seo_description: Learn API testing concepts for coverage, risk, data, security, capacity, documentation, and evidence before building practical REST API checks.
 showads: true
 ---
 
-# How to Test REST APIs
+# API Testing Concepts and Coverage
 
 Testing an API is not just sending a few requests and checking that they return `200`.
 
@@ -19,7 +19,7 @@ We use the API to get to the system. We are testing the system as well as the AP
 
 The API is an 'interface' which we use to test the system.
 
-This page covers how to think about API testing. We will look at coverage, risk, data variation, architecture, security, capacity, documentation, and how to build a useful set of test ideas without depending on a single tool or checklist.
+This reference page covers how to think about API testing. We will look at coverage, risk, data variation, architecture, security, capacity, documentation, and how to build a useful set of test ideas without depending on a single tool or checklist.
 
 ---
 

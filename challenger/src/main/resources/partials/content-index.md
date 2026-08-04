@@ -1,11 +1,14 @@
 - [Challenge Solutions](/apichallenges/solutions)
 - [How to learn APIs](/learning)
+- Tutorials:
+    - [How to Test REST APIs](/tutorials/rest-api-testing)
+    - [API Simulator Walkthrough](/practice-modes/simulation)
 - Reference:
     - [Web Applications](/tutorials/web-basics)
     - [HTTP Basics](/tutorials/http-basics)
     - [HTTP Verbs](/tutorials/http-verbs)
     - [REST API Basics](/tutorials/rest-api-basics)
-    - [Testing APIs](/tutorials/testing-apis)
+    - [API Testing Concepts](/tutorials/testing-apis)
     - [OpenAPI](/tutorials/openapi)
     - [Swagger](/tutorials/swagger)
     - [Summary](/tutorials/summary)

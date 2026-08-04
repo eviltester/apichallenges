@@ -763,6 +763,9 @@ public class ChallengerWebGUI {
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"main-text-content\">");
         html.append("<h1>").append(escapeHtmlAttribute(page.heading())).append("</h1>");
+        if ("/simpleapi/client".equals(page.path())) {
+            html.append(renderSimpleApiRandomIsbnGenerator());
+        }
         html.append(renderApiClientWidget(page));
         html.append("</div>");
         html.append(guiManagement.getEndOfMainContentMarker());
@@ -781,6 +784,10 @@ public class ChallengerWebGUI {
                 + "\" data-use-challenger=\""
                 + page.useChallenger()
                 + "\" data-headers=\"Accept: application/json\"></div>";
+    }
+
+    private String renderSimpleApiRandomIsbnGenerator() {
+        return resourceAsStringOrEmpty("partials/generate-random-isbn.html");
     }
 
     private Map<String, String> getMarkdownParamsFromRequest(HttpServerRequest request) {

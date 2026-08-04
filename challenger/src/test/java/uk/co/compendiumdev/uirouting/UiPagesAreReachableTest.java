@@ -192,6 +192,25 @@ public class UiPagesAreReachableTest {
                 response.body.contains("data-use-challenger=\"" + useChallenger + "\""));
     }
 
+    private void assertBodyContainsRandomSimpleApiIsbnGenerator(
+            final HttpResponseDetails response) {
+        Assertions.assertTrue(
+                response.body.contains("<details class=\"simpleapi-random-isbn-details\">"));
+        Assertions.assertTrue(
+                response.body.contains("<summary>Generate Random SimpleAPI ISBN</summary>"));
+        Assertions.assertTrue(response.body.contains("data-simpleapi-random-isbn"));
+        Assertions.assertTrue(response.body.contains("Generate Random ISBN"));
+        Assertions.assertFalse(response.body.contains("id=\"randomisbn\""));
+    }
+
+    @Test
+    void simpleApiClientPageIncludesRandomIsbnGenerator() {
+        final HttpResponseDetails response = http.send("/simpleapi/client", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertBodyContainsRandomSimpleApiIsbnGenerator(response);
+    }
+
     private void assertContainsHeaderAndFooter(HttpResponseDetails response) {
 
         if (!response.body.contains("<div class=\"css-menu\">")) {
@@ -720,6 +739,7 @@ public class UiPagesAreReachableTest {
         final int simpleApiToc = response.body.indexOf("<div id='toc'>");
         Assertions.assertTrue(simpleApiTitle < simpleApiHero);
         Assertions.assertTrue(simpleApiHero < simpleApiToc);
+        assertBodyContainsRandomSimpleApiIsbnGenerator(response);
     }
 
     @Test

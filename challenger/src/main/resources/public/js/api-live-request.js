@@ -165,6 +165,38 @@
       || todoIdFromLocation(response.headers.get('Location'));
   }
 
+  function simpleApiItemIdFromLocation(location) {
+    if (!location) {
+      return '';
+    }
+    const match = pathFromUrl(location).match(/\/simpleapi\/items\/([^/?#]+)$/);
+    return match ? match[1] : '';
+  }
+
+  function createdSimpleApiItemIdFromResponse(request, response) {
+    if (request.method !== 'POST'
+        || pathFromUrl(request.url) !== '/simpleapi/items'
+        || response.status !== 201) {
+      return '';
+    }
+    return response.headers.get('X-Thing-Instance-Primary-Key')
+      || simpleApiItemIdFromLocation(response.headers.get('Location'));
+  }
+
+  function createdSimpleApiItemIsbnFromRequest(request, response) {
+    if (request.method !== 'POST'
+        || pathFromUrl(request.url) !== '/simpleapi/items'
+        || response.status !== 201) {
+      return '';
+    }
+    try {
+      const body = JSON.parse(request.body || '{}');
+      return body.isbn13 || '';
+    } catch (ignored) {
+      return '';
+    }
+  }
+
   function escapeShellSingleQuotes(value) {
     return value.replace(/'/g, "'\"'\"'");
   }
@@ -250,6 +282,14 @@
     return `apichallenges.${challenger}.lastCreatedTodoId`;
   }
 
+  function lastCreatedSimpleApiItemIdStorageKey() {
+    return 'apichallenges.simpleapi.lastCreatedItemId';
+  }
+
+  function lastCreatedSimpleApiItemIsbnStorageKey() {
+    return 'apichallenges.simpleapi.lastCreatedItemIsbn';
+  }
+
   function currentAuthToken() {
     const challenger = currentChallenger();
     if (!challenger) {
@@ -266,6 +306,14 @@
     return localStorage.getItem(lastCreatedTodoStorageKey(challenger)) || '1';
   }
 
+  function currentLastCreatedSimpleApiItemId() {
+    return localStorage.getItem(lastCreatedSimpleApiItemIdStorageKey()) || '1';
+  }
+
+  function currentLastCreatedSimpleApiItemIsbn() {
+    return localStorage.getItem(lastCreatedSimpleApiItemIsbnStorageKey()) || '1234567890123';
+  }
+
   function storeChallenger(challenger) {
     if (!challenger || challenger.toUpperCase().indexOf('UNKNOWN CHALLENGER') === 0) {
       return;
@@ -280,6 +328,20 @@
       return;
     }
     localStorage.setItem(lastCreatedTodoStorageKey(challenger), String(todoId));
+  }
+
+  function storeLastCreatedSimpleApiItemId(itemId) {
+    if (!itemId) {
+      return;
+    }
+    localStorage.setItem(lastCreatedSimpleApiItemIdStorageKey(), String(itemId));
+  }
+
+  function storeLastCreatedSimpleApiItemIsbn(isbn) {
+    if (!isbn) {
+      return;
+    }
+    localStorage.setItem(lastCreatedSimpleApiItemIsbnStorageKey(), String(isbn));
   }
 
   function storeAuthToken(token) {
@@ -898,6 +960,27 @@
     headersPanel.hidden = true;
     headersPanel.textContent = '(execute the request to see the response headers)';
 
+    const responseBodyCopyButton = document.createElement('button');
+    responseBodyCopyButton.type = 'button';
+    responseBodyCopyButton.className = 'sim-live-copy';
+    responseBodyCopyButton.textContent = 'Copy body';
+    responseBodyCopyButton.addEventListener('click', function () {
+      copyText(bodyPanel.textContent, responseBodyCopyButton);
+    });
+
+    const responseHeadersCopyButton = document.createElement('button');
+    responseHeadersCopyButton.type = 'button';
+    responseHeadersCopyButton.className = 'sim-live-copy';
+    responseHeadersCopyButton.textContent = 'Copy headers';
+    responseHeadersCopyButton.addEventListener('click', function () {
+      copyText(headersPanel.textContent, responseHeadersCopyButton);
+    });
+
+    const responseActions = document.createElement('div');
+    responseActions.className = 'sim-live-response-actions';
+    responseActions.appendChild(responseBodyCopyButton);
+    responseActions.appendChild(responseHeadersCopyButton);
+
     responseTabs.addEventListener('click', function (event) {
       if (event.target.matches('.sim-live-response-tab')) {
         activateTab(widget, event.target.dataset.tab, '.sim-live-response-tab',
@@ -909,7 +992,13 @@
       status: status,
       bodyPanel: bodyPanel,
       headersPanel: headersPanel,
-      elements: [status, responseTabs, bodyPanel, headersPanel],
+      elements: [
+        status,
+        responseTabs,
+        bodyPanel,
+        headersPanel,
+        responseActions,
+      ],
     };
   }
 
@@ -951,13 +1040,15 @@
       lockedFields.textContent = `${request.method} ${pathAndQueryFromUrl(request.url)}`;
       controls.appendChild(lockedFields);
 
-      queryLabel = document.createElement('label');
-      queryLabel.textContent = 'Query string';
-      queryTextarea = document.createElement('textarea');
-      queryTextarea.className = 'sim-live-edit-query';
-      queryTextarea.rows = 2;
-      queryTextarea.value = queryFromUrl(request.url);
-      queryLabel.appendChild(queryTextarea);
+      if (request.queryEditable) {
+        queryLabel = document.createElement('label');
+        queryLabel.textContent = 'Query string';
+        queryTextarea = document.createElement('textarea');
+        queryTextarea.className = 'sim-live-edit-query';
+        queryTextarea.rows = 2;
+        queryTextarea.value = queryFromUrl(request.url);
+        queryLabel.appendChild(queryTextarea);
+      }
     }
 
     const headersLabel = document.createElement('label');
@@ -1094,6 +1185,7 @@
       controls.appendChild(bodyLabel);
     }
     controls.appendChild(editActions);
+    syncBodyControlVisibility();
     return {
       element: controls,
       methodSelect: methodSelect,
@@ -1146,6 +1238,101 @@
     }).catch(function () {
       return '{}';
     });
+  }
+
+  function randomSimpleApiIsbn() {
+    return fetch(absoluteUrl('/simpleapi/randomisbn'), {
+      method: 'GET',
+      headers: { Accept: 'text/plain' },
+    }).then(function (response) {
+      if (!response.ok) {
+        return '123-4-56-789012-3';
+      }
+      return response.text();
+    }).then(function (text) {
+      return text.trim() || '123-4-56-789012-3';
+    }).catch(function () {
+      return '123-4-56-789012-3';
+    });
+  }
+
+  function buildSimpleApiRandomIsbnDetails() {
+    const details = document.createElement('details');
+    details.className = 'simpleapi-random-isbn-details';
+
+    const summary = document.createElement('summary');
+    summary.textContent = 'Generate Random SimpleAPI ISBN';
+    details.appendChild(summary);
+
+    const form = document.createElement('form');
+    form.className = 'simpleapi-random-isbn-form';
+    form.setAttribute('onsubmit', 'return false;');
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = 'Generate Random ISBN';
+    form.appendChild(button);
+
+    const output = document.createElement('input');
+    output.setAttribute('data-simpleapi-random-isbn', '');
+    output.setAttribute('aria-label', 'Generated SimpleAPI ISBN');
+    output.setAttribute('readonly', 'readonly');
+    form.appendChild(output);
+
+    details.appendChild(form);
+    enhanceSimpleApiRandomIsbnDetails(details);
+    return details;
+  }
+
+  function enhanceSimpleApiRandomIsbnDetails(details) {
+    if (!details || details.dataset.simpleApiRandomIsbnEnhanced === 'true') {
+      return;
+    }
+
+    let form = details.querySelector('.simpleapi-random-isbn-form');
+    if (!form) {
+      form = document.createElement('form');
+      form.className = 'simpleapi-random-isbn-form';
+      details.appendChild(form);
+    }
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+    });
+
+    let button = form.querySelector('button');
+    if (!button) {
+      button = document.createElement('button');
+      button.textContent = 'Generate Random ISBN';
+      form.insertBefore(button, form.firstChild);
+    }
+    button.type = 'button';
+
+    let output = form.querySelector('[data-simpleapi-random-isbn]');
+    if (!output) {
+      output = document.createElement('input');
+      output.setAttribute('data-simpleapi-random-isbn', '');
+      form.appendChild(output);
+    }
+    output.setAttribute('aria-label', 'Generated SimpleAPI ISBN');
+    output.setAttribute('readonly', 'readonly');
+
+    button.addEventListener('click', function () {
+      button.disabled = true;
+      randomSimpleApiIsbn().then(function (isbn) {
+        output.value = isbn;
+        output.focus();
+        output.select();
+      }).finally(function () {
+        button.disabled = false;
+      });
+    });
+
+    details.dataset.simpleApiRandomIsbnEnhanced = 'true';
+  }
+
+  function enhanceSimpleApiRandomIsbnDetailsAll() {
+    document.querySelectorAll('.simpleapi-random-isbn-details')
+      .forEach(enhanceSimpleApiRandomIsbnDetails);
   }
 
   function currentChallengerJson() {
@@ -1262,6 +1449,15 @@
       usesPlaceholder(request, 'currentChallengerJsonForRestoredChallenger')
         ? currentChallengerJsonForRestoredChallenger()
         : Promise.resolve(''),
+      usesPlaceholder(request, 'randomSimpleApiIsbn')
+        ? randomSimpleApiIsbn()
+        : Promise.resolve(''),
+      usesPlaceholder(request, 'lastCreatedSimpleApiItemId')
+        ? Promise.resolve(currentLastCreatedSimpleApiItemId())
+        : Promise.resolve(''),
+      usesPlaceholder(request, 'lastCreatedSimpleApiItemIsbn')
+        ? Promise.resolve(currentLastCreatedSimpleApiItemIsbn())
+        : Promise.resolve(''),
     ]).then(function (values) {
       return {
         currentChallenger: challenger,
@@ -1274,6 +1470,9 @@
         currentTodosJson: values[3],
         lastCreatedTodoId: values[4],
         currentChallengerJsonForRestoredChallenger: values[5],
+        randomSimpleApiIsbn: values[6],
+        lastCreatedSimpleApiItemId: values[7],
+        lastCreatedSimpleApiItemIsbn: values[8],
         oversizedChallenger: oversizedChallengerValue(challenger),
         title50: '2*4*6*8*11*14*17*20*23*26*29*32*35*38*41*44*47*50*',
         title51: '*3*5*7*9*12*15*18*21*24*27*30*33*36*39*42*45*48*51*',
@@ -1489,6 +1688,17 @@
             storeLastCreatedTodoId(createdTodoId);
             shouldRefreshDynamicWidgets = true;
           }
+          const createdSimpleApiItemId = createdSimpleApiItemIdFromResponse(request, response);
+          if (createdSimpleApiItemId) {
+            storeLastCreatedSimpleApiItemId(createdSimpleApiItemId);
+            shouldRefreshDynamicWidgets = true;
+          }
+          const createdSimpleApiItemIsbn =
+              createdSimpleApiItemIsbnFromRequest(request, response);
+          if (createdSimpleApiItemIsbn) {
+            storeLastCreatedSimpleApiItemIsbn(createdSimpleApiItemIsbn);
+            shouldRefreshDynamicWidgets = true;
+          }
           if (shouldRefreshDynamicWidgets && request.refreshAfterExecute) {
             updateRenderedWidgetsFromSession();
           }
@@ -1572,7 +1782,8 @@
 
   function updateRenderedWidgetsFromSession() {
     renderedWidgets.forEach(function (widgetState) {
-      if (!widgetState.request.useChallenger || widgetState.request.userEdited) {
+      if (widgetState.request.userEdited
+          || (!widgetState.request.useChallenger && !widgetState.request.hasDynamicValues)) {
         return;
       }
       resolveDynamicRequest(widgetState.request).then(function () {
@@ -1592,6 +1803,7 @@
       editable: editMode !== 'readonly',
       editMode: editMode,
       bodyEditable: placeholder.dataset.bodyEditable !== 'false',
+      queryEditable: placeholder.dataset.queryEditable !== 'false',
       allowedPathPrefixes: parseAllowedPathPrefixes(placeholder.dataset.allowedPathPrefixes),
       useChallenger: isApiRequest && placeholder.dataset.useChallenger !== 'false',
       autoCreateFirstTodo: placeholder.dataset.autoCreateFirstTodo !== 'false',
@@ -1715,8 +1927,14 @@
 
   function renderAll() {
     document.querySelectorAll(WIDGET_SELECTOR).forEach(renderWidget);
+    enhanceSimpleApiRandomIsbnDetailsAll();
     updateChallengeCompletedBanners();
   }
+
+  window.ApiChallengesSimpleApiRandomIsbn = window.ApiChallengesSimpleApiRandomIsbn || {};
+  window.ApiChallengesSimpleApiRandomIsbn.buildDetails = buildSimpleApiRandomIsbnDetails;
+  window.ApiChallengesSimpleApiRandomIsbn.enhanceAll = enhanceSimpleApiRandomIsbnDetailsAll;
+  window.ApiChallengesSimpleApiRandomIsbn.randomIsbn = randomSimpleApiIsbn;
 
   window.ApiChallengesLiveRequest = window.ApiChallengesLiveRequest || {};
   window.ApiChallengesLiveRequest.renderAll = renderAll;

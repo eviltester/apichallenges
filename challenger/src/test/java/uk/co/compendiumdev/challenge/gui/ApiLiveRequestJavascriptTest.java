@@ -37,6 +37,39 @@ public class ApiLiveRequestJavascriptTest {
     }
 
     @Test
+    void liveRequestWidgetsSupportSimpleApiTutorialPlaceholders() throws IOException {
+        String javascript = apiLiveRequestJavascript();
+
+        Assertions.assertTrue(javascript.contains("function randomSimpleApiIsbn()"));
+        Assertions.assertTrue(javascript.contains("function createdSimpleApiItemIdFromResponse"));
+        Assertions.assertTrue(javascript.contains("function createdSimpleApiItemIsbnFromRequest"));
+        Assertions.assertTrue(javascript.contains("storeLastCreatedSimpleApiItemId"));
+        Assertions.assertTrue(javascript.contains("storeLastCreatedSimpleApiItemIsbn"));
+        Assertions.assertTrue(javascript.contains("randomSimpleApiIsbn: values[6]"));
+        Assertions.assertTrue(javascript.contains("lastCreatedSimpleApiItemId: values[7]"));
+        Assertions.assertTrue(javascript.contains("lastCreatedSimpleApiItemIsbn: values[8]"));
+        Assertions.assertTrue(javascript.contains("!widgetState.request.hasDynamicValues"));
+    }
+
+    @Test
+    void liveRequestWidgetsSupportReusableSimpleApiIsbnGenerator() throws IOException {
+        String javascript = apiLiveRequestJavascript();
+
+        Assertions.assertTrue(javascript.contains("function buildSimpleApiRandomIsbnDetails()"));
+        Assertions.assertTrue(javascript.contains("function enhanceSimpleApiRandomIsbnDetails"));
+        Assertions.assertTrue(javascript.contains("Generate Random SimpleAPI ISBN"));
+        Assertions.assertTrue(javascript.contains("data-simpleapi-random-isbn"));
+        Assertions.assertTrue(javascript.contains("randomSimpleApiIsbn().then(function (isbn)"));
+        Assertions.assertTrue(javascript.contains("enhanceSimpleApiRandomIsbnDetailsAll();"));
+        Assertions.assertTrue(
+                javascript.contains("window.ApiChallengesSimpleApiRandomIsbn.buildDetails"));
+        Assertions.assertTrue(
+                javascript.contains("window.ApiChallengesSimpleApiRandomIsbn.enhanceAll"));
+        Assertions.assertTrue(
+                javascript.contains("window.ApiChallengesSimpleApiRandomIsbn.randomIsbn"));
+    }
+
+    @Test
     void editableRequestControlsPlaceResetBeforePrettyPrintInSharedActionRow() throws IOException {
         String javascript = apiLiveRequestJavascript();
 
@@ -122,6 +155,38 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("function requestBodyAllowed(request)"));
         Assertions.assertTrue(javascript.contains("function bodyForRequest(request)"));
         Assertions.assertTrue(javascript.contains("bodyLabel.hidden = !showBody"));
+        Assertions.assertTrue(javascript.contains("syncBodyControlVisibility();"));
+    }
+
+    @Test
+    void liveRequestWidgetsSupportConfiguredFieldsAndResponseCopyActions() throws IOException {
+        String javascript = apiLiveRequestJavascript();
+
+        Assertions.assertTrue(
+                javascript.contains("queryEditable: placeholder.dataset.queryEditable !== 'false'"));
+        Assertions.assertTrue(javascript.contains("if (request.queryEditable)"));
+        Assertions.assertTrue(
+                javascript.contains("responseActions.className = 'sim-live-response-actions'"));
+        Assertions.assertTrue(
+                javascript.contains("responseBodyCopyButton.textContent = 'Copy body'"));
+        Assertions.assertTrue(
+                javascript.contains("responseHeadersCopyButton.textContent = 'Copy headers'"));
+        Assertions.assertTrue(javascript.contains("responseActions.appendChild(responseBodyCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("responseActions.appendChild(responseHeadersCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("copyText(bodyPanel.textContent, responseBodyCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("copyText(headersPanel.textContent, responseHeadersCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("'.sim-live-response-panel'"));
+        final int responseElements = javascript.indexOf("elements: [");
+        final int bodyPanel = javascript.indexOf("bodyPanel,", responseElements);
+        final int headersPanel = javascript.indexOf("headersPanel,", responseElements);
+        final int responseActions = javascript.indexOf("responseActions,", responseElements);
+        Assertions.assertTrue(responseElements >= 0);
+        Assertions.assertTrue(bodyPanel < headersPanel);
+        Assertions.assertTrue(headersPanel < responseActions);
     }
 
     @Test
@@ -147,6 +212,14 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("if (sibling.tagName === 'UL')"));
         Assertions.assertTrue(javascript.contains("parent.insertBefore(details, sibling);"));
         Assertions.assertTrue(javascript.contains("insertBeforeFirstEndpointList("));
+        Assertions.assertTrue(javascript.contains("simpleApiRandomIsbn: true"));
+        Assertions.assertFalse(javascript.contains("function buildSimpleApiRandomIsbnDetails()"));
+        Assertions.assertTrue(javascript.contains("function buildEndpointPracticeTools"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "fragment.appendChild(buildLiveRequestDetails(endpointPath, method, config))"));
+        Assertions.assertTrue(
+                javascript.contains("window.ApiChallengesSimpleApiRandomIsbn.buildDetails"));
     }
 
     private String apiLiveRequestJavascript() throws IOException {

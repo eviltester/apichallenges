@@ -10,6 +10,7 @@
     '/simpleapi/docs': {
       allowedPathPrefixes: '/simpleapi',
       useChallenger: 'false',
+      simpleApiRandomIsbn: true,
     },
     '/shop/docs': {
       allowedPathPrefixes: '/shop',
@@ -85,6 +86,19 @@
     return details;
   }
 
+  function buildEndpointPracticeTools(endpointPath, method, config) {
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(buildLiveRequestDetails(endpointPath, method, config));
+    if (
+      config.simpleApiRandomIsbn
+        && window.ApiChallengesSimpleApiRandomIsbn
+        && window.ApiChallengesSimpleApiRandomIsbn.buildDetails
+    ) {
+      fragment.appendChild(window.ApiChallengesSimpleApiRandomIsbn.buildDetails());
+    }
+    return fragment;
+  }
+
   function enhanceDocs() {
     const config = DOC_CONFIGS[window.location.pathname];
     if (!config) {
@@ -108,7 +122,7 @@
       heading.dataset.liveRequestEnhanced = 'true';
       insertBeforeFirstEndpointList(
         heading,
-        buildLiveRequestDetails(endpointPath, method, config));
+        buildEndpointPracticeTools(endpointPath, method, config));
     });
 
     if (window.ApiChallengesLiveRequest && window.ApiChallengesLiveRequest.renderAll) {

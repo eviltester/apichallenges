@@ -2,7 +2,7 @@
 title: Learning Utilities and Resources
 seo_title: Learning Utilities and Resources | API Challenges
 description: A list of HTTP REST API learning tutorials and recommended books and practice sites for API Testing.
-lastmod: 2026-02-18
+lastmod: 2026-08-04
 seo_description: Start learning API testing with curated tutorials, practical resources, and a clear path from fundamentals to confident hands-on execution.
 og_image: /images/hero/learning-zone-api-testing-path-1600x720.jpg
 og_image_alt: Learning Zone hero image showing the live learning page, REST fundamentals, and the API testing learning path.
@@ -16,15 +16,23 @@ showads: true
   <img src="/images/hero/learning-zone-api-testing-path-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="Learning Zone hero image showing the live learning page, REST fundamentals, and the API testing learning path.">
 </figure>
 
-## Tutorial And Reference Content
+## Tutorial Content
 
-Read through the Tutorial and Reference content to understand the basics of:
+Start with the guided tutorial if you want a practical path through REST API testing:
+
+- [How to Test REST APIs](/tutorials/rest-api-testing)
+
+## Reference Content
+
+Use the reference content when you want to understand a specific concept in more detail:
 
 - [Web Applications](/tutorials/web-basics)
 - [HTTP Basics](/tutorials/http-basics)
 - [HTTP Verbs and Methods](/tutorials/http-verbs)
 - [REST API Basics](/tutorials/rest-api-basics)
-- [Testing APIs](/tutorials/testing-apis)
+- [API Testing Concepts and Coverage](/tutorials/testing-apis)
+- [OpenAPI](/tutorials/openapi)
+- [Swagger](/tutorials/swagger)
 - [Summary](/tutorials/summary)
 
 ## Download Some Tools
