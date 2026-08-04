@@ -515,6 +515,15 @@ public class MarkdownContentManager {
         final List<String> schemaHowToSteps = parseHowToSteps(schemaHowToStepsRaw);
         final Boolean schemaVideoEnabled = parseOptionalBoolean(schemaVideoEnabledRaw);
         final String pageDateModified = resolveDateModified(pageLastModified, pageDatePublished);
+        final String articleBylineSnippet =
+                buildArticleBylineSnippet(
+                        contentFolder,
+                        contentPath,
+                        schemaAuthorValue,
+                        pageDatePublished,
+                        pageDateModified,
+                        DEFAULT_AUTHOR_BIO_PATH,
+                        indexTemplate);
         final String schemaJsonLd =
                 buildSchemaJsonLd(
                         canonicalHost,
@@ -559,23 +568,23 @@ public class MarkdownContentManager {
         // todo: create proper templates
         if (!mdheaders.contains("template: index")) {
             html.append("<section class='doc-columns'>");
-            html.append("<div class='left-column'>");
-            html.append("<div class='side-toc'>");
-            html.append(renderer.render(parser.parse(dropDownMenuAsMarkdown())));
-            html.append("</div>");
-            html.append("</div>");
             html.append("<div class='right-column'>");
         }
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append(bcHtmlHeader.toString());
         html.append("<div class=\"main-text-content\">\n");
-        html.append(renderer.render(document));
+        html.append(insertArticleBylineAfterFirstHeading(renderer.render(document), articleBylineSnippet));
         html.append("</div>\n");
         html.append(nextChallengeCtaSnippet);
         html.append(authorBioSnippet);
         html.append(guiManagement.getEndOfMainContentMarker());
         if (!mdheaders.contains("template: index")) {
             html.append("</div>");
+            html.append("<aside class='left-column' aria-label='Learning links'>");
+            html.append("<nav class='side-toc' aria-label='Learning and reference links'>");
+            html.append(renderer.render(parser.parse(dropDownMenuAsMarkdown())));
+            html.append("</nav>");
+            html.append("</aside>");
             html.append("</section>");
         }
         html.append(guiManagement.getPageFooter());
@@ -1488,6 +1497,80 @@ public class MarkdownContentManager {
                 .map(String::trim)
                 .filter(item -> !item.isEmpty())
                 .collect(Collectors.toList());
+    }
+
+    private String insertArticleBylineAfterFirstHeading(
+            final String renderedContent, final String articleBylineSnippet) {
+        if (articleBylineSnippet == null || articleBylineSnippet.isEmpty()) {
+            return renderedContent;
+        }
+
+        final int firstHeadingEnd = renderedContent.indexOf("</h1>");
+        if (firstHeadingEnd < 0) {
+            return articleBylineSnippet + renderedContent;
+        }
+
+        final int insertionPoint = firstHeadingEnd + "</h1>".length();
+        return renderedContent.substring(0, insertionPoint)
+                + "\n"
+                + articleBylineSnippet
+                + "\n"
+                + renderedContent.substring(insertionPoint);
+    }
+
+    private String buildArticleBylineSnippet(
+            final String contentFolder,
+            final String contentPath,
+            final String authorName,
+            final String datePublished,
+            final String dateModified,
+            final String authorBioPath,
+            final boolean indexTemplate) {
+        final boolean isContentPage = "content".equalsIgnoreCase(contentFolder);
+        final boolean isAuthorPage =
+                contentPath != null && contentPath.equalsIgnoreCase(authorBioPath);
+        if (!isContentPage || isAuthorPage || indexTemplate) {
+            return "";
+        }
+
+        final String safeAuthorName = escapeHtmlAttribute(authorName);
+        final String safeAuthorBioPath = escapeHtmlAttribute(authorBioPath);
+        final String trimmedPublishedDate = datePublished == null ? "" : datePublished.trim();
+        final String trimmedModifiedDate = dateModified == null ? "" : dateModified.trim();
+        final String visibleDate =
+                trimmedPublishedDate.isEmpty() ? trimmedModifiedDate : trimmedPublishedDate;
+        final String dateLabel = trimmedPublishedDate.isEmpty() ? "Updated" : "Published";
+
+        StringBuilder snippet = new StringBuilder();
+        snippet.append("<p class='article-byline'>");
+        snippet.append("<span>By <a href='")
+                .append(safeAuthorBioPath)
+                .append("' rel='author'>")
+                .append(safeAuthorName)
+                .append("</a></span>");
+        if (!visibleDate.isEmpty()) {
+            snippet.append("<span class='article-byline-separator' aria-hidden='true'>")
+                    .append(" &middot; ")
+                    .append("</span>");
+            snippet.append("<span class='article-byline-date'>")
+                    .append(dateLabel)
+                    .append(" <time datetime='")
+                    .append(escapeHtmlAttribute(visibleDate))
+                    .append("'>")
+                    .append(escapeHtmlAttribute(displayDateForArticleByline(visibleDate)))
+                    .append("</time></span>");
+        }
+        snippet.append("</p>");
+        return snippet.toString();
+    }
+
+    private String displayDateForArticleByline(final String dateValue) {
+        final String trimmedDate = dateValue == null ? "" : dateValue.trim();
+        final int dateTimeSeparator = trimmedDate.indexOf("T");
+        if (dateTimeSeparator > 0) {
+            return trimmedDate.substring(0, dateTimeSeparator);
+        }
+        return trimmedDate;
     }
 
     private String buildAuthorBioSnippet(

@@ -971,6 +971,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains(".sim-live-validation"));
         Assertions.assertTrue(response.body.contains(".sim-live-edit-query"));
         Assertions.assertTrue(response.body.contains("background: #16803a"));
+        Assertions.assertTrue(response.body.contains("p.article-byline"));
+        Assertions.assertTrue(response.body.contains("span.article-byline-separator"));
         Assertions.assertTrue(response.body.contains(".challenge-progress-table"));
         Assertions.assertTrue(response.body.contains("@media (max-width: 800px)"));
         Assertions.assertTrue(
@@ -984,6 +986,26 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("overflow-wrap: anywhere;"));
         Assertions.assertTrue(
                 response.body.contains(".challenge-progress-table .api-live-request"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "grid-template-columns: minmax(12rem, 18%) minmax(0, 1fr);"));
+
+        response = http.send("/css/toc.css", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
+        assertCacheControl(response, "public, max-age=31536000, immutable");
+        Assertions.assertTrue(response.body.contains("@media (min-width: 1400px)"));
+        Assertions.assertTrue(response.body.contains(".main-text-content:has(> #toc)"));
+        Assertions.assertTrue(response.body.contains("background: var(--surface, #ffffff)"));
+        Assertions.assertTrue(response.body.contains("box-shadow: var(--shadow-soft"));
+        Assertions.assertTrue(response.body.contains("clear: none"));
+        Assertions.assertTrue(response.body.contains("float: right"));
+        Assertions.assertTrue(response.body.contains(".toc-entry.is-active"));
+        Assertions.assertTrue(response.body.contains("border-left-color: var(--accent"));
+        Assertions.assertFalse(response.body.contains("font-weight: 700"));
+        Assertions.assertFalse(response.body.contains("transform: translateX(-4rem)"));
+        Assertions.assertFalse(response.body.contains("transform: translateX(-2rem)"));
+        Assertions.assertTrue(response.body.contains("position: sticky"));
 
         response = http.send("/css/theme-experiments.css", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -996,12 +1018,19 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("background: #22c55e"));
         Assertions.assertTrue(response.body.contains("border-left-color: var(--accent)"));
         Assertions.assertTrue(response.body.contains("color: var(--text)"));
+        Assertions.assertTrue(response.body.contains("html[data-theme] p.article-byline"));
+        Assertions.assertTrue(response.body.contains("color: var(--muted)"));
+        Assertions.assertFalse(response.body.contains("main p > a:only-child"));
+        Assertions.assertFalse(response.body.contains(".main-text-content p > a:only-child"));
 
         response = http.send("/js/toc.js", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("htmlTableOfContents"));
+        Assertions.assertTrue(response.body.contains("showTableOfContentsProgress"));
+        Assertions.assertTrue(response.body.contains("aria-current"));
+        Assertions.assertTrue(response.body.contains("is-active"));
 
         response = http.send("/js/api-live-request.js", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1331,7 +1360,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "\"url\":\"https://apichallenges.eviltester.com/seo-metadata-test-page\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-04\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"HowTo\""));
         Assertions.assertTrue(response.body.contains("\"name\":\"Open the metadata test page\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"VideoObject\""));
@@ -1417,9 +1446,16 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("\"name\":\"eviltester.com\""));
         Assertions.assertTrue(
                 response.body.contains("\"legalName\":\"Compendium Developments Ltd\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-04\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"BreadcrumbList\""));
         Assertions.assertFalse(response.body.contains("<aside class='next-challenge-cta'"));
+        Assertions.assertTrue(response.body.contains("<p class='article-byline'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<a href='/author/alan-richardson' rel='author'>Alan Richardson</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Updated <time datetime='2026-08-04'>2026-08-04</time>"));
         Assertions.assertTrue(response.body.contains("<aside class='author-bio-snippet'"));
         Assertions.assertTrue(response.body.contains("href='/author/alan-richardson'"));
     }
@@ -1434,6 +1470,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<title>Alan Richardson Author Profile and API Testing Credentials</title>"));
         Assertions.assertTrue(response.body.contains("<h1>About Alan Richardson</h1>"));
+        Assertions.assertFalse(response.body.contains("<p class='article-byline'>"));
         Assertions.assertFalse(response.body.contains("<aside class='author-bio-snippet'"));
     }
 
@@ -1884,6 +1921,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("\"datePublished\":\"2021-07-24T08:30:00Z\""));
         Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Published <time datetime='2021-07-24T08:30:00Z'>2021-07-24</time>"));
     }
 
     @Test

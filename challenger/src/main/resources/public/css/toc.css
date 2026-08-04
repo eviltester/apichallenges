@@ -1,3 +1,7 @@
+div#toc{
+    margin: 1rem 0 1.5rem;
+}
+
 div#toc div.h2{
     margin-left: 2em;
 }
@@ -16,4 +20,75 @@ div#toc div.h6{
 
 div#toc div{
     margin-bottom: 0.3rem;
+}
+
+div#toc .toc-entry{
+    border-left: 0.2rem solid transparent;
+    border-radius: calc(var(--radius, 8px) - 4px);
+    padding: 0.1rem 0.35rem 0.1rem 0.55rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+div#toc .toc-entry.is-active{
+    background: var(--accent-soft, #dff3f3);
+    border-left-color: var(--accent, #0f6795);
+}
+
+div#toc .toc-entry.is-active > a{
+    color: var(--accent-strong, #0b3f73);
+    text-decoration-thickness: 0.12em;
+}
+
+@media (min-width: 1400px) {
+    /*
+     * Keep the article at its normal reading width and let the TOC sit beside it
+     * as a callout, instead of consuming a grid column inside the article flow.
+     */
+    .right-column .main-text-content:has(> #toc) {
+        display: block;
+        max-width: var(--reading-max, 76ch);
+        position: relative;
+    }
+
+    .right-column .main-text-content:has(> #toc) h2,
+    .right-column .main-text-content:has(> #toc) h3,
+    .right-column .main-text-content:has(> #toc) h4 {
+        clear: none;
+    }
+
+    .right-column .main-text-content:has(> #toc) > #toc {
+        align-self: auto;
+        background: var(--surface, #ffffff);
+        border: 1px solid var(--border, #d5e0ea);
+        border-left: 0.25rem solid var(--accent, #0f6795);
+        border-radius: calc(var(--radius, 8px) - 2px);
+        box-shadow: var(--shadow-soft, 0 8px 24px rgba(31, 55, 78, 0.08));
+        box-sizing: border-box;
+        float: right;
+        font-size: 0.92rem;
+        grid-column: auto;
+        grid-row: auto;
+        margin: 0 calc(0px - clamp(11rem, 16vw, 14rem) - 1.5rem) 1rem 1.5rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        padding: 0.85rem 0.85rem 0.85rem 1rem;
+        position: sticky;
+        top: 1rem;
+        width: clamp(11rem, 16vw, 14rem);
+        z-index: 2;
+    }
+
+    .right-column .main-text-content:has(> #toc) > #toc div.h2 {
+        margin-left: 0;
+    }
+
+    .right-column .main-text-content:has(> #toc) > #toc div.h3 {
+        margin-left: 1rem;
+    }
+
+    .right-column .main-text-content:has(> #toc) > #toc div.h4,
+    .right-column .main-text-content:has(> #toc) > #toc div.h5,
+    .right-column .main-text-content:has(> #toc) > #toc div.h6 {
+        margin-left: 1.5rem;
+    }
 }

@@ -553,6 +553,20 @@ html[data-theme] p {
     margin: 0.8rem 0;
 }
 
+html[data-theme] p.article-byline {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: -0.25rem 0 1rem;
+}
+
+html[data-theme] p.article-byline a {
+    color: var(--accent-strong);
+}
+
+html[data-theme] .article-byline-separator {
+    color: var(--muted);
+}
+
 html[data-theme] ul {
     padding-left: 1.35rem;
 }
@@ -581,8 +595,6 @@ html[data-theme] .headertextblock {
     width: auto;
 }
 
-html[data-theme] main p > a:only-child,
-html[data-theme] .main-text-content p > a:only-child,
 html[data-theme] a.next-challenge-cta-link,
 html[data-theme] button,
 html[data-theme] input[type="button"],
@@ -598,8 +610,6 @@ html[data-theme] input[type="submit"] {
     text-decoration: none;
 }
 
-html[data-theme] main p > a:only-child:hover,
-html[data-theme] .main-text-content p > a:only-child:hover,
 html[data-theme] a.next-challenge-cta-link:hover,
 html[data-theme] button:hover,
 html[data-theme] input[type="button"]:hover,
