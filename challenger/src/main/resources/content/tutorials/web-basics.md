@@ -2,7 +2,7 @@
 title: Web Basics - Tutorial
 seo_title: Tutorial: Web Basics Tutorial | API Challenges
 description: Overview of how Web applications work and an introductory HTTP tutorial.
-lastmod: 2026-02-18
+lastmod: 2026-08-04
 seo_description: Learn Web Basics with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -132,6 +132,45 @@ We cover all of this in more detail in the rest of the reference section e.g. [H
 
 ---
 
+## HTTP Responses
+
+HTTP Requests, deserve a response.
+
+The response is the message sent back from the server to the browser or tool that made the request.
+
+Like a request, a response can be thought of as a simple text message with a standard format:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 25
+
+{"message":"Hello World"}
+```
+
+The first line has the HTTP version, a `status code`, and a short reason phrase:
+
+```
+HTTP/1.1 200 OK
+```
+
+The status code tells us what happened. A `200` means the request was handled successfully. A `404` means the resource was not found. A `500` means the server had an internal error trying to process the request.
+
+Then the response has `headers`:
+
+```
+Content-Type: application/json
+Content-Length: 25
+```
+
+The headers describe the response in more detail. For example, `Content-Type` tells the browser or API tool how to interpret the body. `text/html` might be rendered as a web page, `image/png` might be displayed as an image, and `application/json` might be shown as data.
+
+The response body is the content after the blank line. Sometimes the body is HTML for the browser to render. Sometimes it is JSON or XML data for JavaScript or an API client to process. And sometimes there is no body at all, for example a `204 No Content` response.
+
+For testing, the response is important evidence. We can check the status code, headers, and body to understand if the server did what we expected.
+
+---
+
 ## Example HTTP Request
 
 HTTP Requests are often more complicated than the simple example above, and the browser or tool you are using to make requests often adds a lot of meta-data in the headers.
@@ -211,3 +250,14 @@ e.g.
 - when you know about HTTP headers
   - you'll often change the USER-AGENT to see a different web page or interact with a web application differently
 
+---
+
+## Summary
+
+A Web Application is something we access through a browser, but behind the browser there are many HTTP requests and responses being sent between the client and the server.
+
+The browser asks for resources with requests. The server answers with responses. Those responses include status codes, headers, and sometimes a body containing HTML, JSON, XML, images, or other content.
+
+When we understand this basic request and response flow, we can use browser dev tools, API clients, proxies, and automation code more effectively. We can see what was sent, what came back, and where a problem might have happened.
+
+This is the foundation for understanding APIs, testing Web Applications, and debugging the systems we use every day.
