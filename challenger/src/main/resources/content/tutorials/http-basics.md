@@ -1,13 +1,13 @@
 ---
-title: HTTP Basics - Tutorial
-seo_title: Tutorial: HTTP Basics Tutorial | API Challenges
+title: HTTP Basics for API Testing
+seo_title: HTTP Basics for API Testing: Requests, Responses, Headers
 description: Basic HTTP tutorial and overview of key HTTP terminology and status codes.
 lastmod: 2026-08-04
 seo_description: Learn HTTP Basics with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# Introduction to HTTP Requests and Responses
+# HTTP Basics for API Testing
 
 This tutorial introduces the core HTTP concepts you need when testing Web Applications and APIs. We will look at how requests are built, how responses report success or failure, what common verbs and status codes mean, how JSON and XML bodies are represented, and how URLs, query strings, and headers influence the way a server processes a request.
 

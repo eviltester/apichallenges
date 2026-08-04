@@ -242,6 +242,7 @@ public class ChallengerWebGUI {
         for (String pathToMarkdownFile : pathsToFileContent) {
             String endPointForMarkdownFile =
                     pathToMarkdownFile.replaceFirst("content/", "/").replace(".md", "");
+            String trailingSlashEndPointForMarkdownFile = endPointForMarkdownFile + "/";
             get(
                     endPointForMarkdownFile,
                     ((request, response) -> {
@@ -265,6 +266,12 @@ public class ChallengerWebGUI {
                         }
                         return "";
                     }));
+            get(
+                    trailingSlashEndPointForMarkdownFile,
+                    ((request, response) -> {
+                        response.redirect(endPointForMarkdownFile, 301);
+                        return "";
+                    }));
             head(
                     endPointForMarkdownFile,
                     ((request, response) -> {
@@ -284,6 +291,12 @@ public class ChallengerWebGUI {
                             // endpoints for existing resources
                             pageNotFoundHtmlResponse.amendResponse(response, "");
                         }
+                        return "";
+                    }));
+            head(
+                    trailingSlashEndPointForMarkdownFile,
+                    ((request, response) -> {
+                        response.redirect(endPointForMarkdownFile, 301);
                         return "";
                     }));
         }

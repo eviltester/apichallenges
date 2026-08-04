@@ -1924,6 +1924,37 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
     }
 
+    @Test
+    void trailingSlashContentPagesRedirectToCanonicalPathWithoutSlash() {
+
+        HttpResponseDetails response = http.send("/tutorials/summary/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/tutorials/summary", response.getHeader("Location"));
+
+        response = http.send("/apichallenges/solutions/get/get-todos-200/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/apichallenges/solutions/get/get-todos-200", response.getHeader("Location"));
+    }
+
+    @Test
+    void headRequestsToTrailingSlashContentPagesRedirectToCanonicalPathWithoutSlash() {
+
+        final HttpResponseDetails response = http.send("/tutorials/summary/", "head");
+
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/tutorials/summary", response.getHeader("Location"));
+    }
+
+    @Test
+    void trailingSlashAppPagesAreNotRedirectedAsContentPages() {
+
+        final HttpResponseDetails response = http.send("/apichallenges/client/", "get");
+
+        Assertions.assertEquals(404, response.statusCode);
+        Assertions.assertNull(response.getHeader("Location"));
+    }
+
     static Stream<Arguments> legacyUrlRedirects() {
         List<Arguments> args = new ArrayList<>();
         args.add(

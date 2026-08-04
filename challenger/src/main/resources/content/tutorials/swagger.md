@@ -1,13 +1,13 @@
 ---
-title: Swagger Tutorial
-seo_title: Tutorial: Swagger UI And Swagger Tools | API Challenges
+title: Swagger UI and Tools for API Testing
+seo_title: Swagger UI for API Testing: OpenAPI Docs, Requests and Tools
 description: An introduction to Swagger tooling, Swagger UI, and Swagger Editor for working with OpenAPI files.
-lastmod: 2026-07-26
+lastmod: 2026-08-04
 seo_description: Learn how Swagger UI and Swagger Editor use OpenAPI files to render browser-based API documentation and request forms.
 showads: true
 ---
 
-# Introduction to Swagger
+# Swagger UI and Tools for API Testing
 
 Swagger is a family of tools that work with OpenAPI files.
 

@@ -1,14 +1,15 @@
 ---
-title: Web Basics - Tutorial
-seo_title: Tutorial: Web Basics Tutorial | API Challenges
+title: Web Application and HTTP Basics
+seo_title: Web Application and HTTP Basics for API Testing
 description: Overview of how Web applications work and an introductory HTTP tutorial.
 lastmod: 2026-08-04
 seo_description: Learn Web Basics with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# Web Basics and HTTP Basics
+# Web Application and HTTP Basics
 
+This tutorial introduces the basic web application and HTTP concepts that help when testing APIs. We will look at how browsers communicate with servers, how web pages are built from HTTP requests and responses, and why browser dev tools, headers, URLs, and status codes are useful evidence when investigating how a system behaves.
 
 ---
 

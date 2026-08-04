@@ -1,13 +1,13 @@
 ---
-title: HTTP Verbs - Tutorial
-seo_title: Tutorial: HTTP Verbs Tutorial | API Challenges
+title: HTTP Methods for REST API Testing
+seo_title: HTTP Methods for REST API Testing: GET, POST, PUT, PATCH, DELETE
 description: Basic HTTP Verbs and Methods tutorial what they do and how to use them.
 lastmod: 2026-08-04
 seo_description: Learn HTTP Verbs with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# HTTP Verbs Overview
+# HTTP Methods and Verbs for REST API Testing
 
 HTTP verbs, or methods, tell the server what type of action the client wants to perform against a resource.
 

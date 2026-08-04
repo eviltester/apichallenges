@@ -1,13 +1,13 @@
 ---
-title: Summary - Tutorial
-seo_title: Tutorial: Summary Tutorial for API Testing | API Challenges
+title: API Testing Tutorial Summary
+seo_title: API Testing Tutorial Summary: HTTP, REST, Tools and Practice
 description: Basic Summary of REST API tutorial content.
 lastmod: 2026-08-04
 seo_description: Learn Summary with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# Summary Overview
+# API Testing Tutorial Summary
 
 This page is a quick recap of the tutorial section. Use it to refresh the main API testing ideas, then follow the links back to the detailed pages when you need examples or more explanation.
 
@@ -161,20 +161,6 @@ Useful follow-on page:
 ---
 
 ## Tools
-
-- Clients
-    - Bruno
-    - Hoppscotch.io
-    - Postman
-    - Insomnia
-    - cURL
-- Proxies
-    - System
-        - Fiddler
-        - Charles
-    - Other
-        - Burp Suite
-        - OWASP ZAP
 
 Use more than one type of tool when learning.
 

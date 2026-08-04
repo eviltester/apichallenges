@@ -1,13 +1,13 @@
 ---
-title: REST API - Tutorial
-seo_title: Tutorial: REST API Tutorial for API Testing | API Challenges
+title: REST API Basics for API Testing
+seo_title: REST API Basics for Testers: Resources, Verbs, CRUD, Auth
 description: Basic REST API tutorial to learn what is a REST API and how they work.
 lastmod: 2026-08-04
 seo_description: Learn REST API with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# REST API Basics
+# REST API Basics for Testers
 
 - What is a REST API?
 - CRUD and REST

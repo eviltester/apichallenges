@@ -1,13 +1,13 @@
 ---
-title: Testing APIs - Tutorial
-seo_title: Tutorial: Testing APIs Tutorial | API Challenges
+title: REST API Testing Tutorial
+seo_title: How to Test REST APIs: Coverage, Data, Security and Automation
 description: Basic Testing REST API tutorial and how to think when thinking about testing an API.
 lastmod: 2026-08-04
 seo_description: Learn Testing APIs with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
 
-# Testing a REST API
+# How to Test REST APIs
 
 Testing an API is not just sending a few requests and checking that they return `200`.
 

@@ -1,13 +1,13 @@
 ---
-title: OpenAPI Tutorial
-seo_title: Tutorial: OpenAPI Specification | API Challenges
+title: OpenAPI for API Testing
+seo_title: OpenAPI for API Testing: Specs, Requests, Responses, Tools
 description: An introduction to OpenAPI as a standard specification for describing HTTP APIs.
-lastmod: 2026-07-26
+lastmod: 2026-08-04
 seo_description: Learn what OpenAPI is, how OpenAPI JSON and YAML files describe APIs, and how API testing tools use the specification.
 showads: true
 ---
 
-# Introduction to OpenAPI
+# OpenAPI for API Testing
 
 OpenAPI is a standard specification format for describing HTTP APIs.
 
