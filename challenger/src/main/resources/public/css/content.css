@@ -1,7 +1,7 @@
 @media (min-width: 1001px) {
 .doc-columns{
     display: grid;
-    grid-template-columns: minmax(12rem, 20%) minmax(0, 70%);
+    grid-template-columns: minmax(13rem, 20%) minmax(0, 70%);
     grid-auto-flow: column
      }
 .left-column{
@@ -37,7 +37,7 @@
 
 @media (min-width: 1280px) {
 .doc-columns{
-    grid-template-columns: minmax(12rem, 18%) minmax(0, 1fr);
+    grid-template-columns: minmax(14rem, 20%) minmax(0, 1fr);
   }
 }
 
@@ -263,8 +263,12 @@
 
 /* Left Side Menu */
 
-.side-toc ul {
-    padding-inline-start: 1em;
+.side-toc > ul {
+    padding-inline-start: 0;
+}
+
+.side-toc > ul ul {
+    padding-inline-start: 1rem;
 }
 
 .left-column {
@@ -860,4 +864,71 @@ a.next-challenge-cta-link:hover {
     margin: 0 0 0.75rem;
     padding: 0.5rem 0.75rem;
     font-weight: 600;
+}
+
+.online-swagger-client {
+    border: 1px solid #c9d5df;
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+}
+
+.online-swagger-controls,
+.online-swagger-file-row,
+.online-swagger-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.online-swagger-controls {
+    align-items: flex-end;
+}
+
+.online-swagger-controls label,
+.online-swagger-file-row label {
+    display: grid;
+    flex: 1 1 18rem;
+    font-weight: 600;
+    gap: 0.25rem;
+}
+
+.online-swagger-controls input,
+.online-swagger-file-row input {
+    border: 1px solid #9bb6cd;
+    box-sizing: border-box;
+    font: inherit;
+    padding: 0.45rem;
+    width: 100%;
+}
+
+.online-swagger-controls button,
+.online-swagger-examples button {
+    border: 1px solid #8fa7bc;
+    background: #ffffff;
+    color: #152536;
+    cursor: pointer;
+    font: inherit;
+    padding: 0.45rem 0.65rem;
+}
+
+.online-client-status {
+    border-left: 4px solid #1f4e79;
+    background: #eef4f9;
+    font-weight: 600;
+    margin: 0.75rem 0;
+    padding: 0.5rem 0.75rem;
+}
+
+.online-client-status-error {
+    background: #fff1f1;
+    border-left-color: #b42318;
+    color: #681212;
+}
+
+#online-swagger-ui {
+    background: #ffffff;
+    border: 1px solid #d7e1e8;
+    margin-top: 1rem;
+    min-height: 20rem;
 }

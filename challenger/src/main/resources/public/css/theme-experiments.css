@@ -1366,12 +1366,28 @@ html[data-theme] .doc-columns {
     gap: 2rem;
 }
 
+@media (min-width: 1001px) {
+    html[data-theme] .doc-columns {
+        gap: 10px;
+    }
+}
+
 html[data-theme] .left-column,
 html[data-theme] .side-toc {
     background: var(--surface-soft);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1rem;
+}
+
+html[data-theme] .side-toc > ul {
+    padding-left: 0;
+    padding-inline-start: 0;
+}
+
+html[data-theme] .side-toc > ul ul {
+    padding-left: 1rem;
+    padding-inline-start: 1rem;
 }
 
 html[data-theme] .challengesectiondescription {
