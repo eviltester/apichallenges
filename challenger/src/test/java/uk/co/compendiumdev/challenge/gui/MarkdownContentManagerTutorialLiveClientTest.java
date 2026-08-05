@@ -146,8 +146,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "src=\"/js/openapi-tester-converter.js\"",
                 "src=\"/js/openapi-tool-controls.js\"",
                 "src=\"/js/online-swagger-client.js\"");
-        Assertions.assertTrue(
-                html.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
+        Assertions.assertTrue(html.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
         Assertions.assertTrue(html.contains("Render A Tester OpenAPI Spec In Swagger UI"));
         Assertions.assertTrue(html.contains("How To Use Swagger UI For REST API Testing"));
         Assertions.assertTrue(html.contains("CORS Limits For Browser Swagger UI"));
@@ -187,7 +186,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(html.contains("data-openapi-open-swagger disabled"));
         Assertions.assertTrue(html.contains("Convert OpenAPI To A More Permissive Tester Spec"));
-        Assertions.assertTrue(html.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
+        Assertions.assertTrue(
+                html.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
         Assertions.assertTrue(
                 html.contains("Download A Less Restrictive OpenAPI File For REST Client Testing"));
         Assertions.assertTrue(

@@ -173,11 +173,10 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("methodInput.type = 'text'"));
         Assertions.assertTrue(javascript.contains("methodInput.placeholder = 'CUSTOM'"));
         Assertions.assertTrue(
-                javascript.contains("methodInput.setAttribute('aria-label', 'Custom HTTP method')"));
-        Assertions.assertTrue(
-                javascript.contains("methodInput.hidden = !customSelected"));
-        Assertions.assertTrue(
-                javascript.contains("syncMethodControlState(selectedCustomMethod)"));
+                javascript.contains(
+                        "methodInput.setAttribute('aria-label', 'Custom HTTP method')"));
+        Assertions.assertTrue(javascript.contains("methodInput.hidden = !customSelected"));
+        Assertions.assertTrue(javascript.contains("syncMethodControlState(selectedCustomMethod)"));
         Assertions.assertTrue(javascript.contains("methodInput.addEventListener('blur'"));
     }
 

@@ -95,8 +95,7 @@ public class ChallengerUiCssTest {
 
         Assertions.assertTrue(css.contains("html[data-theme] #online-swagger-ui"));
         Assertions.assertTrue(
-                css.contains(
-                        "html[data-theme=\"dark-lab\"] #online-swagger-ui .swagger-ui"));
+                css.contains("html[data-theme=\"dark-lab\"] #online-swagger-ui .swagger-ui"));
         Assertions.assertTrue(
                 css.contains(
                         "html[data-theme]:not([data-theme=\"dark-lab\"]) #online-swagger-ui .swagger-ui"));

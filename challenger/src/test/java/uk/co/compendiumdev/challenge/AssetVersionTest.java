@@ -13,15 +13,14 @@ class AssetVersionTest {
         final String versionedPath = AssetVersion.versionedPath("/css/online-swagger-theme.css");
 
         assertTrue(
-                versionedPath.matches(
-                        "/css/online-swagger-theme\\.css\\?v=[A-Za-z0-9._-]+"),
+                versionedPath.matches("/css/online-swagger-theme\\.css\\?v=[A-Za-z0-9._-]+"),
                 versionedPath);
     }
 
     @Test
     void localAssetVersionAddsATimestampWhenTheResourceExists() {
-        final String version = AssetVersion.localAssetVersion(
-                "/css/online-swagger-theme.css", "dev");
+        final String version =
+                AssetVersion.localAssetVersion("/css/online-swagger-theme.css", "dev");
 
         assertTrue(version.matches("dev-[0-9]+"), version);
     }
@@ -47,8 +46,7 @@ class AssetVersionTest {
                         "(?s).*href=\"/css/online-swagger-theme\\.css\\?v=[^\"]+\".*"),
                 versionedHtml);
         assertTrue(
-                versionedHtml.matches(
-                        "(?s).*src='/js/openapi-tool-controls\\.js\\?v=[^']+'.*"),
+                versionedHtml.matches("(?s).*src='/js/openapi-tool-controls\\.js\\?v=[^']+'.*"),
                 versionedHtml);
         assertTrue(versionedHtml.contains("src=\"https://example.com/app.js\""));
     }

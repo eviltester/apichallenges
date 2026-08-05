@@ -573,7 +573,9 @@ public class MarkdownContentManager {
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append(bcHtmlHeader.toString());
         html.append("<div class=\"main-text-content\">\n");
-        html.append(insertArticleBylineAfterFirstHeading(renderer.render(document), articleBylineSnippet));
+        html.append(
+                insertArticleBylineAfterFirstHeading(
+                        renderer.render(document), articleBylineSnippet));
         html.append("</div>\n");
         html.append(nextChallengeCtaSnippet);
         html.append(authorBioSnippet);

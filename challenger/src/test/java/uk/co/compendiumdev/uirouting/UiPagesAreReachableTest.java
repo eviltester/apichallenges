@@ -115,14 +115,10 @@ public class UiPagesAreReachableTest {
         // home page
         args.add(
                 Arguments.of(
-                        200,
-                        "REST API Tutorial and API Testing Practice | API Challenges",
-                        ""));
+                        200, "REST API Tutorial and API Testing Practice | API Challenges", ""));
         args.add(
                 Arguments.of(
-                        200,
-                        "REST API Tutorial and API Testing Practice | API Challenges",
-                        "/"));
+                        200, "REST API Tutorial and API Testing Practice | API Challenges", "/"));
         // entities
         args.add(Arguments.of(200, "Entities Menu", "/gui/entities"));
         args.add(Arguments.of(200, "todo Instances", "gui/instances?entity=todo"));
@@ -255,17 +251,14 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
         Assertions.assertTrue(
                 response.body.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
-        Assertions.assertTrue(
-                response.body.contains("Render A Tester OpenAPI Spec In Swagger UI"));
-        Assertions.assertTrue(
-                response.body.contains("How To Use Swagger UI For REST API Testing"));
+        Assertions.assertTrue(response.body.contains("Render A Tester OpenAPI Spec In Swagger UI"));
+        Assertions.assertTrue(response.body.contains("How To Use Swagger UI For REST API Testing"));
         Assertions.assertTrue(response.body.contains("CORS Limits For Browser Swagger UI"));
         Assertions.assertTrue(
                 response.body.contains("When To Use A REST Client Instead Of Swagger UI"));
         Assertions.assertTrue(response.body.contains("less-validating, permissive file"));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
-        Assertions.assertTrue(
-                response.body.contains("href=\"/practice-modes/simpleapi-openapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(response.body.contains("limited by CORS"));
@@ -1137,8 +1130,7 @@ public class UiPagesAreReachableTest {
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("@media (min-width: 1400px)"));
         Assertions.assertTrue(response.body.contains("div#toc:empty"));
-        Assertions.assertTrue(
-                response.body.contains(".main-text-content:has(> #toc:not(:empty))"));
+        Assertions.assertTrue(response.body.contains(".main-text-content:has(> #toc:not(:empty))"));
         Assertions.assertFalse(response.body.contains(".main-text-content:has(> #toc)"));
         Assertions.assertTrue(response.body.contains("background: var(--surface, #ffffff)"));
         Assertions.assertTrue(response.body.contains("box-shadow: var(--shadow-soft"));
@@ -1531,7 +1523,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "\"url\":\"https://apichallenges.eviltester.com/seo-metadata-test-page\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-04\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"HowTo\""));
         Assertions.assertTrue(response.body.contains("\"name\":\"Open the metadata test page\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"VideoObject\""));
@@ -1547,7 +1539,7 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails openApiResponse = http.send("/tutorials/openapi", "get");
 
         Assertions.assertEquals(200, openApiResponse.statusCode);
-        Assertions.assertTrue(openApiResponse.body.contains("<h1>Introduction to OpenAPI</h1>"));
+        Assertions.assertTrue(openApiResponse.body.contains("<h1>OpenAPI for API Testing</h1>"));
         Assertions.assertTrue(
                 openApiResponse.body.contains("OpenAPI is a standard specification format"));
         Assertions.assertTrue(openApiResponse.body.contains("Swagger is one family of tools"));
@@ -1558,7 +1550,8 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails swaggerResponse = http.send("/tutorials/swagger", "get");
 
         Assertions.assertEquals(200, swaggerResponse.statusCode);
-        Assertions.assertTrue(swaggerResponse.body.contains("<h1>Introduction to Swagger</h1>"));
+        Assertions.assertTrue(
+                swaggerResponse.body.contains("<h1>Swagger UI and Tools for API Testing</h1>"));
         Assertions.assertTrue(
                 swaggerResponse.body.contains(
                         "OpenAPI is the standard specification. Swagger is tooling"));
@@ -1625,8 +1618,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<a href='/author/alan-richardson' rel='author'>Alan Richardson</a>"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Updated <time datetime='2026-08-04'>2026-08-04</time>"));
+                response.body.contains("Updated <time datetime='2026-08-04'>2026-08-04</time>"));
         Assertions.assertTrue(response.body.contains("<aside class='author-bio-snippet'"));
         Assertions.assertTrue(response.body.contains("href='/author/alan-richardson'"));
     }

@@ -71,7 +71,8 @@ public class RestApiTestingTutorialSimpleApiTest {
             final HttpResponseDetails getCreatedResponse =
                     sendAcceptJson("/simpleapi/items/" + createdItem.id, "GET");
             Assertions.assertEquals(200, getCreatedResponse.statusCode);
-            Assertions.assertEquals("application/json", getCreatedResponse.getHeader("Content-Type"));
+            Assertions.assertEquals(
+                    "application/json", getCreatedResponse.getHeader("Content-Type"));
             assertItem(GSON.fromJson(getCreatedResponse.body, Item.class), "book", isbn, 2.00F, 3);
 
             final HttpResponseDetails duplicateIsbnResponse =
@@ -112,7 +113,8 @@ public class RestApiTestingTutorialSimpleApiTest {
 
             Assertions.assertEquals(422, invalidTypeResponse.statusCode);
             Assertions.assertTrue(
-                    invalidTypeResponse.body.contains("numberinstock should be INTEGER but was STRING"),
+                    invalidTypeResponse.body.contains(
+                            "numberinstock should be INTEGER but was STRING"),
                     invalidTypeResponse.body);
 
             final HttpResponseDetails putResponse =
