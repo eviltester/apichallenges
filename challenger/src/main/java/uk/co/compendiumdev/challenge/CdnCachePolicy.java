@@ -28,10 +28,18 @@ public final class CdnCachePolicy {
 
     static void applyRobotsPolicy(
             final HttpServerRequest request, final HttpServerResponse response) {
-        if (response.status() >= 200
-                && response.status() < 400
-                && isSwaggerUiPath(request.path())) {
+        if (response.status() < 200 || response.status() >= 400) {
+            return;
+        }
+
+        final String path = request.path();
+        if (isNoindexFollowHtmlPagePath(path)) {
             response.header("X-Robots-Tag", "noindex, follow");
+            return;
+        }
+
+        if (isNoindexApiResourcePath(path)) {
+            response.header("X-Robots-Tag", "noindex");
         }
     }
 
@@ -117,6 +125,63 @@ public final class CdnCachePolicy {
     private static boolean isSwaggerUiPath(final String path) {
         return path.equals("/docs/swagger-ui")
                 || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs/swagger-ui$");
+    }
+
+    private static boolean isNoindexFollowHtmlPagePath(final String path) {
+        return isSwaggerUiPath(path)
+                || path.equals("/gui/challenges")
+                || path.startsWith("/gui/challenges/")
+                || path.equals("/gui/entities")
+                || path.startsWith("/gui/entities/")
+                || path.equals("/gui/instances")
+                || path.startsWith("/gui/instances/")
+                || path.startsWith("/gui/instance/")
+                || path.matches("^/(apichallenges|simpleapi|shop)/client$")
+                || path.equals("/simpleapi/gui")
+                || path.startsWith("/simpleapi/gui/")
+                || path.equals("/shop/gui")
+                || path.startsWith("/shop/gui/")
+                || path.matches("^/(sim|mirror)/docs$");
+    }
+
+    private static boolean isNoindexApiResourcePath(final String path) {
+        return path.equals("/docs/openapi.json")
+                || path.equals("/docs/swagger")
+                || path.matches("^/docs/openapi-3\\.[0-9]\\.json$")
+                || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs/swagger$")
+                || path.matches(
+                        "^/(simpleapi|sim|shop|mirror|fromhell)/docs/(openapi|openapi-3\\.[0-9])\\.json$")
+                || path.equals("/gui/challenge-status")
+                || path.startsWith("/gui/challenge-status/")
+                || path.equals("/mirror/request")
+                || path.startsWith("/mirror/request/")
+                || path.equals("/mirror/raw")
+                || path.startsWith("/mirror/raw/")
+                || path.equals("/challenger")
+                || path.startsWith("/challenger/")
+                || path.equals("/secret")
+                || path.startsWith("/secret/")
+                || path.equals("/todos")
+                || path.startsWith("/todos/")
+                || path.equals("/challenges")
+                || path.equals("/heartbeat")
+                || isPracticeApiResourcePath(path);
+    }
+
+    private static boolean isPracticeApiResourcePath(final String path) {
+        return isApiResourceUnderPrefix(path, "/simpleapi")
+                || isApiResourceUnderPrefix(path, "/shop")
+                || isApiResourceUnderPrefix(path, "/sim")
+                || isApiResourceUnderPrefix(path, "/fromhell");
+    }
+
+    private static boolean isApiResourceUnderPrefix(final String path, final String prefix) {
+        return path.startsWith(prefix + "/")
+                && !path.startsWith(prefix + "/docs")
+                && !path.equals(prefix + "/client")
+                && !path.startsWith(prefix + "/client/")
+                && !path.equals(prefix + "/gui")
+                && !path.startsWith(prefix + "/gui/");
     }
 
     private static boolean isContentDocumentationPath(final String path) {

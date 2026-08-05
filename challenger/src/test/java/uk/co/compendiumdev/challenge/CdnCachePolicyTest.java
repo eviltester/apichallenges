@@ -13,7 +13,7 @@ import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
 public class CdnCachePolicyTest {
 
     @Test
-    void swaggerUiPagesDeclareNoindexRobotsHeader() {
+    void htmlAppPagesDeclareNoindexFollowRobotsHeader() {
 
         for (String path :
                 List.of(
@@ -22,7 +22,23 @@ public class CdnCachePolicyTest {
                         "/sim/docs/swagger-ui",
                         "/shop/docs/swagger-ui",
                         "/mirror/docs/swagger-ui",
-                        "/fromhell/docs/swagger-ui")) {
+                        "/fromhell/docs/swagger-ui",
+                        "/gui/challenges",
+                        "/gui/challenges/current",
+                        "/gui/entities",
+                        "/gui/entities/todo",
+                        "/gui/instances",
+                        "/gui/instances/todo",
+                        "/gui/instance/todo/1",
+                        "/apichallenges/client",
+                        "/simpleapi/client",
+                        "/shop/client",
+                        "/simpleapi/gui",
+                        "/simpleapi/gui/entities",
+                        "/shop/gui",
+                        "/shop/gui/entities",
+                        "/sim/docs",
+                        "/mirror/docs")) {
             final TestResponse response = new TestResponse();
 
             CdnCachePolicy.applyRobotsPolicy(new TestRequest(path), response);
@@ -32,13 +48,68 @@ public class CdnCachePolicyTest {
     }
 
     @Test
-    void docsPagesDoNotDeclareNoindexRobotsHeader() {
+    void apiResourcesDeclareNoindexRobotsHeader() {
+        for (String path :
+                List.of(
+                        "/docs/openapi.json",
+                        "/docs/openapi-3.0.json",
+                        "/docs/openapi-3.1.json",
+                        "/docs/openapi-3.2.json",
+                        "/docs/swagger",
+                        "/simpleapi/docs/openapi.json",
+                        "/simpleapi/docs/openapi-3.1.json",
+                        "/simpleapi/docs/swagger",
+                        "/sim/docs/openapi.json",
+                        "/shop/docs/openapi.json",
+                        "/mirror/docs/openapi.json",
+                        "/fromhell/docs/openapi.json",
+                        "/gui/challenge-status",
+                        "/gui/challenge-status/current",
+                        "/mirror/request",
+                        "/mirror/request/anything",
+                        "/mirror/raw",
+                        "/mirror/raw/anything",
+                        "/challenger",
+                        "/challenger/current",
+                        "/secret",
+                        "/secret/token",
+                        "/todos",
+                        "/todos/1",
+                        "/challenges",
+                        "/heartbeat",
+                        "/simpleapi/items",
+                        "/simpleapi/randomisbn",
+                        "/shop/products",
+                        "/shop/register",
+                        "/sim/entities",
+                        "/fromhell/status/200")) {
+            final TestResponse response = new TestResponse();
 
-        final TestResponse response = new TestResponse();
+            CdnCachePolicy.applyRobotsPolicy(new TestRequest(path), response);
 
-        CdnCachePolicy.applyRobotsPolicy(new TestRequest("/docs"), response);
+            Assertions.assertEquals("noindex", response.headers().get("X-Robots-Tag"), path);
+        }
+    }
 
-        Assertions.assertFalse(response.containsHeader("X-Robots-Tag"));
+    @Test
+    void indexableDocsAndSeoPagesDoNotDeclareNoindexRobotsHeader() {
+
+        for (String path :
+                List.of(
+                        "/docs",
+                        "/simpleapi/docs",
+                        "/shop/docs",
+                        "/learning",
+                        "/practice-modes/simpleapi",
+                        "/tools/online-clients/basic-client",
+                        "/tools/online-clients/swagger",
+                        "/tools/online-clients/openapi-converter")) {
+            final TestResponse response = new TestResponse();
+
+            CdnCachePolicy.applyRobotsPolicy(new TestRequest(path), response);
+
+            Assertions.assertFalse(response.containsHeader("X-Robots-Tag"), path);
+        }
     }
 
     private record TestRequest(String path) implements HttpServerRequest {

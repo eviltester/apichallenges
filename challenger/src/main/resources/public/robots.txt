@@ -1,15 +1,13 @@
 User-agent: *
-# use no index meta data instead
-# Disallow: /gui/entities
-# Disallow: /gui/entities/*
-# Disallow: /gui/instances
-# Disallow: /gui/instances/*
-# Disallow: /gui/instance/*
-Disallow: /gui/challenges/*
+# GUI/client/app pages are crawlable so noindex,follow headers can be seen.
+# API/state endpoints that should not be crawled remain disallowed or use
+# X-Robots-Tag: noindex.
 Disallow: /mirror/raw
 Disallow: /mirror/request
 Disallow: /mirror/raw/*
 Disallow: /mirror/request/*
+Allow: /sim/docs
+Allow: /sim/docs/*
 Disallow: /sim/*
 Disallow: /challenger
 Disallow: /challenger/*

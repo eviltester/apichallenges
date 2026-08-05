@@ -338,6 +338,17 @@ public class UiPagesAreReachableTest {
         assertBodyContainsRandomSimpleApiIsbnGenerator(response);
     }
 
+    @Test
+    void browserClientPagesDeclareNoindexFollowRobotsHeader() {
+        for (final String path :
+                List.of("/apichallenges/client", "/simpleapi/client", "/shop/client")) {
+            final HttpResponseDetails response = http.send(path, "get");
+
+            Assertions.assertEquals(200, response.statusCode, path);
+            Assertions.assertEquals("noindex, follow", response.getHeader("X-Robots-Tag"), path);
+        }
+    }
+
     private void assertContainsHeaderAndFooter(HttpResponseDetails response) {
 
         if (!response.body.contains("<div class=\"css-menu\">")) {
@@ -1223,6 +1234,22 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void robotsTxtAllowsCrawlersToSeeNoindexOnHtmlAppPages() {
+        final HttpResponseDetails response = http.send("/robots.txt", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertFalse(response.body.contains("Disallow: /gui/challenges"));
+        Assertions.assertTrue(response.body.contains("Allow: /sim/docs"));
+        Assertions.assertTrue(response.body.contains("Allow: /sim/docs/*"));
+        Assertions.assertTrue(response.body.contains("Disallow: /sim/*"));
+        Assertions.assertTrue(response.body.contains("Disallow: /mirror/raw"));
+        Assertions.assertTrue(response.body.contains("Disallow: /mirror/request"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Sitemap: https://apichallenges.eviltester.com/sitemap.xml"));
+    }
+
+    @Test
     void docsAndDynamicRoutesDeclareCdnCachePolicy() {
 
         HttpResponseDetails response = http.send("/learning", "get");
@@ -1242,23 +1269,30 @@ public class UiPagesAreReachableTest {
         assertCacheControl(
                 response,
                 "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+        Assertions.assertEquals("noindex, follow", response.getHeader("X-Robots-Tag"));
 
         response = http.send("/docs/openapi.json", "get");
         Assertions.assertEquals(200, response.statusCode);
         assertCacheControl(
                 response,
                 "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+        Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
 
-        for (final String dynamicPath :
-                List.of(
-                        "/gui/challenges",
-                        "/todos",
-                        "/challenges",
-                        "/simpleapi/items",
-                        "/mirror/request")) {
+        for (final String[] dynamicRoute :
+                new String[][] {
+                    {"/gui/challenges", "noindex, follow"},
+                    {"/gui/challenge-status", "noindex"},
+                    {"/todos", "noindex"},
+                    {"/challenges", "noindex"},
+                    {"/simpleapi/items", "noindex"},
+                    {"/mirror/request", "noindex"}
+                }) {
+            final String dynamicPath = dynamicRoute[0];
             response = http.send(dynamicPath, "get");
             Assertions.assertEquals(200, response.statusCode, dynamicPath);
             assertCacheControl(response, "no-store");
+            Assertions.assertEquals(
+                    dynamicRoute[1], response.getHeader("X-Robots-Tag"), dynamicPath);
         }
     }
 
@@ -1438,6 +1472,7 @@ public class UiPagesAreReachableTest {
                         "<title>Simulation Mode API Documentation | API Challenges</title>"));
         Assertions.assertTrue(
                 simDocsResponse.body.contains("<meta name='robots' content='noindex,follow'>"));
+        Assertions.assertEquals("noindex, follow", simDocsResponse.getHeader("X-Robots-Tag"));
 
         final HttpResponseDetails mirrorDocsResponse = http.send("/mirror/docs", "get");
         Assertions.assertEquals(200, mirrorDocsResponse.statusCode);
@@ -1446,6 +1481,7 @@ public class UiPagesAreReachableTest {
                         "<title>Mirror Mode API Documentation | API Challenges</title>"));
         Assertions.assertTrue(
                 mirrorDocsResponse.body.contains("<meta name='robots' content='noindex,follow'>"));
+        Assertions.assertEquals("noindex, follow", mirrorDocsResponse.getHeader("X-Robots-Tag"));
         Assertions.assertFalse(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger-ui'"));
         Assertions.assertFalse(mirrorDocsResponse.body.contains("Open Swagger UI"));
         Assertions.assertTrue(mirrorDocsResponse.body.contains("<li>OpenAPI v 3.2 JSON"));
