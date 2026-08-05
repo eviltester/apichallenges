@@ -3,6 +3,7 @@
 
   const WIDGET_SELECTOR = '.sim-live-request, .api-live-request';
   const DEFAULT_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD', 'TRACE', 'QUERY'];
+  const CUSTOM_METHOD_VALUE = '__custom__';
   const BODY_METHODS = ['POST', 'PUT', 'PATCH', 'QUERY'];
   const EDIT_MODES = ['readonly', 'fixed', 'adhoc'];
   const BROWSER_UNSUPPORTED_METHODS = ['CONNECT', 'TRACE', 'TRACK'];
@@ -33,7 +34,19 @@
     return (method || 'GET').trim().toUpperCase();
   }
 
-  function methodAllowsBody(method) {
+  function appendDefaultMethodOptions(select) {
+    DEFAULT_METHODS.forEach(function (method) {
+      const option = document.createElement('option');
+      option.value = method;
+      option.textContent = method;
+      select.appendChild(option);
+    });
+  }
+
+  function methodAllowsBody(method, request) {
+    if (request && request.bodyMethods === 'all') {
+      return true;
+    }
     return BODY_METHODS.indexOf(normalizeMethod(method)) !== -1;
   }
 
@@ -142,7 +155,7 @@
   }
 
   function requestBodyAllowed(request) {
-    return request.bodyEditable && methodAllowsBody(request.method);
+    return request.bodyEditable && methodAllowsBody(request.method, request);
   }
 
   function bodyForRequest(request) {
@@ -1008,6 +1021,7 @@
 
     let methodLabel = null;
     let methodSelect = null;
+    let methodInput = null;
     let urlLabel = null;
     let urlInput = null;
     let queryLabel = null;
@@ -1016,16 +1030,31 @@
     if (request.editMode === 'adhoc') {
       methodLabel = document.createElement('label');
       methodLabel.textContent = 'Verb';
-      methodSelect = document.createElement('select');
-      methodSelect.className = 'sim-live-edit-method';
-      DEFAULT_METHODS.forEach(function (method) {
-        const option = document.createElement('option');
-        option.value = method;
-        option.textContent = method;
-        methodSelect.appendChild(option);
-      });
-      methodSelect.value = request.method;
-      methodLabel.appendChild(methodSelect);
+      if (request.customMethod) {
+        methodSelect = document.createElement('select');
+        methodSelect.className = 'sim-live-edit-method';
+        appendDefaultMethodOptions(methodSelect);
+        const customOption = document.createElement('option');
+        customOption.value = CUSTOM_METHOD_VALUE;
+        customOption.textContent = 'Custom...';
+        methodSelect.appendChild(customOption);
+        methodSelect.setAttribute('aria-label', 'HTTP method');
+        methodLabel.appendChild(methodSelect);
+
+        methodInput = document.createElement('input');
+        methodInput.className = 'sim-live-edit-method sim-live-edit-method-custom';
+        methodInput.type = 'text';
+        methodInput.placeholder = 'CUSTOM';
+        methodInput.value = request.method;
+        methodInput.setAttribute('aria-label', 'Custom HTTP method');
+        methodLabel.appendChild(methodInput);
+      } else {
+        methodSelect = document.createElement('select');
+        methodSelect.className = 'sim-live-edit-method';
+        appendDefaultMethodOptions(methodSelect);
+        methodSelect.value = request.method;
+        methodLabel.appendChild(methodSelect);
+      }
 
       urlLabel = document.createElement('label');
       urlLabel.textContent = 'URL';
@@ -1114,10 +1143,38 @@
       }
     }
 
+    function syncMethodControlState(forceCustom) {
+      if (methodSelect && request.customMethod && methodInput) {
+        const customSelected = forceCustom || DEFAULT_METHODS.indexOf(request.method) === -1;
+        methodSelect.value = customSelected ? CUSTOM_METHOD_VALUE : request.method;
+        methodInput.hidden = !customSelected;
+        methodInput.value = request.method;
+        return;
+      }
+      if (methodSelect) {
+        methodSelect.value = request.method;
+      }
+      if (methodInput) {
+        methodInput.value = request.method;
+      }
+    }
+
     function syncRequestFromControls() {
       request.userEdited = true;
+      const selectedCustomMethod = methodSelect
+        && request.customMethod
+        && methodSelect.value === CUSTOM_METHOD_VALUE
+        && methodInput;
       if (methodSelect) {
-        request.method = normalizeMethod(methodSelect.value);
+        if (selectedCustomMethod) {
+          request.method = normalizeMethod(methodInput.value);
+          methodInput.value = request.method;
+        } else {
+          request.method = normalizeMethod(methodSelect.value);
+        }
+      } else if (methodInput) {
+        request.method = normalizeMethod(methodInput.value);
+        methodInput.value = request.method;
       }
       if (urlInput) {
         request.url = absoluteUrl(urlInput.value);
@@ -1130,12 +1187,25 @@
         request.body = bodyTextarea.value;
       }
       syncLockedFields();
+      syncMethodControlState(selectedCustomMethod);
       syncBodyControlVisibility();
       notifyChanged();
     }
 
     if (methodSelect) {
-      methodSelect.addEventListener('change', syncRequestFromControls);
+      methodSelect.addEventListener('change', function () {
+        syncRequestFromControls();
+        if (request.customMethod
+            && methodSelect.value === CUSTOM_METHOD_VALUE
+            && methodInput) {
+          methodInput.focus();
+          methodInput.select();
+        }
+      });
+    }
+    if (methodInput) {
+      methodInput.addEventListener('change', syncRequestFromControls);
+      methodInput.addEventListener('blur', syncRequestFromControls);
     }
     if (urlInput) {
       urlInput.addEventListener('change', syncRequestFromControls);
@@ -1153,9 +1223,7 @@
       request.url = defaultRequest.url;
       request.body = defaultRequest.body;
       request.headers = cloneHeaders(defaultRequest.headers);
-      if (methodSelect) {
-        methodSelect.value = request.method;
-      }
+      syncMethodControlState();
       if (urlInput) {
         urlInput.value = readableUrl(request.url);
       }
@@ -1185,14 +1253,17 @@
       controls.appendChild(bodyLabel);
     }
     controls.appendChild(editActions);
+    syncMethodControlState();
     syncBodyControlVisibility();
     return {
       element: controls,
       methodSelect: methodSelect,
+      methodInput: methodInput,
       urlInput: urlInput,
       headersTextarea: headersTextarea,
       bodyTextarea: bodyTextarea,
       queryTextarea: queryTextarea,
+      syncMethodControlState: syncMethodControlState,
       syncLockedFields: syncLockedFields,
       syncBodyControlVisibility: syncBodyControlVisibility,
     };
@@ -1619,6 +1690,7 @@
                 if (controls.bodyTextarea) {
                   controls.bodyTextarea.value = request.body;
                 }
+                controls.syncMethodControlState();
                 controls.syncLockedFields();
                 controls.syncBodyControlVisibility();
               }
@@ -1762,6 +1834,10 @@
       if (widgetState.controls.methodSelect) {
         widgetState.controls.methodSelect.value = widgetState.request.method;
       }
+      if (widgetState.controls.methodInput) {
+        widgetState.controls.methodInput.value = widgetState.request.method;
+      }
+      widgetState.controls.syncMethodControlState();
       if (widgetState.controls.urlInput) {
         widgetState.controls.urlInput.value = readableUrl(widgetState.request.url);
       }
@@ -1803,6 +1879,8 @@
       editable: editMode !== 'readonly',
       editMode: editMode,
       bodyEditable: placeholder.dataset.bodyEditable !== 'false',
+      bodyMethods: (placeholder.dataset.bodyMethods || '').trim().toLowerCase(),
+      customMethod: placeholder.dataset.customMethod === 'true',
       queryEditable: placeholder.dataset.queryEditable !== 'false',
       allowedPathPrefixes: parseAllowedPathPrefixes(placeholder.dataset.allowedPathPrefixes),
       useChallenger: isApiRequest && placeholder.dataset.useChallenger !== 'false',

@@ -2,6 +2,10 @@ div#toc{
     margin: 1rem 0 1.5rem;
 }
 
+div#toc:empty{
+    display: none;
+}
+
 div#toc div.h2{
     margin-left: 2em;
 }
@@ -44,19 +48,19 @@ div#toc .toc-entry.is-active > a{
      * Keep the article at its normal reading width and let the TOC sit beside it
      * as a callout, instead of consuming a grid column inside the article flow.
      */
-    .right-column .main-text-content:has(> #toc) {
+    .right-column .main-text-content:has(> #toc:not(:empty)) {
         display: block;
         max-width: var(--reading-max, 76ch);
         position: relative;
     }
 
-    .right-column .main-text-content:has(> #toc) h2,
-    .right-column .main-text-content:has(> #toc) h3,
-    .right-column .main-text-content:has(> #toc) h4 {
+    .right-column .main-text-content:has(> #toc:not(:empty)) h2,
+    .right-column .main-text-content:has(> #toc:not(:empty)) h3,
+    .right-column .main-text-content:has(> #toc:not(:empty)) h4 {
         clear: none;
     }
 
-    .right-column .main-text-content:has(> #toc) > #toc {
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc {
         --toc-floating-gap: 1.5rem;
         --toc-floating-width: clamp(11rem, calc(16vw - 2rem), 14rem);
 
@@ -81,23 +85,23 @@ div#toc .toc-entry.is-active > a{
         z-index: 2;
     }
 
-    .right-column .main-text-content:has(> #toc) > #toc div.h2 {
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc div.h2 {
         margin-left: 0;
     }
 
-    .right-column .main-text-content:has(> #toc) > #toc div.h3 {
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc div.h3 {
         margin-left: 1rem;
     }
 
-    .right-column .main-text-content:has(> #toc) > #toc div.h4,
-    .right-column .main-text-content:has(> #toc) > #toc div.h5,
-    .right-column .main-text-content:has(> #toc) > #toc div.h6 {
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc div.h4,
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc div.h5,
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc div.h6 {
         margin-left: 1.5rem;
     }
 }
 
 @media (min-width: 1500px) {
-    .right-column .main-text-content:has(> #toc) > #toc {
+    .right-column .main-text-content:has(> #toc:not(:empty)) > #toc {
         --toc-floating-gap: clamp(32px, calc(5vw - 43px), 80px);
         --toc-floating-width: clamp(228px, calc(32vw - 252px), 350px);
     }

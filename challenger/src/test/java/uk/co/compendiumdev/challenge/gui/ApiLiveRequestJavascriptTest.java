@@ -151,7 +151,8 @@ public class ApiLiveRequestJavascriptTest {
 
         Assertions.assertTrue(
                 javascript.contains("const BODY_METHODS = ['POST', 'PUT', 'PATCH', 'QUERY'];"));
-        Assertions.assertTrue(javascript.contains("function methodAllowsBody(method)"));
+        Assertions.assertTrue(javascript.contains("function methodAllowsBody(method, request)"));
+        Assertions.assertTrue(javascript.contains("request && request.bodyMethods === 'all'"));
         Assertions.assertTrue(javascript.contains("function requestBodyAllowed(request)"));
         Assertions.assertTrue(javascript.contains("function bodyForRequest(request)"));
         Assertions.assertTrue(javascript.contains("bodyLabel.hidden = !showBody"));
@@ -159,11 +160,34 @@ public class ApiLiveRequestJavascriptTest {
     }
 
     @Test
+    void liveRequestWidgetsCanOptIntoCustomMethods() throws IOException {
+        String javascript = apiLiveRequestJavascript();
+
+        Assertions.assertTrue(
+                javascript.contains("customMethod: placeholder.dataset.customMethod === 'true'"));
+        Assertions.assertTrue(
+                javascript.contains("bodyMethods: (placeholder.dataset.bodyMethods || '').trim()"));
+        Assertions.assertTrue(javascript.contains("const CUSTOM_METHOD_VALUE = '__custom__';"));
+        Assertions.assertTrue(javascript.contains("appendDefaultMethodOptions(methodSelect);"));
+        Assertions.assertTrue(javascript.contains("customOption.textContent = 'Custom...'"));
+        Assertions.assertTrue(javascript.contains("methodInput.type = 'text'"));
+        Assertions.assertTrue(javascript.contains("methodInput.placeholder = 'CUSTOM'"));
+        Assertions.assertTrue(
+                javascript.contains("methodInput.setAttribute('aria-label', 'Custom HTTP method')"));
+        Assertions.assertTrue(
+                javascript.contains("methodInput.hidden = !customSelected"));
+        Assertions.assertTrue(
+                javascript.contains("syncMethodControlState(selectedCustomMethod)"));
+        Assertions.assertTrue(javascript.contains("methodInput.addEventListener('blur'"));
+    }
+
+    @Test
     void liveRequestWidgetsSupportConfiguredFieldsAndResponseCopyActions() throws IOException {
         String javascript = apiLiveRequestJavascript();
 
         Assertions.assertTrue(
-                javascript.contains("queryEditable: placeholder.dataset.queryEditable !== 'false'"));
+                javascript.contains(
+                        "queryEditable: placeholder.dataset.queryEditable !== 'false'"));
         Assertions.assertTrue(javascript.contains("if (request.queryEditable)"));
         Assertions.assertTrue(
                 javascript.contains("responseActions.className = 'sim-live-response-actions'"));
@@ -171,15 +195,16 @@ public class ApiLiveRequestJavascriptTest {
                 javascript.contains("responseBodyCopyButton.textContent = 'Copy body'"));
         Assertions.assertTrue(
                 javascript.contains("responseHeadersCopyButton.textContent = 'Copy headers'"));
-        Assertions.assertTrue(javascript.contains("responseActions.appendChild(responseBodyCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("responseActions.appendChild(responseBodyCopyButton)"));
         Assertions.assertTrue(
                 javascript.contains("responseActions.appendChild(responseHeadersCopyButton)"));
         Assertions.assertTrue(
                 javascript.contains("copyText(bodyPanel.textContent, responseBodyCopyButton)"));
         Assertions.assertTrue(
-                javascript.contains("copyText(headersPanel.textContent, responseHeadersCopyButton)"));
-        Assertions.assertTrue(
-                javascript.contains("'.sim-live-response-panel'"));
+                javascript.contains(
+                        "copyText(headersPanel.textContent, responseHeadersCopyButton)"));
+        Assertions.assertTrue(javascript.contains("'.sim-live-response-panel'"));
         final int responseElements = javascript.indexOf("elements: [");
         final int bodyPanel = javascript.indexOf("bodyPanel,", responseElements);
         final int headersPanel = javascript.indexOf("headersPanel,", responseElements);

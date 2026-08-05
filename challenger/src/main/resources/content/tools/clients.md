@@ -2,7 +2,7 @@
 title: HTTP Rest Clients - Introduction
 seo_title: HTTP Rest Clients - Introduction | API Testing Tools
 description: An overview of the most popular, and mostly free, HTTP and REST Clients.
-lastmod: 2026-02-18
+lastmod: 2026-08-05
 seo_description: Compare popular API clients, see where each tool fits best, and choose the right option for exploratory testing, debugging, and daily request work.
 showads: true
 ---
@@ -65,6 +65,10 @@ Online clients are useful to get started quickly. One issue with Online clients 
 
 But they are very useful to experiment with an API quickly.
 
+- [API Challenges Basic Client](/tools/online-clients/basic-client)
+  - A free online REST API client for sending custom HTTP methods, URLs, headers, and request bodies from the browser.
+- [API Challenges Swagger](/tools/online-clients/swagger)
+  - An online Swagger UI that can open OpenAPI and Swagger files from a URL or local disk.
 - [Hoppscotch](https://hoppscotch.io)
   - A well implemented browser based client. Import Postman and Swagger (Open API) collections.
 - [RestTestTest](https://resttesttest.com/)

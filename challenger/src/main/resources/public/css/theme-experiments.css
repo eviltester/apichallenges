@@ -1408,6 +1408,41 @@ html[data-theme] summary {
     font-weight: 700;
 }
 
+html[data-theme] .side-toc .side-toc-section {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0.15rem 0 0.7rem;
+    padding: 0;
+}
+
+html[data-theme] .side-toc .side-toc-section-summary {
+    color: var(--text);
+    font-weight: 700;
+}
+
+html[data-theme] .side-toc .side-toc-section-summary::before {
+    color: var(--muted);
+}
+
+html[data-theme] .side-toc .side-toc-section-summary:hover::before,
+html[data-theme] .side-toc .side-toc-section-summary:focus-visible::before {
+    color: var(--cta-bg);
+}
+
+html[data-theme] .side-toc .side-toc-section-description {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+html[data-theme] .side-toc .side-toc-section-links {
+    margin-bottom: 0.2rem;
+}
+
+html[data-theme] .side-toc .side-toc-section-links li {
+    font-weight: 500;
+}
+
 html[data-theme] .sim-live-tab,
 html[data-theme] .sim-live-response-tab,
 html[data-theme] .sim-live-copy,

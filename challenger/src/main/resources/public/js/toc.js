@@ -10,6 +10,10 @@ function htmlTableOfContents( documentRef ) {
         return;
     var content = toc.closest(".main-text-content") || documentRef.body;
     var headings = [].slice.call(content.querySelectorAll('h2, h3, h4, h5, h6'));
+    if (!headings.length) {
+        toc.remove();
+        return;
+    }
     var links = [];
     headings.forEach(function (heading, index) {
         var ref = "toc" + index;

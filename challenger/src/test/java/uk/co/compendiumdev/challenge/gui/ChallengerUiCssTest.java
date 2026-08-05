@@ -64,6 +64,31 @@ public class ChallengerUiCssTest {
         Assertions.assertTrue(selectedNextRule.contains("outline: none"));
     }
 
+    @Test
+    void sideTocShowsDescriptionsOnlyWhenSectionsAreCollapsed() throws IOException {
+        String css = contentCss();
+
+        String collapsedLinksRule =
+                ruleBody(css, ".side-toc-section:not([open]) > .side-toc-section-links");
+        Assertions.assertTrue(collapsedLinksRule.contains("display: none"));
+
+        String openDescriptionRule =
+                ruleBody(
+                        css,
+                        ".side-toc-section[open] > .side-toc-section-summary .side-toc-section-description");
+        Assertions.assertTrue(openDescriptionRule.contains("display: none"));
+    }
+
+    @Test
+    void emptyTableOfContentsDoesNotFloatBesideContent() throws IOException {
+        String css = tocCss();
+
+        String emptyTocRule = ruleBody(css, "div#toc:empty");
+        Assertions.assertTrue(emptyTocRule.contains("display: none"));
+        Assertions.assertTrue(css.contains(".main-text-content:has(> #toc:not(:empty))"));
+        Assertions.assertFalse(css.contains(".main-text-content:has(> #toc)"));
+    }
+
     private String ruleBody(final String css, final String selector) {
         Pattern pattern =
                 Pattern.compile(Pattern.quote(selector) + "\\s*\\{([^}]*)}", Pattern.DOTALL);
@@ -75,6 +100,20 @@ public class ChallengerUiCssTest {
     private String themeExperimentsCss() throws IOException {
         try (InputStream stream =
                 getClass().getResourceAsStream("/public/css/theme-experiments.css")) {
+            Assertions.assertNotNull(stream);
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private String contentCss() throws IOException {
+        try (InputStream stream = getClass().getResourceAsStream("/public/css/content.css")) {
+            Assertions.assertNotNull(stream);
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private String tocCss() throws IOException {
+        try (InputStream stream = getClass().getResourceAsStream("/public/css/toc.css")) {
             Assertions.assertNotNull(stream);
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }

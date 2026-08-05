@@ -192,6 +192,59 @@ public class UiPagesAreReachableTest {
                 response.body.contains("data-use-challenger=\"" + useChallenger + "\""));
     }
 
+    @Test
+    void onlineClientPagesRenderFromToolsNavigation() {
+        HttpResponseDetails response = http.send("/tools/online-clients/basic-client", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertContainsHeaderAndFooter(response);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<title>Free Online REST API Client for Testing HTTP Requests</title>"));
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
+        Assertions.assertTrue(response.body.contains("class=\"sim-live-request\""));
+        Assertions.assertTrue(response.body.contains("data-custom-method=\"true\""));
+        Assertions.assertTrue(response.body.contains("data-body-methods=\"all\""));
+        Assertions.assertFalse(response.body.contains("data-allowed-path-prefixes"));
+        Assertions.assertFalse(response.body.contains("data-expected-status"));
+        Assertions.assertTrue(response.body.contains("limited by CORS"));
+        Assertions.assertTrue(
+                response.body.contains("Use Browser Dev Tools To Help Test REST APIs"));
+        Assertions.assertTrue(response.body.contains("HAR file"));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/basic-client\""));
+
+        response = http.send("/tools/online-clients/swagger", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertContainsHeaderAndFooter(response);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<title>Online Swagger UI: Open OpenAPI Files from URL or Disk</title>"));
+        Assertions.assertTrue(response.body.contains("data-online-swagger-client"));
+        Assertions.assertTrue(response.body.contains("data-openapi-url"));
+        Assertions.assertTrue(response.body.contains("data-openapi-file"));
+        Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist"));
+        Assertions.assertTrue(response.body.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
+        Assertions.assertTrue(
+                response.body.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
+        Assertions.assertTrue(
+                response.body.contains("How To Use Swagger UI For REST API Testing"));
+        Assertions.assertTrue(response.body.contains("CORS Limits For Browser Swagger UI"));
+        Assertions.assertTrue(
+                response.body.contains("When To Use A REST Client Instead Of Swagger UI"));
+        Assertions.assertTrue(response.body.contains("less-validating, permissive file"));
+        Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/simpleapi-openapi\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/shoppingcart-openapi\""));
+        Assertions.assertTrue(response.body.contains("limited by CORS"));
+        Assertions.assertTrue(response.body.contains("Open local JSON or YAML file"));
+    }
+
     private void assertBodyContainsRandomSimpleApiIsbnGenerator(
             final HttpResponseDetails response) {
         Assertions.assertTrue(
@@ -995,7 +1048,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/css"));
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("@media (min-width: 1400px)"));
-        Assertions.assertTrue(response.body.contains(".main-text-content:has(> #toc)"));
+        Assertions.assertTrue(response.body.contains("div#toc:empty"));
+        Assertions.assertTrue(
+                response.body.contains(".main-text-content:has(> #toc:not(:empty))"));
+        Assertions.assertFalse(response.body.contains(".main-text-content:has(> #toc)"));
         Assertions.assertTrue(response.body.contains("background: var(--surface, #ffffff)"));
         Assertions.assertTrue(response.body.contains("box-shadow: var(--shadow-soft"));
         Assertions.assertTrue(response.body.contains("clear: none"));
@@ -1029,6 +1085,8 @@ public class UiPagesAreReachableTest {
         assertCacheControl(response, "public, max-age=31536000, immutable");
         Assertions.assertTrue(response.body.contains("htmlTableOfContents"));
         Assertions.assertTrue(response.body.contains("showTableOfContentsProgress"));
+        Assertions.assertTrue(response.body.contains("if (!headings.length)"));
+        Assertions.assertTrue(response.body.contains("toc.remove();"));
         Assertions.assertTrue(response.body.contains("aria-current"));
         Assertions.assertTrue(response.body.contains("is-active"));
 
