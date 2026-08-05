@@ -1,22 +1,23 @@
 ---
-title: The API Challenges - API Tutorials and API Testing Practice Exercises
-seo_title: API Challenges Tutorials and Testing Practice
-description: A practice API application with tutorials for HTTP and REST APIs. Guided exercises and gamification hands on learning path.
-lastmod: 2026-07-29
+title: REST API Tutorial and API Testing Practice | API Challenges
+seo_title: REST API Tutorial and API Testing Practice | API Challenges
+description: Learn REST APIs and API testing by making real requests against practice APIs, guided tutorials, browser tools, and hands-on challenges from API Challenges.
+lastmod: 2026-08-05
 template: index
 canonical: https://apichallenges.eviltester.com
 ---
 
-# The API Challenges
+# Learn REST APIs by Testing a Real API
 
 <figure class="site-hero-figure">
   <img src="/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="API Challenges overview showing the Simulator, Learning Zone, API Challenges progress board, Simple API, Buggy API, HTTP Mirror, Tool Reviews, Practice Sites, and API From Hell.">
 </figure>
 
-## A learning environment to experiment, explore, and play with API Testing and Tooling
+## A Hands-On REST API Tutorial For API Testing Practice
 
-Welcome to The API Challenges, a site dedicated to helping you learn API Testing.
-With all the tutorials, practice APIs and information you need to practice and improve your API Testing skills.
+API Challenges is a hands-on REST API tutorial and API testing practice site. You learn by sending real HTTP requests, checking responses, and working through guided challenges.
+
+The site includes tutorials, practice APIs, online tools, and reference material to help you practise and improve your API testing skills.
 
 We provide:
 
@@ -29,21 +30,26 @@ We provide:
 
 ## How To Learn API Testing
 
-- Start by Reading through our Learning Zone content
+1. Start by Reading through our Learning Zone content
    - [What is an API?](/tutorials/rest-api-basics)
    - [How to Learn API Testing?](/learning)
-- Download an API Client
+2. Follow one of our tutorials with embedded HTTP Clients
+   - Follow our [How to Test Rest APIs Step By Step](/tutorials/rest-api-testing) Tutorial
+   - Use the [API Simulator Walkthrough API Tutorial](/practice-modes/simulation)
+3. Experiment with a Real API
+   - our [Simple API](/practice-modes/simpleapi) does not require any authentication and supports all HTTP Requests. Our embedded HTP client makes this easy.
+4. Work through the API Challenges
+   - [solve each of the API Challenges](/gui/challenges) to gain practical experience of Testing APIs using the browser based HTTP client.
+5. Download an API Client
    - [Recommended API Clients](/tools/clients)
-- Use the API Simulator
-   - [follow our step by step guide](/practice-modes/simulation)
-- Experiment with a Real API
-   - our [Simple API](/practice-modes/simpleapi) does not require any authentication and supports all HTTP Requests
-- Explore business-rule testing
+6. Repeat any of the earlier tutorials or challenges using your stand alone REST API Client.
+7. Explore business-rule testing
    - our [Buggy API](/practice-modes/shoppingcart) has deliberately buggy stock, cart, and checkout behaviour
-- Work through the API Challenges
-   - [solve each of the API Challenges](/gui/challenges) to gain practical experience of Testing APIs
-- Experiment with other APIs
-   - we maintain a list of [Recommended Practice API Sites](/practice-sites) 
+
+8. Experiment with other APIs
+   - we maintain a list of [Recommended Practice API Sites](/practice-sites)
+9. Learn the limits of your API Client by using it with the [API From Hell](/practice-modes/fromhell)
+
 
 ## Video Welcome
 

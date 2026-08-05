@@ -66,6 +66,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg"));
+        Assertions.assertTrue(
+                response.body.contains("<h1>Learn REST APIs by Testing a Real API</h1>"));
         assertContainsHeaderAndFooter(response);
     }
 
@@ -111,8 +113,16 @@ public class UiPagesAreReachableTest {
         List<Arguments> args = new ArrayList<>();
 
         // home page
-        args.add(Arguments.of(200, "API Challenges Tutorials and Testing Practice", ""));
-        args.add(Arguments.of(200, "API Challenges Tutorials and Testing Practice", "/"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "REST API Tutorial and API Testing Practice | API Challenges",
+                        ""));
+        args.add(
+                Arguments.of(
+                        200,
+                        "REST API Tutorial and API Testing Practice | API Challenges",
+                        "/"));
         // entities
         args.add(Arguments.of(200, "Entities Menu", "/gui/entities"));
         args.add(Arguments.of(200, "todo Instances", "gui/instances?entity=todo"));
@@ -1527,7 +1537,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='description' content='A practice API application with tutorials for HTTP and REST APIs. Guided exercises and gamification hands on learning path.'>"));
+                        "<meta name='description' content='Learn REST APIs and API testing by making real requests against practice APIs, guided tutorials, browser tools, and hands-on challenges from API Challenges.'>"));
         Assertions.assertTrue(
                 response.body.contains("<meta name='robots' content='index,follow'>"));
         Assertions.assertTrue(
@@ -2054,6 +2064,12 @@ public class UiPagesAreReachableTest {
         final HttpResponseDetails response = http.send("/sitemap.xml", "get");
 
         Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<urlset xmlns=\"https://www.sitemaps.org/schemas/sitemap/0.9\""));
         Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.eviltester.com</loc>"));
         Assertions.assertTrue(

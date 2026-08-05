@@ -28,7 +28,7 @@ public class SiteMapXml {
             sitemapxml.append(
                     """
                     <?xml version="1.0" encoding="utf-8"?>
-                    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
                     """
                             .stripIndent()
                             .stripLeading());
