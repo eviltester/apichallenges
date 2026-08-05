@@ -33,6 +33,11 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - name: Install Thingifier dependency
         run: >
           mvn -B -f thingifier/pom.xml -pl ercoremodel,thingifier -am install

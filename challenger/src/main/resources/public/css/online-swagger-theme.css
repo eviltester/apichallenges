@@ -72,6 +72,15 @@ html[data-theme] .online-client-status-error {
 }
 
 html[data-theme] #online-swagger-ui {
+    --online-swagger-surface: var(--surface);
+    --online-swagger-surface-soft: var(--surface-soft);
+    --online-swagger-surface-strong: var(--surface-strong);
+    --online-swagger-text: var(--text);
+    --online-swagger-muted: var(--muted);
+    --online-swagger-border: var(--border);
+    --online-swagger-link: var(--accent-strong);
+    --online-swagger-code-bg: var(--code-bg);
+    --online-swagger-code-text: var(--code-text);
     background: var(--surface) !important;
     border-color: var(--border);
     border-radius: var(--radius);
@@ -79,13 +88,115 @@ html[data-theme] #online-swagger-ui {
 }
 
 html[data-theme] #online-swagger-ui .swagger-ui {
-    color: var(--text);
+    color: var(--online-swagger-text) !important;
     font-family: var(--body-font);
 }
 
 html[data-theme] #online-swagger-ui .swagger-ui .wrapper {
     padding-left: 1rem;
     padding-right: 1rem;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui .info .title,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-tag,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-title,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-title span,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-section-header h4,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-section-header h4 span,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-summary-description,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-description-wrapper,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-description-wrapper p,
+html[data-theme] #online-swagger-ui .swagger-ui .parameters-container,
+html[data-theme] #online-swagger-ui .swagger-ui .parameters-container p,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-wrapper h4,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-wrapper h5,
+html[data-theme] #online-swagger-ui .swagger-ui .response-control-media-type__accept-message,
+html[data-theme] #online-swagger-ui .swagger-ui .markdown p,
+html[data-theme] #online-swagger-ui .swagger-ui .markdown li,
+html[data-theme] #online-swagger-ui .swagger-ui .renderedMarkdown p,
+html[data-theme] #online-swagger-ui .swagger-ui .renderedMarkdown li,
+html[data-theme] #online-swagger-ui .swagger-ui table thead tr td,
+html[data-theme] #online-swagger-ui .swagger-ui table thead tr th,
+html[data-theme] #online-swagger-ui .swagger-ui table tbody tr td,
+html[data-theme] #online-swagger-ui .swagger-ui label,
+html[data-theme] #online-swagger-ui .swagger-ui .parameter__name,
+html[data-theme] #online-swagger-ui .swagger-ui .parameter__type,
+html[data-theme] #online-swagger-ui .swagger-ui .response-col_status,
+html[data-theme] #online-swagger-ui .swagger-ui .response-col_description,
+html[data-theme] #online-swagger-ui .swagger-ui .model-title,
+html[data-theme] #online-swagger-ui .swagger-ui .model,
+html[data-theme] #online-swagger-ui .swagger-ui .prop-name,
+html[data-theme] #online-swagger-ui .swagger-ui .prop-type,
+html[data-theme] #online-swagger-ui .swagger-ui .prop-format,
+html[data-theme] #online-swagger-ui .swagger-ui .tab li {
+    color: var(--online-swagger-text) !important;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui a,
+html[data-theme] #online-swagger-ui .swagger-ui .link,
+html[data-theme] #online-swagger-ui .swagger-ui .opblock-tag:hover {
+    color: var(--online-swagger-link) !important;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table thead,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table tbody,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table tr,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table td,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table th {
+    background: var(--online-swagger-surface) !important;
+    border-color: var(--online-swagger-border) !important;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui .response-col_links,
+html[data-theme] #online-swagger-ui .swagger-ui .response-col_links i,
+html[data-theme] #online-swagger-ui .swagger-ui .responses-table .response-col_description__inner div {
+    color: var(--online-swagger-muted) !important;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui .opblock .opblock-section-header {
+    background: var(--online-swagger-surface-soft) !important;
+    border-color: var(--online-swagger-border) !important;
+    box-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui {
+    background: var(--online-swagger-surface) !important;
+    color-scheme: light;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-options,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-head {
+    background: color-mix(in srgb, var(--secondary-accent) 9%, var(--online-swagger-surface)) !important;
+    border-color: var(--secondary-accent) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-trace {
+    background: color-mix(in srgb, var(--warning-accent) 10%, var(--online-swagger-surface)) !important;
+    border-color: var(--warning-accent) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-options .opblock-summary,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-head .opblock-summary {
+    background: color-mix(in srgb, var(--secondary-accent) 14%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-trace .opblock-summary {
+    background: color-mix(in srgb, var(--warning-accent) 16%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-head .opblock-summary-method {
+    background: var(--secondary-accent) !important;
+    color: var(--accent-contrast) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-trace .opblock-summary-method {
+    background: var(--warning-accent) !important;
+    color: var(--accent-contrast) !important;
+    text-shadow: none !important;
 }
 
 html[data-theme="dark-lab"] #online-swagger-ui,
@@ -150,6 +261,11 @@ html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-opti
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-head {
     background: color-mix(in srgb, #93c5fd 12%, var(--surface)) !important;
     border-color: #93c5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-trace {
+    background: color-mix(in srgb, #fbbf24 12%, var(--surface)) !important;
+    border-color: #fbbf24 !important;
 }
 
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .info .title,
@@ -231,6 +347,10 @@ html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-patc
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-head .opblock-summary-method {
     background: #93c5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-trace .opblock-summary-method {
+    background: #fcd34d !important;
 }
 
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .btn,

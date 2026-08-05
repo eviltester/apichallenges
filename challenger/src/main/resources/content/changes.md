@@ -18,6 +18,8 @@ showads: true
 - Improved API Challenges progress tracking, including clearer challenge progress, solution flow, and achievement handling.
 - Re-enabled server-side storage of challenge progress so challenge state can be restored more reliably.
 - Added hosted online API client pages for the Basic Client and Swagger Client.
+- Added the [OpenAPI Converter](/tools/online-clients/openapi-converter) to convert OpenAPI files into more permissive tester specifications in the browser.
+- Added tester OpenAPI profile controls to the [Online Swagger UI](/tools/online-clients/swagger) so imported files can be rendered as original, practical, or aggressive tester-friendly specs.
 
 ## 2026/07/30 - PATCH support
 

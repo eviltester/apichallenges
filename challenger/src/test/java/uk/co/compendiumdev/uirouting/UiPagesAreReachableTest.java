@@ -238,9 +238,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist"));
         assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
-        Assertions.assertTrue(response.body.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
         assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
         Assertions.assertTrue(
                 response.body.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
@@ -295,9 +296,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "Use Converted OpenAPI Files In Swagger UI And REST Clients"));
         Assertions.assertTrue(response.body.contains("CORS Limits For Browser OpenAPI Conversion"));
-        Assertions.assertTrue(response.body.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-converter-page.js");
         Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(

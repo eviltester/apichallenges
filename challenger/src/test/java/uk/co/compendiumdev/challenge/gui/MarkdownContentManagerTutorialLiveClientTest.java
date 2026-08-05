@@ -134,10 +134,18 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(html.contains("https://unpkg.com/swagger-ui-dist"));
         Assertions.assertTrue(html.contains("href=\"/css/online-swagger-theme.css\""));
-        Assertions.assertTrue(html.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        Assertions.assertTrue(html.contains("src=\"/js/vendor/js-yaml.min.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/online-swagger-client.js\""));
+        assertContainsInOrder(
+                html,
+                "src=\"/js/vendor/js-yaml.min.js\"",
+                "src=\"/js/openapi-text-loader.js\"",
+                "src=\"/js/openapi-tester-converter.js\"",
+                "src=\"/js/openapi-tool-controls.js\"",
+                "src=\"/js/online-swagger-client.js\"");
         Assertions.assertTrue(
                 html.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
         Assertions.assertTrue(html.contains("Render A Tester OpenAPI Spec In Swagger UI"));
@@ -187,8 +195,16 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("CORS Limits For Browser OpenAPI Conversion"));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-converter-page.js\""));
-        Assertions.assertTrue(html.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        Assertions.assertTrue(html.contains("src=\"/js/vendor/js-yaml.min.js\""));
+        assertContainsInOrder(
+                html,
+                "src=\"/js/vendor/js-yaml.min.js\"",
+                "src=\"/js/openapi-text-loader.js\"",
+                "src=\"/js/openapi-tester-converter.js\"",
+                "src=\"/js/openapi-tool-controls.js\"",
+                "src=\"/js/openapi-converter-page.js\"");
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));

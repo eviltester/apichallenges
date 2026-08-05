@@ -112,7 +112,8 @@ Many REST clients can import OpenAPI files and create starter requests. Compare 
 <link rel="stylesheet" href="/css/online-swagger-theme.css">
 <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
 <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+<script src="/js/vendor/js-yaml.min.js"></script>
 <script src="/js/openapi-text-loader.js" defer></script>
 <script src="/js/openapi-tester-converter.js" defer></script>
+<script src="/js/openapi-tool-controls.js" defer></script>
 <script src="/js/online-swagger-client.js" defer></script>

@@ -112,7 +112,8 @@ CORS means Cross-Origin Resource Sharing. It is the browser rule that controls w
 
 The converted file can describe methods such as `TRACE`, but browsers may still block some methods or requests when you try them from Swagger UI. Use a desktop REST client, command line client, or [HTTP proxy](/tools/proxies) when you need to avoid browser limits or inspect raw traffic.
 
-<script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+<script src="/js/vendor/js-yaml.min.js"></script>
 <script src="/js/openapi-text-loader.js" defer></script>
 <script src="/js/openapi-tester-converter.js" defer></script>
+<script src="/js/openapi-tool-controls.js" defer></script>
 <script src="/js/openapi-converter-page.js" defer></script>

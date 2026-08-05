@@ -42,7 +42,53 @@
     'parameters',
   ];
 
-  const PROFILE_OPTIONS = {
+  const CONVERSION_LIMITATIONS = [
+    'Tester conversion supports OpenAPI 3.x documents.',
+    'Path item references are left unchanged instead of being resolved in the browser.',
+    'Schema relaxation is applied to common component, parameter, header, request body, and operation schemas.',
+  ];
+
+  /*
+   * TODO: OpenAPI coverage is intentionally partial.
+   *
+   * This converter is designed to make common OpenAPI 3.x REST specs easier to
+   * test from Swagger UI or a REST client. It relaxes the parts most likely to
+   * stop exploratory requests:
+   *
+   * - schemas in components.schemas
+   * - components.parameters and operation parameters
+   * - components.requestBodies and operation requestBody schemas
+   * - components.headers
+   * - path-level parameters
+   * - missing operations that can be generated on normal path items
+   *
+   * It is not a full OpenAPI dereferencer, validator, or normalizer. Examples
+   * of things that are not converted yet:
+   *
+   * - A path item like "/users": { "$ref": "#/components/pathItems/Users" }
+   *   is left as a $ref, so missing verbs are not added to that referenced path.
+   * - An external schema like "$ref": "common.yaml#/components/schemas/User"
+   *   is not fetched or rewritten in the browser.
+   * - Response-only schemas are not relaxed, e.g. a 200 response schema with
+   *   enum, pattern, maxLength, or required may remain unchanged.
+   * - Response headers are not fully relaxed, e.g. a header schema with an enum
+   *   or pattern may still show those restrictions.
+   * - callbacks, webhooks, links, examples, encoding rules, security schemes,
+   *   server variables, discriminators, and allOf/oneOf/anyOf semantics are not
+   *   fully interpreted or rewritten.
+   * - Swagger/OpenAPI 2.0 documents are not converted. They can still be opened
+   *   by Swagger UI, but tester conversion is for OpenAPI 3.x.
+   *
+   * User impact:
+   *
+   * Someone reading "convert my OpenAPI file" might expect every restriction in
+   * the whole document to be removed. That is not what this does today. The
+   * output is a useful tester-friendly approximation, but some strict rules may
+   * remain in less common sections. Users may need to edit those sections
+   * manually, or use a backend converter with reference resolution, when they
+   * need a more complete permissive OpenAPI file.
+   */
+  const TESTER_CONVERSION_PROFILES = {
     original: {
       profile: 'original',
       relaxSchemaConstraints: false,
@@ -92,12 +138,12 @@
 
   function profileOptions(profile) {
     if (profile === 'custom') {
-      const customDefaults = cloneJson(PROFILE_OPTIONS.practical);
+      const customDefaults = cloneJson(TESTER_CONVERSION_PROFILES.practical);
       customDefaults.profile = 'custom';
       return customDefaults;
     }
 
-    return cloneJson(PROFILE_OPTIONS[profile] || PROFILE_OPTIONS.original);
+    return cloneJson(TESTER_CONVERSION_PROFILES[profile] || TESTER_CONVERSION_PROFILES.original);
   }
 
   function normaliseVerb(verb) {
@@ -120,22 +166,25 @@
     return selected;
   }
 
-  function normaliseOptions(options) {
+  function conversionPolicy(options) {
     const requestedProfile = String(options && options.profile ? options.profile : 'original');
     const profile = ['original', 'practical', 'aggressive', 'custom'].includes(requestedProfile)
       ? requestedProfile
       : 'original';
-    const defaults = profileOptions(profile);
-    const merged = Object.assign(defaults, options || {});
+    const policy = Object.assign(profileOptions(profile), options || {});
 
-    merged.profile = profile;
-    merged.verbs = normaliseVerbs(merged.verbs);
+    policy.profile = profile;
+    policy.verbs = normaliseVerbs(policy.verbs);
 
-    if (profile !== 'original' && merged.addMissingOperations && merged.verbs.length === 0) {
-      merged.verbs = normaliseVerbs(profile === 'aggressive' ? OPENAPI_METHODS : PRACTICAL_METHODS);
+    if (profile !== 'original' && policy.addMissingOperations && policy.verbs.length === 0) {
+      policy.verbs = normaliseVerbs(profile === 'aggressive' ? OPENAPI_METHODS : PRACTICAL_METHODS);
     }
 
-    return merged;
+    return policy;
+  }
+
+  function normaliseOptions(options) {
+    return conversionPolicy(options);
   }
 
   function createMetrics() {
@@ -149,22 +198,20 @@
     };
   }
 
+  function conversionLimitations() {
+    return cloneJson(CONVERSION_LIMITATIONS);
+  }
+
   function isOpenApi3(spec) {
     return isObject(spec) && typeof spec.openapi === 'string' && spec.openapi.indexOf('3.') === 0;
   }
 
   function convert(spec, options) {
-    const config = normaliseOptions(options);
+    const policy = conversionPolicy(options);
     const metrics = createMetrics();
 
-    if (config.profile === 'original') {
-      return {
-        spec: cloneJson(spec),
-        converted: false,
-        config: config,
-        metrics: metrics,
-        summary: 'Original OpenAPI rendered unchanged.',
-      };
+    if (policy.profile === 'original') {
+      return originalConversionResult(spec, policy, metrics);
     }
 
     if (!isOpenApi3(spec)) {
@@ -173,19 +220,35 @@
 
     const converted = cloneJson(spec);
 
-    relaxComponents(converted, config, metrics);
-    relaxPaths(converted, config, metrics);
+    relaxComponents(converted, policy, metrics);
+    relaxPaths(converted, policy, metrics);
 
-    if (config.addMissingOperations) {
-      addMissingOperations(converted, config, metrics);
+    if (policy.addMissingOperations) {
+      addMissingOperations(converted, policy, metrics);
     }
 
+    return testerConversionResult(converted, policy, metrics);
+  }
+
+  function originalConversionResult(spec, policy, metrics) {
     return {
-      spec: converted,
-      converted: true,
-      config: config,
+      spec: cloneJson(spec),
+      converted: false,
+      config: policy,
       metrics: metrics,
-      summary: conversionSummary(config, metrics),
+      limitations: conversionLimitations(),
+      summary: 'Original OpenAPI rendered unchanged.',
+    };
+  }
+
+  function testerConversionResult(spec, policy, metrics) {
+    return {
+      spec: spec,
+      converted: true,
+      config: policy,
+      metrics: metrics,
+      limitations: conversionLimitations(),
+      summary: conversionSummary(policy, metrics),
     };
   }
 
@@ -494,8 +557,10 @@
     methods: cloneJson(OPENAPI_METHODS),
     practicalMethods: cloneJson(PRACTICAL_METHODS),
     profileOptions: profileOptions,
+    conversionPolicy: conversionPolicy,
     normaliseOptions: normaliseOptions,
     isOpenApi3: isOpenApi3,
+    conversionLimitations: conversionLimitations,
     convert: convert,
     stringify: stringify,
     convertedFilename: convertedFilename,

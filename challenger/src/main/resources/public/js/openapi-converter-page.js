@@ -20,117 +20,14 @@
     return window.ApiChallengesOpenApiTextLoader;
   }
 
-  function setStatus(statusElement, message, isError) {
-    statusElement.textContent = message;
-    statusElement.classList.toggle('online-client-status-error', isError === true);
-  }
-
-  function readOptions(tool) {
-    const profile = tool.querySelector('[data-openapi-profile]').value;
-    const verbs = [].slice.call(tool.querySelectorAll('[data-openapi-verb]:checked')).map(function (input) {
-      return input.value;
-    });
-    const options = {
-      profile: profile,
-      verbs: verbs,
-    };
-
-    tool.querySelectorAll('[data-openapi-option]').forEach(function (input) {
-      options[input.dataset.openapiOption] = input.checked;
-    });
-
-    return options;
-  }
-
-  function writeOptions(tool, options) {
-    tool.querySelectorAll('[data-openapi-option]').forEach(function (input) {
-      input.checked = options[input.dataset.openapiOption] === true;
-    });
-
-    tool.querySelectorAll('[data-openapi-verb]').forEach(function (input) {
-      input.checked = options.verbs.indexOf(input.value) >= 0;
-    });
-  }
-
-  function hasSelectedTesterOptions(tool) {
-    return [].slice.call(tool.querySelectorAll('[data-openapi-option], [data-openapi-verb]')).some(function (input) {
-      return input.checked;
-    });
-  }
-
-  function profileChanged(tool) {
-    const profile = tool.querySelector('[data-openapi-profile]').value;
-    const api = converterApi();
-
-    if (profile !== 'custom' && api) {
-      writeOptions(tool, api.profileOptions(profile));
-    } else if (profile === 'custom' && api && !hasSelectedTesterOptions(tool)) {
-      writeOptions(tool, api.profileOptions('practical'));
-    }
-
-    const customOptions = tool.querySelector('[data-openapi-custom-options]');
-    if (customOptions && profile === 'custom') {
-      customOptions.open = true;
-    }
-  }
-
-  function setCustomProfile(tool) {
-    const profile = tool.querySelector('[data-openapi-profile]');
-    if (profile.value !== 'custom') {
-      profile.value = 'custom';
-      profileChanged(tool);
-    }
-  }
-
-  function setButtons(tool, enabled) {
-    tool.querySelectorAll('[data-openapi-copy-converted], [data-openapi-download-converted], [data-openapi-open-swagger]').forEach(function (button) {
-      button.disabled = !enabled;
-    });
-  }
-
-  function copyText(text, button) {
-    function copied() {
-      const originalText = button.textContent;
-      button.textContent = 'Copied';
-      window.setTimeout(function () {
-        button.textContent = originalText;
-      }, 1500);
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(copied);
-      return;
-    }
-
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', 'readonly');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
-    copied();
-  }
-
-  function downloadJson(text, filename) {
-    const blob = new Blob([text], { type: 'application/json' });
-    const link = document.createElement('a');
-
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(function () {
-      URL.revokeObjectURL(link.href);
-    }, 0);
+  function controlsApi() {
+    return window.ApiChallengesOpenApiToolControls;
   }
 
   function initConverter(tool) {
     const api = converterApi();
     const loader = textLoaderApi();
+    const controls = controlsApi();
     const form = tool.querySelector('[data-openapi-url-form]');
     const urlInput = tool.querySelector('[data-openapi-url]');
     const fileInput = tool.querySelector('[data-openapi-file]');
@@ -144,31 +41,37 @@
     let convertedSpec = null;
     let sourceName = 'openapi';
 
+    if (!controls) {
+      status.textContent = 'The OpenAPI tool controls could not be loaded.';
+      status.classList.add('online-client-status-error');
+      return;
+    }
+
     if (!api) {
-      setStatus(status, 'The OpenAPI converter could not be loaded.', true);
-      setButtons(tool, false);
+      controls.setStatus(status, 'The OpenAPI converter could not be loaded.', true);
+      controls.setButtons(tool, controls.allExportActionsSelector, false);
       return;
     }
 
     if (!loader) {
-      setStatus(status, 'The OpenAPI JSON/YAML loader could not be loaded.', true);
-      setButtons(tool, false);
+      controls.setStatus(status, 'The OpenAPI JSON/YAML loader could not be loaded.', true);
+      controls.setButtons(tool, controls.allExportActionsSelector, false);
       return;
     }
 
     function renderConversion(loadedMessage) {
-      const options = readOptions(tool);
+      const options = controls.readOptions(tool);
       convertedSpec = null;
       output.value = '';
-      setButtons(tool, false);
+      controls.setButtons(tool, controls.allExportActionsSelector, false);
 
       if (!originalSpec) {
-        setStatus(status, 'Load an OpenAPI JSON or YAML file, then choose a tester profile.', false);
+        controls.setStatus(status, 'Load an OpenAPI JSON or YAML file, then choose a tester profile.', false);
         return;
       }
 
       if (options.profile === 'original') {
-        setStatus(status, `${loadedMessage || `Loaded ${sourceName}.`} Select Practical, Aggressive, or Custom to create a tester OpenAPI file.`, false);
+        controls.setStatus(status, `${loadedMessage || `Loaded ${sourceName}.`} Select Practical, Aggressive, or Custom to create a tester OpenAPI file.`, false);
         return;
       }
 
@@ -176,10 +79,10 @@
         const result = api.convert(originalSpec, options);
         convertedSpec = result.spec;
         output.value = api.stringify(convertedSpec);
-        setButtons(tool, true);
-        setStatus(status, result.summary, false);
+        controls.setButtons(tool, controls.allExportActionsSelector, true);
+        controls.setStatus(status, result.summary, false);
       } catch (error) {
-        setStatus(status, error.message, true);
+        controls.setStatus(status, error.message, true);
       }
     }
 
@@ -192,11 +95,11 @@
     function loadUrl(rawUrl) {
       const openApiUrl = rawUrl.trim();
       if (!openApiUrl) {
-        setStatus(status, 'Enter an OpenAPI or Swagger URL to load.', true);
+        controls.setStatus(status, 'Enter an OpenAPI or Swagger URL to load.', true);
         return;
       }
 
-      setStatus(status, `Loading OpenAPI from ${openApiUrl}`, false);
+      controls.setStatus(status, `Loading OpenAPI from ${openApiUrl}`, false);
       loader.fetchOpenApi(openApiUrl)
         .then(function (spec) {
           loadSpec(spec, openApiUrl);
@@ -205,8 +108,8 @@
           originalSpec = null;
           convertedSpec = null;
           output.value = '';
-          setButtons(tool, false);
-          setStatus(status, error.message, true);
+          controls.setButtons(tool, controls.allExportActionsSelector, false);
+          controls.setStatus(status, error.message, true);
         });
     }
 
@@ -223,24 +126,24 @@
           originalSpec = null;
           convertedSpec = null;
           output.value = '';
-          setButtons(tool, false);
-          setStatus(status, error.message, true);
+          controls.setButtons(tool, controls.allExportActionsSelector, false);
+          controls.setStatus(status, error.message, true);
         }
       });
       reader.addEventListener('error', function () {
-        setStatus(status, `Could not read ${file.name}.`, true);
+        controls.setStatus(status, `Could not read ${file.name}.`, true);
       });
       reader.readAsText(file);
     }
 
     profile.addEventListener('change', function () {
-      profileChanged(tool);
+      controls.applyProfile(tool, api);
       renderConversion();
     });
 
     tool.querySelectorAll('[data-openapi-option], [data-openapi-verb]').forEach(function (input) {
       input.addEventListener('change', function () {
-        setCustomProfile(tool);
+        controls.switchToCustomProfile(tool, api);
         renderConversion();
       });
     });
@@ -256,13 +159,13 @@
 
     copyButton.addEventListener('click', function () {
       if (convertedSpec) {
-        copyText(api.stringify(convertedSpec), copyButton);
+        controls.copyText(api.stringify(convertedSpec), copyButton);
       }
     });
 
     downloadButton.addEventListener('click', function () {
       if (convertedSpec) {
-        downloadJson(api.stringify(convertedSpec), api.convertedFilename(sourceName));
+        controls.downloadJson(api.stringify(convertedSpec), api.convertedFilename(sourceName));
       }
     });
 
@@ -281,9 +184,9 @@
       urlInput.value = urlParameter;
       loadUrl(urlParameter);
     } else {
-      profileChanged(tool);
-      setButtons(tool, false);
-      setStatus(status, 'Load an OpenAPI JSON or YAML file, then choose a tester profile.', false);
+      controls.applyProfile(tool, api);
+      controls.setButtons(tool, controls.allExportActionsSelector, false);
+      controls.setStatus(status, 'Load an OpenAPI JSON or YAML file, then choose a tester profile.', false);
     }
   }
 

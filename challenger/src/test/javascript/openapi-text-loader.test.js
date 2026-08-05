@@ -1,6 +1,29 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const test = require('node:test');
+const vm = require('node:vm');
 const loader = require('../../main/resources/public/js/openapi-text-loader.js');
+
+function plainObject(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function useVendoredYamlParser(t) {
+  const previousYaml = globalThis.jsyaml;
+  const sandbox = {};
+  const source = fs.readFileSync(
+    path.resolve(__dirname, '../../main/resources/public/js/vendor/js-yaml.min.js'),
+    'utf8',
+  );
+
+  vm.createContext(sandbox);
+  vm.runInContext(source, sandbox);
+  globalThis.jsyaml = sandbox.jsyaml;
+  t.after(() => {
+    globalThis.jsyaml = previousYaml;
+  });
+}
 
 test('parseOpenApiText parses JSON OpenAPI text', () => {
   assert.deepEqual(
@@ -16,35 +39,43 @@ test('parseOpenApiText parses JSON OpenAPI text', () => {
   );
 });
 
-test('parseOpenApiText parses YAML OpenAPI text through js-yaml', (t) => {
-  const previousYaml = globalThis.jsyaml;
-  t.after(() => {
-    globalThis.jsyaml = previousYaml;
-  });
-  globalThis.jsyaml = {
-    load(text) {
-      assert.match(text, /openapi: 3\.1\.0/);
-      assert.match(text, /title: YAML/);
-      return {
-        openapi: '3.1.0',
-        info: {
-          title: 'YAML',
-          version: '1',
-        },
-        paths: {},
-      };
-    },
-  };
+test('parseOpenApiText parses YAML OpenAPI text through the vendored js-yaml parser', (t) => {
+  useVendoredYamlParser(t);
 
   assert.deepEqual(
-    loader.parseOpenApiText('openapi: 3.1.0\ninfo:\n  title: YAML\n  version: "1"\npaths: {}\n', 'openapi.yaml'),
+    plainObject(loader.parseOpenApiText(
+      [
+        'openapi: 3.1.0',
+        'info:',
+        '  title: YAML',
+        '  version: "1"',
+        'paths:',
+        '  /items:',
+        '    get:',
+        '      responses:',
+        '        "200":',
+        '          description: OK',
+        '',
+      ].join('\n'),
+      'openapi.yaml',
+    )),
     {
       openapi: '3.1.0',
       info: {
         title: 'YAML',
         version: '1',
       },
-      paths: {},
+      paths: {
+        '/items': {
+          get: {
+            responses: {
+              200: {
+                description: 'OK',
+              },
+            },
+          },
+        },
+      },
     },
   );
 });
@@ -96,10 +127,9 @@ test('fetchOpenApi loads and parses JSON from a URL', async (t) => {
 
 test('fetchOpenApi loads and parses YAML from a URL', async (t) => {
   const previousFetch = globalThis.fetch;
-  const previousYaml = globalThis.jsyaml;
+  useVendoredYamlParser(t);
   t.after(() => {
     globalThis.fetch = previousFetch;
-    globalThis.jsyaml = previousYaml;
   });
   globalThis.fetch = async function (url) {
     assert.equal(url, '/docs/openapi.yaml');
@@ -111,17 +141,9 @@ test('fetchOpenApi loads and parses YAML from a URL', async (t) => {
       },
     };
   };
-  globalThis.jsyaml = {
-    load() {
-      return {
-        openapi: '3.0.3',
-        paths: {},
-      };
-    },
-  };
 
   assert.deepEqual(
-    await loader.fetchOpenApi('/docs/openapi.yaml'),
+    plainObject(await loader.fetchOpenApi('/docs/openapi.yaml')),
     {
       openapi: '3.0.3',
       paths: {},

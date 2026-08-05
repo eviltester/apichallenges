@@ -24,9 +24,8 @@
     return window.ApiChallengesOpenApiTextLoader;
   }
 
-  function setStatus(statusElement, message, isError) {
-    statusElement.textContent = message;
-    statusElement.classList.toggle('online-client-status-error', isError === true);
+  function controlsApi() {
+    return window.ApiChallengesOpenApiToolControls;
   }
 
   function swaggerOptions(targetSelector, source) {
@@ -48,111 +47,9 @@
     }, source);
   }
 
-  function readOptions(client) {
-    const profile = client.querySelector('[data-openapi-profile]').value;
-    const verbs = [].slice.call(client.querySelectorAll('[data-openapi-verb]:checked')).map(function (input) {
-      return input.value;
-    });
-    const options = {
-      profile: profile,
-      verbs: verbs,
-    };
-
-    client.querySelectorAll('[data-openapi-option]').forEach(function (input) {
-      options[input.dataset.openapiOption] = input.checked;
-    });
-
-    return options;
-  }
-
-  function writeOptions(client, options) {
-    client.querySelectorAll('[data-openapi-option]').forEach(function (input) {
-      input.checked = options[input.dataset.openapiOption] === true;
-    });
-
-    client.querySelectorAll('[data-openapi-verb]').forEach(function (input) {
-      input.checked = options.verbs.indexOf(input.value) >= 0;
-    });
-  }
-
-  function hasSelectedTesterOptions(client) {
-    return [].slice.call(client.querySelectorAll('[data-openapi-option], [data-openapi-verb]')).some(function (input) {
-      return input.checked;
-    });
-  }
-
-  function profileChanged(client) {
-    const profile = client.querySelector('[data-openapi-profile]').value;
-    const api = converterApi();
-
-    if (profile !== 'custom' && api) {
-      writeOptions(client, api.profileOptions(profile));
-    } else if (profile === 'custom' && api && !hasSelectedTesterOptions(client)) {
-      writeOptions(client, api.profileOptions('practical'));
-    }
-
-    const customOptions = client.querySelector('[data-openapi-custom-options]');
-    if (customOptions && profile === 'custom') {
-      customOptions.open = true;
-    }
-  }
-
-  function setCustomProfile(client) {
-    const profile = client.querySelector('[data-openapi-profile]');
-    if (profile.value !== 'custom') {
-      profile.value = 'custom';
-      profileChanged(client);
-    }
-  }
-
-  function setExportButtons(client, enabled) {
-    client.querySelectorAll('[data-openapi-copy-converted], [data-openapi-download-converted]').forEach(function (button) {
-      button.disabled = !enabled;
-    });
-  }
-
-  function copyText(text, button) {
-    function copied() {
-      const originalText = button.textContent;
-      button.textContent = 'Copied';
-      window.setTimeout(function () {
-        button.textContent = originalText;
-      }, 1500);
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(copied);
-      return;
-    }
-
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', 'readonly');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
-    copied();
-  }
-
-  function downloadJson(text, filename) {
-    const blob = new Blob([text], { type: 'application/json' });
-    const link = document.createElement('a');
-
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(function () {
-      URL.revokeObjectURL(link.href);
-    }, 0);
-  }
-
   function initSwaggerClient(client) {
     const loader = textLoaderApi();
+    const controls = controlsApi();
     const form = client.querySelector('[data-openapi-url-form]');
     const urlInput = client.querySelector('[data-openapi-url]');
     const fileInput = client.querySelector('[data-openapi-file]');
@@ -169,9 +66,15 @@
     let sourceName = 'openapi';
     let loadedConvertedSpec = false;
 
+    if (!controls) {
+      status.textContent = 'The OpenAPI tool controls could not be loaded.';
+      status.classList.add('online-client-status-error');
+      return;
+    }
+
     if (!loader) {
-      setStatus(status, 'The OpenAPI JSON/YAML loader could not be loaded.', true);
-      setExportButtons(client, false);
+      controls.setStatus(status, 'The OpenAPI JSON/YAML loader could not be loaded.', true);
+      controls.setButtons(client, controls.swaggerExportActionsSelector, false);
       return;
     }
 
@@ -181,14 +84,14 @@
 
     function renderSource(source, statusMessage) {
       if (!hasSwaggerUi()) {
-        setStatus(status, 'Swagger UI could not be loaded. Check your network connection.', true);
+        controls.setStatus(status, 'Swagger UI could not be loaded. Check your network connection.', true);
         return;
       }
 
       clearTarget();
       swaggerUi = window.SwaggerUIBundle(swaggerOptions(targetSelector, source));
       window.ApiChallengesOnlineSwagger = swaggerUi;
-      setStatus(status, statusMessage, false);
+      controls.setStatus(status, statusMessage, false);
     }
 
     function renderCurrent(loadedMessage) {
@@ -197,16 +100,16 @@
       }
 
       const api = converterApi();
-      const options = readOptions(client);
+      const options = controls.readOptions(client);
       let specToRender = originalSpec;
       let statusMessage = loadedMessage || `Loaded ${sourceName}.`;
 
       convertedSpec = null;
-      setExportButtons(client, false);
+      controls.setButtons(client, controls.swaggerExportActionsSelector, false);
 
       if (options.profile !== 'original') {
         if (!api) {
-          setStatus(status, 'The OpenAPI converter could not be loaded.', true);
+          controls.setStatus(status, 'The OpenAPI converter could not be loaded.', true);
           return;
         }
 
@@ -215,15 +118,15 @@
           specToRender = result.spec;
           convertedSpec = result.spec;
           statusMessage = result.summary;
-          setExportButtons(client, true);
+          controls.setButtons(client, controls.swaggerExportActionsSelector, true);
         } catch (error) {
           clearTarget();
-          setStatus(status, error.message, true);
+          controls.setStatus(status, error.message, true);
           return;
         }
       } else if (loadedConvertedSpec) {
         convertedSpec = originalSpec;
-        setExportButtons(client, true);
+        controls.setButtons(client, controls.swaggerExportActionsSelector, true);
       }
 
       renderSource({ spec: specToRender }, statusMessage);
@@ -239,11 +142,11 @@
     function renderUrl(rawUrl) {
       const openApiUrl = rawUrl.trim();
       if (!openApiUrl) {
-        setStatus(status, 'Enter an OpenAPI or Swagger URL to load.', true);
+        controls.setStatus(status, 'Enter an OpenAPI or Swagger URL to load.', true);
         return;
       }
 
-      setStatus(status, `Loading OpenAPI from ${openApiUrl}`, false);
+      controls.setStatus(status, `Loading OpenAPI from ${openApiUrl}`, false);
       loader.fetchOpenApi(openApiUrl)
         .then(function (spec) {
           loadSpec(spec, openApiUrl, `Loaded OpenAPI from ${openApiUrl}.`, false);
@@ -252,8 +155,8 @@
           clearTarget();
           originalSpec = null;
           convertedSpec = null;
-          setExportButtons(client, false);
-          setStatus(status, error.message, true);
+          controls.setButtons(client, controls.swaggerExportActionsSelector, false);
+          controls.setStatus(status, error.message, true);
         });
     }
 
@@ -269,12 +172,12 @@
           loadSpec(spec, file.name, `Loaded ${file.name} from this browser.`, false);
         } catch (error) {
           clearTarget();
-          setStatus(status, error.message, true);
+          controls.setStatus(status, error.message, true);
         }
       });
       reader.addEventListener('error', function () {
         clearTarget();
-        setStatus(status, `Could not read ${file.name}.`, true);
+        controls.setStatus(status, `Could not read ${file.name}.`, true);
       });
       reader.readAsText(file);
     }
@@ -284,7 +187,7 @@
       const storedName = window.sessionStorage.getItem(SWAGGER_SESSION_NAME_KEY) || 'converted-openapi.json';
 
       if (!storedSpec) {
-        setStatus(status, 'No converted OpenAPI file was found in this browser session.', true);
+        controls.setStatus(status, 'No converted OpenAPI file was found in this browser session.', true);
         return false;
       }
 
@@ -292,7 +195,7 @@
         loadSpec(JSON.parse(storedSpec), storedName, `Loaded converted tester OpenAPI from ${storedName}.`, true);
         return true;
       } catch (error) {
-        setStatus(status, 'The converted OpenAPI file in this browser session could not be read.', true);
+        controls.setStatus(status, 'The converted OpenAPI file in this browser session could not be read.', true);
         return false;
       }
     }
@@ -307,13 +210,13 @@
     });
 
     profile.addEventListener('change', function () {
-      profileChanged(client);
+      controls.applyProfile(client, converterApi());
       renderCurrent();
     });
 
     client.querySelectorAll('[data-openapi-option], [data-openapi-verb]').forEach(function (input) {
       input.addEventListener('change', function () {
-        setCustomProfile(client);
+        controls.switchToCustomProfile(client, converterApi());
         renderCurrent();
       });
     });
@@ -321,19 +224,19 @@
     copyButton.addEventListener('click', function () {
       const api = converterApi();
       if (api && convertedSpec) {
-        copyText(api.stringify(convertedSpec), copyButton);
+        controls.copyText(api.stringify(convertedSpec), copyButton);
       }
     });
 
     downloadButton.addEventListener('click', function () {
       const api = converterApi();
       if (api && convertedSpec) {
-        downloadJson(api.stringify(convertedSpec), api.convertedFilename(sourceName));
+        controls.downloadJson(api.stringify(convertedSpec), api.convertedFilename(sourceName));
       }
     });
 
-    profileChanged(client);
-    setExportButtons(client, false);
+    controls.applyProfile(client, converterApi());
+    controls.setButtons(client, controls.swaggerExportActionsSelector, false);
 
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.get('converted') === 'session' && renderConvertedSessionSpec()) {

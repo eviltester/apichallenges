@@ -172,9 +172,20 @@ test('profileOptions returns independent profile configurations', () => {
   assert.equal(converter.profileOptions('unknown').profile, 'original');
 });
 
+test('conversionLimitations returns a defensive copy of documented converter boundaries', () => {
+  const firstLimitations = converter.conversionLimitations();
+  const secondLimitations = converter.conversionLimitations();
+
+  firstLimitations.push('changed');
+
+  assert.notDeepEqual(firstLimitations, secondLimitations);
+  assert.match(secondLimitations.join('\n'), /OpenAPI 3\.x/);
+  assert.match(secondLimitations.join('\n'), /Path item references/);
+});
+
 test('normaliseOptions deduplicates supported verbs and backfills profile defaults', () => {
   assert.deepEqual(
-    converter.normaliseOptions({
+    converter.conversionPolicy({
       profile: 'custom',
       verbs: ['POST', 'post', 'TRACE', 'invalid', ''],
     }).verbs,
@@ -197,6 +208,7 @@ test('original profile returns an unchanged clone without conversion', () => {
 
   assert.equal(result.converted, false);
   assert.equal(result.summary, 'Original OpenAPI rendered unchanged.');
+  assert.match(result.limitations.join('\n'), /OpenAPI 3\.x/);
   assert.deepEqual(result.spec, spec);
 
   result.spec.info.title = 'Changed';
@@ -208,6 +220,7 @@ test('practical profile adds common REST methods without overwriting existing op
   const path = result.spec.paths['/items/{id}'];
 
   assert.equal(result.converted, true);
+  assert.match(result.limitations.join('\n'), /Path item references are left unchanged/);
   assert.equal(path.get.operationId, 'getItem');
   assert.equal(path.post.operationId, 'createItem');
   assert.ok(path.put);

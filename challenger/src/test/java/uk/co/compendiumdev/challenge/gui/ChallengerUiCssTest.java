@@ -97,7 +97,15 @@ public class ChallengerUiCssTest {
         Assertions.assertTrue(
                 css.contains(
                         "html[data-theme=\"dark-lab\"] #online-swagger-ui .swagger-ui"));
+        Assertions.assertTrue(
+                css.contains(
+                        "html[data-theme]:not([data-theme=\"dark-lab\"]) #online-swagger-ui .swagger-ui"));
+        Assertions.assertTrue(css.contains(".responses-table"));
+        Assertions.assertTrue(css.contains(".opblock-summary-options .opblock-summary-method"));
+        Assertions.assertTrue(css.contains(".opblock-summary-head .opblock-summary-method"));
+        Assertions.assertTrue(css.contains(".opblock-summary-trace .opblock-summary-method"));
         Assertions.assertTrue(css.contains("color-scheme: dark"));
+        Assertions.assertTrue(css.contains("color-scheme: light"));
         Assertions.assertTrue(css.contains(".opblock-summary-method"));
         Assertions.assertTrue(css.contains("var(--surface)"));
         Assertions.assertTrue(css.contains("var(--text)"));
