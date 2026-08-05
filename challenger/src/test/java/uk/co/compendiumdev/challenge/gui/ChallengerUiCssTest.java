@@ -101,12 +101,29 @@ public class ChallengerUiCssTest {
                 css.contains(
                         "html[data-theme]:not([data-theme=\"dark-lab\"]) #online-swagger-ui .swagger-ui"));
         Assertions.assertTrue(css.contains(".responses-table"));
+        Assertions.assertTrue(css.contains(".opblock.opblock-get"));
+        Assertions.assertTrue(css.contains(".opblock.opblock-post"));
+        Assertions.assertTrue(css.contains(".opblock.opblock-put"));
+        Assertions.assertTrue(css.contains(".opblock.opblock-patch"));
+        Assertions.assertTrue(css.contains(".opblock.opblock-delete"));
+        Assertions.assertTrue(css.contains(".opblock-summary-path"));
+        Assertions.assertTrue(css.contains(".opblock-summary-control:hover"));
+        Assertions.assertTrue(css.contains("background: transparent !important"));
+        Assertions.assertTrue(css.contains(".btn.try-out__btn"));
+        Assertions.assertTrue(css.contains(".swagger-ui .btn:hover"));
+        Assertions.assertTrue(css.contains("opacity: 1 !important"));
+        Assertions.assertTrue(css.contains(".swagger-ui section.models"));
+        Assertions.assertTrue(css.contains(".json-schema-2020-12"));
+        Assertions.assertTrue(css.contains(".json-schema-2020-12__title"));
+        Assertions.assertTrue(
+                css.contains("section.models .json-schema-2020-12-expand-deep-button"));
         Assertions.assertTrue(css.contains(".opblock-summary-options .opblock-summary-method"));
         Assertions.assertTrue(css.contains(".opblock-summary-head .opblock-summary-method"));
         Assertions.assertTrue(css.contains(".opblock-summary-trace .opblock-summary-method"));
         Assertions.assertTrue(css.contains("color-scheme: dark"));
         Assertions.assertTrue(css.contains("color-scheme: light"));
         Assertions.assertTrue(css.contains(".opblock-summary-method"));
+        Assertions.assertTrue(css.contains("text-shadow: none"));
         Assertions.assertTrue(css.contains("var(--surface)"));
         Assertions.assertTrue(css.contains("var(--text)"));
         Assertions.assertTrue(css.contains("var(--code-bg)"));

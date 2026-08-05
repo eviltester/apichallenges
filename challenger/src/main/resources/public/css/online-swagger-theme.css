@@ -166,6 +166,174 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui {
     color-scheme: light;
 }
 
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock {
+    box-shadow: none !important;
+    color: var(--online-swagger-text) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock .opblock-summary {
+    color: var(--online-swagger-text) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-control,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-control:hover,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-control:focus,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-control:focus-visible {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--online-swagger-text) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-control:focus-visible {
+    outline: 2px solid var(--online-swagger-link) !important;
+    outline-offset: -2px;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn.try-out__btn {
+    background: var(--online-swagger-surface) !important;
+    border-color: var(--online-swagger-link) !important;
+    box-shadow: none !important;
+    color: var(--online-swagger-link) !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn:hover,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn:focus-visible {
+    background: var(--online-swagger-link) !important;
+    border-color: var(--online-swagger-link) !important;
+    color: var(--accent-contrast) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn[disabled],
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .btn:disabled {
+    background: var(--online-swagger-surface-strong) !important;
+    border-color: var(--online-swagger-border) !important;
+    color: var(--online-swagger-muted) !important;
+    opacity: 1 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models {
+    background: var(--online-swagger-surface) !important;
+    border-color: var(--online-swagger-border) !important;
+    color: var(--online-swagger-text) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models h4,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models h4 span,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models .models-control {
+    background: transparent !important;
+    border-color: var(--online-swagger-border) !important;
+    box-shadow: none !important;
+    color: var(--online-swagger-text) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models button,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models button:hover,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models button:focus,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models button:focus-visible {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--online-swagger-text) !important;
+    font: inherit;
+    padding: 0;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models button:focus-visible {
+    outline: 2px solid var(--online-swagger-link) !important;
+    outline-offset: 2px;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models svg,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models svg * {
+    fill: var(--online-swagger-muted) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12 {
+    background: var(--online-swagger-surface-soft) !important;
+    border-color: var(--online-swagger-border) !important;
+    color: var(--online-swagger-text) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12-head,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12-body,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__property {
+    background: transparent !important;
+    border-color: var(--online-swagger-border) !important;
+    color: var(--online-swagger-text) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__title,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__property-name,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__attribute {
+    color: var(--online-swagger-text) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__attribute--primary,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__attribute--muted {
+    color: var(--online-swagger-link) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui section.models .json-schema-2020-12-expand-deep-button {
+    color: var(--online-swagger-link) !important;
+    font-weight: 700;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__description,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__constraint,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__constraint-string,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .json-schema-2020-12__constraint-number {
+    color: var(--online-swagger-muted) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-path,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-path a,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-path span,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-path__deprecated {
+    color: var(--online-swagger-link) !important;
+    font-weight: 800;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-description,
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-operation-id {
+    color: var(--online-swagger-text) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-get {
+    background: color-mix(in srgb, #2563eb 6%, var(--online-swagger-surface)) !important;
+    border-color: #3b82f6 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-post {
+    background: color-mix(in srgb, #16a34a 7%, var(--online-swagger-surface)) !important;
+    border-color: #22c55e !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-put {
+    background: color-mix(in srgb, #ea580c 7%, var(--online-swagger-surface)) !important;
+    border-color: #fb923c !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-patch {
+    background: color-mix(in srgb, #0891b2 7%, var(--online-swagger-surface)) !important;
+    border-color: #22d3ee !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-delete {
+    background: color-mix(in srgb, #dc2626 7%, var(--online-swagger-surface)) !important;
+    border-color: #f87171 !important;
+}
+
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-options,
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-head {
     background: color-mix(in srgb, var(--secondary-accent) 9%, var(--online-swagger-surface)) !important;
@@ -177,6 +345,26 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
     border-color: var(--warning-accent) !important;
 }
 
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-get .opblock-summary {
+    background: color-mix(in srgb, #3b82f6 14%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-post .opblock-summary {
+    background: color-mix(in srgb, #22c55e 14%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-put .opblock-summary {
+    background: color-mix(in srgb, #fb923c 16%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-patch .opblock-summary {
+    background: color-mix(in srgb, #22d3ee 16%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-delete .opblock-summary {
+    background: color-mix(in srgb, #f87171 16%, var(--online-swagger-surface)) !important;
+}
+
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-options .opblock-summary,
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-head .opblock-summary {
     background: color-mix(in srgb, var(--secondary-accent) 14%, var(--online-swagger-surface)) !important;
@@ -184,6 +372,36 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-trace .opblock-summary {
     background: color-mix(in srgb, var(--warning-accent) 16%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-method {
+    border: 1px solid color-mix(in srgb, var(--online-swagger-surface) 45%, currentColor) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-get .opblock-summary-method {
+    background: #60a5fa !important;
+    color: #061833 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-post .opblock-summary-method {
+    background: #4ade80 !important;
+    color: #052e16 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-put .opblock-summary-method {
+    background: #fb923c !important;
+    color: #351404 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-patch .opblock-summary-method {
+    background: #22d3ee !important;
+    color: #042f3a !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-delete .opblock-summary-method {
+    background: #f87171 !important;
+    color: #3b0505 !important;
 }
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,

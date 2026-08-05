@@ -41,6 +41,14 @@
   }
 }
 
+@media (min-width: 1500px) {
+.left-column{
+    box-sizing: border-box;
+    margin-left: -50%;
+    width: 150%;
+  }
+}
+
 .statustrue{
     background:palegreen;
 }

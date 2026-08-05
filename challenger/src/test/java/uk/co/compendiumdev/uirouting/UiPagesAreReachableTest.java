@@ -1126,7 +1126,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains(".challenge-progress-table .api-live-request"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "grid-template-columns: minmax(12rem, 18%) minmax(0, 1fr);"));
+                        "grid-template-columns: minmax(14rem, 20%) minmax(0, 1fr);"));
+        Assertions.assertTrue(response.body.contains("@media (min-width: 1500px)"));
+        Assertions.assertTrue(response.body.contains("margin-left: -50%;"));
+        Assertions.assertTrue(response.body.contains("width: 150%;"));
 
         response = http.send("/css/toc.css", "get");
         Assertions.assertEquals(200, response.statusCode);
