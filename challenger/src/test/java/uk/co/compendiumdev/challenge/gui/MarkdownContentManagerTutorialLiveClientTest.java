@@ -83,7 +83,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tools/proxies\">Proxies</a></li>",
                 "Online Clients",
                 "<li><a href=\"/tools/online-clients/basic-client\">Basic Client</a></li>",
-                "<li><a href=\"/tools/online-clients/swagger\">Swagger</a></li>");
+                "<li><a href=\"/tools/online-clients/swagger\">Swagger</a></li>",
+                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
     }
 
     @Test
@@ -103,6 +104,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("HAR file"));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));
@@ -121,11 +123,24 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-online-swagger-client"));
         Assertions.assertTrue(html.contains("data-openapi-url"));
         Assertions.assertTrue(html.contains("data-openapi-file"));
+        Assertions.assertTrue(html.contains("data-openapi-profile"));
+        Assertions.assertTrue(html.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(html.contains("data-openapi-copy-converted"));
+        Assertions.assertTrue(html.contains("data-openapi-download-converted"));
+        Assertions.assertFalse(html.contains("data-openapi-example"));
+        Assertions.assertTrue(html.contains("<ul class=\"openapi-option-grid\">"));
+        Assertions.assertTrue(html.contains("<ul class=\"openapi-verb-grid\""));
+        Assertions.assertTrue(html.contains("data-openapi-copy-converted disabled"));
+        Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(html.contains("https://unpkg.com/swagger-ui-dist"));
+        Assertions.assertTrue(html.contains("href=\"/css/online-swagger-theme.css\""));
         Assertions.assertTrue(html.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/online-swagger-client.js\""));
         Assertions.assertTrue(
                 html.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
+        Assertions.assertTrue(html.contains("Render A Tester OpenAPI Spec In Swagger UI"));
         Assertions.assertTrue(html.contains("How To Use Swagger UI For REST API Testing"));
         Assertions.assertTrue(html.contains("CORS Limits For Browser Swagger UI"));
         Assertions.assertTrue(html.contains("When To Use A REST Client Instead Of Swagger UI"));
@@ -133,6 +148,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("limited by CORS"));
         Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
@@ -141,6 +157,53 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/insomnia\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+
+        html = renderContentPage("/tools/online-clients/openapi-converter");
+
+        Assertions.assertTrue(
+                html.contains("<title>Convert OpenAPI To A More Permissive Tester Spec</title>"));
+        Assertions.assertTrue(html.contains("data-openapi-converter"));
+        Assertions.assertTrue(html.contains("data-openapi-url"));
+        Assertions.assertTrue(html.contains("data-openapi-file"));
+        Assertions.assertTrue(html.contains("data-openapi-profile"));
+        Assertions.assertTrue(html.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(html.contains("data-openapi-copy-converted"));
+        Assertions.assertTrue(html.contains("data-openapi-download-converted"));
+        Assertions.assertTrue(html.contains("data-openapi-open-swagger"));
+        Assertions.assertTrue(html.contains("data-openapi-output"));
+        Assertions.assertFalse(html.contains("data-openapi-example"));
+        Assertions.assertTrue(html.contains("<ul class=\"openapi-option-grid\">"));
+        Assertions.assertTrue(html.contains("<ul class=\"openapi-verb-grid\""));
+        Assertions.assertTrue(html.contains("data-openapi-copy-converted disabled"));
+        Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
+        Assertions.assertTrue(html.contains("data-openapi-open-swagger disabled"));
+        Assertions.assertTrue(html.contains("Convert OpenAPI To A More Permissive Tester Spec"));
+        Assertions.assertTrue(html.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
+        Assertions.assertTrue(
+                html.contains("Download A Less Restrictive OpenAPI File For REST Client Testing"));
+        Assertions.assertTrue(
+                html.contains("Use Converted OpenAPI Files In Swagger UI And REST Clients"));
+        Assertions.assertTrue(html.contains("CORS Limits For Browser OpenAPI Conversion"));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-converter-page.js\""));
+        Assertions.assertTrue(html.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/bruno\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/postman\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/insomnia\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/curl\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
     }
 

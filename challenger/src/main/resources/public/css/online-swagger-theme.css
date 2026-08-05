@@ -1,0 +1,267 @@
+html[data-theme] .online-swagger-client {
+    background: var(--surface);
+    border-color: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    color: var(--text);
+}
+
+html[data-theme] .online-swagger-controls input,
+html[data-theme] .online-swagger-file-row input,
+html[data-theme] .openapi-profile-row select {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+html[data-theme] .online-swagger-controls input::placeholder {
+    color: var(--muted);
+}
+
+html[data-theme] .online-swagger-file-row input::file-selector-button {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font: inherit;
+    margin-right: 0.75rem;
+    padding: 0.35rem 0.55rem;
+}
+
+html[data-theme] .online-swagger-controls button,
+html[data-theme] .openapi-converter-actions button {
+    background: var(--cta-bg);
+    border-color: var(--cta-bg);
+    border-radius: calc(var(--radius) / 2);
+    color: var(--cta-text);
+}
+
+html[data-theme] .online-swagger-controls button:hover,
+html[data-theme] .online-swagger-controls button:focus-visible,
+html[data-theme] .openapi-converter-actions button:hover,
+html[data-theme] .openapi-converter-actions button:focus-visible {
+    background: var(--cta-hover-bg);
+    border-color: var(--cta-hover-bg);
+}
+
+html[data-theme] .openapi-converter-actions button:disabled {
+    background: var(--surface-strong);
+    border-color: var(--border);
+    color: var(--muted);
+}
+
+html[data-theme] .openapi-tester-controls {
+    border-color: var(--border);
+}
+
+html[data-theme] .openapi-converter-options {
+    background: var(--surface-soft);
+    border-color: var(--border);
+    border-radius: var(--radius);
+}
+
+html[data-theme] .online-client-status {
+    background: var(--surface-soft);
+    border-left-color: var(--accent);
+    color: var(--text);
+}
+
+html[data-theme] .online-client-status-error {
+    background: color-mix(in srgb, #b42318 12%, var(--surface));
+    border-left-color: #ef4444;
+    color: var(--text);
+}
+
+html[data-theme] #online-swagger-ui {
+    background: var(--surface) !important;
+    border-color: var(--border);
+    border-radius: var(--radius);
+    color: var(--text) !important;
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui {
+    color: var(--text);
+    font-family: var(--body-font);
+}
+
+html[data-theme] #online-swagger-ui .swagger-ui .wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    color-scheme: dark;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .wrapper,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .scheme-container,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui section.models,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .model-box,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock .opblock-summary,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock .opblock-section-header,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .responses-inner,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui table,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .dialog-ux .modal-ux {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .topbar,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .scheme-container,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock .opblock-section-header {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock {
+    border-color: var(--border) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-get {
+    background: color-mix(in srgb, #38bdf8 12%, var(--surface)) !important;
+    border-color: #38bdf8 !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-post {
+    background: color-mix(in srgb, #34d399 12%, var(--surface)) !important;
+    border-color: #34d399 !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-put {
+    background: color-mix(in srgb, #fbbf24 12%, var(--surface)) !important;
+    border-color: #fbbf24 !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-delete {
+    background: color-mix(in srgb, #fb7185 12%, var(--surface)) !important;
+    border-color: #fb7185 !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-patch {
+    background: color-mix(in srgb, #a78bfa 12%, var(--surface)) !important;
+    border-color: #a78bfa !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-options,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-head {
+    background: color-mix(in srgb, #93c5fd 12%, var(--surface)) !important;
+    border-color: #93c5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .info .title,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-tag,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-title,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-title span,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-section-header h4,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-section-header h4 span,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-description,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-description-wrapper,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-description-wrapper p,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .parameters-container,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .parameters-container p,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .responses-wrapper h4,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .responses-wrapper h5,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .response-control-media-type__accept-message,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .markdown p,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .markdown li,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .renderedMarkdown p,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .renderedMarkdown li,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui table thead tr td,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui table thead tr th,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui table tbody tr td,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui label,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .parameter__name,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .parameter__type,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .response-col_status,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .response-col_description,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .model-title,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .model,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .prop-name,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .prop-type,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .prop-format,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .tab li {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui a,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .link,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-tag:hover {
+    color: var(--accent-strong) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-path,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-path a,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-path span,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-path__deprecated,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-operation-id {
+    color: var(--text) !important;
+    font-weight: 800;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-method {
+    border: 1px solid color-mix(in srgb, var(--surface) 35%, currentColor) !important;
+    color: var(--accent-contrast) !important;
+    text-shadow: none !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-get .opblock-summary-method {
+    background: #7dd3fc !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-post .opblock-summary-method {
+    background: #86efac !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-put .opblock-summary-method {
+    background: #fcd34d !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-delete .opblock-summary-method {
+    background: #fda4af !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-patch .opblock-summary-method {
+    background: #c4b5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-head .opblock-summary-method {
+    background: #93c5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .btn,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui button,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui input,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui textarea,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui select {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .expand-operation,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-control-arrow,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .authorization__btn,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .btn.authorize,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .copy-to-clipboard {
+    background: var(--surface-soft) !important;
+    border-color: var(--accent) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui svg,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui svg * {
+    fill: var(--accent-strong) !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .highlight-code,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .microlight,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui textarea.curl,
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .model-example {
+    background: var(--code-bg) !important;
+    color: var(--code-text) !important;
+}

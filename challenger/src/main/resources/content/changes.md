@@ -2,12 +2,22 @@
 title: API Challenges Change Log
 seo_title: Change Log Guide for API Testing | API Challenges Guide
 description: Change log for the API Challenges
-lastmod: 2026-07-30
+lastmod: 2026-08-05
 seo_description: Track API Challenges updates, including new guides, improvements, and feature changes that help you learn API testing more effectively over time.
 showads: true
 ---
 
 # Change Log
+
+## 2026/08/05 - Site refresh, progress tracking, and hosted API clients
+
+- Added the Buggy API practice mode for exercising API testing against deliberately flawed behaviour.
+- Expanded the tutorials and reference sections with more practical API testing guidance and clearer supporting material.
+- Restyled the site content pages and navigation to improve readability, structure, and access to tutorials, references, practice modes, tools, and solutions.
+- Added in situ request editors to tutorial pages so examples can be tried directly from the page.
+- Improved API Challenges progress tracking, including clearer challenge progress, solution flow, and achievement handling.
+- Re-enabled server-side storage of challenge progress so challenge state can be restored more reliably.
+- Added hosted online API client pages for the Basic Client and Swagger Client.
 
 ## 2026/07/30 - PATCH support
 

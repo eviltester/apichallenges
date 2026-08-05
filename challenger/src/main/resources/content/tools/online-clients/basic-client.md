@@ -51,6 +51,8 @@ Use this online HTTP client for quick exploratory API testing:
 
 The [HTTP Basics](/tutorials/http-basics), [HTTP Verbs](/tutorials/http-verbs), and [REST API Basics](/tutorials/rest-api-basics) reference pages can help you decide which method, headers, status codes, and payload variations to try.
 
+If you are starting from an OpenAPI file, use the [OpenAPI Converter](/tools/online-clients/openapi-converter) or [Online Swagger UI](/tools/online-clients/swagger) to create starter requests, then come back to this Basic Client when you need fewer restrictions.
+
 ## When To Use A Desktop REST API Client
 
 A browser client is convenient for fast checks and learning, but desktop API clients and command line tools are still useful.

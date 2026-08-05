@@ -89,6 +89,21 @@ public class ChallengerUiCssTest {
         Assertions.assertFalse(css.contains(".main-text-content:has(> #toc)"));
     }
 
+    @Test
+    void onlineSwaggerThemeOverridesSwaggerUiAfterCdnStyles() throws IOException {
+        String css = onlineSwaggerThemeCss();
+
+        Assertions.assertTrue(css.contains("html[data-theme] #online-swagger-ui"));
+        Assertions.assertTrue(
+                css.contains(
+                        "html[data-theme=\"dark-lab\"] #online-swagger-ui .swagger-ui"));
+        Assertions.assertTrue(css.contains("color-scheme: dark"));
+        Assertions.assertTrue(css.contains(".opblock-summary-method"));
+        Assertions.assertTrue(css.contains("var(--surface)"));
+        Assertions.assertTrue(css.contains("var(--text)"));
+        Assertions.assertTrue(css.contains("var(--code-bg)"));
+    }
+
     private String ruleBody(final String css, final String selector) {
         Pattern pattern =
                 Pattern.compile(Pattern.quote(selector) + "\\s*\\{([^}]*)}", Pattern.DOTALL);
@@ -114,6 +129,14 @@ public class ChallengerUiCssTest {
 
     private String tocCss() throws IOException {
         try (InputStream stream = getClass().getResourceAsStream("/public/css/toc.css")) {
+            Assertions.assertNotNull(stream);
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private String onlineSwaggerThemeCss() throws IOException {
+        try (InputStream stream =
+                getClass().getResourceAsStream("/public/css/online-swagger-theme.css")) {
             Assertions.assertNotNull(stream);
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }

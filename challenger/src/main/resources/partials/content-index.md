@@ -81,6 +81,7 @@
                     <ul>
                         <li><a href="/tools/online-clients/basic-client">Basic Client</a></li>
                         <li><a href="/tools/online-clients/swagger">Swagger</a></li>
+                        <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
                     </ul>
                 </li>
             </ul>

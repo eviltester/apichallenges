@@ -214,6 +214,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-converter\""));
 
         response = http.send("/tools/online-clients/swagger", "get");
 
@@ -225,11 +227,25 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-online-swagger-client"));
         Assertions.assertTrue(response.body.contains("data-openapi-url"));
         Assertions.assertTrue(response.body.contains("data-openapi-file"));
+        Assertions.assertTrue(response.body.contains("data-openapi-profile"));
+        Assertions.assertTrue(response.body.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted"));
+        Assertions.assertTrue(response.body.contains("data-openapi-download-converted"));
+        Assertions.assertFalse(response.body.contains("data-openapi-example"));
+        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-option-grid\">"));
+        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-verb-grid\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted disabled"));
+        Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist"));
+        assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
         Assertions.assertTrue(response.body.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
         assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
         Assertions.assertTrue(
                 response.body.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
+        Assertions.assertTrue(
+                response.body.contains("Render A Tester OpenAPI Spec In Swagger UI"));
         Assertions.assertTrue(
                 response.body.contains("How To Use Swagger UI For REST API Testing"));
         Assertions.assertTrue(response.body.contains("CORS Limits For Browser Swagger UI"));
@@ -243,6 +259,52 @@ public class UiPagesAreReachableTest {
                 response.body.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(response.body.contains("limited by CORS"));
         Assertions.assertTrue(response.body.contains("Open local JSON or YAML file"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-converter\""));
+
+        response = http.send("/tools/online-clients/openapi-converter", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertContainsHeaderAndFooter(response);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<title>Convert OpenAPI To A More Permissive Tester Spec</title>"));
+        Assertions.assertTrue(response.body.contains("data-openapi-converter"));
+        Assertions.assertTrue(response.body.contains("data-openapi-url"));
+        Assertions.assertTrue(response.body.contains("data-openapi-file"));
+        Assertions.assertTrue(response.body.contains("data-openapi-profile"));
+        Assertions.assertTrue(response.body.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted"));
+        Assertions.assertTrue(response.body.contains("data-openapi-download-converted"));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-swagger"));
+        Assertions.assertTrue(response.body.contains("data-openapi-output"));
+        Assertions.assertFalse(response.body.contains("data-openapi-example"));
+        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-option-grid\">"));
+        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-verb-grid\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted disabled"));
+        Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-swagger disabled"));
+        Assertions.assertTrue(
+                response.body.contains("Convert OpenAPI To A More Permissive Tester Spec"));
+        Assertions.assertTrue(
+                response.body.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Download A Less Restrictive OpenAPI File For REST Client Testing"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Use Converted OpenAPI Files In Swagger UI And REST Clients"));
+        Assertions.assertTrue(response.body.contains("CORS Limits For Browser OpenAPI Conversion"));
+        Assertions.assertTrue(response.body.contains("https://cdn.jsdelivr.net/npm/js-yaml@4"));
+        assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-converter-page.js");
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/clients/summary-reviews\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
     }
 
     private void assertBodyContainsRandomSimpleApiIsbnGenerator(

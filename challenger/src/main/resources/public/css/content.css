@@ -948,9 +948,14 @@ a.next-challenge-cta-link:hover {
     padding: 1rem;
 }
 
+.openapi-converter-tool {
+    border: 1px solid #c9d5df;
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+}
+
 .online-swagger-controls,
-.online-swagger-file-row,
-.online-swagger-examples {
+.online-swagger-file-row {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
@@ -979,13 +984,89 @@ a.next-challenge-cta-link:hover {
 }
 
 .online-swagger-controls button,
-.online-swagger-examples button {
+.openapi-converter-actions button {
     border: 1px solid #8fa7bc;
     background: #ffffff;
     color: #152536;
     cursor: pointer;
     font: inherit;
     padding: 0.45rem 0.65rem;
+}
+
+.openapi-converter-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.openapi-tester-controls {
+    border-top: 1px solid #d7e1e8;
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+}
+
+.openapi-profile-row,
+.openapi-converter-actions {
+    align-items: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.openapi-profile-row label {
+    display: grid;
+    flex: 1 1 14rem;
+    font-weight: 600;
+    gap: 0.25rem;
+}
+
+.openapi-profile-row select {
+    border: 1px solid #9bb6cd;
+    box-sizing: border-box;
+    font: inherit;
+    padding: 0.45rem;
+    width: 100%;
+}
+
+.openapi-converter-options {
+    border: 1px solid #d7e1e8;
+    padding: 0.75rem;
+}
+
+.openapi-converter-options summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.openapi-option-grid,
+.openapi-verb-grid {
+    display: grid;
+    gap: 0.4rem 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    margin-top: 0.75rem;
+    padding-left: 0;
+}
+
+.openapi-option-grid li,
+.openapi-verb-grid li {
+    list-style: none;
+}
+
+.openapi-option-grid label,
+.openapi-verb-grid label {
+    align-items: start;
+    display: flex;
+    gap: 0.4rem;
+}
+
+.openapi-converter-output {
+    border: 1px solid #9bb6cd;
+    box-sizing: border-box;
+    font: 0.9rem/1.45 Consolas, "Liberation Mono", monospace;
+    min-height: 20rem;
+    padding: 0.75rem;
+    width: 100%;
 }
 
 .online-client-status {
