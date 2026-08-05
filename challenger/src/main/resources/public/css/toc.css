@@ -57,6 +57,9 @@ div#toc .toc-entry.is-active > a{
     }
 
     .right-column .main-text-content:has(> #toc) > #toc {
+        --toc-floating-gap: 1.5rem;
+        --toc-floating-width: clamp(11rem, calc(16vw - 2rem), 14rem);
+
         align-self: auto;
         background: var(--surface, #ffffff);
         border: 1px solid var(--border, #d5e0ea);
@@ -68,13 +71,13 @@ div#toc .toc-entry.is-active > a{
         font-size: 0.92rem;
         grid-column: auto;
         grid-row: auto;
-        margin: 0 calc(0px - clamp(11rem, 16vw, 14rem) - 1.5rem) 1rem 1.5rem;
+        margin: 0 calc(0px - var(--toc-floating-width) - var(--toc-floating-gap)) 1rem var(--toc-floating-gap);
         max-height: calc(100vh - 2rem);
         overflow-y: auto;
         padding: 0.85rem 0.85rem 0.85rem 1rem;
         position: sticky;
         top: 1rem;
-        width: clamp(11rem, 16vw, 14rem);
+        width: var(--toc-floating-width);
         z-index: 2;
     }
 
@@ -90,5 +93,12 @@ div#toc .toc-entry.is-active > a{
     .right-column .main-text-content:has(> #toc) > #toc div.h5,
     .right-column .main-text-content:has(> #toc) > #toc div.h6 {
         margin-left: 1.5rem;
+    }
+}
+
+@media (min-width: 1500px) {
+    .right-column .main-text-content:has(> #toc) > #toc {
+        --toc-floating-gap: clamp(32px, calc(5vw - 43px), 80px);
+        --toc-floating-width: clamp(228px, calc(32vw - 252px), 350px);
     }
 }
