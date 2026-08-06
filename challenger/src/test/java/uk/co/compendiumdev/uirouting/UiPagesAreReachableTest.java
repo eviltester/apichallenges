@@ -815,7 +815,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/reference/rest-api-basics\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs\""));
-        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#http-status-codes\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#toc7\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simulation\""));
@@ -857,7 +857,7 @@ public class UiPagesAreReachableTest {
                 "href=\"/reference/http-basics\"",
                 "href=\"/reference/rest-api-basics\"",
                 "href=\"/reference/http-verbs\"",
-                "href=\"/reference/http-basics#http-status-codes\"",
+                "href=\"/reference/http-basics#toc7\"",
                 "href=\"/reference/openapi\"",
                 "href=\"/tutorials/rest-api-testing\"");
         Assertions.assertTrue(learningMenu.contains("How to Test REST APIs"));

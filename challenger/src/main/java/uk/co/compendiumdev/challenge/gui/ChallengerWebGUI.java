@@ -140,7 +140,7 @@ public class ChallengerWebGUI {
                                     <li><a href="/reference/http-basics">HTTP Basics</a></li>
                                     <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
                                     <li><a href="/reference/http-verbs">HTTP Methods</a></li>
-                                    <li><a href="/reference/http-basics#http-status-codes">HTTP Status Codes</a></li>
+                                    <li><a href="/reference/http-basics#toc7">HTTP Status Codes</a></li>
                                     <li><a href="/reference/openapi">OpenAPI</a></li>
                                     <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
                                 </ul>

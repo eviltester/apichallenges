@@ -24,7 +24,7 @@ Use this as the main route through the Learning Zone. Each step builds enough vo
 2. [HTTP basics](/reference/http-basics) - learn how requests, responses, headers, bodies, and URLs fit together.
 3. [REST basics](/reference/rest-api-basics) - connect resources, representations, statelessness, and CRUD with API design.
 4. [HTTP methods](/reference/http-verbs) - understand what `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, and `OPTIONS` are expected to mean.
-5. [Status codes](/reference/http-basics#http-status-codes) - read response outcomes as testing evidence, not just pass/fail signals.
+5. [Status codes](/reference/http-basics#toc7) - read response outcomes as testing evidence, not just pass/fail signals.
 6. [OpenAPI](/reference/openapi) - use API descriptions to find endpoints, schemas, responses, and security expectations.
 7. [How to Test REST APIs](/tutorials/rest-api-testing) - practise a step-by-step approach for exploring, checking, and reporting API behaviour.
 8. [Interactive API Simulation](/practice-modes/simulation) - use the simulator walkthrough to practise request and response handling safely.

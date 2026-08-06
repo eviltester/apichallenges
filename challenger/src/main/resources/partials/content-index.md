@@ -7,7 +7,7 @@
             <li><a href="/reference/http-basics">HTTP basics</a></li>
             <li><a href="/reference/rest-api-basics">REST basics</a></li>
             <li><a href="/reference/http-verbs">HTTP methods</a></li>
-            <li><a href="/reference/http-basics#http-status-codes">Status codes</a></li>
+            <li><a href="/reference/http-basics#toc7">Status codes</a></li>
             <li><a href="/reference/openapi">OpenAPI</a></li>
             <li><a href="/tutorials/rest-api-testing">Interactive How to Test REST APIs Tutorial</a></li>
             <li><a href="/practice-modes/simulation">Interactive API Simulation</a></li>
