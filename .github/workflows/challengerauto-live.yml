@@ -1,0 +1,70 @@
+name: ChallengerAuto Live
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: challengerauto-live
+  cancel-in-progress: false
+
+jobs:
+  full-live-suite:
+    name: Full live suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout API Challenges
+        uses: actions/checkout@v4
+        with:
+          path: apichallenges
+
+      - name: Checkout Thingifier dependency
+        uses: actions/checkout@v4
+        with:
+          repository: eviltester/thingifier
+          ref: master
+          path: thingifier
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Install Thingifier dependency
+        run: >
+          mvn -B -f thingifier/pom.xml -pl ercoremodel,thingifier -am install
+          -DskipTests
+          -Dspotless.check.skip=true
+          -Dcheckstyle.skip=true
+          -Dpmd.skip=true
+
+      - name: Build Challenger dependency
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challenger -am install
+          -DskipTests
+          -Dspotless.check.skip=true
+          -Dcheckstyle.skip=true
+          -Dpmd.skip=true
+
+      - name: Run ChallengerAuto against apichallenges.com
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto test
+          -Dchallenger.auto.target=live
+          -Dchallenger.auto.baseUrl=https://apichallenges.com
+          -Dchallenger.auto.external.full=true
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: challengerauto-live-surefire-reports
+          path: apichallenges/challengerAuto/target/surefire-reports
+          if-no-files-found: ignore

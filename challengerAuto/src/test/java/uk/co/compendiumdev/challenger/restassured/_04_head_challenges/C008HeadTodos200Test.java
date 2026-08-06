@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -48,22 +47,9 @@ public class C008HeadTodos200Test extends RestAssuredBaseTest {
 
         // compare headers
 
-        // remove the variable headers that are server based rather than app based
-        List<String> headersToSkipComparison =
-                Arrays.asList(
-                        "Report-To",
-                        "Reporting-Endpoints",
-                        "Connection",
-                        "Date",
-                        "X-Railway-HttpServerRequest-Id",
-                        "x-railway-HttpServerRequest-id",
-                        "x-railway-cdn-edge",
-                        "x-served-by",
-                        "date");
-
         List<String> failed = new ArrayList<>();
         for (Header header : todosgetresponse.headers().asList()) {
-            if (!headersToSkipComparison.contains(header.getName())) {
+            if (!shouldSkipHeadGetHeaderComparison(header.getName())) {
                 if (headresponse.headers().hasHeaderWithName(header.getName())) {
                     if (!headresponse.header(header.getName()).equals(header.getValue())) {
                         String failedHeader =

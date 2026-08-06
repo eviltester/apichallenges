@@ -5,7 +5,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.http.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -282,20 +281,8 @@ public class SimulatorHttpTest extends RestAssuredBaseTest {
                         .extract()
                         .headers();
 
-        // remove the variable headers that are server based rather than app based
-        List<String> headersToSkipComparison =
-                Arrays.asList(
-                        "Report-To",
-                        "Reporting-Endpoints",
-                        "Connection",
-                        "Date",
-                        "X-Railway-HttpServerRequest-Id",
-                        "x-railway-HttpServerRequest-id",
-                        "x-railway-cdn-edge",
-                        "x-served-by",
-                        "date");
         for (Header headHeader : headHeaders) {
-            if (!headersToSkipComparison.contains(headHeader.getName())) {
+            if (!shouldSkipHeadGetHeaderComparison(headHeader.getName())) {
                 Assertions.assertEquals(
                         headHeaders.getValue(headHeader.getName()),
                         getHeaders.getValue(headHeader.getName()),
