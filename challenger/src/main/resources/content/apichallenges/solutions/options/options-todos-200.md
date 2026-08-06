@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/accept-header/get-todos-200-xml
 concepts_learned: HTTP OPTIONS||200 OK||Allow header||capability discovery
 concept_summary: Use this challenge to learn how OPTIONS can show which methods an endpoint supports.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create an OPTIONS request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---

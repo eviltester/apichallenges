@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/get-challenger-guid-exis
 concepts_learned: HTTP GET||200 OK||Content-Disposition||download response
 concept_summary: Use this challenge to learn how response headers describe a TSV file download.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a GET request to /todos/export?format=tsv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/tab-separated-values||Check the Content-Disposition header is attachment with filename todos.tsv
 showads: true
 ---

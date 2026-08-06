@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/miscellaneous/create-maximum-number-tod
 concepts_learned: HTTP DELETE||state cleanup||bulk operation||API test data
 concept_summary: Use this challenge to learn how cleanup requests reset API test data between scenarios.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: GET /todos and capture all todo ids currently returned by the API||Send DELETE /todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
 showads: true
 ---

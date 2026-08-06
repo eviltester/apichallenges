@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/query/query-todos-200
 concepts_learned: HTTP DELETE||204 No Content||CRUD delete||resource URL
 concept_summary: Use this challenge to learn how DELETE removes a resource and returns no response body.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a DELETE request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 204
 showads: true
 ---

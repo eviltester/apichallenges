@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/put-update/put-todos-id-404-not-found
 concepts_learned: HTTP PUT||422 Unprocessable Content||idempotent method||id handling
 concept_summary: Use this challenge to learn how PUT handles id handling for todo resources.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a JSON payload without an id field||Send the request and verify the response status is 422
 showads: true
 ---

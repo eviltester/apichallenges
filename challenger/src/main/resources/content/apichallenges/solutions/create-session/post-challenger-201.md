@@ -8,9 +8,9 @@ next_challenge: /apichallenges/solutions/first-challenge/get-challenges-200
 concepts_learned: HTTP POST||201 Created||session state||X-CHALLENGER
 concept_summary: Use this challenge to learn how the app creates a tracked challenge session.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Methods and Verbs
-concept_reference_url_2: /tutorials/http-verbs
+concept_reference_url_2: /reference/http-verbs
 schema_howto_steps: Create a POST request to /challenger||Send the request with no body to create a new challenger session||Capture the returned X-CHALLENGER value for subsequent challenge requests||Send the request and verify the response status is 201
 showads: true
 ---

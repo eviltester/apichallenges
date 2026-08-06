@@ -8,9 +8,9 @@ next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-json-patch
 concepts_learned: HTTP PATCH||200 OK||JSON Merge Patch||partial update
 concept_summary: Use this challenge to learn how PATCH applies a JSON Merge Patch to an existing resource.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/merge-patch+json||Send a JSON Merge Patch object and verify the response status is 200
 showads: true
 ---
@@ -31,7 +31,7 @@ Use `PATCH` with `Content-Type: application/merge-patch+json` when you want to s
 - Send a JSON object containing the fields to add, replace, or remove.
 - The response should be `200`.
 - Fields that are not in the merge patch document should keep their existing values.
-- You can [learn more about PATCH](/tutorials/http-verbs#toc18) in the HTTP verbs tutorial.
+- You can [learn more about PATCH](/reference/http-verbs#toc18) in the HTTP verbs tutorial.
 
 ## Basic Instructions
 

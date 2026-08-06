@@ -76,7 +76,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                         "Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing."));
         Assertions.assertTrue(
                 html.contains(
-                        "Reference tutorials covering HTTP basics, REST APIs, OpenAPI, Swagger, and practical API testing concepts."));
+                        "Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and Swagger."));
+        Assertions.assertTrue(
+                html.contains("<span class=\"side-toc-section-title\">Reference</span>"));
+        Assertions.assertFalse(
+                html.contains("<span class=\"side-toc-section-title\">Reference Tutorials</span>"));
         assertContainsInOrder(
                 html,
                 "<ul class=\"side-toc-root\">",
@@ -84,15 +88,23 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li class=\"side-toc-syllabus\" aria-label=\"REST API Tutorial path\">",
                 "<span class=\"side-toc-syllabus-title\">REST API Tutorial Path</span>",
                 "<li><a href=\"/tutorials/rest-api-tutorial\">Interactive REST API Tutorial</a></li>",
-                "<li><a href=\"/tutorials/http-basics\">HTTP basics</a></li>",
-                "<li><a href=\"/tutorials/rest-api-basics\">REST basics</a></li>",
-                "<li><a href=\"/tutorials/http-verbs\">HTTP methods</a></li>",
-                "<li><a href=\"/tutorials/http-basics#http-status-codes\">Status codes</a></li>",
-                "<li><a href=\"/tutorials/openapi\">OpenAPI</a></li>",
-                "<li><a href=\"/tutorials/rest-api-testing\">How to Test REST APIs</a></li>",
+                "<li><a href=\"/reference/http-basics\">HTTP basics</a></li>",
+                "<li><a href=\"/reference/rest-api-basics\">REST basics</a></li>",
+                "<li><a href=\"/reference/http-verbs\">HTTP methods</a></li>",
+                "<li><a href=\"/reference/http-basics#http-status-codes\">Status codes</a></li>",
+                "<li><a href=\"/reference/openapi\">OpenAPI</a></li>",
+                "<li><a href=\"/tutorials/rest-api-testing\">Interactive How to Test REST APIs Tutorial</a></li>",
                 "<li><a href=\"/practice-modes/simulation\">Interactive API Simulation</a></li>",
                 "<li><a href=\"/apichallenges\">API Challenges</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"reference-tutorials\">",
+                "<span class=\"side-toc-section-title\">Reference</span>",
+                "<li><a href=\"/reference/web-basics\">Web Applications</a></li>",
+                "<li><a href=\"/reference/http-basics\">HTTP Basics</a></li>",
+                "<li><a href=\"/reference/http-verbs\">HTTP Verbs</a></li>",
+                "<li><a href=\"/reference/rest-api-basics\">REST API Basics</a></li>",
+                "<li><a href=\"/reference/testing-apis\">API Testing Concepts</a></li>",
+                "<li><a href=\"/reference/openapi\">OpenAPI</a></li>",
+                "<li><a href=\"/reference/swagger\">Swagger</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"practice-modes\">",
                 "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">");
@@ -123,12 +135,12 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html.contains(
                         "<meta name='description' content='Learn REST API basics with live HTTP requests"));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-tutorial\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-basics\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/http-verbs\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/testing-apis\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/rest-api-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/http-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/http-verbs\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/testing-apis\""));
         Assertions.assertTrue(html.contains("When you want more hands-on repetition"));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi\""));
@@ -174,51 +186,62 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 learningHtml,
                 "REST API Tutorial Syllabus",
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/http-basics\"",
-                "href=\"/tutorials/rest-api-basics\"",
-                "href=\"/tutorials/http-verbs\"",
-                "href=\"/tutorials/http-basics#http-status-codes\"",
-                "href=\"/tutorials/openapi\"",
+                "href=\"/reference/http-basics\"",
+                "href=\"/reference/rest-api-basics\"",
+                "href=\"/reference/http-verbs\"",
+                "href=\"/reference/http-basics#http-status-codes\"",
+                "href=\"/reference/openapi\"",
                 "href=\"/tutorials/rest-api-testing\"",
                 "href=\"/practice-modes/simulation\"",
                 "href=\"/apichallenges\"");
         Assertions.assertTrue(learningHtml.contains("Interactive REST API Tutorial"));
         Assertions.assertTrue(learningHtml.contains("How to Test REST APIs"));
         Assertions.assertTrue(learningHtml.contains("Interactive API Simulation"));
+        assertContainsInOrder(
+                learningHtml,
+                "<h2>Reference</h2>",
+                "href=\"/reference/web-basics\"",
+                "href=\"/reference/http-basics\"",
+                "href=\"/reference/http-verbs\"",
+                "href=\"/reference/rest-api-basics\"",
+                "href=\"/reference/testing-apis\"",
+                "href=\"/reference/openapi\"",
+                "href=\"/reference/swagger\"");
+        Assertions.assertFalse(learningHtml.contains("<h2>Reference Tutorials</h2>"));
     }
 
     @Test
     void referenceTutorialsRenderPracticeSpineLinks() {
 
         assertContentPageContains(
-                "/tutorials/rest-api-basics",
+                "/reference/rest-api-basics",
                 "Practise This Concept",
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/http-verbs\"",
+                "href=\"/reference/http-verbs\"",
                 "href=\"/tutorials/rest-api-testing\"",
                 "href=\"/practice-modes/simpleapi\"",
                 "href=\"/apichallenges/solutions\"");
 
         assertContentPageContains(
-                "/tutorials/http-basics",
+                "/reference/http-basics",
                 "Practise This Concept",
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/http-verbs\"",
+                "href=\"/reference/http-verbs\"",
                 "href=\"/tutorials/rest-api-testing\"",
                 "href=\"/practice-modes/simulation\"",
                 "href=\"/apichallenges/solutions\"");
 
         assertContentPageContains(
-                "/tutorials/http-verbs",
+                "/reference/http-verbs",
                 "Practise This Concept",
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/rest-api-basics\"",
+                "href=\"/reference/rest-api-basics\"",
                 "href=\"/tutorials/rest-api-testing\"",
                 "href=\"/practice-modes/simpleapi\"",
                 "href=\"/apichallenges/solutions\"");
 
         assertContentPageContains(
-                "/tutorials/testing-apis",
+                "/reference/testing-apis",
                 "Practise This Concept",
                 "href=\"/tutorials/rest-api-tutorial\"",
                 "href=\"/tutorials/rest-api-testing\"",
@@ -230,8 +253,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "/tutorials/rest-api-testing",
                 "Where to Go Next",
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/rest-api-basics\"",
-                "href=\"/tutorials/http-verbs\"",
+                "href=\"/reference/rest-api-basics\"",
+                "href=\"/reference/http-verbs\"",
                 "href=\"/practice-modes/simpleapi\"",
                 "href=\"/apichallenges\"",
                 "href=\"/apichallenges/solutions\"");
@@ -257,9 +280,9 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/http-verbs\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/http-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/http-verbs\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/rest-api-basics\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/bruno\""));
@@ -303,8 +326,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("When To Use A REST Client Instead Of Swagger UI"));
         Assertions.assertTrue(html.contains("less-validating, permissive file"));
         Assertions.assertTrue(html.contains("limited by CORS"));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
@@ -365,8 +388,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tools/clients/curl\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/apichallenges/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));

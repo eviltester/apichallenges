@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/status-codes/trace-heartbeat-501
 concepts_learned: HTTP PATCH||500 Internal Server Error||status code||error handling
 concept_summary: Use this challenge to learn how the API reports 500 Internal Server Error for this endpoint and method.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a PATCH request to /heartbeat||Include X-CHALLENGER so progress is tracked||Send the request without a body||Verify the response status is 500
 showads: true
 ---

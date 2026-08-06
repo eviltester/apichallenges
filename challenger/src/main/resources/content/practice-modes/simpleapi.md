@@ -23,7 +23,7 @@ The API Challenges Simple API is an easy-to-use API where you can GET, DELETE, P
 
 Use the Simple API when you want to stop reading about REST and start changing data. It is a good follow-on from the [REST API Tutorial](/tutorials/rest-api-tutorial) because you can practise create, read, update, and delete requests without setting up authentication.
 
-If you need a refresher while experimenting, the useful companions are [REST API Basics](/tutorials/rest-api-basics) for resources and CRUD, [HTTP Methods and Verbs](/tutorials/http-verbs) for method expectations, and [How to Test REST APIs](/tutorials/rest-api-testing) for turning the requests into test coverage. After this, move into the [API Challenges overview](/apichallenges) and use the [API Challenge Solutions](/apichallenges/solutions) to compare your approach with guided walkthroughs.
+If you need a refresher while experimenting, the useful companions are [REST API Basics](/reference/rest-api-basics) for resources and CRUD, [HTTP Methods and Verbs](/reference/http-verbs) for method expectations, and [How to Test REST APIs](/tutorials/rest-api-testing) for turning the requests into test coverage. After this, move into the [API Challenges overview](/apichallenges) and use the [API Challenge Solutions](/apichallenges/solutions) to compare your approach with guided walkthroughs.
 
 ## Overview of Simple API
 

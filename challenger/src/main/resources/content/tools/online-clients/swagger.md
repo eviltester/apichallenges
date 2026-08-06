@@ -74,7 +74,7 @@ Load an OpenAPI or Swagger file from a URL, or open a local JSON or YAML file fr
 
 Swagger UI renders an OpenAPI file as interactive API documentation. It can show endpoints, methods, parameters, request bodies, response schemas, authentication options, and request forms.
 
-This page is useful when you want a quick online Swagger UI without installing anything. You can load a public OpenAPI URL, a local downloaded Swagger JSON file, or a local OpenAPI YAML file, then choose whether Swagger UI should use the original file or a less restrictive tester OpenAPI version. If you mainly want to export a converted file for another tool, use the [OpenAPI Converter](/tools/online-clients/openapi-converter). If you want the background concepts, read the [Swagger UI and Tools](/tutorials/swagger) guide and the [OpenAPI for API Testing](/tutorials/openapi) reference.
+This page is useful when you want a quick online Swagger UI without installing anything. You can load a public OpenAPI URL, a local downloaded Swagger JSON file, or a local OpenAPI YAML file, then choose whether Swagger UI should use the original file or a less restrictive tester OpenAPI version. If you mainly want to export a converted file for another tool, use the [OpenAPI Converter](/tools/online-clients/openapi-converter). If you want the background concepts, read the [Swagger UI and Tools](/reference/swagger) guide and the [OpenAPI for API Testing](/reference/openapi) reference.
 
 Local files are read by your browser and rendered on the page. They are not uploaded to API Challenges.
 

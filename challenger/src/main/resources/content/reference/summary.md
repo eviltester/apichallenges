@@ -41,14 +41,14 @@ Never say "the API failed", you must be able to explain "the API returned `500 I
 Useful follow-on pages:
 
 - [How to Test REST APIs](/tutorials/rest-api-testing)
-- [Web Basics](/tutorials/web-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Verbs](/tutorials/http-verbs)
-- [REST API Basics](/tutorials/rest-api-basics)
-- [REST API Testing Concepts](/tutorials/testing-apis)
-- [OpenAPI](/tutorials/openapi)
-- [Swagger](/tutorials/swagger)
-- [API Testing Summary](/tutorials/summary)
+- [Web Basics](/reference/web-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Verbs](/reference/http-verbs)
+- [REST API Basics](/reference/rest-api-basics)
+- [REST API Testing Concepts](/reference/testing-apis)
+- [OpenAPI](/reference/openapi)
+- [Swagger](/reference/swagger)
+- [API Testing Summary](/reference/summary)
 
 ---
 
@@ -97,7 +97,7 @@ Use the response as evidence, but also check the system state when the operation
 Useful follow-on page:
 
 - [How to Test REST APIs](/tutorials/rest-api-testing)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
 

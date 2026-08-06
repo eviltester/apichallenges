@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/status-codes/patch-heartbeat-500
 concepts_learned: HTTP DELETE||405 Method Not Allowed||status code||error handling
 concept_summary: Use this challenge to learn how the API reports 405 Method Not Allowed for this endpoint and method.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a DELETE request to /heartbeat||Include X-CHALLENGER so progress is tracked||Send the request||Verify the response status is 405
 showads: true
 ---

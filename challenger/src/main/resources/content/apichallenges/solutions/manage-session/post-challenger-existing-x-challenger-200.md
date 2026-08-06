@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/get-challenger-guid-exis
 concepts_learned: HTTP POST||200 OK||X-CHALLENGER||session state
 concept_summary: Use this challenge to learn how challenge progress can be restored, updated, or rejected using session identifiers.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Start with a saved challenger GUID||Send POST /challenger with that GUID in X-CHALLENGER||Verify the response status is 200||Use the restored challenger for later requests
 showads: true
 ---

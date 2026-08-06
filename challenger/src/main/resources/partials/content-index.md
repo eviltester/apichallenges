@@ -4,12 +4,12 @@
         <span class="side-toc-syllabus-title">REST API Tutorial Path</span>
         <ol class="side-toc-syllabus-steps">
             <li><a href="/tutorials/rest-api-tutorial">Interactive REST API Tutorial</a></li>
-            <li><a href="/tutorials/http-basics">HTTP basics</a></li>
-            <li><a href="/tutorials/rest-api-basics">REST basics</a></li>
-            <li><a href="/tutorials/http-verbs">HTTP methods</a></li>
-            <li><a href="/tutorials/http-basics#http-status-codes">Status codes</a></li>
-            <li><a href="/tutorials/openapi">OpenAPI</a></li>
-            <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
+            <li><a href="/reference/http-basics">HTTP basics</a></li>
+            <li><a href="/reference/rest-api-basics">REST basics</a></li>
+            <li><a href="/reference/http-verbs">HTTP methods</a></li>
+            <li><a href="/reference/http-basics#http-status-codes">Status codes</a></li>
+            <li><a href="/reference/openapi">OpenAPI</a></li>
+            <li><a href="/tutorials/rest-api-testing">Interactive How to Test REST APIs Tutorial</a></li>
             <li><a href="/practice-modes/simulation">Interactive API Simulation</a></li>
             <li><a href="/apichallenges">API Challenges</a></li>
         </ol>
@@ -17,18 +17,18 @@
     <li>
         <details class="side-toc-section" data-side-toc-section="reference-tutorials">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Reference Tutorials</span>
-                <span class="side-toc-section-description">Reference tutorials covering HTTP basics, REST APIs, OpenAPI, Swagger, and practical API testing concepts.</span>
+                <span class="side-toc-section-title">Reference</span>
+                <span class="side-toc-section-description">Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and Swagger.</span>
             </summary>
             <ul class="side-toc-section-links">
-                <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
-                <li><a href="/tutorials/http-basics">HTTP Basics</a></li>
-                <li><a href="/tutorials/http-verbs">HTTP Verbs</a></li>
-                <li><a href="/tutorials/testing-apis">API Testing Concepts</a></li>
-                <li><a href="/tutorials/openapi">OpenAPI</a></li>
-                <li><a href="/tutorials/swagger">Swagger</a></li>
-                <li><a href="/tutorials/web-basics">Web Applications</a></li>
-                <li><a href="/tutorials/summary">Summary</a></li>
+                <li><a href="/reference/web-basics">Web Applications</a></li>
+                <li><a href="/reference/http-basics">HTTP Basics</a></li>
+                <li><a href="/reference/http-verbs">HTTP Verbs</a></li>
+                <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
+                <li><a href="/reference/testing-apis">API Testing Concepts</a></li>
+                <li><a href="/reference/openapi">OpenAPI</a></li>
+                <li><a href="/reference/swagger">Swagger</a></li>
+                <li><a href="/reference/summary">Summary</a></li>
             </ul>
         </details>
     </li>

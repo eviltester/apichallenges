@@ -137,11 +137,11 @@ public class ChallengerWebGUI {
                             <li id='learning-root-menu'><a href="/learning">Learning Zone</a>
                                 <ul>
                                     <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
-                                    <li><a href="/tutorials/http-basics">HTTP Basics</a></li>
-                                    <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
-                                    <li><a href="/tutorials/http-verbs">HTTP Methods</a></li>
-                                    <li><a href="/tutorials/http-basics#http-status-codes">HTTP Status Codes</a></li>
-                                    <li><a href="/tutorials/openapi">OpenAPI</a></li>
+                                    <li><a href="/reference/http-basics">HTTP Basics</a></li>
+                                    <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
+                                    <li><a href="/reference/http-verbs">HTTP Methods</a></li>
+                                    <li><a href="/reference/http-basics#http-status-codes">HTTP Status Codes</a></li>
+                                    <li><a href="/reference/openapi">OpenAPI</a></li>
                                     <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
                                 </ul>
                             </li>
@@ -317,6 +317,27 @@ public class ChallengerWebGUI {
                 });
 
         // Redirect legacy URLs to avoid SEO penalties from old inbound links.
+        permanentRedirect("/tutorials/web-basics", "/reference/web-basics");
+        permanentRedirect("/tutorials/web-basics/", "/reference/web-basics");
+        permanentRedirect("/tutorials/http-basics", "/reference/http-basics");
+        permanentRedirect("/tutorials/http-basics/", "/reference/http-basics");
+        permanentRedirect("/tutorials/http-verbs", "/reference/http-verbs");
+        permanentRedirect("/tutorials/http-verbs/", "/reference/http-verbs");
+        permanentRedirect("/tutorials/rest-api-basics", "/reference/rest-api-basics");
+        permanentRedirect("/tutorials/rest-api-basics/", "/reference/rest-api-basics");
+        permanentRedirect("/tutorials/testing-apis", "/reference/testing-apis");
+        permanentRedirect("/tutorials/testing-apis/", "/reference/testing-apis");
+        permanentRedirect("/tutorials/openapi", "/reference/openapi");
+        permanentRedirect("/tutorials/openapi/", "/reference/openapi");
+        permanentRedirect("/tutorials/swagger", "/reference/swagger");
+        permanentRedirect("/tutorials/swagger/", "/reference/swagger");
+        permanentRedirect("/tutorials/summary", "/reference/summary");
+        permanentRedirect("/tutorials/summary/", "/reference/summary");
+        permanentRedirect("/tutorials/openapi-swagger", "/reference/openapi");
+        permanentRedirect("/tutorials/openapi-swagger/", "/reference/openapi");
+        permanentRedirect("/reference/openapi-swagger", "/reference/openapi");
+        permanentRedirect("/reference/openapi-swagger/", "/reference/openapi");
+
         get(
                 "/apichallenges/solutions/method-overrides/all-method-overrides",
                 (request, response) -> {
@@ -372,13 +393,6 @@ public class ChallengerWebGUI {
                 "/tools/clients/soapyi",
                 (request, response) -> {
                     response.redirect("/tools/clients/soapui", 301);
-                    return "";
-                });
-
-        get(
-                "/tutorials/openapi-swagger",
-                (request, response) -> {
-                    response.redirect("/tutorials/openapi", 301);
                     return "";
                 });
 
@@ -781,6 +795,21 @@ public class ChallengerWebGUI {
         return resourceAsStringOrEmpty("partials/generate-random-isbn.html");
     }
 
+    private void permanentRedirect(final String fromPath, final String toPath) {
+        get(
+                fromPath,
+                (request, response) -> {
+                    response.redirect(toPath, 301);
+                    return "";
+                });
+        head(
+                fromPath,
+                (request, response) -> {
+                    response.redirect(toPath, 301);
+                    return "";
+                });
+    }
+
     private Map<String, String> getMarkdownParamsFromRequest(HttpServerRequest request) {
         final String originUrl = originUrlFrom(request);
         final String hostUrl = hostFrom(request);
@@ -874,6 +903,7 @@ public class ChallengerWebGUI {
                 || path.startsWith("/author")
                 || path.startsWith("/learning")
                 || path.startsWith("/practice-modes")
+                || path.startsWith("/reference")
                 || path.startsWith("/tools")
                 || path.startsWith("/tutorials")
                 || path.equals("/sponsors")

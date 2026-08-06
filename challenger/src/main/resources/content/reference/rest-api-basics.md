@@ -423,7 +423,7 @@ This is more useful than simply saying "this is not RESTful."
 - [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#name-head)
 - same as GET but does not return a body
 - can be useful for checking existence of an endpoint or entity
-- see the [HTTP HEAD verb tutorial](/tutorials/http-verbs#http-head-verb)
+- see the [HTTP HEAD verb tutorial](/reference/http-verbs#http-head-verb)
 
 `HEAD` is useful when we want to inspect metadata without downloading the full response body.
 
@@ -473,7 +473,7 @@ If the API says `PUT` is a full replacement, then omitting a field should have a
 - Standard for [JSON Merge Patch format](https://www.rfc-editor.org/rfc/rfc7396)
 - Standard for [JSON Patch format](https://www.rfc-editor.org/rfc/rfc6902)
 - Proposed standard for [XML Patch Using XPath](https://tools.ietf.org/html/rfc5261)
-- see the [HTTP PATCH verb tutorial](/tutorials/http-verbs#http-patch-verb)
+- see the [HTTP PATCH verb tutorial](/reference/http-verbs#http-patch-verb)
 
 `PATCH` is intended for partial updates.
 
@@ -545,7 +545,7 @@ The aim is not to prove that the API is "perfectly RESTful". The aim is to under
 REST basics give you the vocabulary for judging an API design. Use these next links when you want to see those ideas under pressure from real requests:
 
 - [REST API Tutorial](/tutorials/rest-api-tutorial) gives you a guided first pass through resources, URLs, methods, headers, and representations.
-- [HTTP Methods and Verbs](/tutorials/http-verbs) helps you check whether method behaviour matches common REST expectations.
+- [HTTP Methods and Verbs](/reference/http-verbs) helps you check whether method behaviour matches common REST expectations.
 - [How to Test REST APIs](/tutorials/rest-api-testing) turns the REST model into a sequence of practical testing activities.
 - [Simple API](/practice-modes/simpleapi) is useful for trying CRUD choices without authentication getting in the way.
 - [API Challenge Solutions](/apichallenges/solutions) show where resource naming, status codes, and method choices matter in individual walkthroughs.
@@ -559,8 +559,8 @@ Reading:
 - read the REST Dissertation [ics.uci.edu/~fielding/pubs/dissertation/top.htm](https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
 - Read the docs on authentication [developer.mozilla.org/en-US/docs/Web/HTTP/Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
 - for real world discussions see [restcookbook.com](http://restcookbook.com)
-- review [HTTP Basics](/tutorials/http-basics) for requests, responses, headers, status codes, and message bodies
-- review [HTTP Verbs](/tutorials/http-verbs) for examples of each verb and common testing checks
+- review [HTTP Basics](/reference/http-basics) for requests, responses, headers, status codes, and message bodies
+- review [HTTP Verbs](/reference/http-verbs) for examples of each verb and common testing checks
 
 ---
 

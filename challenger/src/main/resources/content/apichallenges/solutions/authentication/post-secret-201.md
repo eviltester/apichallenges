@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/authorization/get-secret-note-403
 concepts_learned: HTTP POST||201 Created||Basic Auth||authentication
 concept_summary: Use this challenge to learn how valid Basic Auth returns an auth token.
 concept_reference_label: REST API Basics
-concept_reference_url: /tutorials/rest-api-basics
+concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with the username and password required by the challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 201||Capture the returned X-AUTH-TOKEN for later authorization challenges
 showads: true
 ---

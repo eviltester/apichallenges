@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/authorization/post-secret-note-bearer
 concepts_learned: HTTP GET||200 OK||authorization||Bearer token
 concept_summary: Use this challenge to learn how protected resources respond when authorization uses Bearer token.
 concept_reference_label: REST API Basics
-concept_reference_url: /tutorials/rest-api-basics
+concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Authenticate with POST /secret/token to obtain X-AUTH-TOKEN||Create a GET request to /secret/note||Use Authorization Bearer with that token value||Verify the response status is 200
 showads: true
 ---

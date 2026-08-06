@@ -673,7 +673,7 @@ Content-Length: 0
 Methods become clearer when you send different verbs to similar resources and watch how the API responds. These links help you move from definitions to behaviour:
 
 - [REST API Tutorial](/tutorials/rest-api-tutorial) gives a short live introduction before you go deep on each method.
-- [REST API Basics](/tutorials/rest-api-basics) explains how verbs and resource URLs combine to express intent.
+- [REST API Basics](/reference/rest-api-basics) explains how verbs and resource URLs combine to express intent.
 - [How to Test REST APIs](/tutorials/rest-api-testing) shows where method checks fit inside a broader API test flow.
 - [Simple API](/practice-modes/simpleapi) lets you try `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` against data you can safely change.
 - [API Challenge Solutions](/apichallenges/solutions) include method-specific walkthroughs for GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, and QUERY.

@@ -111,11 +111,11 @@ Use the documentation as a starting point, not as proof, and certainly not as a 
 
 If you want more background on the concepts, read the reference pages:
 
-- [Web Application and HTTP Basics](/tutorials/web-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Methods and Verbs](/tutorials/http-verbs)
-- [REST API Basics](/tutorials/rest-api-basics)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
+- [Web Application and HTTP Basics](/reference/web-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Methods and Verbs](/reference/http-verbs)
+- [REST API Basics](/reference/rest-api-basics)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
 
@@ -490,7 +490,7 @@ Use this full client when you want to experiment with different verbs, paths, he
 
 {{<api-live-request method="GET" path="/simpleapi/items" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="adhoc" details="true" summary="Experiment with Simple API headers, formats, methods, and paths">}}
 
-This connects directly to [HTTP Basics](/tutorials/http-basics) because the API behaviour is affected by the full HTTP message, not just the URL and body.
+This connects directly to [HTTP Basics](/reference/http-basics) because the API behaviour is affected by the full HTTP message, not just the URL and body.
 
 ---
 
@@ -524,7 +524,7 @@ Ask:
 - does it return a server error?
 - does the documentation match the actual supported methods?
 
-Read [HTTP Methods and Verbs](/tutorials/http-verbs) for more detail on what the common HTTP methods are expected to mean.
+Read [HTTP Methods and Verbs](/reference/http-verbs) for more detail on what the common HTTP methods are expected to mean.
 
 ---
 
@@ -614,14 +614,14 @@ This checklist is deliberately small. It gives you a starting point, but real te
 Use this tutorial as the practical path, then deepen specific areas with the reference pages:
 
 - [REST API Tutorial](/tutorials/rest-api-tutorial)
-- [Web Application and HTTP Basics](/tutorials/web-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Methods and Verbs](/tutorials/http-verbs)
-- [REST API Basics](/tutorials/rest-api-basics)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
-- [OpenAPI for API Testing](/tutorials/openapi)
-- [Swagger UI and Tools for API Testing](/tutorials/swagger)
-- [API Testing Tutorial Summary](/tutorials/summary)
+- [Web Application and HTTP Basics](/reference/web-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Methods and Verbs](/reference/http-verbs)
+- [REST API Basics](/reference/rest-api-basics)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
+- [OpenAPI for API Testing](/reference/openapi)
+- [Swagger UI and Tools for API Testing](/reference/swagger)
+- [API Testing Tutorial Summary](/reference/summary)
 
 For more hands-on practice with the same API, use:
 

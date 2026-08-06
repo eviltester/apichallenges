@@ -25,12 +25,12 @@ By the end of this tutorial you should understand the basics of:
 
 Useful REST API reference pages:
 
-- [REST API Basics](/tutorials/rest-api-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Methods and Verbs](/tutorials/http-verbs)
-- [OpenAPI](/tutorials/openapi)
-- [Swagger](/tutorials/swagger)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
+- [REST API Basics](/reference/rest-api-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Methods and Verbs](/reference/http-verbs)
+- [OpenAPI](/reference/openapi)
+- [Swagger](/reference/swagger)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
 
@@ -56,7 +56,7 @@ A high level starting point is:
 - a status code reports what happened
   - Example: `200 OK` means the API returned the requested resource.
 
-For a deeper explanation of REST concepts, read [REST API Basics](/tutorials/rest-api-basics).
+For a deeper explanation of REST concepts, read [REST API Basics](/reference/rest-api-basics).
 
 ---
 
@@ -83,7 +83,7 @@ Try listing the todo collection:
 
 When you execute the request, look for the collection in the response body. Each todo has fields such as `id`, `title`, `doneStatus`, and `description`.
 
-Learn more about REST resources in [REST API Basics](/tutorials/rest-api-basics).
+Learn more about REST resources in [REST API Basics](/reference/rest-api-basics).
 
 ---
 
@@ -109,7 +109,7 @@ The URL does not usually contain the action. Instead of `/deleteItem/1`, a REST-
 DELETE /simpleapi/items/1
 ~~~~~~~~
 
-For more about HTTP request structure, read [HTTP Basics](/tutorials/http-basics).
+For more about HTTP request structure, read [HTTP Basics](/reference/http-basics).
 
 ---
 
@@ -147,7 +147,7 @@ There are standards available for the body format of `PATCH` requests, but again
 
 When testing, we work with the API we've got, not the API we think the standards and guidelines describe.
 
-Learn more about REST API methods in [HTTP Methods and Verbs](/tutorials/http-verbs).
+Learn more about REST API methods in [HTTP Methods and Verbs](/reference/http-verbs).
 
 ---
 
@@ -177,7 +177,7 @@ You can also ask the API for something the route does not support. Execute this 
 
 If you open the `Raw` response tab, the first line in the response shows the HTTP status returned by the server.
 
-Learn more about HTTP status codes in [HTTP Basics](/tutorials/http-basics).
+Learn more about HTTP status codes in [HTTP Basics](/reference/http-basics).
 
 ---
 
@@ -203,7 +203,7 @@ The API Challenges `/todos` API supports both JSON and XML for most requests. Tr
 
 The resource is the same, but the representation format changes.
 
-Learn more about HTTP request and response bodies in [HTTP Basics](/tutorials/http-basics).
+Learn more about HTTP request and response bodies in [HTTP Basics](/reference/http-basics).
 
 ---
 
@@ -243,7 +243,7 @@ To see the actual headers sent in the request, open the browser Dev Tools and lo
 
 
 
-Learn more about REST API headers in [HTTP Basics](/tutorials/http-basics).
+Learn more about REST API headers in [HTTP Basics](/reference/http-basics).
 
 ---
 
@@ -316,9 +316,9 @@ The API Challenges API also accepts the token in the custom `X-AUTH-TOKEN` reque
 
 For auth details and risks, read:
 
-- [REST API Basics: Authentication](/tutorials/rest-api-basics#toc11)
-- [HTTP Basics: Basic Authentication](/tutorials/http-basics#toc29)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
+- [REST API Basics: Authentication](/reference/rest-api-basics#toc11)
+- [HTTP Basics: Basic Authentication](/reference/http-basics#toc29)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
 
@@ -343,7 +343,7 @@ OpenAPI files can be used in REST Client tools to create collections of requests
 
 OpenAPI is useful, but it is still documentation. The running API is the source of behaviour you experience when you send requests.
 
-Learn more about REST API documentation in [OpenAPI](/tutorials/openapi) and [Swagger](/tutorials/swagger).
+Learn more about REST API documentation in [OpenAPI](/reference/openapi) and [Swagger](/reference/swagger).
 
 ---
 
@@ -376,7 +376,7 @@ For CRUD mutation practice, use the Simple API so the tutorial can create, updat
 
 {{<api-live-request method="DELETE" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="204" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="DELETE /simpleapi/items/{id} to delete the item">}}
 
-Learn more about CRUD and REST in [REST API Basics](/tutorials/rest-api-basics) and [HTTP Methods and Verbs](/tutorials/http-verbs).
+Learn more about CRUD and REST in [REST API Basics](/reference/rest-api-basics) and [HTTP Methods and Verbs](/reference/http-verbs).
 
 ---
 
@@ -401,7 +401,7 @@ Try sending a body with the wrong data type. `numberinstock` should be a number,
 
 The expected result is a client error because the server understood the request body but rejected the value.
 
-For deeper coverage ideas, read [API Testing Concepts and Coverage](/tutorials/testing-apis).
+For deeper coverage ideas, read [API Testing Concepts and Coverage](/reference/testing-apis).
 
 ---
 
@@ -446,12 +446,12 @@ You now have a practical understanding of the basics of REST APIs:
 
 Use the reference pages when one part of the tutorial needs more depth:
 
-- [REST API Basics](/tutorials/rest-api-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Methods and Verbs](/tutorials/http-verbs)
+- [REST API Basics](/reference/rest-api-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Methods and Verbs](/reference/http-verbs)
 - [How to Test REST APIs](/tutorials/rest-api-testing)
-- [OpenAPI](/tutorials/openapi)
-- [Swagger](/tutorials/swagger)
+- [OpenAPI](/reference/openapi)
+- [Swagger](/reference/swagger)
 
 When you want more hands-on repetition, move from the guided examples here into the practice areas:
 

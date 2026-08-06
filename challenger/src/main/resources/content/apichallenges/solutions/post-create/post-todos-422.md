@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/post-create/post-todos-422-title-too-lo
 concepts_learned: HTTP POST||422 Unprocessable Content||CRUD create||validation error
 concept_summary: Use this challenge to learn how APIs reject invalid create request bodies.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send JSON with an invalid doneStatus value||Send the request and verify the response status is 422
 showads: true
 ---

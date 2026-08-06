@@ -9,9 +9,9 @@ next_challenge: /gui/challenges
 concepts_learned: HTTP POST||boundary testing||API test data||state management
 concept_summary: Use this challenge to learn how creating maximum data helps test API limits and state handling.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Methods and Verbs
-concept_reference_url_2: /tutorials/http-verbs
+concept_reference_url_2: /reference/http-verbs
 schema_howto_steps: Create todos repeatedly with POST /todos until the maximum limit is reached||Use valid JSON payloads and include X-CHALLENGER for every create request||Track successful creations so you can confirm the max-count boundary||Verify the final allowed create response and behavior at the limit||Check challenge status and confirm maximum todo creation is complete
 showads: true
 ---

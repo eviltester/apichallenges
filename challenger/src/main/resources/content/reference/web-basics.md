@@ -129,7 +129,7 @@ We also have request verbs with a `body` because we want to send content to the 
 - `PATCH` - used to 'update' something on the server based on the content
 - `QUERY` - this retrieves information but the body contains additional filtering and ordering requests to find a subset of content
 
-We cover all of this in more detail in the rest of the reference section e.g. [HTTP Basics](/tutorials/http-basics) and [HTTP Verbs](/tutorials/http-verbs)
+We cover all of this in more detail in the rest of the reference section e.g. [HTTP Basics](/reference/http-basics) and [HTTP Verbs](/reference/http-verbs)
 
 ---
 

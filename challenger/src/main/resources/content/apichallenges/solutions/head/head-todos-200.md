@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/post-create/post-todos-201
 concepts_learned: HTTP HEAD||200 OK||headers-only response||safe method
 concept_summary: Use this challenge to learn how HEAD checks a resource without returning a response body.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a HEAD request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---

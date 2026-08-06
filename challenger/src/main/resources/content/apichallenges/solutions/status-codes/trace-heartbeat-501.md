@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/status-codes/get-heartbeat-204
 concepts_learned: HTTP TRACE||501 Not Implemented||status code||error handling
 concept_summary: Use this challenge to learn how the API reports 501 Not Implemented for this endpoint and method.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a TRACE request to /heartbeat||Include X-CHALLENGER so progress is tracked||Send the request||Verify the response status is 501
 showads: true
 ---

@@ -27,7 +27,7 @@ The API has [documentation available](/docs).
 
 ## Learning Path
 
-API Challenges is where the learning path becomes deliberate practice. If the terminology still feels new, use the [REST API Tutorial](/tutorials/rest-api-tutorial) first, then keep [REST API Basics](/tutorials/rest-api-basics) and [HTTP Methods and Verbs](/tutorials/http-verbs) open as references while you work.
+API Challenges is where the learning path becomes deliberate practice. If the terminology still feels new, use the [REST API Tutorial](/tutorials/rest-api-tutorial) first, then keep [REST API Basics](/reference/rest-api-basics) and [HTTP Methods and Verbs](/reference/http-verbs) open as references while you work.
 
 For a gentler warm-up, practise request syntax in [Simulation Mode](/practice-modes/simulation), then try state changes in the [Simple API](/practice-modes/simpleapi). When you are ready to think like a tester, follow [How to Test REST APIs](/tutorials/rest-api-testing), complete the challenges, and use the [API Challenge Solutions](/apichallenges/solutions) to review specific outcomes.
 

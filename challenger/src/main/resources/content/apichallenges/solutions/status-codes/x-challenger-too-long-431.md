@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/method-override/post-heartbeat-as-delet
 concepts_learned: HTTP GET||431 Request Header Fields Too Large||request headers||boundary testing
 concept_summary: Use this challenge to learn how APIs can reject request headers that are too large.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Start with your real X-CHALLENGER value||Append enough characters to make the header longer than 100 characters||GET /heartbeat and verify the response status is 431
 showads: true
 ---

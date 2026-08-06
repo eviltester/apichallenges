@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/authorization/get-secret-note-bearer
 concepts_learned: HTTP POST||403 Forbidden||authorization||invalid auth token
 concept_summary: Use this challenge to learn how protected resources respond when authorization uses invalid auth token.
 concept_reference_label: REST API Basics
-concept_reference_url: /tutorials/rest-api-basics
+concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a POST request to /secret/note||Send a valid JSON note body||Include an X-AUTH-TOKEN header with an invalid value||Verify the response status is 403
 showads: true
 ---

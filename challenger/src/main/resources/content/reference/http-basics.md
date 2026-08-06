@@ -207,7 +207,7 @@ When you are learning, the approachable resources help you move quickly. When yo
 - [MDN HTTP documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP) is a practical reference when you want examples and browser-oriented explanations.
 - [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) lists the officially registered status codes.
 - [W3C RFC 2616 section 9](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) is an older HTTP/1.1 reference. You may still see it linked from older articles, but the newer RFCs should be preferred for current work.
-- [HTTP Verbs](/tutorials/http-verbs) explains common method conventions with examples from API testing.
+- [HTTP Verbs](/reference/http-verbs) explains common method conventions with examples from API testing.
 
 In practice, use these references to support your testing language.
 
@@ -720,7 +720,7 @@ see [base64decode.org](https://www.base64decode.org)
 HTTP basics are easiest to learn when you keep looking at the actual request and response. These pages give you more chances to inspect the message, vary one part, and explain the result:
 
 - [REST API Tutorial](/tutorials/rest-api-tutorial) lets you see headers, status codes, JSON, XML, and auth in live examples.
-- [HTTP Methods and Verbs](/tutorials/http-verbs) narrows the focus to what changes when the method changes.
+- [HTTP Methods and Verbs](/reference/http-verbs) narrows the focus to what changes when the method changes.
 - [How to Test REST APIs](/tutorials/rest-api-testing) shows how to turn HTTP evidence into useful test notes and assertions.
 - [Simulation Mode](/practice-modes/simulation) gives repeatable responses while you learn to read the message details.
 - [API Challenge Solutions](/apichallenges/solutions) show specific cases where a header, status code, or body format decides the outcome.

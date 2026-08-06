@@ -101,4 +101,4 @@ The OpenAPI ecosystem has many tools for validation, mocking, documentation, cod
 
 ## Related Swagger Page
 
-Read [Swagger UI and Swagger tooling](/tutorials/swagger) when you want to use a browser interface to explore an OpenAPI file.
+Read [Swagger UI and Swagger tooling](/reference/swagger) when you want to use a browser interface to explore an OpenAPI file.

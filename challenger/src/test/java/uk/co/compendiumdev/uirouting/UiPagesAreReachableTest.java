@@ -318,7 +318,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("href=\"/tools/online-clients/basic-client\""));
         Assertions.assertTrue(response.body.contains("href=\"/tools/clients/summary-reviews\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
     }
 
@@ -812,11 +812,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>Learning API Testing</h1>"));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-tutorial\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-basics\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-basics\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-verbs\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-basics#http-status-codes\""));
-        Assertions.assertTrue(response.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/rest-api-basics\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#http-status-codes\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi\""));
@@ -854,11 +854,11 @@ public class UiPagesAreReachableTest {
         assertContainsInOrder(
                 learningMenu,
                 "href=\"/tutorials/rest-api-tutorial\"",
-                "href=\"/tutorials/http-basics\"",
-                "href=\"/tutorials/rest-api-basics\"",
-                "href=\"/tutorials/http-verbs\"",
-                "href=\"/tutorials/http-basics#http-status-codes\"",
-                "href=\"/tutorials/openapi\"",
+                "href=\"/reference/http-basics\"",
+                "href=\"/reference/rest-api-basics\"",
+                "href=\"/reference/http-verbs\"",
+                "href=\"/reference/http-basics#http-status-codes\"",
+                "href=\"/reference/openapi\"",
                 "href=\"/tutorials/rest-api-testing\"");
         Assertions.assertTrue(learningMenu.contains("How to Test REST APIs"));
         Assertions.assertFalse(learningMenu.contains("Testing Workflow"));
@@ -1580,18 +1580,18 @@ public class UiPagesAreReachableTest {
     @Test
     void openApiAndSwaggerReferencePagesAreSplitByConcept() {
 
-        final HttpResponseDetails openApiResponse = http.send("/tutorials/openapi", "get");
+        final HttpResponseDetails openApiResponse = http.send("/reference/openapi", "get");
 
         Assertions.assertEquals(200, openApiResponse.statusCode);
         Assertions.assertTrue(openApiResponse.body.contains("<h1>OpenAPI for API Testing</h1>"));
         Assertions.assertTrue(
                 openApiResponse.body.contains("OpenAPI is a standard specification format"));
         Assertions.assertTrue(openApiResponse.body.contains("Swagger is one family of tools"));
-        Assertions.assertTrue(openApiResponse.body.contains("href=\"/tutorials/swagger\""));
-        Assertions.assertTrue(openApiResponse.body.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(openApiResponse.body.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(openApiResponse.body.contains("href=\"/reference/openapi\""));
         Assertions.assertFalse(openApiResponse.body.contains("OpenAPI / Swagger"));
 
-        final HttpResponseDetails swaggerResponse = http.send("/tutorials/swagger", "get");
+        final HttpResponseDetails swaggerResponse = http.send("/reference/swagger", "get");
 
         Assertions.assertEquals(200, swaggerResponse.statusCode);
         Assertions.assertTrue(
@@ -1600,8 +1600,8 @@ public class UiPagesAreReachableTest {
                 swaggerResponse.body.contains(
                         "OpenAPI is the standard specification. Swagger is tooling"));
         Assertions.assertTrue(swaggerResponse.body.contains("Swagger UI"));
-        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/tutorials/openapi\""));
-        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/tutorials/swagger\""));
+        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/reference/openapi\""));
+        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/reference/swagger\""));
         Assertions.assertFalse(swaggerResponse.body.contains("OpenAPI / Swagger"));
     }
 
@@ -1709,21 +1709,21 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<aside class='concept-learned'"));
         Assertions.assertTrue(response.body.contains("Concept learned"));
         Assertions.assertTrue(response.body.contains("<li>HTTP GET</li>"));
-        Assertions.assertTrue(response.body.contains("href='/tutorials/http-verbs'"));
+        Assertions.assertTrue(response.body.contains("href='/reference/http-verbs'"));
         Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
 
         response = http.send("/apichallenges/solutions/accept-header/get-todos-200-xml", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<li>Accept header</li>"));
-        Assertions.assertTrue(response.body.contains("href='/tutorials/http-basics'"));
+        Assertions.assertTrue(response.body.contains("href='/reference/http-basics'"));
         Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
 
         response = http.send("/apichallenges/solutions/authentication/post-secret-201", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<li>Basic Auth</li>"));
-        Assertions.assertTrue(response.body.contains("href='/tutorials/rest-api-basics'"));
+        Assertions.assertTrue(response.body.contains("href='/reference/rest-api-basics'"));
         Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
     }
 
@@ -2205,8 +2205,12 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.com/gui/challenges</loc>"));
         Assertions.assertTrue(
-                response.body.contains("<loc>https://apichallenges.com/tutorials/openapi</loc>"));
+                response.body.contains("<loc>https://apichallenges.com/reference/openapi</loc>"));
         Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/reference/swagger</loc>"));
+        Assertions.assertFalse(
+                response.body.contains("<loc>https://apichallenges.com/tutorials/openapi</loc>"));
+        Assertions.assertFalse(
                 response.body.contains("<loc>https://apichallenges.com/tutorials/swagger</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -2214,7 +2218,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
         Assertions.assertFalse(
                 response.body.contains(
-                        "<loc>https://apichallenges.com/tutorials/openapi-swagger</loc>"));
+                        "<loc>https://apichallenges.com/reference/openapi-swagger</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-02-18</lastmod>"));
     }
 
@@ -2241,10 +2245,10 @@ public class UiPagesAreReachableTest {
         response = http.send("/learning", "head");
         Assertions.assertEquals(200, response.statusCode);
 
-        response = http.send("/tutorials/openapi", "head");
+        response = http.send("/reference/openapi", "head");
         Assertions.assertEquals(200, response.statusCode);
 
-        response = http.send("/tutorials/swagger", "head");
+        response = http.send("/reference/swagger", "head");
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/tutorials/rest-api-tutorial", "head");
@@ -2254,9 +2258,9 @@ public class UiPagesAreReachableTest {
     @Test
     void trailingSlashContentPagesRedirectToCanonicalPathWithoutSlash() {
 
-        HttpResponseDetails response = http.send("/tutorials/summary/", "get");
+        HttpResponseDetails response = http.send("/reference/summary/", "get");
         Assertions.assertEquals(301, response.statusCode);
-        Assertions.assertEquals("/tutorials/summary", response.getHeader("Location"));
+        Assertions.assertEquals("/reference/summary", response.getHeader("Location"));
 
         response = http.send("/apichallenges/solutions/get/get-todos-200/", "get");
         Assertions.assertEquals(301, response.statusCode);
@@ -2271,10 +2275,10 @@ public class UiPagesAreReachableTest {
     @Test
     void headRequestsToTrailingSlashContentPagesRedirectToCanonicalPathWithoutSlash() {
 
-        HttpResponseDetails response = http.send("/tutorials/summary/", "head");
+        HttpResponseDetails response = http.send("/reference/summary/", "head");
 
         Assertions.assertEquals(301, response.statusCode);
-        Assertions.assertEquals("/tutorials/summary", response.getHeader("Location"));
+        Assertions.assertEquals("/reference/summary", response.getHeader("Location"));
 
         response = http.send("/tutorials/rest-api-tutorial/", "head");
         Assertions.assertEquals(301, response.statusCode);
@@ -2371,7 +2375,9 @@ public class UiPagesAreReachableTest {
                         "/apichallenges/solutions/authorization/get-post-secret-note-bearer",
                         "/apichallenges/solutions/authorization/get-secret-note-bearer"));
         args.add(Arguments.of("/tools/clients/soapyi", "/tools/clients/soapui"));
-        args.add(Arguments.of("/tutorials/openapi-swagger", "/tutorials/openapi"));
+        args.addAll(movedReferenceUrlRedirectArguments().toList());
+        args.add(Arguments.of("/tutorials/openapi-swagger", "/reference/openapi"));
+        args.add(Arguments.of("/reference/openapi-swagger", "/reference/openapi"));
         args.add(
                 Arguments.of(
                         "/apichallenges/solutions/query/query-todos-200-filter",
@@ -2379,10 +2385,39 @@ public class UiPagesAreReachableTest {
         return args.stream();
     }
 
+    static Stream<Arguments> movedReferenceUrlRedirectArguments() {
+        return Stream.of(
+                Arguments.of("/tutorials/web-basics", "/reference/web-basics"),
+                Arguments.of("/tutorials/web-basics/", "/reference/web-basics"),
+                Arguments.of("/tutorials/http-basics", "/reference/http-basics"),
+                Arguments.of("/tutorials/http-basics/", "/reference/http-basics"),
+                Arguments.of("/tutorials/http-verbs", "/reference/http-verbs"),
+                Arguments.of("/tutorials/http-verbs/", "/reference/http-verbs"),
+                Arguments.of("/tutorials/rest-api-basics", "/reference/rest-api-basics"),
+                Arguments.of("/tutorials/rest-api-basics/", "/reference/rest-api-basics"),
+                Arguments.of("/tutorials/testing-apis", "/reference/testing-apis"),
+                Arguments.of("/tutorials/testing-apis/", "/reference/testing-apis"),
+                Arguments.of("/tutorials/openapi", "/reference/openapi"),
+                Arguments.of("/tutorials/openapi/", "/reference/openapi"),
+                Arguments.of("/tutorials/swagger", "/reference/swagger"),
+                Arguments.of("/tutorials/swagger/", "/reference/swagger"),
+                Arguments.of("/tutorials/summary", "/reference/summary"),
+                Arguments.of("/tutorials/summary/", "/reference/summary"));
+    }
+
     @ParameterizedTest(name = "legacy url {0} redirects to {1}")
     @MethodSource("legacyUrlRedirects")
     void legacyUrlsRedirectToCanonicalContent(String legacyUrl, String canonicalUrl) {
         final HttpResponseDetails response = http.send(legacyUrl, "get");
+
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(canonicalUrl, response.getHeader("Location"));
+    }
+
+    @ParameterizedTest(name = "moved reference head url {0} redirects to {1}")
+    @MethodSource("movedReferenceUrlRedirectArguments")
+    void movedReferenceHeadUrlsRedirectToCanonicalContent(String legacyUrl, String canonicalUrl) {
+        final HttpResponseDetails response = http.send(legacyUrl, "head");
 
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(canonicalUrl, response.getHeader("Location"));

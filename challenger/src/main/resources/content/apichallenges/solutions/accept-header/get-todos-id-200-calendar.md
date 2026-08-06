@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/content-type-header/post-todos-xml
 concepts_learned: HTTP GET||200 OK||Accept header||content negotiation
 concept_summary: Use this challenge to learn how the Accept header changes the response format for text/calendar.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
-concept_reference_url_2: /tutorials/http-verbs
+concept_reference_url_2: /reference/http-verbs
 schema_howto_steps: Create or identify an existing todo||Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to text/calendar||Send the request and verify the response status is 200 and Content-Type is text/calendar
 showads: true
 ---

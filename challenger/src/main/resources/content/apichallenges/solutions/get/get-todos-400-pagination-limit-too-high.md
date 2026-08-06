@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/get/get-todos-200-pagination-sort
 concepts_learned: HTTP GET||400 Bad Request||query parameters||validation
 concept_summary: Use this challenge to learn how APIs reject invalid query parameter values.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=21 to exceed the configured maximum||Send the request and verify the response status is 400
 showads: true
 ---

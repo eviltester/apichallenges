@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/post-challenger-existing
 concepts_learned: HTTP GET||200 OK||X-CHALLENGER||session state
 concept_summary: Use this challenge to learn how challenge progress can be restored, updated, or rejected using session identifiers.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a challenger session||Allow or arrange for that saved challenger to be absent from memory||Send GET /challenger/{guid} with the saved challenger id||Verify the response status is 200
 showads: true
 ---

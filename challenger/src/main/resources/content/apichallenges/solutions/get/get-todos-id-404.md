@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/get/get-todos-200-filter
 concepts_learned: HTTP GET||404 Not Found||resource URL||safe method
 concept_summary: Use this challenge to learn how GET reports a missing or incorrect resource URL.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
 showads: true
 ---

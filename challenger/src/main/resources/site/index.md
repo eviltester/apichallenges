@@ -33,11 +33,11 @@ We provide:
 Follow the REST API Tutorial path from core concepts to hands-on challenge practice:
 
 1. [Interactive REST API Tutorial](/tutorials/rest-api-tutorial) to learn REST by sending requests to a live API.
-2. Learn [HTTP basics](/tutorials/http-basics): requests, responses, headers, bodies, and URLs.
-3. Connect the ideas with [REST basics](/tutorials/rest-api-basics): resources, representations, statelessness, and CRUD.
-4. Study [HTTP methods](/tutorials/http-verbs) so you know what each request is asking the server to do.
-5. Review [status codes](/tutorials/http-basics#http-status-codes) as response evidence.
-6. Use [OpenAPI](/tutorials/openapi) to understand documented endpoints, payloads, responses, and security expectations.
+2. Learn [HTTP basics](/reference/http-basics): requests, responses, headers, bodies, and URLs.
+3. Connect the ideas with [REST basics](/reference/rest-api-basics): resources, representations, statelessness, and CRUD.
+4. Study [HTTP methods](/reference/http-verbs) so you know what each request is asking the server to do.
+5. Review [status codes](/reference/http-basics#http-status-codes) as response evidence.
+6. Use [OpenAPI](/reference/openapi) to understand documented endpoints, payloads, responses, and security expectations.
 7. Follow the practical [How to Test REST APIs](/tutorials/rest-api-testing) tutorial.
 8. Practise safely with the [Interactive API Simulation](/practice-modes/simulation).
 9. Move into [API Challenges](/apichallenges) to apply the concepts in a guided API challenge app.

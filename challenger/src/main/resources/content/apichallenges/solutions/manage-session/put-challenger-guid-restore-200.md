@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/put-challenger-guid-409-
 concepts_learned: HTTP PUT||200 OK||X-CHALLENGER||session state
 concept_summary: Use this challenge to learn how challenge progress can be restored, updated, or rejected using session identifiers.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: GET your challenger progress JSON||Send PUT /challenger/{guid} using that JSON as the request body||Use Content-Type application/json||Verify the response status is 200
 showads: true
 ---

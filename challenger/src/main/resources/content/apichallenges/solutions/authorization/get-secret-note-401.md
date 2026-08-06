@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/authorization/get-secret-note-200
 concepts_learned: HTTP GET||401 Unauthorized||authorization||missing auth token
 concept_summary: Use this challenge to learn how protected resources respond when authorization uses missing auth token.
 concept_reference_label: REST API Basics
-concept_reference_url: /tutorials/rest-api-basics
+concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a GET request to /secret/note||Add an invalid or missing X-AUTH-TOKEN value to trigger unauthorized access||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
 showads: true
 ---

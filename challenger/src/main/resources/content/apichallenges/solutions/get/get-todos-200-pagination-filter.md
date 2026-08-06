@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/head/head-todos-200
 concepts_learned: HTTP GET||200 OK||query parameters||filtering
 concept_summary: Use this challenge to learn how query parameters filter a collection resource.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add doneStatus=false with _limit=2 and _offset=1||Send the request and verify the response status is 200
 showads: true
 ---

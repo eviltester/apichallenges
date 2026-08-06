@@ -17,7 +17,7 @@ These API test walkthroughs are designed for real hands-on execution in tools li
 
 If your goal is API automation, each solution also provides clear assertion targets you can translate into maintainable automated checks.
 
-If a solution exposes a gap in your understanding, step back to the supporting material: use the [REST API Tutorial](/tutorials/rest-api-tutorial) for a guided overview, [REST API Basics](/tutorials/rest-api-basics) for resources and CRUD, [HTTP Methods and Verbs](/tutorials/http-verbs) for method expectations, and [API Testing Concepts and Coverage](/tutorials/testing-apis) for broader test design. The [API Challenges overview](/apichallenges) explains how the walkthroughs connect to progress tracking in the app.
+If a solution exposes a gap in your understanding, step back to the supporting material: use the [REST API Tutorial](/tutorials/rest-api-tutorial) for a guided overview, [REST API Basics](/reference/rest-api-basics) for resources and CRUD, [HTTP Methods and Verbs](/reference/http-verbs) for method expectations, and [API Testing Concepts and Coverage](/reference/testing-apis) for broader test design. The [API Challenges overview](/apichallenges) explains how the walkthroughs connect to progress tracking in the app.
 
 ## Getting Started
 

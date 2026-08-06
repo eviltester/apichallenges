@@ -105,4 +105,4 @@ Exercise:
 
 ## Related OpenAPI Page
 
-Read [OpenAPI as a specification](/tutorials/openapi) when you want to understand the standard file format that Swagger tools consume.
+Read [OpenAPI as a specification](/reference/openapi) when you want to understand the standard file format that Swagger tools consume.

@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/content-disposition-header/get-todos-ex
 concepts_learned: HTTP POST||415 Unsupported Media Type||Content-Type header||media type validation
 concept_summary: Use this challenge to learn how APIs reject unsupported request body media types.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
-concept_reference_url_2: /tutorials/testing-apis
+concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 415
 showads: true
 ---

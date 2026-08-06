@@ -8,9 +8,9 @@ next_challenge: /apichallenges/solutions/options/options-todos-200
 concepts_learned: HTTP PATCH||200 OK||JSON Patch||partial update
 concept_summary: Use this challenge to learn how PATCH applies a JSON Patch to an existing resource.
 concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /tutorials/http-verbs
+concept_reference_url: /reference/http-verbs
 concept_reference_label_2: REST API Basics
-concept_reference_url_2: /tutorials/rest-api-basics
+concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json-patch+json||Send a JSON Patch operation array and verify the response status is 200
 showads: true
 ---
@@ -29,7 +29,7 @@ Use `PATCH` with `Content-Type: application/json-patch+json` when you want to se
 - Send an array of JSON Patch operations.
 - The response should be `200`.
 - Use JSON Pointer paths such as `/title`, `/description`, or `/doneStatus`.
-- You can [learn more about PATCH](/tutorials/http-verbs#toc18) in the HTTP verbs tutorial.
+- You can [learn more about PATCH](/reference/http-verbs#toc18) in the HTTP verbs tutorial.
 
 ## Basic Instructions
 

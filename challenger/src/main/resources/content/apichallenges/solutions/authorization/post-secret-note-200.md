@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/authorization/post-secret-note-401
 concepts_learned: HTTP POST||200 OK||authorization||X-AUTH-TOKEN
 concept_summary: Use this challenge to learn how protected resources respond when authorization uses X-AUTH-TOKEN.
 concept_reference_label: REST API Basics
-concept_reference_url: /tutorials/rest-api-basics
+concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a POST request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---

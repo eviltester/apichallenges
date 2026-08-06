@@ -38,13 +38,13 @@ public class SolutionNextChallengeChainTest {
             Pattern.compile("\\bsummary=(\"([^\"]+)\"|'([^']+)')", Pattern.CASE_INSENSITIVE);
     private static final Set<String> ALLOWED_CONCEPT_REFERENCE_URLS =
             Set.of(
-                    "/tutorials/web-basics",
-                    "/tutorials/http-basics",
-                    "/tutorials/http-verbs",
-                    "/tutorials/rest-api-basics",
-                    "/tutorials/testing-apis",
-                    "/tutorials/openapi",
-                    "/tutorials/swagger");
+                    "/reference/web-basics",
+                    "/reference/http-basics",
+                    "/reference/http-verbs",
+                    "/reference/rest-api-basics",
+                    "/reference/testing-apis",
+                    "/reference/openapi",
+                    "/reference/swagger");
     private static final List<String> LEARNING_SECTION_INLINE_CODE_TERMS =
             List.of(
                     "Accept",

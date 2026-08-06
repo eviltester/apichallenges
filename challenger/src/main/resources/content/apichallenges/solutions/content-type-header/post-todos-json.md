@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/content-type-header/post-todos-415
 concepts_learned: HTTP POST||201 Created||Content-Type header||JSON request body
 concept_summary: Use this challenge to learn how Content-Type tells the API that the request body is JSON.
 concept_reference_label: HTTP Basics
-concept_reference_url: /tutorials/http-basics
+concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
-concept_reference_url_2: /tutorials/http-verbs
+concept_reference_url_2: /reference/http-verbs
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid JSON payload that matches the field and content constraints
 showads: true
 ---

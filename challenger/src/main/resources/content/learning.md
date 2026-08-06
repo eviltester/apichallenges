@@ -21,28 +21,27 @@ showads: true
 Use this as the main route through the Learning Zone. Each step builds enough vocabulary and practical evidence to make the next step easier:
 
 1. [Interactive REST API Tutorial](/tutorials/rest-api-tutorial) - send real requests and see REST concepts in action.
-2. [HTTP basics](/tutorials/http-basics) - learn how requests, responses, headers, bodies, and URLs fit together.
-3. [REST basics](/tutorials/rest-api-basics) - connect resources, representations, statelessness, and CRUD with API design.
-4. [HTTP methods](/tutorials/http-verbs) - understand what `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, and `OPTIONS` are expected to mean.
-5. [Status codes](/tutorials/http-basics#http-status-codes) - read response outcomes as testing evidence, not just pass/fail signals.
-6. [OpenAPI](/tutorials/openapi) - use API descriptions to find endpoints, schemas, responses, and security expectations.
+2. [HTTP basics](/reference/http-basics) - learn how requests, responses, headers, bodies, and URLs fit together.
+3. [REST basics](/reference/rest-api-basics) - connect resources, representations, statelessness, and CRUD with API design.
+4. [HTTP methods](/reference/http-verbs) - understand what `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, and `OPTIONS` are expected to mean.
+5. [Status codes](/reference/http-basics#http-status-codes) - read response outcomes as testing evidence, not just pass/fail signals.
+6. [OpenAPI](/reference/openapi) - use API descriptions to find endpoints, schemas, responses, and security expectations.
 7. [How to Test REST APIs](/tutorials/rest-api-testing) - practise a step-by-step approach for exploring, checking, and reporting API behaviour.
 8. [Interactive API Simulation](/practice-modes/simulation) - use the simulator walkthrough to practise request and response handling safely.
 9. [API Challenges](/apichallenges) - apply the ideas in a guided API challenge app.
 
-## Reference Tutorials
+## Reference
 
 Use these when you want to revisit a specific concept in more detail:
 
-- [REST API Basics](/tutorials/rest-api-basics)
-- [HTTP Basics](/tutorials/http-basics)
-- [HTTP Verbs and Methods](/tutorials/http-verbs)
-- [HTTP Status Codes](/tutorials/http-basics#http-status-codes)
-- [API Testing Concepts and Coverage](/tutorials/testing-apis)
-- [OpenAPI](/tutorials/openapi)
-- [Swagger](/tutorials/swagger)
-- [Web Applications](/tutorials/web-basics)
-- [Summary](/tutorials/summary)
+- [Web Applications](/reference/web-basics)
+- [HTTP Basics](/reference/http-basics)
+- [HTTP Verbs and Methods](/reference/http-verbs)
+- [REST API Basics](/reference/rest-api-basics)
+- [API Testing Concepts and Coverage](/reference/testing-apis)
+- [OpenAPI](/reference/openapi)
+- [Swagger](/reference/swagger)
+- [Summary](/reference/summary)
 
 ## Practise with APIs
 

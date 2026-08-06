@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/get-challenger-database-
 concepts_learned: HTTP PUT||201 Created||X-CHALLENGER||session state
 concept_summary: Use this challenge to learn how challenge progress can be restored, updated, or rejected using session identifiers.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Start with saved challenger progress JSON||Use a challenger GUID that is not currently in memory||PUT the saved JSON to /challenger/{guid}||Verify the response status shows the challenger was created
 showads: true
 ---

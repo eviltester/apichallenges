@@ -9,9 +9,9 @@ next_challenge: /apichallenges/solutions/manage-session/put-challenger-guid-crea
 concepts_learned: HTTP PUT||409 Conflict||X-CHALLENGER||session state
 concept_summary: Use this challenge to learn how challenge progress can be restored, updated, or rejected using session identifiers.
 concept_reference_label: API Testing Concepts and Coverage
-concept_reference_url: /tutorials/testing-apis
+concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
-concept_reference_url_2: /tutorials/http-basics
+concept_reference_url_2: /reference/http-basics
 schema_howto_steps: GET your challenger state||PUT it to /challenger/{different-guid} while the payload keeps your real X-CHALLENGER||Verify the response status is 409
 showads: true
 ---
