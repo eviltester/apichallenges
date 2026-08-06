@@ -23,6 +23,7 @@
     ];
     const themeValues = themes.map((theme) => theme.value);
     const themeKey = "apichallenges-css-theme";
+    const sideTocOpenSectionsKey = "apichallenges-side-toc-open-sections";
 
     function readStorage(key) {
         try {
@@ -37,6 +38,22 @@
             window.localStorage.setItem(key, value);
         } catch (error) {
             // Storage can be unavailable in private contexts; keep the switcher interactive.
+        }
+    }
+
+    function readSessionStorage(key) {
+        try {
+            return window.sessionStorage.getItem(key);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeSessionStorage(key, value) {
+        try {
+            window.sessionStorage.setItem(key, value);
+        } catch (error) {
+            // Storage can be unavailable in private contexts; keep the sidebar interactive.
         }
     }
 
@@ -169,9 +186,60 @@
         });
     }
 
+    function storedSideTocOpenSections() {
+        const stored = readSessionStorage(sideTocOpenSectionsKey);
+        if (stored === null) {
+            return null;
+        }
+
+        try {
+            const sections = JSON.parse(stored);
+            return Array.isArray(sections)
+                ? sections.filter((section) => typeof section === "string")
+                : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function sideTocSectionKey(section) {
+        return section.dataset.sideTocSection || "";
+    }
+
+    function saveSideTocOpenSections(sections) {
+        const openSections = sections
+            .filter((section) => section.open)
+            .map(sideTocSectionKey)
+            .filter(Boolean);
+
+        writeSessionStorage(sideTocOpenSectionsKey, JSON.stringify(openSections));
+    }
+
+    function restoreSideTocOpenSections() {
+        const sections = [].slice.call(
+            document.querySelectorAll(".side-toc-section[data-side-toc-section]")
+        );
+        if (!sections.length) {
+            return;
+        }
+
+        const storedSections = storedSideTocOpenSections();
+        if (storedSections !== null) {
+            const openSections = new Set(storedSections);
+            sections.forEach((section) => {
+                section.open = openSections.has(sideTocSectionKey(section));
+            });
+        }
+
+        sections.forEach((section) => {
+            section.addEventListener("toggle", () => saveSideTocOpenSections(sections));
+        });
+    }
+
     function buildCompactNavigationControls() {
         buildSiteNavControl();
         buildContentNavControls();
+        restoreSideTocOpenSections();
     }
 
     setTheme(storedTheme() || currentTheme(), false);
