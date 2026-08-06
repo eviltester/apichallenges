@@ -99,7 +99,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html.contains("<h1>REST API Tutorial: Learn REST by Using a LIVE API</h1>"));
         Assertions.assertTrue(
                 html.contains(
-                        "<meta name='description' content='Learn REST by using a live API with interactive examples"));
+                        "<meta name='description' content='Learn REST by using live API examples with interactive requests"));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-tutorial\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-basics\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));
@@ -107,20 +107,36 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/testing-apis\""));
-        Assertions.assertEquals(9, countOccurrences(html, "class=\"api-live-request\""));
-        Assertions.assertEquals(9, countOccurrences(html, "data-use-challenger=\"false\""));
+        Assertions.assertEquals(15, countOccurrences(html, "class=\"api-live-request\""));
+        Assertions.assertEquals(15, countOccurrences(html, "data-use-challenger=\"false\""));
         Assertions.assertEquals(
-                9, countOccurrences(html, "data-allowed-path-prefixes=\"/simpleapi\""));
-        Assertions.assertEquals(8, countOccurrences(html, "data-editable=\"false\""));
+                5, countOccurrences(html, "data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertEquals(
+                5, countOccurrences(html, "data-allowed-path-prefixes=\"/todos\""));
+        Assertions.assertEquals(1, countOccurrences(html, "data-allowed-path-prefixes=\"/docs\""));
+        Assertions.assertEquals(
+                1, countOccurrences(html, "data-allowed-path-prefixes=\"/heartbeat\""));
+        Assertions.assertEquals(
+                3, countOccurrences(html, "data-allowed-path-prefixes=\"/secret\""));
+        Assertions.assertEquals(14, countOccurrences(html, "data-editable=\"false\""));
         Assertions.assertEquals(1, countOccurrences(html, "data-editable=\"true\""));
         Assertions.assertEquals(
                 1, countOccurrences(html, "data-editable=\"true\" data-edit-mode=\"fixed\""));
         Assertions.assertEquals(
-                9, countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
+                15, countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
         Assertions.assertEquals(
                 0, countOccurrences(html, "<details class=\"sim-live-request-details\" open"));
+        Assertions.assertTrue(html.contains("data-path=\"/todos\""));
+        Assertions.assertTrue(html.contains("data-path=\"/todos/1\""));
+        Assertions.assertTrue(html.contains("data-method=\"HEAD\" data-path=\"/todos/1\""));
+        Assertions.assertTrue(html.contains("data-path=\"/heartbeat\""));
+        Assertions.assertTrue(html.contains("data-expected-status=\"405\""));
+        Assertions.assertTrue(html.contains("data-path=\"/secret/token\""));
+        Assertions.assertTrue(html.contains("data-path=\"/secret/note\""));
+        Assertions.assertTrue(html.contains("{{authToken}}"));
+        Assertions.assertTrue(html.contains("data-path=\"/docs/openapi.json\""));
+        Assertions.assertFalse(html.contains("data-path=\"/simpleapi/docs/openapi.json\""));
         Assertions.assertTrue(html.contains("data-path=\"/simpleapi/items\""));
-        Assertions.assertTrue(html.contains("data-path=\"/simpleapi/docs/openapi.json\""));
         Assertions.assertTrue(
                 html.contains("data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\""));
         Assertions.assertTrue(html.contains("{{randomSimpleApiIsbn}}"));

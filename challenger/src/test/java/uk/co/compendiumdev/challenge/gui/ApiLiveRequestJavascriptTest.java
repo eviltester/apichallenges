@@ -189,28 +189,48 @@ public class ApiLiveRequestJavascriptTest {
                         "queryEditable: placeholder.dataset.queryEditable !== 'false'"));
         Assertions.assertTrue(javascript.contains("if (request.queryEditable)"));
         Assertions.assertTrue(
+                javascript.contains("return 'apichallenges.readonly.xAuthToken'"));
+        Assertions.assertTrue(
+                javascript.contains("function authTokenStorageKeyForRequest(request)"));
+        Assertions.assertTrue(javascript.contains("authToken: currentAuthToken(request)"));
+        Assertions.assertTrue(javascript.contains("storeAuthToken(responseAuthToken, request)"));
+        Assertions.assertTrue(
                 javascript.contains("responseActions.className = 'sim-live-response-actions'"));
         Assertions.assertTrue(
                 javascript.contains("responseBodyCopyButton.textContent = 'Copy body'"));
         Assertions.assertTrue(
                 javascript.contains("responseHeadersCopyButton.textContent = 'Copy headers'"));
+        Assertions.assertTrue(javascript.contains("rawTab.textContent = 'Raw'"));
+        Assertions.assertTrue(
+                javascript.contains("responseRawCopyButton.textContent = 'Copy raw'"));
+        Assertions.assertTrue(
+                javascript.contains("function rawResponseToText(response, bodyText)"));
         Assertions.assertTrue(
                 javascript.contains("responseActions.appendChild(responseBodyCopyButton)"));
         Assertions.assertTrue(
                 javascript.contains("responseActions.appendChild(responseHeadersCopyButton)"));
         Assertions.assertTrue(
+                javascript.contains("responseActions.appendChild(responseRawCopyButton)"));
+        Assertions.assertTrue(
                 javascript.contains("copyText(bodyPanel.textContent, responseBodyCopyButton)"));
         Assertions.assertTrue(
                 javascript.contains(
                         "copyText(headersPanel.textContent, responseHeadersCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains("copyText(rawPanel.textContent, responseRawCopyButton)"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "responseArea.rawPanel.textContent = rawResponseToText(response, text)"));
         Assertions.assertTrue(javascript.contains("'.sim-live-response-panel'"));
         final int responseElements = javascript.indexOf("elements: [");
         final int bodyPanel = javascript.indexOf("bodyPanel,", responseElements);
         final int headersPanel = javascript.indexOf("headersPanel,", responseElements);
+        final int rawPanel = javascript.indexOf("rawPanel,", responseElements);
         final int responseActions = javascript.indexOf("responseActions,", responseElements);
         Assertions.assertTrue(responseElements >= 0);
         Assertions.assertTrue(bodyPanel < headersPanel);
-        Assertions.assertTrue(headersPanel < responseActions);
+        Assertions.assertTrue(headersPanel < rawPanel);
+        Assertions.assertTrue(rawPanel < responseActions);
     }
 
     @Test

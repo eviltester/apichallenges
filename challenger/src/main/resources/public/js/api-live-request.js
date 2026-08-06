@@ -291,6 +291,18 @@
     return `apichallenges.${challenger}.xAuthToken`;
   }
 
+  function readOnlyAuthTokenStorageKey() {
+    return 'apichallenges.readonly.xAuthToken';
+  }
+
+  function authTokenStorageKeyForRequest(request) {
+    if (request && request.useChallenger === false) {
+      return readOnlyAuthTokenStorageKey();
+    }
+    const challenger = currentChallenger();
+    return challenger ? authTokenStorageKey(challenger) : readOnlyAuthTokenStorageKey();
+  }
+
   function lastCreatedTodoStorageKey(challenger) {
     return `apichallenges.${challenger}.lastCreatedTodoId`;
   }
@@ -303,12 +315,8 @@
     return 'apichallenges.simpleapi.lastCreatedItemIsbn';
   }
 
-  function currentAuthToken() {
-    const challenger = currentChallenger();
-    if (!challenger) {
-      return '';
-    }
-    return localStorage.getItem(authTokenStorageKey(challenger)) || '';
+  function currentAuthToken(request) {
+    return localStorage.getItem(authTokenStorageKeyForRequest(request)) || '';
   }
 
   function currentLastCreatedTodoId() {
@@ -357,12 +365,11 @@
     localStorage.setItem(lastCreatedSimpleApiItemIsbnStorageKey(), String(isbn));
   }
 
-  function storeAuthToken(token) {
-    const challenger = currentChallenger();
-    if (!challenger || !token) {
+  function storeAuthToken(token, request) {
+    if (!token) {
       return;
     }
-    localStorage.setItem(authTokenStorageKey(challenger), token);
+    localStorage.setItem(authTokenStorageKeyForRequest(request), token);
   }
 
   function normalizeHeaderName(name) {
@@ -697,6 +704,14 @@
     return headerLines.sort().join('\n');
   }
 
+  function rawResponseToText(response, bodyText) {
+    const statusText = response.statusText ? ` ${response.statusText}` : '';
+    const headersText = responseHeadersToText(response);
+    const exposedHeaders = headersText === '(no response headers available)' ? '' : headersText;
+    const rawBody = bodyText || '';
+    return [`HTTP ${response.status}${statusText}`, exposedHeaders, rawBody].join('\n').trimEnd();
+  }
+
   function showChallengeFeedback(feedback, passed) {
     if (!feedback) {
       return;
@@ -959,8 +974,16 @@
     headersTab.setAttribute('aria-selected', 'false');
     headersTab.textContent = 'Headers';
 
+    const rawTab = document.createElement('button');
+    rawTab.type = 'button';
+    rawTab.dataset.tab = 'raw';
+    rawTab.className = 'sim-live-response-tab';
+    rawTab.setAttribute('aria-selected', 'false');
+    rawTab.textContent = 'Raw';
+
     responseTabs.appendChild(bodyTab);
     responseTabs.appendChild(headersTab);
+    responseTabs.appendChild(rawTab);
 
     const bodyPanel = document.createElement('pre');
     bodyPanel.className = 'sim-live-response-panel';
@@ -972,6 +995,12 @@
     headersPanel.dataset.panel = 'headers';
     headersPanel.hidden = true;
     headersPanel.textContent = '(execute the request to see the response headers)';
+
+    const rawPanel = document.createElement('pre');
+    rawPanel.className = 'sim-live-response-panel';
+    rawPanel.dataset.panel = 'raw';
+    rawPanel.hidden = true;
+    rawPanel.textContent = '(execute the request to see the raw response)';
 
     const responseBodyCopyButton = document.createElement('button');
     responseBodyCopyButton.type = 'button';
@@ -989,10 +1018,19 @@
       copyText(headersPanel.textContent, responseHeadersCopyButton);
     });
 
+    const responseRawCopyButton = document.createElement('button');
+    responseRawCopyButton.type = 'button';
+    responseRawCopyButton.className = 'sim-live-copy';
+    responseRawCopyButton.textContent = 'Copy raw';
+    responseRawCopyButton.addEventListener('click', function () {
+      copyText(rawPanel.textContent, responseRawCopyButton);
+    });
+
     const responseActions = document.createElement('div');
     responseActions.className = 'sim-live-response-actions';
     responseActions.appendChild(responseBodyCopyButton);
     responseActions.appendChild(responseHeadersCopyButton);
+    responseActions.appendChild(responseRawCopyButton);
 
     responseTabs.addEventListener('click', function (event) {
       if (event.target.matches('.sim-live-response-tab')) {
@@ -1005,11 +1043,13 @@
       status: status,
       bodyPanel: bodyPanel,
       headersPanel: headersPanel,
+      rawPanel: rawPanel,
       elements: [
         status,
         responseTabs,
         bodyPanel,
         headersPanel,
+        rawPanel,
         responseActions,
       ],
     };
@@ -1534,7 +1574,7 @@
         currentChallenger: challenger,
         mismatchedChallenger: mismatchedChallenger(),
         restoredChallenger: restoredChallenger(),
-        authToken: currentAuthToken(),
+        authToken: currentAuthToken(request),
         firstTodoId: values[0],
         missingTodoId: values[1],
         currentChallengerJson: values[2],
@@ -1669,6 +1709,7 @@
       responseArea.status.textContent = 'Running...';
       responseArea.bodyPanel.textContent = '';
       responseArea.headersPanel.textContent = '';
+      responseArea.rawPanel.textContent = '';
 
       Promise.resolve()
         .then(function () {
@@ -1713,6 +1754,7 @@
             responseArea.status.textContent = 'Request blocked';
             responseArea.bodyPanel.textContent = requestTargetValidation.message;
             responseArea.headersPanel.textContent = '(request was not sent)';
+            responseArea.rawPanel.textContent = '(request was not sent)';
             refreshRequestDisplay();
             return null;
           }
@@ -1722,6 +1764,7 @@
             responseArea.status.textContent = 'Cannot execute in browser';
             responseArea.bodyPanel.textContent = unsupportedRequestMessage;
             responseArea.headersPanel.textContent = '(request was not sent)';
+            responseArea.rawPanel.textContent = '(request was not sent)';
             return null;
           }
 
@@ -1752,7 +1795,7 @@
             shouldRefreshDynamicWidgets = true;
           }
           if (responseAuthToken) {
-            storeAuthToken(responseAuthToken);
+            storeAuthToken(responseAuthToken, request);
             shouldRefreshDynamicWidgets = true;
           }
           const createdTodoId = createdTodoIdFromResponse(request, response);
@@ -1782,6 +1825,7 @@
           responseArea.headersPanel.textContent = responseHeadersToText(response);
           return response.text().then(function (text) {
             responseArea.bodyPanel.textContent = formatBody(text, contentType);
+            responseArea.rawPanel.textContent = rawResponseToText(response, text);
             return true;
           });
         })
@@ -1804,6 +1848,7 @@
           responseArea.status.textContent = 'Request failed';
           responseArea.bodyPanel.textContent = error.message;
           responseArea.headersPanel.textContent = '(no response headers available)';
+          responseArea.rawPanel.textContent = '(no response received)';
         })
         .finally(function () {
           executeButton.disabled = false;

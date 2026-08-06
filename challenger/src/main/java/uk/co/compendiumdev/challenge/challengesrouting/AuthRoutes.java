@@ -8,6 +8,7 @@ import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpRouteHandler;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.HttpServerRequestToInternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.conversion.InternalHttpResponseToHttpServer;
@@ -39,6 +40,8 @@ import uk.co.compendiumdev.thingifier.core.reporting.ValidationReport;
 // TODO: This should be using a Thingifier to do the work of XML JSON etc... like the simulation
 public class AuthRoutes {
     private static final String LIVE_WIDGET_HEADER = "X-API-Challenges-Live-Widget";
+    static final String READ_ONLY_AUTH_TOKEN = "00000000-0000-4000-8000-000000000000";
+    static final String READ_ONLY_SECRET_NOTE = "This is the read-only secret note.";
 
     private Thingifier secretNoteStore;
     private EntityDefinition secretNote;
@@ -69,28 +72,45 @@ public class AuthRoutes {
                 "options",
                 (request, result) -> {
                     result.status(204);
-                    // disallow POST, DELETE, PATCH, TRACE
-                    result.header("Allow", "POST, OPTIONS");
+                    // disallow DELETE, PATCH, TRACE
+                    result.header("Allow", "GET, POST, OPTIONS");
                     return "";
                 });
 
         // TODO: this still feels tightly coupled to HTTP routing; route handling should delegate
         // to an internal auth use case.
 
-        // POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header
+        // GET /secret/token with basic auth returns a token for read-only tutorial examples.
+        get(
+                "/secret/token",
+                (request, result) -> {
+                    if (!requestHasValidBasicAuth(request, result)) {
+                        return "";
+                    }
+
+                    ChallengerAuthData challenger =
+                            challengers.getChallenger(request.header("X-CHALLENGER"));
+                    if (challenger == null && hasXChallengerHeader(request)) {
+                        result.status(401);
+                        XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
+                        return "";
+                    }
+
+                    final String authToken =
+                            challenger == null ? READ_ONLY_AUTH_TOKEN : challenger.getXAuthToken();
+
+                    result.header("X-AUTH-TOKEN", authToken);
+                    result.header("Content-Type", "application/json");
+                    result.status(200);
+                    return "{\"token\":\"" + authToken + "\"}";
+                });
+
+        // POST /secret/token with basic auth to get a session token to use as X-AUTH-TOKEN header
         // todo: or {username, password} payload
         post(
                 "/secret/token",
                 (request, result) -> {
-                    BasicAuthHeaderParser basicAuth =
-                            new BasicAuthHeaderParser(request.header("Authorization"));
-
-                    // admin/password as default username:password
-                    if (!basicAuth.matches("admin", "password")) {
-                        if (!isLiveWidgetRequest(request)) {
-                            result.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
-                        }
-                        result.status(401);
+                    if (!requestHasValidBasicAuth(request, result)) {
                         return "";
                     }
 
@@ -109,7 +129,8 @@ public class AuthRoutes {
                     return "";
                 });
 
-        SimpleHttpRouteCreator.routeStatusWhenNot(405, "/secret/token", List.of("post", "options"));
+        SimpleHttpRouteCreator.routeStatusWhenNot(
+                405, "/secret/token", List.of("get", "post", "options"));
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
@@ -122,7 +143,16 @@ public class AuthRoutes {
                         .addPossibleStatuses(201, 401)
                         .secureWithBasicAuth());
 
-        // todo: GET /secret/token returns the secret token or 401 if not authenticated
+        apiDefn.addRouteToDocumentation(
+                new RoutingDefinition(
+                                RoutingVerb.GET,
+                                "/secret/token",
+                                RoutingStatus.returnedFromCall(),
+                                null)
+                        .addDocumentation(
+                                "GET /secret/token with basic auth to get an X-AUTH-TOKEN header for read-only access to /secret/note.")
+                        .addPossibleStatuses(200, 401)
+                        .secureWithBasicAuth());
 
         // POST /secret/note GET /secret/note - limit note to 100 chars
         // no auth token will receive a 403
@@ -141,8 +171,7 @@ public class AuthRoutes {
 
         HttpRouteHandler getSecretNote =
                 (request, result) -> {
-                    String authToken = request.header("X-AUTH-TOKEN");
-                    final String authorization = request.header("Authorization");
+                    String authToken = authTokenFromRequest(request);
 
                     result.header("Content-Type", "application/json");
 
@@ -150,18 +179,12 @@ public class AuthRoutes {
                             challengers.getChallenger(request.header("X-CHALLENGER"));
 
                     if (challenger == null) {
-                        result.status(401);
-                        XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
-                        return "";
-                    }
-
-                    // authorization bearer token will take precedence over X-AUTH-HEADER
-                    if (authorization != null && !authorization.isEmpty()) {
-                        final BearerAuthHeaderParser bearerToken =
-                                new BearerAuthHeaderParser(authorization);
-                        if (bearerToken.isBearerToken() && bearerToken.isValid()) {
-                            authToken = bearerToken.getToken();
+                        if (hasXChallengerHeader(request)) {
+                            result.status(401);
+                            XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
+                            return "";
                         }
+                        return getReadOnlySecretNote(request, result, authToken);
                     }
 
                     if (authToken == null || authToken.isEmpty()) {
@@ -182,26 +205,7 @@ public class AuthRoutes {
                         return "";
                     }
 
-                    final InternalHttpRequest internalRequest =
-                            HttpServerRequestToInternalHttpRequest.convert(request);
-                    final HttpApiRequest myRequest =
-                            InternalHttpRequestToHttpApiRequest.convert(internalRequest);
-
-                    final ApiResponse response =
-                            ApiResponse.success()
-                                    .returnSingleDraft(
-                                            EntityInstanceDraft.forEntity(secretNote)
-                                                    .withField("note", challenger.getNote()));
-
-                    final HttpApiResponse httpApiResponse =
-                            new HttpApiResponse(
-                                    myRequest.getHeaders(),
-                                    response,
-                                    jsonThing,
-                                    this.secretNoteStore.apiConfig());
-
-                    return InternalHttpResponseToHttpServer.convert(
-                            HttpApiResponseToInternalHttpResponse.convert(httpApiResponse), result);
+                    return renderSecretNoteResponse(request, result, challenger.getNote());
 
                     // return resultBasedOnAcceptHeader(result, request.header("ACCEPT"),
                     // challenger.getNote());
@@ -380,5 +384,91 @@ public class AuthRoutes {
 
     private boolean isLiveWidgetRequest(final HttpServerRequest request) {
         return "true".equalsIgnoreCase(request.header(LIVE_WIDGET_HEADER));
+    }
+
+    private boolean hasXChallengerHeader(final HttpServerRequest request) {
+        final String challenger = request.header("X-CHALLENGER");
+        return challenger != null && !challenger.trim().isEmpty();
+    }
+
+    private boolean requestHasValidBasicAuth(
+            final HttpServerRequest request, final HttpServerResponse result) {
+
+        BasicAuthHeaderParser basicAuth =
+                new BasicAuthHeaderParser(request.header("Authorization"));
+
+        // admin/password as default username:password
+        if (!basicAuth.matches("admin", "password")) {
+            if (!isLiveWidgetRequest(request)) {
+                result.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+            }
+            result.status(401);
+            return false;
+        }
+
+        return true;
+    }
+
+    private String authTokenFromRequest(final HttpServerRequest request) {
+        String authToken = request.header("X-AUTH-TOKEN");
+        final String authorization = request.header("Authorization");
+
+        // authorization bearer token will take precedence over X-AUTH-HEADER
+        if (authorization != null && !authorization.isEmpty()) {
+            final BearerAuthHeaderParser bearerToken = new BearerAuthHeaderParser(authorization);
+            if (bearerToken.isBearerToken() && bearerToken.isValid()) {
+                authToken = bearerToken.getToken();
+            }
+        }
+
+        return authToken;
+    }
+
+    private String getReadOnlySecretNote(
+            final HttpServerRequest request,
+            final HttpServerResponse result,
+            final String authToken) {
+
+        if (authToken == null || authToken.isEmpty()) {
+            result.status(401);
+            return "";
+        }
+
+        if (!READ_ONLY_AUTH_TOKEN.contentEquals(authToken)) {
+            result.status(403);
+            return "";
+        }
+
+        AcceptHeaderParser acceptHeaderParser = new AcceptHeaderParser(request.header("ACCEPT"));
+        if (!acceptHeaderParser.missingAcceptHeader() && !acceptHeaderParser.isSupportedHeader()) {
+            result.status(406);
+            return "";
+        }
+
+        return renderSecretNoteResponse(request, result, READ_ONLY_SECRET_NOTE);
+    }
+
+    private String renderSecretNoteResponse(
+            final HttpServerRequest request, final HttpServerResponse result, final String note) {
+
+        final InternalHttpRequest internalRequest =
+                HttpServerRequestToInternalHttpRequest.convert(request);
+        final HttpApiRequest myRequest =
+                InternalHttpRequestToHttpApiRequest.convert(internalRequest);
+
+        final ApiResponse response =
+                ApiResponse.success()
+                        .returnSingleDraft(
+                                EntityInstanceDraft.forEntity(secretNote).withField("note", note));
+
+        final HttpApiResponse httpApiResponse =
+                new HttpApiResponse(
+                        myRequest.getHeaders(),
+                        response,
+                        jsonThing,
+                        this.secretNoteStore.apiConfig());
+
+        return InternalHttpResponseToHttpServer.convert(
+                HttpApiResponseToInternalHttpResponse.convert(httpApiResponse), result);
     }
 }

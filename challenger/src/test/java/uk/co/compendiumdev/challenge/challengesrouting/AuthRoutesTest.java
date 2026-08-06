@@ -40,7 +40,7 @@ public class AuthRoutesTest {
         args.add(Arguments.of(405, "patch", "/secret/note"));
         args.add(Arguments.of(405, "trace", "/secret/note"));
 
-        args.add(Arguments.of(405, "get", "/secret/token"));
+        args.add(Arguments.of(401, "get", "/secret/token"));
         args.add(Arguments.of(405, "head", "/secret/token"));
         args.add(Arguments.of(204, "options", "/secret/token"));
         // post
@@ -62,7 +62,7 @@ public class AuthRoutesTest {
     static Stream simpleRoutingStatusForToken() {
         List<Arguments> args = new ArrayList<>();
 
-        args.add(Arguments.of(405, "get", "/secret/token"));
+        args.add(Arguments.of(200, "get", "/secret/token"));
         args.add(Arguments.of(405, "head", "/secret/token"));
         args.add(Arguments.of(204, "options", "/secret/token"));
         // post
@@ -80,7 +80,7 @@ public class AuthRoutesTest {
         http.clearHeaders();
         http.setHeader("X-CHALLENGER", challenger.getXChallenger());
         // admin:password YWRtaW46cGFzc3dvcmQ=
-        http.setHeader("Authentication", "basic YWRtaW46cGFzc3dvcmQ=");
+        http.setHeader("Authorization", "basic YWRtaW46cGFzc3dvcmQ=");
 
         final HttpResponseDetails response = http.send(url, verb);
 
@@ -167,6 +167,44 @@ public class AuthRoutesTest {
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
 
+    @Test
+    void getSecretTokenWithoutChallengerReturnsStableReadOnlyToken() {
+
+        http.clearHeaders();
+        http.setHeader("Authorization", "basic " + base64("admin:password"));
+        http.setHeader("Accept", "application/json");
+
+        final HttpResponseDetails firstResponse = http.send("/secret/token", "get");
+        final HttpResponseDetails secondResponse = http.send("/secret/token", "get");
+
+        Assertions.assertEquals(200, firstResponse.statusCode);
+        Assertions.assertEquals(200, secondResponse.statusCode);
+        Assertions.assertEquals(
+                AuthRoutes.READ_ONLY_AUTH_TOKEN, firstResponse.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(
+                AuthRoutes.READ_ONLY_AUTH_TOKEN, secondResponse.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(
+                firstResponse.getHeader("X-AUTH-TOKEN"),
+                secondResponse.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(
+                "{\"token\":\"" + AuthRoutes.READ_ONLY_AUTH_TOKEN + "\"}", firstResponse.body);
+    }
+
+    @Test
+    void getSecretTokenWithUnknownChallengerIsNotReadOnlyMode() {
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", "bobobobobobobobob");
+        http.setHeader("Authorization", "basic " + base64("admin:password"));
+
+        final HttpResponseDetails response = http.send("/secret/token", "get");
+
+        Assertions.assertEquals(401, response.statusCode);
+        Assertions.assertEquals(
+                XChallengerHeader.NOT_FOUND_ERROR_MESSAGE, response.getHeader("X-CHALLENGER"));
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
+    }
+
     static String base64(String convertMe) {
         final Base64.Encoder base64 = Base64.getEncoder();
         return base64.encodeToString(convertMe.getBytes());
@@ -184,6 +222,18 @@ public class AuthRoutesTest {
         Assertions.assertEquals(401, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+    }
+
+    @Test
+    void cannotGetReadOnlySecretNoteWhenNoAuthToken() {
+
+        http.clearHeaders();
+        http.setHeader("Accept", "application/json");
+
+        final HttpResponseDetails response = http.send("/secret/note", "get");
+
+        Assertions.assertEquals(401, response.statusCode);
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
     }
 
     @Test
@@ -230,6 +280,34 @@ public class AuthRoutesTest {
         Assertions.assertEquals(403, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+    }
+
+    @Test
+    void cannotGetReadOnlySecretNoteWithWrongAuthToken() {
+
+        http.clearHeaders();
+        http.setHeader("X-AUTH-TOKEN", AuthRoutes.READ_ONLY_AUTH_TOKEN + "wrong");
+        http.setHeader("Accept", "application/json");
+
+        final HttpResponseDetails response = http.send("/secret/note", "get");
+
+        Assertions.assertEquals(403, response.statusCode);
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
+    }
+
+    @Test
+    void canGetReadOnlySecretNoteWithReadOnlyAuthToken() {
+
+        http.clearHeaders();
+        http.setHeader("X-AUTH-TOKEN", AuthRoutes.READ_ONLY_AUTH_TOKEN);
+        http.setHeader("Accept", "application/json");
+
+        final HttpResponseDetails response = http.send("/secret/note", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals(
+                "{\"note\":\"" + AuthRoutes.READ_ONLY_SECRET_NOTE + "\"}", response.body);
     }
 
     @Test
