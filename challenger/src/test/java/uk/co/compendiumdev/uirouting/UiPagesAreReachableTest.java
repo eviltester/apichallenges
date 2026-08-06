@@ -141,7 +141,7 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
-                        "REST API Tutorial: Learn REST by Using a LIVE API",
+                        "REST API Tutorial: Learn REST by Using a Live API",
                         "/tutorials/rest-api-tutorial"));
         args.add(
                 Arguments.of(

@@ -94,12 +94,12 @@ public class MarkdownContentManagerTutorialLiveClientTest {
 
         Assertions.assertTrue(
                 html.contains(
-                        "<title>REST API Tutorial: Learn REST by Using a LIVE API</title>"));
+                        "<title>REST API Tutorial: Learn REST by Using a Live API</title>"));
         Assertions.assertTrue(
-                html.contains("<h1>REST API Tutorial: Learn REST by Using a LIVE API</h1>"));
+                html.contains("<h1>REST API Tutorial: Learn REST by Using a Live API</h1>"));
         Assertions.assertTrue(
                 html.contains(
-                        "<meta name='description' content='Learn REST by using live API examples with interactive requests"));
+                        "<meta name='description' content='Learn REST API basics with live HTTP requests"));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-tutorial\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-basics\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));

@@ -20,7 +20,7 @@ showads: true
 
 Start with the guided tutorial if you want a practical path through REST API testing:
 
-- [REST API Tutorial: Learn REST by Using a LIVE API](/tutorials/rest-api-tutorial)
+- [REST API Tutorial: Learn REST by Using a Live API](/tutorials/rest-api-tutorial)
 - [How to Test REST APIs](/tutorials/rest-api-testing)
 
 ## Reference Content

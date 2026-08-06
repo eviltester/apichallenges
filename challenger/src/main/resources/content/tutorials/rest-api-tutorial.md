@@ -1,17 +1,17 @@
 ---
-title: REST API Tutorial: Learn REST by Using a LIVE API
-seo_title: REST API Tutorial: Learn REST by Using a LIVE API
-description: Learn REST API basics by sending read-only todo requests and CRUD requests to live APIs.
+title: REST API Tutorial: Learn REST by Using a Live API
+seo_title: REST API Tutorial: Learn REST by Using a Live API
+description: Learn REST API basics by sending real GET, HEAD, POST, PATCH, and DELETE requests to live APIs.
 lastmod: 2026-08-06
-seo_description: Learn REST by using live API examples with interactive requests for resources, URLs, HTTP methods, status codes, JSON, XML, headers, auth, OpenAPI, CRUD, and common REST mistakes.
+seo_description: Learn REST API basics with live HTTP requests. Try resources, URLs, methods, status codes, JSON, XML, headers, auth, OpenAPI, CRUD, and common REST mistakes.
 showads: true
 ---
 
-# REST API Tutorial: Learn REST by Using a LIVE API
+# REST API Tutorial: Learn REST by Using a Live API
 
-This REST API tutorial introduces the main REST ideas by using live API examples. We provide a quick practical model of REST, and have embedded HTTP clients to let you send real requests from the page. When you want to learn a topic in more detail we have links to expanded reference material.
+This REST API tutorial teaches the main REST concepts by sending real HTTP requests to live APIs. You will try `GET`, `HEAD`, `POST`, `PATCH`, and `DELETE`, inspect status codes and headers, switch between JSON and XML, use auth tokens, and run a small CRUD flow from the page.
 
-The read-only examples use the [API Challenges API](/apichallenges) `/todos` endpoint, and the CRUD examples use the [Simple API](/practice-modes/simpleapi) when we need to create, update, or delete data. 
+The read-only examples use the [API Challenges API](/apichallenges) `/todos` endpoint, and the CRUD examples use the [Simple API](/practice-modes/simpleapi) when we need to create, update, or delete data. When you want to learn a topic in more detail, follow the links to the expanded reference material.
 
 By the end of this tutorial you should understand the basics of:
 
@@ -23,7 +23,7 @@ By the end of this tutorial you should understand the basics of:
 - where OpenAPI documentation helps
 - common mistakes to avoid
 
-Useful reference pages:
+Useful REST API reference pages:
 
 - [REST API Basics](/tutorials/rest-api-basics)
 - [HTTP Basics](/tutorials/http-basics)
@@ -34,7 +34,7 @@ Useful reference pages:
 
 ---
 
-## What REST Is
+## What Is a REST API?
 
 REST stands for Representational State Transfer. In practical API work, people usually use "REST API" to mean an HTTP API that is organised around resources and uses standard HTTP methods such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
 
@@ -56,11 +56,11 @@ A high level starting point is:
 - a status code reports what happened
   - Example: `200 OK` means the API returned the requested resource.
 
-For more depth, read [REST API Basics](/tutorials/rest-api-basics).
+For a deeper explanation of REST concepts, read [REST API Basics](/tutorials/rest-api-basics).
 
 ---
 
-## Resources
+## REST API Resources
 
 A resource is something the API exposes. In the API Challenges API, a todo item is a resource.
 
@@ -83,11 +83,11 @@ Try listing the todo collection:
 
 When you execute the request, look for the collection in the response body. Each todo has fields such as `id`, `title`, `doneStatus`, and `description`.
 
-Learn more about resources in [REST API Basics](/tutorials/rest-api-basics).
+Learn more about REST resources in [REST API Basics](/tutorials/rest-api-basics).
 
 ---
 
-## URLs
+## REST API URLs and Endpoints
 
 In a REST-style API, URLs are usually noun-like. They identify the thing you want to work with.
 
@@ -113,7 +113,7 @@ For more about HTTP request structure, read [HTTP Basics](/tutorials/http-basics
 
 ---
 
-## HTTP Methods
+## HTTP Methods in REST APIs
 
 The HTTP method (also known as HTTP verb) tells the server what kind of operation the client wants.
 
@@ -147,11 +147,11 @@ There are standards available for the body format of `PATCH` requests, but again
 
 When testing, we work with the API we've got, not the API we think the standards and guidelines describe.
 
-Learn more in [HTTP Methods and Verbs](/tutorials/http-verbs).
+Learn more about REST API methods in [HTTP Methods and Verbs](/tutorials/http-verbs).
 
 ---
 
-## Status Codes
+## REST API Status Codes
 
 The status code gives a quick summary of what happened.
 
@@ -177,11 +177,11 @@ You can also ask the API for something the route does not support. Execute this 
 
 If you open the `Raw` response tab, the first line in the response shows the HTTP status returned by the server.
 
-Learn more about status codes in [HTTP Basics](/tutorials/http-basics).
+Learn more about HTTP status codes in [HTTP Basics](/tutorials/http-basics).
 
 ---
 
-## JSON and XML
+## JSON and XML in REST APIs
 
 REST APIs usually send a representation of a resource in the response body.
 
@@ -203,11 +203,11 @@ The API Challenges `/todos` API supports both JSON and XML for most requests. Tr
 
 The resource is the same, but the representation format changes.
 
-Learn more about request and response bodies in [HTTP Basics](/tutorials/http-basics).
+Learn more about HTTP request and response bodies in [HTTP Basics](/tutorials/http-basics).
 
 ---
 
-## Headers
+## REST API Headers
 
 Headers are metadata for the HTTP message.
 
@@ -218,20 +218,20 @@ Important API headers include:
 - `Authorization`: credentials or tokens used for authentication
 - `Location`: often returned after creating a resource
 
-Headers in the request describe the content e.g. `Content-Type` but they also set preferences for how the client wants the request to be processed and what the response should be like e.g. `Accept`.
+Request headers describe the content, for example `Content-Type`, and can also set preferences for how the client wants the request to be processed, for example `Accept`.
 
-Headers in the response describe the content and provide follow on information for the client e.g. `Content-Type`, `Location`.
+Response headers describe the returned content and provide follow-on information for the client, for example `Content-Type` and `Location`.
 
 Issue the request below and look at the headers in both the response and the request to see the difference.
 
 {{<api-live-request method="GET" path="/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/json" editable="true" edit-mode="fixed" query-editable="false" body-editable="false" details="true" summary="GET /todos and inspect the headers in the response">}}
 
-To see the actual headers sent in the Request you really need to open the Browser Dev Tools, and look in the Network tab. This will show every Request and Response and you'll see the full details of the request sent through to the server. The Browser will have added additional headers that are not listed in the HTTP Client headers field. Clients often add additional headers and it is worth being aware of that in case it impacts your testing or use of the API.
+To see the actual headers sent in the request, open the browser Dev Tools and look in the Network tab. This shows the full request and response details sent to the server. The browser may add headers that are not listed in the embedded HTTP client, and those extra headers can sometimes affect API testing.
 
 > **Exercise: Change the `Accept` Header**
 >
 > In our default request we asked for JSON.
-> Use the editable exercise below. Keep the URL as `/todos`, but change the `Accept` header between:
+> Use the editable request above. Keep the URL as `/todos`, but change the `Accept` header between:
 >
 > `Accept: application/json`
 > 
@@ -243,17 +243,17 @@ To see the actual headers sent in the Request you really need to open the Browse
 
 
 
-Learn more about headers in [HTTP Basics](/tutorials/http-basics).
+Learn more about REST API headers in [HTTP Basics](/tutorials/http-basics).
 
 ---
 
-## Authentication and Authorization (Auth)
+## REST API Authentication and Authorization
 
-Authentication answers "who is making the request?
+Authentication answers "who is making the request?"
 
 Authorization answers "what is that caller allowed to do?"
 
-So you might be Authenticated and can login to the system, but you might not be Authorized to access all parts of the system.
+So you might be authenticated and able to log in to the system, but not authorized to access every resource.
 
 APIs often use headers for auth, for example:
 
@@ -272,45 +272,45 @@ Authorization: Basic YWRtaW46cGFzc3dvcmQ=
 
 Base64 is only an encoding, not encryption. Anyone who can see the header can decode it, so Basic Auth should be sent over HTTPS in real systems.
 
-Authentication is often the first step. The API asks "can you prove who you are?" The `GET /secret/token` endpoint uses Basic Auth to prove who you are, then returns the Authorization token to allow you access to private data.
+Authentication is often the first step. The API asks "can you prove who you are?" The `GET /secret/token` endpoint uses Basic Auth to prove who you are, then returns an auth token to allow access to private data.
 
-Run this request first to get the Authorization token:
+Run this request first to get the auth token:
 
 {{<api-live-request method="GET" path="/secret/token" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/token with Basic Auth to receive a read-only token">}}
 
-The Authorization token is also shown in the response headers as the `X-AUTH-TOKEN` header.
+The auth token is shown in the response body and in the `X-AUTH-TOKEN` response header.
 
 > **Exercise - Amend Authorization Header**
 >
 > Amend the Authorization header so that the encoded credentials are incorrect and send the request.
 > Delete a few characters from the credentials to make them invalid.
-> You should see a 401 response, meaning that you are not Authenticated.
+> You should see a `401` response, meaning that authentication failed.
 
 ### Authorization
 
-Authorization is the next step. The API asks "is this caller allowed to access this resource?" Use the `X-AUTH-TOKEN` value from the previous response as a bearer token Authorization header to read the protected secret note:
+Authorization is the next step. The API asks "is this caller allowed to access this resource?" Use the token from the previous response as a Bearer token in the standard `Authorization` request header to read the protected secret note:
 
 {{<api-live-request method="GET" path="/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="Authorization: Bearer {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/note with Bearer Token to read the secret note">}}
 
 > **Exercise - Amend Authorization Header**
 >
-> Amend the Authorization header so that the Bearer Token value is incorrect and send the request.
+> Amend the `Authorization` header so that the Bearer token value is incorrect and send the request.
 > Delete a few characters from the value to make it invalid.
-> You should see a 403 response, meaning that you are Forbidden from accessing the content and are therefore not Authorized.
+> You should see a `403` response, meaning that the request is forbidden because the token is not authorized.
 
 ### Custom Headers
 
-Custom HTTP Response and Request headers are often prefixed by `X-` and many APIs use this convention to have API keys which Authorize requests.
+Custom HTTP request and response headers are sometimes prefixed by `X-`. Some APIs use custom headers to pass API keys or auth tokens.
 
-The API Challenges API uses the `X-AUTH-TOKEN` custom header for the API key, so we are also able to Authorize our requests using the `X-AUTH-TOKEN` from the previous response to read the protected secret note:
+The API Challenges API also accepts the token in the custom `X-AUTH-TOKEN` request header, so the same protected note can be read this way:
 
 {{<api-live-request method="GET" path="/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/note with Custom header X-AUTH-TOKEN to read the secret note">}}
 
 > **Exercise - Amend X-AUTH-TOKEN Header**
 >
-> Amend the X-AUTH-TOKEN header so that the value is incorrect and send the request.
+> Amend the `X-AUTH-TOKEN` header so that the value is incorrect and send the request.
 > Delete a few characters from the value to make it invalid.
-> You should see a 403 response, meaning that you are Forbidden from accessing the content and are therefore not Authorized.
+> You should see a `403` response, meaning that the request is forbidden because the token is not authorized.
 
 ### More About Auth
 
@@ -322,7 +322,7 @@ For auth details and risks, read:
 
 ---
 
-## OpenAPI
+## OpenAPI Documentation for REST APIs
 
 OpenAPI is a structured way to describe an HTTP API.
 
@@ -343,11 +343,11 @@ OpenAPI files can be used in REST Client tools to create collections of requests
 
 OpenAPI is useful, but it is still documentation. The running API is the source of behaviour you experience when you send requests.
 
-Learn more in [OpenAPI](/tutorials/openapi) and [Swagger](/tutorials/swagger).
+Learn more about REST API documentation in [OpenAPI](/tutorials/openapi) and [Swagger](/tutorials/swagger).
 
 ---
 
-## CRUD
+## CRUD Operations in REST APIs
 
 CRUD means:
 
@@ -366,7 +366,7 @@ A common REST-style CRUD flow looks like this:
 | Delete | `DELETE /simpleapi/items/{id}` |
 
 
-For CRUD mutation practice, use the Simple API so the tutorial can create, update, and delete inventory items without challenger session tracking. Most API Update and Delete actions will require Authorization, to make it easy to practice testing APIs our Simple API does not require Authorization so you don't have to deal with that yet. Try the sequence below. Run the `POST` first. The built-in client remembers the created item id for the later requests.
+For CRUD mutation practice, use the Simple API so the tutorial can create, update, and delete inventory items without challenger session tracking. Many real API update and delete actions require authorization; the Simple API does not, so you can focus on the REST and HTTP basics first. Try the sequence below. Run the `POST` first. The built-in client remembers the created item id for the later requests.
 
 {{<api-live-request method="POST" path="/simpleapi/items" expected-status="201" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" editable="false" query-editable="false" body='{"type":"book","isbn13":"{{randomSimpleApiIsbn}}","price":2.00,"numberinstock":3}' details="true" summary="POST /simpleapi/items to create an item">}}
 
@@ -380,7 +380,7 @@ Learn more about CRUD and REST in [REST API Basics](/tutorials/rest-api-basics) 
 
 ---
 
-## Common Mistakes
+## Common REST API Mistakes
 
 REST API mistakes often come from mixing up the parts of the HTTP message.
 
@@ -402,6 +402,34 @@ Try sending a body with the wrong data type. `numberinstock` should be a number,
 The expected result is a client error because the server understood the request body but rejected the value.
 
 For deeper coverage ideas, read [API Testing Concepts and Coverage](/tutorials/testing-apis).
+
+---
+
+## REST API FAQ
+
+### What is a REST API?
+
+A REST API is usually an HTTP API that exposes resources through URLs and lets clients use HTTP methods such as `GET`, `POST`, `PATCH`, and `DELETE`.
+
+### What is a REST API resource?
+
+A REST API resource is something the API exposes, such as a todo item, a user, an order, or a product.
+
+### What is the difference between `GET` and `HEAD`?
+
+`GET` asks for the resource representation, including the response body. `HEAD` asks for the status and headers only, without the response body.
+
+### What is CRUD in a REST API?
+
+CRUD means create, read, update, and delete. REST-style APIs commonly map CRUD actions to `POST`, `GET`, `PUT` or `PATCH`, and `DELETE`.
+
+### What is the difference between authentication and authorization?
+
+Authentication checks who is making the request. Authorization checks whether that caller is allowed to access the requested resource.
+
+### Is OpenAPI the same as REST?
+
+No. REST is an API style. OpenAPI is a documentation format that can describe REST-style HTTP APIs.
 
 ---
 
