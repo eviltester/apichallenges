@@ -1464,6 +1464,23 @@ html[data-theme] .side-toc .side-toc-section-links li {
     font-weight: 500;
 }
 
+html[data-theme] .side-toc-syllabus {
+    border-bottom-color: var(--border);
+}
+
+html[data-theme] .side-toc-syllabus-title {
+    color: var(--text);
+}
+
+html[data-theme] .side-toc-syllabus-steps li {
+    color: var(--text);
+    font-weight: 500;
+}
+
+html[data-theme] .side-toc-syllabus-steps li::before {
+    color: var(--muted);
+}
+
 html[data-theme] .sim-live-tab,
 html[data-theme] .sim-live-response-tab,
 html[data-theme] .sim-live-copy,

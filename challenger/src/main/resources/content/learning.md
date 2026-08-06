@@ -16,20 +16,28 @@ showads: true
   <img src="/images/hero/learning-zone-api-testing-path-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="Learning Zone hero image showing the live learning page, REST fundamentals, and the API testing learning path.">
 </figure>
 
-## Start Here
+## REST API Tutorial Syllabus
 
-Start with the guided REST tutorial if you want a practical path through API testing:
+Use this as the main route through the Learning Zone. Each step builds enough vocabulary and practical evidence to make the next step easier:
 
-- [REST API Tutorial: Learn REST by Using a Live API](/tutorials/rest-api-tutorial)
-- [How to Test REST APIs](/tutorials/rest-api-testing)
+1. [Interactive REST API Tutorial](/tutorials/rest-api-tutorial) - send real requests and see REST concepts in action.
+2. [HTTP basics](/tutorials/http-basics) - learn how requests, responses, headers, bodies, and URLs fit together.
+3. [REST basics](/tutorials/rest-api-basics) - connect resources, representations, statelessness, and CRUD with API design.
+4. [HTTP methods](/tutorials/http-verbs) - understand what `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, and `OPTIONS` are expected to mean.
+5. [Status codes](/tutorials/http-basics#http-status-codes) - read response outcomes as testing evidence, not just pass/fail signals.
+6. [OpenAPI](/tutorials/openapi) - use API descriptions to find endpoints, schemas, responses, and security expectations.
+7. [How to Test REST APIs](/tutorials/rest-api-testing) - practise a step-by-step approach for exploring, checking, and reporting API behaviour.
+8. [Interactive API Simulation](/practice-modes/simulation) - use the simulator walkthrough to practise request and response handling safely.
+9. [API Challenges](/apichallenges) - apply the ideas in a guided API challenge app.
 
-## Understand the References
+## Reference Tutorials
 
-Use the reference content when you want to understand a specific concept in more detail:
+Use these when you want to revisit a specific concept in more detail:
 
 - [REST API Basics](/tutorials/rest-api-basics)
 - [HTTP Basics](/tutorials/http-basics)
 - [HTTP Verbs and Methods](/tutorials/http-verbs)
+- [HTTP Status Codes](/tutorials/http-basics#http-status-codes)
 - [API Testing Concepts and Coverage](/tutorials/testing-apis)
 - [OpenAPI](/tutorials/openapi)
 - [Swagger](/tutorials/swagger)
@@ -38,7 +46,7 @@ Use the reference content when you want to understand a specific concept in more
 
 ## Practise with APIs
 
-Move from reading to hands-on practice with APIs designed for learning:
+Move from syllabus reading to hands-on practice with APIs designed for learning:
 
 - [Simulation Mode](/practice-modes/simulation)
 - [Simple API](/practice-modes/simpleapi)
@@ -46,7 +54,7 @@ Move from reading to hands-on practice with APIs designed for learning:
 
 ## Review Challenge Solutions
 
-The challenge solutions are longer walkthroughs for specific API testing ideas:
+The challenge solutions are longer walkthroughs for specific API testing ideas. Use them after trying a challenge, or when you want to compare your reasoning with a worked example:
 
 - [Read the API Challenge Solutions](/apichallenges/solutions)
 - [Try the API Challenges app](/gui/challenges)

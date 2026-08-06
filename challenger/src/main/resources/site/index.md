@@ -30,16 +30,21 @@ We provide:
 
 ## How To Learn API Testing
 
-Follow the learning path from REST concepts to hands-on challenge practice:
+Follow the REST API Tutorial path from core concepts to hands-on challenge practice:
 
-1. Start with the [REST API Tutorial](/tutorials/rest-api-tutorial) to learn REST by sending requests to a live API.
-2. Deepen the core concepts with [REST API Basics](/tutorials/rest-api-basics), [HTTP Basics](/tutorials/http-basics), and [HTTP Methods and Verbs](/tutorials/http-verbs).
-3. Follow the practical [How to Test REST APIs Step by Step](/tutorials/rest-api-testing) tutorial.
-4. Practise safely with [Simulation Mode](/practice-modes/simulation) and the [Simple API](/practice-modes/simpleapi).
-5. Use the [API Challenges overview](/apichallenges) to understand the challenge app, then review the [API Challenge Solutions](/apichallenges/solutions) when you want guided walkthroughs.
-6. Open the [API Challenges app](/gui/challenges) when you are ready to track progress in the browser.
-7. Download a [recommended REST API client](/tools/clients) and repeat the tutorials or challenges in a standalone tool.
-8. Explore business-rule testing with the [Buggy API](/practice-modes/shoppingcart), try [other API practice sites](/practice-sites), and learn client limits with the [API From Hell](/practice-modes/fromhell).
+1. [Interactive REST API Tutorial](/tutorials/rest-api-tutorial) to learn REST by sending requests to a live API.
+2. Learn [HTTP basics](/tutorials/http-basics): requests, responses, headers, bodies, and URLs.
+3. Connect the ideas with [REST basics](/tutorials/rest-api-basics): resources, representations, statelessness, and CRUD.
+4. Study [HTTP methods](/tutorials/http-verbs) so you know what each request is asking the server to do.
+5. Review [status codes](/tutorials/http-basics#http-status-codes) as response evidence.
+6. Use [OpenAPI](/tutorials/openapi) to understand documented endpoints, payloads, responses, and security expectations.
+7. Follow the practical [How to Test REST APIs](/tutorials/rest-api-testing) tutorial.
+8. Practise safely with the [Interactive API Simulation](/practice-modes/simulation).
+9. Move into [API Challenges](/apichallenges) to apply the concepts in a guided API challenge app.
+10. Use the [API Challenge Solutions](/apichallenges/solutions) when you want guided walkthroughs.
+11. Open the [API Challenges app](/gui/challenges) when you are ready to track progress in the browser.
+12. Download a [recommended REST API client](/tools/clients) and repeat the tutorials or challenges in a standalone tool.
+13. Explore business-rule testing with the [Buggy API](/practice-modes/shoppingcart), try [other API practice sites](/practice-sites), and learn client limits with the [API From Hell](/practice-modes/fromhell).
 
 
 ## Video Welcome

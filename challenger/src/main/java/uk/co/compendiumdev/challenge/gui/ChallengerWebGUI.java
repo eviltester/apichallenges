@@ -137,9 +137,11 @@ public class ChallengerWebGUI {
                             <li id='learning-root-menu'><a href="/learning">Learning Zone</a>
                                 <ul>
                                     <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
-                                    <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
                                     <li><a href="/tutorials/http-basics">HTTP Basics</a></li>
+                                    <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
                                     <li><a href="/tutorials/http-verbs">HTTP Methods</a></li>
+                                    <li><a href="/tutorials/http-basics#http-status-codes">HTTP Status Codes</a></li>
+                                    <li><a href="/tutorials/openapi">OpenAPI</a></li>
                                     <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
                                 </ul>
                             </li>

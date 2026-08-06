@@ -815,6 +815,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-basics\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-basics\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-verbs\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-basics#http-status-codes\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi\""));
@@ -849,12 +851,19 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(simulationRoot > learningRoot);
 
         final String learningMenu = response.body.substring(learningRoot, simulationRoot);
-        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-tutorial\""));
-        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-basics\""));
-        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/http-basics\""));
-        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/http-verbs\""));
-        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-testing\""));
+        assertContainsInOrder(
+                learningMenu,
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/http-basics\"",
+                "href=\"/tutorials/rest-api-basics\"",
+                "href=\"/tutorials/http-verbs\"",
+                "href=\"/tutorials/http-basics#http-status-codes\"",
+                "href=\"/tutorials/openapi\"",
+                "href=\"/tutorials/rest-api-testing\"");
+        Assertions.assertTrue(learningMenu.contains("How to Test REST APIs"));
+        Assertions.assertFalse(learningMenu.contains("Testing Workflow"));
         Assertions.assertFalse(learningMenu.contains("href=\"/practice-modes/simulation\""));
+        Assertions.assertFalse(learningMenu.contains("href=\"/apichallenges\""));
         Assertions.assertFalse(learningMenu.contains("href=\"/apichallenges/solutions\""));
     }
 
@@ -2377,6 +2386,18 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(canonicalUrl, response.getHeader("Location"));
+    }
+
+    private void assertContainsInOrder(final String value, final String... substrings) {
+        int previousIndex = -1;
+        for (String substring : substrings) {
+            final int index = value.indexOf(substring, previousIndex + 1);
+            Assertions.assertTrue(index >= 0, "Missing expected text: " + substring);
+            Assertions.assertTrue(
+                    index > previousIndex,
+                    "Expected text to appear later than previous entry: " + substring);
+            previousIndex = index;
+        }
     }
 
     private HttpMessageSender forwardedHostHttp(final String host) {

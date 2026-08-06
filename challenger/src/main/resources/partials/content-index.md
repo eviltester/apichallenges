@@ -1,6 +1,19 @@
 <ul class="side-toc-root">
     <li><a href="/learning">Learning Zone</a></li>
-    <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
+    <li class="side-toc-syllabus" aria-label="REST API Tutorial path">
+        <span class="side-toc-syllabus-title">REST API Tutorial Path</span>
+        <ol class="side-toc-syllabus-steps">
+            <li><a href="/tutorials/rest-api-tutorial">Interactive REST API Tutorial</a></li>
+            <li><a href="/tutorials/http-basics">HTTP basics</a></li>
+            <li><a href="/tutorials/rest-api-basics">REST basics</a></li>
+            <li><a href="/tutorials/http-verbs">HTTP methods</a></li>
+            <li><a href="/tutorials/http-basics#http-status-codes">Status codes</a></li>
+            <li><a href="/tutorials/openapi">OpenAPI</a></li>
+            <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
+            <li><a href="/practice-modes/simulation">Interactive API Simulation</a></li>
+            <li><a href="/apichallenges">API Challenges</a></li>
+        </ol>
+    </li>
     <li>
         <details class="side-toc-section" data-side-toc-section="reference-tutorials">
             <summary class="side-toc-section-summary">
@@ -16,18 +29,6 @@
                 <li><a href="/tutorials/swagger">Swagger</a></li>
                 <li><a href="/tutorials/web-basics">Web Applications</a></li>
                 <li><a href="/tutorials/summary">Summary</a></li>
-            </ul>
-        </details>
-    </li>
-    <li>
-        <details class="side-toc-section" data-side-toc-section="tutorials">
-            <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Guided Tutorials</span>
-                <span class="side-toc-section-description">Interactive tutorials on how to test APIs, send HTTP requests, and practise with the API simulator.</span>
-            </summary>
-            <ul class="side-toc-section-links">
-                <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
-                <li><a href="/practice-modes/simulation">API Simulator Walkthrough</a></li>
             </ul>
         </details>
     </li>

@@ -81,11 +81,25 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html,
                 "<ul class=\"side-toc-root\">",
                 "<li><a href=\"/learning\">Learning Zone</a></li>",
-                "<li><a href=\"/tutorials/rest-api-tutorial\">REST API Tutorial</a></li>",
+                "<li class=\"side-toc-syllabus\" aria-label=\"REST API Tutorial path\">",
+                "<span class=\"side-toc-syllabus-title\">REST API Tutorial Path</span>",
+                "<li><a href=\"/tutorials/rest-api-tutorial\">Interactive REST API Tutorial</a></li>",
+                "<li><a href=\"/tutorials/http-basics\">HTTP basics</a></li>",
+                "<li><a href=\"/tutorials/rest-api-basics\">REST basics</a></li>",
+                "<li><a href=\"/tutorials/http-verbs\">HTTP methods</a></li>",
+                "<li><a href=\"/tutorials/http-basics#http-status-codes\">Status codes</a></li>",
+                "<li><a href=\"/tutorials/openapi\">OpenAPI</a></li>",
+                "<li><a href=\"/tutorials/rest-api-testing\">How to Test REST APIs</a></li>",
+                "<li><a href=\"/practice-modes/simulation\">Interactive API Simulation</a></li>",
+                "<li><a href=\"/apichallenges\">API Challenges</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"reference-tutorials\">",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"practice-modes\">",
                 "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">");
+        Assertions.assertFalse(
+                html.contains(
+                        "<details class=\"side-toc-section\" data-side-toc-section=\"tutorials\">"));
+        Assertions.assertFalse(html.contains("Guided Tutorials"));
         assertContainsInOrder(
                 html,
                 "<a href=\"/tools/clients\">REST/HTTP Clients</a>",
@@ -156,7 +170,21 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("numberinstock&quot;:&quot;3"));
 
         String learningHtml = renderContentPage("/learning");
-        Assertions.assertTrue(learningHtml.contains("href=\"/tutorials/rest-api-tutorial\""));
+        assertContainsInOrder(
+                learningHtml,
+                "REST API Tutorial Syllabus",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/http-basics\"",
+                "href=\"/tutorials/rest-api-basics\"",
+                "href=\"/tutorials/http-verbs\"",
+                "href=\"/tutorials/http-basics#http-status-codes\"",
+                "href=\"/tutorials/openapi\"",
+                "href=\"/tutorials/rest-api-testing\"",
+                "href=\"/practice-modes/simulation\"",
+                "href=\"/apichallenges\"");
+        Assertions.assertTrue(learningHtml.contains("Interactive REST API Tutorial"));
+        Assertions.assertTrue(learningHtml.contains("How to Test REST APIs"));
+        Assertions.assertTrue(learningHtml.contains("Interactive API Simulation"));
     }
 
     @Test
