@@ -79,6 +79,15 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                         "Reference tutorials covering HTTP basics, REST APIs, OpenAPI, Swagger, and practical API testing concepts."));
         assertContainsInOrder(
                 html,
+                "<ul class=\"side-toc-root\">",
+                "<li><a href=\"/learning\">Learning Zone</a></li>",
+                "<li><a href=\"/tutorials/rest-api-tutorial\">REST API Tutorial</a></li>",
+                "<details class=\"side-toc-section\" data-side-toc-section=\"reference-tutorials\">",
+                "<details class=\"side-toc-section\" data-side-toc-section=\"practice-modes\">",
+                "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
+                "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">");
+        assertContainsInOrder(
+                html,
                 "<a href=\"/tools/clients\">REST/HTTP Clients</a>",
                 "<li><a href=\"/tools/proxies\">Proxies</a></li>",
                 "Online Clients",
@@ -106,6 +115,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/testing-apis\""));
+        Assertions.assertTrue(html.contains("When you want more hands-on repetition"));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi\""));
+        Assertions.assertTrue(html.contains("href=\"/apichallenges\""));
+        Assertions.assertTrue(html.contains("href=\"/apichallenges/solutions\""));
         Assertions.assertEquals(15, countOccurrences(html, "class=\"api-live-request\""));
         Assertions.assertEquals(15, countOccurrences(html, "data-use-challenger=\"false\""));
         Assertions.assertEquals(
@@ -143,6 +157,56 @@ public class MarkdownContentManagerTutorialLiveClientTest {
 
         String learningHtml = renderContentPage("/learning");
         Assertions.assertTrue(learningHtml.contains("href=\"/tutorials/rest-api-tutorial\""));
+    }
+
+    @Test
+    void referenceTutorialsRenderPracticeSpineLinks() {
+
+        assertContentPageContains(
+                "/tutorials/rest-api-basics",
+                "Practise This Concept",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/http-verbs\"",
+                "href=\"/tutorials/rest-api-testing\"",
+                "href=\"/practice-modes/simpleapi\"",
+                "href=\"/apichallenges/solutions\"");
+
+        assertContentPageContains(
+                "/tutorials/http-basics",
+                "Practise This Concept",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/http-verbs\"",
+                "href=\"/tutorials/rest-api-testing\"",
+                "href=\"/practice-modes/simulation\"",
+                "href=\"/apichallenges/solutions\"");
+
+        assertContentPageContains(
+                "/tutorials/http-verbs",
+                "Practise This Concept",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/rest-api-basics\"",
+                "href=\"/tutorials/rest-api-testing\"",
+                "href=\"/practice-modes/simpleapi\"",
+                "href=\"/apichallenges/solutions\"");
+
+        assertContentPageContains(
+                "/tutorials/testing-apis",
+                "Practise This Concept",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/rest-api-testing\"",
+                "href=\"/practice-modes/simulation\"",
+                "href=\"/practice-modes/simpleapi\"",
+                "href=\"/apichallenges/solutions\"");
+
+        assertContentPageContains(
+                "/tutorials/rest-api-testing",
+                "Where to Go Next",
+                "href=\"/tutorials/rest-api-tutorial\"",
+                "href=\"/tutorials/rest-api-basics\"",
+                "href=\"/tutorials/http-verbs\"",
+                "href=\"/practice-modes/simpleapi\"",
+                "href=\"/apichallenges\"",
+                "href=\"/apichallenges/solutions\"");
     }
 
     @Test
@@ -302,10 +366,19 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         return value.split(java.util.regex.Pattern.quote(substring), -1).length - 1;
     }
 
+    private void assertContentPageContains(final String contentPath, final String... expectedText) {
+        final String html = renderContentPage(contentPath);
+        for (String expected : expectedText) {
+            Assertions.assertTrue(
+                    html.contains(expected),
+                    "Expected " + contentPath + " to contain: " + expected);
+        }
+    }
+
     private void assertContainsInOrder(final String value, final String... substrings) {
         int previousIndex = -1;
         for (String substring : substrings) {
-            final int index = value.indexOf(substring);
+            final int index = value.indexOf(substring, previousIndex + 1);
             Assertions.assertTrue(index >= 0, "Missing expected text: " + substring);
             Assertions.assertTrue(
                     index > previousIndex,

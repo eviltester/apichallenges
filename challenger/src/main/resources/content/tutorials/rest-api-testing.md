@@ -613,6 +613,7 @@ This checklist is deliberately small. It gives you a starting point, but real te
 
 Use this tutorial as the practical path, then deepen specific areas with the reference pages:
 
+- [REST API Tutorial](/tutorials/rest-api-tutorial)
 - [Web Application and HTTP Basics](/tutorials/web-basics)
 - [HTTP Basics](/tutorials/http-basics)
 - [HTTP Methods and Verbs](/tutorials/http-verbs)
@@ -624,10 +625,16 @@ Use this tutorial as the practical path, then deepen specific areas with the ref
 
 For more hands-on practice with the same API, use:
 
-- [Simple API practice guide](/practice-sites/simpleapi)
+- [Simple API practice mode](/practice-modes/simpleapi)
 - [Simple API documentation](/simpleapi/docs)
 - [Simple API Swagger UI](/simpleapi/docs/swagger-ui)
 - [Simple API OpenAPI files](/practice-modes/simpleapi-openapi)
+
+For broader challenge practice, use:
+
+- [Simulation Mode](/practice-modes/simulation)
+- [API Challenges overview](/apichallenges)
+- [API Challenge Solutions](/apichallenges/solutions)
 
 ---
 

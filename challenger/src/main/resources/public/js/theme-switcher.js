@@ -206,6 +206,11 @@
         return section.dataset.sideTocSection || "";
     }
 
+    function shouldForceOpenSideTocSections() {
+        const path = window.location && window.location.pathname;
+        return path === "/learning" || path === "/learning/";
+    }
+
     function saveSideTocOpenSections(sections) {
         const openSections = sections
             .filter((section) => section.open)
@@ -220,6 +225,13 @@
             document.querySelectorAll(".side-toc-section[data-side-toc-section]")
         );
         if (!sections.length) {
+            return;
+        }
+
+        if (shouldForceOpenSideTocSections()) {
+            sections.forEach((section) => {
+                section.open = true;
+            });
             return;
         }
 

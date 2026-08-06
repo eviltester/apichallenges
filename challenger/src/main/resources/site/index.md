@@ -30,25 +30,16 @@ We provide:
 
 ## How To Learn API Testing
 
-1. Start by Reading through our Learning Zone content
-   - [What is an API?](/tutorials/rest-api-basics)
-   - [How to Learn API Testing?](/learning)
-2. Follow one of our tutorials with embedded HTTP Clients
-   - Follow our [How to Test Rest APIs Step By Step](/tutorials/rest-api-testing) Tutorial
-   - Use the [API Simulator Walkthrough API Tutorial](/practice-modes/simulation)
-3. Experiment with a Real API
-   - our [Simple API](/practice-modes/simpleapi) does not require any authentication and supports all HTTP Requests. Our embedded HTP client makes this easy.
-4. Work through the API Challenges
-   - [solve each of the API Challenges](/gui/challenges) to gain practical experience of Testing APIs using the browser based HTTP client.
-5. Download an API Client
-   - [Recommended API Clients](/tools/clients)
-6. Repeat any of the earlier tutorials or challenges using your stand alone REST API Client.
-7. Explore business-rule testing
-   - our [Buggy API](/practice-modes/shoppingcart) has deliberately buggy stock, cart, and checkout behaviour
+Follow the learning path from REST concepts to hands-on challenge practice:
 
-8. Experiment with other APIs
-   - we maintain a list of [Recommended Practice API Sites](/practice-sites)
-9. Learn the limits of your API Client by using it with the [API From Hell](/practice-modes/fromhell)
+1. Start with the [REST API Tutorial](/tutorials/rest-api-tutorial) to learn REST by sending requests to a live API.
+2. Deepen the core concepts with [REST API Basics](/tutorials/rest-api-basics), [HTTP Basics](/tutorials/http-basics), and [HTTP Methods and Verbs](/tutorials/http-verbs).
+3. Follow the practical [How to Test REST APIs Step by Step](/tutorials/rest-api-testing) tutorial.
+4. Practise safely with [Simulation Mode](/practice-modes/simulation) and the [Simple API](/practice-modes/simpleapi).
+5. Use the [API Challenges overview](/apichallenges) to understand the challenge app, then review the [API Challenge Solutions](/apichallenges/solutions) when you want guided walkthroughs.
+6. Open the [API Challenges app](/gui/challenges) when you are ready to track progress in the browser.
+7. Download a [recommended REST API client](/tools/clients) and repeat the tutorials or challenges in a standalone tool.
+8. Explore business-rule testing with the [Buggy API](/practice-modes/shoppingcart), try [other API practice sites](/practice-sites), and learn client limits with the [API From Hell](/practice-modes/fromhell).
 
 
 ## Video Welcome

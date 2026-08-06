@@ -16,36 +16,46 @@ showads: true
   <img src="/images/hero/learning-zone-api-testing-path-1600x720.jpg" width="1600" height="720" loading="eager" decoding="async" alt="Learning Zone hero image showing the live learning page, REST fundamentals, and the API testing learning path.">
 </figure>
 
-## Tutorial Content
+## Start Here
 
-Start with the guided tutorial if you want a practical path through REST API testing:
+Start with the guided REST tutorial if you want a practical path through API testing:
 
 - [REST API Tutorial: Learn REST by Using a Live API](/tutorials/rest-api-tutorial)
 - [How to Test REST APIs](/tutorials/rest-api-testing)
 
-## Reference Content
+## Understand the References
 
 Use the reference content when you want to understand a specific concept in more detail:
 
-- [Web Applications](/tutorials/web-basics)
+- [REST API Basics](/tutorials/rest-api-basics)
 - [HTTP Basics](/tutorials/http-basics)
 - [HTTP Verbs and Methods](/tutorials/http-verbs)
-- [REST API Basics](/tutorials/rest-api-basics)
 - [API Testing Concepts and Coverage](/tutorials/testing-apis)
 - [OpenAPI](/tutorials/openapi)
 - [Swagger](/tutorials/swagger)
+- [Web Applications](/tutorials/web-basics)
 - [Summary](/tutorials/summary)
+
+## Practise with APIs
+
+Move from reading to hands-on practice with APIs designed for learning:
+
+- [Simulation Mode](/practice-modes/simulation)
+- [Simple API](/practice-modes/simpleapi)
+- [API Challenges overview](/apichallenges)
+
+## Review Challenge Solutions
+
+The challenge solutions are longer walkthroughs for specific API testing ideas:
+
+- [Read the API Challenge Solutions](/apichallenges/solutions)
+- [Try the API Challenges app](/gui/challenges)
+- [Read the API Challenges Documentation](/docs)
 
 ## Download Some Tools
 
 - [HTTP/REST Clients](/tools/clients)
 - [HTTP Proxies](/tools/proxies)
-
-## Experiment with the API Challenges
-
-- [Read the API Challenges Documentation](/docs)
-- [Try the Challenges](/gui/challenges)
-- [Read the Solutions if you get stuck](/apichallenges/solutions)
 
 ## Experiment with Other APIs
 
@@ -53,13 +63,18 @@ We have an extensive list of [Practice Sites](/practice-sites), which includes t
 
 We are in the process of creating longer tutorial guides with exercises for each of the listed sites.
 
-- [Swapi](/practice-sites/swapi)
 
-## Experiment with our HTTP Request Mirror Mode
+## Understand Your REST Client
 
 The Mirror mode is a good way to test out your tooling and see the details of your requests without using a proxy.
 
 [Learn About the Mirror Mode Here](/practice-modes/mirror)
+
+Also you want to learn the limits of your tooling and make sure it is accurately reporting your requests and the responses received. We create the API From Hell to help you stress your REST Client.
+
+Using this API we've seen clients make malformed XML in the response look like we received perfect XML and responses that cannot be rendered. You really need to know what your API Client is hiding.
+
+[Stress your REST API Client with the API From Hell](/practice-modes/fromhell)
 
 ## Experiment with our API Simulation Mode
 
@@ -81,12 +96,7 @@ Buying the book helps support this web site and application.
 
 ## Challenge Tutorials
 
-The Challenges have solution tutorials. 
-
-These are available:
-
-- bundled into the app [API Challenge Solutions](/apichallenges/solutions)
-- and on the [EvilTester.com](https://www.eviltester.com/categories/api-challenges/) blog.
+The Challenges have full solution tutorials with key learning lessons and experiments to continue learning from. 
 
 [Read the API Challenge Solutions](/apichallenges/solutions)
 

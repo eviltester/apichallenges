@@ -516,6 +516,18 @@ Different tools make different parts of the request visible, and that helps you 
 
 ---
 
+## Practise This Concept
+
+This page is about broadening your test thinking. Use the following pages when you want to move from coverage ideas into request examples and worked challenge evidence:
+
+- [REST API Tutorial](/tutorials/rest-api-tutorial) is a concise refresher on the HTTP and REST pieces you will vary during testing.
+- [How to Test REST APIs](/tutorials/rest-api-testing) gives a more procedural path for planning, executing, and recording exploratory API tests.
+- [Simulation Mode](/practice-modes/simulation) is useful when you want stable responses while practising tool use and observation.
+- [Simple API](/practice-modes/simpleapi) supports CRUD, duplicate data, validation, and state checks without auth setup.
+- [API Challenge Solutions](/apichallenges/solutions) show how individual risks become concrete checks, expected statuses, and follow-up experiments.
+
+---
+
 ## Summary
 
 API testing is about understanding a system boundary. We send requests, observe responses, and check whether the API handled the input, state, security, and business rules correctly.

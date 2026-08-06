@@ -135,7 +135,13 @@ public class ChallengerWebGUI {
                             <li id='home-root-menu'><a class="brand-link" href="/">Home</a></li>
 
                             <li id='learning-root-menu'><a href="/learning">Learning Zone</a>
-                                <!-- TODO include a sample of learning information -->
+                                <ul>
+                                    <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
+                                    <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
+                                    <li><a href="/tutorials/http-basics">HTTP Basics</a></li>
+                                    <li><a href="/tutorials/http-verbs">HTTP Methods</a></li>
+                                    <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
+                                </ul>
                             </li>
 
 

@@ -18,6 +18,12 @@ twitter_card: summary_large_image
 
 The API has a simulation mode, it uses hard coded data in responses, but tries to mimic some conditions.
 
+## Learning Path
+
+Simulation Mode is the low-risk rehearsal API. The responses are predictable, so it works well immediately after the [REST API Tutorial](/tutorials/rest-api-tutorial) when you want to focus on request structure rather than data setup.
+
+Use [HTTP Basics](/tutorials/http-basics) when you want to interpret the raw message, [HTTP Methods and Verbs](/tutorials/http-verbs) when you want to understand why a method succeeds or fails, and [How to Test REST APIs](/tutorials/rest-api-testing) when you are ready to plan coverage. For stateful CRUD practice, move on to the [Simple API](/practice-modes/simpleapi), then use the [API Challenge Solutions](/apichallenges/solutions) to compare your observations with worked examples.
+
 ## Overview of Simulation Mode
 
 {{<youtube-embed key="jlbLr2Ddo6s" title="How to use simulation mode">}}

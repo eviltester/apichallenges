@@ -444,10 +444,18 @@ You now have a practical understanding of the basics of REST APIs:
 - status codes describe the outcome
 - OpenAPI documents expected behaviour
 
-To continue, read:
+Use the reference pages when one part of the tutorial needs more depth:
 
-- [How to Test REST APIs](/tutorials/rest-api-testing)
 - [REST API Basics](/tutorials/rest-api-basics)
 - [HTTP Basics](/tutorials/http-basics)
 - [HTTP Methods and Verbs](/tutorials/http-verbs)
+- [How to Test REST APIs](/tutorials/rest-api-testing)
 - [OpenAPI](/tutorials/openapi)
+- [Swagger](/tutorials/swagger)
+
+When you want more hands-on repetition, move from the guided examples here into the practice areas:
+
+- [Simulation Mode](/practice-modes/simulation)
+- [Simple API](/practice-modes/simpleapi)
+- [API Challenges overview](/apichallenges)
+- [API Challenge Solutions](/apichallenges/solutions)

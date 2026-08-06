@@ -715,6 +715,18 @@ see [base64decode.org](https://www.base64decode.org)
 
 ---
 
+## Practise This Concept
+
+HTTP basics are easiest to learn when you keep looking at the actual request and response. These pages give you more chances to inspect the message, vary one part, and explain the result:
+
+- [REST API Tutorial](/tutorials/rest-api-tutorial) lets you see headers, status codes, JSON, XML, and auth in live examples.
+- [HTTP Methods and Verbs](/tutorials/http-verbs) narrows the focus to what changes when the method changes.
+- [How to Test REST APIs](/tutorials/rest-api-testing) shows how to turn HTTP evidence into useful test notes and assertions.
+- [Simulation Mode](/practice-modes/simulation) gives repeatable responses while you learn to read the message details.
+- [API Challenge Solutions](/apichallenges/solutions) show specific cases where a header, status code, or body format decides the outcome.
+
+---
+
 ## Summary
 
 HTTP is built around requests and responses. A client sends a request with a verb, URL, headers, and sometimes a body. The server sends back a response with a status code, headers, and sometimes a body.

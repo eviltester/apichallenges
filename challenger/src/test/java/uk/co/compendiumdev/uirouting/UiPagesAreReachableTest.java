@@ -68,6 +68,11 @@ public class UiPagesAreReachableTest {
                         "/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg"));
         Assertions.assertTrue(
                 response.body.contains("<h1>Learn REST APIs by Testing a Real API</h1>"));
+        final int restTutorialLink = response.body.indexOf("href=\"/tutorials/rest-api-tutorial\"");
+        final int appChallengesLink = response.body.indexOf("href=\"/gui/challenges\"");
+        Assertions.assertTrue(restTutorialLink > -1);
+        Assertions.assertTrue(appChallengesLink > -1);
+        Assertions.assertTrue(restTutorialLink < appChallengesLink);
         assertContainsHeaderAndFooter(response);
     }
 
@@ -807,6 +812,13 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>Learning API Testing</h1>"));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-tutorial\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-basics\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-basics\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/http-verbs\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-testing\""));
+        Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simulation\""));
+        Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/apichallenges/solutions\""));
         Assertions.assertTrue(
                 response.body.contains("/images/hero/learning-zone-api-testing-path-1600x720.jpg"));
         Assertions.assertTrue(
@@ -823,6 +835,27 @@ public class UiPagesAreReachableTest {
         final int learningToc = response.body.indexOf("<div id='toc'>");
         Assertions.assertTrue(learningTitle < learningHero);
         Assertions.assertTrue(learningHero < learningToc);
+    }
+
+    @Test
+    void topNavigationExposesLearningSpineLinks() {
+
+        final HttpResponseDetails response = http.send("/", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        final int learningRoot = response.body.indexOf("<li id='learning-root-menu'");
+        final int simulationRoot = response.body.indexOf("<li id='sim-api-root-menu'");
+        Assertions.assertTrue(learningRoot > -1);
+        Assertions.assertTrue(simulationRoot > learningRoot);
+
+        final String learningMenu = response.body.substring(learningRoot, simulationRoot);
+        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-tutorial\""));
+        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-basics\""));
+        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/http-basics\""));
+        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/http-verbs\""));
+        Assertions.assertTrue(learningMenu.contains("href=\"/tutorials/rest-api-testing\""));
+        Assertions.assertFalse(learningMenu.contains("href=\"/practice-modes/simulation\""));
+        Assertions.assertFalse(learningMenu.contains("href=\"/apichallenges/solutions\""));
     }
 
     @Test

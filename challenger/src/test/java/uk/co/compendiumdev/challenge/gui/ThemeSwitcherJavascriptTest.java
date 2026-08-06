@@ -26,6 +26,27 @@ public class ThemeSwitcherJavascriptTest {
         Assertions.assertTrue(javascript.contains("restoreSideTocOpenSections();"));
     }
 
+    @Test
+    void learningPageForcesSideTocOpenWithoutPersistingState() throws IOException {
+        String javascript = themeSwitcherJavascript();
+
+        Assertions.assertTrue(javascript.contains("function shouldForceOpenSideTocSections()"));
+        Assertions.assertTrue(javascript.contains("path === \"/learning\" || path === \"/learning/\""));
+        Assertions.assertTrue(javascript.contains("if (shouldForceOpenSideTocSections())"));
+        Assertions.assertTrue(javascript.contains("section.open = true;"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "section.addEventListener(\"toggle\", () => saveSideTocOpenSections"));
+
+        final int forceOpenBranch = javascript.indexOf("if (shouldForceOpenSideTocSections())");
+        final int returnFromForceOpenBranch = javascript.indexOf("return;", forceOpenBranch);
+        final int togglePersistenceListener =
+                javascript.indexOf("section.addEventListener(\"toggle\"", forceOpenBranch);
+        Assertions.assertTrue(forceOpenBranch > -1);
+        Assertions.assertTrue(returnFromForceOpenBranch > forceOpenBranch);
+        Assertions.assertTrue(togglePersistenceListener > returnFromForceOpenBranch);
+    }
+
     private String themeSwitcherJavascript() throws IOException {
         try (InputStream stream = getClass().getResourceAsStream("/public/js/theme-switcher.js")) {
             Assertions.assertNotNull(stream);

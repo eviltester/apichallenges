@@ -540,6 +540,18 @@ The aim is not to prove that the API is "perfectly RESTful". The aim is to under
 
 ---
 
+## Practise This Concept
+
+REST basics give you the vocabulary for judging an API design. Use these next links when you want to see those ideas under pressure from real requests:
+
+- [REST API Tutorial](/tutorials/rest-api-tutorial) gives you a guided first pass through resources, URLs, methods, headers, and representations.
+- [HTTP Methods and Verbs](/tutorials/http-verbs) helps you check whether method behaviour matches common REST expectations.
+- [How to Test REST APIs](/tutorials/rest-api-testing) turns the REST model into a sequence of practical testing activities.
+- [Simple API](/practice-modes/simpleapi) is useful for trying CRUD choices without authentication getting in the way.
+- [API Challenge Solutions](/apichallenges/solutions) show where resource naming, status codes, and method choices matter in individual walkthroughs.
+
+---
+
 ## Recommended Reading
 
 Reading:

@@ -1,19 +1,6 @@
 <ul class="side-toc-root">
-    <li><a href="/apichallenges/solutions">Challenge Solutions</a></li>
-    <li><a href="/learning">How to learn APIs</a></li>
-    <li>
-        <details class="side-toc-section" data-side-toc-section="tutorials">
-            <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Tutorials</span>
-                <span class="side-toc-section-description">Interactive tutorials on how to test APIs, send HTTP requests, and practise with the API simulator.</span>
-            </summary>
-            <ul class="side-toc-section-links">
-                <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
-                <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
-                <li><a href="/practice-modes/simulation">API Simulator Walkthrough</a></li>
-            </ul>
-        </details>
-    </li>
+    <li><a href="/learning">Learning Zone</a></li>
+    <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
     <li>
         <details class="side-toc-section" data-side-toc-section="reference-tutorials">
             <summary class="side-toc-section-summary">
@@ -21,14 +8,26 @@
                 <span class="side-toc-section-description">Reference tutorials covering HTTP basics, REST APIs, OpenAPI, Swagger, and practical API testing concepts.</span>
             </summary>
             <ul class="side-toc-section-links">
-                <li><a href="/tutorials/web-basics">Web Applications</a></li>
+                <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
                 <li><a href="/tutorials/http-basics">HTTP Basics</a></li>
                 <li><a href="/tutorials/http-verbs">HTTP Verbs</a></li>
-                <li><a href="/tutorials/rest-api-basics">REST API Basics</a></li>
                 <li><a href="/tutorials/testing-apis">API Testing Concepts</a></li>
                 <li><a href="/tutorials/openapi">OpenAPI</a></li>
                 <li><a href="/tutorials/swagger">Swagger</a></li>
+                <li><a href="/tutorials/web-basics">Web Applications</a></li>
                 <li><a href="/tutorials/summary">Summary</a></li>
+            </ul>
+        </details>
+    </li>
+    <li>
+        <details class="side-toc-section" data-side-toc-section="tutorials">
+            <summary class="side-toc-section-summary">
+                <span class="side-toc-section-title">Guided Tutorials</span>
+                <span class="side-toc-section-description">Interactive tutorials on how to test APIs, send HTTP requests, and practise with the API simulator.</span>
+            </summary>
+            <ul class="side-toc-section-links">
+                <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
+                <li><a href="/practice-modes/simulation">API Simulator Walkthrough</a></li>
             </ul>
         </details>
     </li>
@@ -48,6 +47,7 @@
             </ul>
         </details>
     </li>
+    <li><a href="/apichallenges/solutions">Challenge Solutions</a></li>
     <li>
         <details class="side-toc-section" data-side-toc-section="tools">
             <summary class="side-toc-section-summary">
