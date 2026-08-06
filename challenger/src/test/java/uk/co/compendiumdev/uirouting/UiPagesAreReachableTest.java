@@ -140,6 +140,11 @@ public class UiPagesAreReachableTest {
                         200, "Learning Utilities and Resources | API Challenges", "/learning"));
         args.add(
                 Arguments.of(
+                        200,
+                        "REST API Tutorial: Learn REST by Using a LIVE API",
+                        "/tutorials/rest-api-tutorial"));
+        args.add(
+                Arguments.of(
                         200, "Multi-User Instructions | API Challenges Guide", "/gui/multiuser"));
         args.add(Arguments.of(200, "API Challenges API Documentation | API Challenges", "/docs"));
         args.add(
@@ -804,6 +809,7 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>Learning API Testing</h1>"));
+        Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-tutorial\""));
         Assertions.assertTrue(
                 response.body.contains("/images/hero/learning-zone-api-testing-path-1600x720.jpg"));
         Assertions.assertTrue(
@@ -1610,7 +1616,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("\"name\":\"eviltester.com\""));
         Assertions.assertTrue(
                 response.body.contains("\"legalName\":\"Compendium Developments Ltd\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-04\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-06\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"BreadcrumbList\""));
         Assertions.assertFalse(response.body.contains("<aside class='next-challenge-cta'"));
         Assertions.assertTrue(response.body.contains("<p class='article-byline'>"));
@@ -1618,7 +1624,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<a href='/author/alan-richardson' rel='author'>Alan Richardson</a>"));
         Assertions.assertTrue(
-                response.body.contains("Updated <time datetime='2026-08-04'>2026-08-04</time>"));
+                response.body.contains("Updated <time datetime='2026-08-06'>2026-08-06</time>"));
         Assertions.assertTrue(response.body.contains("<aside class='author-bio-snippet'"));
         Assertions.assertTrue(response.body.contains("href='/author/alan-richardson'"));
     }
@@ -2117,6 +2123,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.eviltester.com/tutorials/swagger</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.eviltester.com/tutorials/rest-api-tutorial</loc>"));
+        Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
         Assertions.assertFalse(
                 response.body.contains(
                         "<loc>https://apichallenges.eviltester.com/tutorials/openapi-swagger</loc>"));
@@ -2151,6 +2161,9 @@ public class UiPagesAreReachableTest {
 
         response = http.send("/tutorials/swagger", "head");
         Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tutorials/rest-api-tutorial", "head");
+        Assertions.assertEquals(200, response.statusCode);
     }
 
     @Test
@@ -2164,15 +2177,23 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(
                 "/apichallenges/solutions/get/get-todos-200", response.getHeader("Location"));
+
+        response = http.send("/tutorials/rest-api-tutorial/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
     }
 
     @Test
     void headRequestsToTrailingSlashContentPagesRedirectToCanonicalPathWithoutSlash() {
 
-        final HttpResponseDetails response = http.send("/tutorials/summary/", "head");
+        HttpResponseDetails response = http.send("/tutorials/summary/", "head");
 
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/tutorials/summary", response.getHeader("Location"));
+
+        response = http.send("/tutorials/rest-api-tutorial/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
     }
 
     @Test

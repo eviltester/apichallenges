@@ -8,6 +8,7 @@
                 <span class="side-toc-section-description">Interactive tutorials on how to test APIs, send HTTP requests, and practise with the API simulator.</span>
             </summary>
             <ul class="side-toc-section-links">
+                <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
                 <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
                 <li><a href="/practice-modes/simulation">API Simulator Walkthrough</a></li>
             </ul>

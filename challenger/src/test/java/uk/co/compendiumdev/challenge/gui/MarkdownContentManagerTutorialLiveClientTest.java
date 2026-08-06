@@ -88,6 +88,49 @@ public class MarkdownContentManagerTutorialLiveClientTest {
     }
 
     @Test
+    void restApiTutorialPillarPageRendersInteractiveIntroduction() {
+
+        String html = renderContentPage("/tutorials/rest-api-tutorial");
+
+        Assertions.assertTrue(
+                html.contains(
+                        "<title>REST API Tutorial: Learn REST by Using a LIVE API</title>"));
+        Assertions.assertTrue(
+                html.contains("<h1>REST API Tutorial: Learn REST by Using a LIVE API</h1>"));
+        Assertions.assertTrue(
+                html.contains(
+                        "<meta name='description' content='Learn REST by using a live API with interactive examples"));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-tutorial\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/http-basics\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/http-verbs\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/tutorials/testing-apis\""));
+        Assertions.assertEquals(9, countOccurrences(html, "class=\"api-live-request\""));
+        Assertions.assertEquals(9, countOccurrences(html, "data-use-challenger=\"false\""));
+        Assertions.assertEquals(
+                9, countOccurrences(html, "data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertEquals(8, countOccurrences(html, "data-editable=\"false\""));
+        Assertions.assertEquals(1, countOccurrences(html, "data-editable=\"true\""));
+        Assertions.assertEquals(
+                1, countOccurrences(html, "data-editable=\"true\" data-edit-mode=\"fixed\""));
+        Assertions.assertEquals(
+                9, countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
+        Assertions.assertEquals(
+                0, countOccurrences(html, "<details class=\"sim-live-request-details\" open"));
+        Assertions.assertTrue(html.contains("data-path=\"/simpleapi/items\""));
+        Assertions.assertTrue(html.contains("data-path=\"/simpleapi/docs/openapi.json\""));
+        Assertions.assertTrue(
+                html.contains("data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\""));
+        Assertions.assertTrue(html.contains("{{randomSimpleApiIsbn}}"));
+        Assertions.assertTrue(html.contains("numberinstock&quot;:&quot;3"));
+
+        String learningHtml = renderContentPage("/learning");
+        Assertions.assertTrue(learningHtml.contains("href=\"/tutorials/rest-api-tutorial\""));
+    }
+
+    @Test
     void onlineClientContentPagesRenderToolsAndSidebarLinks() {
 
         String html = renderContentPage("/tools/online-clients/basic-client");
