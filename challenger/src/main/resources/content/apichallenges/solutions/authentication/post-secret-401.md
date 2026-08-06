@@ -1,14 +1,21 @@
 ---
 date:  2021-07-24T08:15:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - authentication failed 401
 seo_title: Solution: authentication failed 401 | API Challenges
 description: How to solve API challenge - authentication failed with username and password.
 seo_description: Use this walkthrough to solve authentication failed 401 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authentication/post-secret-201
+concepts_learned: HTTP POST||401 Unauthorized||Basic Auth||authentication
+concept_summary: Use this challenge to learn how invalid Basic Auth returns an authentication failure.
+concept_reference_label: REST API Basics
+concept_reference_url: /tutorials/rest-api-basics
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 401
 showads: true
 ---
+
 
 # How to complete the authentication failed challenge
 
@@ -102,5 +109,13 @@ Although we add an "Authorization" header, really we are trying to "authenticate
 
 [Patreon ad free version](https://www.patreon.com/posts/54057993)
 
+## Lessons Learned
 
+- `401 Unauthorized` on `/secret/token` means authentication failed before any authorization token exists.
+- Bad or missing `Basic Auth` should not return an `X-AUTH-TOKEN`.
+- Authentication failures are useful for checking `WWW-Authenticate` or challenge headers if provided.
 
+## Suggested Experiments
+
+- Send no `Authorization` header, then send an incorrectly encoded `Basic` value, and compare the error responses.
+- Correct only the password while keeping the same request shape to confirm the failure was credential-specific.

@@ -2,12 +2,19 @@
 title: API Challenges Solution For - GET Todos (200)
 seo_title: Solution: GET Todos (200) Guide | API Challenges
 description: How to solve the API challenge and GET all the Todos
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve GET Todos (200) with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/get/get-todo-404
+concepts_learned: HTTP GET||200 OK||safe method||collection resource
+concept_summary: Use this challenge to learn how GET reads a collection resource without changing server state.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos 200`.
 
@@ -82,3 +89,14 @@ How to solve the API challenge and issue a GET request to return all the Todos i
 {{<youtube-embed key="OpisB0UZq0c" title="Solution video for GET all TODOs">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/41107610)
+
+## Lessons Learned
+
+- `GET /todos` is the baseline collection read used before most state-changing challenges.
+- Safe reads let you inspect current state without creating or changing todos.
+- A collection response is the easiest place to learn the default todo representation.
+
+## Suggested Experiments
+
+- Capture the ids returned by `GET /todos`, create a new todo, then call `GET /todos` again to see the collection change.
+- Add `?doneStatus=false` and compare the filtered collection with the full baseline.

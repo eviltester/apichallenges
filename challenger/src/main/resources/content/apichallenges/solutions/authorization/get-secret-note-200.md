@@ -1,14 +1,21 @@
 ---
 date:  2021-07-25T08:45:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET authorized secret note 200
 seo_title: Solution: GET authorized secret note 20 | API Challenges
 description: How to solve GET /secret/note (200) - authorized to access secret note
 seo_description: Use this walkthrough to solve GET authorized secret note with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-200
+concepts_learned: HTTP GET||200 OK||authorization||X-AUTH-TOKEN
+concept_summary: Use this challenge to learn how protected resources respond when authorization uses X-AUTH-TOKEN.
+concept_reference_label: REST API Basics
+concept_reference_url: /tutorials/rest-api-basics
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the GET Authorized secret note challenge
 
@@ -93,4 +100,13 @@ Example body of the response:
 
 [Patreon ad free version](https://www.patreon.com/posts/54089625)
 
+## Lessons Learned
 
+- `GET /secret/note` uses a valid `X-AUTH-TOKEN` to read protected state.
+- The custom token header proves permission to read, while `X-CHALLENGER` identifies the session data.
+- A `200 OK` protected read should return note content without modifying it.
+
+## Suggested Experiments
+
+- Read the note, update it with a valid `POST`, then read it again to prove the token can access changed state.
+- Move the same token into `Authorization: Bearer` and compare which authorization challenge is completed.

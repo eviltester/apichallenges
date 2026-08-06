@@ -1,14 +1,21 @@
 ---
 date:  2021-07-24T08:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - authentication passed 201
 seo_title: Solution: authentication passed 201 | API Challenges
 description: How to solve POST /secret/token (201) - authenticate with username and password for basic auth.
 seo_description: Use this walkthrough to solve authentication passed 201 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-403
+concepts_learned: HTTP POST||201 Created||Basic Auth||authentication
+concept_summary: Use this challenge to learn how valid Basic Auth returns an auth token.
+concept_reference_label: REST API Basics
+concept_reference_url: /tutorials/rest-api-basics
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with the username and password required by the challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 201||Capture the returned X-AUTH-TOKEN for later authorization challenges
 showads: true
 ---
+
 
 # How to complete the basic auth authentication challenge
 
@@ -99,5 +106,13 @@ The command to encode a string as base64 is `btoa`
 
 [Patreon ad free version](https://www.patreon.com/posts/54058810)
 
+## Lessons Learned
 
+- `Basic Auth` sends username and password as `Base64` encoded credentials in the `Authorization` header.
+- A successful `POST /secret/token` creates a token for later protected requests, not a todo resource.
+- The returned `X-AUTH-TOKEN` is tied to the current `X-CHALLENGER` session.
 
+## Suggested Experiments
+
+- Decode `YWRtaW46cGFzc3dvcmQ=` locally and confirm it represents the configured username and password pair.
+- Authenticate twice in the same session and compare whether the token changes or remains stable.

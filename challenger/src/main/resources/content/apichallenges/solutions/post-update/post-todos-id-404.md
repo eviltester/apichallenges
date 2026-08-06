@@ -1,14 +1,21 @@
 ---
 date:  2024-01-01T11:26:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos/id 404
 seo_title: Solution: POST todos/id 404 Guide | API Challenges
 description: How to solve API challenge POST todos/id 404 to try to update a todo which does not exist.
 seo_description: Use this walkthrough to solve POST todos/id 404 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/put-update/put-todos-id-200-update-full
+concepts_learned: HTTP POST||404 Not Found||resource URL||missing resource
+concept_summary: Use this challenge to learn how this API uses POST to update an existing todo resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a POST request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 404
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos/id (404)`
 
@@ -93,7 +100,13 @@ How to use a POST request to try to update a todo item in the application, but t
 | 	}
 ~~~~~~~~
 
+## Lessons Learned
 
+- `POST /todos/{id}` to a missing `id` shows that update-style `POST` still depends on an existing target.
+- `404 Not Found` prevents the request from becoming an accidental create.
+- Missing-resource update tests should use a clearly absent `id` to avoid flaky results.
 
+## Suggested Experiments
 
-
+- Try the same payload against an existing `id` and a missing `id`, then compare `200 OK` with `404 Not Found`.
+- Create a todo after the failed update and confirm the failed `POST` did not reserve or create that `id`.

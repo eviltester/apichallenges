@@ -1,14 +1,21 @@
 ---
 date:  2021-05-29T09:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos any 200
 seo_title: Solution: GET todos any 200 Guide | API Challenges
 description: How to solve API challenge GET todos any 200 to accept the todos in default format.
 seo_description: Use this walkthrough to solve GET todos any 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-200-xml-pref
+concepts_learned: HTTP GET||200 OK||Accept header||content negotiation
+concept_summary: Use this challenge to learn how the Accept header changes the response format for default JSON.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # GET all the todos in default format
 
@@ -20,7 +27,7 @@ How to complete the challenge `GET /todos ANY (200)` to successfully GET all the
 
 - `GET` request will receive a response with all the todo items
     - e.g. `GET /todos` to get all the todo items
-- `200` is a success code, in this case it means the end point exists and the `todo items were returned
+- `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `Accept` means that an `Accept` header was added to specify that the todos should be returned in **ANY** format i.e. the default from the server
 - add the `X-CHALLENGER` header to track progress
 
@@ -94,6 +101,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/51830126)
 
+## Lessons Learned
 
+- `*/*` in `Accept` says the client has no format preference, so the server default becomes part of the behavior under test.
+- A `200 OK` response with wildcard negotiation still needs a `Content-Type` check because the requested format was deliberately broad.
+- This challenge is useful for finding the API fallback representation before writing stricter `Accept` tests.
 
+## Suggested Experiments
 
+- Send `Accept: */*`, then remove the `Accept` header entirely and compare the selected `Content-Type`.
+- Send `Accept: image/png` and confirm the API reports negotiation failure instead of silently returning `JSON`.

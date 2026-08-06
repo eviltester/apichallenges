@@ -17,8 +17,7 @@ public class ThemeSwitcherJavascriptTest {
                         "const sideTocOpenSectionsKey = \"apichallenges-side-toc-open-sections\""));
         Assertions.assertTrue(javascript.contains("window.sessionStorage.getItem"));
         Assertions.assertTrue(javascript.contains("window.sessionStorage.setItem"));
-        Assertions.assertTrue(
-                javascript.contains(".side-toc-section[data-side-toc-section]"));
+        Assertions.assertTrue(javascript.contains(".side-toc-section[data-side-toc-section]"));
         Assertions.assertTrue(javascript.contains("section.dataset.sideTocSection"));
         Assertions.assertTrue(javascript.contains("JSON.stringify(openSections)"));
         Assertions.assertTrue(
@@ -28,8 +27,7 @@ public class ThemeSwitcherJavascriptTest {
     }
 
     private String themeSwitcherJavascript() throws IOException {
-        try (InputStream stream =
-                getClass().getResourceAsStream("/public/js/theme-switcher.js")) {
+        try (InputStream stream = getClass().getResourceAsStream("/public/js/theme-switcher.js")) {
             Assertions.assertNotNull(stream);
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }

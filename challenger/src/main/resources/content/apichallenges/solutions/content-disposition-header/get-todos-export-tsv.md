@@ -1,14 +1,21 @@
 ---
 date:  2026-07-30T22:17:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos export tab-delimited download
 seo_title: Solution: GET todos export tab-delimited download | API Challenges
 description: How to solve API challenge GET todos export tab-delimited download by using format=tsv and checking the Content-Disposition response header.
 seo_description: Export todos as tab-separated values, verify the response is a file attachment, and check the Content-Disposition filename todos.tsv to complete the challenge.
 next_challenge: /apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200
+concepts_learned: HTTP GET||200 OK||Content-Disposition||download response
+concept_summary: Use this challenge to learn how response headers describe a TSV file download.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: API Testing Concepts and Coverage
+concept_reference_url_2: /tutorials/testing-apis
 schema_howto_steps: Create a GET request to /todos/export?format=tsv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/tab-separated-values||Check the Content-Disposition header is attachment with filename todos.tsv
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos/export (200) tab-delimited download`
 
@@ -79,3 +86,14 @@ Open [todos.tsv](/todos/export?format=tsv) in your browser to request the tab-de
 Other `format` parameter values to try include [json](/todos/export?format=json), [xml](/todos/export?format=xml), [csv](/todos/export?format=csv), [text](/todos/export?format=text), [html](/todos/export?format=html), [ndjson](/todos/export?format=ndjson), [jsonl](/todos/export?format=jsonl), [json-seq](/todos/export?format=json-seq), and [tab-delimited](/todos/export?format=tab-delimited). The text aliases `txt` and `plain`, JSON sequence alias `jsonseq`, and tab aliases `tab`, `tabs`, and `tab-separated` are also supported.
 
 Repeat the request with `/todos/export?format=tab-delimited`. It should still return `Content-Type: text/tab-separated-values` and `Content-Disposition: attachment; filename="todos.tsv"`.
+
+## Lessons Learned
+
+- `text/tab-separated-values` is useful when commas in data would make `CSV` assertions noisy.
+- A `TSV` export should use tab delimiters while preserving the same todo fields.
+- Header validation matters because downloaded text formats can look similar at a glance.
+
+## Suggested Experiments
+
+- Inspect the raw payload and confirm fields are separated by tab characters rather than commas.
+- Import the `TSV` into a spreadsheet and compare column alignment with the `CSV` export.

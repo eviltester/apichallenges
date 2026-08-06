@@ -2,12 +2,19 @@
 title: API Challenges Solution For - PATCH todos/id 200 partial
 seo_title: Solution: PATCH todos/id 200 Partial JSON | API Challenges
 description: How to solve API challenge PATCH todos/id 200 using a partial JSON update.
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve PATCH todos/id 200 partial JSON updates with request setup, headers, body content, and expected status code.
 next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-merge-patch
+concepts_learned: HTTP PATCH||200 OK||partial update||partial update
+concept_summary: Use this challenge to learn how PATCH applies a partial update to an existing resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json||Send only the todo fields to change and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `PATCH /todos/id (200) partial`
 
@@ -82,3 +89,14 @@ Returned body:
   "description": "existing description"
 }
 ```
+
+## Lessons Learned
+
+- This API accepts `PATCH` with ordinary `application/json` as an API-specific partial update style.
+- Unlike `PUT`, a `PATCH` body can focus on the fields being changed.
+- Partial update tests should prove omitted fields remain unchanged.
+
+## Suggested Experiments
+
+- Change only `doneStatus`, then fetch the todo and confirm `title` and `description` were preserved.
+- Send an empty `JSON` object and observe whether the API treats it as no-op or invalid.

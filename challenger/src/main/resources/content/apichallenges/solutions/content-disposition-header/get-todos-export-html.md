@@ -1,14 +1,21 @@
 ---
 date:  2026-07-30T22:16:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos export HTML download
 seo_title: Solution: GET todos export HTML download | API Challenges
 description: How to solve API challenge GET todos export HTML download by using format=html and checking the Content-Disposition response header.
 seo_description: Export todos as HTML, verify the response is a file attachment, and check the Content-Disposition filename todos.html to complete the challenge.
 next_challenge: /apichallenges/solutions/content-disposition-header/get-todos-export-tsv
+concepts_learned: HTTP GET||200 OK||Content-Disposition||download response
+concept_summary: Use this challenge to learn how response headers describe a HTML file download.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: API Testing Concepts and Coverage
+concept_reference_url_2: /tutorials/testing-apis
 schema_howto_steps: Create a GET request to /todos/export?format=html||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/html||Check the Content-Disposition header is attachment with filename todos.html
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos/export (200) HTML download`
 
@@ -77,3 +84,14 @@ Example Response body:
 Open [todos.html](/todos/export?format=html) in a browser or save the response body as `todos.html`. The same response can be inspected as data or treated as a downloadable HTML file because of the response headers.
 
 Other `format` parameter values to try include [json](/todos/export?format=json), [xml](/todos/export?format=xml), [csv](/todos/export?format=csv), [text](/todos/export?format=text), [ndjson](/todos/export?format=ndjson), [jsonl](/todos/export?format=jsonl), [json-seq](/todos/export?format=json-seq), [tsv](/todos/export?format=tsv), and [tab-delimited](/todos/export?format=tab-delimited). The text aliases `txt` and `plain`, JSON sequence alias `jsonseq`, and tab aliases `tab`, `tabs`, and `tab-separated` are also supported.
+
+## Lessons Learned
+
+- `text/html` export is presentation-oriented, not a data-interchange format like `JSON`.
+- Download responses may be safe `GET` requests even when browsers treat them as files.
+- `HTML` export tests should check markup structure as well as the download filename.
+
+## Suggested Experiments
+
+- Open the exported `HTML` payload and verify it contains a table or list of todos.
+- Compare the `HTML` export with `CSV` and note which one is easier to assert automatically.

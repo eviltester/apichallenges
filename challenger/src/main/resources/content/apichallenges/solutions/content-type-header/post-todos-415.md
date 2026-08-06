@@ -1,14 +1,21 @@
 ---
 date:  2021-07-17T11:15:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos (415)
 seo_title: Solution: POST todos (415) Guide | API Challenges
 description: How to solve API challenge POST todos 415. Failing to creating a todo due to unsupported content format.
 seo_description: Use this walkthrough to solve POST todos (415) with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/content-disposition-header/get-todos-export-csv
+concepts_learned: HTTP POST||415 Unsupported Media Type||Content-Type header||media type validation
+concept_summary: Use this challenge to learn how APIs reject unsupported request body media types.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: API Testing Concepts and Coverage
+concept_reference_url_2: /tutorials/testing-apis
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 415
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos (415)`
 
@@ -100,5 +107,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53795763)
 
+## Lessons Learned
 
+- `415 Unsupported Media Type` means the server does not accept the declared request-body format.
+- `Content-Type` is about what you send, not what you want back.
+- A correct body can still fail if its media type header tells the server to parse it incorrectly.
 
+## Suggested Experiments
+
+- Send a valid `JSON` body with `Content-Type: application/xml` and compare this error with a malformed `JSON` error.
+- Remove `Content-Type` completely and see whether the API guesses, rejects, or applies a default.

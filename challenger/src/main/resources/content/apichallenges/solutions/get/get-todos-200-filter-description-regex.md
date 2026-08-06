@@ -1,14 +1,21 @@
 ---
 date: 2026-07-31T09:00:00Z
-lastmod: 2026-07-31
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 filter description regex
 seo_title: "Solution: GET todos filter description regex | API Challenges"
 description: How to solve API challenge GET todos 200 filter description regex using a regular expression description filter.
 seo_description: Use this walkthrough to solve GET todos filter description regex with a regular expression query and expected status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-filter-description-wildcard
+concepts_learned: HTTP GET||200 OK||query parameters||filtering
+concept_summary: Use this challenge to learn how query parameters filter a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add a description regex filter and verify status 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? filter description regex`
 
@@ -78,3 +85,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- The `description~=` query uses a regular expression match, which is more expressive than exact filtering.
+- Regex filters need fixture data with predictable text so the assertion is meaningful.
+- Reserved characters in regex query values may be encoded by clients before transmission.
+
+## Suggested Experiments
+
+- Change `description~=.*fixture.*` to anchor the match, such as `^created`, and compare returned todos.
+- Add a todo whose description nearly matches and confirm the regex includes or excludes it as expected.

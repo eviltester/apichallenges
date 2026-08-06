@@ -1,14 +1,21 @@
 ---
 date:  2025-01-01T12:53:00Z
-lastmod: 2026-08-01
+lastmod: 2026-08-06
 title: API Challenges Solution For - PUT todos/id 200 full update
 seo_title: Solution: PUT todos/id 200 partial | API Challenges
 description: How to solve API challenge PUT todos/id 200 to update a todo in the application with a full payload.
 seo_description: Learn how partial PUT /todos/{id} updates behave, which fields can be omitted, and how to verify a 200 response with expected changes.
 next_challenge: /apichallenges/solutions/put-update/put-todos-200-body-id
+concepts_learned: HTTP PUT||200 OK||idempotent method||partial update
+concept_summary: Use this challenge to learn how PUT handles partial update for todo resources.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `PUT /todos/id (200) partial update`
 
@@ -121,3 +128,14 @@ Returned body:
   "description": ""
 }
 ```
+
+## Lessons Learned
+
+- This API accepts a partial-looking `PUT`, which is worth testing because many APIs treat `PUT` as full replacement.
+- Required fields still matter even when the payload is described as partial.
+- Partial `PUT` behavior should be documented so clients do not assume standard merge semantics.
+
+## Suggested Experiments
+
+- Send a `PUT` body with only `title` plus required fields and inspect what happens to `description`.
+- Compare this partial `PUT` with `PATCH /todos/{id}` using the same changed field.

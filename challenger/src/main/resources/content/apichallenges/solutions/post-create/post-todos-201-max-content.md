@@ -1,14 +1,21 @@
 ---
 date:  2024-12-31T14:04:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos 201 - max out content
 seo_title: Solution POST todos 201 max out content | API Challenges
 description: How to solve API challenge POST todos 201 max out content by sending request details such that all fields are maximum length.
 seo_description: Use this walkthrough to solve POST todos 201 - max out with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/post-create/post-todos-413-content-too-long
+concepts_learned: HTTP POST||201 Created||CRUD create||boundary values
+concept_summary: Use this challenge to learn how POST handles valid maximum-length field values.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos (201) max out content`
 
@@ -102,8 +109,13 @@ Returned body:
 }
 ```
 
+## Lessons Learned
 
+- Boundary-value creates should prove maximum allowed `title` and `description` lengths are accepted.
+- A `201 Created` at the exact limit is different from a failure just beyond the limit.
+- Max-length tests are easier to debug when the generated strings make their length obvious.
 
+## Suggested Experiments
 
-
-
+- Send exactly `50` title characters and exactly `200` description characters, then increase each by one separately.
+- Use a counterstring payload so the error position is obvious if the API reports a length problem.

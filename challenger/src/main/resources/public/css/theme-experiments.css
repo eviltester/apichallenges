@@ -581,6 +581,7 @@ html[data-theme] .standoutblock,
 html[data-theme] .headertextblock,
 html[data-theme] aside.author-bio-snippet,
 html[data-theme] aside.next-challenge-cta,
+html[data-theme] aside.concept-learned,
 html[data-theme] .sim-live-widget {
     background: var(--surface-soft);
     border: 1px solid var(--border);
@@ -593,6 +594,26 @@ html[data-theme] .sim-live-widget {
 
 html[data-theme] .headertextblock {
     width: auto;
+}
+
+html[data-theme] aside.concept-learned {
+    border-left: 4px solid var(--secondary-accent);
+}
+
+html[data-theme] .concept-learned-title {
+    color: var(--accent-strong);
+}
+
+html[data-theme] .concept-learned-summary,
+html[data-theme] .concept-learned-links {
+    color: var(--text);
+}
+
+html[data-theme] .concept-learned-tags li {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 4px);
+    color: var(--text);
 }
 
 html[data-theme] a.next-challenge-cta-link,

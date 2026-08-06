@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 filter and sort
 seo_title: "Solution: GET todos 200 filter and sort | API Challenges"
 description: How to solve API challenge GET todos 200 filter and sort using a query filter with the _sortBy query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 filter and sort with a query filter, _sortBy, and expected status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-pagination-limit
+concepts_learned: HTTP GET||200 OK||query parameters||filtering and sorting
+concept_summary: Use this challenge to learn how filtering and sorting query parameters combine on a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add a todo query filter and _sortBy to sort the filtered results||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? filter and _sortBy`
 
@@ -76,3 +83,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- Combining a filter with `_sortBy` tests operation order: narrow the set, then order the survivors.
+- Multi-parameter queries need assertions for both inclusion and ordering.
+- Sorting a filtered subset can hide missed data if you only inspect the first item.
+
+## Suggested Experiments
+
+- Sort the filtered results by `-title` and verify every returned todo still matches `doneStatus`.
+- Add one done and one not-done fixture with similar titles to prove sorting does not override filtering.

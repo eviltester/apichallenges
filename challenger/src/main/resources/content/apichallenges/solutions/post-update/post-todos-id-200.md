@@ -1,14 +1,21 @@
 ---
 date:  2021-03-07T09:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos/id 200
 seo_title: Solution: POST todos/id 200 Guide | API Challenges
 description: How to solve API challenge POST todos/id 200 to update a todo in the application.
 seo_description: Use this walkthrough to solve POST todos/id 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/post-update/post-todos-id-404
+concepts_learned: HTTP POST||200 OK||resource URL||resource update
+concept_summary: Use this challenge to learn how this API uses POST to update an existing todo resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a POST request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos/id (200)`
 
@@ -115,5 +122,13 @@ Returned body:
 
 [Patreon ad free version with transcript](https://www.patreon.com/posts/48448220)
 
+## Lessons Learned
 
+- This API supports `POST /todos/{id}` as an update action, even though many APIs reserve `POST` for create.
+- Updating by path `id` requires verifying the existing resource changed rather than a new resource appearing.
+- A `200 OK` update response should be followed by a read of the same `id`.
 
+## Suggested Experiments
+
+- Update only the `title` through `POST /todos/{id}` and then verify the `id` did not change.
+- Compare this `POST` update with `PUT /todos/{id}` to see which fields must be supplied.

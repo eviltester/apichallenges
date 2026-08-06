@@ -1,14 +1,21 @@
 ---
 date:  2025-01-01T12:53:00Z
-lastmod: 2026-08-01
+lastmod: 2026-08-06
 title: API Challenges Solution For - PUT todos/id 200 full update
 seo_title: Solution: PUT todos/id 200 full update | API Challenges
 description: How to solve API challenge PUT todos/id 200 to update a todo in the application with a full payload.
 seo_description: Master PUT /todos/{id} full updates by sending all required fields, setting correct headers, and validating the 200 response payload.
 next_challenge: /apichallenges/solutions/put-update/put-todos-id-200-update-partial
+concepts_learned: HTTP PUT||200 OK||idempotent method||full update
+concept_summary: Use this challenge to learn how PUT handles full update for todo resources.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `PUT /todos/id (200) full update`
 
@@ -121,5 +128,13 @@ Returned body:
 }
 ```
 
+## Lessons Learned
 
+- Full `PUT` update asks the client to send a complete todo representation.
+- Required fields should be preserved or supplied intentionally because replacement semantics can overwrite omissions.
+- The response should be compared with the pre-update resource to confirm every intended field changed.
 
+## Suggested Experiments
+
+- Change all mutable fields in one `PUT`, then fetch the todo to verify the full replacement.
+- Omit an optional field from the full update and compare whether the API clears, defaults, or preserves it.

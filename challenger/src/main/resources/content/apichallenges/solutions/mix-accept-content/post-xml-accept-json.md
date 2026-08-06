@@ -1,14 +1,21 @@
 ---
 date:  2021-07-17T11:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST XML accept JSON
 seo_title: Solution: POST XML accept JSON | API Challenges
 description: How to solve API challenge POST /todos XML to JSON. Creating a todo with XML and receiving response in JSON.
 seo_description: Use this walkthrough to solve POST XML accept JSON with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/mix-accept-content/post-json-accept-xml
+concepts_learned: HTTP POST||Content-Type header||Accept header||content negotiation
+concept_summary: Use this challenge to learn how Content-Type and Accept can describe different formats: XML request body and JSON response.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid XML payload that matches the field and content constraints
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos XML to JSON`
 
@@ -109,6 +116,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53796838)
 
+## Lessons Learned
 
+- `Content-Type: application/xml` with `Accept: application/json` exercises the reverse mixed-format path.
+- The API should parse `XML` fields into the same todo model returned as `JSON`.
+- This challenge is a reminder to assert stored data, not just chosen serialization.
 
+## Suggested Experiments
 
+- Create with `XML`, request `JSON`, then fetch the new todo as `XML` and compare field values.
+- Change the `XML` element order and see whether parsing depends on order or names.

@@ -1,14 +1,21 @@
 ---
 date:  2026-07-30T22:15:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos export CSV download
 seo_title: Solution: GET todos export CSV download | API Challenges
 description: How to solve API challenge GET todos export CSV download by using the format query parameter and checking the Content-Disposition response header.
 seo_description: Export todos as CSV, verify the response is a file attachment, and check the Content-Disposition filename todos.csv to complete the challenge.
 next_challenge: /apichallenges/solutions/content-disposition-header/get-todos-export-html
+concepts_learned: HTTP GET||200 OK||Content-Disposition||download response
+concept_summary: Use this challenge to learn how response headers describe a CSV file download.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: API Testing Concepts and Coverage
+concept_reference_url_2: /tutorials/testing-apis
 schema_howto_steps: Create a GET request to /todos/export?format=csv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/csv||Check the Content-Disposition header is attachment with filename todos.csv
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos/export (200) CSV download`
 
@@ -78,3 +85,14 @@ Open [todos.csv](/todos/export?format=csv) in your browser to request the CSV ex
 Other `format` parameter values to try include [json](/todos/export?format=json), [xml](/todos/export?format=xml), [text](/todos/export?format=text), [html](/todos/export?format=html), [ndjson](/todos/export?format=ndjson), [jsonl](/todos/export?format=jsonl), [json-seq](/todos/export?format=json-seq), [tsv](/todos/export?format=tsv), and [tab-delimited](/todos/export?format=tab-delimited). The text aliases `txt` and `plain`, JSON sequence alias `jsonseq`, and tab aliases `tab`, `tabs`, and `tab-separated` are also supported.
 
 Try changing the request `Accept` header to `application/json` while keeping `format=csv`. The export endpoint should still return CSV because the format is selected by the query parameter.
+
+## Lessons Learned
+
+- `Content-Disposition` turns a normal API response into a download-oriented response.
+- `text/csv` should produce comma-separated rows that spreadsheet tools can import.
+- Export endpoints need header checks and payload checks because the status alone says little about file usability.
+
+## Suggested Experiments
+
+- Save the `CSV` response and confirm the filename extension matches the `Content-Disposition` value.
+- Compare a field containing commas or quotes, if available, to see how the `CSV` serializer escapes it.

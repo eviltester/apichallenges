@@ -58,7 +58,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<meta property='og:type' content='website'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com'>"));
+                        "<meta property='og:url' content='https://apichallenges.com'>"));
         Assertions.assertTrue(response.body.contains("application/ld+json"));
         Assertions.assertTrue(response.body.contains("\"@type\":\"Organization\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"WebSite\""));
@@ -521,8 +521,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
         Assertions.assertTrue(
                 response.body.indexOf("\"url\" : \"http://localhost:4567\"")
-                        < response.body.indexOf(
-                                "\"url\" : \"https://apichallenges.eviltester.com\""));
+                        < response.body.indexOf("\"url\" : \"https://apichallenges.com\""));
     }
 
     @Test
@@ -531,7 +530,7 @@ public class UiPagesAreReachableTest {
         final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
         proxyHttp.clearHeaders();
         proxyHttp.setHeader("X-Forwarded-Proto", "https");
-        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.eviltester.com");
+        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.com");
 
         final HttpResponseDetails response = proxyHttp.send("/docs/openapi.json", "get");
 
@@ -540,7 +539,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
         assertOpenApiVersion(response.body, "3.1.0");
         Assertions.assertTrue(
-                response.body.indexOf("\"url\" : \"https://apichallenges.eviltester.com\"")
+                response.body.indexOf("\"url\" : \"https://apichallenges.com\"")
                         < response.body.indexOf("\"url\" : \"http://localhost:4567\""));
     }
 
@@ -791,15 +790,13 @@ public class UiPagesAreReachableTest {
                 "Accept",
                 "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
         proxyHttp.setHeader("X-Forwarded-Proto", "https");
-        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.eviltester.com");
+        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.com");
 
         final HttpResponseDetails response = proxyHttp.send("/practice-modes/simulation", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(
-                response.body.contains("GET https://apichallenges.eviltester.com/sim/entities"));
-        Assertions.assertFalse(
-                response.body.contains("GET http://apichallenges.eviltester.com/sim/entities"));
+        Assertions.assertTrue(response.body.contains("GET https://apichallenges.com/sim/entities"));
+        Assertions.assertFalse(response.body.contains("GET http://apichallenges.com/sim/entities"));
     }
 
     @Test
@@ -816,10 +813,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains("content-hero-figure learning-zone-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/learning-zone-api-testing-path-1600x720.jpg'>"));
         final int learningTitle = response.body.indexOf("<h1>Learning API Testing</h1>");
         final int learningHero =
                 response.body.indexOf("content-hero-figure learning-zone-hero-image");
@@ -842,10 +839,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains("content-hero-figure api-challenges-api-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/api-challenges-api-session-progress-1600x720.jpg'>"));
         final int apiChallengesTitle = response.body.indexOf("<h1>API Challenges</h1>");
         final int apiChallengesHero =
                 response.body.indexOf("content-hero-figure api-challenges-api-hero-image");
@@ -866,10 +863,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("content-hero-figure simple-api-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/simple-api-no-auth-practice-1600x720.jpg'>"));
         final int simpleApiTitle = response.body.indexOf("<h1>Simple API</h1>");
         final int simpleApiHero =
                 response.body.indexOf("content-hero-figure simple-api-hero-image");
@@ -891,10 +888,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("content-hero-figure simulator-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
         final int simulationTitle = response.body.indexOf("<h1>Simulation Mode</h1>");
         final int simulationHero =
                 response.body.indexOf("content-hero-figure simulator-hero-image");
@@ -945,10 +942,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("content-hero-figure mirror-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/http-mirror-client-evidence-1600x720.jpg'>"));
         final int mirrorTitle = response.body.indexOf("<h1>Mirror Mode</h1>");
         final int mirrorHero = response.body.indexOf("content-hero-figure mirror-hero-image");
         final int mirrorToc = response.body.indexOf("<div id='toc'>");
@@ -968,10 +965,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("content-hero-figure buggy-api-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/buggy-api-shopping-cart-1600x720.jpg'>"));
         final int buggyApiTitle = response.body.indexOf("<h1>Buggy API</h1>");
         final int buggyApiHero = response.body.indexOf("content-hero-figure buggy-api-hero-image");
         final int buggyApiToc = response.body.indexOf("<div id='toc'>");
@@ -991,10 +988,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("content-hero-figure fromhell-hero-image"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/api-from-hell-burning-1200x630.jpg'>"));
         final int fromHellTitle = response.body.indexOf("<h1>API From Hell</h1>");
         final int fromHellHero = response.body.indexOf("content-hero-figure fromhell-hero-image");
         final int fromHellToc = response.body.indexOf("<div id='toc'>");
@@ -1246,8 +1243,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("Disallow: /mirror/raw"));
         Assertions.assertTrue(response.body.contains("Disallow: /mirror/request"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Sitemap: https://apichallenges.eviltester.com/sitemap.xml"));
+                response.body.contains("Sitemap: https://apichallenges.com/sitemap.xml"));
     }
 
     @Test
@@ -1432,13 +1428,13 @@ public class UiPagesAreReachableTest {
                 docsResponse.body.contains("<meta name='robots' content='index,follow'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com/docs'>"));
+                        "<meta property='og:url' content='https://apichallenges.com/docs'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
                         "<meta name='twitter:title' content='API Challenges API Documentation | API Challenges'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
-                        "<link rel='canonical' href='https://apichallenges.eviltester.com/docs'>"));
+                        "<link rel='canonical' href='https://apichallenges.com/docs'>"));
 
         final HttpResponseDetails simpleApiDocsResponse = http.send("/simpleapi/docs", "get");
         Assertions.assertEquals(200, simpleApiDocsResponse.statusCode);
@@ -1451,7 +1447,7 @@ public class UiPagesAreReachableTest {
                 simpleApiDocsResponse.body.contains("<meta name='robots' content='index,follow'>"));
         Assertions.assertTrue(
                 simpleApiDocsResponse.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com/simpleapi/docs'>"));
+                        "<meta property='og:url' content='https://apichallenges.com/simpleapi/docs'>"));
 
         final HttpResponseDetails shopDocsResponse = http.send("/shop/docs", "get");
         Assertions.assertEquals(200, shopDocsResponse.statusCode);
@@ -1464,7 +1460,7 @@ public class UiPagesAreReachableTest {
                 shopDocsResponse.body.contains("<meta name='robots' content='index,follow'>"));
         Assertions.assertTrue(
                 shopDocsResponse.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com/shop/docs'>"));
+                        "<meta property='og:url' content='https://apichallenges.com/shop/docs'>"));
 
         final HttpResponseDetails simDocsResponse = http.send("/sim/docs", "get");
         Assertions.assertEquals(200, simDocsResponse.statusCode);
@@ -1508,10 +1504,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<meta property='og:type' content='article'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com/seo-metadata-test-page'>"));
+                        "<meta property='og:url' content='https://apichallenges.com/seo-metadata-test-page'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/social/apichallenges-og-1200x630.png'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/social/apichallenges-og-1200x630.png'>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<meta property='og:image:alt' content='OG preview image for API Challenges metadata tests'>"));
@@ -1521,14 +1517,14 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<meta name='twitter:site' content='@apichallenges'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/social/apichallenges-og-1200x630.png'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/social/apichallenges-og-1200x630.png'>"));
         Assertions.assertTrue(response.body.contains("\"@type\":\"Article\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "\"description\":\"Search snippet with Alan's \\\"special\\\" chars & context.\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "\"url\":\"https://apichallenges.eviltester.com/seo-metadata-test-page\""));
+                        "\"url\":\"https://apichallenges.com/seo-metadata-test-page\""));
         Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"HowTo\""));
         Assertions.assertTrue(response.body.contains("\"name\":\"Open the metadata test page\""));
@@ -1582,15 +1578,15 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<meta property='og:type' content='website'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.eviltester.com'>"));
+                        "<meta property='og:url' content='https://apichallenges.com'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta property='og:image' content='https://apichallenges.eviltester.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
         Assertions.assertTrue(
                 response.body.contains("<meta name='twitter:card' content='summary_large_image'>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<meta name='twitter:image' content='https://apichallenges.eviltester.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg'>"));
         Assertions.assertTrue(response.body.contains("\"@type\":\"WebPage\""));
     }
 
@@ -1602,11 +1598,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("\"@type\":\"Article\""));
         Assertions.assertTrue(
-                response.body.contains(
-                        "\"url\":\"https://apichallenges.eviltester.com/learning\""));
+                response.body.contains("\"url\":\"https://apichallenges.com/learning\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "\"mainEntityOfPage\":\"https://apichallenges.eviltester.com/learning\""));
+                        "\"mainEntityOfPage\":\"https://apichallenges.com/learning\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"Person\""));
         Assertions.assertTrue(response.body.contains("\"name\":\"Alan Richardson\""));
         Assertions.assertTrue(
@@ -1660,6 +1655,60 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<aside class='next-challenge-cta'"));
         Assertions.assertTrue(response.body.contains("class='next-challenge-cta-link'"));
         Assertions.assertTrue(response.body.contains("Try the next challenge walkthrough"));
+    }
+
+    @Test
+    void solutionPagesRenderConceptLearnedBlocksWithReferenceTutorialLinks() {
+
+        HttpResponseDetails response =
+                http.send("/apichallenges/solutions/get/get-todos-200", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<aside class='concept-learned'"));
+        Assertions.assertTrue(response.body.contains("Concept learned"));
+        Assertions.assertTrue(response.body.contains("<li>HTTP GET</li>"));
+        Assertions.assertTrue(response.body.contains("href='/tutorials/http-verbs'"));
+        Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
+
+        response = http.send("/apichallenges/solutions/accept-header/get-todos-200-xml", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<li>Accept header</li>"));
+        Assertions.assertTrue(response.body.contains("href='/tutorials/http-basics'"));
+        Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
+
+        response = http.send("/apichallenges/solutions/authentication/post-secret-201", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<li>Basic Auth</li>"));
+        Assertions.assertTrue(response.body.contains("href='/tutorials/rest-api-basics'"));
+        Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
+    }
+
+    @Test
+    void solutionPagesRenderLessonsAndSuggestedExperimentsBeforeEndpointExperiment() {
+
+        final HttpResponseDetails response =
+                http.send("/apichallenges/solutions/get/get-todos-200", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h2>Lessons Learned</h2>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<code>GET /todos</code> is the baseline collection read"));
+        Assertions.assertTrue(response.body.contains("<h2>Suggested Experiments</h2>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Capture the ids returned by <code>GET /todos</code>"));
+        Assertions.assertTrue(response.body.contains("<code>?doneStatus=false</code>"));
+
+        final int lessonsIndex = response.body.indexOf("Lessons Learned");
+        final int suggestedExperimentsIndex = response.body.indexOf("Suggested Experiments");
+        final int endpointExperimentIndex = response.body.indexOf("Experiment with this endpoint");
+
+        Assertions.assertTrue(lessonsIndex > -1);
+        Assertions.assertTrue(suggestedExperimentsIndex > lessonsIndex);
+        Assertions.assertTrue(endpointExperimentIndex > suggestedExperimentsIndex);
     }
 
     @Test
@@ -2089,7 +2138,7 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("\"datePublished\":\"2021-07-24T08:30:00Z\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-02-18\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-06\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "Published <time datetime='2021-07-24T08:30:00Z'>2021-07-24</time>"));
@@ -2107,29 +2156,23 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(
                 response.body.contains(
                         "<urlset xmlns=\"https://www.sitemaps.org/schemas/sitemap/0.9\""));
-        Assertions.assertTrue(
-                response.body.contains("<loc>https://apichallenges.eviltester.com</loc>"));
-        Assertions.assertTrue(
-                response.body.contains("<loc>https://apichallenges.eviltester.com/docs</loc>"));
+        Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com</loc>"));
+        Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com/docs</loc>"));
         Assertions.assertFalse(
-                response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/docs/swagger-ui</loc>"));
+                response.body.contains("<loc>https://apichallenges.com/docs/swagger-ui</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/gui/challenges</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/tutorials/openapi</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/tutorials/swagger</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/gui/challenges</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/tutorials/openapi</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/tutorials/swagger</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/tutorials/rest-api-tutorial</loc>"));
+                        "<loc>https://apichallenges.com/tutorials/rest-api-tutorial</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
         Assertions.assertFalse(
                 response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/tutorials/openapi-swagger</loc>"));
+                        "<loc>https://apichallenges.com/tutorials/openapi-swagger</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-02-18</lastmod>"));
     }
 
@@ -2141,10 +2184,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertFalse(
                 response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/seo-metadata-test-page</loc>"));
+                        "<loc>https://apichallenges.com/seo-metadata-test-page</loc>"));
         Assertions.assertFalse(
                 response.body.contains(
-                        "<loc>https://apichallenges.eviltester.com/practice-modes/shoppingcart-bugs</loc>"));
+                        "<loc>https://apichallenges.com/practice-modes/shoppingcart-bugs</loc>"));
     }
 
     @Test
@@ -2205,6 +2248,60 @@ public class UiPagesAreReachableTest {
         Assertions.assertNull(response.getHeader("Location"));
     }
 
+    @ParameterizedTest
+    @MethodSource("canonicalRedirectHosts")
+    void redirectHostsContentPagesRedirectToCanonicalHostWith301(final String redirectHost) {
+
+        final HttpResponseDetails response =
+                forwardedHostHttp(redirectHost)
+                        .send("/tutorials/rest-api-tutorial?source=old", "get");
+
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "https://apichallenges.com/tutorials/rest-api-tutorial?source=old",
+                response.getHeader("Location"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("canonicalRedirectHosts")
+    void redirectHostsApiGetRequestsRedirectToCanonicalHostWith308(final String redirectHost) {
+
+        final HttpResponseDetails response =
+                forwardedHostHttp(redirectHost).send("/todos?doneStatus=false", "get");
+
+        Assertions.assertEquals(308, response.statusCode);
+        Assertions.assertEquals(
+                "https://apichallenges.com/todos?doneStatus=false", response.getHeader("Location"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("canonicalRedirectHosts")
+    void redirectHostsApiPostRequestsRedirectToCanonicalHostWith308(final String redirectHost) {
+
+        final HttpMessageSender redirectHostHttp = forwardedHostHttp(redirectHost);
+        redirectHostHttp.setHeader("Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                redirectHostHttp.post("/todos", "{\"title\":\"redirect me\",\"doneStatus\":false}");
+
+        Assertions.assertEquals(308, response.statusCode);
+        Assertions.assertEquals("https://apichallenges.com/todos", response.getHeader("Location"));
+    }
+
+    @Test
+    void canonicalHostRequestsDoNotRedirect() {
+
+        final HttpResponseDetails response =
+                forwardedHostHttp("apichallenges.com").send("/tutorials/rest-api-tutorial", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertNull(response.getHeader("Location"));
+    }
+
+    static Stream<String> canonicalRedirectHosts() {
+        return Stream.of("apichallenges.eviltester.com", "www.apichallenges.com");
+    }
+
     static Stream<Arguments> legacyUrlRedirects() {
         List<Arguments> args = new ArrayList<>();
         args.add(
@@ -2247,5 +2344,16 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(canonicalUrl, response.getHeader("Location"));
+    }
+
+    private HttpMessageSender forwardedHostHttp(final String host) {
+        final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
+        proxyHttp.clearHeaders();
+        proxyHttp.setHeader(
+                "Accept",
+                "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8");
+        proxyHttp.setHeader("X-Forwarded-Proto", "https");
+        proxyHttp.setHeader("X-Forwarded-Host", host);
+        return proxyHttp;
     }
 }

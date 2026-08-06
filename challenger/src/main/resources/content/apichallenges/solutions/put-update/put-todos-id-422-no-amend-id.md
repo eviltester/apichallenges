@@ -1,14 +1,21 @@
 ---
 date:  2026-07-20T09:00:00Z
-lastmod: 2026-08-01
+lastmod: 2026-08-06
 title: API Challenges Solution For - PUT todos/id no amend id 422
 seo_title: Solution: PUT todos/id no amend id 422 | API Challenges
 description: How to solve API challenge PUT todos/id no amend id 422.
 seo_description: Use this walkthrough to solve PUT todos/id no amend id 422 with request setup, key headers, and expected status codes.
 next_challenge: /apichallenges/solutions/delete/delete-todos-id-204
+concepts_learned: HTTP PUT||422 Unprocessable Content||idempotent method||id handling
+concept_summary: Use this challenge to learn how PUT handles id handling for todo resources.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a body id that differs from the URL id||Send the request and verify the response status is 422
 showads: true
 ---
+
 
 # How to complete the challenge `PUT /todos/{id} no amend id (422)`
 
@@ -32,3 +39,14 @@ If you have already deleted all todos, create one using `POST /todos`. [See the 
 {{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
 
 {{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"id":"{{missingTodoId}}","title":"mismatch id","doneStatus":true,"description":"created from the solution page"}' details="true" summary="PUT /todos/{id} with a mismatched body id to trigger 422" open="true">}}
+
+## Lessons Learned
+
+- A body `id` that conflicts with the URL `id` is rejected to protect resource identity.
+- `PUT` updates should not allow clients to rename or move a resource accidentally.
+- Identity mismatch tests are most useful when all other fields are valid.
+
+## Suggested Experiments
+
+- Send a matching body `id`, then change only the body `id` and compare `200 OK` with `422 Unprocessable Content`.
+- Change only the URL `id` while keeping the body `id` fixed to see the same mismatch from the other side.

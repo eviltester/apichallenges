@@ -2,12 +2,19 @@
 title: API Challenges Solution For -  GET todo 404
 seo_title: Solution: GET todo 404 Guide | API Challenges
 description: How to solve challenge GET todo 404.
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve GET todo 404 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/get/get-todos-id-200
+concepts_learned: HTTP GET||404 Not Found||resource URL||safe method
+concept_summary: Use this challenge to learn how GET reports a missing or incorrect resource URL.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a GET request to /todo||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todo 404`.
 
@@ -62,4 +69,13 @@ How to solve challenge GET todo 404 by issuing a GET request on a non-existent e
 
 [Patreon ad free version](https://www.patreon.com/posts/41107933)
 
+## Lessons Learned
 
+- `/todo` is the wrong route, so `404 Not Found` here tests URL design and plural resource naming.
+- This is not a missing todo `id`; the route itself does not match the API contract.
+- Path typos can look like data problems unless you compare the documented URL.
+
+## Suggested Experiments
+
+- Change only `/todo` to `/todos` and confirm the same `GET` style reaches a valid collection route.
+- Try `/todos/999999` after `/todo` and compare route-not-found with resource-not-found behavior.

@@ -1,14 +1,21 @@
 ---
 date: 2026-07-31T09:00:00Z
-lastmod: 2026-07-31
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 filter description wildcard
 seo_title: "Solution: GET todos filter description wildcard | API Challenges"
 description: How to solve API challenge GET todos 200 filter description wildcard using a wildcard description filter.
 seo_description: Use this walkthrough to solve GET todos filter description wildcard with a wildcard query and expected status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-sort-ascending
+concepts_learned: HTTP GET||200 OK||query parameters||filtering
+concept_summary: Use this challenge to learn how query parameters filter a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add a description wildcard filter and verify status 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? filter description wildcard`
 
@@ -78,3 +85,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- The `description*=` query uses wildcard matching rather than regular-expression syntax.
+- `*` and `?` patterns are easier for broad searches but less precise than regex filters.
+- Wildcard tests should prove both matching and non-matching descriptions.
+
+## Suggested Experiments
+
+- Change the wildcard from `*fixture*` to `created*` and compare how many descriptions match.
+- Try a single-character `?` wildcard in the pattern and confirm it behaves differently from `*`.

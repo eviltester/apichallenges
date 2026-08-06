@@ -1,14 +1,21 @@
 ---
 date:  2020-12-15T09:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos id 404
 seo_title: Solution: GET todos id 404 Guide | API Challenges
 description: How to solve challenge GET todos id 404.
 seo_description: Use this walkthrough to solve GET todos id 404 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/get/get-todos-200-filter
+concepts_learned: HTTP GET||404 Not Found||resource URL||safe method
+concept_summary: Use this challenge to learn how GET reports a missing or incorrect resource URL.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos/id 404`.
 
@@ -74,3 +81,13 @@ How to receive a 404 status code response by trying to GET a todo item by id for
 
 [Patreon ad free version](https://www.patreon.com/posts/41109076)
 
+## Lessons Learned
+
+- `GET /todos/{id}` with a missing `id` tests resource absence, not route absence.
+- `404 Not Found` can be a valid outcome when the URL pattern is correct but the item is gone.
+- A good missing-id test proves the `id` was absent before making the request.
+
+## Suggested Experiments
+
+- Delete a known todo, then request the same `/todos/{id}` and compare with a never-used `id`.
+- Request `/todo/{id}` as a separate test to see route mismatch versus missing resource.

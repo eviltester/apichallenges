@@ -25,7 +25,7 @@ import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 public class MarkdownContentManager {
 
-    private static final String DEFAULT_CANONICAL_HOST = "https://apichallenges.eviltester.com";
+    private static final String DEFAULT_CANONICAL_HOST = "https://apichallenges.com";
     private static final String DEFAULT_SITE_NAME = "API Challenges";
     private static final String DEFAULT_OG_IMAGE_PATH =
             "/images/hero/apichallenges-whole-site-gauntlet-1600x720.jpg";
@@ -313,6 +313,12 @@ public class MarkdownContentManager {
         String schemaVideoEnabledRaw = "";
         String schemaVideoId = "";
         String nextChallengePath = "";
+        String conceptsLearnedRaw = "";
+        String conceptSummary = "";
+        String conceptReferenceLabel = "";
+        String conceptReferenceUrl = "";
+        String conceptReferenceLabel2 = "";
+        String conceptReferenceUrl2 = "";
         String pageDatePublished = "";
         String pageLastModified = "";
         String canonicalUrl = DEFAULT_CANONICAL_HOST + contentPath;
@@ -380,6 +386,24 @@ public class MarkdownContentManager {
             }
             if (aHeader.startsWith("next_challenge: ")) {
                 nextChallengePath = aHeader.replace("next_challenge: ", "");
+            }
+            if (aHeader.startsWith("concepts_learned: ")) {
+                conceptsLearnedRaw = aHeader.replace("concepts_learned: ", "");
+            }
+            if (aHeader.startsWith("concept_summary: ")) {
+                conceptSummary = aHeader.replace("concept_summary: ", "");
+            }
+            if (aHeader.startsWith("concept_reference_label: ")) {
+                conceptReferenceLabel = aHeader.replace("concept_reference_label: ", "");
+            }
+            if (aHeader.startsWith("concept_reference_url: ")) {
+                conceptReferenceUrl = aHeader.replace("concept_reference_url: ", "");
+            }
+            if (aHeader.startsWith("concept_reference_label_2: ")) {
+                conceptReferenceLabel2 = aHeader.replace("concept_reference_label_2: ", "");
+            }
+            if (aHeader.startsWith("concept_reference_url_2: ")) {
+                conceptReferenceUrl2 = aHeader.replace("concept_reference_url_2: ", "");
             }
             if (aHeader.startsWith("date:")) {
                 pageDatePublished = aHeader.replaceFirst("^date:\\s*", "");
@@ -510,6 +534,16 @@ public class MarkdownContentManager {
                         DEFAULT_AUTHOR_BIO_PATH);
         final String nextChallengeCtaSnippet =
                 buildNextChallengeCtaSnippet(contentFolder, contentPath, nextChallengePath);
+        final String conceptLearnedSnippet =
+                buildConceptLearnedSnippet(
+                        contentFolder,
+                        contentPath,
+                        conceptsLearnedRaw,
+                        conceptSummary,
+                        conceptReferenceLabel,
+                        conceptReferenceUrl,
+                        conceptReferenceLabel2,
+                        conceptReferenceUrl2);
         final Boolean schemaBreadcrumbEnabled = parseOptionalBoolean(schemaBreadcrumbEnabledRaw);
         final Boolean schemaHowToEnabled = parseOptionalBoolean(schemaHowToEnabledRaw);
         final List<String> schemaHowToSteps = parseHowToSteps(schemaHowToStepsRaw);
@@ -576,6 +610,7 @@ public class MarkdownContentManager {
         html.append(
                 insertArticleBylineAfterFirstHeading(
                         renderer.render(document), articleBylineSnippet));
+        html.append(conceptLearnedSnippet);
         html.append("</div>\n");
         html.append(nextChallengeCtaSnippet);
         html.append(authorBioSnippet);
@@ -1658,6 +1693,102 @@ public class MarkdownContentManager {
                     + "'>"
                     + escapeHtmlAttribute(ctaLabel)
                     + "</a></aside>";
+        }
+    }
+
+    private String buildConceptLearnedSnippet(
+            final String contentFolder,
+            final String contentPath,
+            final String conceptsLearnedRaw,
+            final String conceptSummary,
+            final String conceptReferenceLabel,
+            final String conceptReferenceUrl,
+            final String conceptReferenceLabel2,
+            final String conceptReferenceUrl2) {
+
+        if (!"content".equalsIgnoreCase(contentFolder)
+                || contentPath == null
+                || !contentPath.startsWith("/apichallenges/solutions/")) {
+            return "";
+        }
+
+        final List<String> concepts = parseDelimitedMetadata(conceptsLearnedRaw);
+        final List<ConceptReference> references =
+                conceptReferences(
+                        conceptReferenceLabel,
+                        conceptReferenceUrl,
+                        conceptReferenceLabel2,
+                        conceptReferenceUrl2);
+
+        if (concepts.isEmpty()
+                || conceptSummary == null
+                || conceptSummary.trim().isEmpty()
+                || references.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder html = new StringBuilder();
+        html.append("<aside class='concept-learned' aria-label='Concept learned'>");
+        html.append("<p class='concept-learned-title'><strong>Concept learned</strong></p>");
+        html.append("<p class='concept-learned-summary'>")
+                .append(escapeHtmlAttribute(conceptSummary.trim()))
+                .append("</p>");
+        html.append("<ul class='concept-learned-tags'>");
+        for (String concept : concepts) {
+            html.append("<li>").append(escapeHtmlAttribute(concept)).append("</li>");
+        }
+        html.append("</ul>");
+        html.append("<p class='concept-learned-links'>Reference tutorials: ");
+        for (int index = 0; index < references.size(); index++) {
+            if (index > 0) {
+                html.append(" | ");
+            }
+            final ConceptReference reference = references.get(index);
+            html.append("<a href='")
+                    .append(escapeHtmlAttribute(reference.url))
+                    .append("'>")
+                    .append(escapeHtmlAttribute(reference.label))
+                    .append("</a>");
+        }
+        html.append("</p>");
+        html.append("</aside>");
+        return html.toString();
+    }
+
+    private List<String> parseDelimitedMetadata(final String rawValue) {
+        if (rawValue == null || rawValue.trim().isEmpty()) {
+            return List.of();
+        }
+
+        return Arrays.stream(rawValue.split("\\|\\|"))
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    private List<ConceptReference> conceptReferences(
+            final String label, final String url, final String label2, final String url2) {
+        final List<ConceptReference> references = new ArrayList<>();
+        addConceptReference(references, label, url);
+        addConceptReference(references, label2, url2);
+        return references;
+    }
+
+    private void addConceptReference(
+            final List<ConceptReference> references, final String label, final String url) {
+        if (label == null || label.trim().isEmpty() || url == null || url.trim().isEmpty()) {
+            return;
+        }
+        references.add(new ConceptReference(label.trim(), url.trim()));
+    }
+
+    private static class ConceptReference {
+        private final String label;
+        private final String url;
+
+        private ConceptReference(final String label, final String url) {
+            this.label = label;
+            this.url = url;
         }
     }
 

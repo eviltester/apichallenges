@@ -2,12 +2,19 @@
 title: API Challenges Solution For - PATCH todos/id 200 json patch
 seo_title: Solution: PATCH todos/id 200 JSON Patch | API Challenges
 description: How to solve API challenge PATCH todos/id 200 using JSON Patch operations.
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve PATCH todos/id 200 with JSON Patch request setup, headers, body content, and expected status code.
 next_challenge: /apichallenges/solutions/options/options-todos-200
+concepts_learned: HTTP PATCH||200 OK||JSON Patch||partial update
+concept_summary: Use this challenge to learn how PATCH applies a JSON Patch to an existing resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json-patch+json||Send a JSON Patch operation array and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `PATCH /todos/id (200) json-patch`
 
@@ -85,3 +92,14 @@ Returned body:
   "description": "existing description"
 }
 ```
+
+## Lessons Learned
+
+- `application/json-patch+json` sends an operation list, so the patch document is about actions, not final state.
+- `JSON Pointer` paths such as `/title` target fields inside the todo representation.
+- Patch tests should assert both the operation response and the final resource state.
+
+## Suggested Experiments
+
+- Replace `/title`, then fetch the todo and confirm only the title changed.
+- Try an invalid `JSON Pointer` path and compare the error with a valid operation list.

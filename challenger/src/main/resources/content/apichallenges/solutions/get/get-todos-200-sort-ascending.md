@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 sort ascending
 seo_title: "Solution: GET todos 200 sort ascending | API Challenges"
 description: How to solve API challenge GET todos 200 sort ascending using the _sortBy query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 sort ascending with the _sortBy query parameter and verify the response status is 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-sort-descending
+concepts_learned: HTTP GET||200 OK||query parameters||sorting
+concept_summary: Use this challenge to learn how query parameters sort a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _sortBy with a todo field to sort ascending||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? _sortBy ascending`
 
@@ -78,3 +85,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- `_sortBy=+id` makes ascending order explicit instead of relying on a default.
+- Sorting tests should compare adjacent values, not just the first and last record.
+- A stable sort gives clients predictable collection browsing.
+
+## Suggested Experiments
+
+- Sort by `+title` and compare alphabetic order with `+id`.
+- Add a new todo and confirm its position is based on the sorted field, not creation time alone.

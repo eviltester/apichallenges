@@ -2,12 +2,17 @@
 title: API Challenges Change Log
 seo_title: Change Log Guide for API Testing | API Challenges Guide
 description: Change log for the API Challenges
-lastmod: 2026-08-05
+lastmod: 2026-08-06
 seo_description: Track API Challenges updates, including new guides, improvements, and feature changes that help you learn API testing more effectively over time.
 showads: true
 ---
 
 # Change Log
+
+## 2026/08/06 - Interactive REST API tutorial
+
+- Added the [REST API Tutorial: Learn REST by Using a Live API](/tutorials/rest-api-tutorial), an interactive tutorial for learning REST API concepts by making requests against a live API.
+- Added a raw response view to the in-page API request tools so headers and bodies can be inspected in their original response format.
 
 ## 2026/08/05 - Site refresh, progress tracking, and hosted API clients
 

@@ -65,7 +65,7 @@ public final class ShoppingCartRoutes {
 
     private ThingifierApiDocumentationDefn documentation() {
         final ThingifierApiDocumentationDefn apiDocDefn = new ThingifierApiDocumentationDefn();
-        apiDocDefn.addServer("https://apichallenges.eviltester.com", "cloud hosted version");
+        apiDocDefn.addServer("https://apichallenges.com", "cloud hosted version");
         apiDocDefn.addServer("http://localhost:4567", "local execution");
         apiDocDefn.setVersion("1.0.0");
         apiDocDefn.setThingifier(shoppingCart);

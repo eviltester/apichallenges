@@ -745,13 +745,13 @@ public class FromHellRoutesTest {
         final HttpMessageSender proxyHttp = new HttpMessageSender(Environment.getBaseUri());
         proxyHttp.clearHeaders();
         proxyHttp.setHeader("X-Forwarded-Proto", "https");
-        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.eviltester.com");
+        proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.com");
 
         final HttpResponseDetails response = proxyHttp.send("/fromhell/docs/openapi.json", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         final int firstServerIndex =
-                response.body.indexOf("\"url\": \"https://apichallenges.eviltester.com\"");
+                response.body.indexOf("\"url\": \"https://apichallenges.com\"");
         final int localServerIndex = response.body.indexOf("\"url\": \"http://localhost:4567\"");
         Assertions.assertTrue(firstServerIndex > 0);
         Assertions.assertTrue(localServerIndex > firstServerIndex);

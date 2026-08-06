@@ -1,14 +1,21 @@
 ---
 date:  2021-05-29T10:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos XML as Preference 200
 seo_title: Solution: GET todos XML Preference 200 | API Challenges
 description: How to solve API challenge GET todos XML 200 to accept the todos in XML format as preferred format.
 seo_description: Use this walkthrough to solve GET todos XML as Preference with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-200-no-accept
+concepts_learned: HTTP GET||200 OK||Accept header||content negotiation
+concept_summary: Use this challenge to learn how the Accept header changes the response format for XML.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # Use Accept Headers to GET XML Content as a preference
 
@@ -22,7 +29,7 @@ It is possible to ask for multiple types in the Accept header, expressing a pref
 
 - `GET` request will receive a response with all the todo items
     - e.g. `GET /todos` to get all the todo items
-- `200` is a success code, in this case it means the end point exists and the `todo items were returned
+- `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `Accept` means that an `Accept` header was added to specify that the todos should be returned in **XML** format as first preference, followed by **JSON** as second preference
 - add the `X-CHALLENGER` header to track progress
 
@@ -96,6 +103,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/51831256)
 
+## Lessons Learned
 
+- `Accept: application/xml,application/json` expresses a preference order without `q` values.
+- Negotiation should return `application/xml` when `XML` is supported, not simply the API default.
+- Preference lists are useful for clients that can process a fallback format.
 
+## Suggested Experiments
 
+- Reverse the header to `Accept: application/json,application/xml` and observe which `Content-Type` wins.
+- Add `q` values such as `application/xml;q=0.5, application/json;q=1` and compare with the comma-order request.

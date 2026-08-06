@@ -57,7 +57,13 @@ public class SeoTitleContentValidationTest {
                                 "schema_howto_enabled",
                                 "schema_howto_steps",
                                 "schema_video_enabled",
-                                "schema_video_id"));
+                                "schema_video_id",
+                                "concepts_learned",
+                                "concept_summary",
+                                "concept_reference_label",
+                                "concept_reference_url",
+                                "concept_reference_label_2",
+                                "concept_reference_url_2"));
         final List<String> missingSeoTitle = new ArrayList<>();
         final List<String> emptySeoTitle = new ArrayList<>();
         final List<String> outOfRangeSeoTitle = new ArrayList<>();
@@ -134,6 +140,8 @@ public class SeoTitleContentValidationTest {
                                 || key.startsWith("og_")
                                 || key.startsWith("twitter_")
                                 || key.startsWith("schema_")
+                                || key.startsWith("concept_")
+                                || key.equals("concepts_learned")
                                 || key.equals("meta_robots");
                 if (isMetadataKey && !allowedMetadataKeys.contains(key)) {
                     malformedMetadataKeys.add(relativePath + " -> " + key);

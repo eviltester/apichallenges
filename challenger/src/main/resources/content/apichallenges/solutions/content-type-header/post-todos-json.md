@@ -1,14 +1,21 @@
 ---
 date:  2021-07-17T11:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos create todo with JSON
 seo_title: Solution: POST todos create with JSON | API Challenges
 description: How to solve API challenge POST todos JSON. Creating a todo with JSON format.
 seo_description: Create a todo with JSON by setting Content-Type and Accept to application/json, posting a valid payload, and confirming challenge completion.
 next_challenge: /apichallenges/solutions/content-type-header/post-todos-415
+concepts_learned: HTTP POST||201 Created||Content-Type header||JSON request body
+concept_summary: Use this challenge to learn how Content-Type tells the API that the request body is JSON.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid JSON payload that matches the field and content constraints
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos JSON`
 
@@ -124,6 +131,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53795265)
 
+## Lessons Learned
 
+- `Content-Type: application/json` tells the server to parse the create payload as `JSON`.
+- Create tests should verify both `201 Created` and the returned todo fields.
+- The request body format is independent from the response format requested with `Accept`.
 
+## Suggested Experiments
 
+- Keep the same `JSON` body and change `Accept` to `application/xml` to see if the response representation changes.
+- Break the `JSON` syntax while leaving `Content-Type: application/json` and inspect the parse error.

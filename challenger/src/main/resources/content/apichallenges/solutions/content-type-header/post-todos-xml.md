@@ -1,14 +1,21 @@
 ---
 date:  2021-07-17T10:45:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos create todo with XML
 seo_title: Solution: POST todos create with XML | API Challenges
 description: How to solve API challenge POST todos XML. Creating a todo with XML format.
 seo_description: Create a todo with XML by setting Content-Type and Accept to application/xml, sending a valid body, and confirming a successful response.
 next_challenge: /apichallenges/solutions/content-type-header/post-todos-json
+concepts_learned: HTTP POST||201 Created||Content-Type header||XML request body
+concept_summary: Use this challenge to learn how Content-Type tells the API that the request body is XML.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid XML payload that matches the field and content constraints
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos XML`
 
@@ -124,6 +131,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53794821)
 
+## Lessons Learned
 
+- `Content-Type: application/xml` proves the API can create todos from an `XML` request body.
+- `XML` body tests should check element names and required fields, not just successful status.
+- The same resource can be created from different request representations.
 
+## Suggested Experiments
 
+- Create equivalent todos using `XML` and `JSON`, then compare the stored resources with `GET /todos`.
+- Rename one required `XML` element and confirm the API reports a validation or parsing error.

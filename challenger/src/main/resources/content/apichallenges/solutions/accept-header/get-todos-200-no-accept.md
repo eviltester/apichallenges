@@ -1,18 +1,25 @@
 ---
 date:  2021-05-29T10:32:00Z
-lastmod: 2026-07-31
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos No Accept Header 200
 seo_title: Solution GET todos No Accept Header 200 | API Challenges
 description: How to solve API challenge GET todos No Accept 200 to GET the todos with no accept header present.
 seo_description: Use this walkthrough to solve GET todos No Accept Header with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-406
+concepts_learned: HTTP GET||200 OK||Accept header||content negotiation
+concept_summary: Use this challenge to learn how the Accept header changes the response format for default JSON.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
 
+
 # How to complete the challenge `GET /todos No Accept (200)`
 
-Accept headers are optional. Most API clients will add one by default. But we do not need to pass in an `Acdept` header to successfully GET all the todos in JSON format. This challenge allows us to test this, to complete it we must ensure that we do not pass in an accept header.
+Accept headers are optional. Most API clients will add one by default. But we do not need to pass in an `Accept` header to successfully GET all the todos in JSON format. This challenge allows us to test this, to complete it we must ensure that we do not pass in an accept header.
 
 ## GET /todos No Accept (200)
 
@@ -22,7 +29,7 @@ When we issue a request with no accept header, we should receive the default fro
 
 - `GET` request will receive a response with all the todo items
     - e.g. `GET /todos` to get all the todo items
-- `200` is a success code, in this case it means the end point exists and the `todo items were returned
+- `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `No Accept` means that the request should not include an `Accept` header
 - add the `X-CHALLENGER` header to track progress
 
@@ -106,4 +113,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/51831718)
 
+## Lessons Learned
 
+- No `Accept` header lets the server choose its default representation, which can hide client assumptions about response format.
+- This challenge separates "server can return `JSON`" from "client explicitly requested `JSON`".
+- Default response behavior should be documented by checking both status and `Content-Type`.
+
+## Suggested Experiments
+
+- Run the same request with no `Accept`, then with `Accept: application/json`, and compare the body and `Content-Type`.
+- Add `Accept: application/xml` after the no-header request to see how explicit negotiation changes the representation.

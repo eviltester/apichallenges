@@ -94,7 +94,7 @@ public class ChallengeMain {
         app.configureThingifierWithProfile();
 
         app.setupDefaultGui();
-        app.getGuiManagement().setCanonicalHost("https://apichallenges.eviltester.com");
+        app.getGuiManagement().setCanonicalHost("https://apichallenges.com");
         app.getGuiManagement()
                 .appendToCustomHeadContent(
                         """

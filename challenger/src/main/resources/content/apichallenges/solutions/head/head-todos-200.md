@@ -1,14 +1,21 @@
 ---
 date:  2021-01-24T09:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - HEAD todos 200
 seo_title: Solution: HEAD todos 200 Guide | API Challenges
 description: How to solve API challenge HEAD todos 200
 seo_description: Use this walkthrough to solve HEAD todos 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/post-create/post-todos-201
+concepts_learned: HTTP HEAD||200 OK||headers-only response||safe method
+concept_summary: Use this challenge to learn how HEAD checks a resource without returning a response body.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a HEAD request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `HEAD /todos (200)`
 
@@ -63,3 +70,13 @@ How to issue a HEAD request and see the results of a GET request without the bod
 
 [Patreon ad free version](https://www.patreon.com/posts/41230531)
 
+## Lessons Learned
+
+- `HEAD /todos` returns metadata for the collection without sending the response body.
+- Headers from `HEAD` should help clients decide whether a later `GET` is worth making.
+- A passing `HEAD` test should assert the body is empty, not merely ignored.
+
+## Suggested Experiments
+
+- Send `HEAD /todos` and `GET /todos` back to back and compare status plus response headers.
+- Change the `Accept` header on `HEAD` and see whether content negotiation affects `Content-Type`.

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public final class FromHellOpenApi {
 
-    static final String CLOUD_SERVER = "https://apichallenges.eviltester.com";
+    static final String CLOUD_SERVER = "https://apichallenges.com";
     static final String LOCAL_SERVER = "http://localhost:4567";
 
     private final FromHellCatalog catalog;

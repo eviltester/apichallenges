@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 sort descending
 seo_title: "Solution: GET todos 200 sort descending | API Challenges"
 description: How to solve API challenge GET todos 200 sort descending using the _sortBy query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 sort descending with the _sortBy query parameter and verify the response status is 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-sort-multiple
+concepts_learned: HTTP GET||200 OK||query parameters||sorting
+concept_summary: Use this challenge to learn how query parameters sort a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _sortBy with a minus-prefixed todo field to sort descending||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? _sortBy descending`
 
@@ -76,3 +83,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- `_sortBy=-id` reverses collection order and is useful for newest-item style views.
+- Descending sort should be verified across every adjacent pair in the response.
+- Sort direction bugs can pass if the dataset has only one item.
+
+## Suggested Experiments
+
+- Compare `_sortBy=-id` with `_sortBy=+id` and confirm the response order is reversed.
+- Create a new todo, then sort by `-id` to check whether it appears near the start.

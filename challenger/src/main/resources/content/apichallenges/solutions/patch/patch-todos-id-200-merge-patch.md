@@ -2,12 +2,19 @@
 title: API Challenges Solution For - PATCH todos/id 200 merge patch
 seo_title: Solution: PATCH todos/id 200 JSON Merge Patch | API Challenges
 description: How to solve API challenge PATCH todos/id 200 using JSON Merge Patch.
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve PATCH todos/id 200 with JSON Merge Patch request setup, headers, body content, and expected status code.
 next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-json-patch
+concepts_learned: HTTP PATCH||200 OK||JSON Merge Patch||partial update
+concept_summary: Use this challenge to learn how PATCH applies a JSON Merge Patch to an existing resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/merge-patch+json||Send a JSON Merge Patch object and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `PATCH /todos/id (200) merge-patch`
 
@@ -83,3 +90,14 @@ Returned body:
   "description": "patched with merge patch"
 }
 ```
+
+## Lessons Learned
+
+- `application/merge-patch+json` describes desired field changes as a partial object.
+- Merge Patch semantics differ from ordinary partial `JSON`, especially around `null` values.
+- This format is useful for small updates where operation lists would be verbose.
+
+## Suggested Experiments
+
+- Send a merge patch with one changed field and compare it with a `JSON Patch` `replace` operation.
+- Try setting an optional field to `null` and observe whether the API removes it, ignores it, or rejects it.

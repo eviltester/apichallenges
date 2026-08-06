@@ -1,14 +1,21 @@
 ---
 date:  2021-07-25T08:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - unauthorized secret note 401
 seo_title: Solution: unauthorized secret note 401 | API Challenges
 description: How to solve GET /secret/note (401) - unauthorized to access secret note
 seo_description: Use this walkthrough to solve unauthorized secret note 401 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-200
+concepts_learned: HTTP GET||401 Unauthorized||authorization||missing auth token
+concept_summary: Use this challenge to learn how protected resources respond when authorization uses missing auth token.
+concept_reference_label: REST API Basics
+concept_reference_url: /tutorials/rest-api-basics
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /secret/note||Add an invalid or missing X-AUTH-TOKEN value to trigger unauthorized access||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
 showads: true
 ---
+
 
 
 # Hot to solve the Unauthorized challenge
@@ -81,5 +88,13 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 [Patreon ad free version](https://www.patreon.com/posts/54089275)
 
+## Lessons Learned
 
+- Missing `X-AUTH-TOKEN` tests absence of credentials, not an incorrect credential value.
+- `401 Unauthorized` is the expected prompt for "send credentials" on this protected read.
+- The protected route should not leak the secret note body when the token header is absent.
 
+## Suggested Experiments
+
+- Send `GET /secret/note` without `X-AUTH-TOKEN`, then add a real token and compare status plus body exposure.
+- Keep `X-CHALLENGER` present but remove only `X-AUTH-TOKEN` to isolate the failing header.

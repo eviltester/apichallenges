@@ -93,8 +93,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         String html = renderContentPage("/tutorials/rest-api-tutorial");
 
         Assertions.assertTrue(
-                html.contains(
-                        "<title>REST API Tutorial: Learn REST by Using a Live API</title>"));
+                html.contains("<title>REST API Tutorial: Learn REST by Using a Live API</title>"));
         Assertions.assertTrue(
                 html.contains("<h1>REST API Tutorial: Learn REST by Using a Live API</h1>"));
         Assertions.assertTrue(
@@ -111,8 +110,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertEquals(15, countOccurrences(html, "data-use-challenger=\"false\""));
         Assertions.assertEquals(
                 5, countOccurrences(html, "data-allowed-path-prefixes=\"/simpleapi\""));
-        Assertions.assertEquals(
-                5, countOccurrences(html, "data-allowed-path-prefixes=\"/todos\""));
+        Assertions.assertEquals(5, countOccurrences(html, "data-allowed-path-prefixes=\"/todos\""));
         Assertions.assertEquals(1, countOccurrences(html, "data-allowed-path-prefixes=\"/docs\""));
         Assertions.assertEquals(
                 1, countOccurrences(html, "data-allowed-path-prefixes=\"/heartbeat\""));
@@ -123,7 +121,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertEquals(
                 1, countOccurrences(html, "data-editable=\"true\" data-edit-mode=\"fixed\""));
         Assertions.assertEquals(
-                15, countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
+                15,
+                countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
         Assertions.assertEquals(
                 0, countOccurrences(html, "<details class=\"sim-live-request-details\" open"));
         Assertions.assertTrue(html.contains("data-path=\"/todos\""));

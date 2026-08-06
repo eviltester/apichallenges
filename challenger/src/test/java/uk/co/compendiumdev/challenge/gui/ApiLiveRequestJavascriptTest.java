@@ -188,8 +188,7 @@ public class ApiLiveRequestJavascriptTest {
                 javascript.contains(
                         "queryEditable: placeholder.dataset.queryEditable !== 'false'"));
         Assertions.assertTrue(javascript.contains("if (request.queryEditable)"));
-        Assertions.assertTrue(
-                javascript.contains("return 'apichallenges.readonly.xAuthToken'"));
+        Assertions.assertTrue(javascript.contains("return 'apichallenges.readonly.xAuthToken'"));
         Assertions.assertTrue(
                 javascript.contains("function authTokenStorageKeyForRequest(request)"));
         Assertions.assertTrue(javascript.contains("authToken: currentAuthToken(request)"));

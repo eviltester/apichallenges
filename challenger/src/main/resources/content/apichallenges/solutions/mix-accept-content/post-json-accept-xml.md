@@ -1,14 +1,21 @@
 ---
 date:  2021-07-18T08:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: How To - POST JSON accept XML
 seo_title: Solution: POST JSON accept XML | API Challenges
 description: How to solve API challenge POST /todos JSON to XML. Creating a todo with JSON and receiving response in XML.
 seo_description: Use this walkthrough to solve POST JSON accept XML with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/status-codes/delete-heartbeat-405
+concepts_learned: HTTP POST||Content-Type header||Accept header||content negotiation
+concept_summary: Use this challenge to learn how Content-Type and Accept can describe different formats: JSON request body and XML response.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid XML payload that matches the field and content constraints
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos JSON to XML`
 
@@ -112,4 +119,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53821574)
 
+## Lessons Learned
 
+- `Content-Type: application/json` and `Accept: application/xml` prove request and response formats are negotiated separately.
+- A server can parse `JSON` input and serialize the created resource as `XML`.
+- Mixed-format tests catch clients that assume request and response media types must match.
+
+## Suggested Experiments
+
+- Keep the `JSON` body but switch `Accept` from `application/xml` to `application/json` and compare the response body only.
+- Send malformed `JSON` while still requesting `XML` to see whether parsing fails before response negotiation matters.

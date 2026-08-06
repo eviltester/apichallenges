@@ -184,8 +184,7 @@ public class AuthRoutesTest {
         Assertions.assertEquals(
                 AuthRoutes.READ_ONLY_AUTH_TOKEN, secondResponse.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(
-                firstResponse.getHeader("X-AUTH-TOKEN"),
-                secondResponse.getHeader("X-AUTH-TOKEN"));
+                firstResponse.getHeader("X-AUTH-TOKEN"), secondResponse.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(
                 "{\"token\":\"" + AuthRoutes.READ_ONLY_AUTH_TOKEN + "\"}", firstResponse.body);
     }

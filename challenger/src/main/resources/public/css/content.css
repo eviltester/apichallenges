@@ -455,6 +455,49 @@ aside.next-challenge-cta {
     margin-bottom: 1rem;
 }
 
+aside.concept-learned {
+    margin: 1.5rem 0 1.25rem;
+    padding: 1rem;
+    border-left: 4px solid #20756b;
+    background: #f0f8f6;
+}
+
+aside.concept-learned p {
+    margin: 0.35rem 0;
+}
+
+.concept-learned-title {
+    color: #163858;
+}
+
+.concept-learned-summary {
+    color: #243748;
+}
+
+.concept-learned-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    list-style: none;
+    margin: 0.65rem 0;
+    padding: 0;
+}
+
+.concept-learned-tags li {
+    border: 1px solid #a8cbc4;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #243748;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    margin: 0;
+    padding: 0.25rem 0.45rem;
+}
+
+.concept-learned-links {
+    font-size: 0.95rem;
+}
+
 a.next-challenge-cta-link {
     display: inline-block;
     background: #1f4e79;

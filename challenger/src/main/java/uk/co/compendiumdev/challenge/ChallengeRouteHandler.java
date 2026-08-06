@@ -60,12 +60,11 @@ public class ChallengeRouteHandler {
         mirrorModeDocumentationDefn.setMetaRobots("noindex,follow");
         mirrorModeDocumentationDefn.setOgType("website");
         mirrorModeDocumentationDefn.setTwitterCard("summary_large_image");
-        mirrorModeDocumentationDefn.addServer(
-                "https://apichallenges.eviltester.com", "cloud hosted version");
+        mirrorModeDocumentationDefn.addServer("https://apichallenges.com", "cloud hosted version");
         mirrorModeDocumentationDefn.addServer("http://localhost:4567", "local execution");
         mirrorModeDocumentationDefn.setVersion("1.0.0");
 
-        apiDefn.addServer("https://apichallenges.eviltester.com", "cloud hosted version");
+        apiDefn.addServer("https://apichallenges.com", "cloud hosted version");
         apiDefn.addServer("http://localhost:4567", "local execution");
         apiDefn.setVersion("1.0.0");
 

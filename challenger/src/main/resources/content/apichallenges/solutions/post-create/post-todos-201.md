@@ -1,14 +1,21 @@
 ---
 date:  2021-01-24T10:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST todos 201
 seo_title: Solution: POST todos 201 Guide | API Challenges
 description: How to solve API challenge POST todos 201 to create a todo item in the application.
 seo_description: Use this walkthrough to solve POST todos 201 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/post-create/post-todos-422
+concepts_learned: HTTP POST||201 Created||CRUD create||request body
+concept_summary: Use this challenge to learn how POST creates a resource from a valid request body.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
 showads: true
 ---
+
 
 # How to complete the challenge `POST /todos (201)`
 
@@ -78,3 +85,13 @@ How to use a POST request to create a todo item in the application and receive a
 
 [Patreon ad free version](https://www.patreon.com/posts/41230767)
 
+## Lessons Learned
+
+- `POST /todos` creates a server-assigned todo resource and should return `201 Created`.
+- The client should omit `id` because the server owns identity assignment for new todos.
+- A successful create response becomes fixture data for later read, update, and delete tests.
+
+## Suggested Experiments
+
+- Create a todo, capture its returned `id`, then request `GET /todos/{id}` to verify it was stored.
+- Repeat the same create body twice and compare whether the API creates two resources or detects duplicates.

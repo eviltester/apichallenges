@@ -1,14 +1,21 @@
 ---
 date:  2025-01-01T15:26:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - Delete /todos/id (204) all
 seo_title: Solution: Delete /todos/id (204) all | API Challenges
 description: How to solve API challenges to Delete all the todos
 seo_description: Use this walkthrough to solve Delete /todos/id (204) all with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/miscellaneous/create-maximum-number-todos
+concepts_learned: HTTP DELETE||state cleanup||bulk operation||API test data
+concept_summary: Use this challenge to learn how cleanup requests reset API test data between scenarios.
+concept_reference_label: API Testing Concepts and Coverage
+concept_reference_url: /tutorials/testing-apis
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: GET /todos and capture all todo ids currently returned by the API||Send DELETE /todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
 showads: true
 ---
+
 
 # How to complete the Delete All Todos Challenge
 
@@ -171,3 +178,14 @@ If there are no todos, create one using `POST /todos`. [See the solution](/apich
 Use the delete request repeatedly until `GET /todos` returns an empty todo list.
 
 {{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" details="true" summary="DELETE /todos/{id} to remove each todo until none remain" open="true">}}
+
+## Lessons Learned
+
+- Bulk deletion changes the whole collection, so verification needs a collection read afterward.
+- Cleanup endpoints are useful test fixtures but can make later challenges depend on reset data.
+- A successful delete-all request should leave predictable empty-state behavior.
+
+## Suggested Experiments
+
+- Call delete-all, then `GET /todos` and confirm the collection is empty or reset as documented.
+- Run delete-all twice and compare whether the second call is treated as a no-op or a fresh success.

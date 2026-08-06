@@ -2,12 +2,19 @@
 title: API Challenges Solution For - POST Challenger (201)
 seo_title: Solution: POST Challenger (201) | API Challenges
 description: How to use a POST request to create a Challenger session and start using the API challenges
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve POST Challenger (201) with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/first-challenge/get-challenges-200
+concepts_learned: HTTP POST||201 Created||session state||X-CHALLENGER
+concept_summary: Use this challenge to learn how the app creates a tracked challenge session.
+concept_reference_label: API Testing Concepts and Coverage
+concept_reference_url: /tutorials/testing-apis
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a POST request to /challenger||Send the request with no body to create a new challenger session||Capture the returned X-CHALLENGER value for subsequent challenge requests||Send the request and verify the response status is 201
 showads: true
 ---
+
 
 # POST Challenger 201 Solution
 
@@ -61,3 +68,13 @@ Server: Jetty(9.4.z-SNAPSHOT)
 
 [Patreon ad free version](https://www.patreon.com/posts/39882254)
 
+## Lessons Learned
+
+- `POST /challenger` creates a new session resource and returns its identifier in `X-CHALLENGER`.
+- Session creation is the setup step that makes later challenge completion trackable.
+- The session `id` is both response data and a required request header for future work.
+
+## Suggested Experiments
+
+- Create two challenger sessions and compare how their `X-CHALLENGER` values isolate progress.
+- Use a newly returned `X-CHALLENGER` on `GET /challenges` and confirm completion starts from a fresh state.

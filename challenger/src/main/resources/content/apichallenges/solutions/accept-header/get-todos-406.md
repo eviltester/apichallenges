@@ -1,14 +1,21 @@
 ---
 date:  2021-07-17T10:32:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos Invalid Accept Header 406
 seo_title: Solution: GET todos Invalid Accept Head | API Challenges
 description: How to solve API challenge GET todos Invalid Accept 406 to GET the todos with an unsupported accept header present which generates a 406 error response.
 seo_description: Use this walkthrough to solve GET todos Invalid Accept with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-id-200-calendar
+concepts_learned: HTTP GET||406 Not Acceptable||Accept header||content negotiation
+concept_summary: Use this challenge to learn how the Accept header changes the response format for unsupported media type.
+concept_reference_label: HTTP Basics
+concept_reference_url: /tutorials/http-basics
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 406
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (406)`
 
@@ -85,5 +92,13 @@ Example Response body:
 
 [Patreon ad free version](https://www.patreon.com/posts/53793842)
 
+## Lessons Learned
 
+- `406 Not Acceptable` proves the route exists but cannot produce the requested media type.
+- Unsupported `Accept` values are content negotiation failures, not missing-resource failures.
+- Negative negotiation tests help expose whether an API ignores client preferences.
 
+## Suggested Experiments
+
+- Change `Accept: application/gzip` to `Accept: application/xml` and compare `406 Not Acceptable` with a successful representation.
+- Try `Accept: application/json;q=0` to see whether refusing `JSON` leaves the server with no acceptable format.

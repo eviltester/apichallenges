@@ -2,12 +2,19 @@
 title: API Challenges Solution For - GET todos id 200
 seo_title: Solution: GET todos id 200 Guide | API Challenges
 description: How to solve challenge GET todos id 200.
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 seo_description: Use this walkthrough to solve GET todos id 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/get/get-todos-id-404
+concepts_learned: HTTP GET||200 OK||resource URL||safe method
+concept_summary: Use this challenge to learn how GET reads a single resource by id.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos/id 200`.
 
@@ -86,3 +93,14 @@ If you have already deleted all todos, create one using `POST /todos`. [See the 
 {{<youtube-embed key="JDbbSY3U_rY" title="Solution to Get Specific Todo by ID">}}
 
 [Patreon ad free version](https://www.patreon.com/posts/41108384)
+
+## Lessons Learned
+
+- `GET /todos/{id}` reads one resource and should return the same fields seen in the collection.
+- Path parameters target a specific resource, unlike query filters that still return collections.
+- A single-resource response is useful for verifying create, update, and delete follow-up behavior.
+
+## Suggested Experiments
+
+- Choose an `id` from `GET /todos`, then request `/todos/{id}` and compare the field values.
+- Update that todo and repeat the same `GET /todos/{id}` to confirm the resource changed.

@@ -16,7 +16,7 @@ public class MarkdownContentManagerBreadcrumbSchemaTest {
                 contentManager.getHtmlVersionOfMarkdownContent("site", "/index", Map.of());
 
         Assertions.assertFalse(html.contains("\"@type\":\"BreadcrumbList\""));
-        Assertions.assertFalse(html.contains("https://apichallenges.eviltester.com/index"));
+        Assertions.assertFalse(html.contains("https://apichallenges.com/index"));
     }
 
     @Test
@@ -28,11 +28,9 @@ public class MarkdownContentManagerBreadcrumbSchemaTest {
                         "content", "/author/alan-richardson", Map.of());
 
         Assertions.assertTrue(html.contains("\"@type\":\"BreadcrumbList\""));
-        Assertions.assertFalse(
-                html.contains("\"item\":\"https://apichallenges.eviltester.com/author\""));
+        Assertions.assertFalse(html.contains("\"item\":\"https://apichallenges.com/author\""));
         Assertions.assertTrue(
-                html.contains(
-                        "\"item\":\"https://apichallenges.eviltester.com/author/alan-richardson\""));
+                html.contains("\"item\":\"https://apichallenges.com/author/alan-richardson\""));
     }
 
     @Test
@@ -45,16 +43,15 @@ public class MarkdownContentManagerBreadcrumbSchemaTest {
 
         Assertions.assertTrue(html.contains("\"@type\":\"BreadcrumbList\""));
         Assertions.assertTrue(
-                html.contains("\"item\":\"https://apichallenges.eviltester.com/apichallenges\""));
+                html.contains("\"item\":\"https://apichallenges.com/apichallenges\""));
         Assertions.assertTrue(
-                html.contains(
-                        "\"item\":\"https://apichallenges.eviltester.com/apichallenges/solutions\""));
+                html.contains("\"item\":\"https://apichallenges.com/apichallenges/solutions\""));
         Assertions.assertFalse(
                 html.contains(
-                        "\"item\":\"https://apichallenges.eviltester.com/apichallenges/solutions/get\""));
+                        "\"item\":\"https://apichallenges.com/apichallenges/solutions/get\""));
         Assertions.assertTrue(
                 html.contains(
-                        "\"item\":\"https://apichallenges.eviltester.com/apichallenges/solutions/get/get-todos-200\""));
+                        "\"item\":\"https://apichallenges.com/apichallenges/solutions/get/get-todos-200\""));
     }
 
     private MarkdownContentManager contentManager() {

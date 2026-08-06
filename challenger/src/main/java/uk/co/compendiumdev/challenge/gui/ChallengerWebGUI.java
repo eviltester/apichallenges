@@ -21,11 +21,16 @@ import uk.co.compendiumdev.challenge.challenges.*;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
 import uk.co.compendiumdev.challenge.persistence.PersistenceResponse;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
 import uk.co.compendiumdev.thingifier.core.EntityRelModel;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 public class ChallengerWebGUI {
     private static final LocalDate SEO_FIXED_LASTMOD = LocalDate.parse("2026-02-18");
+    private static final String CANONICAL_HOST = "https://apichallenges.com";
+    private static final String LEGACY_HOST = "apichallenges.eviltester.com";
+    private static final String WWW_HOST = "www.apichallenges.com";
+    private static final String LEGACY_CANONICAL_HOST = "https://" + LEGACY_HOST;
     private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
             "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
     private static final Gson GSON = new Gson();
@@ -38,6 +43,7 @@ public class ChallengerWebGUI {
 
     public ChallengerWebGUI(final DefaultGUIHTML defaultGui, final boolean guiStayAlive) {
         this.guiManagement = defaultGui;
+        this.guiManagement.setCanonicalHost(CANONICAL_HOST);
         this.guiStayAlive = guiStayAlive;
         this.pageNotFoundHtmlResponse = new PageNotFoundResponse(guiManagement);
     }
@@ -207,29 +213,8 @@ public class ChallengerWebGUI {
 
         guiManagement.setFooter(getSponsorMessage() + getChallengesFooter());
 
-        // could redirect to eviltester.com if the canonical doesn't change the search indexing from
-        // heroku to eviltester
-        //        before((request, response) -> {
-        //
-        //                    if (request.requestMethod().equals("GET")) {
-        //                        if (request.url().startsWith("http://apichallenges.herokuapp.com")
-        // ||
-        //
-        // request.url().startsWith("https://apichallenges.herokuapp.com")
-        //                        ) {
-        //                            // and it is a browser request
-        //                            if (request.header("accept").contains("text/html")) {
-        //                                // then redirect
-        //                                response.header("location",
-        // "https://apichallenges.eviltester.com" + request.uri());
-        //                                halt(301);
-        //                            }
-        //                        } else {
-        //                            System.out.println("nothing to see here");
-        //                        }
-        //                    }
-        //                }
-        //        );
+        installCanonicalHostRedirect();
+        installCanonicalHostHeadRewrite();
 
         ResourceContentScanner contentScanner = new ResourceContentScanner();
         List<String> pathsToFileContent =
@@ -308,14 +293,12 @@ public class ChallengerWebGUI {
         Map<String, LocalDate> contentUrls = contentScanner.scanForUrlsWithDates("content/", "md");
         for (String pathToMarkdownFile : contentUrls.keySet()) {
             siteMap.addUrl(
-                    "https://apichallenges.eviltester.com/" + pathToMarkdownFile,
+                    CANONICAL_HOST + "/" + pathToMarkdownFile,
                     contentUrls.get(pathToMarkdownFile).toString());
         }
-        siteMap.addUrl("https://apichallenges.eviltester.com", SEO_FIXED_LASTMOD.toString());
-        siteMap.addUrl("https://apichallenges.eviltester.com/docs", SEO_FIXED_LASTMOD.toString());
-        siteMap.addUrl(
-                "https://apichallenges.eviltester.com/gui/challenges",
-                SEO_FIXED_LASTMOD.toString());
+        siteMap.addUrl(CANONICAL_HOST, SEO_FIXED_LASTMOD.toString());
+        siteMap.addUrl(CANONICAL_HOST + "/docs", SEO_FIXED_LASTMOD.toString());
+        siteMap.addUrl(CANONICAL_HOST + "/gui/challenges", SEO_FIXED_LASTMOD.toString());
 
         get(
                 "/sitemap.xml",
@@ -801,6 +784,111 @@ public class ChallengerWebGUI {
 
     private String originUrlFrom(final HttpServerRequest request) {
         return "%s://%s".formatted(schemeFrom(request), hostFrom(request));
+    }
+
+    private void installCanonicalHostRedirect() {
+        before(
+                (request, response) -> {
+                    if (!isRedirectHost(hostFrom(request))) {
+                        return;
+                    }
+
+                    final String canonicalUrl = canonicalUrlFor(request);
+                    final int redirectStatus = canonicalRedirectStatusFor(request);
+
+                    response.header("Location", canonicalUrl);
+                    halt(redirectStatus, "");
+                });
+    }
+
+    private void installCanonicalHostHeadRewrite() {
+        after(
+                (request, response) -> {
+                    final String body = response.body();
+                    if (!isHtmlResponse(response) || body == null) {
+                        return;
+                    }
+
+                    final int headEndIndex = body.indexOf("</head>");
+                    if (headEndIndex < 0) {
+                        return;
+                    }
+
+                    final String head = body.substring(0, headEndIndex);
+                    if (!head.contains(LEGACY_CANONICAL_HOST)) {
+                        return;
+                    }
+
+                    response.body(
+                            head.replace(LEGACY_CANONICAL_HOST, CANONICAL_HOST)
+                                    + body.substring(headEndIndex));
+                });
+    }
+
+    private boolean isHtmlResponse(final HttpServerResponse response) {
+        String contentType = response.type();
+        if (!hasText(contentType)) {
+            contentType = responseHeaderValue(response, "Content-Type");
+        }
+        return hasText(contentType) && contentType.toLowerCase(Locale.ROOT).contains("text/html");
+    }
+
+    private String responseHeaderValue(final HttpServerResponse response, final String headerName) {
+        for (Map.Entry<String, String> header : response.headers().entrySet()) {
+            if (header.getKey().equalsIgnoreCase(headerName)) {
+                return header.getValue();
+            }
+        }
+        return null;
+    }
+
+    private String canonicalUrlFor(final HttpServerRequest request) {
+        final String query = request.queryString();
+        return CANONICAL_HOST + request.path() + (hasText(query) ? "?" + query : "");
+    }
+
+    private int canonicalRedirectStatusFor(final HttpServerRequest request) {
+        if (isGetOrHead(request.method()) && isContentDocumentationPath(request.path())) {
+            return 301;
+        }
+        return 308;
+    }
+
+    private boolean isGetOrHead(final String method) {
+        return "GET".equalsIgnoreCase(method) || "HEAD".equalsIgnoreCase(method);
+    }
+
+    private boolean isContentDocumentationPath(final String path) {
+        return path.equals("/")
+                || path.equals("/sitemap.xml")
+                || path.equals("/robots.txt")
+                || path.startsWith("/apichallenges")
+                || path.startsWith("/author")
+                || path.startsWith("/learning")
+                || path.startsWith("/practice-modes")
+                || path.startsWith("/tools")
+                || path.startsWith("/tutorials")
+                || path.equals("/sponsors")
+                || path.equals("/changes")
+                || path.startsWith("/seo-metadata-");
+    }
+
+    private boolean isRedirectHost(final String host) {
+        final String normalizedHost = normalizeHost(host);
+        return LEGACY_HOST.equals(normalizedHost) || WWW_HOST.equals(normalizedHost);
+    }
+
+    private String normalizeHost(final String host) {
+        if (!hasText(host)) {
+            return "";
+        }
+
+        final String trimmed = firstHeaderValue(host).toLowerCase(Locale.ROOT);
+        final int portIndex = trimmed.indexOf(":");
+        if (portIndex > -1) {
+            return trimmed.substring(0, portIndex);
+        }
+        return trimmed;
     }
 
     private String schemeFrom(final HttpServerRequest request) {

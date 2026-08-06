@@ -4,7 +4,7 @@ seo_title: REST API Tutorial and API Testing Practice | API Challenges
 description: Learn REST APIs and API testing by making real requests against practice APIs, guided tutorials, browser tools, and hands-on challenges from API Challenges.
 lastmod: 2026-08-05
 template: index
-canonical: https://apichallenges.eviltester.com
+canonical: https://apichallenges.com
 ---
 
 # Learn REST APIs by Testing a Real API

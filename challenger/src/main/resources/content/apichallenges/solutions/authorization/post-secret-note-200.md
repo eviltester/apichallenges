@@ -1,14 +1,21 @@
 ---
 date:  2021-07-25T09:00:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST amend secret note 200
 seo_title: Solution: POST amend secret note 200 | API Challenges
 description: How to solve POST /secret/note (200) - amend the secret note with a POST request and receive 200 status code
 seo_description: Use this walkthrough to solve POST amend secret note 200 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-401
+concepts_learned: HTTP POST||200 OK||authorization||X-AUTH-TOKEN
+concept_summary: Use this challenge to learn how protected resources respond when authorization uses X-AUTH-TOKEN.
+concept_reference_label: REST API Basics
+concept_reference_url: /tutorials/rest-api-basics
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a POST request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the POST secret note challenge
 
@@ -111,3 +118,13 @@ Example body of the response:
 
 [Patreon ad free version](https://www.patreon.com/posts/54090441)
 
+## Lessons Learned
+
+- `POST /secret/note` changes protected state, so authorization controls write access as well as reads.
+- A valid `X-AUTH-TOKEN` must be combined with a valid `JSON` note payload.
+- Successful protected writes should be followed by a `GET /secret/note` verification step.
+
+## Suggested Experiments
+
+- Post a short note, then immediately read it back with `GET /secret/note` to confirm persistence.
+- Send a note longer than the documented limit and inspect whether it is rejected or truncated.

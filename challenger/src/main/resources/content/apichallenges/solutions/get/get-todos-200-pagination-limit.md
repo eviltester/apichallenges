@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 pagination limit
 seo_title: "Solution: GET todos 200 pagination limit | API Challenges"
 description: How to solve API challenge GET todos 200 pagination limit using the _limit query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 pagination limit by requesting up to 8 todos with _limit and verifying the response status is 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-pagination-limit-offset
+concepts_learned: HTTP GET||200 OK||query parameters||pagination
+concept_summary: Use this challenge to learn how limit and offset query parameters paginate a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=8 to limit the returned todos||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ?_limit`
 
@@ -72,3 +79,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- `_limit` is a client-side request for a maximum number of returned todos.
+- A response with fewer items than `_limit` can be correct when the collection is smaller.
+- Limit tests should count array entries, not only read the status code.
+
+## Suggested Experiments
+
+- Compare `_limit=1`, `_limit=2`, and no `_limit` to see how the collection size changes.
+- Set `_limit=0` and inspect whether the API treats zero as an empty page or invalid input.

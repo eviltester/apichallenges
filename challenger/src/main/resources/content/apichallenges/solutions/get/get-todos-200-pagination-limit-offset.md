@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 pagination limit and offset
 seo_title: "Solution: GET todos 200 pagination limit and offset | API Challenges"
 description: How to solve API challenge GET todos 200 pagination limit and offset using the _limit and _offset query parameters.
 seo_description: Use this walkthrough to solve GET todos 200 pagination by combining _limit and _offset, checking the returned page size, and verifying status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-400-pagination-limit-too-high
+concepts_learned: HTTP GET||200 OK||query parameters||pagination
+concept_summary: Use this challenge to learn how limit and offset query parameters paginate a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=5 and _offset=5 to page through todos||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ?_limit&_offset`
 
@@ -70,3 +77,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- `_limit` controls page size and `_offset` controls where the page starts in the collection.
+- Offset-based pagination depends on a stable ordering, even when no explicit sort is supplied.
+- Tests should record ids across pages to catch overlap or skipped records.
+
+## Suggested Experiments
+
+- Request `_limit=2&_offset=0`, then `_limit=2&_offset=2`, and check that ids do not repeat.
+- Try an `_offset` beyond the collection size and observe whether the API returns an empty list or an error.

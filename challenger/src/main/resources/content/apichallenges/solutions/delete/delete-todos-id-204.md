@@ -1,14 +1,21 @@
 ---
 date:  2021-04-12T09:30:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - DELETE todos/id 204
 seo_title: Solution: DELETE todos/id 204 | API Challenges
 description: How to solve API challenge DELETE todos/id 204 to delete a todo in the application.
 seo_description: Use this walkthrough to solve DELETE todos/id 204 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/query/query-todos-200
+concepts_learned: HTTP DELETE||204 No Content||CRUD delete||resource URL
+concept_summary: Use this challenge to learn how DELETE removes a resource and returns no response body.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: REST API Basics
+concept_reference_url_2: /tutorials/rest-api-basics
 schema_howto_steps: Create a DELETE request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 204
 showads: true
 ---
+
 
 # Delete a todo item in the application
 
@@ -74,6 +81,13 @@ After you've deleted something. You should really check that it has been deleted
 < Via: 1.1 vegur
 ~~~~~~~~
 
+## Lessons Learned
 
+- `DELETE /todos/{id}` removes an existing resource and returns `204 No Content`.
+- A successful delete should be verified by a follow-up read, because the response body is intentionally empty.
+- Repeating the same delete is a useful way to explore idempotency and missing-resource behavior.
 
+## Suggested Experiments
 
+- Delete a todo, then call `GET /todos/{id}` to confirm the API no longer returns it.
+- Send the identical `DELETE` again and compare the second status with the first `204 No Content`.

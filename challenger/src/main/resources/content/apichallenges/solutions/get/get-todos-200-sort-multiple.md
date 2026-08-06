@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 sort multiple fields
 seo_title: "Solution: GET todos 200 sort multiple fields | API Challenges"
 description: How to solve API challenge GET todos 200 sort multiple fields using the _sortBy query parameter.
 seo_description: Use this walkthrough to solve GET todos 200 sort multiple fields with the _sortBy query parameter and verify the response status is 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-filter-sort
+concepts_learned: HTTP GET||200 OK||query parameters||sorting
+concept_summary: Use this challenge to learn how query parameters sort a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _sortBy with comma-separated todo fields||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? _sortBy multiple`
 
@@ -83,3 +90,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- Multiple `_sortBy` fields define tie-breaking when the first field has duplicate values.
+- Multi-sort tests need data with shared primary values, otherwise the secondary sort is invisible.
+- Comma-separated sort criteria should be parsed in the order supplied.
+
+## Suggested Experiments
+
+- Create several todos with the same `doneStatus` but different `title` values and sort by `doneStatus,+title`.
+- Reverse only the secondary sort field and check whether records inside each primary group change order.

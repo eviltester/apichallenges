@@ -1,14 +1,21 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-07-30
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 pagination and sort
 seo_title: "Solution: GET todos 200 pagination and sort | API Challenges"
 description: How to solve API challenge GET todos 200 pagination and sort using _sortBy, _limit, and _offset query parameters.
 seo_description: Use this walkthrough to solve GET todos 200 pagination and sort with _sortBy=-id, _limit, _offset, and expected status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-pagination-filter
+concepts_learned: HTTP GET||200 OK||query parameters||sorting
+concept_summary: Use this challenge to learn how query parameters sort a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _sortBy=-id with _limit=5 and _offset=5||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ?_sortBy&_limit&_offset`
 
@@ -70,3 +77,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- Sorting before pagination makes page contents predictable across repeated requests.
+- Pagination plus `_sortBy` needs assertions about global order, not just each page separately.
+- Changing sort direction should change which records appear on the first page.
+
+## Suggested Experiments
+
+- Request `_sortBy=+id&_limit=2`, then `_sortBy=-id&_limit=2`, and compare first-page ids.
+- Move from `_offset=0` to `_offset=2` with the same sort and check that the ordered sequence continues.

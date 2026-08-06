@@ -1,14 +1,21 @@
 ---
 date: 2026-07-31T09:00:00Z
-lastmod: 2026-07-31
+lastmod: 2026-08-06
 title: API Challenges Solution For - GET todos 200 filter id greater than
 seo_title: "Solution: GET todos filter id greater than | API Challenges"
 description: How to solve API challenge GET todos 200 filter id greater than using an id greater-than query filter.
 seo_description: Use this walkthrough to solve GET todos filter id greater than with an id greater-than query parameter and expected status 200.
 next_challenge: /apichallenges/solutions/get/get-todos-200-filter-id-less-than
+concepts_learned: HTTP GET||200 OK||query parameters||filtering
+concept_summary: Use this challenge to learn how query parameters filter a collection resource.
+concept_reference_label: HTTP Methods and Verbs
+concept_reference_url: /tutorials/http-verbs
+concept_reference_label_2: HTTP Basics
+concept_reference_url_2: /tutorials/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add an id greater-than filter that returns some, but not all, todos||Send the request and verify the response status is 200
 showads: true
 ---
+
 
 # How to complete the challenge `GET /todos (200) ? filter id greater than`
 
@@ -72,3 +79,14 @@ Returned body:
   ]
 }
 ```
+
+## Lessons Learned
+
+- Numeric comparison filters such as `id>1` depend on ordering and existing fixture data.
+- Greater-than filters are boundary tests: the value equal to the boundary should not be included.
+- The response can be correct even when ids are not contiguous.
+
+## Suggested Experiments
+
+- Compare `id>1` with `id>2`, and inspect which boundary ids disappear.
+- Create a new todo, note its `id`, then filter above and below that `id` to test the comparison.

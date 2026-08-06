@@ -1,14 +1,21 @@
 ---
 date:  2025-01-01T15:26:00Z
-lastmod: 2026-02-18
+lastmod: 2026-08-06
 title: API Challenges Solution For - POST /todos (409) max todos
 seo_title: Solution: POST /todos (409) max todos | API Challenges
 description: How to solve API challenges to Create maximum number of todos
 seo_description: Use this walkthrough to solve POST /todos (409) max todos with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /gui/challenges
+concepts_learned: HTTP POST||boundary testing||API test data||state management
+concept_summary: Use this challenge to learn how creating maximum data helps test API limits and state handling.
+concept_reference_label: API Testing Concepts and Coverage
+concept_reference_url: /tutorials/testing-apis
+concept_reference_label_2: HTTP Methods and Verbs
+concept_reference_url_2: /tutorials/http-verbs
 schema_howto_steps: Create todos repeatedly with POST /todos until the maximum limit is reached||Use valid JSON payloads and include X-CHALLENGER for every create request||Track successful creations so you can confirm the max-count boundary||Verify the final allowed create response and behavior at the limit||Check challenge status and confirm maximum todo creation is complete
 showads: true
 ---
+
 
 # How to complete the Create Maximum Number of Todos
 
@@ -78,3 +85,14 @@ Most of the API client tools also have the ability to create scripts to achieve 
 ### Try it now
 
 {{<api-live-request method="POST" path="/todos" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos after maxing out todos to trigger 409" open="true">}}
+
+## Lessons Learned
+
+- The max-todos challenge is about system state limits, not a single request field.
+- To reproduce the limit, tests must control setup by counting or clearing existing todos.
+- `409 Conflict` can signal capacity constraints when the request is valid in isolation.
+
+## Suggested Experiments
+
+- Delete all todos, then create them until the first `409 Conflict` to identify the exact limit.
+- After reaching the limit, delete one todo and confirm a new create request succeeds.
