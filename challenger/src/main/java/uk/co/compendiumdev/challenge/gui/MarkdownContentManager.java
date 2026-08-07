@@ -52,6 +52,7 @@ public class MarkdownContentManager {
 
     private final DefaultGUIHTML guiManagement;
     private final Map<String, String> solutionChallengeIds;
+    private final BlogContentManager blogContentManager;
     Logger logger = LoggerFactory.getLogger(MarkdownContentManager.class);
     private final Set<String> markdownContentPaths;
     private final Properties schemaAuthorDefaults;
@@ -66,6 +67,8 @@ public class MarkdownContentManager {
         markdownContentPaths.addAll(pathsToFileContent);
         this.guiManagement = defaultGui;
         this.solutionChallengeIds = buildSolutionChallengeIds(challengeDefinitions);
+        this.blogContentManager =
+                new BlogContentManager(pathsToFileContent, DEFAULT_CANONICAL_HOST);
         this.schemaAuthorDefaults = loadPropertiesFromResource(DEFAULT_SCHEMA_AUTHOR_RESOURCE);
         this.schemaPublisherDefaults =
                 loadPropertiesFromResource(DEFAULT_SCHEMA_PUBLISHER_RESOURCE);
@@ -319,6 +322,8 @@ public class MarkdownContentManager {
         String conceptReferenceUrl = "";
         String conceptReferenceLabel2 = "";
         String conceptReferenceUrl2 = "";
+        String categoriesRaw = "";
+        String hideSidebarRaw = "";
         String pageDatePublished = "";
         String pageLastModified = "";
         String canonicalUrl = DEFAULT_CANONICAL_HOST + contentPath;
@@ -405,6 +410,12 @@ public class MarkdownContentManager {
             if (aHeader.startsWith("concept_reference_url_2: ")) {
                 conceptReferenceUrl2 = aHeader.replace("concept_reference_url_2: ", "");
             }
+            if (aHeader.startsWith("categories: ")) {
+                categoriesRaw = aHeader.replace("categories: ", "");
+            }
+            if (aHeader.startsWith("hide_sidebar: ")) {
+                hideSidebarRaw = aHeader.replace("hide_sidebar: ", "");
+            }
             if (aHeader.startsWith("date:")) {
                 pageDatePublished = aHeader.replaceFirst("^date:\\s*", "");
             }
@@ -412,6 +423,11 @@ public class MarkdownContentManager {
                 pageLastModified = aHeader.replaceFirst("^lastmod:\\s*", "");
             }
         }
+
+        bcHtmlHeader =
+                new StringBuilder(
+                        buildBreadcrumbHtml(
+                                contentFolder, contentPath, breadcrumbs, categoriesRaw));
 
         final String htmlTitle = seoTitle.isEmpty() ? pageTitle : seoTitle;
         final String htmlDescription = seoDescription.isEmpty() ? pageDescription : seoDescription;
@@ -435,6 +451,9 @@ public class MarkdownContentManager {
                 twitterSite.isEmpty()
                         ? getEnvironmentOrDefault("SEO_TWITTER_SITE", "")
                         : twitterSite;
+        if (isBlogContentPath(contentPath)) {
+            headerInject = headerInject + blogContentManager.rssDiscoveryLink();
+        }
 
         if (!htmlDescription.isEmpty()) {
             headerInject =
@@ -544,10 +563,15 @@ public class MarkdownContentManager {
                         conceptReferenceUrl,
                         conceptReferenceLabel2,
                         conceptReferenceUrl2);
+        final String blogCategorySnippet = buildBlogCategorySnippet(contentPath, categoriesRaw);
+        final String blogPostNavigationSnippet =
+                blogContentManager.renderPostNavigationHtml(contentPath);
         final Boolean schemaBreadcrumbEnabled = parseOptionalBoolean(schemaBreadcrumbEnabledRaw);
         final Boolean schemaHowToEnabled = parseOptionalBoolean(schemaHowToEnabledRaw);
         final List<String> schemaHowToSteps = parseHowToSteps(schemaHowToStepsRaw);
         final Boolean schemaVideoEnabled = parseOptionalBoolean(schemaVideoEnabledRaw);
+        final boolean hideSidebar = Boolean.TRUE.equals(parseOptionalBoolean(hideSidebarRaw));
+        final boolean renderDocumentColumns = !indexTemplate && !hideSidebar;
         final String pageDateModified = resolveDateModified(pageLastModified, pageDatePublished);
         final String articleBylineSnippet =
                 buildArticleBylineSnippet(
@@ -578,7 +602,8 @@ public class MarkdownContentManager {
                         schemaHowToEnabled,
                         schemaHowToSteps,
                         schemaVideoEnabled,
-                        schemaVideoId);
+                        schemaVideoId,
+                        categoriesRaw);
         if (!schemaJsonLd.isEmpty()) {
             headerInject = headerInject + schemaJsonLd;
         }
@@ -600,22 +625,23 @@ public class MarkdownContentManager {
 
         html.append(guiManagement.getMenuAsHTML());
         // todo: create proper templates
-        if (!mdheaders.contains("template: index")) {
+        if (renderDocumentColumns) {
             html.append("<section class='doc-columns'>");
             html.append("<div class='right-column'>");
         }
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append(bcHtmlHeader.toString());
         html.append("<div class=\"main-text-content\">\n");
+        final String postIntroSnippet = articleBylineSnippet + blogCategorySnippet;
         html.append(
-                insertArticleBylineAfterFirstHeading(
-                        renderer.render(document), articleBylineSnippet));
+                insertArticleBylineAfterFirstHeading(renderer.render(document), postIntroSnippet));
         html.append(conceptLearnedSnippet);
         html.append("</div>\n");
         html.append(nextChallengeCtaSnippet);
+        html.append(blogPostNavigationSnippet);
         html.append(authorBioSnippet);
         html.append(guiManagement.getEndOfMainContentMarker());
-        if (!mdheaders.contains("template: index")) {
+        if (renderDocumentColumns) {
             html.append("</div>");
             html.append("<aside class='left-column' aria-label='Learning links'>");
             html.append("<nav class='side-toc' aria-label='Learning and reference links'>");
@@ -685,6 +711,10 @@ public class MarkdownContentManager {
         line =
                 processLiveRequestMacro(
                         line, "api-live-request", "api-live-request", "true", contentPath);
+
+        if (line.contains("{{<blog-index>}}")) {
+            line = line.replace("{{<blog-index>}}", blogContentManager.renderBlogIndexHtml());
+        }
 
         if (line.contains("{{<PARTIAL_SNIPPET")) {
             String partialMacroRegex = "\\{\\{<PARTIAL_SNIPPET filename=\"(.+)\">}}";
@@ -942,6 +972,75 @@ public class MarkdownContentManager {
                 .replace(">", "&gt;");
     }
 
+    private String buildBreadcrumbHtml(
+            final String contentFolder,
+            final String contentPath,
+            final String[] breadcrumbs,
+            final String categoriesRaw) {
+
+        if (isIndividualBlogPostPath(contentPath)) {
+            return buildBlogPostBreadcrumbHtml(contentPath, categoriesRaw);
+        }
+
+        StringBuilder bcHtmlHeader = new StringBuilder();
+        String bcPath = "";
+        int linksInBreadcrumb = 0;
+        if (breadcrumbs.length > 0) {
+            bcHtmlHeader.append("<div class=\"breadcrumb\">\n\n");
+            bcHtmlHeader.append("<blockquote>");
+
+            for (String bc : breadcrumbs) {
+                bcPath = bcPath + bc;
+
+                if (!bc.isEmpty()) {
+
+                    if (contentPath.endsWith(bc)) {
+                        bcHtmlHeader.append(String.format(" %s", bc));
+                    } else {
+                        if (markdownContentPaths.contains(contentFolder + "/" + bcPath + ".md")) {
+                            linksInBreadcrumb++;
+                            bcHtmlHeader.append(
+                                    String.format("<a href=\"%s\">%s</a> &gt;", "/" + bcPath, bc));
+                        }
+                    }
+                }
+                bcPath = bcPath + "/";
+            }
+            bcHtmlHeader.append("</blockquote>");
+            bcHtmlHeader.append("</div >\n\n");
+        }
+
+        if (linksInBreadcrumb == 0) {
+            return "";
+        }
+
+        return bcHtmlHeader.toString();
+    }
+
+    private String buildBlogPostBreadcrumbHtml(
+            final String contentPath, final String categoriesRaw) {
+        final String postSlug = contentPath.substring(contentPath.lastIndexOf("/") + 1);
+        final Optional<String> primaryCategory = primaryBlogCategory(categoriesRaw);
+
+        StringBuilder html = new StringBuilder();
+        html.append("<div class=\"breadcrumb\">\n\n");
+        html.append("<blockquote>");
+        html.append("<a href=\"/blog\">Blog</a> &gt; ");
+        if (primaryCategory.isPresent()) {
+            html.append("<a href=\"/blog/categories/")
+                    .append(
+                            escapeHtmlAttribute(
+                                    BlogContentManager.categorySlug(primaryCategory.get())))
+                    .append("\">")
+                    .append(escapeHtmlAttribute(primaryCategory.get()))
+                    .append("</a> &gt;");
+        }
+        html.append(" ").append(escapeHtmlAttribute(postSlug));
+        html.append("</blockquote>");
+        html.append("</div >\n\n");
+        return html.toString();
+    }
+
     private String buildSchemaJsonLd(
             final String canonicalHost,
             final String canonicalAbsoluteUrl,
@@ -961,7 +1060,8 @@ public class MarkdownContentManager {
             final Boolean schemaHowToEnabled,
             final List<String> schemaHowToSteps,
             final Boolean schemaVideoEnabled,
-            final String schemaVideoId) {
+            final String schemaVideoId,
+            final String categoriesRaw) {
 
         final String orgName =
                 schemaPublisherValue.isEmpty()
@@ -1043,7 +1143,8 @@ public class MarkdownContentManager {
                 schemaBreadcrumbEnabled == null || schemaBreadcrumbEnabled;
         if (includeBreadcrumb) {
             final String breadcrumbJson =
-                    buildBreadcrumbListJson(canonicalHost, contentFolder, contentPath, breadcrumbs);
+                    buildBreadcrumbListJson(
+                            canonicalHost, contentFolder, contentPath, breadcrumbs, categoriesRaw);
             scripts.append(toJsonLdScript(breadcrumbJson));
         }
 
@@ -1248,7 +1349,7 @@ public class MarkdownContentManager {
         json.append("\"@type\":\"").append(escapeJsonValue(schemaTypeValue)).append("\",");
         json.append("\"@id\":\"").append(escapeJsonValue(pageId)).append("\",");
         json.append("\"name\":\"").append(escapeJsonValue(htmlTitle)).append("\",");
-        if ("Article".equalsIgnoreCase(schemaTypeValue)) {
+        if (isArticleLikeSchemaType(schemaTypeValue)) {
             json.append("\"headline\":\"").append(escapeJsonValue(htmlTitle)).append("\",");
         }
         if (!htmlDescription.isEmpty()) {
@@ -1293,12 +1394,16 @@ public class MarkdownContentManager {
             final String canonicalHost,
             final String contentFolder,
             final String contentPath,
-            final String[] breadcrumbs) {
+            final String[] breadcrumbs,
+            final String categoriesRaw) {
         if (breadcrumbs == null || breadcrumbs.length == 0) {
             return "";
         }
         if ("/index".equals(contentPath)) {
             return "";
+        }
+        if (isIndividualBlogPostPath(contentPath)) {
+            return buildBlogPostBreadcrumbListJson(canonicalHost, contentPath, categoriesRaw);
         }
 
         StringBuilder json = new StringBuilder();
@@ -1332,6 +1437,49 @@ public class MarkdownContentManager {
                     .append(escapeJsonValue(canonicalHost + path))
                     .append("\"}");
         }
+        json.append("]");
+        json.append("}");
+        return json.toString();
+    }
+
+    private String buildBlogPostBreadcrumbListJson(
+            final String canonicalHost, final String contentPath, final String categoriesRaw) {
+        final String postSlug = contentPath.substring(contentPath.lastIndexOf("/") + 1);
+        final Optional<String> primaryCategory = primaryBlogCategory(categoriesRaw);
+
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("\"@context\":\"https://schema.org\",");
+        json.append("\"@type\":\"BreadcrumbList\",");
+        json.append("\"itemListElement\":[");
+        json.append("{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost))
+                .append("\"}");
+        json.append(",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Blog\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost + "/blog"))
+                .append("\"}");
+        int currentPosition = 3;
+        if (primaryCategory.isPresent()) {
+            json.append(",{\"@type\":\"ListItem\",\"position\":")
+                    .append(currentPosition++)
+                    .append(",\"name\":\"")
+                    .append(escapeJsonValue(primaryCategory.get()))
+                    .append("\",\"item\":\"")
+                    .append(
+                            escapeJsonValue(
+                                    canonicalHost
+                                            + "/blog/categories/"
+                                            + BlogContentManager.categorySlug(
+                                                    primaryCategory.get())))
+                    .append("\"}");
+        }
+        json.append(",{\"@type\":\"ListItem\",\"position\":")
+                .append(currentPosition)
+                .append(",\"name\":\"")
+                .append(escapeJsonValue(humanizeSlug(postSlug)))
+                .append("\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost + contentPath))
+                .append("\"}");
         json.append("]");
         json.append("}");
         return json.toString();
@@ -1436,6 +1584,11 @@ public class MarkdownContentManager {
 
     private String humanizeSlug(final String slug) {
         return slug.replace("-", " ").trim();
+    }
+
+    private boolean isArticleLikeSchemaType(final String schemaTypeValue) {
+        return "Article".equalsIgnoreCase(schemaTypeValue)
+                || "BlogPosting".equalsIgnoreCase(schemaTypeValue);
     }
 
     private String extractYouTubeVideoId(final String line) {
@@ -1661,6 +1814,61 @@ public class MarkdownContentManager {
                 .append(".</p>");
         snippet.append("</aside>");
         return snippet.toString();
+    }
+
+    private String buildBlogCategorySnippet(final String contentPath, final String categoriesRaw) {
+        if (contentPath == null
+                || !contentPath.startsWith("/blog/")
+                || categoriesRaw == null
+                || categoriesRaw.trim().isEmpty()) {
+            return "";
+        }
+
+        final List<String> categories =
+                Arrays.stream(categoriesRaw.split("\\|\\|"))
+                        .map(String::trim)
+                        .filter(category -> !category.isEmpty())
+                        .toList();
+        if (categories.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder html = new StringBuilder();
+        html.append("<p class='blog-post-categories'>Categories: ");
+        for (int i = 0; i < categories.size(); i++) {
+            if (i > 0) {
+                html.append(", ");
+            }
+            final String category = categories.get(i);
+            html.append("<a href='/blog/categories/")
+                    .append(escapeHtmlAttribute(BlogContentManager.categorySlug(category)))
+                    .append("'>")
+                    .append(escapeHtmlAttribute(category))
+                    .append("</a>");
+        }
+        html.append("</p>");
+        return html.toString();
+    }
+
+    private boolean isBlogContentPath(final String contentPath) {
+        return contentPath != null
+                && (contentPath.equals("/blog") || contentPath.startsWith("/blog/"));
+    }
+
+    private boolean isIndividualBlogPostPath(final String contentPath) {
+        return contentPath != null
+                && contentPath.startsWith("/blog/")
+                && !contentPath.startsWith("/blog/categories/");
+    }
+
+    private Optional<String> primaryBlogCategory(final String categoriesRaw) {
+        if (categoriesRaw == null || categoriesRaw.trim().isEmpty()) {
+            return Optional.empty();
+        }
+        return Arrays.stream(categoriesRaw.split("\\|\\|"))
+                .map(String::trim)
+                .filter(category -> !category.isEmpty())
+                .findFirst();
     }
 
     private String buildNextChallengeCtaSnippet(

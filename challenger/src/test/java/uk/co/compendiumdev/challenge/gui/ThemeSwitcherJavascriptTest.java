@@ -31,7 +31,8 @@ public class ThemeSwitcherJavascriptTest {
         String javascript = themeSwitcherJavascript();
 
         Assertions.assertTrue(javascript.contains("function shouldForceOpenSideTocSections()"));
-        Assertions.assertTrue(javascript.contains("path === \"/learning\" || path === \"/learning/\""));
+        Assertions.assertTrue(
+                javascript.contains("path === \"/learning\" || path === \"/learning/\""));
         Assertions.assertTrue(javascript.contains("if (shouldForceOpenSideTocSections())"));
         Assertions.assertTrue(javascript.contains("section.open = true;"));
         Assertions.assertTrue(

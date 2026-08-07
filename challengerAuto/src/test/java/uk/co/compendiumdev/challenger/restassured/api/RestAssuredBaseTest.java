@@ -56,7 +56,6 @@ public class RestAssuredBaseTest {
     }
 
     protected static boolean shouldSkipHeadGetHeaderComparison(final String headerName) {
-        return HEAD_GET_HEADER_COMPARISON_SKIP.contains(
-                headerName.toLowerCase(Locale.ROOT));
+        return HEAD_GET_HEADER_COMPARISON_SKIP.contains(headerName.toLowerCase(Locale.ROOT));
     }
 }

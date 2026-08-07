@@ -192,3 +192,18 @@ Apply formatting:
 ```shell
 mvn spotless:apply
 ```
+
+Install the local pre-push hook so formatting failures are caught before CI:
+
+```shell
+git config core.hooksPath .githooks
+```
+
+On macOS or Linux, make the hook executable if needed:
+
+```shell
+chmod +x .githooks/pre-push
+```
+
+The hook runs the CI Spotless check with Java 21. Set `JAVA_HOME` or
+`JAVA_HOME_21` to a JDK 21 install before pushing.

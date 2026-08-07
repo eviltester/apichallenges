@@ -420,8 +420,7 @@ public class SolutionNextChallengeChainTest {
                                                 + line);
                             }
 
-                            final String proseWithoutCodeSpans =
-                                    line.replaceAll("`[^`]*`", "");
+                            final String proseWithoutCodeSpans = line.replaceAll("`[^`]*`", "");
                             for (String term : LEARNING_SECTION_INLINE_CODE_TERMS) {
                                 if (proseWithoutCodeSpans.contains(term)) {
                                     metadataErrors.add(
@@ -463,8 +462,8 @@ public class SolutionNextChallengeChainTest {
             }
 
             final String duplicateKey = currentHeading + "\t" + line.trim();
-            final String previousSolution = learningBulletsSeen.putIfAbsent(
-                    duplicateKey, solutionPage);
+            final String previousSolution =
+                    learningBulletsSeen.putIfAbsent(duplicateKey, solutionPage);
             if (previousSolution != null) {
                 metadataErrors.add(
                         solutionPage

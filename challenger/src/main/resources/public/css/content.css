@@ -494,6 +494,137 @@ aside.author-bio-snippet p {
     margin: 0.25rem 0;
 }
 
+.blog-post-list {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.blog-list-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+    padding-bottom: 1rem;
+}
+
+.blog-list-item h2 {
+    margin-bottom: 0.25rem;
+}
+
+.blog-list-meta,
+.blog-categories,
+.blog-post-categories,
+.blog-feed-link {
+    color: #4f5965;
+    font-size: 0.95rem;
+}
+
+.blog-post-categories {
+    box-sizing: border-box;
+    display: block;
+    line-height: 1.45;
+    margin: -0.25rem 0 0.9rem;
+    max-width: 100%;
+    text-align: right;
+    width: 100%;
+}
+
+.blog-category-list {
+    columns: 2;
+}
+
+.blog-pagination {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.25rem 0 2rem;
+}
+
+.blog-pagination a,
+.blog-pagination strong {
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0.45rem 0.65rem;
+}
+
+.blog-pagination strong {
+    background: #f2f6fb;
+}
+
+.blog-pagination-current {
+    color: #4f5965;
+    margin-right: 0.25rem;
+}
+
+.blog-all-post-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.blog-all-post-list li {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.blog-all-post-list time {
+    color: #4f5965;
+    flex: 0 0 7rem;
+}
+
+.blog-post-navigation {
+    border-top: 1px solid rgba(0, 0, 0, 0.14);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 1.5rem auto 1rem;
+    max-width: 70ch;
+    padding-top: 1rem;
+}
+
+.blog-post-nav-item {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.blog-post-nav-next {
+    text-align: right;
+}
+
+.blog-post-nav-label {
+    color: #4f5965;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+    .blog-category-list {
+        columns: 1;
+    }
+
+    .blog-post-navigation {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-post-nav-next {
+        text-align: left;
+    }
+
+    .blog-post-categories {
+        margin: 0 0 1rem;
+        text-align: left;
+    }
+
+    .blog-all-post-list li {
+        display: block;
+    }
+
+    .blog-all-post-list time {
+        display: block;
+        margin-bottom: 0.15rem;
+    }
+}
+
 aside.next-challenge-cta {
     margin-top: 1.25rem;
     margin-bottom: 1rem;

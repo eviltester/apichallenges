@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "[pre-push] Running CI formatting check with Java 21"
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+if [ -n "${JAVA_HOME_21:-}" ] && [ -x "$JAVA_HOME_21/bin/java" ]; then
+    export JAVA_HOME="$JAVA_HOME_21"
+    export PATH="$JAVA_HOME/bin:$PATH"
+elif [ -n "${JAVA_HOME_21_X64:-}" ] && [ -x "$JAVA_HOME_21_X64/bin/java" ]; then
+    export JAVA_HOME="$JAVA_HOME_21_X64"
+    export PATH="$JAVA_HOME/bin:$PATH"
+fi
+
+if ! command -v java >/dev/null 2>&1; then
+    echo "[pre-push] java was not found on PATH."
+    echo "[pre-push] Set JAVA_HOME or JAVA_HOME_21 to a JDK 21 install and retry."
+    exit 1
+fi
+
+if ! command -v mvn >/dev/null 2>&1; then
+    echo "[pre-push] mvn was not found on PATH."
+    exit 1
+fi
+
+java_major="$(
+    java -XshowSettings:properties -version 2>&1 \
+        | sed -n 's/.*java.specification.version = //p' \
+        | head -n 1 \
+        | tr -d '[:space:]'
+)"
+
+if [ "$java_major" != "21" ]; then
+    echo "[pre-push] Java 21 is required to mirror the CI Spotless check."
+    echo "[pre-push] Current java.specification.version is '$java_major'."
+    echo "[pre-push] Set JAVA_HOME or JAVA_HOME_21 to a JDK 21 install and retry."
+    java -version
+    exit 1
+fi
+
+mvn -B spotless:check

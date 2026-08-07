@@ -107,7 +107,8 @@ public class ChallengerWebGUI {
                             ['/sim/docs', 'sim-api-root-menu'],
                             ['/practice-modes/simulation', 'sim-api-root-menu'],
                             ['/mirror/', 'mirror-api-root-menu'],
-                            ['/practice-modes/mirror', 'mirror-api-root-menu']
+                            ['/practice-modes/mirror', 'mirror-api-root-menu'],
+                            ['/blog', 'blog-root-menu']
                         ];
                         foundMapping = false;
                         for(const mapping of urlMapping){
@@ -200,6 +201,7 @@ public class ChallengerWebGUI {
 
                                 </ul>
                             </li>
+                            <li id='blog-root-menu'><a href="/blog">Blog</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -232,6 +234,8 @@ public class ChallengerWebGUI {
         // add an endpoint for each markdown content file
         MarkdownContentManager contentManager =
                 new MarkdownContentManager(pathsToFileContent, guiManagement, challengeDefinitions);
+        BlogContentManager blogContentManager =
+                new BlogContentManager(pathsToFileContent, CANONICAL_HOST);
         for (String pathToMarkdownFile : pathsToFileContent) {
             String endPointForMarkdownFile =
                     pathToMarkdownFile.replaceFirst("content/", "/").replace(".md", "");
@@ -294,6 +298,7 @@ public class ChallengerWebGUI {
                     }));
         }
 
+        registerBlogGeneratedRoutes(blogContentManager);
         registerApiClientRoutes();
 
         // using the ResourceContentScanner, we can build the sitemap.xml automatically
@@ -307,6 +312,26 @@ public class ChallengerWebGUI {
         siteMap.addUrl(CANONICAL_HOST, SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl(CANONICAL_HOST + "/docs", SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl(CANONICAL_HOST + "/gui/challenges", SEO_FIXED_LASTMOD.toString());
+        siteMap.addUrl(CANONICAL_HOST + "/blog/all-posts", blogContentManager.latestLastMod());
+        for (int pageNumber = 2; pageNumber <= blogContentManager.blogPageCount(); pageNumber++) {
+            siteMap.addUrl(
+                    CANONICAL_HOST + blogContentManager.blogPagePath(pageNumber),
+                    blogContentManager.latestLastMod());
+        }
+        siteMap.addUrl(CANONICAL_HOST + "/blog/categories", blogContentManager.latestLastMod());
+        for (String categorySlug : blogContentManager.categorySlugs()) {
+            siteMap.addUrl(
+                    CANONICAL_HOST + "/blog/categories/" + categorySlug,
+                    blogContentManager.categoryLastMod(categorySlug));
+            for (int pageNumber = 2;
+                    pageNumber <= blogContentManager.categoryPageCount(categorySlug);
+                    pageNumber++) {
+                siteMap.addUrl(
+                        CANONICAL_HOST
+                                + blogContentManager.categoryPagePath(categorySlug, pageNumber),
+                        blogContentManager.categoryLastMod(categorySlug));
+            }
+        }
 
         get(
                 "/sitemap.xml",
@@ -777,6 +802,170 @@ public class ChallengerWebGUI {
         html.append(guiManagement.getPageFooter());
         html.append(guiManagement.getPageEnd());
         return html.toString();
+    }
+
+    private void registerBlogGeneratedRoutes(final BlogContentManager blogContentManager) {
+        get(
+                "/blog/all-posts",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.status(200);
+                    return blogContentManager.renderAllPostsIndexPage(guiManagement);
+                });
+        head(
+                "/blog/all-posts",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.status(200);
+                    return "";
+                });
+        get(
+                "/blog/all-posts/",
+                (request, response) -> {
+                    response.redirect("/blog/all-posts", 301);
+                    return "";
+                });
+        head(
+                "/blog/all-posts/",
+                (request, response) -> {
+                    response.redirect("/blog/all-posts", 301);
+                    return "";
+                });
+
+        registerRedirect("/blog/page/1", "/blog");
+        registerRedirect("/blog/page/1/", "/blog");
+        for (int pageNumber = 2; pageNumber <= blogContentManager.blogPageCount(); pageNumber++) {
+            final String blogPagePath = blogContentManager.blogPagePath(pageNumber);
+            final int currentPageNumber = pageNumber;
+            get(
+                    blogPagePath,
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return blogContentManager.renderBlogPage(guiManagement, currentPageNumber);
+                    });
+            head(
+                    blogPagePath,
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return "";
+                    });
+            registerRedirect(blogPagePath + "/", blogPagePath);
+        }
+
+        get(
+                "/blog/categories",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.status(200);
+                    return blogContentManager.renderCategoryIndexPage(guiManagement);
+                });
+        head(
+                "/blog/categories",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.status(200);
+                    return "";
+                });
+        get(
+                "/blog/categories/",
+                (request, response) -> {
+                    response.redirect("/blog/categories", 301);
+                    return "";
+                });
+        head(
+                "/blog/categories/",
+                (request, response) -> {
+                    response.redirect("/blog/categories", 301);
+                    return "";
+                });
+
+        for (String categorySlug : blogContentManager.categorySlugs()) {
+            final String categoryPath = "/blog/categories/" + categorySlug;
+            get(
+                    categoryPath,
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return blogContentManager.renderCategoryPage(guiManagement, categorySlug);
+                    });
+            head(
+                    categoryPath,
+                    (request, response) -> {
+                        response.type("text/html");
+                        response.status(200);
+                        return "";
+                    });
+            get(
+                    categoryPath + "/",
+                    (request, response) -> {
+                        response.redirect(categoryPath, 301);
+                        return "";
+                    });
+            head(
+                    categoryPath + "/",
+                    (request, response) -> {
+                        response.redirect(categoryPath, 301);
+                        return "";
+                    });
+
+            registerRedirect(categoryPath + "/page/1", categoryPath);
+            registerRedirect(categoryPath + "/page/1/", categoryPath);
+            for (int pageNumber = 2;
+                    pageNumber <= blogContentManager.categoryPageCount(categorySlug);
+                    pageNumber++) {
+                final String categoryPagePath =
+                        blogContentManager.categoryPagePath(categorySlug, pageNumber);
+                final int currentPageNumber = pageNumber;
+                get(
+                        categoryPagePath,
+                        (request, response) -> {
+                            response.type("text/html");
+                            response.status(200);
+                            return blogContentManager.renderCategoryPage(
+                                    guiManagement, categorySlug, currentPageNumber);
+                        });
+                head(
+                        categoryPagePath,
+                        (request, response) -> {
+                            response.type("text/html");
+                            response.status(200);
+                            return "";
+                        });
+                registerRedirect(categoryPagePath + "/", categoryPagePath);
+            }
+        }
+
+        get(
+                "/blog/feed.xml",
+                (request, response) -> {
+                    response.type("application/rss+xml; charset=utf-8");
+                    response.status(200);
+                    return blogContentManager.renderRssFeed();
+                });
+        head(
+                "/blog/feed.xml",
+                (request, response) -> {
+                    response.type("application/rss+xml; charset=utf-8");
+                    response.status(200);
+                    return "";
+                });
+    }
+
+    private void registerRedirect(final String fromPath, final String toPath) {
+        get(
+                fromPath,
+                (request, response) -> {
+                    response.redirect(toPath, 301);
+                    return "";
+                });
+        head(
+                fromPath,
+                (request, response) -> {
+                    response.redirect(toPath, 301);
+                    return "";
+                });
     }
 
     private String renderApiClientWidget(final ApiClientPage page) {

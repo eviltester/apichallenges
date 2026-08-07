@@ -115,6 +115,7 @@ public final class CdnCachePolicy {
 
     private static boolean isDocsPath(final String path) {
         return path.equals("/")
+                || path.equals("/blog/feed.xml")
                 || path.equals("/sitemap.xml")
                 || path.equals("/docs")
                 || path.startsWith("/docs/")
@@ -187,6 +188,7 @@ public final class CdnCachePolicy {
     private static boolean isContentDocumentationPath(final String path) {
         return path.startsWith("/apichallenges")
                 || path.startsWith("/author")
+                || path.startsWith("/blog")
                 || path.startsWith("/learning")
                 || path.startsWith("/practice-modes")
                 || path.startsWith("/tools")

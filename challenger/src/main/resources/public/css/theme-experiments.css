@@ -567,6 +567,46 @@ html[data-theme] .article-byline-separator {
     color: var(--muted);
 }
 
+html[data-theme] .blog-list-item {
+    border-bottom-color: var(--border);
+}
+
+html[data-theme] .blog-list-meta,
+html[data-theme] .blog-categories,
+html[data-theme] .blog-post-categories,
+html[data-theme] .blog-feed-link,
+html[data-theme] .blog-pagination-current,
+html[data-theme] .blog-all-post-list time {
+    color: var(--muted);
+}
+
+html[data-theme] p.blog-post-categories {
+    box-sizing: border-box;
+    display: block;
+    line-height: 1.45;
+    margin: -0.25rem 0 0.9rem;
+    max-width: 100%;
+    text-align: right;
+    width: 100%;
+}
+
+html[data-theme] .blog-pagination a,
+html[data-theme] .blog-pagination strong {
+    border-color: var(--border);
+}
+
+html[data-theme] .blog-pagination strong {
+    background: var(--surface-soft);
+}
+
+html[data-theme] .blog-post-navigation {
+    border-top-color: var(--border);
+}
+
+html[data-theme] .blog-post-nav-label {
+    color: var(--muted);
+}
+
 html[data-theme] ul {
     padding-left: 1.35rem;
 }
@@ -1861,6 +1901,11 @@ html[data-theme] .mobile-content-nav-toggle {
 @media (max-width: 760px) {
     html[data-theme] .content {
         padding: 0.75rem;
+    }
+
+    html[data-theme] p.blog-post-categories {
+        margin: 0 0 1rem;
+        text-align: left;
     }
 
     html[data-theme] main {

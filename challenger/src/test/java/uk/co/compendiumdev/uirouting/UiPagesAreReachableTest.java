@@ -143,6 +143,35 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200, "Learning Utilities and Resources | API Challenges", "/learning"));
+        args.add(Arguments.of(200, "API Testing Blog and REST API Practice Updates", "/blog"));
+        args.add(
+                Arguments.of(200, "API Challenges Blog - Page 2 | API Challenges", "/blog/page/2"));
+        args.add(Arguments.of(200, "All Blog Posts | API Challenges", "/blog/all-posts"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "API Challenges Practice API Overview Video Summary",
+                        "/blog/api-challenges-practice-api-overview"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "Interactive API Simulator Walkthrough Launch Guide",
+                        "/blog/api-simulator-walkthrough-launch"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "Interactive REST API Tutorial and Raw Response View",
+                        "/blog/changelog-2026-08-06-interactive-rest-api-tutorial"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "Bruno API Client Demo for Exploratory API Testing",
+                        "/blog/changelog-2025-04-19-bruno-client-demo"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "Simple API Overview with Bruno and cURL Guides",
+                        "/blog/changelog-2025-04-13-simple-api-bruno-curl"));
         args.add(
                 Arguments.of(
                         200,
@@ -849,6 +878,132 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
+    void blogGeneratedCategoryPagesAndRssFeedRender() {
+
+        HttpResponseDetails response = http.send("/blog/categories", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Blog Categories</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; categories</blockquote>"));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/categories/api-testing\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/categories/rest-api-tutorial\""));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/categories/api-simulator\""));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
+
+        response = http.send("/blog", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/all-posts\""));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/page/2\""));
+        Assertions.assertTrue(response.body.contains("Page 1 of 2"));
+        Assertions.assertTrue(
+                response.body.contains("Interactive API Simulator Walkthrough Launch"));
+        Assertions.assertFalse(
+                response.body.contains("API Challenges Practice API Overview Video Summary"));
+
+        response = http.send("/blog/page/2", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>API Challenges Blog - Page 2</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; page 2</blockquote>"));
+        Assertions.assertTrue(response.body.contains("href=\"/blog\""));
+        Assertions.assertTrue(response.body.contains("Page 2 of 2"));
+        Assertions.assertTrue(
+                response.body.contains("API Challenges Practice API Overview Video Summary"));
+        Assertions.assertTrue(
+                response.body.contains("Practice API Apps for REST API Testing Exercises"));
+
+        response = http.send("/blog/all-posts", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>All Blog Posts</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; all posts index</blockquote>"));
+        Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<time datetime=\"2026-08-07T09:00:00Z\">2026-08-07</time> <a href=\"/blog/api-simulator-walkthrough-launch\">Interactive API Simulator Walkthrough Launch</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<time datetime=\"2024-04-13T15:36:44Z\">2024-04-13</time> <a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
+        Assertions.assertTrue(
+                response.body.indexOf("Interactive API Simulator Walkthrough Launch")
+                        < response.body.indexOf(
+                                "API Challenges Practice API Overview Video Summary"));
+
+        response = http.send("/blog/categories/api-testing", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>API Testing Blog Posts</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; API Testing</blockquote>"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/api-challenges-practice-api-overview\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/api-simulator-walkthrough-launch\""));
+
+        response = http.send("/blog/categories/change-log", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Change Log Blog Posts</h1>"));
+        Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/categories/change-log/page/2\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/blog/changelog-2026-08-06-interactive-rest-api-tutorial\""));
+        Assertions.assertFalse(
+                response.body.contains("href=\"/blog/changelog-2025-02-16-practice-apps\""));
+
+        response = http.send("/blog/categories/change-log/page/2", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Change Log Blog Posts - Page 2</h1>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+        Assertions.assertTrue(response.body.contains("Page 2 of 2"));
+        Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/changelog-2025-02-16-practice-apps\""));
+
+        response = http.send("/blog/feed.xml", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/rss+xml"));
+        Assertions.assertTrue(response.body.contains("<rss version=\"2.0\""));
+        Assertions.assertTrue(response.body.contains("xmlns:content="));
+        Assertions.assertTrue(response.body.contains("<content:encoded><![CDATA["));
+        Assertions.assertTrue(
+                response.body.contains("Interactive API Simulator Walkthrough Launch"));
+        Assertions.assertTrue(
+                response.body.contains("Interactive REST API Tutorial and Raw Response View"));
+        Assertions.assertTrue(
+                response.body.contains("API Challenges Site Refresh and Hosted API Clients"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "https://apichallenges.com/blog/changelog-2026-08-06-interactive-rest-api-tutorial"));
+        Assertions.assertTrue(response.body.contains("<category>API Testing</category>"));
+        Assertions.assertTrue(response.body.contains("<category>Change Log</category>"));
+        Assertions.assertTrue(response.body.contains("Thu, 6 Aug 2026 09:00:00 GMT"));
+        Assertions.assertTrue(response.body.contains("raw response view"));
+        Assertions.assertTrue(
+                response.body.indexOf("Interactive API Simulator Walkthrough Launch")
+                        < response.body.indexOf(
+                                "Interactive REST API Tutorial and Raw Response View"));
+        Assertions.assertTrue(
+                response.body.indexOf("Interactive REST API Tutorial and Raw Response View")
+                        < response.body.indexOf(
+                                "API Challenges Site Refresh and Hosted API Clients"));
+        Assertions.assertFalse(
+                response.body.contains("API Challenges Practice API Overview Video Summary"));
+        Assertions.assertTrue(response.body.split("<item>", -1).length - 1 <= 5);
+    }
+
+    @Test
     void topNavigationExposesLearningSpineLinks() {
 
         final HttpResponseDetails response = http.send("/", "get");
@@ -856,8 +1011,14 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         final int learningRoot = response.body.indexOf("<li id='learning-root-menu'");
         final int simulationRoot = response.body.indexOf("<li id='sim-api-root-menu'");
+        final int mirrorRoot = response.body.indexOf("<li id='mirror-api-root-menu'");
+        final int blogRoot = response.body.indexOf("<li id='blog-root-menu'");
         Assertions.assertTrue(learningRoot > -1);
         Assertions.assertTrue(simulationRoot > learningRoot);
+        Assertions.assertTrue(mirrorRoot > simulationRoot);
+        Assertions.assertTrue(blogRoot > mirrorRoot);
+        Assertions.assertTrue(
+                response.body.contains("<li id='blog-root-menu'><a href=\"/blog\">Blog</a></li>"));
 
         final String learningMenu = response.body.substring(learningRoot, simulationRoot);
         assertContainsInOrder(
@@ -973,8 +1134,7 @@ public class UiPagesAreReachableTest {
         final int tutorialTitle =
                 response.body.indexOf(
                         "<h1>Interactive API Simulation: API Simulator Walkthrough</h1>");
-        final int tutorialHero =
-                response.body.indexOf("content-hero-figure simulator-hero-image");
+        final int tutorialHero = response.body.indexOf("content-hero-figure simulator-hero-image");
         final int tutorialToc = response.body.indexOf("<div id='toc'>");
         Assertions.assertTrue(tutorialTitle < tutorialHero);
         Assertions.assertTrue(tutorialHero < tutorialToc);
@@ -1365,6 +1525,12 @@ public class UiPagesAreReachableTest {
                 "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
 
         response = http.send("/learning", "head");
+        Assertions.assertEquals(200, response.statusCode);
+        assertCacheControl(
+                response,
+                "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
+
+        response = http.send("/blog/feed.xml", "get");
         Assertions.assertEquals(200, response.statusCode);
         assertCacheControl(
                 response,
@@ -1803,12 +1969,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h2>Lessons Learned</h2>"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "<code>GET /todos</code> is the baseline collection read"));
+                response.body.contains("<code>GET /todos</code> is the baseline collection read"));
         Assertions.assertTrue(response.body.contains("<h2>Suggested Experiments</h2>"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Capture the ids returned by <code>GET /todos</code>"));
+                response.body.contains("Capture the ids returned by <code>GET /todos</code>"));
         Assertions.assertTrue(response.body.contains("<code>?doneStatus=false</code>"));
 
         final int lessonsIndex = response.body.indexOf("Lessons Learned");
@@ -2285,6 +2449,34 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.com/tutorials/api-simulator-walkthrough</loc>"));
+        Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com/blog</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/blog/all-posts</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/blog/page/2</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/api-challenges-practice-api-overview</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/api-simulator-walkthrough-launch</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/changelog-2026-08-06-interactive-rest-api-tutorial</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/changelog-2025-04-19-bruno-client-demo</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/blog/categories</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/categories/api-testing</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/categories/change-log</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/categories/change-log/page/2</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-07</lastmod>"));
         Assertions.assertFalse(
@@ -2316,6 +2508,39 @@ public class UiPagesAreReachableTest {
         response = http.send("/learning", "head");
         Assertions.assertEquals(200, response.statusCode);
 
+        response = http.send("/blog", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/page/2", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/all-posts", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/api-challenges-practice-api-overview", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/api-simulator-walkthrough-launch", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/changelog-2026-08-06-interactive-rest-api-tutorial", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/categories", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/categories/api-testing", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/categories/change-log", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/categories/change-log/page/2", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/feed.xml", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
         response = http.send("/reference/openapi", "head");
         Assertions.assertEquals(200, response.statusCode);
 
@@ -2345,6 +2570,54 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
 
+        response = http.send("/blog/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog", response.getHeader("Location"));
+
+        response = http.send("/blog/all-posts/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/all-posts", response.getHeader("Location"));
+
+        response = http.send("/blog/page/1", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog", response.getHeader("Location"));
+
+        response = http.send("/blog/page/2/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/page/2", response.getHeader("Location"));
+
+        response = http.send("/blog/api-challenges-practice-api-overview/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/api-challenges-practice-api-overview", response.getHeader("Location"));
+
+        response = http.send("/blog/changelog-2026-08-06-interactive-rest-api-tutorial/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/changelog-2026-08-06-interactive-rest-api-tutorial",
+                response.getHeader("Location"));
+
+        response = http.send("/blog/categories/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/api-testing/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/api-testing", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/page/1", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/page/2/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/categories/change-log/page/2", response.getHeader("Location"));
+
         response = http.send("/tutorials/api-simulator-walkthrough/", "get");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(
@@ -2362,6 +2635,39 @@ public class UiPagesAreReachableTest {
         response = http.send("/tutorials/rest-api-tutorial/", "head");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
+
+        response = http.send("/blog/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog", response.getHeader("Location"));
+
+        response = http.send("/blog/all-posts/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/all-posts", response.getHeader("Location"));
+
+        response = http.send("/blog/page/1", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog", response.getHeader("Location"));
+
+        response = http.send("/blog/page/2/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/page/2", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/api-testing/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/api-testing", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/page/1", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
+
+        response = http.send("/blog/categories/change-log/page/2/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/categories/change-log/page/2", response.getHeader("Location"));
 
         response = http.send("/tutorials/api-simulator-walkthrough/", "head");
         Assertions.assertEquals(301, response.statusCode);

@@ -94,6 +94,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html,
                 "<ul class=\"side-toc-root\">",
                 "<li><a href=\"/learning\">Learning Zone</a></li>",
+                "<li><a href=\"/blog\">Blog</a></li>",
                 "<li class=\"side-toc-syllabus\" aria-label=\"REST API Tutorial path\">",
                 "<span class=\"side-toc-syllabus-title\">REST API Tutorial Path</span>",
                 "<li><a href=\"/tutorials/rest-api-tutorial\">Interactive REST API Tutorial</a></li>",
@@ -134,6 +135,103 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tools/online-clients/basic-client\">Basic Client</a></li>",
                 "<li><a href=\"/tools/online-clients/swagger\">Swagger</a></li>",
                 "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
+        Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
+    }
+
+    @Test
+    void blogIndexAndPostsRenderWithoutLeftSidebarOnPosts() {
+
+        String blogHtml = renderContentPage("/blog");
+
+        Assertions.assertTrue(blogHtml.contains("<h1>API Challenges Blog</h1>"));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/feed.xml\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/categories\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/all-posts\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/page/2\""));
+        Assertions.assertTrue(blogHtml.contains("Page 1 of 2"));
+        Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
+        Assertions.assertFalse(
+                blogHtml.contains("href=\"/blog/api-challenges-practice-api-overview\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/api-simulator-walkthrough-launch\""));
+        Assertions.assertTrue(
+                blogHtml.contains(
+                        "href=\"/blog/changelog-2026-08-06-interactive-rest-api-tutorial\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/categories/api-testing\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/categories/rest-api-tutorial\""));
+        Assertions.assertTrue(blogHtml.contains("href=\"/blog/categories/change-log\""));
+        assertContainsInOrder(
+                blogHtml,
+                "Interactive API Simulator Walkthrough Launch",
+                "Interactive REST API Tutorial and Raw Response View",
+                "API Challenges Site Refresh and Hosted API Clients");
+
+        String videoPostHtml = renderContentPage("/blog/api-challenges-practice-api-overview");
+
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "<h1>API Challenges Practice API Overview Video Summary</h1>"));
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "Published <time datetime='2024-04-13T15:36:44Z'>2024-04-13</time>"));
+        Assertions.assertTrue(videoPostHtml.contains("<lite-youtube videoid=\"rxEwPMM_Qyc\">"));
+        Assertions.assertTrue(videoPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertTrue(videoPostHtml.contains("\"@type\":\"VideoObject\""));
+        Assertions.assertTrue(videoPostHtml.contains("href='/blog/categories/api-testing'"));
+        Assertions.assertTrue(videoPostHtml.contains("href='/blog/categories/rest-api-tutorial'"));
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "<a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories/api-testing\">API Testing</a> &gt; api-challenges-practice-api-overview"));
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "\"name\":\"API Testing\",\"item\":\"https://apichallenges.com/blog/categories/api-testing\""));
+        Assertions.assertTrue(videoPostHtml.contains("<nav class='blog-post-navigation'"));
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "<a rel='next' href='/blog/changelog-2025-02-16-practice-apps'>Practice API Apps for REST API Testing Exercises</a>"));
+        Assertions.assertTrue(
+                videoPostHtml.contains(
+                        "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"API Challenges Blog RSS\" href=\"/blog/feed.xml\">"));
+        Assertions.assertFalse(videoPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(videoPostHtml.contains("<nav class='side-toc'"));
+        assertContainsInOrder(
+                videoPostHtml,
+                "<h1>API Challenges Practice API Overview Video Summary</h1>",
+                "<p class='article-byline'>",
+                "<p class='blog-post-categories'>",
+                "<div id='toc'></div>");
+
+        String launchPostHtml = renderContentPage("/blog/api-simulator-walkthrough-launch");
+
+        Assertions.assertTrue(
+                launchPostHtml.contains("<h1>Interactive API Simulator Walkthrough Launch</h1>"));
+        Assertions.assertTrue(
+                launchPostHtml.contains(
+                        "Published <time datetime='2026-08-07T09:00:00Z'>2026-08-07</time>"));
+        Assertions.assertTrue(launchPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertFalse(launchPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(launchPostHtml.contains("<nav class='side-toc'"));
+
+        String changelogPostHtml =
+                renderContentPage("/blog/changelog-2025-04-19-bruno-client-demo");
+
+        Assertions.assertTrue(
+                changelogPostHtml.contains(
+                        "<h1>Bruno API Client Demo for Exploratory API Testing</h1>"));
+        Assertions.assertTrue(changelogPostHtml.contains("<lite-youtube videoid=\"3TlwUKyfOMw\">"));
+        Assertions.assertTrue(changelogPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertTrue(changelogPostHtml.contains("\"@type\":\"VideoObject\""));
+        Assertions.assertTrue(changelogPostHtml.contains("href='/blog/categories/change-log'"));
+        Assertions.assertTrue(
+                changelogPostHtml.contains(
+                        "<a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories/change-log\">Change Log</a> &gt; changelog-2025-04-19-bruno-client-demo"));
+        Assertions.assertTrue(
+                changelogPostHtml.contains(
+                        "<a rel='prev' href='/blog/changelog-2025-04-13-simple-api-bruno-curl'>Simple API Overview with Bruno and cURL Guides</a>"));
+        Assertions.assertTrue(
+                changelogPostHtml.contains(
+                        "<a rel='next' href='/blog/changelog-2025-04-20-api-clients-page'>Expanded API Clients Page for Tool Selection</a>"));
+        Assertions.assertFalse(changelogPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(changelogPostHtml.contains("<nav class='side-toc'"));
     }
 
     @Test
