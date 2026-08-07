@@ -15,6 +15,6 @@ public class ResourceContentScannerTest {
 
         Assertions.assertFalse(urls.containsKey("seo-metadata-test-page"));
         Assertions.assertFalse(urls.containsKey("practice-modes/shoppingcart-bugs"));
-        Assertions.assertTrue(urls.containsKey("tutorials/openapi"));
+        Assertions.assertTrue(urls.containsKey("reference/openapi"));
     }
 }

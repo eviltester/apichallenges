@@ -154,6 +154,9 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
         Assertions.assertFalse(
                 blogHtml.contains("href=\"/blog/api-challenges-practice-api-overview\""));
+        Assertions.assertTrue(
+                blogHtml.contains(
+                        "href=\"/blog/changelog-2026-08-07-initial-api-spector-review\""));
         Assertions.assertTrue(blogHtml.contains("href=\"/blog/api-simulator-walkthrough-launch\""));
         Assertions.assertTrue(
                 blogHtml.contains(
@@ -163,6 +166,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(blogHtml.contains("href=\"/blog/categories/change-log\""));
         assertContainsInOrder(
                 blogHtml,
+                "API Spector Review: Best New API Client for API Testing",
                 "Interactive API Simulator Walkthrough Launch",
                 "Interactive REST API Tutorial and Raw Response View",
                 "API Challenges Site Refresh and Hosted API Clients");
@@ -212,6 +216,19 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(launchPostHtml.contains("\"@type\":\"BlogPosting\""));
         Assertions.assertFalse(launchPostHtml.contains("<aside class='left-column'"));
         Assertions.assertFalse(launchPostHtml.contains("<nav class='side-toc'"));
+
+        String apiSpectorPostHtml =
+                renderContentPage("/blog/changelog-2026-08-07-initial-api-spector-review");
+
+        Assertions.assertTrue(
+                apiSpectorPostHtml.contains(
+                        "<h1>API Spector Review: Best New API Client for API Testing</h1>"));
+        Assertions.assertTrue(apiSpectorPostHtml.contains("https://api-spector.dev/"));
+        Assertions.assertTrue(apiSpectorPostHtml.contains("href=\"/tools/clients/api-spector\""));
+        Assertions.assertTrue(apiSpectorPostHtml.contains("href='/blog/categories/tools'"));
+        Assertions.assertTrue(apiSpectorPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertFalse(apiSpectorPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(apiSpectorPostHtml.contains("<nav class='side-toc'"));
 
         String changelogPostHtml =
                 renderContentPage("/blog/changelog-2025-04-19-bruno-client-demo");

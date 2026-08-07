@@ -150,6 +150,11 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
+                        "API Spector Review: Best New API Client for API Testing",
+                        "/blog/changelog-2026-08-07-initial-api-spector-review"));
+        args.add(
+                Arguments.of(
+                        200,
                         "API Challenges Practice API Overview Video Summary",
                         "/blog/api-challenges-practice-api-overview"));
         args.add(
@@ -891,6 +896,8 @@ public class UiPagesAreReachableTest {
                 response.body.contains("href=\"/blog/categories/rest-api-tutorial\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/api-simulator\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/categories/api-client-reviews\""));
 
         response = http.send("/blog", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -898,6 +905,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/blog/all-posts\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/page/2\""));
         Assertions.assertTrue(response.body.contains("Page 1 of 2"));
+        Assertions.assertTrue(
+                response.body.contains("API Spector Review: Best New API Client for API Testing"));
         Assertions.assertTrue(
                 response.body.contains("Interactive API Simulator Walkthrough Launch"));
         Assertions.assertFalse(
@@ -925,14 +934,30 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
         Assertions.assertTrue(
                 response.body.contains(
+                        "<time datetime=\"2026-08-07T10:30:00Z\">2026-08-07</time> <a href=\"/blog/changelog-2026-08-07-initial-api-spector-review\">API Spector Review: Best New API Client for API Testing</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "<time datetime=\"2026-08-07T09:00:00Z\">2026-08-07</time> <a href=\"/blog/api-simulator-walkthrough-launch\">Interactive API Simulator Walkthrough Launch</a>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<time datetime=\"2024-04-13T15:36:44Z\">2024-04-13</time> <a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
         Assertions.assertTrue(
+                response.body.indexOf("API Spector Review: Best New API Client for API Testing")
+                        < response.body.indexOf("Interactive API Simulator Walkthrough Launch"));
+        Assertions.assertTrue(
                 response.body.indexOf("Interactive API Simulator Walkthrough Launch")
                         < response.body.indexOf(
                                 "API Challenges Practice API Overview Video Summary"));
+
+        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<h1>API Spector Review: Best New API Client for API Testing</h1>"));
+        Assertions.assertTrue(response.body.contains("https://api-spector.dev/"));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/clients/api-spector\""));
+        Assertions.assertTrue(response.body.contains("href='/blog/categories/tools'"));
+        Assertions.assertFalse(response.body.contains("<aside class='left-column'"));
 
         response = http.send("/blog/categories/api-testing", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -942,6 +967,9 @@ public class UiPagesAreReachableTest {
                         "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; API Testing</blockquote>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/api-challenges-practice-api-overview\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/blog/changelog-2026-08-07-initial-api-spector-review\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/api-simulator-walkthrough-launch\""));
 
@@ -978,6 +1006,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("xmlns:content="));
         Assertions.assertTrue(response.body.contains("<content:encoded><![CDATA["));
         Assertions.assertTrue(
+                response.body.contains("API Spector Review: Best New API Client for API Testing"));
+        Assertions.assertTrue(
                 response.body.contains("Interactive API Simulator Walkthrough Launch"));
         Assertions.assertTrue(
                 response.body.contains("Interactive REST API Tutorial and Raw Response View"));
@@ -989,7 +1019,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<category>API Testing</category>"));
         Assertions.assertTrue(response.body.contains("<category>Change Log</category>"));
         Assertions.assertTrue(response.body.contains("Thu, 6 Aug 2026 09:00:00 GMT"));
+        Assertions.assertTrue(response.body.contains("api-spector.dev"));
         Assertions.assertTrue(response.body.contains("raw response view"));
+        Assertions.assertTrue(
+                response.body.indexOf("API Spector Review: Best New API Client for API Testing")
+                        < response.body.indexOf("Interactive API Simulator Walkthrough Launch"));
         Assertions.assertTrue(
                 response.body.indexOf("Interactive API Simulator Walkthrough Launch")
                         < response.body.indexOf(
@@ -2459,6 +2493,9 @@ public class UiPagesAreReachableTest {
                         "<loc>https://apichallenges.com/blog/api-challenges-practice-api-overview</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
+                        "<loc>https://apichallenges.com/blog/changelog-2026-08-07-initial-api-spector-review</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "<loc>https://apichallenges.com/blog/api-simulator-walkthrough-launch</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -2520,6 +2557,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/blog/api-challenges-practice-api-overview", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review", "head");
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/blog/api-simulator-walkthrough-launch", "head");
@@ -2593,6 +2633,12 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(
                 "/blog/api-challenges-practice-api-overview", response.getHeader("Location"));
 
+        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/changelog-2026-08-07-initial-api-spector-review",
+                response.getHeader("Location"));
+
         response = http.send("/blog/changelog-2026-08-06-interactive-rest-api-tutorial/", "get");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(
@@ -2653,6 +2699,12 @@ public class UiPagesAreReachableTest {
         response = http.send("/blog/page/2/", "head");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/blog/page/2", response.getHeader("Location"));
+
+        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/blog/changelog-2026-08-07-initial-api-spector-review",
+                response.getHeader("Location"));
 
         response = http.send("/blog/categories/api-testing/", "head");
         Assertions.assertEquals(301, response.statusCode);
