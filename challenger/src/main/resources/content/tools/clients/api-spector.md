@@ -60,8 +60,8 @@ Best API client for checking your OpenAPI specifications and standards complianc
 | View history of requests/responses                  | Y   | can export history to HAR file                                    |
 | Exporting requests to cURL format                   | N   |                                                                   |
 | Sends Diagnostic information to server              | N   | Does not seem to send diagnostic information                      |
-| **Bonus**                                           |     |                                                                   |
-| Data driven requests                                | N   | But it has built in fuzzing and can use faker                     |
+| **Bonus**                                |     |                                                          |
+| Data driven requests                                | Y   | Use `Collection data` to define variables from csv |
 | Output log of test sessions                         | Y   | as HAR file                                                       |
 | Scriptable for customisation                        | Y   | At Collection and Request level                                   |
 | Importing cURL requests                             | Y   | When creating a request can import cURL                           |
