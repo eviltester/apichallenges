@@ -46,6 +46,7 @@ I recommend and primarily use Bruno. It is a very capable free client, with paid
 
 **Recommended free lightweight GUI Clients for evaluation:**
 
+- API Spector [review](/tools/clients/api-spector) - fast becoming one of my favourite clients, pro-actively highlights errors in responses - free and open source [api-spector.dev](https://api-spector.dev/).
 - Bruno [review](/tools/clients/bruno) - good all-rounder, free for commercial use. **Recommended** [usebruno.com](https://usebruno.com)
 - Milkman [review](/tools/clients/milkman) - a little rough around the edges, but open source and free for commercial use [Milkman on github](https://github.com/warmuuh/milkman)
 - Kreya [review](/tools/clients/kreya) - proxy can only be configured via environment variables but capable when configured [Kreya](https://kreya.app)

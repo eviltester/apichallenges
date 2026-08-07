@@ -94,7 +94,6 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html,
                 "<ul class=\"side-toc-root\">",
                 "<li><a href=\"/learning\">Learning Zone</a></li>",
-                "<li><a href=\"/blog\">Blog</a></li>",
                 "<li class=\"side-toc-syllabus\" aria-label=\"REST API Tutorial path\">",
                 "<span class=\"side-toc-syllabus-title\">REST API Tutorial Path</span>",
                 "<li><a href=\"/tutorials/rest-api-tutorial\">Interactive REST API Tutorial</a></li>",
@@ -122,7 +121,9 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tutorials/api-simulator-walkthrough\">API Simulator Walkthrough</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"practice-modes\">",
                 "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
-                "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">");
+                "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">",
+                "<li><a href=\"/sponsors\">Sponsors</a></li>",
+                "<li><a href=\"/blog\">Blog</a></li>");
         Assertions.assertFalse(
                 html.contains(
                         "<details class=\"side-toc-section\" data-side-toc-section=\"tutorials\">"));
@@ -136,6 +137,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tools/online-clients/swagger\">Swagger</a></li>",
                 "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
         Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
+        Assertions.assertFalse(html.contains("href=\"/changes\""));
     }
 
     @Test

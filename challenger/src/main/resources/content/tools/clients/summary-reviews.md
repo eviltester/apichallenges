@@ -29,6 +29,7 @@ If you are evaluating a tool for Exploratory Testing then start with those liste
 
 ### Recommended Lightweight Free Clients
 
+- API Spector [review](/tools/clients/api-spector) - fast becoming one of my favourite clients, pro-actively highlights errors in responses - free and open source [api-spector.dev](https://api-spector.dev/).
 - Bruno [review](/tools/clients/bruno) - good all-rounder, free for commercial use. **Recommended** [usebruno.com](https://usebruno.com)
 - Milkman [review](/tools/clients/milkman) - a little rough around the edges, but open source and free for commercial use [Milkman on github](https://github.com/warmuuh/milkman)
 - Kreya [review](/tools/clients/kreya) - proxy can only be configured via environment variables but capable when configured [Kreya](https://kreya.app)
@@ -70,6 +71,21 @@ Since there are so many other Open Source and free API clients, I do not recomme
 - no custom methods
 
 Would not recommend given the availability of other tools. Does not seem to be under active development.
+
+### API Spector
+
+- API Spector is Open Source.
+- Free for commercial use.
+- Aids Exploratory Testing well with good Proxy support.
+- Pro-actively points out errors as you test (HTTP standards compliance).
+- Out of the box CI usage and automated assertions.
+- JavaScript scripting capabilities.
+- Provides Open API import, and other import formats supported.
+- Mock Server support and contract testing.
+- Good code generation capabilities
+- [api-spector.dev](https://api-spector.dev)
+
+Read our [full review of API Spector](/tools/clients/api-spector)
 
 ### Bruno
 

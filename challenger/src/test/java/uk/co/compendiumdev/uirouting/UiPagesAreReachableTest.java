@@ -885,7 +885,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>Blog Categories</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; categories</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; categories</blockquote>"));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/api-testing\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/categories/rest-api-tutorial\""));
@@ -908,7 +908,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>API Challenges Blog - Page 2</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; page 2</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; page 2</blockquote>"));
         Assertions.assertTrue(response.body.contains("href=\"/blog\""));
         Assertions.assertTrue(response.body.contains("Page 2 of 2"));
         Assertions.assertTrue(
@@ -921,7 +921,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>All Blog Posts</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; all posts index</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; all posts index</blockquote>"));
         Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -939,7 +939,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>API Testing Blog Posts</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; API Testing</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; API Testing</blockquote>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/api-challenges-practice-api-overview\""));
         Assertions.assertTrue(
@@ -951,7 +951,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/categories/change-log/page/2\""));
         Assertions.assertTrue(
@@ -965,7 +965,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>Change Log Blog Posts - Page 2</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
         Assertions.assertTrue(response.body.contains("Page 2 of 2"));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
         Assertions.assertTrue(
@@ -2477,6 +2477,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.com/blog/categories/change-log/page/2</loc>"));
+        Assertions.assertFalse(
+                response.body.contains("<loc>https://apichallenges.com/changes</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-07</lastmod>"));
         Assertions.assertFalse(
@@ -2768,6 +2770,8 @@ public class UiPagesAreReachableTest {
         args.addAll(movedReferenceUrlRedirectArguments().toList());
         args.add(Arguments.of("/tutorials/openapi-swagger", "/reference/openapi"));
         args.add(Arguments.of("/reference/openapi-swagger", "/reference/openapi"));
+        args.add(Arguments.of("/changes", "/blog/categories/change-log"));
+        args.add(Arguments.of("/changes/", "/blog/categories/change-log"));
         args.add(
                 Arguments.of(
                         "/apichallenges/solutions/query/query-todos-200-filter",
@@ -2811,6 +2815,19 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(canonicalUrl, response.getHeader("Location"));
+    }
+
+    @Test
+    void legacyChangeLogHeadUrlRedirectsToBlogCategory() {
+        HttpResponseDetails response = http.send("/changes", "head");
+
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
+
+        response = http.send("/changes/", "head");
+
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals("/blog/categories/change-log", response.getHeader("Location"));
     }
 
     private void assertContainsInOrder(final String value, final String... substrings) {

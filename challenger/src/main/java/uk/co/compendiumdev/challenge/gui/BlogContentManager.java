@@ -96,7 +96,7 @@ public class BlogContentManager {
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">blog</a> &gt; page ")
+        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; page ")
                 .append(pageNumber)
                 .append("</blockquote>");
         html.append("</div>\n\n");
@@ -126,7 +126,7 @@ public class BlogContentManager {
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">blog</a> &gt; all posts index</blockquote>");
+        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; all posts index</blockquote>");
         html.append("</div>\n\n");
         html.append("<div class=\"main-text-content blog-all-posts-index\">");
         html.append("<h1>All Blog Posts</h1>");
@@ -164,7 +164,7 @@ public class BlogContentManager {
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">blog</a> &gt; categories</blockquote>");
+        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; categories</blockquote>");
         html.append("</div>\n\n");
         html.append("<div class=\"main-text-content blog-category-index\">");
         html.append("<h1>Blog Categories</h1>");
@@ -222,7 +222,7 @@ public class BlogContentManager {
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">blog</a> &gt; ")
+        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; ")
                 .append("<a href=\"/blog/categories\">category</a> &gt; ")
                 .append(escapeHtmlAttribute(category.get()))
                 .append("</blockquote>");

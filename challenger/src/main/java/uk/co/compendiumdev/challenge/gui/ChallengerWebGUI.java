@@ -362,6 +362,8 @@ public class ChallengerWebGUI {
         permanentRedirect("/tutorials/openapi-swagger/", "/reference/openapi");
         permanentRedirect("/reference/openapi-swagger", "/reference/openapi");
         permanentRedirect("/reference/openapi-swagger/", "/reference/openapi");
+        permanentRedirect("/changes", "/blog/categories/change-log");
+        permanentRedirect("/changes/", "/blog/categories/change-log");
 
         get(
                 "/apichallenges/solutions/method-overrides/all-method-overrides",
@@ -1090,6 +1092,7 @@ public class ChallengerWebGUI {
                 || path.equals("/robots.txt")
                 || path.startsWith("/apichallenges")
                 || path.startsWith("/author")
+                || path.startsWith("/blog")
                 || path.startsWith("/learning")
                 || path.startsWith("/practice-modes")
                 || path.startsWith("/reference")

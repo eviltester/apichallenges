@@ -1,6 +1,5 @@
 <ul class="side-toc-root">
     <li><a href="/learning">Learning Zone</a></li>
-    <li><a href="/blog">Blog</a></li>
     <li class="side-toc-syllabus" aria-label="REST API Tutorial path">
         <span class="side-toc-syllabus-title">REST API Tutorial Path</span>
         <ol class="side-toc-syllabus-steps">
@@ -154,7 +153,7 @@
         </details>
     </li>
     <li><a href="/sponsors">Sponsors</a></li>
-    <li><a href="/changes">Change Log</a></li>
+    <li><a href="/blog">Blog</a></li>
 </ul>
 
 ---

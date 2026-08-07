@@ -59,7 +59,7 @@ I have not used the `Test` capabilities because I automate using HTTP libraries.
 | - override body type headers                        | Y   | It is possible to edit as JSON and set content-type header to XML |
 | Variables in headers                                | Y   |                                                                   |
 | Custom Verb support                                 | N   | GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD                      |
-| Repeating or cloning earlier requests               | Y   | But not from the History, only the Request UI                     |
+| Repeating or cloning earlier requests               | N   | Can clone requests in collection but not adhoc repeat             |
 | View history of requests/responses                  | Y   | But no export capability                                          |
 | Exporting requests to cURL format                   | Y   |                                                                   |
 | Sends Diagnostic information to server              | N   | Does not seem to send diagnostic information                      |
