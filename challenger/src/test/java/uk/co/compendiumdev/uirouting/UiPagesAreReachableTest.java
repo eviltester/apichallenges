@@ -964,7 +964,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>API Testing Blog Posts</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; API Testing</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">categories</a> &gt; API Testing</blockquote>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/api-challenges-practice-api-overview\""));
         Assertions.assertTrue(
@@ -979,7 +979,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">categories</a> &gt; Change Log</blockquote>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/categories/change-log/page/2\""));
         Assertions.assertTrue(
@@ -993,7 +993,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h1>Change Log Blog Posts - Page 2</h1>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">category</a> &gt; Change Log</blockquote>"));
+                        "<blockquote><a href=\"/blog\">Blog</a> &gt; <a href=\"/blog/categories\">categories</a> &gt; Change Log</blockquote>"));
         Assertions.assertTrue(response.body.contains("Page 2 of 2"));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
         Assertions.assertTrue(

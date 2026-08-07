@@ -83,7 +83,7 @@ Would not recommend given the availability of other tools. Does not seem to be u
 - Provides Open API import, and other import formats supported.
 - Mock Server support and contract testing.
 - Good code generation capabilities
-- Built in Fuzzying
+- Built in Fuzzing
 - [api-spector.dev](https://api-spector.dev)
 
 Read our [full review of API Spector](/tools/clients/api-spector)

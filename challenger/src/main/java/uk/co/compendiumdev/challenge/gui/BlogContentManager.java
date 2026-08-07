@@ -223,7 +223,7 @@ public class BlogContentManager {
         html.append(guiManagement.getStartOfMainContentMarker());
         html.append("<div class=\"breadcrumb\">\n\n");
         html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; ")
-                .append("<a href=\"/blog/categories\">category</a> &gt; ")
+                .append("<a href=\"/blog/categories\">categories</a> &gt; ")
                 .append(escapeHtmlAttribute(category.get()))
                 .append("</blockquote>");
         html.append("</div>\n\n");

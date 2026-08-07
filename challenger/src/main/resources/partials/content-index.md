@@ -76,6 +76,7 @@
                         <li>
                             Detailed Reviews:
                             <ul>
+                                <li><a href="/tools/clients/api-spector">API Spector</a></li>
                                 <li><a href="/tools/clients/bruno">Bruno</a></li>
                                 <li><a href="/tools/clients/curl">cURL</a></li>
                                 <li><a href="/tools/clients/httpie">Httpie</a></li>
