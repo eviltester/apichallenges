@@ -193,17 +193,25 @@ Apply formatting:
 mvn spotless:apply
 ```
 
-Install the local pre-push hook so formatting failures are caught before CI:
+Install the local Git hooks so formatting and static-analysis failures are
+caught before CI:
 
 ```shell
 git config core.hooksPath .githooks
 ```
 
-On macOS or Linux, make the hook executable if needed:
+On macOS or Linux, make the hooks executable if needed:
 
 ```shell
+chmod +x .githooks/pre-commit
 chmod +x .githooks/pre-push
 ```
 
-The hook runs the CI Spotless check with Java 21. Set `JAVA_HOME` or
-`JAVA_HOME_21` to a JDK 21 install before pushing.
+The pre-commit hook runs the CI Java 21 static-analysis build:
+
+```shell
+mvn -B -DskipTests verify
+```
+
+The pre-push hook runs the CI Spotless check. Set `JAVA_HOME` or
+`JAVA_HOME_21` to a JDK 21 install before committing or pushing.

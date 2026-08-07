@@ -126,40 +126,7 @@ public class MarkdownContentManager {
                         .filter(item -> item != null && !item.isEmpty())
                         .toArray(String[]::new);
 
-        StringBuilder bcHtmlHeader = new StringBuilder();
-        String bcPath = "";
-        int linksInBreadcrumb = 0;
-        if (breadcrumbs.length > 0) {
-            // https://spec.commonmark.org/0.29/#html-blocks
-            bcHtmlHeader.append("<div class=\"breadcrumb\">\n\n");
-            bcHtmlHeader.append("<blockquote>");
-
-            for (String bc : breadcrumbs) {
-                bcPath = bcPath + bc;
-
-                if (!bc.isEmpty()) {
-
-                    if (contentPath.endsWith(bc)) {
-                        bcHtmlHeader.append(String.format(" %s", bc));
-                    } else {
-                        // if there is an index file then show the breadcrumb
-                        if (markdownContentPaths.contains(contentFolder + "/" + bcPath + ".md")) {
-                            linksInBreadcrumb++;
-                            bcHtmlHeader.append(
-                                    String.format("<a href=\"%s\">%s</a> &gt;", "/" + bcPath, bc));
-                        }
-                    }
-                }
-                bcPath = bcPath + "/";
-            }
-            bcHtmlHeader.append("</blockquote>");
-            bcHtmlHeader.append("</div >\n\n");
-        }
-
-        if (linksInBreadcrumb == 0) {
-            // do not output the breadcrumb
-            bcHtmlHeader = new StringBuilder();
-        }
+        StringBuilder bcHtmlHeader;
 
         String headerInject = "";
         String youtubeHeaderInject = "";
