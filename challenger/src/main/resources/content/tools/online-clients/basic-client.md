@@ -21,7 +21,7 @@ This client is deliberately simple. Type any HTTP method, enter any URL, add hea
 
 It does not check API Challenges expected results, does not restrict the URL to this site, and does not limit you to a practice mode path. The browser itself still applies browser security rules.
 
-If this is your first time using a REST client, consider following [How to Test REST APIs](/tutorials/rest-api-testing) or the [API Simulator Walkthrough](/practice-modes/simulation) first. Those tutorials explain the request and response flow, common HTTP methods, headers, payloads, and how to observe the results of exploratory API testing.
+If this is your first time using a REST client, consider following [How to Test REST APIs](/tutorials/rest-api-testing) or the [API Simulator Walkthrough](/tutorials/api-simulator-walkthrough) first. Those tutorials explain the request and response flow, common HTTP methods, headers, payloads, and how to observe the results of exploratory API testing.
 
 ## Use Browser Dev Tools To Help Test REST APIs
 

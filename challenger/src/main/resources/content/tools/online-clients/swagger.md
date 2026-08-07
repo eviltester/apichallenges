@@ -86,7 +86,7 @@ The conversion is a client-side approximation of the permissive OpenAPI files ge
 
 ## How To Use Swagger UI For REST API Testing
 
-If this is your first time using a browser API client or Swagger UI, consider following [How to Test REST APIs](/tutorials/rest-api-testing) or the [API Simulator Walkthrough](/practice-modes/simulation) first. Those tutorials show how to make requests, inspect responses, and compare tool output with the actual API behaviour.
+If this is your first time using a browser API client or Swagger UI, consider following [How to Test REST APIs](/tutorials/rest-api-testing) or the [API Simulator Walkthrough](/tutorials/api-simulator-walkthrough) first. Those tutorials show how to make requests, inspect responses, and compare tool output with the actual API behaviour.
 
 Swagger UI is very good for discovering documented endpoints and sending normal requests. It helps you understand the available paths, required parameters, allowed request bodies, authentication options, and documented response schemas before you move into deeper exploratory API testing.
 

@@ -27,7 +27,7 @@ Use this as the main route through the Learning Zone. Each step builds enough vo
 5. [Status codes](/reference/http-basics#toc7) - read response outcomes as testing evidence, not just pass/fail signals.
 6. [OpenAPI](/reference/openapi) - use API descriptions to find endpoints, schemas, responses, and security expectations.
 7. [How to Test REST APIs](/tutorials/rest-api-testing) - practise a step-by-step approach for exploring, checking, and reporting API behaviour.
-8. [Interactive API Simulation](/practice-modes/simulation) - use the simulator walkthrough to practise request and response handling safely.
+8. [Interactive API Simulation](/tutorials/api-simulator-walkthrough) - use the simulator walkthrough to practise request and response handling safely.
 9. [API Challenges](/apichallenges) - apply the ideas in a guided API challenge app.
 
 ## Reference

@@ -150,6 +150,11 @@ public class UiPagesAreReachableTest {
                         "/tutorials/rest-api-tutorial"));
         args.add(
                 Arguments.of(
+                        200,
+                        "Interactive API Simulation: API Simulator Walkthrough",
+                        "/tutorials/api-simulator-walkthrough"));
+        args.add(
+                Arguments.of(
                         200, "Multi-User Instructions | API Challenges Guide", "/gui/multiuser"));
         args.add(Arguments.of(200, "API Challenges API Documentation | API Challenges", "/docs"));
         args.add(
@@ -779,7 +784,8 @@ public class UiPagesAreReachableTest {
     @Test
     void simulationModePageUsesLocalOriginByDefault() {
 
-        final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
+        final HttpResponseDetails response =
+                http.send("/tutorials/api-simulator-walkthrough", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("GET http://localhost:4567/sim/entities"));
@@ -797,7 +803,8 @@ public class UiPagesAreReachableTest {
         proxyHttp.setHeader("X-Forwarded-Proto", "https");
         proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.com");
 
-        final HttpResponseDetails response = proxyHttp.send("/practice-modes/simulation", "get");
+        final HttpResponseDetails response =
+                proxyHttp.send("/tutorials/api-simulator-walkthrough", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("GET https://apichallenges.com/sim/entities"));
@@ -818,6 +825,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#toc7\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/tutorials/rest-api-testing\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tutorials/api-simulator-walkthrough\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/solutions\""));
@@ -943,9 +952,55 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void simulationModePageIncludesLiveRequestWidgetsForEachStep() {
+    void apiSimulatorWalkthroughPageIncludesHeroAndSocialCard() {
+
+        final HttpResponseDetails response =
+                http.send("/tutorials/api-simulator-walkthrough", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<h1>Interactive API Simulation: API Simulator Walkthrough</h1>"));
+        Assertions.assertTrue(
+                response.body.contains("/images/hero/api-simulator-browser-requests-1600x720.jpg"));
+        Assertions.assertTrue(response.body.contains("content-hero-figure simulator-hero-image"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:image' content='https://apichallenges.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:image' content='https://apichallenges.com/images/hero/api-simulator-browser-requests-1600x720.jpg'>"));
+        final int tutorialTitle =
+                response.body.indexOf(
+                        "<h1>Interactive API Simulation: API Simulator Walkthrough</h1>");
+        final int tutorialHero =
+                response.body.indexOf("content-hero-figure simulator-hero-image");
+        final int tutorialToc = response.body.indexOf("<div id='toc'>");
+        Assertions.assertTrue(tutorialTitle < tutorialHero);
+        Assertions.assertTrue(tutorialHero < tutorialToc);
+    }
+
+    @Test
+    void simulationModeOverviewPageLinksToInteractiveWalkthroughWithoutWidgets() {
 
         final HttpResponseDetails response = http.send("/practice-modes/simulation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h2>Suggested Request Sequence</h2>"));
+        Assertions.assertTrue(response.body.contains("Get all the entities with"));
+        Assertions.assertTrue(response.body.contains("<code>GET /sim/entities</code>"));
+        Assertions.assertTrue(response.body.contains("<code>PUT /sim/entities/10</code>"));
+        Assertions.assertTrue(response.body.contains("<code>HEAD /sim/entities</code>"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tutorials/api-simulator-walkthrough\""));
+        Assertions.assertFalse(response.body.contains("class=\"sim-live-request\""));
+    }
+
+    @Test
+    void apiSimulatorWalkthroughPageIncludesLiveRequestWidgetsForEachStep() {
+
+        final HttpResponseDetails response =
+                http.send("/tutorials/api-simulator-walkthrough", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
@@ -961,6 +1016,18 @@ public class UiPagesAreReachableTest {
                                 + " data-path=\"/sim/entities\""));
         Assertions.assertTrue(
                 response.body.contains("data-body=\"{&quot;name&quot;: &quot;bob&quot;}\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"PUT\""
+                                + " data-path=\"/sim/entities/10\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"DELETE\""
+                                + " data-path=\"/sim/entities/9\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "class=\"sim-live-request\" data-method=\"OPTIONS\""
+                                + " data-path=\"/sim/entities\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"sim-live-request\" data-method=\"HEAD\""
@@ -2215,7 +2282,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.com/tutorials/rest-api-tutorial</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tutorials/api-simulator-walkthrough</loc>"));
         Assertions.assertTrue(response.body.contains("<lastmod>2026-08-06</lastmod>"));
+        Assertions.assertTrue(response.body.contains("<lastmod>2026-08-07</lastmod>"));
         Assertions.assertFalse(
                 response.body.contains(
                         "<loc>https://apichallenges.com/reference/openapi-swagger</loc>"));
@@ -2253,6 +2324,9 @@ public class UiPagesAreReachableTest {
 
         response = http.send("/tutorials/rest-api-tutorial", "head");
         Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tutorials/api-simulator-walkthrough", "head");
+        Assertions.assertEquals(200, response.statusCode);
     }
 
     @Test
@@ -2270,6 +2344,11 @@ public class UiPagesAreReachableTest {
         response = http.send("/tutorials/rest-api-tutorial/", "get");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
+
+        response = http.send("/tutorials/api-simulator-walkthrough/", "get");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/tutorials/api-simulator-walkthrough", response.getHeader("Location"));
     }
 
     @Test
@@ -2283,6 +2362,11 @@ public class UiPagesAreReachableTest {
         response = http.send("/tutorials/rest-api-tutorial/", "head");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/tutorials/rest-api-tutorial", response.getHeader("Location"));
+
+        response = http.send("/tutorials/api-simulator-walkthrough/", "head");
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(
+                "/tutorials/api-simulator-walkthrough", response.getHeader("Location"));
     }
 
     @Test

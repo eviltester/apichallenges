@@ -10,7 +10,7 @@
             <li><a href="/reference/http-basics#toc7">Status codes</a></li>
             <li><a href="/reference/openapi">OpenAPI</a></li>
             <li><a href="/tutorials/rest-api-testing">Interactive How to Test REST APIs Tutorial</a></li>
-            <li><a href="/practice-modes/simulation">Interactive API Simulation</a></li>
+            <li><a href="/tutorials/api-simulator-walkthrough">Interactive API Simulation</a></li>
             <li><a href="/apichallenges">API Challenges</a></li>
         </ol>
     </li>
@@ -29,6 +29,19 @@
                 <li><a href="/reference/openapi">OpenAPI</a></li>
                 <li><a href="/reference/swagger">Swagger</a></li>
                 <li><a href="/reference/summary">Summary</a></li>
+            </ul>
+        </details>
+    </li>
+    <li>
+        <details class="side-toc-section" data-side-toc-section="interactive-tutorials">
+            <summary class="side-toc-section-summary">
+                <span class="side-toc-section-title">Interactive Tutorials</span>
+                <span class="side-toc-section-description">Hands-on tutorial pages for learning REST concepts and API testing workflows.</span>
+            </summary>
+            <ul class="side-toc-section-links">
+                <li><a href="/tutorials/rest-api-tutorial">Rest API Tutorial</a></li>
+                <li><a href="/tutorials/rest-api-testing">Testing REST APIs Tutorial</a></li>
+                <li><a href="/tutorials/api-simulator-walkthrough">API Simulator Walkthrough</a></li>
             </ul>
         </details>
     </li>

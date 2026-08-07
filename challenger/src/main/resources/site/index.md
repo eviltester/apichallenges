@@ -39,7 +39,7 @@ Follow the REST API Tutorial path from core concepts to hands-on challenge pract
 5. Review [status codes](/reference/http-basics#toc7) as response evidence.
 6. Use [OpenAPI](/reference/openapi) to understand documented endpoints, payloads, responses, and security expectations.
 7. Follow the practical [How to Test REST APIs](/tutorials/rest-api-testing) tutorial.
-8. Practise safely with the [Interactive API Simulation](/practice-modes/simulation).
+8. Practise safely with the [Interactive API Simulation](/tutorials/api-simulator-walkthrough).
 9. Move into [API Challenges](/apichallenges) to apply the concepts in a guided API challenge app.
 10. Use the [API Challenge Solutions](/apichallenges/solutions) when you want guided walkthroughs.
 11. Open the [API Challenges app](/gui/challenges) when you are ready to track progress in the browser.
@@ -61,7 +61,7 @@ It is a real API so you can experiment with different content types, but no data
 
 This is the safest and easiest way to start learning API interaction before moving on to a live API.
 
-Start working through the [API Simulator Scenarios](/practice-modes/simulation).
+Start with the [Simulation Mode overview](/practice-modes/simulation), then work through the [API Simulator Walkthrough](/tutorials/api-simulator-walkthrough).
 
 ## The Simple API
 
