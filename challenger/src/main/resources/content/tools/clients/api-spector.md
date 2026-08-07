@@ -65,7 +65,7 @@ Best API client for checking your OpenAPI specifications and standards complianc
 | Output log of test sessions                         | Y   | as HAR file                                                       |
 | Scriptable for customisation                        | Y   | At Collection and Request level                                   |
 | Importing cURL requests                             | Y   | When creating a request can import cURL                           |
-| Free for commercial use | Y   | Additional features are available on paid plan                    |
+| Free for commercial use | Y   | free - no paid plan                    |
 
 API Spector met all my basic needs.
 
