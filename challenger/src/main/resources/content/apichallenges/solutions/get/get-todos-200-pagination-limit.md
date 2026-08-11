@@ -1,6 +1,6 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 pagination limit
 seo_title: "Solution: GET todos 200 pagination limit | API Challenges"
 description: How to solve API challenge GET todos 200 pagination limit using the _limit query parameter.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=8 to limit the returned todos||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _limit=8 to limit the returned todos||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -23,18 +23,20 @@ How to issue a GET request on a top level entity endpoint and use pagination to 
 
 ## GET /todos (200) ?_limit
 
-> Issue a GET request on the `/todos` end point with a pagination limit to retrieve up to 8 todos.
+> Issue a GET request on the `/todos` end point with a pagination limit to retrieve up to 8 todos, requesting the response in JSON format.
 
 - `_limit` controls the maximum number of todos returned
 - the maximum supported `_limit` value is `20`
 - this challenge is passed by requesting up to 8 todos and receiving a `200` response
 - if your current session has fewer than 8 todos, the response will contain fewer todos
+- if necessary, add header `Accept: application/json` so the filtered and sorted todo collection is visible as JSON
 
 ## Basic Instructions
 
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `_limit=8` as a URL parameter:
     - `{{<ORIGIN_URL>}}/todos?_limit=8`
 - The response status code should be `200` because the request is accepted

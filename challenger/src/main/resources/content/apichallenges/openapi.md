@@ -2,7 +2,7 @@
 title: API Challenges OpenAPI JSON Files
 seo_title: OpenAPI JSON File for Practicing | API Challenges
 description: Download the OpenAPI JSON files for the API Challenges.
-lastmod: 2026-07-26
+lastmod: 2026-08-10
 seo_description: Explore API Challenges OpenAPI JSON with practical guidance and actionable next steps designed to improve API testing skills through hands-on practice.
 showads: true
 ---
@@ -19,6 +19,36 @@ OpenAPI JSON files are available in the default format and in specific OpenAPI v
 - OpenAPI v 3.1 JSON [standard validation](/docs/openapi-3.1.json) [download](/docs/openapi-3.1.json?download) - [less validation](/docs/openapi-3.1.json?permissive) [download](/docs/openapi-3.1.json?permissive&download)
 - OpenAPI v 3.2 JSON [standard validation](/docs/openapi-3.2.json) [download](/docs/openapi-3.2.json?download) - [less validation](/docs/openapi-3.2.json?permissive) [download](/docs/openapi-3.2.json?permissive&download)
 
+## Open OpenAPI 3.2 In Online UIs
+
+Tool support for OpenAPI 3.2 is still emerging, so these links help compare how each UI handles the same file.
+
+<div class="openapi-ui-launch-panel">
+  <div class="openapi-ui-launch-group">
+    <h3>Standard validation</h3>
+    <p>Open the user-facing API Challenges OpenAPI 3.2 file.</p>
+    <p class="openapi-ui-launch-links">
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json">Open in Swagger</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fdocs%2Fopenapi-3.2.json">Open in OpenAPI Explorer</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/scalar?url=%2Fdocs%2Fopenapi-3.2.json">Open in Scalar</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fdocs%2Fopenapi-3.2.json">Open in Stoplight Elements</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fdocs%2Fopenapi-3.2.json">Open in Zudoku</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/redoc?url=%2Fdocs%2Fopenapi-3.2.json">Open in Redoc</a>
+    </p>
+  </div>
+  <div class="openapi-ui-launch-group">
+    <h3>Less validation</h3>
+    <p>Open the more permissive API Challenges OpenAPI 3.2 file for testing edge cases.</p>
+    <p class="openapi-ui-launch-links">
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in Swagger</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in OpenAPI Explorer</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/scalar?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in Scalar</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in Stoplight Elements</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in Zudoku</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/redoc?url=%2Fdocs%2Fopenapi-3.2.json%3Fpermissive">Open in Redoc</a>
+    </p>
+  </div>
+</div>
 
 ## QUERY Method Support
 

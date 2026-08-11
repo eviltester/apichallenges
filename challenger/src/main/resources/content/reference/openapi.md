@@ -2,7 +2,7 @@
 title: OpenAPI for API Testing
 seo_title: OpenAPI for API Testing: Specs, Requests, Responses, Tools
 description: An introduction to OpenAPI as a standard specification for describing HTTP APIs.
-lastmod: 2026-08-04
+lastmod: 2026-08-11
 seo_description: Learn what OpenAPI is, how OpenAPI JSON and YAML files describe APIs, and how API testing tools use the specification.
 showads: true
 ---
@@ -46,9 +46,11 @@ If you are new to OpenAPI then a dedicated tool is easier because it can render 
 Examples on this site:
 
 - [API Challenges OpenAPI JSON](/docs/openapi.json)
+- [API Simulator OpenAPI JSON](/sim/docs/openapi.json)
 - [Simple API OpenAPI JSON](/simpleapi/docs/openapi.json)
+- [Buggy API OpenAPI JSON](/shop/docs/openapi.json)
 
-Both APIs also expose versioned OpenAPI JSON files:
+These APIs also expose versioned OpenAPI JSON files:
 
 - OpenAPI v 3.0 JSON for tools that support OpenAPI 3.0
 - OpenAPI v 3.1 JSON, which is the default `openapi.json` version
@@ -71,7 +73,7 @@ It can also help you spot gaps. If the running API behaves differently from the 
 
 ## Standard And Permissive Files
 
-API Challenges provides two styles of OpenAPI output.
+The API Challenges practice APIs provide two styles of OpenAPI output.
 
 The standard validation files describe intended usage. These are useful when you want tools to guide you through normal valid requests.
 
@@ -80,13 +82,28 @@ The less-validating, permissive files are useful for testing because they relax 
 Examples:
 
 - [API Challenges OpenAPI files](/apichallenges/openapi)
+- [API Simulator OpenAPI files](/practice-modes/simulation-openapi)
 - [Simple API OpenAPI files](/practice-modes/simpleapi-openapi)
+- [Buggy API OpenAPI files](/practice-modes/shoppingcart-openapi)
 
 ## OpenAPI In REST Clients
 
 Most REST clients can import an OpenAPI file and create a starter collection of requests.
 
 This is often the most flexible testing workflow because REST clients are not limited by browser security rules in the same way as browser-hosted API interfaces.
+
+## OpenAPI UIs
+
+OpenAPI UIs render an OpenAPI file as human-friendly API reference documentation.
+
+They can help you explore endpoints, methods, parameters, request bodies, response schemas, authentication requirements, and examples without reading the raw JSON or YAML directly. Some OpenAPI UIs also include a browser request console so you can try documented API calls from the rendered page.
+
+- [Swagger UI and Tools](/reference/open-api-uis/swagger) - Swagger is a family of tools that work with OpenAPI files. Swagger UI renders an OpenAPI file as interactive API documentation and can create request forms for browser API calls.
+- [OpenAPI Explorer](/reference/open-api-uis/openapi-explorer) - OpenAPI Explorer is a web component for rendering OpenAPI documentation, resources, models, and browser API calls inside a site or app.
+- [Scalar](/reference/open-api-uis/scalar) - Scalar provides open source OpenAPI and Swagger support for API references, a REST API client, hosted docs, and related API tooling.
+- [Stoplight Elements](/reference/open-api-uis/stoplight) - Stoplight Elements provides React and web components for building interactive OpenAPI and Markdown powered API documentation.
+- [Zudoku](/reference/open-api-uis/zudoku) - Zudoku is an open source documentation framework for building customizable developer documentation around OpenAPI documents.
+- [Redoc](/reference/open-api-uis/redoc) - Redoc is an open source OpenAPI documentation viewer that renders API reference pages. The open source version is primarily a viewer, not a request-sending client.
 
 ## OpenAPI Tools
 
@@ -99,6 +116,6 @@ The OpenAPI ecosystem has many tools for validation, mocking, documentation, cod
 - [Tcases](https://github.com/Cornutum/tcases/blob/master/tcases-openapi/README.md#tcases-for-openapi-from-rest-ful-to-test-ful)
 - [Humlix](https://www.humlix.com/)
 
-## Related Swagger Page
+## Related OpenAPI UI Pages
 
-Read [Swagger UI and Swagger tooling](/reference/swagger) when you want to use a browser interface to explore an OpenAPI file.
+Read the [OpenAPI UI pages](/reference/open-api-uis/swagger) when you want to compare browser interfaces for exploring an OpenAPI file.

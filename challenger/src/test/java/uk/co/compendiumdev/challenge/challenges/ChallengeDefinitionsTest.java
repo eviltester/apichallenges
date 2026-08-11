@@ -62,6 +62,42 @@ public class ChallengeDefinitionsTest {
                                                 "/apichallenges/solutions/accept-header/get-todos-id-200-calendar")));
     }
 
+    @Test
+    void collectionQueryChallengesMentionJsonResponseRequirement() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        ChallengeDefinitions definitions = new ChallengeDefinitions(config);
+        List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
+
+        for (String challengeName :
+                List.of(
+                        "GET /todos (200) ?filter",
+                        "GET /todos (200) ?filter id greater than",
+                        "GET /todos (200) ?filter id less than",
+                        "GET /todos (200) ?filter id single result",
+                        "GET /todos (200) ?filter description regex",
+                        "GET /todos (200) ?filter description wildcard",
+                        "GET /todos (200) ?_sortBy ascending",
+                        "GET /todos (200) ?_sortBy descending",
+                        "GET /todos (200) ?_sortBy multiple",
+                        "GET /todos (200) ?filter&_sortBy",
+                        "GET /todos (200) ?_limit",
+                        "GET /todos (200) ?_limit&_offset",
+                        "GET /todos (200) ?_sortBy&_limit&_offset",
+                        "GET /todos (200) ?filter&_limit&_offset")) {
+            ChallengeDefinitionData challenge = challengeNamed(challenges, challengeName);
+
+            Assertions.assertTrue(
+                    challenge.description.contains("JSON format"),
+                    challengeName + " should mention JSON response format");
+            Assertions.assertTrue(
+                    challenge.hints.stream()
+                            .anyMatch(hint -> hint.hintText.contains("Accept: application/json")),
+                    challengeName + " should include the Accept JSON hint");
+        }
+    }
+
     private void assertAllChallengesHaveHints(final ChallengerConfig config) {
         Collection<ChallengeDefinitionData> challenges =
                 new ChallengeDefinitions(config).getChallenges();

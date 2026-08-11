@@ -49,6 +49,93 @@
   }
 }
 
+body.wide-tool-page .doc-columns{
+    display: flex;
+    flex-direction: column;
+}
+
+body.wide-tool-page .right-column{
+    min-width: 0;
+    order: 1;
+    width: 100%;
+}
+
+body.wide-tool-page .left-column{
+    box-sizing: border-box;
+    grid-column: auto;
+    grid-row: auto;
+    margin: 0 0 1rem;
+    order: 0;
+    padding-right: 0;
+    width: auto;
+}
+
+body.wide-tool-page .left-column.is-collapsible .mobile-content-nav-toggle{
+    display: inline-flex;
+}
+
+body.wide-tool-page .left-column.is-collapsible .side-toc{
+    display: none;
+}
+
+body.wide-tool-page .left-column.is-collapsible.is-open .side-toc{
+    display: block;
+    margin-top: 0.75rem;
+}
+
+@media (min-width: 1180px) {
+body.wide-tool-page .wide-tool-side-toc-grid{
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.85fr) minmax(20rem, 1.4fr) minmax(13rem, 0.9fr);
+}
+}
+
+body.wide-tool-page .wide-tool-side-toc-column{
+    min-width: 0;
+}
+
+body.wide-tool-page .wide-tool-side-toc-column + .wide-tool-side-toc-column{
+    margin-top: 0.75rem;
+}
+
+body.wide-tool-page .wide-tool-side-toc-column > .side-toc-root{
+    padding-inline-start: 0;
+}
+
+body.wide-tool-page .wide-tool-side-toc-column > .side-toc-root > li{
+    font-weight: bold;
+    list-style-type: none;
+    min-width: 0;
+}
+
+body.wide-tool-page .wide-tool-side-toc-column > .side-toc-root > li > ul li{
+    font-weight: normal;
+    padding-bottom: 0.2em;
+    padding-top: 0.2em;
+}
+
+body.wide-tool-page .wide-tool-side-toc-support{
+    min-width: 0;
+}
+
+@media (min-width: 1180px) {
+body.wide-tool-page .wide-tool-side-toc-column + .wide-tool-side-toc-column{
+    margin-top: 0;
+}
+}
+
+body.wide-tool-page .main-text-content{
+    max-width: none;
+    width: 100%;
+}
+
+body.wide-tool-page .wide-tool-client-breakout{
+    box-sizing: border-box;
+    margin-inline-start: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 1rem);
+}
+
 .statustrue{
     background:palegreen;
 }
@@ -327,6 +414,11 @@
 
 .side-toc-section-title {
     line-height: 1.25;
+}
+
+a.side-toc-section-title,
+a.side-toc-syllabus-title {
+    text-decoration: none;
 }
 
 .side-toc-section-description {
@@ -685,6 +777,11 @@ a.next-challenge-cta-link {
 
 a.next-challenge-cta-link:hover {
     background: #163858;
+}
+
+.content-centered-cta {
+    margin: 1.5rem 0;
+    text-align: center;
 }
 
 /* Simulation mode live request widgets */
@@ -1178,6 +1275,40 @@ a.next-challenge-cta-link:hover {
     border: 1px solid #c9d5df;
     margin: 1rem 0 1.5rem;
     padding: 1rem;
+}
+
+.openapi-ui-launch-panel {
+    display: grid;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.openapi-ui-launch-group {
+    border: 1px solid #c9d5df;
+    padding: 0.85rem;
+}
+
+.openapi-ui-launch-group h3 {
+    margin-top: 0;
+}
+
+.openapi-ui-launch-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+}
+
+a.openapi-ui-launch-link {
+    align-items: center;
+    border: 1px solid #8fa7bc;
+    border-radius: 0.25rem;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.7rem;
+    text-decoration: none;
 }
 
 .online-swagger-controls,

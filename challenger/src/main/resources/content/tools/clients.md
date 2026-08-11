@@ -62,14 +62,16 @@ We have evaluated [many Desktop GUI Clients here](/tools/clients/summary-reviews
 
 ### Online Clients
 
-Online clients are useful to get started quickly. One issue with Online clients is that they may experience [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues with some requests (e.g. `OPTIONS` is particularly problematic)
+Online clients are useful to get started quickly. One issue with online clients is that they may experience [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues with some requests.
 
-But they are very useful to experiment with an API quickly.
+The [Online API Clients and OpenAPI UI Tools](/tools/online-clients) page compares the browser based clients and OpenAPI viewers hosted on this site.
 
 - [API Challenges Basic Client](/tools/online-clients/basic-client)
   - A free online REST API client for sending custom HTTP methods, URLs, headers, and request bodies from the browser.
 - [API Challenges Swagger](/tools/online-clients/swagger)
   - An online Swagger UI that can open OpenAPI and Swagger files from a URL or local disk.
+- [OpenAPI UI showcases](/tools/online-clients)
+  - Browser pages for Swagger UI, OpenAPI Explorer, Scalar, Stoplight Elements, Zudoku, and Redoc.
 - [Hoppscotch](https://hoppscotch.io)
   - A well implemented browser based client. Import Postman and Swagger (Open API) collections.
 - [RestTestTest](https://resttesttest.com/)

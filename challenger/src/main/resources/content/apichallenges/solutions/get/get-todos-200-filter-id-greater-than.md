@@ -1,6 +1,6 @@
 ---
 date: 2026-07-31T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 filter id greater than
 seo_title: "Solution: GET todos filter id greater than | API Challenges"
 description: How to solve API challenge GET todos 200 filter id greater than using an id greater-than query filter.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add an id greater-than filter that returns some, but not all, todos||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add an id greater-than filter that returns some, but not all, todos||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -23,19 +23,21 @@ How to issue a GET request on a top level entity endpoint and filter todos by id
 
 ## GET /todos (200) ? filter id greater than
 
-> Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value.
+> Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value, requesting the response in JSON format.
 
 - `id>5` means return todos where the id is greater than 5
 - most tools and browsers will encode the `>` symbol for you when sending the request
 - the response should contain at least one todo
 - the response should be a subset of the current todos, not the full list
 - every returned todo should have an `id` greater than the threshold
+- the returned todo list should be JSON, so send `Accept: application/json` if the response is not JSON
 
 ## Basic Instructions
 
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add an id greater-than filter:
     - `{{<ORIGIN_URL>}}/todos?id>5`
 - The response status code should be `200` because the request is accepted

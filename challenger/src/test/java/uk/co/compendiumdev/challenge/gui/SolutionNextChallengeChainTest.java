@@ -44,7 +44,7 @@ public class SolutionNextChallengeChainTest {
                     "/reference/rest-api-basics",
                     "/reference/testing-apis",
                     "/reference/openapi",
-                    "/reference/swagger");
+                    "/reference/open-api-uis/swagger");
     private static final List<String> LEARNING_SECTION_INLINE_CODE_TERMS =
             List.of(
                     "Accept",

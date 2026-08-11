@@ -1,6 +1,6 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 pagination and sort
 seo_title: "Solution: GET todos 200 pagination and sort | API Challenges"
 description: How to solve API challenge GET todos 200 pagination and sort using _sortBy, _limit, and _offset query parameters.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _sortBy=-id with _limit=5 and _offset=5||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _sortBy=-id with _limit=5 and _offset=5||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -23,19 +23,21 @@ How to issue a GET request on a top level entity endpoint and combine sorting wi
 
 ## GET /todos (200) ?_sortBy&_limit&_offset
 
-> Issue a GET request on the `/todos` end point with sorting and pagination parameters.
+> Issue a GET request on the `/todos` end point with sorting and pagination parameters, requesting the response in JSON format.
 
 - `_sortBy=-id` sorts todos by `id` from highest to lowest
 - `_limit=5` asks for 5 returned todos
 - `_offset=5` skips 5 todos after sorting
 - sorting is applied before pagination
 - if your current session has fewer todos after the offset, the response will contain fewer todos
+- double check that header `Accept: application/json` exists to ensure the filtered and sorted todo collection is visible as JSON
 
 ## Basic Instructions
 
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `_sortBy=-id`, `_limit=5`, and `_offset=5` as URL parameters:
     - `{{<ORIGIN_URL>}}/todos?_sortBy=-id&_limit=5&_offset=5`
 - The response status code should be `200` because the request is accepted

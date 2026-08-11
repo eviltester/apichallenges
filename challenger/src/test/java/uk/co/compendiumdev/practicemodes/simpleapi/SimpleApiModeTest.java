@@ -78,8 +78,9 @@ public class SimpleApiModeTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals("application/json", response.getHeader("content-type"));
-        Assertions.assertEquals(
-                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
+        Assertions.assertTrue(
+                response.getHeader("Accept-Query").contains("application/x-www-form-urlencoded"));
+        Assertions.assertTrue(response.getHeader("Accept-Query").contains("application/jsonpath"));
 
         Items items = new Gson().fromJson(response.body, Items.class);
         Assertions.assertFalse(items.items.isEmpty());

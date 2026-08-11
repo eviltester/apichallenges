@@ -4,6 +4,9 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
 
 public class GetChallenges {
 
+    private static final String JSON_RESPONSE_HINT =
+            "Send an `Accept: application/json` header to request JSON todos.";
+
     public static ChallengeDefinitionData getChallenges200(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
@@ -109,13 +112,14 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter",
-                        "Issue a GET request on the `/todos` end point with a query filter to get only todos which are 'done'. There must exist both 'done' and 'not done' todos, to pass this challenge.");
+                        "Issue a GET request on the `/todos` end point with a query filter to get only todos which are 'done', requesting the response in JSON format. There must exist both 'done' and 'not done' todos, to pass this challenge.");
 
         aChallenge.addHint("A query filter is a URL parameter using the field name and a value");
         aChallenge.addHint(
                 "A URL parameter is added to the end of a url with a ? e.g. /todos?id=1");
         aChallenge.addHint(
                 "To filter on 'done' we use the 'doneStatus' field  ? e.g. ?doneStatus=true");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure there are todos which are done, and not yet done");
 
         aChallenge.addSolutionLink(
@@ -129,10 +133,11 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter id greater than",
-                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value.");
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with the greater than operator.");
         aChallenge.addHint("For example, `?id>5` returns todos with an id greater than 5.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
 
         aChallenge.addSolutionLink(
@@ -147,10 +152,11 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter id less than",
-                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id less than a supplied value.");
+                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id less than a supplied value, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with the less than operator.");
         aChallenge.addHint("For example, `?id<6` returns todos with an id less than 6.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure the filter returns at least one todo, but not all todos.");
 
         aChallenge.addSolutionLink(
@@ -165,10 +171,11 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter id single result",
-                        "Issue a GET request on the `/todos` end point with an id filter that returns one todo while multiple todos exist in the database.");
+                        "Issue a GET request on the `/todos` end point with an id filter that returns one todo while multiple todos exist in the database, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with an exact value.");
         aChallenge.addHint("For example, `?id=3` returns the todo with id 3.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure there is more than one todo in the database.");
 
         aChallenge.addSolutionLink(
@@ -183,12 +190,13 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter description regex",
-                        "Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions.");
+                        "Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
 
         aChallenge.addHint(
                 "Use the `description` field with the regular expression operator `~=`.");
         aChallenge.addHint(
                 "For example, `?description~=.*fixture.*` returns descriptions that match the regular expression.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
 
         aChallenge.addSolutionLink(
@@ -204,11 +212,12 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter description wildcard",
-                        "Issue a GET request on the `/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions.");
+                        "Issue a GET request on the `/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `description` field with the wildcard operator `*=`.");
         aChallenge.addHint(
                 "For example, `?description*=*fixture*` matches descriptions containing fixture.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Create a todo with a non-empty description if you need matching data.");
 
         aChallenge.addSolutionLink(
@@ -223,12 +232,13 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_sortBy ascending",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos ascending by a field.");
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos ascending by a field, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Use a field name to sort ascending, e.g. `?_sortBy=title`.");
         aChallenge.addHint(
                 "You can also prefix the field with `+` for ascending, e.g. `?_sortBy=+title`.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure you sort by a field that exists on a todo.");
 
         aChallenge.addSolutionLink(
@@ -243,11 +253,12 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_sortBy descending",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos descending by a field.");
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos descending by a field, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Prefix a field name with `-` to sort descending.");
         aChallenge.addHint("For example, use `?_sortBy=-id` to sort by id descending.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure you sort by a field that exists on a todo.");
 
         aChallenge.addSolutionLink(
@@ -262,12 +273,13 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_sortBy multiple",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos by multiple fields.");
+                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos by multiple fields, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Separate multiple sort fields with commas.");
         aChallenge.addHint(
                 "For example, `?_sortBy=+doneStatus,-id` sorts by doneStatus, then id descending.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure every sort field exists on a todo.");
 
         aChallenge.addSolutionLink(
@@ -282,12 +294,13 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter&_sortBy",
-                        "Issue a GET request on the `/todos` end point with a query filter and a query parameter to sort the filtered todos.");
+                        "Issue a GET request on the `/todos` end point with a query filter and a query parameter to sort the filtered todos, requesting the response in JSON format.");
 
         aChallenge.addHint("Use a todo field as a URL parameter to filter the collection.");
         aChallenge.addHint("Use `_sortBy` to sort the filtered results.");
         aChallenge.addHint(
                 "For example, `?doneStatus=false&_sortBy=-id` filters not done todos and sorts them by id descending.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Make sure the filter field and sort field both exist on a todo.");
 
         aChallenge.addSolutionLink(
@@ -300,13 +313,12 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_limit",
-                        "Issue a GET request on the `/todos` end point with a query parameter to limit the returned todos to 8 items.");
+                        "Issue a GET request on the `/todos` end point with a query parameter to limit the returned todos to 8 items, requesting the response in JSON format.");
 
         aChallenge.addHint(
                 "Pagination is controlled by the `_limit` and `_offset` URL parameters.");
         aChallenge.addHint("Use `_limit=8` to return at most 8 todos.");
-        aChallenge.addHint(
-                "Send an `Accept: application/json` header so you can inspect the returned collection.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -320,10 +332,11 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to limit the returned todos to 5 items starting from offset 5.");
+                        "Issue a GET request on the `/todos` end point with query parameters to limit the returned todos to 5 items starting from offset 5, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `_limit=5` to set the page size.");
         aChallenge.addHint("Use `_offset=5` to skip the first 5 todos.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("The default `_offset` is 0 when it is not supplied.");
 
         aChallenge.addSolutionLink(
@@ -356,11 +369,12 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?_sortBy&_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to sort todos by id descending, then return a page of 5 todos from offset 5.");
+                        "Issue a GET request on the `/todos` end point with query parameters to sort todos by id descending, then return a page of 5 todos from offset 5, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `_sortBy=-id` to sort todos by id descending.");
         aChallenge.addHint(
                 "Use `_limit=5&_offset=5` to request the second page of 5 sorted todos.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Sorting should be applied before pagination.");
 
         aChallenge.addSolutionLink(
@@ -375,11 +389,12 @@ public class GetChallenges {
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
                         "GET /todos (200) ?filter&_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to filter todos with doneStatus=false, then return a page of 2 todos from offset 1.");
+                        "Issue a GET request on the `/todos` end point with query parameters to filter todos with doneStatus=false, then return a page of 2 todos from offset 1, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `doneStatus=false` to filter the collection.");
         aChallenge.addHint(
                 "Use `_limit=2&_offset=1` to request 2 filtered todos after skipping the first match.");
+        aChallenge.addHint(JSON_RESPONSE_HINT);
         aChallenge.addHint("Filtering should be applied before pagination.");
 
         aChallenge.addSolutionLink(

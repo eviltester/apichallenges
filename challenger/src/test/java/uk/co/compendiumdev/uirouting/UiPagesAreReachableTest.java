@@ -180,6 +180,16 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
+                        "Interactive API Tutorials | API Challenges Learning Path",
+                        "/tutorials"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "REST API Tutorial Path | Learn HTTP, REST, OpenAPI and API Testing",
+                        "/tutorials/rest-api-tutorial-path"));
+        args.add(
+                Arguments.of(
+                        200,
                         "REST API Tutorial: Learn REST by Using a Live API",
                         "/tutorials/rest-api-tutorial"));
         args.add(
@@ -194,6 +204,26 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
+                        "API Testing Reference | HTTP, REST, OpenAPI and Testing Concepts",
+                        "/reference"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "API Practice Modes | Challenges, Simulator, Simple API and Buggy API",
+                        "/practice-modes"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "API Testing Tools | REST Clients, Online Clients and Proxies",
+                        "/tools"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "API Testing Practice Sites | API Challenges Guide",
+                        "/practice-sites"));
+        args.add(
+                Arguments.of(
+                        200,
                         "HTTP Mirror Mode | API Challenges Practice Mode",
                         "/practice-modes/mirror"));
         args.add(
@@ -201,6 +231,11 @@ public class UiPagesAreReachableTest {
                         200,
                         "Simulation Mode | API Challenges Practice Mode",
                         "/practice-modes/simulation"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "API Simulator OpenAPI JSON Downloads | API Practice Mode",
+                        "/practice-modes/simulation-openapi"));
         return args.stream();
     }
 
@@ -249,7 +284,30 @@ public class UiPagesAreReachableTest {
 
     @Test
     void onlineClientPagesRenderFromToolsNavigation() {
-        HttpResponseDetails response = http.send("/tools/online-clients/basic-client", "get");
+        HttpResponseDetails response = http.send("/tools/online-clients", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertContainsHeaderAndFooter(response);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<title>Online API Clients and OpenAPI UI Tools for Testing</title>"));
+        Assertions.assertTrue(response.body.contains("How The Tools Differ"));
+        Assertions.assertTrue(response.body.contains("CORS And Browser Limits"));
+        Assertions.assertTrue(response.body.contains("Testing With Browser Developer Tools"));
+        Assertions.assertTrue(response.body.contains("When To Use A Desktop REST API Client"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-explorer\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/scalar\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/stoplight\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/zudoku\""));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/redoc\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-converter\""));
+
+        response = http.send("/tools/online-clients/basic-client", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         assertContainsHeaderAndFooter(response);
@@ -262,10 +320,12 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-body-methods=\"all\""));
         Assertions.assertFalse(response.body.contains("data-allowed-path-prefixes"));
         Assertions.assertFalse(response.body.contains("data-expected-status"));
-        Assertions.assertTrue(response.body.contains("limited by CORS"));
         Assertions.assertTrue(
+                response.body.contains("For general browser client limits, CORS notes"));
+        Assertions.assertFalse(
                 response.body.contains("Use Browser Dev Tools To Help Test REST APIs"));
-        Assertions.assertTrue(response.body.contains("HAR file"));
+        Assertions.assertFalse(response.body.contains("HAR file"));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients\""));
         Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/tools/online-clients/basic-client\""));
@@ -279,6 +339,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<title>Online Swagger UI: Open OpenAPI Files from URL or Disk</title>"));
+        assertWideToolEmbedPage(response.body);
         Assertions.assertTrue(response.body.contains("data-online-swagger-client"));
         Assertions.assertTrue(response.body.contains("data-openapi-url"));
         Assertions.assertTrue(response.body.contains("data-openapi-file"));
@@ -291,29 +352,86 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<ul class=\"openapi-verb-grid\""));
         Assertions.assertTrue(response.body.contains("data-openapi-copy-converted disabled"));
         Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
-        Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist"));
+        Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist@5.32.12"));
         assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
         assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
         assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
-        Assertions.assertTrue(
-                response.body.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
-        Assertions.assertTrue(response.body.contains("Render A Tester OpenAPI Spec In Swagger UI"));
-        Assertions.assertTrue(response.body.contains("How To Use Swagger UI For REST API Testing"));
-        Assertions.assertTrue(response.body.contains("CORS Limits For Browser Swagger UI"));
-        Assertions.assertTrue(
+        Assertions.assertTrue(response.body.contains("Swagger UI In This Page"));
+        Assertions.assertTrue(response.body.contains("Tester OpenAPI Profile"));
+        Assertions.assertTrue(response.body.contains("Swagger UI Testing Limits"));
+        Assertions.assertFalse(
+                response.body.contains("How To Use Swagger UI For REST API Testing"));
+        Assertions.assertFalse(response.body.contains("CORS Limits For Browser Swagger UI"));
+        Assertions.assertFalse(
                 response.body.contains("When To Use A REST Client Instead Of Swagger UI"));
-        Assertions.assertTrue(response.body.contains("less-validating, permissive file"));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/simulation-openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/practice-modes/shoppingcart-openapi\""));
-        Assertions.assertTrue(response.body.contains("limited by CORS"));
         Assertions.assertTrue(response.body.contains("Open local JSON or YAML file"));
+        Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/tools/online-clients/openapi-converter\""));
+        assertOpenApiUiBreadcrumb(response.body, "Swagger", "/tools/online-clients/swagger");
+
+        assertOnlineOpenApiUiClientRoute(
+                "/tools/online-clients/openapi-explorer",
+                "Online OpenAPI Explorer UI for Loading API Specs",
+                "openapi-explorer",
+                "OpenAPI Explorer In This Page",
+                "https://unpkg.com/openapi-explorer@2.4.820/dist/browser/openapi-explorer.min.js");
+        assertOnlineOpenApiUiClientRoute(
+                "/tools/online-clients/scalar",
+                "Online Scalar OpenAPI UI for API Reference Testing",
+                "scalar",
+                "Scalar In This Page",
+                "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.64.1");
+        assertOnlineOpenApiUiClientRoute(
+                "/tools/online-clients/stoplight",
+                "Online Stoplight Elements UI for OpenAPI Documentation",
+                "stoplight",
+                "Stoplight Elements In This Page",
+                "https://unpkg.com/@stoplight/elements@9.0.24/web-components.min.js");
+        assertOnlineOpenApiUiClientRoute(
+                "/tools/online-clients/zudoku",
+                "Online Zudoku OpenAPI UI for API Reference Demos",
+                "zudoku",
+                "Zudoku In This Page",
+                "src=\"/js/online-openapi-ui-client.js");
+
+        response = http.send("/zudoku-embed?apiUrl=%2Fdocs%2Fopenapi.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("text/html"));
+        Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
+        Assertions.assertTrue(response.body.contains("data-api-url=\"/docs/openapi.json\""));
+        Assertions.assertTrue(response.body.contains("https://cdn.zudoku.dev/0.83.0/main.js"));
+        Assertions.assertTrue(response.body.contains("showInfoPage: false"));
+        Assertions.assertTrue(response.body.contains("basename: '/zudoku-embed'"));
+        Assertions.assertTrue(response.body.contains("--foreground: var(--zudoku-text)"));
+        Assertions.assertTrue(
+                response.body.contains("--muted-foreground: var(--zudoku-muted-text)"));
+        Assertions.assertTrue(response.body.contains("--zudoku-code-bg"));
+        Assertions.assertTrue(response.body.contains("--shiki-light: var(--zudoku-code-text)"));
+        Assertions.assertTrue(response.body.contains("#zudoku-root .font-mono"));
+        Assertions.assertTrue(response.body.contains("#zudoku-root [style*=\"--shiki\"]"));
+
+        response = http.send("/zudoku-embed/~endpoints?apiUrl=%2Fdocs%2Fopenapi.json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("text/html"));
+        Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
+        Assertions.assertTrue(response.body.contains("data-api-url=\"/docs/openapi.json\""));
+
+        assertOnlineOpenApiUiClientRoute(
+                "/tools/online-clients/redoc",
+                "Online Redoc OpenAPI Viewer for API Reference Docs",
+                "redoc",
+                "Redoc In This Page",
+                "https://cdn.jsdelivr.net/npm/redoc@2.5.3/bundles/redoc.standalone.js");
 
         response = http.send("/tools/online-clients/openapi-converter", "get");
 
@@ -359,6 +477,66 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/tools/clients/summary-reviews\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/simulation-openapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/practice-modes/simpleapi-openapi\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/shoppingcart-openapi\""));
+    }
+
+    private void assertOnlineOpenApiUiClientRoute(
+            final String path,
+            final String title,
+            final String client,
+            final String pageHeading,
+            final String dependency) {
+
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode, path);
+        assertContainsHeaderAndFooter(response);
+        assertWideToolEmbedPage(response.body);
+        Assertions.assertTrue(response.body.contains("<title>" + title + "</title>"), path);
+        Assertions.assertTrue(response.body.contains("data-online-openapi-ui-client"), path);
+        Assertions.assertTrue(response.body.contains("data-openapi-ui=\"" + client + "\""), path);
+        Assertions.assertTrue(response.body.contains("data-openapi-url"), path);
+        Assertions.assertTrue(response.body.contains("data-openapi-file"), path);
+        Assertions.assertTrue(response.body.contains("data-openapi-render-target"), path);
+        Assertions.assertTrue(response.body.contains("Open local JSON or YAML file"), path);
+        Assertions.assertTrue(response.body.contains(pageHeading), path);
+        Assertions.assertTrue(response.body.contains(dependency), path);
+        assertOpenApiUiBreadcrumb(response.body, openApiUiToolDisplayName(client), path);
+        assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
+        assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
+        assertBodyContainsVersionedScript(response, "/js/online-openapi-ui-client.js");
+    }
+
+    private void assertWideToolEmbedPage(final String body) {
+        Assertions.assertTrue(body.contains("<body class='wide-tool-page'>"));
+        Assertions.assertTrue(body.contains("<div class='content'>"));
+        Assertions.assertTrue(body.contains("<section class='doc-columns'>"));
+        Assertions.assertTrue(body.contains("<div class='right-column'>"));
+        Assertions.assertTrue(body.contains("<main id='maincontentstartshere'>"));
+        Assertions.assertTrue(body.contains("<div class=\"main-text-content\">"));
+        Assertions.assertTrue(body.contains("wide-tool-copy-block wide-tool-copy-block-top"));
+        Assertions.assertTrue(body.contains("wide-tool-client-breakout"));
+        Assertions.assertTrue(body.contains("wide-tool-copy-block wide-tool-copy-block-bottom"));
+        Assertions.assertTrue(body.contains("online-openapi-ui-wide-embed"));
+        Assertions.assertTrue(body.contains("<aside class='left-column'"));
+        Assertions.assertTrue(
+                body.contains("<nav class='side-toc' aria-label='Learning and reference links'>"));
+        Assertions.assertTrue(body.contains("wide-tool-side-toc-grid"));
+        Assertions.assertTrue(body.contains("wide-tool-side-toc-column-learning"));
+        Assertions.assertTrue(body.contains("wide-tool-side-toc-column-reference"));
+        Assertions.assertTrue(body.contains("wide-tool-side-toc-column-support"));
+        Assertions.assertTrue(body.contains("wide-tool-side-toc-support"));
+        Assertions.assertTrue(body.contains("<div id='toc'>"));
+        Assertions.assertFalse(body.contains("content-wide-tool"));
+        Assertions.assertFalse(body.contains("doc-columns-wide-tool"));
+        Assertions.assertFalse(body.contains("wide-tool-main"));
+        Assertions.assertFalse(body.contains("wide-tool-main-text"));
     }
 
     private void assertBodyContainsRandomSimpleApiIsbnGenerator(
@@ -506,6 +684,14 @@ public class UiPagesAreReachableTest {
 
     private void assertOpenApiFilePageLinks(
             final String body, final String docsPrefix, final String oldSwaggerPath) {
+        assertOpenApiFilePageLinks(body, docsPrefix, oldSwaggerPath, true);
+    }
+
+    private void assertOpenApiFilePageLinks(
+            final String body,
+            final String docsPrefix,
+            final String oldSwaggerPath,
+            final boolean expectRepeatedDownloadLinks) {
 
         Assertions.assertTrue(body.contains("currently returns OpenAPI v 3.1"));
         Assertions.assertFalse(body.contains("Download Normal OpenAPI File"));
@@ -525,12 +711,113 @@ public class UiPagesAreReachableTest {
             Assertions.assertTrue(
                     body.contains(openApiJsonPath + "?permissive&amp;download")
                             || body.contains(openApiJsonPath + "?permissive&download"));
+            final int minimumDownloadLinks = expectRepeatedDownloadLinks ? 2 : 1;
             Assertions.assertTrue(
-                    countOccurrences(normalizedBody, openApiJsonPath + "?download") >= 2);
+                    countOccurrences(normalizedBody, openApiJsonPath + "?download")
+                            >= minimumDownloadLinks);
             Assertions.assertTrue(
                     countOccurrences(normalizedBody, openApiJsonPath + "?permissive&download")
-                            >= 2);
+                            >= minimumDownloadLinks);
         }
+
+        assertOpenApiUiLaunchLinks(body, docsPrefix + "/docs/openapi-3.2.json");
+    }
+
+    private void assertOpenApiUiLaunchLinks(final String body, final String openApiJsonPath) {
+
+        final String encodedStandardPath = encodeOpenApiUiUrl(openApiJsonPath);
+        final String encodedPermissivePath = encodeOpenApiUiUrl(openApiJsonPath + "?permissive");
+
+        Assertions.assertTrue(body.contains("Open OpenAPI 3.2 In Online UIs"));
+        for (final String client :
+                List.of("swagger", "openapi-explorer", "scalar", "stoplight", "zudoku", "redoc")) {
+            Assertions.assertTrue(
+                    body.contains(
+                            "href=\"/tools/online-clients/"
+                                    + client
+                                    + "?url="
+                                    + encodedStandardPath
+                                    + "\""));
+            Assertions.assertTrue(
+                    body.contains(
+                            "href=\"/tools/online-clients/"
+                                    + client
+                                    + "?url="
+                                    + encodedPermissivePath
+                                    + "\""));
+        }
+    }
+
+    private void assertReferenceOpenApiUiLaunchLinks(
+            final String body, final String toolName, final String clientPath) {
+
+        assertOpenApiUiBreadcrumb(body, toolName, "/reference/open-api-uis/" + clientPath);
+        Assertions.assertTrue(body.contains("Try " + toolName + " with our APIs:"));
+        Assertions.assertTrue(body.contains("openapi-ui-launch-panel"));
+        Assertions.assertTrue(body.contains("openapi-ui-launch-link"));
+        assertReferenceOpenApiUiLaunchLink(
+                body, clientPath, "/simpleapi/docs/openapi-3.2.json", "Simple API");
+        assertReferenceOpenApiUiLaunchLink(
+                body, clientPath, "/sim/docs/openapi-3.2.json", "API Simulator");
+        assertReferenceOpenApiUiLaunchLink(
+                body, clientPath, "/docs/openapi-3.2.json", "API Challenges");
+        assertReferenceOpenApiUiLaunchLink(
+                body, clientPath, "/shop/docs/openapi-3.2.json", "Buggy API");
+    }
+
+    private void assertReferenceOpenApiUiLaunchLink(
+            final String body,
+            final String clientPath,
+            final String openApiJsonPath,
+            final String linkText) {
+
+        Assertions.assertTrue(
+                body.contains(
+                        "href=\"/tools/online-clients/"
+                                + clientPath
+                                + "?url="
+                                + encodeOpenApiUiUrl(openApiJsonPath)
+                                + "\">"
+                                + linkText
+                                + "</a>"));
+    }
+
+    private void assertOpenApiUiBreadcrumb(
+            final String body, final String toolName, final String currentPath) {
+
+        Assertions.assertTrue(
+                body.contains(
+                        "<a href=\"/reference\">Reference</a> &gt;<a href=\"/reference/openapi\">OpenAPI</a> &gt; "
+                                + toolName));
+        Assertions.assertTrue(
+                body.contains(
+                        "\"position\":2,\"name\":\"Reference\",\"item\":\"https://apichallenges.com/reference\""));
+        Assertions.assertTrue(
+                body.contains(
+                        "\"position\":3,\"name\":\"OpenAPI\",\"item\":\"https://apichallenges.com/reference/openapi\""));
+        Assertions.assertTrue(
+                body.contains(
+                        "\"position\":4,\"name\":\""
+                                + toolName
+                                + "\",\"item\":\"https://apichallenges.com"
+                                + currentPath
+                                + "\""));
+    }
+
+    private String openApiUiToolDisplayName(final String clientPath) {
+        return switch (clientPath) {
+            case "swagger" -> "Swagger";
+            case "openapi-explorer" -> "OpenAPI Explorer UI";
+            case "scalar" -> "Scalar";
+            case "stoplight" -> "Stoplight Elements";
+            case "zudoku" -> "Zudoku";
+            case "redoc" -> "Redoc";
+            default -> clientPath;
+        };
+    }
+
+    private String encodeOpenApiUiUrl(final String openApiJsonPath) {
+        return openApiJsonPath.replace("/", "%2F").replace("?", "%3F");
     }
 
     @Test
@@ -677,6 +964,19 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, simpleApiOpenApiPage.statusCode);
         assertOpenApiFilePageLinks(
                 simpleApiOpenApiPage.body, "/simpleapi", "/simpleapi/docs/swagger");
+
+        final HttpResponseDetails simulationOpenApiPage =
+                http.send("/practice-modes/simulation-openapi", "get");
+
+        Assertions.assertEquals(200, simulationOpenApiPage.statusCode);
+        assertOpenApiFilePageLinks(simulationOpenApiPage.body, "/sim", "/sim/docs/swagger");
+
+        final HttpResponseDetails shoppingCartOpenApiPage =
+                http.send("/practice-modes/shoppingcart-openapi", "get");
+
+        Assertions.assertEquals(200, shoppingCartOpenApiPage.statusCode);
+        assertOpenApiFilePageLinks(
+                shoppingCartOpenApiPage.body, "/shop", "/shop/docs/swagger", false);
     }
 
     static Stream<Arguments> expandableThingifierBackedVersionedOpenApiJsonRoutes() {
@@ -1095,6 +1395,19 @@ public class UiPagesAreReachableTest {
         final int apiChallengesToc = response.body.indexOf("<div id='toc'>");
         Assertions.assertTrue(apiChallengesTitle < apiChallengesHero);
         Assertions.assertTrue(apiChallengesHero < apiChallengesToc);
+        Assertions.assertEquals(
+                2, countOccurrences(response.body, "class=\"next-challenge-cta-link\""));
+        Assertions.assertEquals(
+                2,
+                countOccurrences(
+                        response.body,
+                        "class=\"next-challenge-cta-link\" href=\"/gui/challenges\""));
+        assertContainsInOrder(
+                response.body,
+                "<p class=\"content-centered-cta\"><a class=\"next-challenge-cta-link\" href=\"/gui/challenges\">Do The Challenges</a></p>",
+                "Learning Path</h2>",
+                "Full details are included",
+                "<p class=\"content-centered-cta\"><a class=\"next-challenge-cta-link\" href=\"/gui/challenges\">Take The Challenges</a></p>");
     }
 
     @Test
@@ -1648,12 +1961,13 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals("noindex, follow", response.getHeader("X-Robots-Tag"));
         assertContainsHeaderAndFooter(response);
         Assertions.assertTrue(
-                response.body.contains("https://unpkg.com/swagger-ui-dist/swagger-ui.css"));
-        Assertions.assertTrue(
-                response.body.contains("https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"));
+                response.body.contains("https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui.css"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"));
+                        "https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui-bundle.js"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui-standalone-preset.js"));
         Assertions.assertTrue(response.body.contains("color-scheme:light"));
         Assertions.assertTrue(response.body.contains("syntaxHighlight: {activated: false}"));
         Assertions.assertTrue(response.body.contains("SwaggerUIBundle"));
@@ -1687,9 +2001,14 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/shop/client\""));
         Assertions.assertTrue(response.body.contains("href=\"/shop/gui/entities\""));
         Assertions.assertTrue(response.body.contains("href=\"/sim/docs/swagger-ui\""));
-        Assertions.assertTrue(response.body.contains("href=\"/sim/docs/openapi.json?download\""));
         Assertions.assertTrue(
-                response.body.contains("href=\"/mirror/docs/openapi.json?download\""));
+                response.body.contains("href=\"/practice-modes/simulation-openapi\">OpenAPI File"));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/mirror/docs/openapi.json?download\">OpenAPI File"));
+        Assertions.assertFalse(response.body.contains("[Download Open API File]"));
+        Assertions.assertFalse(response.body.contains("href=\"/sim/docs/openapi.json?download\""));
+        Assertions.assertFalse(
+                response.body.contains("href=\"/mirror/docs/openapi.json\">OpenAPI File"));
         Assertions.assertFalse(response.body.contains("href=\"/sim/docs/swagger\""));
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger\""));
         Assertions.assertFalse(response.body.contains("href=\"/fromhell/docs/swagger-ui\""));
@@ -1845,20 +2164,41 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void openApiAndSwaggerReferencePagesAreSplitByConcept() {
+    void openApiAndOpenApiUiReferencePagesAreSplitByConcept() {
 
         final HttpResponseDetails openApiResponse = http.send("/reference/openapi", "get");
 
         Assertions.assertEquals(200, openApiResponse.statusCode);
         Assertions.assertTrue(openApiResponse.body.contains("<h1>OpenAPI for API Testing</h1>"));
+        Assertions.assertTrue(openApiResponse.body.contains("<section class='doc-columns'>"));
+        Assertions.assertTrue(openApiResponse.body.contains("<main id='maincontentstartshere'>"));
+        Assertions.assertFalse(openApiResponse.body.contains("wide-tool-page"));
         Assertions.assertTrue(
                 openApiResponse.body.contains("OpenAPI is a standard specification format"));
         Assertions.assertTrue(openApiResponse.body.contains("Swagger is one family of tools"));
-        Assertions.assertTrue(openApiResponse.body.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(openApiResponse.body.contains("OpenAPI UIs"));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/practice-modes/simulation-openapi\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/swagger\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/openapi-explorer\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/scalar\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/stoplight\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/zudoku\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains("href=\"/reference/open-api-uis/redoc\""));
+        Assertions.assertTrue(
+                openApiResponse.body.contains(
+                        "The open source version is primarily a viewer, not a request-sending client"));
         Assertions.assertTrue(openApiResponse.body.contains("href=\"/reference/openapi\""));
+        Assertions.assertFalse(openApiResponse.body.contains("href=\"/reference/swagger\""));
         Assertions.assertFalse(openApiResponse.body.contains("OpenAPI / Swagger"));
 
-        final HttpResponseDetails swaggerResponse = http.send("/reference/swagger", "get");
+        HttpResponseDetails swaggerResponse = http.send("/reference/open-api-uis/swagger", "get");
 
         Assertions.assertEquals(200, swaggerResponse.statusCode);
         Assertions.assertTrue(
@@ -1868,8 +2208,45 @@ public class UiPagesAreReachableTest {
                         "OpenAPI is the standard specification. Swagger is tooling"));
         Assertions.assertTrue(swaggerResponse.body.contains("Swagger UI"));
         Assertions.assertTrue(swaggerResponse.body.contains("href=\"/reference/openapi\""));
-        Assertions.assertTrue(swaggerResponse.body.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(
+                swaggerResponse.body.contains("href=\"/reference/open-api-uis/swagger\""));
         Assertions.assertFalse(swaggerResponse.body.contains("OpenAPI / Swagger"));
+        assertReferenceOpenApiUiLaunchLinks(swaggerResponse.body, "Swagger", "swagger");
+
+        HttpResponseDetails explorerResponse =
+                http.send("/reference/open-api-uis/openapi-explorer", "get");
+        Assertions.assertEquals(200, explorerResponse.statusCode);
+        Assertions.assertTrue(explorerResponse.body.contains("<h1>OpenAPI Explorer UI</h1>"));
+        Assertions.assertTrue(explorerResponse.body.contains("web component"));
+        assertReferenceOpenApiUiLaunchLinks(
+                explorerResponse.body, "OpenAPI Explorer UI", "openapi-explorer");
+
+        HttpResponseDetails scalarResponse = http.send("/reference/open-api-uis/scalar", "get");
+        Assertions.assertEquals(200, scalarResponse.statusCode);
+        Assertions.assertTrue(scalarResponse.body.contains("<h1>Scalar OpenAPI UI</h1>"));
+        Assertions.assertTrue(scalarResponse.body.contains("REST API client"));
+        assertReferenceOpenApiUiLaunchLinks(scalarResponse.body, "Scalar", "scalar");
+
+        HttpResponseDetails stoplightResponse =
+                http.send("/reference/open-api-uis/stoplight", "get");
+        Assertions.assertEquals(200, stoplightResponse.statusCode);
+        Assertions.assertTrue(
+                stoplightResponse.body.contains("<h1>Stoplight Elements OpenAPI UI</h1>"));
+        Assertions.assertTrue(stoplightResponse.body.contains("React components"));
+        assertReferenceOpenApiUiLaunchLinks(
+                stoplightResponse.body, "Stoplight Elements", "stoplight");
+
+        HttpResponseDetails zudokuResponse = http.send("/reference/open-api-uis/zudoku", "get");
+        Assertions.assertEquals(200, zudokuResponse.statusCode);
+        Assertions.assertTrue(zudokuResponse.body.contains("<h1>Zudoku OpenAPI UI</h1>"));
+        Assertions.assertTrue(zudokuResponse.body.contains("developer portals"));
+        assertReferenceOpenApiUiLaunchLinks(zudokuResponse.body, "Zudoku", "zudoku");
+
+        HttpResponseDetails redocResponse = http.send("/reference/open-api-uis/redoc", "get");
+        Assertions.assertEquals(200, redocResponse.statusCode);
+        Assertions.assertTrue(redocResponse.body.contains("<h1>Redoc OpenAPI UI</h1>"));
+        Assertions.assertTrue(redocResponse.body.contains("not a request-sending API client"));
+        assertReferenceOpenApiUiLaunchLinks(redocResponse.body, "Redoc", "redoc");
     }
 
     @Test
@@ -1920,7 +2297,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("\"name\":\"eviltester.com\""));
         Assertions.assertTrue(
                 response.body.contains("\"legalName\":\"Compendium Developments Ltd\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-06\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-09\""));
         Assertions.assertTrue(response.body.contains("\"@type\":\"BreadcrumbList\""));
         Assertions.assertFalse(response.body.contains("<aside class='next-challenge-cta'"));
         Assertions.assertTrue(response.body.contains("<p class='article-byline'>"));
@@ -1928,7 +2305,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<a href='/author/alan-richardson' rel='author'>Alan Richardson</a>"));
         Assertions.assertTrue(
-                response.body.contains("Updated <time datetime='2026-08-06'>2026-08-06</time>"));
+                response.body.contains("Updated <time datetime='2026-08-09'>2026-08-09</time>"));
         Assertions.assertTrue(response.body.contains("<aside class='author-bio-snippet'"));
         Assertions.assertTrue(response.body.contains("href='/author/alan-richardson'"));
     }
@@ -2147,6 +2524,28 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(2, countOccurrences(response.body, "data-challenge-id=\""));
         Assertions.assertTrue(
                 response.body.contains("<summary>Experiment with this endpoint</summary>"));
+    }
+
+    @Test
+    void filteredTodosSolutionExplainsJsonAcceptHeaderRequirement() {
+
+        final HttpResponseDetails response =
+                http.send("/apichallenges/solutions/get/get-todos-200-filter", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
+        Assertions.assertTrue(
+                response.body.contains("The challenge completion check expects a JSON response"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "The request should have an <code>Accept: application/json</code> header"));
+        Assertions.assertTrue(
+                response.body.matches(
+                        "(?s).*<div class=\"api-live-request\""
+                                + "(?=[^>]*data-method=\"GET\")"
+                                + "(?=[^>]*data-path=\"/todos\\?doneStatus=true\")"
+                                + "(?=[^>]*data-headers=\"Accept: application/json\")"
+                                + "(?=[^>]*data-expected-status=\"200\")[^>]*>.*"));
     }
 
     @Test
@@ -2470,8 +2869,59 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.com/gui/challenges</loc>"));
         Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/reference</loc>"));
+        Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.com/reference/openapi</loc>"));
         Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/swagger</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/openapi-explorer</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/scalar</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/stoplight</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/zudoku</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/reference/open-api-uis/redoc</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients/openapi-explorer</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients/scalar</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients/stoplight</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients/zudoku</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tools/online-clients/redoc</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/tutorials</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/tutorials/rest-api-tutorial-path</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/practice-modes</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/practice-modes/simulation-openapi</loc>"));
+        Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com/tools</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/practice-sites</loc>"));
+        Assertions.assertFalse(
                 response.body.contains("<loc>https://apichallenges.com/reference/swagger</loc>"));
         Assertions.assertFalse(
                 response.body.contains("<loc>https://apichallenges.com/tutorials/openapi</loc>"));
@@ -2586,13 +3036,60 @@ public class UiPagesAreReachableTest {
         response = http.send("/reference/openapi", "head");
         Assertions.assertEquals(200, response.statusCode);
 
-        response = http.send("/reference/swagger", "head");
+        response = http.send("/reference/open-api-uis/swagger", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/reference", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools/online-clients", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools/online-clients/openapi-explorer", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools/online-clients/scalar", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools/online-clients/stoplight", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tools/online-clients/zudoku", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/zudoku-embed", "head");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
+
+        response = http.send("/zudoku-embed/~endpoints", "head");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
+
+        response = http.send("/tools/online-clients/redoc", "head");
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/tutorials/rest-api-tutorial", "head");
         Assertions.assertEquals(200, response.statusCode);
 
+        response = http.send("/tutorials", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/tutorials/rest-api-tutorial-path", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
         response = http.send("/tutorials/api-simulator-walkthrough", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/practice-modes", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/practice-modes/simulation-openapi", "head");
+        Assertions.assertEquals(200, response.statusCode);
+
+        response = http.send("/practice-sites", "head");
         Assertions.assertEquals(200, response.statusCode);
     }
 
@@ -2845,8 +3342,10 @@ public class UiPagesAreReachableTest {
                 Arguments.of("/tutorials/testing-apis/", "/reference/testing-apis"),
                 Arguments.of("/tutorials/openapi", "/reference/openapi"),
                 Arguments.of("/tutorials/openapi/", "/reference/openapi"),
-                Arguments.of("/tutorials/swagger", "/reference/swagger"),
-                Arguments.of("/tutorials/swagger/", "/reference/swagger"),
+                Arguments.of("/tutorials/swagger", "/reference/open-api-uis/swagger"),
+                Arguments.of("/tutorials/swagger/", "/reference/open-api-uis/swagger"),
+                Arguments.of("/reference/swagger", "/reference/open-api-uis/swagger"),
+                Arguments.of("/reference/swagger/", "/reference/open-api-uis/swagger"),
                 Arguments.of("/tutorials/summary", "/reference/summary"),
                 Arguments.of("/tutorials/summary/", "/reference/summary"));
     }

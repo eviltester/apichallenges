@@ -36,6 +36,15 @@ public class TodoExportRoutes {
                                                         thingifier))
                                 .handle());
 
+        SimpleHttpRouteCreator.addHandler(
+                "/todos/export",
+                "options",
+                (request, result) -> {
+                    result.status(204);
+                    result.header("Allow", "GET, OPTIONS");
+                    return "";
+                });
+
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.GET,
@@ -55,7 +64,17 @@ public class TodoExportRoutes {
                                 "Content-Disposition", "attachment; filename=\"todos.{extension}\"")
                         .addPossibleStatuses(200, 400, 431));
 
-        SimpleHttpRouteCreator.routeStatusWhenNot(405, "/todos/export", List.of("get"));
+        apiDefn.addRouteToDocumentation(
+                new RoutingDefinition(
+                                RoutingVerb.OPTIONS,
+                                "/todos/export",
+                                RoutingStatus.returnValue(204),
+                                null)
+                        .addDocumentation("CORS preflight options for exporting todos")
+                        .addResponseHeader("Allow", "GET, OPTIONS")
+                        .addPossibleStatuses(204, 431));
+
+        SimpleHttpRouteCreator.routeStatusWhenNot(405, "/todos/export", List.of("get", "options"));
     }
 
     private ApiResponse exportTodos(

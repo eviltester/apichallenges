@@ -2,7 +2,7 @@
 title: REST API Tutorial: Learn REST by Using a Live API
 seo_title: REST API Tutorial: Learn REST by Using a Live API
 description: Learn REST API basics by sending real GET, HEAD, POST, PATCH, and DELETE requests to live APIs.
-lastmod: 2026-08-06
+lastmod: 2026-08-09
 seo_description: Learn REST API basics with live HTTP requests. Try resources, URLs, methods, status codes, JSON, XML, headers, auth, OpenAPI, CRUD, and common REST mistakes.
 showads: true
 ---
@@ -29,7 +29,7 @@ Useful REST API reference pages:
 - [HTTP Basics](/reference/http-basics)
 - [HTTP Methods and Verbs](/reference/http-verbs)
 - [OpenAPI](/reference/openapi)
-- [Swagger](/reference/swagger)
+- [Swagger UI](/reference/open-api-uis/swagger)
 - [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
@@ -343,7 +343,7 @@ OpenAPI files can be used in REST Client tools to create collections of requests
 
 OpenAPI is useful, but it is still documentation. The running API is the source of behaviour you experience when you send requests.
 
-Learn more about REST API documentation in [OpenAPI](/reference/openapi) and [Swagger](/reference/swagger).
+Learn more about REST API documentation in [OpenAPI](/reference/openapi) and [Swagger UI](/reference/open-api-uis/swagger).
 
 ---
 
@@ -451,7 +451,7 @@ Use the reference pages when one part of the tutorial needs more depth:
 - [HTTP Methods and Verbs](/reference/http-verbs)
 - [How to Test REST APIs](/tutorials/rest-api-testing)
 - [OpenAPI](/reference/openapi)
-- [Swagger](/reference/swagger)
+- [Swagger UI](/reference/open-api-uis/swagger)
 
 When you want more hands-on repetition, move from the guided examples here into the practice areas:
 

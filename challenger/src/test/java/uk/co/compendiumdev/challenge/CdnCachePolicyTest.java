@@ -101,8 +101,14 @@ public class CdnCachePolicyTest {
                         "/shop/docs",
                         "/learning",
                         "/practice-modes/simpleapi",
+                        "/tools/online-clients",
                         "/tools/online-clients/basic-client",
                         "/tools/online-clients/swagger",
+                        "/tools/online-clients/openapi-explorer",
+                        "/tools/online-clients/scalar",
+                        "/tools/online-clients/stoplight",
+                        "/tools/online-clients/zudoku",
+                        "/tools/online-clients/redoc",
                         "/tools/online-clients/openapi-converter")) {
             final TestResponse response = new TestResponse();
 
@@ -110,6 +116,34 @@ public class CdnCachePolicyTest {
 
             Assertions.assertFalse(response.containsHeader("X-Robots-Tag"), path);
         }
+    }
+
+    @Test
+    void generatedSwaggerUiCdnUrlsArePinnedToExplicitVersions() {
+        final String generatedHtml =
+                """
+                <link rel='stylesheet' href='https://unpkg.com/swagger-ui-dist/swagger-ui.css'>
+                <script src='https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js'></script>
+                <script src='https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js'></script>
+                """;
+
+        final String pinnedHtml = CdnCachePolicy.pinThirdPartyCdnHtmlAssets(generatedHtml);
+
+        Assertions.assertTrue(
+                pinnedHtml.contains("https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui.css"));
+        Assertions.assertTrue(
+                pinnedHtml.contains(
+                        "https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui-bundle.js"));
+        Assertions.assertTrue(
+                pinnedHtml.contains(
+                        "https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui-standalone-preset.js"));
+        Assertions.assertFalse(
+                pinnedHtml.contains("https://unpkg.com/swagger-ui-dist/swagger-ui.css"));
+        Assertions.assertFalse(
+                pinnedHtml.contains("https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"));
+        Assertions.assertFalse(
+                pinnedHtml.contains(
+                        "https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"));
     }
 
     private record TestRequest(String path) implements HttpServerRequest {
