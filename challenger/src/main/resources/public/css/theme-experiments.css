@@ -680,6 +680,26 @@ html[data-theme] input[type="submit"]:hover {
     color: var(--cta-text);
 }
 
+html[data-theme] .openapi-ui-launch-group {
+    background: var(--surface-soft);
+    border-color: var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+}
+
+html[data-theme] a.openapi-ui-launch-link {
+    background: var(--cta-bg);
+    border-color: var(--cta-bg);
+    color: var(--cta-text);
+}
+
+html[data-theme] a.openapi-ui-launch-link:hover,
+html[data-theme] a.openapi-ui-launch-link:focus-visible {
+    background: var(--cta-hover-bg);
+    border-color: var(--cta-hover-bg);
+    color: var(--cta-text);
+}
+
 html[data-theme] .sponsor-logo-panel {
     align-items: center;
     display: flex;
@@ -1512,6 +1532,19 @@ html[data-theme] .side-toc-syllabus-title {
     color: var(--text);
 }
 
+html[data-theme] a.side-toc-section-title,
+html[data-theme] a.side-toc-syllabus-title {
+    color: var(--text);
+}
+
+html[data-theme] a.side-toc-section-title:hover,
+html[data-theme] a.side-toc-section-title:focus-visible,
+html[data-theme] a.side-toc-syllabus-title:hover,
+html[data-theme] a.side-toc-syllabus-title:focus-visible {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
 html[data-theme] .side-toc-syllabus-steps li {
     color: var(--text);
     font-weight: 500;
@@ -1519,6 +1552,168 @@ html[data-theme] .side-toc-syllabus-steps li {
 
 html[data-theme] .side-toc-syllabus-steps li::before {
     color: var(--muted);
+}
+
+html[data-theme] body.wide-tool-page .doc-columns {
+    gap: 0;
+}
+
+html[data-theme] body.wide-tool-page main {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+html[data-theme] body.wide-tool-page main > .breadcrumb {
+    margin-inline: auto;
+    max-width: var(--reading-max);
+}
+
+html[data-theme] body.wide-tool-page .main-text-content {
+    max-width: none;
+    width: 100%;
+}
+
+html[data-theme] body.wide-tool-page .left-column.is-collapsible {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin: 0 auto 1rem;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    z-index: 45;
+}
+
+html[data-theme] body.wide-tool-page .mobile-content-nav-toggle {
+    align-items: center;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: none;
+    color: var(--text);
+    cursor: pointer;
+    display: inline-flex;
+    font: 700 0.95rem var(--body-font);
+    gap: 0.5rem;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    width: auto;
+}
+
+html[data-theme] body.wide-tool-page .mobile-content-nav-toggle::before {
+    background:
+        linear-gradient(currentColor, currentColor) 0 0 / 100% 2px no-repeat,
+        linear-gradient(currentColor, currentColor) 0 50% / 100% 2px no-repeat,
+        linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat;
+    content: "";
+    flex: 0 0 auto;
+    height: 0.8rem;
+    width: 1.05rem;
+}
+
+html[data-theme] body.wide-tool-page .mobile-content-nav-toggle[aria-expanded="true"] {
+    background: var(--nav-active-bg);
+    border-color: var(--accent);
+    color: var(--accent-strong);
+}
+
+html[data-theme] body.wide-tool-page .mobile-content-nav-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+html[data-theme] body.wide-tool-page .left-column.is-collapsible .side-toc {
+    display: none;
+}
+
+html[data-theme] body.wide-tool-page .left-column.is-collapsible.is-open .side-toc {
+    display: block;
+    margin-top: 0.75rem;
+}
+
+@media (min-width: 1180px) {
+    html[data-theme] body.wide-tool-page .wide-tool-side-toc-grid {
+        align-items: start;
+        display: grid;
+        gap: clamp(1rem, 2vw, 1.75rem);
+        grid-template-columns: minmax(13rem, 0.85fr) minmax(20rem, 1.4fr) minmax(13rem, 0.9fr);
+    }
+
+    html[data-theme] body.wide-tool-page .wide-tool-side-toc-column > .side-toc-root > li {
+        margin-block: 0;
+    }
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-side-toc-support > hr {
+    border-top-color: var(--border);
+    margin: 0.35rem 0 0;
+    width: 100%;
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-side-toc-support > p {
+    color: var(--muted);
+    margin: 0;
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-side-toc-support > p a {
+    color: var(--accent-strong);
+    font-weight: 700;
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-copy-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-width: var(--reading-max);
+    padding: clamp(1.15rem, 2vw, 2rem);
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-copy-block-bottom {
+    margin-top: 1.5rem;
+}
+
+html[data-theme] body.wide-tool-page .wide-tool-client-breakout {
+    inline-size: calc(100vw - clamp(1rem, 4vw, 3rem));
+    margin-block: 1.25rem;
+    max-inline-size: none;
+}
+
+html[data-theme] body.wide-tool-page #toc {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    float: none !important;
+    margin: 1rem 0 1.5rem !important;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    position: static !important;
+    width: auto !important;
+    z-index: auto;
+}
+
+html[data-theme] body.wide-tool-page #toc div.h2 {
+    margin-left: 2em;
+}
+
+html[data-theme] body.wide-tool-page #toc div.h3 {
+    margin-left: 3em;
+}
+
+html[data-theme] body.wide-tool-page #toc div.h4 {
+    margin-left: 4em;
+}
+
+@media (max-width: 1000px) {
+    html[data-theme] body.wide-tool-page .mobile-content-nav-toggle {
+        width: 100%;
+    }
 }
 
 html[data-theme] .sim-live-tab,

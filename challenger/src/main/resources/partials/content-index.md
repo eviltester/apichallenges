@@ -1,7 +1,7 @@
 <ul class="side-toc-root">
     <li><a href="/learning">Learning Zone</a></li>
     <li class="side-toc-syllabus" aria-label="REST API Tutorial path">
-        <span class="side-toc-syllabus-title">REST API Tutorial Path</span>
+        <a class="side-toc-syllabus-title" href="/tutorials/rest-api-tutorial-path">REST API Tutorial Path</a>
         <ol class="side-toc-syllabus-steps">
             <li><a href="/tutorials/rest-api-tutorial">Interactive REST API Tutorial</a></li>
             <li><a href="/reference/http-basics">HTTP basics</a></li>
@@ -12,13 +12,14 @@
             <li><a href="/tutorials/rest-api-testing">Interactive How to Test REST APIs Tutorial</a></li>
             <li><a href="/tutorials/api-simulator-walkthrough">Interactive API Simulation</a></li>
             <li><a href="/apichallenges">API Challenges</a></li>
+            <li><a href="/apichallenges/solutions">Challenge Solutions</a></li>
         </ol>
     </li>
     <li>
         <details class="side-toc-section" data-side-toc-section="reference-tutorials">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Reference</span>
-                <span class="side-toc-section-description">Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and Swagger.</span>
+                <a class="side-toc-section-title" href="/reference">Reference</a>
+                <span class="side-toc-section-description">Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and OpenAPI UIs.</span>
             </summary>
             <ul class="side-toc-section-links">
                 <li><a href="/reference/web-basics">Web Applications</a></li>
@@ -26,8 +27,17 @@
                 <li><a href="/reference/http-verbs">HTTP Verbs</a></li>
                 <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
                 <li><a href="/reference/testing-apis">API Testing Concepts</a></li>
-                <li><a href="/reference/openapi">OpenAPI</a></li>
-                <li><a href="/reference/swagger">Swagger</a></li>
+                <li>
+                    <a href="/reference/openapi">OpenAPI</a>
+                    <ul>
+                        <li><a href="/reference/open-api-uis/swagger">Swagger UI</a></li>
+                        <li><a href="/reference/open-api-uis/openapi-explorer">OpenAPI Explorer</a></li>
+                        <li><a href="/reference/open-api-uis/scalar">Scalar</a></li>
+                        <li><a href="/reference/open-api-uis/stoplight">Stoplight Elements</a></li>
+                        <li><a href="/reference/open-api-uis/zudoku">Zudoku</a></li>
+                        <li><a href="/reference/open-api-uis/redoc">Redoc</a></li>
+                    </ul>
+                </li>
                 <li><a href="/reference/summary">Summary</a></li>
             </ul>
         </details>
@@ -35,7 +45,7 @@
     <li>
         <details class="side-toc-section" data-side-toc-section="interactive-tutorials">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Interactive Tutorials</span>
+                <a class="side-toc-section-title" href="/tutorials">Interactive Tutorials</a>
                 <span class="side-toc-section-description">Hands-on tutorial pages for learning REST concepts and API testing workflows.</span>
             </summary>
             <ul class="side-toc-section-links">
@@ -48,7 +58,7 @@
     <li>
         <details class="side-toc-section" data-side-toc-section="practice-modes">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Practice Modes</span>
+                <a class="side-toc-section-title" href="/practice-modes">Practice Modes</a>
                 <span class="side-toc-section-description">Hands-on API practice modes for simulation, challenges, simple APIs, buggy APIs, mirror testing, and API From Hell scenarios.</span>
             </summary>
             <ul class="side-toc-section-links">
@@ -61,11 +71,10 @@
             </ul>
         </details>
     </li>
-    <li><a href="/apichallenges/solutions">Challenge Solutions</a></li>
     <li>
         <details class="side-toc-section" data-side-toc-section="tools">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Tools</span>
+                <a class="side-toc-section-title" href="/tools">Tools</a>
                 <span class="side-toc-section-description">Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing.</span>
             </summary>
             <ul class="side-toc-section-links">
@@ -93,10 +102,15 @@
                 </li>
                 <li><a href="/tools/proxies">Proxies</a></li>
                 <li>
-                    Online Clients
+                    <a href="/tools/online-clients">Online Clients</a>
                     <ul>
                         <li><a href="/tools/online-clients/basic-client">Basic Client</a></li>
-                        <li><a href="/tools/online-clients/swagger">Swagger</a></li>
+                        <li><a href="/tools/online-clients/swagger">Swagger UI</a></li>
+                        <li><a href="/tools/online-clients/openapi-explorer">OpenAPI Explorer</a></li>
+                        <li><a href="/tools/online-clients/scalar">Scalar</a></li>
+                        <li><a href="/tools/online-clients/stoplight">Stoplight Elements</a></li>
+                        <li><a href="/tools/online-clients/zudoku">Zudoku</a></li>
+                        <li><a href="/tools/online-clients/redoc">Redoc</a></li>
                         <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
                     </ul>
                 </li>
@@ -106,11 +120,10 @@
     <li>
         <details class="side-toc-section" data-side-toc-section="practice-sites">
             <summary class="side-toc-section-summary">
-                <span class="side-toc-section-title">Practice Sites</span>
+                <a class="side-toc-section-title" href="/practice-sites">Practice Sites</a>
                 <span class="side-toc-section-description">Public practice sites and sample applications for API testing, from simple GET APIs to fuller app examples.</span>
             </summary>
             <ul class="side-toc-section-links">
-                <li><a href="/practice-sites">All Practice Sites</a></li>
                 <li>
                     Simulators
                     <ul>

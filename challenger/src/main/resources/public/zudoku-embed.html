@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zudoku OpenAPI UI</title>
+  <script>
+    (function () {
+      'use strict';
+
+      var params = new URLSearchParams(window.location.search);
+      var themeName = params.get('theme') || 'clean-docs';
+      var isDark = themeName === 'dark-lab';
+      document.documentElement.setAttribute('data-theme', themeName);
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      window.apiChallengesZudokuTheme = themeName;
+    }());
+  </script>
+  <link rel="stylesheet" href="https://cdn.zudoku.dev/0.83.0/zudoku.css" crossorigin>
+  <style>
+    html[data-theme="clean-docs"] {
+      --zudoku-page-bg: #ffffff;
+      --zudoku-surface: #ffffff;
+      --zudoku-surface-soft: #eef7f6;
+      --zudoku-text: #102033;
+      --zudoku-muted-text: #526272;
+      --zudoku-border: #d5e0ea;
+      --zudoku-primary: #0b3f73;
+      --zudoku-primary-text: #ffffff;
+      --zudoku-code-bg: #f6fbfc;
+      --zudoku-code-text: #102033;
+      --zudoku-code-muted-text: #334155;
+      --zudoku-code-border: #c5d5e4;
+    }
+
+    html[data-theme="learning-platform"] {
+      --zudoku-page-bg: #fffdf8;
+      --zudoku-surface: #fffdf8;
+      --zudoku-surface-soft: #fff1d6;
+      --zudoku-text: #172033;
+      --zudoku-muted-text: #665b4b;
+      --zudoku-border: #ead8bd;
+      --zudoku-primary: #7c2d12;
+      --zudoku-primary-text: #ffffff;
+      --zudoku-code-bg: #fff7ed;
+      --zudoku-code-text: #172033;
+      --zudoku-code-muted-text: #4b5563;
+      --zudoku-code-border: #e4c8a3;
+    }
+
+    html[data-theme="dark-lab"] {
+      --zudoku-page-bg: #0b181c;
+      --zudoku-surface: #0b181c;
+      --zudoku-surface-soft: #102429;
+      --zudoku-text: #e7fbff;
+      --zudoku-muted-text: #c7dde1;
+      --zudoku-border: #21444b;
+      --zudoku-primary: #22d3c5;
+      --zudoku-primary-text: #021213;
+      --zudoku-code-bg: #03090b;
+      --zudoku-code-text: #d9fff8;
+      --zudoku-code-muted-text: #b7d0d3;
+      --zudoku-code-border: #21444b;
+    }
+
+    html,
+    body {
+      background: var(--zudoku-page-bg);
+      color: var(--zudoku-text);
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #zudoku-root {
+      background: var(--zudoku-surface);
+      color: var(--zudoku-text);
+      min-height: 100vh;
+      --background: var(--zudoku-page-bg);
+      --foreground: var(--zudoku-text);
+      --card: var(--zudoku-surface);
+      --card-foreground: var(--zudoku-text);
+      --popover: var(--zudoku-surface);
+      --popover-foreground: var(--zudoku-text);
+      --primary: var(--zudoku-primary);
+      --primary-foreground: var(--zudoku-primary-text);
+      --secondary: var(--zudoku-surface-soft);
+      --secondary-foreground: var(--zudoku-text);
+      --muted: var(--zudoku-surface-soft);
+      --muted-foreground: var(--zudoku-muted-text);
+      --accent: var(--zudoku-surface-soft);
+      --accent-foreground: var(--zudoku-text);
+      --border: var(--zudoku-border);
+      --input: var(--zudoku-border);
+      --ring: var(--zudoku-primary);
+      --shiki-light: var(--zudoku-code-text) !important;
+      --shiki-dark: var(--zudoku-code-text) !important;
+      --shiki-light-bg: var(--zudoku-code-bg) !important;
+      --shiki-dark-bg: var(--zudoku-code-bg) !important;
+      --shiki-token-comment: var(--zudoku-code-muted-text) !important;
+      --shiki-token-keyword: var(--zudoku-code-text) !important;
+      --shiki-token-string: var(--zudoku-code-text) !important;
+      --shiki-token-constant: var(--zudoku-code-text) !important;
+      --shiki-token-function: var(--zudoku-code-text) !important;
+      --shiki-token-punctuation: var(--zudoku-code-text) !important;
+      --shiki-token-parameter: var(--zudoku-code-text) !important;
+      --shiki-token-link: var(--zudoku-code-text) !important;
+    }
+
+    #zudoku-root code,
+    #zudoku-root pre {
+      background: var(--zudoku-code-bg) !important;
+      border-color: var(--zudoku-code-border) !important;
+      border-radius: 0.25rem;
+      color: var(--zudoku-code-text) !important;
+      padding: 0.08rem 0.25rem;
+    }
+
+    #zudoku-root :is(pre, code, .shiki, .code-block, .font-mono, [data-line], [style*="--shiki"]) {
+      --shiki-light: var(--zudoku-code-text) !important;
+      --shiki-dark: var(--zudoku-code-text) !important;
+      --shiki-light-bg: var(--zudoku-code-bg) !important;
+      --shiki-dark-bg: var(--zudoku-code-bg) !important;
+      color: var(--zudoku-code-text) !important;
+    }
+
+    #zudoku-root code *,
+    #zudoku-root pre *,
+    #zudoku-root .font-mono,
+    #zudoku-root .font-mono *,
+    #zudoku-root [data-line],
+    #zudoku-root [data-line] *,
+    #zudoku-root [style*="--shiki"],
+    #zudoku-root [style*="--shiki"] * {
+      color: var(--zudoku-code-text) !important;
+    }
+
+    #zudoku-root .code-block,
+    #zudoku-root .code-block pre,
+    #zudoku-root .code-block code,
+    #zudoku-root .shiki,
+    #zudoku-root .overflow-auto:has(:is(pre, code, .shiki, .code-block, .font-mono, [style*="--shiki"])),
+    #zudoku-root .overflow-x-auto:has(:is(pre, code, .shiki, .code-block, .font-mono, [style*="--shiki"])),
+    #zudoku-root .relative.overflow-auto:has(:is(pre, code, .shiki, .code-block, .font-mono, [style*="--shiki"])) {
+      background: var(--zudoku-code-bg) !important;
+      border-color: var(--zudoku-code-border) !important;
+      color: var(--zudoku-code-text) !important;
+    }
+
+    #zudoku-root .code-block code,
+    #zudoku-root .shiki {
+      display: block !important;
+      padding: 1rem !important;
+    }
+
+    #zudoku-root .code-block span,
+    #zudoku-root .shiki span {
+      background: transparent !important;
+      color: var(--zudoku-code-text) !important;
+    }
+
+    #zudoku-root span.flex.items-center.duration-200.transition-opacity {
+      color: var(--zudoku-primary) !important;
+      font-weight: 700;
+    }
+
+    #zudoku-root .text-green-600,
+    #zudoku-root span.inline-flex.items-center.justify-center {
+      color: var(--zudoku-primary) !important;
+      font-weight: 700;
+    }
+
+    #zudoku-root .text-neutral-400,
+    #zudoku-root .dark\:text-neutral-500 {
+      color: var(--zudoku-muted-text) !important;
+    }
+
+    #zudoku-root .text-neutral-900,
+    #zudoku-root .dark\:text-neutral-200 {
+      color: var(--zudoku-text) !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="zudoku-root" data-api-url="/docs/openapi.json"></div>
+  <script>
+    (function () {
+      'use strict';
+
+      function absoluteZudokuUrl(value) {
+        var input = value || window.location.origin + '/docs/openapi.json';
+        if (input.indexOf('://') > -1) {
+          return input;
+        }
+        return new URL(input, window.location.origin).href;
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var apiInput = params.get('apiUrl');
+      var sessionKey = params.get('sessionKey');
+      var storedSpec = sessionKey ? window.sessionStorage.getItem(sessionKey) : null;
+      if (storedSpec) {
+        window.apiChallengesZudokuInput = {
+          type: 'raw',
+          input: storedSpec
+        };
+      } else {
+        window.apiChallengesZudokuInput = {
+          type: 'url',
+          input: absoluteZudokuUrl(apiInput)
+        };
+      }
+
+      document
+        .getElementById('zudoku-root')
+        .setAttribute('data-api-url', window.apiChallengesZudokuInput.input);
+    }());
+  </script>
+  <script type="module">
+    const CDN_MAIN_URL = 'https://cdn.zudoku.dev/0.83.0/main.js';
+    const root = document.getElementById('zudoku-root');
+
+    function displayZudokuError(error) {
+      root.textContent = 'Zudoku could not render this OpenAPI file.';
+      console.error(error);
+    }
+
+    function parseImport(source, filenamePattern) {
+      const importPattern = new RegExp(
+        'import\\s+\\{\\s*([^}]+?)\\s*\\}\\s+from\\s+"\\./(' + filenamePattern + ')"',
+      );
+      const match = source.match(importPattern);
+      if (!match) {
+        throw new Error('Zudoku CDN module layout changed.');
+      }
+
+      const exportByLocalName = {};
+      match[1].split(',').forEach(function (part) {
+        const pieces = part.trim().split(/\s+as\s+/);
+        const exportName = pieces[0].trim();
+        const localName = (pieces[1] || pieces[0]).trim();
+        exportByLocalName[localName] = exportName;
+      });
+
+      return {
+        url: new URL(match[2], CDN_MAIN_URL).href,
+        exportNameFor: function (localName) {
+          const exportName = exportByLocalName[localName];
+          if (!exportName) {
+            throw new Error('Zudoku CDN export layout changed.');
+          }
+          return exportName;
+        },
+      };
+    }
+
+    function runtimeNamesFrom(source) {
+      const startup = source.match(/var\s+([\w$]+)\s*=\s*([\w$]+)\(\),\s*([\w$]+)\s*=\s*([\w$]+)\(\)/);
+      const router = source.match(/,\s*[\w$]+\s*=\s*([\w$]+)\(([\w$]+)\(\{\s*site:/);
+      const openApi = source.match(/plugins:\s*\[\s*([\w$]+)\(\{\s*type:\s*"url"/);
+      const render = source.match(/jsx\)\(([\w$]+),\s*\{\s*router:\s*[\w$]+,\s*head:\s*([\w$]+)\(\)/);
+      if (!startup || !router || !openApi || !render) {
+        throw new Error('Zudoku CDN bootstrap layout changed.');
+      }
+
+      return {
+        reactDomLocal: startup[2],
+        jsxRuntimeLocal: startup[4],
+        createRouterLocal: router[1],
+        transformConfigLocal: router[2],
+        openApiLocal: openApi[1],
+        zudokuLocal: render[1],
+        headLocal: render[2],
+      };
+    }
+
+    function moduleExport(module, exportName) {
+      if (typeof module[exportName] === 'undefined') {
+        throw new Error('Zudoku CDN export was not found.');
+      }
+      return module[exportName];
+    }
+
+    async function loadZudokuRuntime() {
+      const response = await fetch(CDN_MAIN_URL);
+      if (!response.ok) {
+        throw new Error('Zudoku CDN bootstrap could not be loaded.');
+      }
+
+      const source = await response.text();
+      const names = runtimeNamesFrom(source);
+      const coreImport = parseImport(source, 'main-[^"]+\\.js');
+      const routerImport = parseImport(source, 'Badge-[^"]+\\.js');
+      const openApiImport = parseImport(source, 'openapi-[^"]+\\.js');
+      const jsxImport = parseImport(source, 'jsx-runtime-[^"]+\\.js');
+
+      const [coreModule, routerModule, openApiModule, jsxModule] = await Promise.all([
+        import(coreImport.url),
+        import(routerImport.url),
+        import(openApiImport.url),
+        import(jsxImport.url),
+      ]);
+
+      return {
+        head: moduleExport(coreModule, coreImport.exportNameFor(names.headLocal)),
+        Zudoku: moduleExport(coreModule, coreImport.exportNameFor(names.zudokuLocal)),
+        reactDomClient: moduleExport(coreModule, coreImport.exportNameFor(names.reactDomLocal))(),
+        transformConfig: moduleExport(coreModule, coreImport.exportNameFor(names.transformConfigLocal)),
+        createRouter: moduleExport(routerModule, routerImport.exportNameFor(names.createRouterLocal)),
+        openApiPlugin: moduleExport(openApiModule, openApiImport.exportNameFor(names.openApiLocal)),
+        jsx: moduleExport(jsxModule, jsxImport.exportNameFor(names.jsxRuntimeLocal))().jsx,
+      };
+    }
+
+    function openApiConfigFromHandoff() {
+      const handoff = window.apiChallengesZudokuInput || {
+        type: 'url',
+        input: new URL('/docs/openapi.json', window.location.origin).href,
+      };
+
+      if (handoff.type === 'raw') {
+        return {
+          type: 'raw',
+          input: JSON.parse(handoff.input),
+          path: '/',
+          options: {
+            showInfoPage: false,
+          },
+        };
+      }
+
+      return {
+        type: 'url',
+        input: handoff.input,
+        path: '/',
+        options: {
+          showInfoPage: false,
+        },
+      };
+    }
+
+    function zudokuThemeColors(themeName) {
+      const colors = {
+        'learning-platform': {
+          background: '#fffdf8',
+          foreground: '#172033',
+          card: '#fffdf8',
+          cardForeground: '#172033',
+          popover: '#fffdf8',
+          popoverForeground: '#172033',
+          primary: '#ea580c',
+          primaryForeground: '#ffffff',
+          secondary: '#fff1d6',
+          secondaryForeground: '#172033',
+          muted: '#fff1d6',
+          mutedForeground: '#665b4b',
+          accent: '#ffedd5',
+          accentForeground: '#172033',
+          destructive: '#dc2626',
+          destructiveForeground: '#ffffff',
+          border: '#ead8bd',
+          input: '#ead8bd',
+          ring: '#ea580c',
+          radius: '0.5rem',
+        },
+        'dark-lab': {
+          background: '#0b181c',
+          foreground: '#e7fbff',
+          card: '#0b181c',
+          cardForeground: '#e7fbff',
+          popover: '#102429',
+          popoverForeground: '#e7fbff',
+          primary: '#22d3c5',
+          primaryForeground: '#021213',
+          secondary: '#102429',
+          secondaryForeground: '#e7fbff',
+          muted: '#102429',
+          mutedForeground: '#9fb8bd',
+          accent: '#10393a',
+          accentForeground: '#e7fbff',
+          destructive: '#fda4af',
+          destructiveForeground: '#021213',
+          border: '#21444b',
+          input: '#21444b',
+          ring: '#22d3c5',
+          radius: '0.375rem',
+        },
+        'clean-docs': {
+          background: '#ffffff',
+          foreground: '#102033',
+          card: '#ffffff',
+          cardForeground: '#102033',
+          popover: '#ffffff',
+          popoverForeground: '#102033',
+          primary: '#0f6795',
+          primaryForeground: '#ffffff',
+          secondary: '#eef7f6',
+          secondaryForeground: '#102033',
+          muted: '#eef7f6',
+          mutedForeground: '#526272',
+          accent: '#dff3f3',
+          accentForeground: '#102033',
+          destructive: '#dc2626',
+          destructiveForeground: '#ffffff',
+          border: '#d5e0ea',
+          input: '#d5e0ea',
+          ring: '#0f6795',
+          radius: '0.5rem',
+        },
+      };
+      return colors[themeName] || colors['clean-docs'];
+    }
+
+    function zudokuThemeConfig() {
+      const selectedTheme = zudokuThemeColors(window.apiChallengesZudokuTheme);
+      return {
+        light: selectedTheme,
+        dark: selectedTheme,
+      };
+    }
+
+    try {
+      const runtime = await loadZudokuRuntime();
+      const apiConfig = openApiConfigFromHandoff();
+      const config = runtime.transformConfig({
+        site: {
+          title: document.title,
+        },
+        theme: zudokuThemeConfig(),
+        navigation: [{
+          type: 'link',
+          label: 'API Reference',
+          to: '/',
+        }],
+        plugins: [runtime.openApiPlugin(apiConfig)],
+      });
+      const router = runtime.createRouter(config, { basename: '/zudoku-embed' });
+      runtime.reactDomClient
+        .createRoot(root)
+        .render(runtime.jsx(runtime.Zudoku, {
+          router: router,
+          head: runtime.head(),
+        }));
+    } catch (error) {
+      displayZudokuError(error);
+    }
+  </script>
+</body>
+</html>

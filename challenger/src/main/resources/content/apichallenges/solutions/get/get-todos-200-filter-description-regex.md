@@ -1,6 +1,6 @@
 ---
 date: 2026-07-31T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 filter description regex
 seo_title: "Solution: GET todos filter description regex | API Challenges"
 description: How to solve API challenge GET todos 200 filter description regex using a regular expression description filter.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add a description regex filter and verify status 200
+schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add a description regex filter and verify status 200
 showads: true
 ---
 
@@ -23,13 +23,14 @@ How to issue a GET request on a top level entity endpoint and filter todos by ma
 
 ## GET /todos (200) ? filter description regex
 
-> Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions.
+> Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.
 
 - `description~=.*fixture.*` means return todos where the description matches the regular expression
 - most tools and browsers will encode any reserved characters for you when sending the request
 - the response should contain at least one todo
 - every returned todo should have a non-empty `description`
 - every returned description should match the regular expression
+- the returned todo list should be JSON, so send `Accept: application/json` if the response is not JSON
 
 ## Basic Instructions
 
@@ -37,6 +38,7 @@ How to issue a GET request on a top level entity endpoint and filter todos by ma
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add a regular expression filter:
     - `{{<ORIGIN_URL>}}/todos?description~=.*fixture.*`
 - The response status code should be `200` because the request is accepted

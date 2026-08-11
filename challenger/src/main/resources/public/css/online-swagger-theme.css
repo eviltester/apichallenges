@@ -2,8 +2,822 @@ html[data-theme] .online-swagger-client {
     background: var(--surface);
     border-color: var(--border);
     border-radius: var(--radius);
+    box-sizing: border-box;
     box-shadow: var(--shadow-soft);
     color: var(--text);
+    width: 100%;
+}
+
+html[data-theme] .online-openapi-ui-client {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    box-shadow: var(--shadow-soft);
+    color: var(--text);
+    margin: 1.5rem 0;
+    padding: 1rem;
+    width: 100%;
+}
+
+html[data-theme] .online-openapi-ui-render {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    height: calc(100vh - 16rem);
+    min-height: 42rem;
+    overflow: auto;
+    width: 100%;
+}
+
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed {
+    inline-size: 100%;
+    margin-block: 1rem 0;
+    margin-inline-start: 0;
+    max-inline-size: none;
+    transform: none;
+}
+
+html[data-theme] body.wide-tool-page .online-swagger-client,
+html[data-theme] body.wide-tool-page .online-openapi-ui-client {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+html[data-theme] body.wide-tool-page .online-swagger-controls,
+html[data-theme] body.wide-tool-page .online-swagger-file-row,
+html[data-theme] body.wide-tool-page .openapi-profile-row,
+html[data-theme] body.wide-tool-page .openapi-tester-controls,
+html[data-theme] body.wide-tool-page .openapi-converter-actions,
+html[data-theme] body.wide-tool-page .online-client-status {
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-width: min(var(--reading-max), calc(100vw - 2rem));
+}
+
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render,
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed #online-swagger-ui {
+    background: var(--surface);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    height: auto;
+    min-height: max(34rem, calc(100vh - 8rem));
+    overflow: visible;
+    width: 100%;
+}
+
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-frame {
+    height: max(56rem, calc(100vh - 8rem));
+    min-height: 56rem;
+}
+
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render openapi-explorer,
+html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render elements-api {
+    height: auto;
+    min-height: max(34rem, calc(100vh - 8rem));
+}
+
+html[data-theme] body.wide-tool-page .scalar-app-exit {
+    left: 0 !important;
+    max-width: 100vw !important;
+    right: 0 !important;
+    width: auto !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui main.references-rendered {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    width: auto;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui,
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-app,
+html[data-theme] body.wide-tool-page .scalar-app-exit {
+    --scalar-color-1: var(--text) !important;
+    --scalar-color-2: var(--muted) !important;
+    --scalar-color-3: var(--muted) !important;
+    --scalar-color-accent: var(--accent) !important;
+    --scalar-background-1: var(--surface) !important;
+    --scalar-background-2: var(--surface-soft) !important;
+    --scalar-background-3: var(--surface-strong) !important;
+    --scalar-background-accent: var(--accent-soft) !important;
+    --scalar-border-color: var(--border) !important;
+    --scalar-sidebar-background-1: var(--surface-soft) !important;
+    --scalar-sidebar-background-2: var(--surface) !important;
+    --scalar-sidebar-border-color: var(--border) !important;
+    --scalar-sidebar-color-1: var(--text) !important;
+    --scalar-sidebar-color-2: var(--muted) !important;
+    --scalar-sidebar-color-active: var(--accent-strong) !important;
+    --scalar-sidebar-item-hover-background: var(--surface-strong) !important;
+    --scalar-sidebar-item-active-background: var(--accent-soft) !important;
+    --scalar-sidebar-search-background: var(--surface) !important;
+    --scalar-sidebar-search-border-color: var(--border) !important;
+    --scalar-sidebar-search-color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-app,
+html[data-theme] body.wide-tool-page .scalar-app-exit {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui button,
+html[data-theme] body.wide-tool-page .scalar-app-exit button {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    text-shadow: none !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui button *,
+html[data-theme] body.wide-tool-page .scalar-app-exit button * {
+    color: inherit !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui [class*="group/button"][class*="peer/button"],
+html[data-theme] body.wide-tool-page .scalar-app-exit [class*="group/button"][class*="peer/button"] {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui [class*="group/button"][class*="peer/button"]:hover,
+html[data-theme] body.wide-tool-page #online-scalar-ui [class*="group/button"][class*="peer/button"]:focus-visible,
+html[data-theme] body.wide-tool-page .scalar-app-exit [class*="group/button"][class*="peer/button"]:hover,
+html[data-theme] body.wide-tool-page .scalar-app-exit [class*="group/button"][class*="peer/button"]:focus-visible {
+    background: var(--surface-strong) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui button.text-c-3,
+html[data-theme] body.wide-tool-page .scalar-app-exit button.text-c-3 {
+    background: transparent !important;
+    color: var(--muted) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui button.text-c-3:hover,
+html[data-theme] body.wide-tool-page #online-scalar-ui button.text-c-3:focus-visible,
+html[data-theme] body.wide-tool-page .scalar-app-exit button.text-c-3:hover,
+html[data-theme] body.wide-tool-page .scalar-app-exit button.text-c-3:focus-visible {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries:hover,
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries:focus-visible,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries:hover,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries:focus-visible {
+    background: var(--surface-strong) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries__active,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries__active,
+html[data-theme] body.wide-tool-page #online-scalar-ui .download-button,
+html[data-theme] body.wide-tool-page .scalar-app-exit .download-button {
+    background: var(--cta-bg) !important;
+    border-color: var(--cta-bg) !important;
+    color: var(--cta-text) !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .client-libraries__active,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .client-libraries__active,
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .download-button,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .download-button {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries__active:hover,
+html[data-theme] body.wide-tool-page #online-scalar-ui .client-libraries__active:focus-visible,
+html[data-theme] body.wide-tool-page #online-scalar-ui .download-button:hover,
+html[data-theme] body.wide-tool-page #online-scalar-ui .download-button:focus-visible,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries__active:hover,
+html[data-theme] body.wide-tool-page .scalar-app-exit .client-libraries__active:focus-visible,
+html[data-theme] body.wide-tool-page .scalar-app-exit .download-button:hover,
+html[data-theme] body.wide-tool-page .scalar-app-exit .download-button:focus-visible {
+    background: var(--cta-hover-bg) !important;
+    border-color: var(--cta-hover-bg) !important;
+    color: var(--cta-text) !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .client-libraries__active:hover,
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .client-libraries__active:focus-visible,
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .download-button:hover,
+html[data-theme="learning-platform"] body.wide-tool-page #online-scalar-ui .download-button:focus-visible,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .client-libraries__active:hover,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .client-libraries__active:focus-visible,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .download-button:hover,
+html[data-theme="learning-platform"] body.wide-tool-page .scalar-app-exit .download-button:focus-visible {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .parameter-item-trigger,
+html[data-theme] body.wide-tool-page .scalar-app-exit .parameter-item-trigger {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .request-body-required,
+html[data-theme] body.wide-tool-page .scalar-app-exit .request-body-required {
+    color: #991b1b !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-scalar-ui .request-body-required,
+html[data-theme="dark-lab"] body.wide-tool-page .scalar-app-exit .request-body-required {
+    color: #fca5a5 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block,
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block .custom-scroll,
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block pre,
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block code,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block .custom-scroll,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block pre,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block code {
+    background: var(--code-bg) !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block .line,
+html[data-theme] body.wide-tool-page #online-scalar-ui .scalar-code-block .hljs,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block .line,
+html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block .hljs {
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-openapi-explorer-ui openapi-explorer {
+    --api-challenges-openapi-surface: var(--surface);
+    --api-challenges-openapi-surface-soft: var(--surface-soft);
+    --api-challenges-openapi-text: var(--text);
+    --api-challenges-openapi-border: var(--border);
+    --api-challenges-openapi-link: var(--accent-strong);
+    --api-challenges-openapi-nav-bg: #21445f;
+    --api-challenges-openapi-nav-text: #ffffff;
+    --api-challenges-openapi-nav-active-bg: rgba(255, 255, 255, 0.16);
+    --api-challenges-openapi-color-scheme: light;
+    --blue: var(--accent) !important;
+    --gray: var(--text) !important;
+    --green: #16a34a !important;
+    --orange: #ea580c !important;
+    --purple: #7c3aed !important;
+    --red: #dc2626 !important;
+    --yellow: #ca8a04 !important;
+    --pink: #db2777 !important;
+    --white: var(--surface) !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-openapi-explorer-ui openapi-explorer {
+    --api-challenges-openapi-color-scheme: dark;
+    --blue: var(--accent) !important;
+    --green: #34d399 !important;
+    --orange: #fbbf24 !important;
+    --purple: #c4b5fd !important;
+    --red: #fda4af !important;
+    --yellow: #fde68a !important;
+    --pink: #f9a8d4 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui,
+html[data-theme] body.wide-tool-page #online-stoplight-ui elements-api,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-elements {
+    --color-canvas: var(--surface) !important;
+    --color-canvas-pure: var(--surface) !important;
+    --color-canvas-50: var(--surface-soft) !important;
+    --color-canvas-100: var(--surface-soft) !important;
+    --color-canvas-200: var(--surface-strong) !important;
+    --color-canvas-300: var(--surface-strong) !important;
+    --color-canvas-tint: var(--surface-soft) !important;
+    --color-text: var(--text) !important;
+    --color-text-heading: var(--text) !important;
+    --color-text-paragraph: var(--text) !important;
+    --color-text-muted: var(--muted) !important;
+    --color-border: var(--border) !important;
+    --color-primary: var(--accent) !important;
+    --color-primary-light: var(--accent-soft) !important;
+    --color-primary-dark: var(--accent-strong) !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-pure {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-50,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-100 {
+    background: var(--surface-soft) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-200,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-300 {
+    background: var(--surface-strong) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-canvas-tint {
+    background: var(--surface-soft) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-text-heading,
+html[data-theme] body.wide-tool-page #online-stoplight-ui h1,
+html[data-theme] body.wide-tool-page #online-stoplight-ui h2,
+html[data-theme] body.wide-tool-page #online-stoplight-ui h3,
+html[data-theme] body.wide-tool-page #online-stoplight-ui h4 {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-text-body,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-text-paragraph,
+html[data-theme] body.wide-tool-page #online-stoplight-ui p,
+html[data-theme] body.wide-tool-page #online-stoplight-ui li {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-text-muted {
+    color: var(--muted) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-border,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-border-t,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-border-r,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-border-b,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-border-l {
+    border-color: var(--border) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-button {
+    align-items: center !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+    color: var(--text) !important;
+    display: inline-flex !important;
+    font-family: inherit !important;
+    font-size: 0.875rem !important;
+    line-height: 1rem !important;
+    min-height: 1.5rem !important;
+    overflow: visible !important;
+    padding-block: 0.25rem !important;
+    padding-inline: 0.5rem !important;
+    text-shadow: none !important;
+    white-space: nowrap !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-button:not(.sl-w-full) {
+    inline-size: auto !important;
+    min-inline-size: max-content !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-w-full {
+    inline-size: 100% !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-font-normal {
+    font-weight: 400 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-font-medium {
+    font-weight: 500 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-primary {
+    background: var(--accent-strong) !important;
+    border-color: transparent !important;
+    color: var(--accent-contrast) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-primary:hover,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-primary:focus-visible {
+    background: var(--cta-hover-bg) !important;
+    color: var(--cta-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-transparent {
+    background: transparent !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-canvas {
+    background: var(--surface) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-border-transparent {
+    border-color: transparent !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .SendButtonHolder .sl-stack--horizontal {
+    flex-wrap: wrap !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-text-muted {
+    color: var(--muted) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-text-body,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-transparent:hover,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-transparent:focus-visible,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-text-muted:hover,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-text-muted:focus-visible {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-transparent:hover,
+html[data-theme] body.wide-tool-page #online-stoplight-ui button.sl-bg-transparent:focus-visible {
+    background: var(--surface-strong) !important;
+    border-color: var(--border) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-code-viewer,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-code-viewer__scroller,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-code-highlight {
+    background: var(--code-bg) !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.string,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.attr-value {
+    color: #a5f3fc !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.property,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.attr-name {
+    color: #fde68a !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.number,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.boolean {
+    color: #c4b5fd !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.keyword,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.function {
+    color: #93c5fd !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.operator,
+html[data-theme] body.wide-tool-page #online-stoplight-ui .token.punctuation {
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-success.sl-text-on-primary,
+html[data-theme] body.wide-tool-page #online-stoplight-ui [role="tab"].sl-bg-success.sl-text-on-primary {
+    background-color: #047857 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-warning.sl-text-on-primary,
+html[data-theme] body.wide-tool-page #online-stoplight-ui [role="tab"].sl-bg-warning.sl-text-on-primary {
+    background-color: #92400e !important;
+    color: #ffffff !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-bg-danger.sl-text-on-primary,
+html[data-theme] body.wide-tool-page #online-stoplight-ui [role="tab"].sl-bg-danger.sl-text-on-primary {
+    background-color: #991b1b !important;
+    color: #ffffff !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .sl-text-success:not(.sl-text-on-primary) {
+    color: #065f46 !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .sl-text-success:not(.sl-text-on-primary) {
+    color: #86efac !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .sl-text-warning:not(.sl-text-on-primary) {
+    color: #92400e !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .sl-text-warning:not(.sl-text-on-primary) {
+    color: #fcd34d !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .sl-text-danger:not(.sl-text-on-primary) {
+    color: #991b1b !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .sl-text-danger:not(.sl-text-on-primary) {
+    color: #fca5a5 !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-stoplight-ui .sl-text-primary,
+html[data-theme="learning-platform"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-primary {
+    color: #7c2d12 !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-flex-1.sl-items-center {
+    color: #7c2d12 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-uppercase {
+    color: var(--accent-strong) !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-uppercase.sl-text-primary {
+    color: #7c2d12 !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-success {
+    color: #065f46 !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-success {
+    color: #86efac !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-warning {
+    color: #92400e !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-warning {
+    color: #fcd34d !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-danger {
+    color: #991b1b !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page #online-stoplight-ui .ElementsTableOfContentsItem .sl-text-danger {
+    color: #fca5a5 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-stoplight-ui .sl-text-lg.sl-font-semibold.sl-uppercase.sl-px-2\.5 {
+    background: var(--accent-strong) !important;
+    color: var(--accent-contrast) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui,
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-wrap,
+html[data-theme] body.wide-tool-page #online-redoc-ui .api-content {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .menu-content {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .scrollbar-container.ps {
+    overflow: auto !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .menu-content label,
+html[data-theme] body.wide-tool-page #online-redoc-ui .menu-content li,
+html[data-theme] body.wide-tool-page #online-redoc-ui .menu-content span {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui h1,
+html[data-theme] body.wide-tool-page #online-redoc-ui h2,
+html[data-theme] body.wide-tool-page #online-redoc-ui h3,
+html[data-theme] body.wide-tool-page #online-redoc-ui h4,
+html[data-theme] body.wide-tool-page #online-redoc-ui h5,
+html[data-theme] body.wide-tool-page #online-redoc-ui h6,
+html[data-theme] body.wide-tool-page #online-redoc-ui p,
+html[data-theme] body.wide-tool-page #online-redoc-ui li,
+html[data-theme] body.wide-tool-page #online-redoc-ui td,
+html[data-theme] body.wide-tool-page #online-redoc-ui th {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui a {
+    color: var(--accent-strong) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui [role="tab"] {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui [role="tab"][aria-selected="true"],
+html[data-theme] body.wide-tool-page #online-redoc-ui .react-tabs__tab--selected {
+    background: var(--code-bg) !important;
+    border-color: var(--border) !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui button {
+    align-items: center !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    font-family: inherit !important;
+    line-height: 1.35 !important;
+    text-shadow: none !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui button:not(.collapser) {
+    background: var(--surface-soft) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui button:not(.collapser):hover,
+html[data-theme] body.wide-tool-page #online-redoc-ui button:not(.collapser):focus-visible {
+    background: var(--surface-strong) !important;
+    border-color: var(--accent) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui button.collapser {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.get,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.get,
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.delete,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.delete {
+    color: #ffffff !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.post,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.post {
+    color: #052e16 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.put,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.put {
+    color: #351404 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.patch,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.patch,
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.options,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.options,
+html[data-theme] body.wide-tool-page #online-redoc-ui .http-verb.head,
+html[data-theme] body.wide-tool-page #online-redoc-ui .operation-type.head {
+    color: #021213 !important;
+}
+
+html[data-theme="learning-platform"] body.wide-tool-page #online-redoc-ui .http-verb.options,
+html[data-theme="learning-platform"] body.wide-tool-page #online-redoc-ui .operation-type.options,
+html[data-theme="learning-platform"] body.wide-tool-page #online-redoc-ui .http-verb.head,
+html[data-theme="learning-platform"] body.wide-tool-page #online-redoc-ui .operation-type.head {
+    color: #ffffff !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui table,
+html[data-theme] body.wide-tool-page #online-redoc-ui tr,
+html[data-theme] body.wide-tool-page #online-redoc-ui td,
+html[data-theme] body.wide-tool-page #online-redoc-ui th {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui table span,
+html[data-theme] body.wide-tool-page #online-redoc-ui table td div,
+html[data-theme] body.wide-tool-page #online-redoc-ui table th div {
+    color: var(--text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui code,
+html[data-theme] body.wide-tool-page #online-redoc-ui pre {
+    background: var(--code-bg) !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json {
+    background: var(--code-bg) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    box-sizing: border-box !important;
+    color: var(--code-text) !important;
+    display: block !important;
+    overflow-x: auto !important;
+    padding: 1rem !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json code,
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json pre {
+    background: var(--code-bg) !important;
+    box-sizing: border-box !important;
+    color: var(--code-text) !important;
+    display: block !important;
+    min-inline-size: 100% !important;
+    padding: 0 !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json ul,
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json li,
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json div {
+    background: var(--code-bg) !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui code span,
+html[data-theme] body.wide-tool-page #online-redoc-ui pre span,
+html[data-theme] body.wide-tool-page #online-redoc-ui .redoc-json span {
+    background: transparent !important;
+    color: var(--code-text) !important;
+}
+
+html[data-theme] body.wide-tool-page #online-redoc-ui .react-tabs__tab-panel,
+html[data-theme] body.wide-tool-page #online-redoc-ui [kind="field"],
+html[data-theme] body.wide-tool-page #online-redoc-ui [kind="group"] {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark-lab"] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render,
+html[data-theme="dark-lab"] body.wide-tool-page .online-openapi-ui-wide-embed #online-swagger-ui,
+html[data-theme="dark-lab"] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-frame {
+    color-scheme: dark;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render,
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page .online-openapi-ui-wide-embed #online-swagger-ui,
+html[data-theme]:not([data-theme="dark-lab"]) body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-frame {
+    color-scheme: light;
+}
+
+@media (max-width: 700px) {
+    html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render,
+    html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed #online-swagger-ui {
+        min-height: max(30rem, calc(100vh - 6rem));
+    }
+
+    html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-frame {
+        height: max(46rem, calc(100vh - 6rem));
+        min-height: 46rem;
+    }
+
+    html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render openapi-explorer,
+    html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed .online-openapi-ui-render elements-api {
+        min-height: max(30rem, calc(100vh - 6rem));
+    }
+
+    html[data-theme] body.wide-tool-page #online-scalar-ui .download-container,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .download-button,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .download-button span,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .text-c-2,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .download-container,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .download-button,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .download-button span,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .text-c-2 {
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    html[data-theme] body.wide-tool-page #online-scalar-ui .download-button,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .download-button span,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .text-c-2,
+    html[data-theme] body.wide-tool-page #online-scalar-ui .whitespace-nowrap,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .download-button,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .download-button span,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .text-c-2,
+    html[data-theme] body.wide-tool-page .scalar-app-exit .whitespace-nowrap {
+        overflow-wrap: anywhere !important;
+        white-space: normal !important;
+    }
+}
+
+html[data-theme] .online-openapi-ui-render openapi-explorer,
+html[data-theme] .online-openapi-ui-render elements-api {
+    display: block;
+    height: 100%;
+    min-height: 42rem;
+    width: 100%;
+}
+
+html[data-theme] .online-openapi-ui-frame {
+    background: var(--surface);
+    border: 0;
+    display: block;
+    height: calc(100vh - 16rem);
+    min-height: 42rem;
+    width: 100%;
 }
 
 html[data-theme] .online-swagger-controls input,
@@ -160,6 +974,12 @@ html[data-theme] #online-swagger-ui .swagger-ui .opblock .opblock-section-header
     box-shadow: none !important;
 }
 
+html[data-theme] #online-swagger-ui .swagger-ui .download-url-wrapper .download-url-button {
+    background: var(--accent-strong) !important;
+    border-color: var(--accent-strong) !important;
+    color: var(--accent-contrast) !important;
+}
+
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui,
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui {
     background: var(--online-swagger-surface) !important;
@@ -303,6 +1123,13 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
     text-shadow: none !important;
 }
 
+html[data-theme="learning-platform"] #online-swagger-ui .swagger-ui .opblock-summary-path,
+html[data-theme="learning-platform"] #online-swagger-ui .swagger-ui .opblock-summary-path a,
+html[data-theme="learning-platform"] #online-swagger-ui .swagger-ui .opblock-summary-path span,
+html[data-theme="learning-platform"] #online-swagger-ui .swagger-ui .opblock-summary-path__deprecated {
+    color: #7c2d12 !important;
+}
+
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-description,
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-operation-id {
     color: var(--online-swagger-text) !important;
@@ -327,6 +1154,11 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-patch {
     background: color-mix(in srgb, #0891b2 7%, var(--online-swagger-surface)) !important;
     border-color: #22d3ee !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-query {
+    background: color-mix(in srgb, #be185d 7%, var(--online-swagger-surface)) !important;
+    border-color: #be185d !important;
 }
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-delete {
@@ -359,6 +1191,10 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-patch .opblock-summary {
     background: color-mix(in srgb, #22d3ee 16%, var(--online-swagger-surface)) !important;
+}
+
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-query .opblock-summary {
+    background: color-mix(in srgb, #be185d 14%, var(--online-swagger-surface)) !important;
 }
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock.opblock-delete .opblock-summary {
@@ -399,6 +1235,11 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
     color: #042f3a !important;
 }
 
+html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-query .opblock-summary-method {
+    background: #be185d !important;
+    color: #ffffff !important;
+}
+
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-delete .opblock-summary-method {
     background: #f87171 !important;
     color: #3b0505 !important;
@@ -406,8 +1247,8 @@ html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .op
 
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,
 html[data-theme]:not([data-theme="dark-lab"]) #online-swagger-ui .swagger-ui .opblock-summary-head .opblock-summary-method {
-    background: var(--secondary-accent) !important;
-    color: var(--accent-contrast) !important;
+    background: #0f766e !important;
+    color: #ffffff !important;
     text-shadow: none !important;
 }
 
@@ -473,6 +1314,11 @@ html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-dele
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-patch {
     background: color-mix(in srgb, #a78bfa 12%, var(--surface)) !important;
     border-color: #a78bfa !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-query {
+    background: color-mix(in srgb, #f9a8d4 12%, var(--surface)) !important;
+    border-color: #f9a8d4 !important;
 }
 
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock.opblock-options,
@@ -560,6 +1406,10 @@ html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-dele
 
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-patch .opblock-summary-method {
     background: #c4b5fd !important;
+}
+
+html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-query .opblock-summary-method {
+    background: #f9a8d4 !important;
 }
 
 html[data-theme="dark-lab"] #online-swagger-ui .swagger-ui .opblock-summary-options .opblock-summary-method,

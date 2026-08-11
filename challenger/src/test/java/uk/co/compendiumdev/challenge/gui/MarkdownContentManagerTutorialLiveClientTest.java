@@ -54,7 +54,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html.contains(
                         "<a href='/author/alan-richardson' rel='author'>Alan Richardson</a>"));
         Assertions.assertTrue(
-                html.contains("Updated <time datetime='2026-08-04'>2026-08-04</time>"));
+                html.contains("Updated <time datetime='2026-08-11'>2026-08-11</time>"));
         Assertions.assertTrue(
                 html.contains("<nav class='side-toc' aria-label='Learning and reference links'>"));
     }
@@ -73,10 +73,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(
                 html.contains(
                         "<details class=\"side-toc-section\" data-side-toc-section=\"interactive-tutorials\">"));
-        Assertions.assertTrue(html.contains("<span class=\"side-toc-section-title\">Tools</span>"));
+        Assertions.assertTrue(
+                html.contains("<a class=\"side-toc-section-title\" href=\"/tools\">Tools</a>"));
         Assertions.assertTrue(
                 html.contains(
-                        "<span class=\"side-toc-section-title\">Interactive Tutorials</span>"));
+                        "<a class=\"side-toc-section-title\" href=\"/tutorials\">Interactive Tutorials</a>"));
         Assertions.assertTrue(
                 html.contains(
                         "Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing."));
@@ -85,9 +86,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                         "Hands-on tutorial pages for learning REST concepts and API testing workflows."));
         Assertions.assertTrue(
                 html.contains(
-                        "Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and Swagger."));
+                        "Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and OpenAPI UIs."));
         Assertions.assertTrue(
-                html.contains("<span class=\"side-toc-section-title\">Reference</span>"));
+                html.contains(
+                        "<a class=\"side-toc-section-title\" href=\"/reference\">Reference</a>"));
         Assertions.assertFalse(
                 html.contains("<span class=\"side-toc-section-title\">Reference Tutorials</span>"));
         assertContainsInOrder(
@@ -95,7 +97,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<ul class=\"side-toc-root\">",
                 "<li><a href=\"/learning\">Learning Zone</a></li>",
                 "<li class=\"side-toc-syllabus\" aria-label=\"REST API Tutorial path\">",
-                "<span class=\"side-toc-syllabus-title\">REST API Tutorial Path</span>",
+                "<a class=\"side-toc-syllabus-title\" href=\"/tutorials/rest-api-tutorial-path\">REST API Tutorial Path</a>",
                 "<li><a href=\"/tutorials/rest-api-tutorial\">Interactive REST API Tutorial</a></li>",
                 "<li><a href=\"/reference/http-basics\">HTTP basics</a></li>",
                 "<li><a href=\"/reference/rest-api-basics\">REST basics</a></li>",
@@ -105,23 +107,32 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tutorials/rest-api-testing\">Interactive How to Test REST APIs Tutorial</a></li>",
                 "<li><a href=\"/tutorials/api-simulator-walkthrough\">Interactive API Simulation</a></li>",
                 "<li><a href=\"/apichallenges\">API Challenges</a></li>",
+                "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"reference-tutorials\">",
-                "<span class=\"side-toc-section-title\">Reference</span>",
+                "<a class=\"side-toc-section-title\" href=\"/reference\">Reference</a>",
                 "<li><a href=\"/reference/web-basics\">Web Applications</a></li>",
                 "<li><a href=\"/reference/http-basics\">HTTP Basics</a></li>",
                 "<li><a href=\"/reference/http-verbs\">HTTP Verbs</a></li>",
                 "<li><a href=\"/reference/rest-api-basics\">REST API Basics</a></li>",
                 "<li><a href=\"/reference/testing-apis\">API Testing Concepts</a></li>",
-                "<li><a href=\"/reference/openapi\">OpenAPI</a></li>",
-                "<li><a href=\"/reference/swagger\">Swagger</a></li>",
+                "<a href=\"/reference/openapi\">OpenAPI</a>",
+                "<li><a href=\"/reference/open-api-uis/swagger\">Swagger UI</a></li>",
+                "<li><a href=\"/reference/open-api-uis/openapi-explorer\">OpenAPI Explorer</a></li>",
+                "<li><a href=\"/reference/open-api-uis/scalar\">Scalar</a></li>",
+                "<li><a href=\"/reference/open-api-uis/stoplight\">Stoplight Elements</a></li>",
+                "<li><a href=\"/reference/open-api-uis/zudoku\">Zudoku</a></li>",
+                "<li><a href=\"/reference/open-api-uis/redoc\">Redoc</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"interactive-tutorials\">",
-                "<span class=\"side-toc-section-title\">Interactive Tutorials</span>",
+                "<a class=\"side-toc-section-title\" href=\"/tutorials\">Interactive Tutorials</a>",
                 "<li><a href=\"/tutorials/rest-api-tutorial\">Rest API Tutorial</a></li>",
                 "<li><a href=\"/tutorials/rest-api-testing\">Testing REST APIs Tutorial</a></li>",
                 "<li><a href=\"/tutorials/api-simulator-walkthrough\">API Simulator Walkthrough</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"practice-modes\">",
-                "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
+                "<a class=\"side-toc-section-title\" href=\"/practice-modes\">Practice Modes</a>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"tools\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools\">Tools</a>",
+                "<details class=\"side-toc-section\" data-side-toc-section=\"practice-sites\">",
+                "<a class=\"side-toc-section-title\" href=\"/practice-sites\">Practice Sites</a>",
                 "<li><a href=\"/sponsors\">Sponsors</a></li>",
                 "<li><a href=\"/blog\">Blog</a></li>");
         Assertions.assertFalse(
@@ -132,12 +143,18 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 html,
                 "<a href=\"/tools/clients\">REST/HTTP Clients</a>",
                 "<li><a href=\"/tools/proxies\">Proxies</a></li>",
-                "Online Clients",
+                "<a href=\"/tools/online-clients\">Online Clients</a>",
                 "<li><a href=\"/tools/online-clients/basic-client\">Basic Client</a></li>",
-                "<li><a href=\"/tools/online-clients/swagger\">Swagger</a></li>",
+                "<li><a href=\"/tools/online-clients/swagger\">Swagger UI</a></li>",
+                "<li><a href=\"/tools/online-clients/openapi-explorer\">OpenAPI Explorer</a></li>",
+                "<li><a href=\"/tools/online-clients/scalar\">Scalar</a></li>",
+                "<li><a href=\"/tools/online-clients/stoplight\">Stoplight Elements</a></li>",
+                "<li><a href=\"/tools/online-clients/zudoku\">Zudoku</a></li>",
+                "<li><a href=\"/tools/online-clients/redoc\">Redoc</a></li>",
                 "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
         Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
         Assertions.assertFalse(html.contains("href=\"/changes\""));
+        Assertions.assertFalse(html.contains("All Practice Sites"));
     }
 
     @Test
@@ -270,7 +287,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/reference/http-basics\""));
         Assertions.assertTrue(html.contains("href=\"/reference/http-verbs\""));
         Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
-        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/reference/testing-apis\""));
         Assertions.assertTrue(html.contains("When you want more hands-on repetition"));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
@@ -338,7 +355,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "href=\"/reference/rest-api-basics\"",
                 "href=\"/reference/testing-apis\"",
                 "href=\"/reference/openapi\"",
-                "href=\"/reference/swagger\"");
+                "href=\"/reference/open-api-uis/swagger\"");
         Assertions.assertFalse(learningHtml.contains("<h2>Reference Tutorials</h2>"));
     }
 
@@ -393,9 +410,84 @@ public class MarkdownContentManagerTutorialLiveClientTest {
     }
 
     @Test
+    void openApiReferencePagesRenderOpenApiUiContent() {
+
+        String html = renderContentPage("/reference/openapi");
+
+        Assertions.assertTrue(html.contains("<h1>OpenAPI for API Testing</h1>"));
+        Assertions.assertTrue(html.contains("<section class='doc-columns'>"));
+        Assertions.assertTrue(html.contains("<main id='maincontentstartshere'>"));
+        Assertions.assertFalse(html.contains("wide-tool-page"));
+        Assertions.assertTrue(html.contains("OpenAPI UIs"));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/openapi-explorer\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/scalar\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/stoplight\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/zudoku\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/redoc\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "The open source version is primarily a viewer, not a request-sending client"));
+
+        html = renderContentPage("/reference/open-api-uis/swagger");
+        Assertions.assertTrue(html.contains("<h1>Swagger UI and Tools for API Testing</h1>"));
+        Assertions.assertTrue(
+                html.contains("OpenAPI is the standard specification. Swagger is tooling"));
+        assertOpenApiUiReferenceLaunchLinks(html, "Swagger", "swagger");
+
+        html = renderContentPage("/reference/open-api-uis/openapi-explorer");
+        Assertions.assertTrue(html.contains("<h1>OpenAPI Explorer UI</h1>"));
+        Assertions.assertTrue(html.contains("web component"));
+        assertOpenApiUiReferenceLaunchLinks(html, "OpenAPI Explorer UI", "openapi-explorer");
+
+        html = renderContentPage("/reference/open-api-uis/scalar");
+        Assertions.assertTrue(html.contains("<h1>Scalar OpenAPI UI</h1>"));
+        Assertions.assertTrue(html.contains("REST API client"));
+        assertOpenApiUiReferenceLaunchLinks(html, "Scalar", "scalar");
+
+        html = renderContentPage("/reference/open-api-uis/stoplight");
+        Assertions.assertTrue(html.contains("<h1>Stoplight Elements OpenAPI UI</h1>"));
+        Assertions.assertTrue(html.contains("React components"));
+        assertOpenApiUiReferenceLaunchLinks(html, "Stoplight Elements", "stoplight");
+
+        html = renderContentPage("/reference/open-api-uis/zudoku");
+        Assertions.assertTrue(html.contains("<h1>Zudoku OpenAPI UI</h1>"));
+        Assertions.assertTrue(html.contains("developer portals"));
+        assertOpenApiUiReferenceLaunchLinks(html, "Zudoku", "zudoku");
+
+        html = renderContentPage("/reference/open-api-uis/redoc");
+        Assertions.assertTrue(html.contains("<h1>Redoc OpenAPI UI</h1>"));
+        Assertions.assertTrue(html.contains("not a request-sending API client"));
+        assertOpenApiUiReferenceLaunchLinks(html, "Redoc", "redoc");
+    }
+
+    @Test
     void onlineClientContentPagesRenderToolsAndSidebarLinks() {
 
-        String html = renderContentPage("/tools/online-clients/basic-client");
+        String html = renderContentPage("/tools/online-clients");
+
+        Assertions.assertTrue(
+                html.contains(
+                        "<title>Online API Clients and OpenAPI UI Tools for Testing</title>"));
+        Assertions.assertTrue(html.contains("<h1>Online API Clients and OpenAPI UI Tools</h1>"));
+        Assertions.assertTrue(html.contains("Browser tools are convenient for learning"));
+        Assertions.assertTrue(html.contains("How The Tools Differ"));
+        Assertions.assertTrue(html.contains("CORS And Browser Limits"));
+        Assertions.assertTrue(html.contains("Testing With Browser Developer Tools"));
+        Assertions.assertTrue(html.contains("When To Use A Desktop REST API Client"));
+        Assertions.assertTrue(html.contains("HAR file"));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-explorer\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/scalar\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/stoplight\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/zudoku\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/redoc\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+
+        html = renderContentPage("/tools/online-clients/basic-client");
 
         Assertions.assertTrue(
                 html.contains(
@@ -404,28 +496,23 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-custom-method=\"true\""));
         Assertions.assertTrue(html.contains("data-body-methods=\"all\""));
         Assertions.assertFalse(html.contains("data-allowed-path-prefixes"));
-        Assertions.assertTrue(html.contains("limited by CORS"));
-        Assertions.assertTrue(html.contains("Use Browser Dev Tools To Help Test REST APIs"));
-        Assertions.assertTrue(html.contains("HAR file"));
+        Assertions.assertTrue(html.contains("For general browser client limits, CORS notes"));
+        Assertions.assertFalse(html.contains("Use Browser Dev Tools To Help Test REST APIs"));
+        Assertions.assertFalse(html.contains("HAR file"));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/api-simulator-walkthrough\""));
-        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(html.contains("href=\"/reference/http-basics\""));
         Assertions.assertTrue(html.contains("href=\"/reference/http-verbs\""));
         Assertions.assertTrue(html.contains("href=\"/reference/rest-api-basics\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/clients\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/clients/bruno\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
 
         html = renderContentPage("/tools/online-clients/swagger");
 
         Assertions.assertTrue(
                 html.contains(
                         "<title>Online Swagger UI: Open OpenAPI Files from URL or Disk</title>"));
+        assertWideToolEmbedPage(html);
         Assertions.assertTrue(html.contains("data-online-swagger-client"));
         Assertions.assertTrue(html.contains("data-openapi-url"));
         Assertions.assertTrue(html.contains("data-openapi-file"));
@@ -438,7 +525,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("<ul class=\"openapi-verb-grid\""));
         Assertions.assertTrue(html.contains("data-openapi-copy-converted disabled"));
         Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
-        Assertions.assertTrue(html.contains("https://unpkg.com/swagger-ui-dist"));
+        Assertions.assertTrue(html.contains("https://unpkg.com/swagger-ui-dist@5.32.12"));
         Assertions.assertTrue(html.contains("href=\"/css/online-swagger-theme.css\""));
         Assertions.assertTrue(html.contains("src=\"/js/vendor/js-yaml.min.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
@@ -452,26 +539,61 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "src=\"/js/openapi-tester-converter.js\"",
                 "src=\"/js/openapi-tool-controls.js\"",
                 "src=\"/js/online-swagger-client.js\"");
-        Assertions.assertTrue(html.contains("Open OpenAPI And Swagger Files From URL Or Disk"));
-        Assertions.assertTrue(html.contains("Render A Tester OpenAPI Spec In Swagger UI"));
-        Assertions.assertTrue(html.contains("How To Use Swagger UI For REST API Testing"));
-        Assertions.assertTrue(html.contains("CORS Limits For Browser Swagger UI"));
-        Assertions.assertTrue(html.contains("When To Use A REST Client Instead Of Swagger UI"));
-        Assertions.assertTrue(html.contains("less-validating, permissive file"));
-        Assertions.assertTrue(html.contains("limited by CORS"));
-        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("Swagger UI In This Page"));
+        Assertions.assertTrue(html.contains("Tester OpenAPI Profile"));
+        Assertions.assertTrue(html.contains("Swagger UI Testing Limits"));
+        Assertions.assertFalse(html.contains("How To Use Swagger UI For REST API Testing"));
+        Assertions.assertFalse(html.contains("CORS Limits For Browser Swagger UI"));
+        Assertions.assertFalse(html.contains("When To Use A REST Client Instead Of Swagger UI"));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
-        Assertions.assertTrue(html.contains("href=\"/tutorials/api-simulator-walkthrough\""));
-        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/basic-client\""));
         Assertions.assertTrue(html.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/clients/insomnia\""));
-        Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+
+        assertOnlineOpenApiUiClientPage(
+                "/tools/online-clients/openapi-explorer",
+                "<title>Online OpenAPI Explorer UI for Loading API Specs</title>",
+                "openapi-explorer",
+                "OpenAPI Explorer In This Page",
+                "https://unpkg.com/openapi-explorer@2.4.820/dist/browser/openapi-explorer.min.js");
+
+        assertOnlineOpenApiUiClientPage(
+                "/tools/online-clients/scalar",
+                "<title>Online Scalar OpenAPI UI for API Reference Testing</title>",
+                "scalar",
+                "Scalar In This Page",
+                "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.64.1");
+
+        assertOnlineOpenApiUiClientPage(
+                "/tools/online-clients/stoplight",
+                "<title>Online Stoplight Elements UI for OpenAPI Documentation</title>",
+                "stoplight",
+                "Stoplight Elements In This Page",
+                "https://unpkg.com/@stoplight/elements@9.0.24/web-components.min.js");
+        html = renderContentPage("/tools/online-clients/stoplight");
+        assertContainsInOrder(
+                html,
+                "href=\"https://unpkg.com/@stoplight/elements@9.0.24/styles.min.css\"",
+                "href=\"/css/online-swagger-theme.css\"");
+
+        assertOnlineOpenApiUiClientPage(
+                "/tools/online-clients/zudoku",
+                "<title>Online Zudoku OpenAPI UI for API Reference Demos</title>",
+                "zudoku",
+                "Zudoku In This Page",
+                "src=\"/js/online-openapi-ui-client.js\"");
+
+        assertOnlineOpenApiUiClientPage(
+                "/tools/online-clients/redoc",
+                "<title>Online Redoc OpenAPI Viewer for API Reference Docs</title>",
+                "redoc",
+                "Redoc In This Page",
+                "https://cdn.jsdelivr.net/npm/redoc@2.5.3/bundles/redoc.standalone.js");
 
         html = renderContentPage("/tools/online-clients/openapi-converter");
 
@@ -523,12 +645,102 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tutorials/rest-api-testing\""));
         Assertions.assertTrue(html.contains("href=\"/tutorials/api-simulator-walkthrough\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation\""));
-        Assertions.assertTrue(html.contains("href=\"/reference/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/reference/open-api-uis/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/reference/openapi\""));
         Assertions.assertTrue(html.contains("href=\"/apichallenges/openapi\""));
+        Assertions.assertTrue(html.contains("href=\"/practice-modes/simulation-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+    }
+
+    private void assertOnlineOpenApiUiClientPage(
+            final String path,
+            final String expectedTitle,
+            final String expectedClient,
+            final String expectedHeading,
+            final String expectedDependency) {
+
+        final String html = renderContentPage(path);
+
+        assertWideToolEmbedPage(html);
+        Assertions.assertTrue(html.contains(expectedTitle));
+        Assertions.assertTrue(html.contains("data-online-openapi-ui-client"));
+        Assertions.assertTrue(html.contains("data-openapi-ui=\"" + expectedClient + "\""));
+        Assertions.assertTrue(html.contains("data-openapi-url"));
+        Assertions.assertTrue(html.contains("data-openapi-file"));
+        Assertions.assertTrue(html.contains("data-openapi-render-target"));
+        Assertions.assertTrue(html.contains("Open local JSON or YAML file"));
+        Assertions.assertTrue(html.contains(expectedHeading));
+        Assertions.assertTrue(html.contains(expectedDependency));
+        Assertions.assertTrue(html.contains("href=\"/css/online-swagger-theme.css\""));
+        Assertions.assertTrue(html.contains("src=\"/js/vendor/js-yaml.min.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/online-openapi-ui-client.js\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/redoc\""));
+        Assertions.assertTrue(
+                html.contains("href=\"/reference/open-api-uis/" + expectedClient + "\""));
+    }
+
+    private void assertWideToolEmbedPage(final String html) {
+        Assertions.assertTrue(html.contains("<body class='wide-tool-page'>"));
+        Assertions.assertTrue(html.contains("<div class='content'>"));
+        Assertions.assertTrue(html.contains("<section class='doc-columns'>"));
+        Assertions.assertTrue(html.contains("<div class='right-column'>"));
+        Assertions.assertTrue(html.contains("<main id='maincontentstartshere'>"));
+        Assertions.assertTrue(html.contains("<div class=\"main-text-content\">"));
+        Assertions.assertTrue(html.contains("wide-tool-copy-block wide-tool-copy-block-top"));
+        Assertions.assertTrue(html.contains("wide-tool-client-breakout"));
+        Assertions.assertTrue(html.contains("wide-tool-copy-block wide-tool-copy-block-bottom"));
+        Assertions.assertTrue(html.contains("online-openapi-ui-wide-embed"));
+        Assertions.assertTrue(html.contains("<aside class='left-column'"));
+        Assertions.assertTrue(
+                html.contains("<nav class='side-toc' aria-label='Learning and reference links'>"));
+        Assertions.assertTrue(html.contains("wide-tool-side-toc-grid"));
+        Assertions.assertTrue(html.contains("wide-tool-side-toc-column-learning"));
+        Assertions.assertTrue(html.contains("wide-tool-side-toc-column-reference"));
+        Assertions.assertTrue(html.contains("wide-tool-side-toc-column-support"));
+        Assertions.assertTrue(html.contains("wide-tool-side-toc-support"));
+        Assertions.assertTrue(html.contains("<div id='toc'>"));
+        Assertions.assertFalse(html.contains("content-wide-tool"));
+        Assertions.assertFalse(html.contains("doc-columns-wide-tool"));
+        Assertions.assertFalse(html.contains("wide-tool-main"));
+        Assertions.assertFalse(html.contains("wide-tool-main-text"));
+    }
+
+    private void assertOpenApiUiReferenceLaunchLinks(
+            final String html, final String toolName, final String clientPath) {
+
+        Assertions.assertTrue(html.contains("Try " + toolName + " with our APIs:"));
+        Assertions.assertTrue(html.contains("openapi-ui-launch-panel"));
+        Assertions.assertTrue(html.contains("openapi-ui-launch-link"));
+        assertOpenApiUiReferenceLaunchLink(
+                html, clientPath, "%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json", "Simple API");
+        assertOpenApiUiReferenceLaunchLink(
+                html, clientPath, "%2Fsim%2Fdocs%2Fopenapi-3.2.json", "API Simulator");
+        assertOpenApiUiReferenceLaunchLink(
+                html, clientPath, "%2Fdocs%2Fopenapi-3.2.json", "API Challenges");
+        assertOpenApiUiReferenceLaunchLink(
+                html, clientPath, "%2Fshop%2Fdocs%2Fopenapi-3.2.json", "Buggy API");
+    }
+
+    private void assertOpenApiUiReferenceLaunchLink(
+            final String html,
+            final String clientPath,
+            final String encodedOpenApiPath,
+            final String linkText) {
+
+        Assertions.assertTrue(
+                html.contains(
+                        "href=\"/tools/online-clients/"
+                                + clientPath
+                                + "?url="
+                                + encodedOpenApiPath
+                                + "\">"
+                                + linkText
+                                + "</a>"));
     }
 
     private String renderRestApiTestingTutorial() {

@@ -2,7 +2,7 @@
 title: API Challenges Simulation Mode
 seo_title: Simulation Mode | API Challenges Practice Mode
 description: A simulated API tutorial - follow the guided instructions and learn how to use your API Tool without any side-effects or risk.
-lastmod: 2026-07-29
+lastmod: 2026-08-11
 seo_description: Use API Challenges Simulation to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced testing.
 og_image: /images/hero/api-simulator-browser-requests-1600x720.jpg
 og_image_alt: Simulation Mode hero image showing live in-browser HTTP request examples and the Simulator request widget.
@@ -77,7 +77,7 @@ I have created an example set of very simple Java `@Test` methods using RestAssu
 
 ## Swagger OpenAPI File
 
-You can download a simple Swagger [OpenAPI File for simulation mode](/sim/docs/openapi-3.1.json).
+You can open, download, or launch the [API Simulator OpenAPI files](/practice-modes/simulation-openapi) in the online OpenAPI UI clients.
 
 Versioned OpenAPI JSON files are also available:
 

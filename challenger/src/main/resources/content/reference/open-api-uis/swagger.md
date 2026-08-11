@@ -2,7 +2,7 @@
 title: Swagger UI and Tools for API Testing
 seo_title: Swagger UI for API Testing: OpenAPI Docs, Requests and Tools
 description: An introduction to Swagger tooling, Swagger UI, and Swagger Editor for working with OpenAPI files.
-lastmod: 2026-08-04
+lastmod: 2026-08-11
 seo_description: Learn how Swagger UI and Swagger Editor use OpenAPI files to render browser-based API documentation and request forms.
 showads: true
 ---
@@ -106,3 +106,17 @@ Exercise:
 ## Related OpenAPI Page
 
 Read [OpenAPI as a specification](/reference/openapi) when you want to understand the standard file format that Swagger tools consume.
+
+## Try Swagger With Our APIs
+
+<div class="openapi-ui-launch-panel">
+  <div class="openapi-ui-launch-group">
+    <p>Try Swagger with our APIs:</p>
+    <p class="openapi-ui-launch-links">
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
+    </p>
+  </div>
+</div>

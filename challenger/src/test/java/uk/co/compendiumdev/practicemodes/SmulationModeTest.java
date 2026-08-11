@@ -69,8 +69,8 @@ public class SmulationModeTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
-        Assertions.assertEquals(
-                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
+        Assertions.assertTrue(
+                response.getHeader("Accept-Query").contains("application/x-www-form-urlencoded"));
         Assertions.assertTrue(response.body.contains("\"id\":1,"));
         Assertions.assertTrue(response.body.contains("\"id\":2,"));
         Assertions.assertFalse(response.body.contains("\"id\":3,"));
@@ -86,8 +86,9 @@ public class SmulationModeTest {
         HttpResponseDetails response = http.send("/sim/entities", "QUERY");
 
         Assertions.assertEquals(400, response.statusCode);
-        Assertions.assertEquals(
-                "application/x-www-form-urlencoded", response.getHeader("Accept-Query"));
+        Assertions.assertTrue(
+                response.getHeader("Accept-Query").contains("application/x-www-form-urlencoded"));
+        Assertions.assertTrue(response.getHeader("Accept-Query").contains("application/jsonpath"));
     }
 
     @Test

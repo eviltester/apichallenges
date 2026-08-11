@@ -33,6 +33,13 @@ public class MarkdownContentManager {
             "/images/social/apichallenges-og-1200x630.png";
     private static final String DEFAULT_OG_TYPE_CONTENT = "article";
     private static final String DEFAULT_OG_TYPE_WEBSITE = "website";
+    private static final Pattern WIDE_TOOL_CLIENT_SECTION_PATTERN =
+            Pattern.compile(
+                    "(?s)(<section\\s+class=\"(?:online-openapi-ui-client|online-swagger-client)\"\\s+[^>]*>.*?</section>)");
+    private static final Pattern HTML_UL_TAG_PATTERN =
+            Pattern.compile("<(/?)ul\\b[^>]*>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern HTML_LI_TAG_PATTERN =
+            Pattern.compile("<(/?)li\\b[^>]*>", Pattern.CASE_INSENSITIVE);
     private static final String DEFAULT_TWITTER_CARD = "summary_large_image";
     private static final String DEFAULT_META_ROBOTS = "index,follow";
     private static final String DEFAULT_SCHEMA_TYPE_CONTENT = "Article";
@@ -291,6 +298,7 @@ public class MarkdownContentManager {
         String conceptReferenceUrl2 = "";
         String categoriesRaw = "";
         String hideSidebarRaw = "";
+        String layout = "";
         String pageDatePublished = "";
         String pageLastModified = "";
         String canonicalUrl = DEFAULT_CANONICAL_HOST + contentPath;
@@ -382,6 +390,9 @@ public class MarkdownContentManager {
             }
             if (aHeader.startsWith("hide_sidebar: ")) {
                 hideSidebarRaw = aHeader.replace("hide_sidebar: ", "");
+            }
+            if (aHeader.startsWith("layout: ")) {
+                layout = aHeader.replace("layout: ", "");
             }
             if (aHeader.startsWith("date:")) {
                 pageDatePublished = aHeader.replaceFirst("^date:\\s*", "");
@@ -538,6 +549,7 @@ public class MarkdownContentManager {
         final List<String> schemaHowToSteps = parseHowToSteps(schemaHowToStepsRaw);
         final Boolean schemaVideoEnabled = parseOptionalBoolean(schemaVideoEnabledRaw);
         final boolean hideSidebar = Boolean.TRUE.equals(parseOptionalBoolean(hideSidebarRaw));
+        final boolean wideToolLayout = "wide-tool".equals(layout);
         final boolean renderDocumentColumns = !indexTemplate && !hideSidebar;
         final String pageDateModified = resolveDateModified(pageLastModified, pageDatePublished);
         final String articleBylineSnippet =
@@ -576,7 +588,7 @@ public class MarkdownContentManager {
         }
 
         StringBuilder html = new StringBuilder();
-        html.append(
+        String pageStart =
                 guiManagement.getPageStart(
                         htmlTitle,
                         """
@@ -588,7 +600,14 @@ public class MarkdownContentManager {
                                                 AssetVersion.versionedPath(
                                                         "/js/externalize-links.js"))
                                 + headerInject,
-                        canonicalAbsoluteUrl));
+                        canonicalAbsoluteUrl);
+        if (wideToolLayout) {
+            pageStart =
+                    pageStart.replace(
+                            "<body><div class='content'>",
+                            "<body class='wide-tool-page'><div class='content'>");
+        }
+        html.append(pageStart);
 
         html.append(guiManagement.getMenuAsHTML());
         // todo: create proper templates
@@ -600,8 +619,12 @@ public class MarkdownContentManager {
         html.append(bcHtmlHeader.toString());
         html.append("<div class=\"main-text-content\">\n");
         final String postIntroSnippet = articleBylineSnippet + blogCategorySnippet;
-        html.append(
-                insertArticleBylineAfterFirstHeading(renderer.render(document), postIntroSnippet));
+        String renderedMarkdown =
+                insertArticleBylineAfterFirstHeading(renderer.render(document), postIntroSnippet);
+        if (wideToolLayout) {
+            renderedMarkdown = wrapWideToolRenderedContent(renderedMarkdown);
+        }
+        html.append(renderedMarkdown);
         html.append(conceptLearnedSnippet);
         html.append("</div>\n");
         html.append(nextChallengeCtaSnippet);
@@ -612,7 +635,8 @@ public class MarkdownContentManager {
             html.append("</div>");
             html.append("<aside class='left-column' aria-label='Learning links'>");
             html.append("<nav class='side-toc' aria-label='Learning and reference links'>");
-            html.append(renderer.render(parser.parse(dropDownMenuAsMarkdown())));
+            final String renderedSideToc = renderer.render(parser.parse(dropDownMenuAsMarkdown()));
+            html.append(wideToolLayout ? wrapWideToolSideToc(renderedSideToc) : renderedSideToc);
             html.append("</nav>");
             html.append("</aside>");
             html.append("</section>");
@@ -621,6 +645,127 @@ public class MarkdownContentManager {
         html.append(guiManagement.getPageEnd());
 
         return html.toString();
+    }
+
+    private String wrapWideToolRenderedContent(final String renderedMarkdown) {
+        final Matcher matcher = WIDE_TOOL_CLIENT_SECTION_PATTERN.matcher(renderedMarkdown);
+        if (!matcher.find()) {
+            return renderedMarkdown;
+        }
+
+        final String beforeClient = renderedMarkdown.substring(0, matcher.start()).strip();
+        final String client = matcher.group(1).strip();
+        final String afterClient = renderedMarkdown.substring(matcher.end()).strip();
+
+        final StringBuilder wrapped = new StringBuilder();
+        if (!beforeClient.isEmpty()) {
+            wrapped.append("<div class=\"wide-tool-copy-block wide-tool-copy-block-top\">\n");
+            wrapped.append(beforeClient);
+            wrapped.append("\n</div>\n");
+        }
+        wrapped.append("<div class=\"wide-tool-client-breakout\">\n");
+        wrapped.append(client);
+        wrapped.append("\n</div>\n");
+        if (!afterClient.isEmpty()) {
+            wrapped.append("<div class=\"wide-tool-copy-block wide-tool-copy-block-bottom\">\n");
+            wrapped.append(afterClient);
+            wrapped.append("\n</div>\n");
+        }
+        return wrapped.toString();
+    }
+
+    private String wrapWideToolSideToc(final String renderedSideToc) {
+        final String rootStartTag = "<ul class=\"side-toc-root\">";
+        final int rootStart = renderedSideToc.indexOf(rootStartTag);
+        if (rootStart < 0) {
+            return renderedSideToc;
+        }
+
+        final int rootStartTagEnd = rootStart + rootStartTag.length();
+        int depth = 1;
+        int rootCloseStart = -1;
+        int rootEnd = -1;
+        final Matcher ulMatcher = HTML_UL_TAG_PATTERN.matcher(renderedSideToc);
+        ulMatcher.region(rootStartTagEnd, renderedSideToc.length());
+        while (ulMatcher.find()) {
+            if ("/".equals(ulMatcher.group(1))) {
+                depth--;
+                if (depth == 0) {
+                    rootCloseStart = ulMatcher.start();
+                    rootEnd = ulMatcher.end();
+                    break;
+                }
+            } else {
+                depth++;
+            }
+        }
+
+        if (rootCloseStart < 0 || rootEnd < 0) {
+            return renderedSideToc;
+        }
+
+        final List<String> topLevelItems =
+                splitTopLevelListItems(renderedSideToc.substring(rootStartTagEnd, rootCloseStart));
+        if (topLevelItems.size() < 9) {
+            return renderedSideToc;
+        }
+
+        final String prefix = renderedSideToc.substring(0, rootStart).strip();
+        final String supportHtml = renderedSideToc.substring(rootEnd).strip();
+        final StringBuilder wrapped = new StringBuilder();
+        if (!prefix.isEmpty()) {
+            wrapped.append(prefix).append("\n");
+        }
+        wrapped.append("<div class=\"wide-tool-side-toc-grid\">\n");
+        appendWideToolSideTocColumn(wrapped, "learning", topLevelItems.subList(0, 2), "");
+        appendWideToolSideTocColumn(wrapped, "reference", topLevelItems.subList(2, 7), "");
+        appendWideToolSideTocColumn(
+                wrapped, "support", topLevelItems.subList(7, topLevelItems.size()), supportHtml);
+        wrapped.append("</div>\n");
+        return wrapped.toString();
+    }
+
+    private List<String> splitTopLevelListItems(final String listContent) {
+        final List<String> items = new ArrayList<>();
+        final Matcher liMatcher = HTML_LI_TAG_PATTERN.matcher(listContent);
+        int depth = 0;
+        int itemStart = -1;
+        while (liMatcher.find()) {
+            if ("/".equals(liMatcher.group(1))) {
+                depth--;
+                if (depth == 0 && itemStart >= 0) {
+                    items.add(listContent.substring(itemStart, liMatcher.end()));
+                    itemStart = -1;
+                }
+            } else {
+                if (depth == 0) {
+                    itemStart = liMatcher.start();
+                }
+                depth++;
+            }
+        }
+        return items;
+    }
+
+    private void appendWideToolSideTocColumn(
+            final StringBuilder wrapped,
+            final String columnName,
+            final List<String> items,
+            final String supportHtml) {
+        wrapped.append("<div class=\"wide-tool-side-toc-column wide-tool-side-toc-column-")
+                .append(columnName)
+                .append("\">\n");
+        wrapped.append("<ul class=\"side-toc-root\">\n");
+        for (final String item : items) {
+            wrapped.append(item.strip()).append("\n");
+        }
+        wrapped.append("</ul>\n");
+        if (!supportHtml.isEmpty()) {
+            wrapped.append("<div class=\"wide-tool-side-toc-support\">\n");
+            wrapped.append(supportHtml);
+            wrapped.append("\n</div>\n");
+        }
+        wrapped.append("</div>\n");
     }
 
     // TODO: move this into a markdown file so it can be cached and amended easily
@@ -948,6 +1093,9 @@ public class MarkdownContentManager {
         if (isIndividualBlogPostPath(contentPath)) {
             return buildBlogPostBreadcrumbHtml(contentPath, categoriesRaw);
         }
+        if (isOpenApiUiBreadcrumbPath(contentPath)) {
+            return buildOpenApiUiBreadcrumbHtml(contentPath);
+        }
 
         StringBuilder bcHtmlHeader = new StringBuilder();
         String bcPath = "";
@@ -982,6 +1130,19 @@ public class MarkdownContentManager {
         }
 
         return bcHtmlHeader.toString();
+    }
+
+    private String buildOpenApiUiBreadcrumbHtml(final String contentPath) {
+
+        StringBuilder html = new StringBuilder();
+        html.append("<div class=\"breadcrumb\">\n\n");
+        html.append("<blockquote>");
+        html.append("<a href=\"/reference\">Reference</a> &gt;");
+        html.append("<a href=\"/reference/openapi\">OpenAPI</a> &gt; ");
+        html.append(escapeHtmlAttribute(openApiUiToolBreadcrumbLabel(contentPath)));
+        html.append("</blockquote>");
+        html.append("</div >\n\n");
+        return html.toString();
     }
 
     private String buildBlogPostBreadcrumbHtml(
@@ -1372,6 +1533,9 @@ public class MarkdownContentManager {
         if (isIndividualBlogPostPath(contentPath)) {
             return buildBlogPostBreadcrumbListJson(canonicalHost, contentPath, categoriesRaw);
         }
+        if (isOpenApiUiBreadcrumbPath(contentPath)) {
+            return buildOpenApiUiBreadcrumbListJson(canonicalHost, contentPath);
+        }
 
         StringBuilder json = new StringBuilder();
         json.append("{");
@@ -1404,6 +1568,33 @@ public class MarkdownContentManager {
                     .append(escapeJsonValue(canonicalHost + path))
                     .append("\"}");
         }
+        json.append("]");
+        json.append("}");
+        return json.toString();
+    }
+
+    private String buildOpenApiUiBreadcrumbListJson(
+            final String canonicalHost, final String contentPath) {
+
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("\"@context\":\"https://schema.org\",");
+        json.append("\"@type\":\"BreadcrumbList\",");
+        json.append("\"itemListElement\":[");
+        json.append("{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost))
+                .append("\"}");
+        json.append(",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Reference\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost + "/reference"))
+                .append("\"}");
+        json.append(",{\"@type\":\"ListItem\",\"position\":3,\"name\":\"OpenAPI\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost + "/reference/openapi"))
+                .append("\"}");
+        json.append(",{\"@type\":\"ListItem\",\"position\":4,\"name\":\"")
+                .append(escapeJsonValue(openApiUiToolBreadcrumbLabel(contentPath)))
+                .append("\",\"item\":\"")
+                .append(escapeJsonValue(canonicalHost + contentPath))
+                .append("\"}");
         json.append("]");
         json.append("}");
         return json.toString();
@@ -1551,6 +1742,47 @@ public class MarkdownContentManager {
 
     private String humanizeSlug(final String slug) {
         return slug.replace("-", " ").trim();
+    }
+
+    private boolean isOpenApiUiBreadcrumbPath(final String contentPath) {
+        return openApiUiToolSlug(contentPath).isPresent();
+    }
+
+    private Optional<String> openApiUiToolSlug(final String contentPath) {
+        if (contentPath == null) {
+            return Optional.empty();
+        }
+
+        final String referencePrefix = "/reference/open-api-uis/";
+        final String onlineClientPrefix = "/tools/online-clients/";
+        final String slug;
+
+        if (contentPath.startsWith(referencePrefix)) {
+            slug = contentPath.substring(referencePrefix.length());
+        } else if (contentPath.startsWith(onlineClientPrefix)) {
+            slug = contentPath.substring(onlineClientPrefix.length());
+        } else {
+            return Optional.empty();
+        }
+
+        return switch (slug) {
+            case "swagger", "openapi-explorer", "scalar", "stoplight", "zudoku", "redoc" ->
+                    Optional.of(slug);
+            default -> Optional.empty();
+        };
+    }
+
+    private String openApiUiToolBreadcrumbLabel(final String contentPath) {
+        final String slug = openApiUiToolSlug(contentPath).orElse("");
+        return switch (slug) {
+            case "swagger" -> "Swagger";
+            case "openapi-explorer" -> "OpenAPI Explorer UI";
+            case "scalar" -> "Scalar";
+            case "stoplight" -> "Stoplight Elements";
+            case "zudoku" -> "Zudoku";
+            case "redoc" -> "Redoc";
+            default -> humanizeSlug(slug);
+        };
     }
 
     private boolean isArticleLikeSchemaType(final String schemaTypeValue) {

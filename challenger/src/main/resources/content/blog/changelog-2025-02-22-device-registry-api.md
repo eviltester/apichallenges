@@ -1,6 +1,6 @@
 ---
 date: 2025-02-22T09:00:00Z
-lastmod: 2026-08-07
+lastmod: 2026-08-09
 title: Device Registry API Practice Site for API Testers
 seo_title: Device Registry API Practice Site for API Testers
 description: Learn how the Device Registry API practice site helps testers practise CRUD, basic authentication, OpenAPI docs, and Swagger UI.
@@ -58,4 +58,4 @@ Adding Device Registry improved the practice-site list because it created a clea
 
 That progression matters because learners can add one new source of complexity at a time. First learn HTTP and REST basics, then learn CRUD state changes, then learn authentication, then bring in documentation and workflow coverage.
 
-Use [OpenAPI for API Testing](/reference/openapi) and [Swagger UI and Tools](/reference/swagger) if you want to understand how API documentation fits into a testing workflow.
+Use [OpenAPI for API Testing](/reference/openapi) and [Swagger UI and Tools](/reference/open-api-uis/swagger) if you want to understand how API documentation fits into a testing workflow.

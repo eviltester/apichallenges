@@ -13,6 +13,19 @@ public final class CdnCachePolicy {
     public static final String DOCS_CACHE_CONTROL =
             "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800";
     public static final String NO_STORE_CACHE_CONTROL = "no-store";
+    private static final String SWAGGER_UI_DIST_VERSION = "5.32.12";
+    private static final String UNPKG_CDN_ROOT = "https://" + "unpkg.com/";
+    private static final String SWAGGER_UI_DIST_CDN_ROOT = UNPKG_CDN_ROOT + "swagger-ui-dist";
+    private static final String PINNED_SWAGGER_UI_DIST_CDN_ROOT =
+            UNPKG_CDN_ROOT + "swagger-ui-dist@" + SWAGGER_UI_DIST_VERSION;
+    private static final Map<String, String> PINNED_CDN_REPLACEMENTS =
+            Map.of(
+                    SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui.css",
+                    PINNED_SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui.css",
+                    SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui-bundle.js",
+                    PINNED_SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui-bundle.js",
+                    SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui-standalone-preset.js",
+                    PINNED_SWAGGER_UI_DIST_CDN_ROOT + "/swagger-ui-standalone-preset.js");
 
     private CdnCachePolicy() {}
 
@@ -81,10 +94,19 @@ public final class CdnCachePolicy {
         }
 
         final String body = response.body();
-        final String versionedBody = AssetVersion.versionHtmlAssetReferences(body);
+        final String versionedBody =
+                AssetVersion.versionHtmlAssetReferences(pinThirdPartyCdnHtmlAssets(body));
         if (versionedBody != null && !versionedBody.equals(body)) {
             response.body(versionedBody);
         }
+    }
+
+    static String pinThirdPartyCdnHtmlAssets(final String body) {
+        String pinnedBody = body;
+        for (Map.Entry<String, String> replacement : PINNED_CDN_REPLACEMENTS.entrySet()) {
+            pinnedBody = pinnedBody.replace(replacement.getKey(), replacement.getValue());
+        }
+        return pinnedBody;
     }
 
     private static boolean hasCacheControl(final HttpServerResponse response) {

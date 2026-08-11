@@ -153,7 +153,7 @@ public class ChallengerWebGUI {
                                     <li><a href="/practice-modes/simulation">About API Simulator</a></li>
                                     <li><a href="/sim/docs">API Docs</a></li>
                                     <li><a href="/sim/docs/swagger-ui">Swagger UI</a></li>
-                                    <li><a href="/sim/docs/openapi.json?download">[Download Open API File]</a></li>
+                                    <li><a href="/practice-modes/simulation-openapi">OpenAPI File</a></li>
 
                                 </ul>
                             </li>
@@ -197,7 +197,7 @@ public class ChallengerWebGUI {
                                 <ul>
                                     <li><a href="/practice-modes/mirror">About HTTP Mirror</a></li>
                                     <li><a href="/mirror/docs">Mirror API Docs</a></li>
-                                    <li><a href="/mirror/docs/openapi.json?download">[Download Open API File]</a></li>
+                                    <li><a href="/mirror/docs/openapi.json?download">OpenAPI File</a></li>
 
                                 </ul>
                             </li>
@@ -300,6 +300,7 @@ public class ChallengerWebGUI {
 
         registerBlogGeneratedRoutes(blogContentManager);
         registerApiClientRoutes();
+        registerZudokuEmbedRoute();
 
         // using the ResourceContentScanner, we can build the sitemap.xml automatically
         SiteMapXml siteMap = new SiteMapXml();
@@ -354,8 +355,10 @@ public class ChallengerWebGUI {
         permanentRedirect("/tutorials/testing-apis/", "/reference/testing-apis");
         permanentRedirect("/tutorials/openapi", "/reference/openapi");
         permanentRedirect("/tutorials/openapi/", "/reference/openapi");
-        permanentRedirect("/tutorials/swagger", "/reference/swagger");
-        permanentRedirect("/tutorials/swagger/", "/reference/swagger");
+        permanentRedirect("/tutorials/swagger", "/reference/open-api-uis/swagger");
+        permanentRedirect("/tutorials/swagger/", "/reference/open-api-uis/swagger");
+        permanentRedirect("/reference/swagger", "/reference/open-api-uis/swagger");
+        permanentRedirect("/reference/swagger/", "/reference/open-api-uis/swagger");
         permanentRedirect("/tutorials/summary", "/reference/summary");
         permanentRedirect("/tutorials/summary/", "/reference/summary");
         permanentRedirect("/tutorials/openapi-swagger", "/reference/openapi");
@@ -780,6 +783,41 @@ public class ChallengerWebGUI {
                         return "";
                     });
         }
+    }
+
+    private void registerZudokuEmbedRoute() {
+        get(
+                "/zudoku-embed",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.header("x-robots-tag", "noindex");
+                    response.status(200);
+                    return resourceAsStringOrEmpty("public/zudoku-embed.html");
+                });
+        get(
+                "/zudoku-embed/*",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.header("x-robots-tag", "noindex");
+                    response.status(200);
+                    return resourceAsStringOrEmpty("public/zudoku-embed.html");
+                });
+        head(
+                "/zudoku-embed",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.header("x-robots-tag", "noindex");
+                    response.status(200);
+                    return "";
+                });
+        head(
+                "/zudoku-embed/*",
+                (request, response) -> {
+                    response.type("text/html");
+                    response.header("x-robots-tag", "noindex");
+                    response.status(200);
+                    return "";
+                });
     }
 
     private String renderApiClientPage(final ApiClientPage page) {

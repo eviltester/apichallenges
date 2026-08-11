@@ -9,3 +9,4 @@ challengersessions/
 examples/tools/voiden.md/.voiden
 .playwright-cli
 /output
+challenger/output/playwright

@@ -2,7 +2,7 @@
 title: REST API Testing Tutorial
 seo_title: How to Test REST APIs: Step-by-Step Tutorial with Examples
 description: A step-by-step REST API testing tutorial using the Simple API, with no authentication required.
-lastmod: 2026-08-04
+lastmod: 2026-08-11
 seo_description: Learn how to test REST APIs step by step with Simple API examples covering requests, responses, data, headers, status codes, and evidence.
 showads: true
 ---
@@ -620,7 +620,7 @@ Use this tutorial as the practical path, then deepen specific areas with the ref
 - [REST API Basics](/reference/rest-api-basics)
 - [API Testing Concepts and Coverage](/reference/testing-apis)
 - [OpenAPI for API Testing](/reference/openapi)
-- [Swagger UI and Tools for API Testing](/reference/swagger)
+- [Swagger UI and Tools for API Testing](/reference/open-api-uis/swagger)
 - [API Testing Tutorial Summary](/reference/summary)
 
 For more hands-on practice with the same API, use:
@@ -633,6 +633,7 @@ For more hands-on practice with the same API, use:
 For broader challenge practice, use:
 
 - [Simulation Mode](/practice-modes/simulation)
+- [API Simulator OpenAPI files](/practice-modes/simulation-openapi)
 - [API Challenges overview](/apichallenges)
 - [API Challenge Solutions](/apichallenges/solutions)
 

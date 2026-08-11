@@ -2,7 +2,7 @@
 title: API Testing Tutorial Summary
 seo_title: API Testing Tutorial Summary: HTTP, REST, Tools and Practice
 description: Basic Summary of REST API tutorial content.
-lastmod: 2026-08-04
+lastmod: 2026-08-09
 seo_description: Learn Summary with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -47,7 +47,7 @@ Useful follow-on pages:
 - [REST API Basics](/reference/rest-api-basics)
 - [REST API Testing Concepts](/reference/testing-apis)
 - [OpenAPI](/reference/openapi)
-- [Swagger](/reference/swagger)
+- [Swagger UI](/reference/open-api-uis/swagger)
 - [API Testing Summary](/reference/summary)
 
 ---

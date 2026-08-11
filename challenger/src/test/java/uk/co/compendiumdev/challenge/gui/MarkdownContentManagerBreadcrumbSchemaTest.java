@@ -54,6 +54,96 @@ public class MarkdownContentManagerBreadcrumbSchemaTest {
                         "\"item\":\"https://apichallenges.com/apichallenges/solutions/get/get-todos-200\""));
     }
 
+    @Test
+    void sectionIndexPagesLeadBreadcrumbsForSubPages() {
+
+        final MarkdownContentManager contentManager = contentManager();
+
+        final String referenceHtml =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/reference/http-basics", Map.of());
+        Assertions.assertTrue(referenceHtml.contains("<a href=\"/reference\">reference</a>"));
+        Assertions.assertTrue(
+                referenceHtml.contains("\"item\":\"https://apichallenges.com/reference\""));
+
+        final String tutorialsHtml =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/tutorials/rest-api-testing", Map.of());
+        Assertions.assertTrue(tutorialsHtml.contains("<a href=\"/tutorials\">tutorials</a>"));
+        Assertions.assertTrue(
+                tutorialsHtml.contains("\"item\":\"https://apichallenges.com/tutorials\""));
+
+        final String practiceModesHtml =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/practice-modes/simpleapi", Map.of());
+        Assertions.assertTrue(
+                practiceModesHtml.contains("<a href=\"/practice-modes\">practice-modes</a>"));
+        Assertions.assertTrue(
+                practiceModesHtml.contains(
+                        "\"item\":\"https://apichallenges.com/practice-modes\""));
+
+        final String toolsHtml =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/tools/clients/bruno", Map.of());
+        Assertions.assertTrue(toolsHtml.contains("<a href=\"/tools\">tools</a>"));
+        Assertions.assertTrue(toolsHtml.contains("<a href=\"/tools/clients\">clients</a>"));
+        Assertions.assertTrue(toolsHtml.contains("\"item\":\"https://apichallenges.com/tools\""));
+
+        final String practiceSitesHtml =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/practice-sites/httpbin", Map.of());
+        Assertions.assertTrue(
+                practiceSitesHtml.contains("<a href=\"/practice-sites\">practice-sites</a>"));
+        Assertions.assertTrue(
+                practiceSitesHtml.contains(
+                        "\"item\":\"https://apichallenges.com/practice-sites\""));
+    }
+
+    @Test
+    void openApiUiReferencePagesUseOpenApiAsBreadcrumbParent() {
+
+        final MarkdownContentManager contentManager = contentManager();
+        final String html =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/reference/open-api-uis/openapi-explorer", Map.of());
+
+        assertOpenApiUiBreadcrumb(
+                html, "OpenAPI Explorer UI", "/reference/open-api-uis/openapi-explorer");
+    }
+
+    @Test
+    void onlineOpenApiUiToolPagesUseOpenApiAsBreadcrumbParent() {
+
+        final MarkdownContentManager contentManager = contentManager();
+        final String html =
+                contentManager.getResourceMarkdownFileAsHtml(
+                        "content", "/tools/online-clients/scalar", Map.of());
+
+        assertOpenApiUiBreadcrumb(html, "Scalar", "/tools/online-clients/scalar");
+    }
+
+    private void assertOpenApiUiBreadcrumb(
+            final String html, final String toolName, final String currentPath) {
+
+        Assertions.assertTrue(
+                html.contains(
+                        "<a href=\"/reference\">Reference</a> &gt;<a href=\"/reference/openapi\">OpenAPI</a> &gt; "
+                                + toolName));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":2,\"name\":\"Reference\",\"item\":\"https://apichallenges.com/reference\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":3,\"name\":\"OpenAPI\",\"item\":\"https://apichallenges.com/reference/openapi\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":4,\"name\":\""
+                                + toolName
+                                + "\",\"item\":\"https://apichallenges.com"
+                                + currentPath
+                                + "\""));
+    }
+
     private MarkdownContentManager contentManager() {
         final ResourceContentScanner contentScanner = new ResourceContentScanner();
         final List<String> pathsToFileContent =

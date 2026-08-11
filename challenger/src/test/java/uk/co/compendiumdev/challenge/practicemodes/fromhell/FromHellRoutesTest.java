@@ -780,7 +780,7 @@ public class FromHellRoutesTest {
         Assertions.assertTrue(response.body.contains("/fromhell/docs/openapi-3.2.json"));
         Assertions.assertTrue(response.body.contains("/fromhell/docs/openapi-3.0.json"));
         Assertions.assertTrue(
-                response.body.contains("https://unpkg.com/swagger-ui-dist/swagger-ui.css"));
+                response.body.contains("https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui.css"));
     }
 
     @Test

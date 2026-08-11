@@ -1,6 +1,6 @@
 ---
 date:  2021-01-30T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 filter
 seo_title: Solution: GET todos 200 filter | API Challenges
 description: How to solve API challenge GET todos 200 filter to use URL parameters to filter the results.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add the required query parameters and confirm the filtered todo results||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add the required query parameters and confirm the filtered todo results||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -23,13 +23,14 @@ How to issue a GET request on a top level entity endpoint and use a query filter
 
 ## GET /todos (200) ? filter
 
-> 	Issue a GET request on the `/todos` end point with a query filter to get only todos which are 'done'. There must exist both 'done' and 'not done' todos, to pass this challenge.
+> 	Issue a GET request on the `/todos` end point with a query filter to get only todos which are 'done', requesting the response in JSON format. There must exist both 'done' and 'not done' todos, to pass this challenge.
 
 - `GET` request will return all items from the `/todos` end point
 - `200` is the success code meaning the request was accepted
 - `?` means we need to add a URL Parameter
 - `filter` means it will filter based on an attribute. In this case we are asked to filter on those which are 'done'. And this is represented by the `doneStatus` i.e. `doneStatus=true`
 - We are using this request to `GET` a filter list of todo items
+- check header `Accept: application/json` is present so the filtered and sorted todo collection is visible as JSON
 - Perform a `GET` first to see what the format of the message is
 - Add a URL parameter to the request to repeat the `GET` and filter the list of todos e.g. `/todos?doneStatus=true`
 
@@ -38,6 +39,8 @@ How to issue a GET request on a top level entity endpoint and use a query filter
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
+- The challenge completion check expects a JSON response
 - Look at the returned format for todos
 
 ```js
@@ -50,7 +53,7 @@ How to issue a GET request on a top level entity endpoint and use a query filter
 ```
 - we want to use the `doneStatus` attribute as a URL parameter
 - if you don't see any todos in the list with a `"doneStatus": true` then you will need to issue a `POST` request to create or amend a todo item. e.g. [challenge POST todos 201](/apichallenges/solutions/post-create/post-todos-201)
-- Issue a `GET` request with a URL parameter `/todos?doneStatus=true`
+- Issue a `GET` request with a URL parameter `/todos?doneStatus=true` and `Accept: application/json`
 - The response status code should be `200` because the request is accepted
 - If you get a different response code, check the URL or headers of the message because you made have made a typo.
 - If you don't see any todos returned then you may need to create one e.g. [challenge POST todos 201](/apichallenges/solutions/post-create/post-todos-201)

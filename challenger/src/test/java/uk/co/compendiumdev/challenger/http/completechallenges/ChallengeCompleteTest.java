@@ -38,6 +38,7 @@ public abstract class ChallengeCompleteTest {
     public static HttpMessageSender http;
 
     private static ChallengerAuthData newChallenger;
+    private static final int MAX_TODOS = 20;
 
     public Map<String, String> getXChallengerHeader(String guid) {
         Map<String, String> xchallenger_header = new HashMap<>();
@@ -800,15 +801,25 @@ public abstract class ChallengeCompleteTest {
             final String title,
             final String doneStatus,
             final String description) {
-        return ChallengeMain.getChallenger()
-                .getThingifier()
-                .getStore(challenger.getXChallenger())
+        final ThingStore repository = todoRepository();
+        ensureTodoFixtureCanBeCreated(todos, repository);
+
+        return repository
                 .entities()
                 .create(
                         EntityInstanceDraft.forEntity(todos)
                                 .withField("title", title)
                                 .withField("doneStatus", doneStatus)
                                 .withField("description", description));
+    }
+
+    private void ensureTodoFixtureCanBeCreated(
+            final EntityDefinition todos, final ThingStore repository) {
+        if (repository.entityQueries().count(todos) >= MAX_TODOS) {
+            repository
+                    .entities()
+                    .delete((EntityInstance) repository.entityQueries().list(todos).toArray()[0]);
+        }
     }
 
     private EntityDefinition todoDefinition() {
@@ -1070,9 +1081,8 @@ public abstract class ChallengeCompleteTest {
 
         HttpResponseDetails response = null;
 
-        int maxTodos = 20;
         // will create 21 which will max out
-        for (int todoCount = 0; todoCount <= maxTodos; todoCount++) {
+        for (int todoCount = 0; todoCount <= MAX_TODOS; todoCount++) {
             response =
                     http.send(
                             "/todos",
@@ -1301,6 +1311,7 @@ public abstract class ChallengeCompleteTest {
     public void canFilterTodoPass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final EntityDefinition todos =
                 ChallengeMain.getChallenger()
@@ -1325,6 +1336,7 @@ public abstract class ChallengeCompleteTest {
         ensureAtLeastXTodoAvailable(2);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
         int threshold = minimumTodoId();
 
         final HttpResponseDetails response =
@@ -1341,6 +1353,7 @@ public abstract class ChallengeCompleteTest {
         ensureAtLeastXTodoAvailable(2);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
         int threshold = maximumTodoId();
 
         final HttpResponseDetails response =
@@ -1357,6 +1370,7 @@ public abstract class ChallengeCompleteTest {
         ensureAtLeastXTodoAvailable(2);
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
         int id = firstTodoId();
 
         final HttpResponseDetails response =
@@ -1373,6 +1387,7 @@ public abstract class ChallengeCompleteTest {
         ensureTodoWithDescription("regexfixture description");
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send(
@@ -1390,6 +1405,7 @@ public abstract class ChallengeCompleteTest {
         ensureTodoWithDescription("wildcardfixture description");
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send(
@@ -1405,6 +1421,7 @@ public abstract class ChallengeCompleteTest {
     public void canSortTodosAscendingPass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send("/todos?_sortBy=title", "GET", x_challenger_header, "");
@@ -1417,6 +1434,7 @@ public abstract class ChallengeCompleteTest {
     public void canSortTodosDescendingPass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send("/todos?_sortBy=-id", "GET", x_challenger_header, "");
@@ -1429,6 +1447,7 @@ public abstract class ChallengeCompleteTest {
     public void canSortTodosMultipleFieldsPass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send("/todos?_sortBy=doneStatus,-id", "GET", x_challenger_header, "");
@@ -1442,6 +1461,7 @@ public abstract class ChallengeCompleteTest {
     public void canFilterAndSortTodosPass() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
+        x_challenger_header.put("Accept", "application/json");
 
         final HttpResponseDetails response =
                 http.send("/todos?doneStatus=false&_sortBy=-id", "GET", x_challenger_header, "");

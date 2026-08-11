@@ -1,6 +1,6 @@
 ---
 date: 2026-07-30T09:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-11
 title: API Challenges Solution For - GET todos 200 pagination limit and offset
 seo_title: "Solution: GET todos 200 pagination limit and offset | API Challenges"
 description: How to solve API challenge GET todos 200 pagination limit and offset using the _limit and _offset query parameters.
@@ -12,7 +12,7 @@ concept_reference_label: HTTP Methods and Verbs
 concept_reference_url: /reference/http-verbs
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=5 and _offset=5 to page through todos||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _limit=5 and _offset=5 to page through todos||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -23,19 +23,21 @@ How to issue a GET request on a top level entity endpoint and use pagination to 
 
 ## GET /todos (200) ?_limit&_offset
 
-> Issue a GET request on the `/todos` end point with pagination limit and offset parameters.
+> Issue a GET request on the `/todos` end point with pagination limit and offset parameters, requesting the response in JSON format.
 
 - `_limit` controls the maximum number of todos returned
 - `_offset` controls how many todos are skipped before returning results
 - if `_offset` is not supplied, the default offset is `0`
 - this challenge is passed by requesting up to 5 todos after skipping 5 todos
 - if your current session has fewer todos after the offset, the response will contain fewer todos
+- header `Accept: application/json` should be present so the filtered and sorted todo collection is visible as JSON
 
 ## Basic Instructions
 
 - Issue a `GET` request to end point "/todos"
     - `{{<ORIGIN_URL>}}/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
+- The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `_limit=5` and `_offset=5` as URL parameters:
     - `{{<ORIGIN_URL>}}/todos?_limit=5&_offset=5`
 - The response status code should be `200` because the request is accepted

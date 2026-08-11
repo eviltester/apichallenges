@@ -9,6 +9,7 @@ const filesToSyntaxCheck = [
   'src/main/resources/public/js/openapi-tool-controls.js',
   'src/main/resources/public/js/openapi-converter-page.js',
   'src/main/resources/public/js/online-swagger-client.js',
+  'src/main/resources/public/js/online-openapi-ui-client.js',
   'src/main/resources/public/js/vendor/js-yaml.min.js',
 ];
 
