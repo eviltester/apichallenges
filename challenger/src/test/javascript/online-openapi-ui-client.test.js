@@ -21,6 +21,52 @@ test('clientLabel returns readable labels for page status messages', () => {
   assert.equal(client.clientLabel('unknown'), 'OpenAPI UI');
 });
 
+test('readConvertedSpecPayload reads converter handoff data from browser session storage', () => {
+  const originalSessionStorage = global.sessionStorage;
+  const spec = {
+    openapi: '3.1.0',
+    info: { title: 'Stored API', version: '1.0.0' },
+    paths: {},
+  };
+  const key = 'apiChallengesConvertedOpenApiSpec:test-key';
+  const storage = new Map([
+    [key, JSON.stringify({ name: 'stored-api.json', spec })],
+  ]);
+
+  global.sessionStorage = {
+    getItem: (storageKey) => storage.get(storageKey) || null,
+  };
+
+  try {
+    assert.deepEqual(client.readConvertedSpecPayload(key), {
+      name: 'stored-api.json',
+      spec,
+    });
+  } finally {
+    global.sessionStorage = originalSessionStorage;
+  }
+});
+
+test('readConvertedSpecPayload rejects missing or invalid converter handoff keys', () => {
+  const originalSessionStorage = global.sessionStorage;
+  global.sessionStorage = {
+    getItem: () => null,
+  };
+
+  try {
+    assert.throws(
+      () => client.readConvertedSpecPayload('not-a-converter-key'),
+      /OpenAPI file reference is not valid/,
+    );
+    assert.throws(
+      () => client.readConvertedSpecPayload('apiChallengesConvertedOpenApiSpec:missing'),
+      /No OpenAPI file was found/,
+    );
+  } finally {
+    global.sessionStorage = originalSessionStorage;
+  }
+});
+
 test('zudokuEmbedUrl encodes the OpenAPI URL for the same-origin iframe host page', () => {
   const url = client.zudokuEmbedUrl('blob:http://localhost:4568/79fc0bbe-f23b-49c6-9dfa-6d3d623da729');
 

@@ -922,6 +922,10 @@ html[data-theme] .openapi-tester-controls {
     border-color: var(--border);
 }
 
+html[data-theme] .openapi-converter-client-launch {
+    border-color: var(--border);
+}
+
 html[data-theme] .openapi-converter-options {
     background: var(--surface-soft);
     border-color: var(--border);

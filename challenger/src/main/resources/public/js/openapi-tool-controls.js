@@ -13,8 +13,9 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
   'use strict';
 
-  const EXPORT_ACTION_SELECTOR = '[data-openapi-copy-converted], [data-openapi-download-converted], [data-openapi-open-swagger]';
+  const EXPORT_ACTION_SELECTOR = '[data-openapi-copy-converted], [data-openapi-download-converted], [data-openapi-open-client]';
   const SWAGGER_EXPORT_ACTION_SELECTOR = '[data-openapi-copy-converted], [data-openapi-download-converted]';
+  const EMBEDDED_CLIENT_ACTION_SELECTOR = '[data-openapi-open-client]';
 
   function setStatus(statusElement, message, isError) {
     statusElement.textContent = message;
@@ -128,6 +129,7 @@
   return {
     allExportActionsSelector: EXPORT_ACTION_SELECTOR,
     swaggerExportActionsSelector: SWAGGER_EXPORT_ACTION_SELECTOR,
+    embeddedClientActionsSelector: EMBEDDED_CLIENT_ACTION_SELECTOR,
     setStatus: setStatus,
     readOptions: readOptions,
     writeOptions: writeOptions,

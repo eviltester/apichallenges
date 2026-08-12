@@ -668,6 +668,25 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-openapi-copy-converted"));
         Assertions.assertTrue(html.contains("data-openapi-download-converted"));
         Assertions.assertTrue(html.contains("data-openapi-open-swagger"));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"swagger\""));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"openapi-explorer\""));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"scalar\""));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"stoplight\""));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"zudoku\""));
+        Assertions.assertTrue(html.contains("data-openapi-open-client=\"redoc\""));
+        Assertions.assertTrue(
+                html.contains("data-openapi-client-path=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/openapi-explorer\""));
+        Assertions.assertTrue(
+                html.contains("data-openapi-client-path=\"/tools/online-clients/scalar\""));
+        Assertions.assertTrue(
+                html.contains("data-openapi-client-path=\"/tools/online-clients/stoplight\""));
+        Assertions.assertTrue(
+                html.contains("data-openapi-client-path=\"/tools/online-clients/zudoku\""));
+        Assertions.assertTrue(
+                html.contains("data-openapi-client-path=\"/tools/online-clients/redoc\""));
         Assertions.assertTrue(html.contains("data-openapi-output"));
         Assertions.assertFalse(html.contains("data-openapi-example"));
         Assertions.assertTrue(html.contains("<ul class=\"openapi-option-grid\">"));
@@ -675,13 +694,20 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-openapi-copy-converted disabled"));
         Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(html.contains("data-openapi-open-swagger disabled"));
+        Assertions.assertTrue(html.contains("Open in Embedded Client"));
+        assertContainsInOrder(
+                html,
+                "Converted OpenAPI JSON",
+                "Open in Embedded Client",
+                "Open in Swagger UI",
+                "Open in Redoc");
         Assertions.assertTrue(html.contains("Convert OpenAPI To A More Permissive Tester Spec"));
         Assertions.assertTrue(
                 html.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
         Assertions.assertTrue(
                 html.contains("Download A Less Restrictive OpenAPI File For REST Client Testing"));
         Assertions.assertTrue(
-                html.contains("Use Converted OpenAPI Files In Swagger UI And REST Clients"));
+                html.contains("Use Converted OpenAPI Files In Embedded Clients And REST Clients"));
         Assertions.assertTrue(html.contains("CORS Limits For Browser OpenAPI Conversion"));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));

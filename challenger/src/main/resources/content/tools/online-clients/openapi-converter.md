@@ -3,7 +3,7 @@ title: OpenAPI Tester Converter
 seo_title: Convert OpenAPI To A More Permissive Tester Spec
 description: Convert an OpenAPI JSON or YAML file in the browser to a more permissive tester OpenAPI file for exploratory REST API testing.
 lastmod: 2026-08-11
-seo_description: Convert OpenAPI files to a less restrictive tester OpenAPI spec in the browser, then copy, download, or open the result in Swagger UI.
+seo_description: Convert OpenAPI files to a less restrictive tester OpenAPI spec in the browser, then copy, download, or open the result in embedded OpenAPI clients.
 schema_type: WebPage
 og_type: website
 showads: true
@@ -64,7 +64,6 @@ Convert an OpenAPI 3 JSON or YAML file into a more permissive tester OpenAPI spe
     <div class="openapi-converter-actions">
       <button type="button" data-openapi-copy-converted disabled>Copy converted JSON</button>
       <button type="button" data-openapi-download-converted disabled>Download converted JSON</button>
-      <button type="button" data-openapi-open-swagger disabled>Open in Swagger UI</button>
     </div>
   </div>
   <p class="online-client-status" data-openapi-status role="status">Load an OpenAPI JSON or YAML file, then choose a tester profile.</p>
@@ -72,6 +71,18 @@ Convert an OpenAPI 3 JSON or YAML file into a more permissive tester OpenAPI spe
     Converted OpenAPI JSON
     <textarea class="openapi-converter-output" data-openapi-output readonly spellcheck="false"></textarea>
   </label>
+  <section class="openapi-converter-client-launch" aria-labelledby="openapi-converter-client-heading">
+    <h2 id="openapi-converter-client-heading">Open in Embedded Client</h2>
+    <p>Open the original OpenAPI file, or the converted tester file when a tester profile is selected, in one of the embedded API clients on this site.</p>
+    <div class="openapi-converter-actions openapi-converter-client-actions">
+      <button type="button" data-openapi-open-client="swagger" data-openapi-client-path="/tools/online-clients/swagger" data-openapi-open-swagger disabled>Open in Swagger UI</button>
+      <button type="button" data-openapi-open-client="openapi-explorer" data-openapi-client-path="/tools/online-clients/openapi-explorer" disabled>Open in OpenAPI Explorer</button>
+      <button type="button" data-openapi-open-client="scalar" data-openapi-client-path="/tools/online-clients/scalar" disabled>Open in Scalar</button>
+      <button type="button" data-openapi-open-client="stoplight" data-openapi-client-path="/tools/online-clients/stoplight" disabled>Open in Stoplight Elements</button>
+      <button type="button" data-openapi-open-client="zudoku" data-openapi-client-path="/tools/online-clients/zudoku" disabled>Open in Zudoku</button>
+      <button type="button" data-openapi-open-client="redoc" data-openapi-client-path="/tools/online-clients/redoc" disabled>Open in Redoc</button>
+    </div>
+  </section>
 </section>
 
 ## Convert OpenAPI To A More Permissive Tester Spec
@@ -96,9 +107,9 @@ After conversion, copy the JSON or download the tester OpenAPI file. You can imp
 
 For more tool options, compare the [REST/HTTP client summary reviews](/tools/clients/summary-reviews), read the [REST/HTTP Clients overview](/tools/clients), or review detailed notes for [Bruno](/tools/clients/bruno), [Postman](/tools/clients/postman), [Insomnia](/tools/clients/insomnia), and [cURL](/tools/clients/curl).
 
-## Use Converted OpenAPI Files In Swagger UI And REST Clients
+## Use Converted OpenAPI Files In Embedded Clients And REST Clients
 
-Use the `Open in Swagger UI` button to render the converted tester spec in the [Online Swagger UI](/tools/online-clients/swagger). Swagger UI will show the generated operations and the relaxed request shapes so you can try requests from the browser.
+Use the `Open in Embedded Client` buttons to render the loaded OpenAPI file in [Swagger UI](/tools/online-clients/swagger), [OpenAPI Explorer](/tools/online-clients/openapi-explorer), [Scalar](/tools/online-clients/scalar), [Stoplight Elements](/tools/online-clients/stoplight), [Zudoku](/tools/online-clients/zudoku), or [Redoc](/tools/online-clients/redoc). If you selected a tester profile then the embedded client opens the converted tester spec; if you selected `Original` then it opens the original URL or local file content.
 
 If this is your first time using OpenAPI or REST clients, follow [How to Test REST APIs](/tutorials/rest-api-testing), the [API Simulator Walkthrough](/tutorials/api-simulator-walkthrough), the [Swagger UI and Tools](/tools/online-clients/swagger/about) guide, or the [OpenAPI for API Testing](/reference/openapi) reference first.
 

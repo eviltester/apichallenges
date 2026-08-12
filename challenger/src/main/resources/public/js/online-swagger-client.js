@@ -3,6 +3,7 @@
 
   const SWAGGER_SESSION_SPEC_KEY = 'apiChallengesConvertedOpenApiSpec';
   const SWAGGER_SESSION_NAME_KEY = 'apiChallengesConvertedOpenApiName';
+  const CONVERTED_SESSION_KEY_PREFIX = 'apiChallengesConvertedOpenApiSpec:';
 
   function onReady(callback) {
     if (document.readyState === 'loading') {
@@ -26,6 +27,47 @@
 
   function controlsApi() {
     return window.ApiChallengesOpenApiToolControls;
+  }
+
+  function readConvertedSpecPayload(storageKey) {
+    if (!window.sessionStorage) {
+      throw new Error('Browser session storage is required to open this OpenAPI file.');
+    }
+
+    if (storageKey === 'session') {
+      const legacySpec = window.sessionStorage.getItem(SWAGGER_SESSION_SPEC_KEY);
+      const legacyName = window.sessionStorage.getItem(SWAGGER_SESSION_NAME_KEY)
+        || 'converted-openapi.json';
+
+      if (!legacySpec) {
+        throw new Error('No OpenAPI file was found in this browser session.');
+      }
+
+      return {
+        name: legacyName,
+        spec: JSON.parse(legacySpec),
+      };
+    }
+
+    if (!storageKey || !storageKey.startsWith(CONVERTED_SESSION_KEY_PREFIX)) {
+      throw new Error('The OpenAPI file reference is not valid.');
+    }
+
+    const storedPayload = window.sessionStorage.getItem(storageKey);
+    if (!storedPayload) {
+      throw new Error('No OpenAPI file was found in this browser session.');
+    }
+
+    const payload = JSON.parse(storedPayload);
+    const spec = typeof payload.spec === 'string' ? JSON.parse(payload.spec) : payload.spec;
+    if (!spec || typeof spec !== 'object') {
+      throw new Error('The OpenAPI file in this browser session could not be read.');
+    }
+
+    return {
+      name: payload.name || 'converted-openapi.json',
+      spec: spec,
+    };
   }
 
   function swaggerOptions(targetSelector, source) {
@@ -182,20 +224,13 @@
       reader.readAsText(file);
     }
 
-    function renderConvertedSessionSpec() {
-      const storedSpec = window.sessionStorage.getItem(SWAGGER_SESSION_SPEC_KEY);
-      const storedName = window.sessionStorage.getItem(SWAGGER_SESSION_NAME_KEY) || 'converted-openapi.json';
-
-      if (!storedSpec) {
-        controls.setStatus(status, 'No converted OpenAPI file was found in this browser session.', true);
-        return false;
-      }
-
+    function renderConvertedSpec(storageKey) {
       try {
-        loadSpec(JSON.parse(storedSpec), storedName, `Loaded converted tester OpenAPI from ${storedName}.`, true);
+        const payload = readConvertedSpecPayload(storageKey);
+        loadSpec(payload.spec, payload.name, `Loaded converted tester OpenAPI from ${payload.name}.`, true);
         return true;
       } catch (error) {
-        controls.setStatus(status, 'The converted OpenAPI file in this browser session could not be read.', true);
+        controls.setStatus(status, error.message, true);
         return false;
       }
     }
@@ -239,11 +274,13 @@
     controls.setButtons(client, controls.swaggerExportActionsSelector, false);
 
     const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.get('converted') === 'session' && renderConvertedSessionSpec()) {
+    const convertedParameter = searchParams.get('converted');
+    if (convertedParameter) {
+      renderConvertedSpec(convertedParameter);
       return;
     }
 
-    const urlParameter = new URLSearchParams(window.location.search).get('url');
+    const urlParameter = searchParams.get('url');
     urlInput.value = urlParameter || defaultOpenApiUrl;
     renderUrl(urlInput.value);
   }

@@ -74,6 +74,9 @@ function testScope() {
       if (selector === controls.swaggerExportActionsSelector) {
         return exportButtons.slice(0, 2);
       }
+      if (selector === controls.embeddedClientActionsSelector) {
+        return exportButtons.slice(2);
+      }
       return [];
     },
   };
@@ -156,6 +159,9 @@ test('switchToCustomProfile opens custom options and seeds practical defaults wh
 test('setButtons can target all converter actions or only Swagger export actions', () => {
   const scope = testScope();
 
+  assert.match(controls.allExportActionsSelector, /\[data-openapi-open-client\]/);
+  assert.doesNotMatch(controls.allExportActionsSelector, /data-openapi-open-swagger/);
+
   controls.setButtons(scope, controls.swaggerExportActionsSelector, false);
 
   assert.equal(scope.exportButtons[0].disabled, true);
@@ -164,6 +170,11 @@ test('setButtons can target all converter actions or only Swagger export actions
 
   controls.setButtons(scope, controls.allExportActionsSelector, false);
   assert.equal(scope.exportButtons[2].disabled, true);
+
+  controls.setButtons(scope, controls.embeddedClientActionsSelector, true);
+  assert.equal(scope.exportButtons[0].disabled, true);
+  assert.equal(scope.exportButtons[1].disabled, true);
+  assert.equal(scope.exportButtons[2].disabled, false);
 });
 
 test('setStatus writes status text and toggles the error class', () => {

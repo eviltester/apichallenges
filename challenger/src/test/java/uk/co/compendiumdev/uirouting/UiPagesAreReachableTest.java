@@ -457,6 +457,30 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-openapi-copy-converted"));
         Assertions.assertTrue(response.body.contains("data-openapi-download-converted"));
         Assertions.assertTrue(response.body.contains("data-openapi-open-swagger"));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"swagger\""));
+        Assertions.assertTrue(
+                response.body.contains("data-openapi-open-client=\"openapi-explorer\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"scalar\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"stoplight\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"zudoku\""));
+        Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"redoc\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/swagger\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/openapi-explorer\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/scalar\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/stoplight\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-openapi-client-path=\"/tools/online-clients/zudoku\""));
+        Assertions.assertTrue(
+                response.body.contains("data-openapi-client-path=\"/tools/online-clients/redoc\""));
         Assertions.assertTrue(response.body.contains("data-openapi-output"));
         Assertions.assertFalse(response.body.contains("data-openapi-example"));
         Assertions.assertTrue(response.body.contains("<ul class=\"openapi-option-grid\">"));
@@ -464,6 +488,13 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-openapi-copy-converted disabled"));
         Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
         Assertions.assertTrue(response.body.contains("data-openapi-open-swagger disabled"));
+        Assertions.assertTrue(response.body.contains("Open in Embedded Client"));
+        assertContainsInOrder(
+                response.body,
+                "Converted OpenAPI JSON",
+                "Open in Embedded Client",
+                "Open in Swagger UI",
+                "Open in Redoc");
         Assertions.assertTrue(
                 response.body.contains("Convert OpenAPI To A More Permissive Tester Spec"));
         Assertions.assertTrue(
@@ -473,7 +504,7 @@ public class UiPagesAreReachableTest {
                         "Download A Less Restrictive OpenAPI File For REST Client Testing"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "Use Converted OpenAPI Files In Swagger UI And REST Clients"));
+                        "Use Converted OpenAPI Files In Embedded Clients And REST Clients"));
         Assertions.assertTrue(response.body.contains("CORS Limits For Browser OpenAPI Conversion"));
         assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");

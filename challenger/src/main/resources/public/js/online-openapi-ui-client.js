@@ -14,6 +14,7 @@
   'use strict';
 
   const DEFAULT_OPENAPI_URL = '/docs/openapi.json';
+  const CONVERTED_SESSION_KEY_PREFIX = 'apiChallengesConvertedOpenApiSpec:';
   const CLIENT_LABELS = {
     'openapi-explorer': 'OpenAPI Explorer',
     scalar: 'Scalar',
@@ -85,6 +86,32 @@
 
   function controlsApi() {
     return root && root.ApiChallengesOpenApiToolControls;
+  }
+
+  function readConvertedSpecPayload(storageKey) {
+    if (!root.sessionStorage) {
+      throw new Error('Browser session storage is required to open this OpenAPI file.');
+    }
+
+    if (!storageKey || !storageKey.startsWith(CONVERTED_SESSION_KEY_PREFIX)) {
+      throw new Error('The OpenAPI file reference is not valid.');
+    }
+
+    const storedPayload = root.sessionStorage.getItem(storageKey);
+    if (!storedPayload) {
+      throw new Error('No OpenAPI file was found in this browser session.');
+    }
+
+    const payload = JSON.parse(storedPayload);
+    const spec = typeof payload.spec === 'string' ? JSON.parse(payload.spec) : payload.spec;
+    if (!spec || typeof spec !== 'object') {
+      throw new Error('The OpenAPI file in this browser session could not be read.');
+    }
+
+    return {
+      name: payload.name || 'converted-openapi.json',
+      spec: spec,
+    };
   }
 
   function setStatus(statusElement, message, isError) {
@@ -630,6 +657,16 @@
       reader.readAsText(file);
     }
 
+    function renderConvertedSpec(storageKey) {
+      try {
+        const payload = readConvertedSpecPayload(storageKey);
+        renderSpec(payload.spec, payload.name);
+      } catch (error) {
+        clearTarget(target);
+        setStatus(status, error.message, true);
+      }
+    }
+
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       renderUrl(urlInput.value);
@@ -643,7 +680,14 @@
       revokeSpecObjectUrl(currentSpecUrl);
     });
 
-    const urlParameter = new root.URLSearchParams(root.location.search).get('url');
+    const searchParams = new root.URLSearchParams(root.location.search);
+    const convertedParameter = searchParams.get('converted');
+    if (convertedParameter) {
+      renderConvertedSpec(convertedParameter);
+      return;
+    }
+
+    const urlParameter = searchParams.get('url');
     urlInput.value = urlParameter || defaultOpenApiUrl;
     renderUrl(urlInput.value);
   }
@@ -661,6 +705,7 @@
     renderZudoku: renderZudoku,
     renderRedoc: renderRedoc,
     redocTheme: redocTheme,
+    readConvertedSpecPayload: readConvertedSpecPayload,
     zudokuSessionEmbedUrl: zudokuSessionEmbedUrl,
     zudokuEmbedUrl: zudokuEmbedUrl,
     escapeHtmlAttribute: escapeHtmlAttribute,
