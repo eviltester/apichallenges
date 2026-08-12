@@ -23,8 +23,13 @@ It can help people:
 
 - view resources and models from the OpenAPI document
 - make API calls from the rendered interface
-- see generated client or SDK code samples
 - style the component to fit the host site
+
+At first glance the UI doesn't seem like much, you have to click the side-bar "operations" to see the list of end point descriptions, and then you can easily navigate the API documentation and make requests.
+
+The endpoints themselves are not shown in the side-bar, only the descriptions, so the ease of use here varies between Open API files. But this can help you decide if your descriptions are good enough stand alone representations of the endpoint.
+
+`cURL` is supported as the code export format.
 
 ## When To Consider OpenAPI Explorer
 
