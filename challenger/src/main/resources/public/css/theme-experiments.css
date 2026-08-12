@@ -1189,6 +1189,15 @@ html[data-theme] pre {
     width: auto;
 }
 
+html[data-theme] pre,
+html[data-theme] code,
+html[data-theme] kbd,
+html[data-theme] samp,
+html[data-theme] .endpoint {
+    font-feature-settings: "liga" 0, "calt" 0;
+    font-variant-ligatures: none;
+}
+
 html[data-theme] code,
 html[data-theme] .endpoint {
     font-family: var(--mono-font);
@@ -1681,7 +1690,9 @@ html[data-theme] body.wide-tool-page .wide-tool-copy-block-bottom {
 html[data-theme] body.wide-tool-page .wide-tool-client-breakout {
     inline-size: calc(100vw - clamp(1rem, 4vw, 3rem));
     margin-block: 1.25rem;
+    margin-inline-start: calc(50% - 50vw + clamp(0.5rem, 2vw, 1.5rem));
     max-inline-size: none;
+    transform: none;
 }
 
 html[data-theme] body.wide-tool-page #toc {

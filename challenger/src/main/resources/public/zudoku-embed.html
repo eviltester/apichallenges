@@ -120,6 +120,11 @@
       padding: 0.08rem 0.25rem;
     }
 
+    #zudoku-root :is(pre, code, textarea, .font-mono, .shiki, [data-line], [style*="--shiki"]) {
+      font-feature-settings: "liga" 0, "calt" 0 !important;
+      font-variant-ligatures: none !important;
+    }
+
     #zudoku-root :is(pre, code, .shiki, .code-block, .font-mono, [data-line], [style*="--shiki"]) {
       --shiki-light: var(--zudoku-code-text) !important;
       --shiki-dark: var(--zudoku-code-text) !important;

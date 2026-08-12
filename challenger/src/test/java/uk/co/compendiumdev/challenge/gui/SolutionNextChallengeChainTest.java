@@ -63,6 +63,7 @@ public class SolutionNextChallengeChainTest {
                     "application/problem+json",
                     "application/vnd.api+json",
                     "application/x-www-form-urlencoded",
+                    "application/jsonpath",
                     "application/merge-patch+json",
                     "application/json-patch+json",
                     "text/calendar",

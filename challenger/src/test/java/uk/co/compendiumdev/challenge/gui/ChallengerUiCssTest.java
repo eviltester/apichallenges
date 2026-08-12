@@ -97,6 +97,52 @@ public class ChallengerUiCssTest {
     }
 
     @Test
+    void exactTextExamplesAndRequestEditorsDisableProgrammingLigatures() throws IOException {
+        String contentCss = contentCss();
+        String themeCss = themeExperimentsCss();
+        String onlineCss = onlineSwaggerThemeCss();
+
+        String themedCodeRule =
+                ruleBody(
+                        themeCss,
+                        "html[data-theme] pre,\n"
+                                + "html[data-theme] code,\n"
+                                + "html[data-theme] kbd,\n"
+                                + "html[data-theme] samp,\n"
+                                + "html[data-theme] .endpoint");
+        Assertions.assertTrue(themedCodeRule.contains("font-variant-ligatures: none"));
+        Assertions.assertTrue(
+                themedCodeRule.contains("font-feature-settings: \"liga\" 0, \"calt\" 0"));
+
+        String liveRequestRule =
+                ruleBody(
+                        contentCss,
+                        ".sim-live-locked-fields,\n"
+                                + ".sim-live-edit-query,\n"
+                                + ".sim-live-edit-headers,\n"
+                                + ".sim-live-edit-body,\n"
+                                + ".sim-live-command,\n"
+                                + ".sim-live-request-body,\n"
+                                + ".sim-live-response-panel,\n"
+                                + ".openapi-converter-output");
+        Assertions.assertTrue(liveRequestRule.contains("font-variant-ligatures: none"));
+        Assertions.assertTrue(
+                liveRequestRule.contains("font-feature-settings: \"liga\" 0, \"calt\" 0"));
+
+        String onlineToolRule =
+                ruleBody(
+                        onlineCss,
+                        "html[data-theme] .online-swagger-client :is(pre, code, textarea),\n"
+                                + "html[data-theme] .online-openapi-ui-client :is(pre, code, textarea),\n"
+                                + "html[data-theme] .online-openapi-ui-render :is(pre, code, textarea, .font-mono),\n"
+                                + "html[data-theme] .scalar-app-exit :is(pre, code, textarea, .font-mono)");
+        Assertions.assertTrue(onlineToolRule.contains("font-variant-ligatures: none !important"));
+        Assertions.assertTrue(
+                onlineToolRule.contains(
+                        "font-feature-settings: \"liga\" 0, \"calt\" 0 !important"));
+    }
+
+    @Test
     void wideToolPagesUseNormalChromeClosableNavAndWideEmbedOnly() throws IOException {
         String contentCss = contentCss();
         String themeCss = themeExperimentsCss();
@@ -180,6 +226,10 @@ public class ChallengerUiCssTest {
                         "html[data-theme] body.wide-tool-page .wide-tool-client-breakout");
         Assertions.assertTrue(
                 breakoutRule.contains("inline-size: calc(100vw - clamp(1rem, 4vw, 3rem))"));
+        Assertions.assertTrue(
+                breakoutRule.contains(
+                        "margin-inline-start: calc(50% - 50vw + clamp(0.5rem, 2vw, 1.5rem))"));
+        Assertions.assertTrue(breakoutRule.contains("transform: none"));
 
         String wideToolTocRule = ruleBody(themeCss, "html[data-theme] body.wide-tool-page #toc");
         Assertions.assertTrue(wideToolTocRule.contains("float: none"));
@@ -216,6 +266,30 @@ public class ChallengerUiCssTest {
         Assertions.assertFalse(wideRenderRule.contains("overflow: auto"));
         Assertions.assertTrue(onlineCss.contains("body.wide-tool-page .scalar-app-exit"));
         Assertions.assertTrue(onlineCss.contains("width: auto !important"));
+        String scalarExitRule =
+                ruleBody(onlineCss, "html[data-theme] body.wide-tool-page .scalar-app-exit");
+        Assertions.assertTrue(scalarExitRule.contains("top: 0 !important"));
+        Assertions.assertTrue(scalarExitRule.contains("bottom: 0 !important"));
+        Assertions.assertTrue(scalarExitRule.contains("height: auto !important"));
+        String scalarOpenContainerRule =
+                ruleBody(
+                        onlineCss,
+                        "html[data-theme] body.wide-tool-page #online-scalar-ui"
+                                + " .scalar-container.scalar-client--open");
+        Assertions.assertTrue(scalarOpenContainerRule.contains("position: fixed !important"));
+        Assertions.assertTrue(scalarOpenContainerRule.contains("inset: 0.75rem !important"));
+        Assertions.assertTrue(scalarOpenContainerRule.contains("overflow-y: auto !important"));
+        Assertions.assertTrue(
+                scalarOpenContainerRule.contains("max-height: calc(100dvh - 1.5rem)"));
+        Assertions.assertTrue(scalarOpenContainerRule.contains("z-index: 10020 !important"));
+        String scalarOpenDialogRule =
+                ruleBody(
+                        onlineCss,
+                        "html[data-theme] body.wide-tool-page #online-scalar-ui"
+                                + " .scalar-container.scalar-client--open"
+                                + " .scalar-app-layout.scalar-client[role=\"dialog\"]");
+        Assertions.assertTrue(scalarOpenDialogRule.contains("max-width: min(92rem, 100%)"));
+        Assertions.assertTrue(scalarOpenDialogRule.contains("overflow: visible !important"));
         String scalarRenderedMainRule =
                 ruleBody(
                         onlineCss,
@@ -297,6 +371,8 @@ public class ChallengerUiCssTest {
         Assertions.assertTrue(onlineCss.contains("#online-redoc-ui .redoc-json code"));
         Assertions.assertTrue(onlineCss.contains("#online-redoc-ui .redoc-json ul"));
         Assertions.assertTrue(onlineCss.contains("overflow-x: auto !important"));
+        Assertions.assertTrue(onlineCss.contains("max-height: 100dvh !important"));
+        Assertions.assertTrue(onlineCss.contains("flex-basis: 100% !important"));
         Assertions.assertTrue(
                 onlineCss.contains(
                         "html[data-theme] body.wide-tool-page .online-openapi-ui-wide-embed #online-swagger-ui"));

@@ -240,6 +240,19 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             }
         }
 
+        if (request.getVerb() == HttpApiRequest.VERB.QUERY
+                && request.getPath().contentEquals("todos")
+                && contentTypeParser.isJsonPath()
+                && queryJsonPathBodyTargetsDoneStatusTrue(request)
+                && response.getStatusCode() == 200) {
+            List<JsonObject> responseTodos = todosFromJsonResponse(response);
+            if (hasDoneAndNotDoneTodos(challenger)
+                    && !responseTodos.isEmpty()
+                    && allDoneStatusTrue(responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED);
+            }
+        }
+
         // CREATE
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().matches("todos")
@@ -972,6 +985,19 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         return true;
     }
 
+    private boolean allDoneStatusTrue(final List<JsonObject> todos) {
+        for (JsonObject todo : todos) {
+            try {
+                if (!todo.get("doneStatus").getAsBoolean()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private int expectedPaginatedTodoCount(
             final ChallengerAuthData challenger, final int limit, final int offset) {
         return expectedPageSize(countTodos(challenger), limit, offset);
@@ -1077,6 +1103,16 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             }
         }
         return false;
+    }
+
+    private boolean queryJsonPathBodyTargetsDoneStatusTrue(final HttpApiRequest request) {
+        final String body = request.getBody();
+        if (body == null) {
+            return false;
+        }
+
+        final String normalized = body.toLowerCase();
+        return normalized.contains("donestatus") && normalized.contains("true");
     }
 
     private EntityInstance findTodoByIdentifier(

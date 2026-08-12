@@ -2,7 +2,7 @@
 title: HTTP Methods for REST API Testing
 seo_title: HTTP Methods for REST API Testing: GET, POST, PUT, PATCH, DELETE
 description: Basic HTTP Verbs and Methods tutorial what they do and how to use them.
-lastmod: 2026-08-04
+lastmod: 2026-08-11
 seo_description: Learn HTTP Verbs with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -188,7 +188,7 @@ Accept: */*
 - [QUERY](https://www.rfc-editor.org/rfc/rfc10008.html) - safely retrieve data using query content in the request body
 - QUERY is intended for safe, read-only requests where the query content is too large, complex, or structured for a URI query string
 - A server can advertise supported QUERY request content types with `Accept-Query`
-- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded`
+- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded` and `Content-Type: application/jsonpath`
 
 `QUERY` is newer and less widely supported than the traditional verbs.
 
@@ -206,7 +206,7 @@ Because `QUERY` is not as widely supported as `GET` and `POST`, always check whe
 
 ---
 
-### HTTP QUERY Verb Example
+### HTTP QUERY Form Body Example
 
 ~~~~~~~~
 curl -X QUERY {{<ORIGIN_URL>}}/todos ^
@@ -228,12 +228,90 @@ doneStatus=true
 
 ---
 
+### HTTP QUERY JSONPath Body
+
+`QUERY` can also use a structured query language in the request body. API Challenges supports JSONPath query bodies using:
+
+~~~~~~~~
+Content-Type: application/jsonpath
+~~~~~~~~
+
+JSONPath is defined by [RFC 9535](https://datatracker.ietf.org/doc/html/rfc9535). The standard describes JSONPath as a string syntax for selecting and extracting values from a JSON value. In practice, it gives us a compact way to describe which parts of a JSON document we want to select.
+
+JSONPath expressions usually start at the root with `$`. For API Challenges, `QUERY /todos` evaluates the expression against a JSON document shaped like the normal collection response:
+
+```json
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "learn QUERY",
+      "doneStatus": true,
+      "description": "try JSONPath"
+    }
+  ]
+}
+```
+
+To return only completed todos, send:
+
+~~~~~~~~
+$.todos[?(@.doneStatus == true)]
+~~~~~~~~
+
+That expression means:
+
+- `$` starts at the root of the JSON document.
+- `.todos` selects the `todos` array.
+- `[?(...)]` filters the array.
+- `@` refers to each todo being tested by the filter.
+- `@.doneStatus == true` keeps only todos whose `doneStatus` value is `true`.
+
+JSONPath `QUERY` requests should select complete resource objects from the collection. For example, `$.todos[?(@.doneStatus == true)]` is valid because it selects todo objects. A projection such as `$.todos[*].title` selects only field values, not complete todos, so API Challenges rejects it as unprocessable.
+
+---
+
+### HTTP QUERY JSONPath Example
+
+~~~~~~~~
+curl -X QUERY {{<ORIGIN_URL>}}/todos ^
+-H "Content-Type: application/jsonpath" ^
+-H "Accept: application/json" ^
+-d "$.todos[?(@.doneStatus == true)]"
+~~~~~~~~
+
+~~~~~~~~
+QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
+User-Agent: curl/8.0.0
+Host: localhost:4567
+Content-Type: application/jsonpath
+Accept: application/json
+Content-Length: 31
+
+$.todos[?(@.doneStatus == true)]
+~~~~~~~~
+
+Useful JSONPath expressions to experiment with:
+
+| **Goal** | **JSONPath Body** |
+|----------|-------------------|
+| Return every todo | `$.todos` |
+| Return done todos | `$.todos[?(@.doneStatus == true)]` |
+| Return not-done todos | `$.todos[?(@.doneStatus == false)]` |
+| Return todos with a specific title | `$.todos[?(@.title == 'learn QUERY')]` |
+| Return todos with non-empty descriptions | `$.todos[?(@.description != '')]` |
+
+JSONPath is useful with `QUERY` because the URL can stay focused on the resource collection, while the request body carries a more expressive read-only selection.
+
+---
+
 ### Common HTTP Status codes in response to a QUERY
 
 - **200** - OK, returned the matching representation
 - **400** - invalid query content
 - **405** - method not allowed for this endpoint
 - **415** - unsupported query content type
+- **422** - query content was valid syntax but selected data that cannot be returned as complete resources
 
 
 ---

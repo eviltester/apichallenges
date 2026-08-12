@@ -2,7 +2,7 @@
 title: API Challenges Solution Index
 seo_title: Solution Index and Walkthroughs | API Challenges
 description: A list of all the solutions for the API Challenges. Try them yourself, but if you get stuck, we have instructions and solution videos.
-lastmod: 2026-07-31
+lastmod: 2026-08-11
 seo_description: Explore API Challenges Solution with practical guidance and actionable next steps designed to improve API testing skills through hands-on practice.
 showads: true
 ---
@@ -99,6 +99,7 @@ If a solution exposes a gap in your understanding, step back to the supporting m
 ## QUERY Challenges
 
 - [QUERY /todos (200)](/apichallenges/solutions/query/query-todos-200)
+- [QUERY /todos (200) JSONPath](/apichallenges/solutions/query/query-todos-200-jsonpath)
 
 ## PATCH Challenges
 

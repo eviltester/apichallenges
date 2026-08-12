@@ -2,7 +2,7 @@
 title: Simple API OpenAPI JSON Files
 seo_title: Simple API OpenAPI JSON Downloads | API Practice Mode
 description: Download the OpenAPI JSON files for the Simple API.
-lastmod: 2026-08-10
+lastmod: 2026-08-11
 seo_description: Use Simple API OpenAPI JSON to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced.
 showads: true
 ---
@@ -61,6 +61,20 @@ Accept: application/json
 
 type=book
 ```
+
+The same endpoint also supports JSONPath QUERY bodies:
+
+```http
+QUERY /simpleapi/items HTTP/1.1
+Content-Type: application/jsonpath
+Accept: application/json
+
+$.items[?(@.type == 'book')]
+```
+
+Useful JSONPath experiments include `$.items`, `$.items[?(@.type == 'cd')]`, `$.items[?(@.numberinstock == 0)]`, and `$.items[?(@.type == 'book' && @.numberinstock > 0)]`.
+
+Read [HTTP Methods and Verbs](/reference/http-verbs#http-query-verb) for more about `QUERY` request bodies and JSONPath.
 
 ## Normal OpenAPI File Explained
 

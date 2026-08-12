@@ -1569,6 +1569,31 @@ public abstract class ChallengeCompleteTest {
     }
 
     @Test
+    public void canQueryJsonPathFilterTodoPass() {
+
+        Map<String, String> headers = getXChallengerHeader(challenger.getXChallenger());
+        headers.put("Content-Type", "application/jsonpath");
+        headers.put("Accept", "application/json");
+
+        final EntityDefinition todos =
+                ChallengeMain.getChallenger()
+                        .getThingifier()
+                        .getERmodel()
+                        .getSchema()
+                        .getDefinitionWithSingularOrPluralNamed("todo");
+
+        createTodo(todos, "done jsonpath query fixture", "true");
+        createTodo(todos, "not done jsonpath query fixture", "false");
+
+        final HttpResponseDetails response =
+                http.send("/todos", "QUERY", headers, "$.todos[?(@.doneStatus == true)]");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED));
+    }
+
+    @Test
     public void canPatchTodosPartial200AmendPass() {
 
         final EntityDefinition todos =

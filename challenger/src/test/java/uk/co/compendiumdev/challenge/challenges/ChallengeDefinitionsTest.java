@@ -98,6 +98,38 @@ public class ChallengeDefinitionsTest {
         }
     }
 
+    @Test
+    void queryJsonPathChallengeIsInQuerySectionAfterFormEncodedQueryChallenge() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        ChallengeDefinitions definitions = new ChallengeDefinitions(config);
+
+        List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
+        ChallengeDefinitionData jsonPathChallenge =
+                challengeNamed(challenges, "QUERY /todos (200) JSONPath");
+
+        Assertions.assertEquals(
+                CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED,
+                definitions.getChallenge("QUERY /todos (200) JSONPath"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "QUERY /todos (200)")
+                        < indexOfChallenge(challenges, "QUERY /todos (200) JSONPath"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "QUERY /todos (200) JSONPath")
+                        < indexOfChallenge(challenges, "PATCH /todos/{id} (200) partial"));
+        Assertions.assertTrue(jsonPathChallenge.description.contains("JSONPath query body"));
+        Assertions.assertTrue(
+                jsonPathChallenge.hints.stream()
+                        .anyMatch(hint -> hint.hintText.contains("application/jsonpath")));
+        Assertions.assertTrue(
+                jsonPathChallenge.solutions.stream()
+                        .anyMatch(
+                                solution ->
+                                        solution.linkData.equals(
+                                                "/apichallenges/solutions/query/query-todos-200-jsonpath")));
+    }
+
     private void assertAllChallengesHaveHints(final ChallengerConfig config) {
         Collection<ChallengeDefinitionData> challenges =
                 new ChallengeDefinitions(config).getChallenges();

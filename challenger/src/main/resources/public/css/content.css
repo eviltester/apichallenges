@@ -131,8 +131,8 @@ body.wide-tool-page .main-text-content{
 
 body.wide-tool-page .wide-tool-client-breakout{
     box-sizing: border-box;
-    margin-inline-start: 50%;
-    transform: translateX(-50%);
+    margin-inline-start: calc(50% - 50vw + 0.5rem);
+    transform: none;
     width: calc(100vw - 1rem);
 }
 
@@ -1180,6 +1180,18 @@ a.next-challenge-cta-link:hover {
 
 .sim-live-edit-query {
     min-height: 3rem;
+}
+
+.sim-live-locked-fields,
+.sim-live-edit-query,
+.sim-live-edit-headers,
+.sim-live-edit-body,
+.sim-live-command,
+.sim-live-request-body,
+.sim-live-response-panel,
+.openapi-converter-output {
+    font-feature-settings: "liga" 0, "calt" 0;
+    font-variant-ligatures: none;
 }
 
 .sim-live-edit-actions {
