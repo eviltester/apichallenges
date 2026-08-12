@@ -342,6 +342,10 @@ body.wide-tool-page .wide-tool-client-breakout{
         width: 100%;
         background: #efefef;
     }
+    .sub-menu:has(> li:hover) > li.dropped:not(:hover) > ul,
+    .sub-menu:has(> li:focus-within) > li.dropped:not(:focus-within) > ul {
+        display: none;
+    }
 }
 
 .sub-menu li ul li:hover a { color: #000; }
@@ -507,7 +511,34 @@ a.side-toc-syllabus-title {
 }
 
 /* breadcrumb */
-div.breadcrumb blockquote {
+nav.breadcrumb {
+    margin: 1rem 0;
+}
+
+nav.breadcrumb ol {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.breadcrumb li {
+    align-items: center;
+    display: inline-flex;
+    min-width: 0;
+}
+
+nav.breadcrumb li + li::before {
+    content: ">";
+    margin-right: 0.35rem;
+    opacity: 0.72;
+}
+
+nav.breadcrumb a {
+    font-weight: 700;
 }
 
 /* main-text-content formatting */

@@ -14,18 +14,18 @@ showads: true
 
 # Online Open API Embedded Clients
 
-The default Open API Client for embedding in your application seems to be [Swagger](/reference/open-api-uis/swagger). It has a functional interface that works well as a responsive client. But it isn't a particularly user friendly interface and can be hard to navigate with a lot of endpoints.
+The default Open API Client for embedding in your application seems to be [Swagger](/tools/online-clients/swagger/about). It has a functional interface that works well as a responsive client. But it isn't a particularly user friendly interface and can be hard to navigate with a lot of endpoints.
 
 Other tools do exist, although you might not be aware of them.
 
 We've collated a list of tools which act as embedded OpenAPI Clients and created an overview review of each:
 
-- [Swagger](/reference/open-api-uis/swagger)
-- [Open API Explorer](/reference/open-api-uis/openapi-explorer)
-- [Scalar](/reference/open-api-uis/scalar)
-- [Stoplight Elements](/reference/open-api-uis/stoplight)
-- [Zudoku](reference/open-api-uis/zudoku)
-- [Redoc](/reference/open-api-uis/redoc)
+- [Swagger](/tools/online-clients/swagger/about)
+- [Open API Explorer](/tools/online-clients/openapi-explorer/about)
+- [Scalar](/tools/online-clients/scalar/about)
+- [Stoplight Elements](/tools/online-clients/stoplight/about)
+- [Zudoku](/tools/online-clients/zudoku/about)
+- [Redoc](/tools/online-clients/redoc/about)
 
 Redoc is an outlier in the list because the Open Source version is a 'viewer' only and doesn't allow making requests, but since it is frequently supported by API development frameworks, we've added it to the list.
 

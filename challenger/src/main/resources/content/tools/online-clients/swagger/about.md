@@ -1,13 +1,13 @@
 ---
-title: Swagger UI and Tools for API Testing
-seo_title: Swagger UI for API Testing: OpenAPI Docs, Requests and Tools
-description: An introduction to Swagger tooling, Swagger UI, and Swagger Editor for working with OpenAPI files.
-lastmod: 2026-08-11
+title: About Swagger UI
+seo_title: About Swagger UI for API Testing: OpenAPI Docs and Requests
+description: A review-style introduction to Swagger tooling, Swagger UI, and Swagger Editor for working with OpenAPI files.
+lastmod: 2026-08-12
 seo_description: Learn how Swagger UI and Swagger Editor use OpenAPI files to render browser-based API documentation and request forms.
 showads: true
 ---
 
-# Swagger UI and Tools for API Testing
+# About Swagger UI
 
 Swagger is a family of tools that work with OpenAPI files.
 
@@ -17,6 +17,8 @@ The most common Swagger tools are:
 
 - Swagger UI, a browser interface for exploring and trying an API
 - Swagger Editor, an editor for viewing and changing an OpenAPI file
+
+Use our [Online Swagger UI](/tools/online-clients/swagger) page when you want to load an OpenAPI file from a URL or from disk and try it directly on this site.
 
 ## Swagger UI
 
@@ -103,9 +105,11 @@ Exercise:
 - with the [less-validating Simple API OpenAPI file](/simpleapi/docs/openapi.json?permissive)
 - notice how the more permissive file makes it easier to send exploratory or negative test requests
 
-## Related OpenAPI Page
+## Related OpenAPI Pages
 
 Read [OpenAPI as a specification](/reference/openapi) when you want to understand the standard file format that Swagger tools consume.
+
+Compare Swagger UI with [OpenAPI Explorer](/tools/online-clients/openapi-explorer/about), [Scalar](/tools/online-clients/scalar/about), [Stoplight Elements](/tools/online-clients/stoplight/about), [Zudoku](/tools/online-clients/zudoku/about), and [Redoc](/tools/online-clients/redoc/about).
 
 ## Try Swagger With Our APIs
 

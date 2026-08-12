@@ -29,7 +29,7 @@ Useful REST API reference pages:
 - [HTTP Basics](/reference/http-basics)
 - [HTTP Methods and Verbs](/reference/http-verbs)
 - [OpenAPI](/reference/openapi)
-- [Swagger UI](/reference/open-api-uis/swagger)
+- [Swagger UI](/tools/online-clients/swagger/about)
 - [API Testing Concepts and Coverage](/reference/testing-apis)
 
 ---
@@ -343,7 +343,7 @@ OpenAPI files can be used in REST Client tools to create collections of requests
 
 OpenAPI is useful, but it is still documentation. The running API is the source of behaviour you experience when you send requests.
 
-Learn more about REST API documentation in [OpenAPI](/reference/openapi) and [Swagger UI](/reference/open-api-uis/swagger).
+Learn more about REST API documentation in [OpenAPI](/reference/openapi) and [Swagger UI](/tools/online-clients/swagger/about).
 
 ---
 
@@ -451,7 +451,7 @@ Use the reference pages when one part of the tutorial needs more depth:
 - [HTTP Methods and Verbs](/reference/http-verbs)
 - [How to Test REST APIs](/tutorials/rest-api-testing)
 - [OpenAPI](/reference/openapi)
-- [Swagger UI](/reference/open-api-uis/swagger)
+- [Swagger UI](/tools/online-clients/swagger/about)
 
 When you want more hands-on repetition, move from the guided examples here into the practice areas:
 

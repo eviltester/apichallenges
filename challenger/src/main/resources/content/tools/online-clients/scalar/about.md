@@ -1,19 +1,21 @@
 ---
-title: Scalar OpenAPI UI
-seo_title: Scalar OpenAPI UI for API Reference and API Client Docs
-description: An introduction to Scalar as an OpenAPI UI, API reference renderer, and API client.
-lastmod: 2026-08-11
+title: About Scalar
+seo_title: About Scalar OpenAPI UI for API Reference and API Client Docs
+description: A review-style introduction to Scalar as an OpenAPI UI, API reference renderer, and API client.
+lastmod: 2026-08-12
 seo_description: Learn how Scalar supports OpenAPI and Swagger through API reference pages, a REST API client, hosted documentation, and related API tooling.
 showads: true
 ---
 
-# Scalar OpenAPI UI
+# About Scalar
 
 [Scalar](https://github.com/scalar/scalar) is an open source API platform with OpenAPI support.
 
-The project consists of the embedded API client and documentation viewer and a standalone API client, hosted documentation options, and other tools around OpenAPI documents.
+The project consists of the embedded API client and documentation viewer, a standalone API client, hosted documentation options, and other tools around OpenAPI documents.
 
-We are demonstrating the Scalar 'Api Reference' which is the embedded client and documentation viewer.
+We are demonstrating the Scalar API Reference, which is the embedded client and documentation viewer.
+
+Use our [Online Scalar OpenAPI UI](/tools/online-clients/scalar) page when you want to load an OpenAPI file from a URL or from disk and see it rendered on this site.
 
 ## What Scalar Shows
 
@@ -23,25 +25,24 @@ It is useful when you want a modern API reference experience and may also want r
 
 It adopts a side-bar endpoint list for easy navigation and then the main request specification on the right.
 
-There is a `ctrl+k` shortcut key which shows a popup list of all endpoints, this might be useful on smaller screens when the side-bar disappears - this turns into an 'introduction' hamburger menu on smaller screens to make eaiser navigation on phones and tablets.
+There is a `ctrl+k` shortcut key which shows a popup list of all endpoints. This can be useful on smaller screens when the side-bar disappears; it turns into an introduction menu on smaller screens to make navigation easier on phones and tablets.
 
-The Send Request feature uses a popop client that allows you amend headers and add additional query parameters that are not part of the OpenAPI specification file. Making the Scalar UI more suited for complex evaluation or to support more adhoc testing of the API.
-
+The Send Request feature uses a popup client that lets you amend headers and add additional query parameters that are not part of the OpenAPI specification file. This can make the Scalar UI more suited for complex evaluation or more ad hoc testing of the API.
 
 ## When To Consider Scalar
 
 Scalar is worth evaluating when you want:
 
-- the multi-language/multi-framework support,
-- more fully featured send request editing,
+- multi-language and multi-framework support
+- more fully featured send request editing
 - responsive support for smaller screens
-- side-bar for navigation
+- side-bar navigation
 
 If you use the interactive API console from a browser page, remember that browser security rules can affect whether requests are sent successfully. Use a REST client or proxy when you need more control over request construction and traffic evidence.
 
 ## Related OpenAPI Pages
 
-Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare it with [Swagger UI](/reference/open-api-uis/swagger), [OpenAPI Explorer](/reference/open-api-uis/openapi-explorer), [Stoplight Elements](/reference/open-api-uis/stoplight), [Zudoku](/reference/open-api-uis/zudoku), and [Redoc](/reference/open-api-uis/redoc).
+Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare Scalar with [Swagger UI](/tools/online-clients/swagger/about), [OpenAPI Explorer](/tools/online-clients/openapi-explorer/about), [Stoplight Elements](/tools/online-clients/stoplight/about), [Zudoku](/tools/online-clients/zudoku/about), and [Redoc](/tools/online-clients/redoc/about).
 
 ## Try Scalar With Our APIs
 

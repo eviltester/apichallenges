@@ -95,11 +95,11 @@ public class BlogContentManager {
                         canonicalUrl));
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; page ")
-                .append(pageNumber)
-                .append("</blockquote>");
-        html.append("</div>\n\n");
+        html.append(
+                BreadcrumbHtml.render(
+                        List.of(
+                                BreadcrumbHtml.link("Blog", "/blog"),
+                                BreadcrumbHtml.current("page " + pageNumber))));
         html.append("<div class=\"main-text-content blog-index-page\">");
         html.append("<h1>API Challenges Blog - Page ").append(pageNumber).append("</h1>");
         html.append("<p>Older posts from the API Challenges blog archive.</p>");
@@ -125,9 +125,11 @@ public class BlogContentManager {
                         canonicalUrl));
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; all posts index</blockquote>");
-        html.append("</div>\n\n");
+        html.append(
+                BreadcrumbHtml.render(
+                        List.of(
+                                BreadcrumbHtml.link("Blog", "/blog"),
+                                BreadcrumbHtml.current("all posts index"))));
         html.append("<div class=\"main-text-content blog-all-posts-index\">");
         html.append("<h1>All Blog Posts</h1>");
         html.append("<p>Every API Challenges blog post, listed newest first.</p>");
@@ -163,9 +165,11 @@ public class BlogContentManager {
                         canonicalUrl));
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; categories</blockquote>");
-        html.append("</div>\n\n");
+        html.append(
+                BreadcrumbHtml.render(
+                        List.of(
+                                BreadcrumbHtml.link("Blog", "/blog"),
+                                BreadcrumbHtml.current("categories"))));
         html.append("<div class=\"main-text-content blog-category-index\">");
         html.append("<h1>Blog Categories</h1>");
         html.append("<p>Use these categories to find API Challenges blog posts by topic.</p>");
@@ -221,12 +225,12 @@ public class BlogContentManager {
                         canonicalUrl));
         html.append(guiManagement.getMenuAsHTML());
         html.append(guiManagement.getStartOfMainContentMarker());
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote><a href=\"/blog\">Blog</a> &gt; ")
-                .append("<a href=\"/blog/categories\">categories</a> &gt; ")
-                .append(escapeHtmlAttribute(category.get()))
-                .append("</blockquote>");
-        html.append("</div>\n\n");
+        html.append(
+                BreadcrumbHtml.render(
+                        List.of(
+                                BreadcrumbHtml.link("Blog", "/blog"),
+                                BreadcrumbHtml.link("categories", "/blog/categories"),
+                                BreadcrumbHtml.current(category.get()))));
         html.append("<div class=\"main-text-content blog-category-page\">");
         html.append("<h1>").append(escapeHtmlAttribute(category.get())).append(" Blog Posts");
         if (pageNumber > 1) {

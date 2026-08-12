@@ -40,7 +40,7 @@ Use these when you want to revisit a specific concept in more detail:
 - [REST API Basics](/reference/rest-api-basics)
 - [API Testing Concepts and Coverage](/reference/testing-apis)
 - [OpenAPI](/reference/openapi)
-- [Swagger UI](/reference/open-api-uis/swagger)
+- [Swagger UI](/tools/online-clients/swagger/about)
 - [Summary](/reference/summary)
 
 ## Practise with APIs

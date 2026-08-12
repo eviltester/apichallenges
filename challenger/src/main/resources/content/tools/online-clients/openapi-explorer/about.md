@@ -1,17 +1,19 @@
 ---
-title: OpenAPI Explorer UI
-seo_title: OpenAPI Explorer UI for OpenAPI Documentation
-description: An introduction to OpenAPI Explorer as an OpenAPI documentation web component.
-lastmod: 2026-08-11
+title: About OpenAPI Explorer
+seo_title: About OpenAPI Explorer UI for OpenAPI Documentation
+description: A review-style introduction to OpenAPI Explorer as an OpenAPI documentation web component.
+lastmod: 2026-08-12
 seo_description: Learn how OpenAPI Explorer uses a web component to render OpenAPI documentation, show resources and models, and support browser API calls.
 showads: true
 ---
 
-# OpenAPI Explorer UI
+# About OpenAPI Explorer
 
 [OpenAPI Explorer](https://github.com/Authress-Engineering/openapi-explorer) is an open source web component for viewing OpenAPI specifications in a browser.
 
 It is designed to be embedded in a site or application as a custom element. The project also describes automatic integration options for React and Vue.
+
+Use our [Online OpenAPI Explorer](/tools/online-clients/openapi-explorer) page when you want to load an OpenAPI file from a URL or from disk and see it rendered on this site.
 
 ## What OpenAPI Explorer Shows
 
@@ -32,7 +34,7 @@ Because it is a browser UI, API calls made from the page are still affected by b
 
 ## Related OpenAPI Pages
 
-Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare it with [Swagger UI](/reference/open-api-uis/swagger), [Scalar](/reference/open-api-uis/scalar), [Stoplight Elements](/reference/open-api-uis/stoplight), [Zudoku](/reference/open-api-uis/zudoku), and [Redoc](/reference/open-api-uis/redoc).
+Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare OpenAPI Explorer with [Swagger UI](/tools/online-clients/swagger/about), [Scalar](/tools/online-clients/scalar/about), [Stoplight Elements](/tools/online-clients/stoplight/about), [Zudoku](/tools/online-clients/zudoku/about), and [Redoc](/tools/online-clients/redoc/about).
 
 ## Try OpenAPI Explorer UI With Our APIs
 

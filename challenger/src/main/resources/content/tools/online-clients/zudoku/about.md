@@ -1,17 +1,19 @@
 ---
-title: Zudoku OpenAPI UI
-seo_title: Zudoku OpenAPI UI for Interactive API Documentation
-description: An introduction to Zudoku as an OpenAPI powered API documentation framework.
-lastmod: 2026-08-11
+title: About Zudoku
+seo_title: About Zudoku OpenAPI UI for Interactive API Documentation
+description: A review-style introduction to Zudoku as an OpenAPI powered API documentation framework.
+lastmod: 2026-08-12
 seo_description: Learn how Zudoku uses OpenAPI documents to build customizable developer documentation, API references, and self-hosted developer portals.
 showads: true
 ---
 
-# Zudoku OpenAPI UI
+# About Zudoku
 
 [Zudoku](https://github.com/zuplo/zudoku) is an open source framework for building API documentation around OpenAPI documents.
 
 It is created by Zuplo and is designed for customizable developer experiences, API references, and developer portals.
+
+Use our [Online Zudoku OpenAPI UI](/tools/online-clients/zudoku) page when you want to load an OpenAPI file from a URL or from disk and preview it on this site.
 
 ## What Zudoku Shows
 
@@ -21,27 +23,27 @@ It supports use cases such as standalone documentation websites, interactive API
 
 Zudoku uses a side-bar to show the endpoints, with the main request documented on the right. The Send Request mechanism is a popup client which allows header and parameter amendment to go beyond the confines of the OpenAPI specification supplied by the API.
 
-Zudoku supports multiple programming language examples but the framework for each language is not configurable so not as extensive language support ass [Scalar](/reference/open-api-uis/scalar) or [Stoplight](/reference/open-api-uis/stoplight)
+Zudoku supports multiple programming language examples, but the framework for each language is not configurable, so the language support is not as extensive as [Scalar](/tools/online-clients/scalar/about) or [Stoplight Elements](/tools/online-clients/stoplight/about).
 
-Zudoku uses a slide in side-bar for endpoints on smaller screens which works, but is surprising at first sight.
+Zudoku uses a slide-in side-bar for endpoints on smaller screens, which works, but can be surprising at first sight.
 
-Zudoku is normally designed to be used as its own docs site or app, often with a project/build setup. In that mode, it owns the route structure, theme, navigation, and React app directly. On this site we are embedding it in a non-React environment so we are having to use an iframe.
+Zudoku is normally designed to be used as its own docs site or app, often with a project and build setup. In that mode, it owns the route structure, theme, navigation, and React app directly. On this site we are embedding it in a non-React environment, so the showcase page uses an iframe.
 
 ## When To Consider Zudoku
 
-Zudoku is worth evaluating when you want a flexible embedded client but don't want the user to be overloaded with frameworks and just wants to see examples in their familiar coding language.
+Zudoku is worth evaluating when you want a flexible embedded client, but do not want the user overloaded with frameworks and mainly want to show examples in their familiar coding language.
 
-- the multi-language (non-configurable framework) support,
-- flexible and advanced sending interface,
-- responsive client,
-- side-bar for navigation,
-- you want Zudoku to 'own' the docs - because it is a framework more than an embedded client widget
+- multi-language examples with a fixed framework choice
+- a flexible and advanced sending interface
+- a responsive client
+- side-bar navigation
+- a documentation framework that can own the docs site rather than a small embedded widget
 
 For API testing, treat any browser request console as a convenient starter tool and still verify important traffic with a REST client or proxy.
 
 ## Related OpenAPI Pages
 
-Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare it with [Swagger UI](/reference/open-api-uis/swagger), [OpenAPI Explorer](/reference/open-api-uis/openapi-explorer), [Scalar](/reference/open-api-uis/scalar), [Stoplight Elements](/reference/open-api-uis/stoplight), and [Redoc](/reference/open-api-uis/redoc).
+Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare Zudoku with [Swagger UI](/tools/online-clients/swagger/about), [OpenAPI Explorer](/tools/online-clients/openapi-explorer/about), [Scalar](/tools/online-clients/scalar/about), [Stoplight Elements](/tools/online-clients/stoplight/about), and [Redoc](/tools/online-clients/redoc/about).
 
 ## Try Zudoku With Our APIs
 

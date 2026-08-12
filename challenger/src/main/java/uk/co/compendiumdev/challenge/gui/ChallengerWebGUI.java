@@ -137,13 +137,12 @@ public class ChallengerWebGUI {
 
                             <li id='learning-root-menu'><a href="/learning">Learning Zone</a>
                                 <ul>
-                                    <li><a href="/tutorials/rest-api-tutorial">REST API Tutorial</a></li>
-                                    <li><a href="/reference/http-basics">HTTP Basics</a></li>
-                                    <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
-                                    <li><a href="/reference/http-verbs">HTTP Methods</a></li>
-                                    <li><a href="/reference/http-basics#toc7">HTTP Status Codes</a></li>
-                                    <li><a href="/reference/openapi">OpenAPI</a></li>
-                                    <li><a href="/tutorials/rest-api-testing">How to Test REST APIs</a></li>
+                                    <li><a href="/tutorials/rest-api-tutorial-path">Tutorial Path</a></li>
+                                    <li><a href="/reference">Reference</a></li>
+                                    <li><a href="/tutorials">Interactive Tutorials</a></li>
+                                    <li><a href="/practice-modes">Practice Modes</a></li>
+                                    <li><a href="/tools">Tools</a></li>
+                                    <li><a href="/practice-sites">Practice Sites</a></li>
                                 </ul>
                             </li>
 
@@ -355,10 +354,29 @@ public class ChallengerWebGUI {
         permanentRedirect("/tutorials/testing-apis/", "/reference/testing-apis");
         permanentRedirect("/tutorials/openapi", "/reference/openapi");
         permanentRedirect("/tutorials/openapi/", "/reference/openapi");
-        permanentRedirect("/tutorials/swagger", "/reference/open-api-uis/swagger");
-        permanentRedirect("/tutorials/swagger/", "/reference/open-api-uis/swagger");
-        permanentRedirect("/reference/swagger", "/reference/open-api-uis/swagger");
-        permanentRedirect("/reference/swagger/", "/reference/open-api-uis/swagger");
+        permanentRedirect("/tutorials/swagger", "/tools/online-clients/swagger/about");
+        permanentRedirect("/tutorials/swagger/", "/tools/online-clients/swagger/about");
+        permanentRedirect("/reference/swagger", "/tools/online-clients/swagger/about");
+        permanentRedirect("/reference/swagger/", "/tools/online-clients/swagger/about");
+        permanentRedirect("/reference/open-api-uis/swagger", "/tools/online-clients/swagger/about");
+        permanentRedirect(
+                "/reference/open-api-uis/swagger/", "/tools/online-clients/swagger/about");
+        permanentRedirect(
+                "/reference/open-api-uis/openapi-explorer",
+                "/tools/online-clients/openapi-explorer/about");
+        permanentRedirect(
+                "/reference/open-api-uis/openapi-explorer/",
+                "/tools/online-clients/openapi-explorer/about");
+        permanentRedirect("/reference/open-api-uis/scalar", "/tools/online-clients/scalar/about");
+        permanentRedirect("/reference/open-api-uis/scalar/", "/tools/online-clients/scalar/about");
+        permanentRedirect(
+                "/reference/open-api-uis/stoplight", "/tools/online-clients/stoplight/about");
+        permanentRedirect(
+                "/reference/open-api-uis/stoplight/", "/tools/online-clients/stoplight/about");
+        permanentRedirect("/reference/open-api-uis/zudoku", "/tools/online-clients/zudoku/about");
+        permanentRedirect("/reference/open-api-uis/zudoku/", "/tools/online-clients/zudoku/about");
+        permanentRedirect("/reference/open-api-uis/redoc", "/tools/online-clients/redoc/about");
+        permanentRedirect("/reference/open-api-uis/redoc/", "/tools/online-clients/redoc/about");
         permanentRedirect("/tutorials/summary", "/reference/summary");
         permanentRedirect("/tutorials/summary/", "/reference/summary");
         permanentRedirect("/tutorials/openapi-swagger", "/reference/openapi");

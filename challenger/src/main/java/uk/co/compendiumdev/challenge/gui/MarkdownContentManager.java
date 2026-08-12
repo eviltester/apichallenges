@@ -1097,52 +1097,62 @@ public class MarkdownContentManager {
             return buildOpenApiUiBreadcrumbHtml(contentPath);
         }
 
-        StringBuilder bcHtmlHeader = new StringBuilder();
+        final List<BreadcrumbHtml.Item> breadcrumbItems = new ArrayList<>();
         String bcPath = "";
         int linksInBreadcrumb = 0;
         if (breadcrumbs.length > 0) {
-            bcHtmlHeader.append("<div class=\"breadcrumb\">\n\n");
-            bcHtmlHeader.append("<blockquote>");
-
             for (String bc : breadcrumbs) {
                 bcPath = bcPath + bc;
 
                 if (!bc.isEmpty()) {
 
                     if (contentPath.endsWith(bc)) {
-                        bcHtmlHeader.append(String.format(" %s", bc));
+                        breadcrumbItems.add(BreadcrumbHtml.current(bc));
                     } else {
                         if (markdownContentPaths.contains(contentFolder + "/" + bcPath + ".md")) {
                             linksInBreadcrumb++;
-                            bcHtmlHeader.append(
-                                    String.format("<a href=\"%s\">%s</a> &gt;", "/" + bcPath, bc));
+                            breadcrumbItems.add(BreadcrumbHtml.link(bc, "/" + bcPath));
                         }
                     }
                 }
                 bcPath = bcPath + "/";
             }
-            bcHtmlHeader.append("</blockquote>");
-            bcHtmlHeader.append("</div >\n\n");
         }
 
         if (linksInBreadcrumb == 0) {
             return "";
         }
 
-        return bcHtmlHeader.toString();
+        return BreadcrumbHtml.render(breadcrumbItems);
     }
 
     private String buildOpenApiUiBreadcrumbHtml(final String contentPath) {
 
-        StringBuilder html = new StringBuilder();
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote>");
-        html.append("<a href=\"/reference\">Reference</a> &gt;");
-        html.append("<a href=\"/reference/openapi\">OpenAPI</a> &gt; ");
-        html.append(escapeHtmlAttribute(openApiUiToolBreadcrumbLabel(contentPath)));
-        html.append("</blockquote>");
-        html.append("</div >\n\n");
-        return html.toString();
+        final Optional<String> aboutSlug = openApiUiToolAboutSlug(contentPath);
+        if (aboutSlug.isPresent()) {
+            return BreadcrumbHtml.render(
+                    List.of(
+                            BreadcrumbHtml.link("Tools", "/tools"),
+                            BreadcrumbHtml.link("Online Clients", "/tools/online-clients"),
+                            BreadcrumbHtml.link(
+                                    openApiUiToolBreadcrumbLabel(contentPath),
+                                    "/tools/online-clients/" + aboutSlug.get()),
+                            BreadcrumbHtml.current("About")));
+        }
+
+        if (isOnlineOpenApiUiToolPath(contentPath)) {
+            return BreadcrumbHtml.render(
+                    List.of(
+                            BreadcrumbHtml.link("Tools", "/tools"),
+                            BreadcrumbHtml.link("Online Clients", "/tools/online-clients"),
+                            BreadcrumbHtml.current(openApiUiToolBreadcrumbLabel(contentPath))));
+        }
+
+        return BreadcrumbHtml.render(
+                List.of(
+                        BreadcrumbHtml.link("Reference", "/reference"),
+                        BreadcrumbHtml.link("OpenAPI", "/reference/openapi"),
+                        BreadcrumbHtml.current(openApiUiToolBreadcrumbLabel(contentPath))));
     }
 
     private String buildBlogPostBreadcrumbHtml(
@@ -1150,23 +1160,17 @@ public class MarkdownContentManager {
         final String postSlug = contentPath.substring(contentPath.lastIndexOf("/") + 1);
         final Optional<String> primaryCategory = primaryBlogCategory(categoriesRaw);
 
-        StringBuilder html = new StringBuilder();
-        html.append("<div class=\"breadcrumb\">\n\n");
-        html.append("<blockquote>");
-        html.append("<a href=\"/blog\">Blog</a> &gt; ");
+        final List<BreadcrumbHtml.Item> breadcrumbItems = new ArrayList<>();
+        breadcrumbItems.add(BreadcrumbHtml.link("Blog", "/blog"));
         if (primaryCategory.isPresent()) {
-            html.append("<a href=\"/blog/categories/")
-                    .append(
-                            escapeHtmlAttribute(
-                                    BlogContentManager.categorySlug(primaryCategory.get())))
-                    .append("\">")
-                    .append(escapeHtmlAttribute(primaryCategory.get()))
-                    .append("</a> &gt;");
+            breadcrumbItems.add(
+                    BreadcrumbHtml.link(
+                            primaryCategory.get(),
+                            "/blog/categories/"
+                                    + BlogContentManager.categorySlug(primaryCategory.get())));
         }
-        html.append(" ").append(escapeHtmlAttribute(postSlug));
-        html.append("</blockquote>");
-        html.append("</div >\n\n");
-        return html.toString();
+        breadcrumbItems.add(BreadcrumbHtml.current(postSlug));
+        return BreadcrumbHtml.render(breadcrumbItems);
     }
 
     private String buildSchemaJsonLd(
@@ -1584,17 +1588,48 @@ public class MarkdownContentManager {
         json.append("{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"")
                 .append(escapeJsonValue(canonicalHost))
                 .append("\"}");
-        json.append(",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Reference\",\"item\":\"")
-                .append(escapeJsonValue(canonicalHost + "/reference"))
-                .append("\"}");
-        json.append(",{\"@type\":\"ListItem\",\"position\":3,\"name\":\"OpenAPI\",\"item\":\"")
-                .append(escapeJsonValue(canonicalHost + "/reference/openapi"))
-                .append("\"}");
-        json.append(",{\"@type\":\"ListItem\",\"position\":4,\"name\":\"")
-                .append(escapeJsonValue(openApiUiToolBreadcrumbLabel(contentPath)))
-                .append("\",\"item\":\"")
-                .append(escapeJsonValue(canonicalHost + contentPath))
-                .append("\"}");
+        final Optional<String> aboutSlug = openApiUiToolAboutSlug(contentPath);
+        if (aboutSlug.isPresent()) {
+            final String liveToolPath = "/tools/online-clients/" + aboutSlug.get();
+            json.append(",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Tools\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/tools"))
+                    .append("\"}");
+            json.append(
+                            ",{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Online Clients\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/tools/online-clients"))
+                    .append("\"}");
+            json.append(",{\"@type\":\"ListItem\",\"position\":4,\"name\":\"")
+                    .append(escapeJsonValue(openApiUiToolBreadcrumbLabel(contentPath)))
+                    .append("\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + liveToolPath))
+                    .append("\"}");
+            json.append(",{\"@type\":\"ListItem\",\"position\":5,\"name\":\"About\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + contentPath))
+                    .append("\"}");
+        } else if (isOnlineOpenApiUiToolPath(contentPath)) {
+            json.append(",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Tools\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/tools"))
+                    .append("\"}");
+            json.append(
+                            ",{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Online Clients\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/tools/online-clients"))
+                    .append("\"}");
+        } else {
+            json.append(
+                            ",{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Reference\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/reference"))
+                    .append("\"}");
+            json.append(",{\"@type\":\"ListItem\",\"position\":3,\"name\":\"OpenAPI\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + "/reference/openapi"))
+                    .append("\"}");
+        }
+        if (aboutSlug.isEmpty()) {
+            json.append(",{\"@type\":\"ListItem\",\"position\":4,\"name\":\"")
+                    .append(escapeJsonValue(openApiUiToolBreadcrumbLabel(contentPath)))
+                    .append("\",\"item\":\"")
+                    .append(escapeJsonValue(canonicalHost + contentPath))
+                    .append("\"}");
+        }
         json.append("]");
         json.append("}");
         return json.toString();
@@ -1745,7 +1780,14 @@ public class MarkdownContentManager {
     }
 
     private boolean isOpenApiUiBreadcrumbPath(final String contentPath) {
-        return openApiUiToolSlug(contentPath).isPresent();
+        return openApiUiToolSlug(contentPath).isPresent()
+                || openApiUiToolAboutSlug(contentPath).isPresent();
+    }
+
+    private boolean isOnlineOpenApiUiToolPath(final String contentPath) {
+        return contentPath != null
+                && contentPath.startsWith("/tools/online-clients/")
+                && openApiUiToolSlug(contentPath).isPresent();
     }
 
     private Optional<String> openApiUiToolSlug(final String contentPath) {
@@ -1772,8 +1814,32 @@ public class MarkdownContentManager {
         };
     }
 
+    private Optional<String> openApiUiToolAboutSlug(final String contentPath) {
+        if (contentPath == null) {
+            return Optional.empty();
+        }
+
+        final String onlineClientPrefix = "/tools/online-clients/";
+        final String aboutSuffix = "/about";
+        if (!contentPath.startsWith(onlineClientPrefix) || !contentPath.endsWith(aboutSuffix)) {
+            return Optional.empty();
+        }
+
+        final String slug =
+                contentPath.substring(
+                        onlineClientPrefix.length(), contentPath.length() - aboutSuffix.length());
+        return switch (slug) {
+            case "swagger", "openapi-explorer", "scalar", "stoplight", "zudoku", "redoc" ->
+                    Optional.of(slug);
+            default -> Optional.empty();
+        };
+    }
+
     private String openApiUiToolBreadcrumbLabel(final String contentPath) {
-        final String slug = openApiUiToolSlug(contentPath).orElse("");
+        final String slug =
+                openApiUiToolSlug(contentPath)
+                        .or(() -> openApiUiToolAboutSlug(contentPath))
+                        .orElse("");
         return switch (slug) {
             case "swagger" -> "Swagger";
             case "openapi-explorer" -> "OpenAPI Explorer UI";

@@ -100,41 +100,79 @@ public class MarkdownContentManagerBreadcrumbSchemaTest {
     }
 
     @Test
-    void openApiUiReferencePagesUseOpenApiAsBreadcrumbParent() {
+    void onlineOpenApiUiToolAboutPagesUseToolAsBreadcrumbParent() {
 
         final MarkdownContentManager contentManager = contentManager();
         final String html =
                 contentManager.getResourceMarkdownFileAsHtml(
-                        "content", "/reference/open-api-uis/openapi-explorer", Map.of());
+                        "content", "/tools/online-clients/openapi-explorer/about", Map.of());
 
-        assertOpenApiUiBreadcrumb(
-                html, "OpenAPI Explorer UI", "/reference/open-api-uis/openapi-explorer");
+        assertOpenApiUiToolAboutBreadcrumb(html, "OpenAPI Explorer UI", "openapi-explorer");
     }
 
     @Test
-    void onlineOpenApiUiToolPagesUseOpenApiAsBreadcrumbParent() {
+    void onlineOpenApiUiToolPagesUseToolsAsBreadcrumbParent() {
 
         final MarkdownContentManager contentManager = contentManager();
         final String html =
                 contentManager.getResourceMarkdownFileAsHtml(
                         "content", "/tools/online-clients/scalar", Map.of());
 
-        assertOpenApiUiBreadcrumb(html, "Scalar", "/tools/online-clients/scalar");
+        assertOnlineOpenApiUiToolBreadcrumb(html, "Scalar", "/tools/online-clients/scalar");
     }
 
-    private void assertOpenApiUiBreadcrumb(
+    private void assertOpenApiUiToolAboutBreadcrumb(
+            final String html, final String toolName, final String clientPath) {
+
+        Assertions.assertTrue(
+                html.contains("<nav class=\"breadcrumb\" aria-label=\"Breadcrumb\">"));
+        Assertions.assertTrue(html.contains("<li><a href=\"/tools\">Tools</a></li>"));
+        Assertions.assertTrue(
+                html.contains("<li><a href=\"/tools/online-clients\">Online Clients</a></li>"));
+        Assertions.assertTrue(
+                html.contains(
+                        "<li><a href=\"/tools/online-clients/"
+                                + clientPath
+                                + "\">"
+                                + toolName
+                                + "</a></li>"));
+        Assertions.assertTrue(html.contains("<li aria-current=\"page\">About</li>"));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":2,\"name\":\"Tools\",\"item\":\"https://apichallenges.com/tools\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":3,\"name\":\"Online Clients\",\"item\":\"https://apichallenges.com/tools/online-clients\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":4,\"name\":\""
+                                + toolName
+                                + "\",\"item\":\"https://apichallenges.com/tools/online-clients/"
+                                + clientPath
+                                + "\""));
+        Assertions.assertTrue(
+                html.contains(
+                        "\"position\":5,\"name\":\"About\",\"item\":\"https://apichallenges.com/tools/online-clients/"
+                                + clientPath
+                                + "/about"
+                                + "\""));
+    }
+
+    private void assertOnlineOpenApiUiToolBreadcrumb(
             final String html, final String toolName, final String currentPath) {
 
         Assertions.assertTrue(
-                html.contains(
-                        "<a href=\"/reference\">Reference</a> &gt;<a href=\"/reference/openapi\">OpenAPI</a> &gt; "
-                                + toolName));
+                html.contains("<nav class=\"breadcrumb\" aria-label=\"Breadcrumb\">"));
+        Assertions.assertTrue(html.contains("<li><a href=\"/tools\">Tools</a></li>"));
+        Assertions.assertTrue(
+                html.contains("<li><a href=\"/tools/online-clients\">Online Clients</a></li>"));
+        Assertions.assertTrue(html.contains("<li aria-current=\"page\">" + toolName + "</li>"));
         Assertions.assertTrue(
                 html.contains(
-                        "\"position\":2,\"name\":\"Reference\",\"item\":\"https://apichallenges.com/reference\""));
+                        "\"position\":2,\"name\":\"Tools\",\"item\":\"https://apichallenges.com/tools\""));
         Assertions.assertTrue(
                 html.contains(
-                        "\"position\":3,\"name\":\"OpenAPI\",\"item\":\"https://apichallenges.com/reference/openapi\""));
+                        "\"position\":3,\"name\":\"Online Clients\",\"item\":\"https://apichallenges.com/tools/online-clients\""));
         Assertions.assertTrue(
                 html.contains(
                         "\"position\":4,\"name\":\""

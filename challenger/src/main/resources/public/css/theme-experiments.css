@@ -1369,10 +1369,8 @@ html[data-theme] .sub-menu li:hover ul {
     z-index: 35;
 }
 
-html[data-theme] #home-root-menu:hover ~ li.dropped > ul,
-html[data-theme] #home-root-menu:focus-within ~ li.dropped > ul,
-html[data-theme] #learning-root-menu:hover ~ li.dropped > ul,
-html[data-theme] #learning-root-menu:focus-within ~ li.dropped > ul {
+html[data-theme] .sub-menu:has(> li:hover) > li.dropped:not(:hover) > ul,
+html[data-theme] .sub-menu:has(> li:focus-within) > li.dropped:not(:focus-within) > ul {
     display: none;
 }
 
@@ -1447,9 +1445,17 @@ html[data-theme] div.main-text-content blockquote {
     padding: 0.75rem 1rem;
 }
 
-html[data-theme] .breadcrumb blockquote {
+html[data-theme] nav.breadcrumb {
     color: var(--muted);
     font-size: 0.92rem;
+}
+
+html[data-theme] nav.breadcrumb a {
+    color: var(--accent-strong);
+}
+
+html[data-theme] nav.breadcrumb li[aria-current="page"] {
+    color: var(--muted);
 }
 
 html[data-theme] .doc-columns {
@@ -2011,10 +2017,8 @@ html[data-theme] .mobile-content-nav-toggle {
         width: 100%;
     }
 
-    html[data-theme] .container.cssmenu.is-compact.is-open #home-root-menu:hover ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #home-root-menu:focus-within ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #learning-root-menu:hover ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #learning-root-menu:focus-within ~ li.dropped > ul {
+    html[data-theme] .container.cssmenu.is-compact.is-open .sub-menu:has(> li:hover) > li.dropped:not(:hover) > ul,
+    html[data-theme] .container.cssmenu.is-compact.is-open .sub-menu:has(> li:focus-within) > li.dropped:not(:focus-within) > ul {
         display: flex;
     }
 
@@ -2218,10 +2222,8 @@ html[data-theme] .mobile-content-nav-toggle {
         width: 100%;
     }
 
-    html[data-theme] .container.cssmenu.is-compact.is-open #home-root-menu:hover ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #home-root-menu:focus-within ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #learning-root-menu:hover ~ li.dropped > ul,
-    html[data-theme] .container.cssmenu.is-compact.is-open #learning-root-menu:focus-within ~ li.dropped > ul {
+    html[data-theme] .container.cssmenu.is-compact.is-open .sub-menu:has(> li:hover) > li.dropped:not(:hover) > ul,
+    html[data-theme] .container.cssmenu.is-compact.is-open .sub-menu:has(> li:focus-within) > li.dropped:not(:focus-within) > ul {
         display: flex;
     }
 

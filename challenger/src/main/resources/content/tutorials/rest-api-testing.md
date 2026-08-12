@@ -620,7 +620,7 @@ Use this tutorial as the practical path, then deepen specific areas with the ref
 - [REST API Basics](/reference/rest-api-basics)
 - [API Testing Concepts and Coverage](/reference/testing-apis)
 - [OpenAPI for API Testing](/reference/openapi)
-- [Swagger UI and Tools for API Testing](/reference/open-api-uis/swagger)
+- [Swagger UI and Tools for API Testing](/tools/online-clients/swagger/about)
 - [API Testing Tutorial Summary](/reference/summary)
 
 For more hands-on practice with the same API, use:

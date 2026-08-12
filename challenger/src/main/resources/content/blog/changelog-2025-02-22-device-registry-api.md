@@ -58,4 +58,4 @@ Adding Device Registry improved the practice-site list because it created a clea
 
 That progression matters because learners can add one new source of complexity at a time. First learn HTTP and REST basics, then learn CRUD state changes, then learn authentication, then bring in documentation and workflow coverage.
 
-Use [OpenAPI for API Testing](/reference/openapi) and [Swagger UI and Tools](/reference/open-api-uis/swagger) if you want to understand how API documentation fits into a testing workflow.
+Use [OpenAPI for API Testing](/reference/openapi) and [Swagger UI and Tools](/tools/online-clients/swagger/about) if you want to understand how API documentation fits into a testing workflow.

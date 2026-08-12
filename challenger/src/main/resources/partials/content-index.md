@@ -19,7 +19,7 @@
         <details class="side-toc-section" data-side-toc-section="reference-tutorials">
             <summary class="side-toc-section-summary">
                 <a class="side-toc-section-title" href="/reference">Reference</a>
-                <span class="side-toc-section-description">Reference material in a supporting learning order for web, HTTP, REST, testing, OpenAPI, and OpenAPI UIs.</span>
+                <span class="side-toc-section-description">Reference material in a supporting learning order for web, HTTP, REST, testing, and OpenAPI.</span>
             </summary>
             <ul class="side-toc-section-links">
                 <li><a href="/reference/web-basics">Web Applications</a></li>
@@ -27,17 +27,7 @@
                 <li><a href="/reference/http-verbs">HTTP Verbs</a></li>
                 <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
                 <li><a href="/reference/testing-apis">API Testing Concepts</a></li>
-                <li>
-                    <a href="/reference/openapi">OpenAPI</a>
-                    <ul>
-                        <li><a href="/reference/open-api-uis/swagger">Swagger UI</a></li>
-                        <li><a href="/reference/open-api-uis/openapi-explorer">OpenAPI Explorer</a></li>
-                        <li><a href="/reference/open-api-uis/scalar">Scalar</a></li>
-                        <li><a href="/reference/open-api-uis/stoplight">Stoplight Elements</a></li>
-                        <li><a href="/reference/open-api-uis/zudoku">Zudoku</a></li>
-                        <li><a href="/reference/open-api-uis/redoc">Redoc</a></li>
-                    </ul>
-                </li>
+                <li><a href="/reference/openapi">OpenAPI</a></li>
                 <li><a href="/reference/summary">Summary</a></li>
             </ul>
         </details>
@@ -105,12 +95,42 @@
                     <a href="/tools/online-clients">Online Clients</a>
                     <ul>
                         <li><a href="/tools/online-clients/basic-client">Basic Client</a></li>
-                        <li><a href="/tools/online-clients/swagger">Swagger UI</a></li>
-                        <li><a href="/tools/online-clients/openapi-explorer">OpenAPI Explorer</a></li>
-                        <li><a href="/tools/online-clients/scalar">Scalar</a></li>
-                        <li><a href="/tools/online-clients/stoplight">Stoplight Elements</a></li>
-                        <li><a href="/tools/online-clients/zudoku">Zudoku</a></li>
-                        <li><a href="/tools/online-clients/redoc">Redoc</a></li>
+                        <li>
+                            <a href="/tools/online-clients/swagger">Swagger UI</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/swagger/about">About Swagger UI</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/tools/online-clients/openapi-explorer">OpenAPI Explorer</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/openapi-explorer/about">About OpenAPI Explorer</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/tools/online-clients/scalar">Scalar</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/scalar/about">About Scalar</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/tools/online-clients/stoplight">Stoplight Elements</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/stoplight/about">About Stoplight Elements</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/tools/online-clients/zudoku">Zudoku</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/zudoku/about">About Zudoku</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/tools/online-clients/redoc">Redoc</a>
+                            <ul>
+                                <li><a href="/tools/online-clients/redoc/about">About Redoc</a></li>
+                            </ul>
+                        </li>
                         <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
                     </ul>
                 </li>

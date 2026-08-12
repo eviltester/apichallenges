@@ -2,7 +2,7 @@
 title: Online Swagger UI
 seo_title: Online Swagger UI: Open OpenAPI Files from URL or Disk
 description: A browser based Swagger UI for loading OpenAPI or Swagger files from a URL or local disk, with optional tester OpenAPI conversion.
-lastmod: 2026-08-11
+lastmod: 2026-08-12
 layout: wide-tool
 seo_description: Use an online Swagger UI to load OpenAPI JSON or YAML from a URL or local file, convert to a tester OpenAPI profile, inspect endpoints, and try browser API requests.
 schema_type: WebPage
@@ -93,9 +93,23 @@ The conversion is a client-side approximation of the permissive OpenAPI files ge
 
 Swagger UI is driven by the OpenAPI file. If an operation is missing from the file, or the schema is strict, Swagger UI may guide you away from the invalid or unusual requests you need to test.
 
-Use the [Basic Client](/tools/online-clients/basic-client), the [REST/HTTP Clients overview](/tools/clients), or a desktop REST client when you need more freedom. Use the [Swagger UI reference](/reference/open-api-uis/swagger) and [OpenAPI reference](/reference/openapi) pages when you want background concepts.
+Use the [Basic Client](/tools/online-clients/basic-client), the [REST/HTTP Clients overview](/tools/clients), or a desktop REST client when you need more freedom. Read [About Swagger UI](/tools/online-clients/swagger/about) and the [OpenAPI reference](/reference/openapi) when you want background concepts.
 
 You can compare standard and less-validating OpenAPI files for the [API Challenges OpenAPI Files](/apichallenges/openapi), [API Simulator OpenAPI Files](/practice-modes/simulation-openapi), [Simple API OpenAPI Files](/practice-modes/simpleapi-openapi), and [Buggy API OpenAPI Files](/practice-modes/shoppingcart-openapi).
+
+## Try Swagger With Our APIs
+
+<div class="openapi-ui-launch-panel">
+  <div class="openapi-ui-launch-group">
+    <p>Try Swagger with our APIs:</p>
+    <p class="openapi-ui-launch-links">
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
+    </p>
+  </div>
+</div>
 
 <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.32.12/swagger-ui.css">
 <link rel="stylesheet" href="/css/online-swagger-theme.css">

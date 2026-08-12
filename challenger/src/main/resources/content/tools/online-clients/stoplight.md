@@ -2,7 +2,7 @@
 title: Online Stoplight Elements
 seo_title: Online Stoplight Elements UI for OpenAPI Documentation
 description: A browser based Stoplight Elements page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-09
+lastmod: 2026-08-12
 layout: wide-tool
 seo_description: Use Stoplight Elements online to load OpenAPI JSON or YAML from a URL or local file, inspect schemas, code samples, and API docs.
 schema_type: WebPage
@@ -36,13 +36,27 @@ Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Stopl
 
 ## Stoplight Elements In This Page
 
-[Stoplight Elements](/reference/open-api-uis/stoplight) is an OpenAPI documentation toolkit built around embeddable components.
+[Stoplight Elements](/tools/online-clients/stoplight/about) is an OpenAPI documentation toolkit built around embeddable components.
 
 This page uses the Elements web component to render an OpenAPI file as interactive API reference documentation with navigation, schemas, request and response details, code samples, and a browser API console.
 
 Because Stoplight Elements runs in the browser, URL loading and try-it requests are affected by CORS. If a URL is blocked, download the OpenAPI file and open it locally.
 
 Compare this with the [Online Swagger UI](/tools/online-clients/swagger), [OpenAPI Explorer](/tools/online-clients/openapi-explorer), [Scalar](/tools/online-clients/scalar), [Zudoku](/tools/online-clients/zudoku), and [Redoc](/tools/online-clients/redoc) pages.
+
+## Try Stoplight Elements With Our APIs
+
+<div class="openapi-ui-launch-panel">
+  <div class="openapi-ui-launch-group">
+    <p>Try Stoplight Elements with our APIs:</p>
+    <p class="openapi-ui-launch-links">
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
+    </p>
+  </div>
+</div>
 
 <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements@9.0.24/styles.min.css">
 <link rel="stylesheet" href="/css/online-swagger-theme.css">

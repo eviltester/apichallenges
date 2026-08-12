@@ -38,7 +38,7 @@ The inline simulator requests are particularly helpful because the API Simulator
 
 Swagger UI pages were added for [API Challenges](/docs/swagger-ui) and [Simple API](/simpleapi/docs/swagger-ui). These pages make the OpenAPI descriptions visible and interactive.
 
-Use [Swagger UI and Tools](/reference/open-api-uis/swagger) to understand where Swagger UI helps and where exploratory testing still needs a more flexible REST client.
+Use [Swagger UI and Tools](/tools/online-clients/swagger/about) to understand where Swagger UI helps and where exploratory testing still needs a more flexible REST client.
 
 Swagger UI is useful because it gives readers a quick way to discover paths, schemas, and example requests. It also lets learners make requests from a documentation-first view. That is a different experience from starting in a REST client, and both perspectives are useful.
 

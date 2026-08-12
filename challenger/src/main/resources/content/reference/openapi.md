@@ -2,7 +2,7 @@
 title: OpenAPI for API Testing
 seo_title: OpenAPI for API Testing: Specs, Requests, Responses, Tools
 description: An introduction to OpenAPI as a standard specification for describing HTTP APIs.
-lastmod: 2026-08-11
+lastmod: 2026-08-12
 seo_description: Learn what OpenAPI is, how OpenAPI JSON and YAML files describe APIs, and how API testing tools use the specification.
 showads: true
 ---
@@ -98,12 +98,12 @@ OpenAPI UIs render an OpenAPI file as human-friendly API reference documentation
 
 They can help you explore endpoints, methods, parameters, request bodies, response schemas, authentication requirements, and examples without reading the raw JSON or YAML directly. Some OpenAPI UIs also include a browser request console so you can try documented API calls from the rendered page.
 
-- [Swagger UI and Tools](/reference/open-api-uis/swagger) - Swagger is a family of tools that work with OpenAPI files. Swagger UI renders an OpenAPI file as interactive API documentation and can create request forms for browser API calls.
-- [OpenAPI Explorer](/reference/open-api-uis/openapi-explorer) - OpenAPI Explorer is a web component for rendering OpenAPI documentation, resources, models, and browser API calls inside a site or app.
-- [Scalar](/reference/open-api-uis/scalar) - Scalar provides open source OpenAPI and Swagger support for API references, a REST API client, hosted docs, and related API tooling.
-- [Stoplight Elements](/reference/open-api-uis/stoplight) - Stoplight Elements provides React and web components for building interactive OpenAPI and Markdown powered API documentation.
-- [Zudoku](/reference/open-api-uis/zudoku) - Zudoku is an open source documentation framework for building customizable developer documentation around OpenAPI documents.
-- [Redoc](/reference/open-api-uis/redoc) - Redoc is an open source OpenAPI documentation viewer that renders API reference pages. The open source version is primarily a viewer, not a request-sending client.
+- [Swagger UI and Tools](/tools/online-clients/swagger/about) - Swagger is a family of tools that work with OpenAPI files. Swagger UI renders an OpenAPI file as interactive API documentation and can create request forms for browser API calls.
+- [OpenAPI Explorer](/tools/online-clients/openapi-explorer/about) - OpenAPI Explorer is a web component for rendering OpenAPI documentation, resources, models, and browser API calls inside a site or app.
+- [Scalar](/tools/online-clients/scalar/about) - Scalar provides open source OpenAPI and Swagger support for API references, a REST API client, hosted docs, and related API tooling.
+- [Stoplight Elements](/tools/online-clients/stoplight/about) - Stoplight Elements provides React and web components for building interactive OpenAPI and Markdown powered API documentation.
+- [Zudoku](/tools/online-clients/zudoku/about) - Zudoku is an open source documentation framework for building customizable developer documentation around OpenAPI documents.
+- [Redoc](/tools/online-clients/redoc/about) - Redoc is an open source OpenAPI documentation viewer that renders API reference pages. The open source version is primarily a viewer, not a request-sending client.
 
 ## OpenAPI Tools
 
@@ -116,6 +116,6 @@ The OpenAPI ecosystem has many tools for validation, mocking, documentation, cod
 - [Tcases](https://github.com/Cornutum/tcases/blob/master/tcases-openapi/README.md#tcases-for-openapi-from-rest-ful-to-test-ful)
 - [Humlix](https://www.humlix.com/)
 
-## Related OpenAPI UI Pages
+## Related OpenAPI UI Tool Pages
 
-Read the [OpenAPI UI pages](/reference/open-api-uis/swagger) when you want to compare browser interfaces for exploring an OpenAPI file.
+Read the [Online Clients](/tools/online-clients) summary and the [Swagger UI about page](/tools/online-clients/swagger/about) when you want to compare browser interfaces for exploring an OpenAPI file.

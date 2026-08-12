@@ -47,7 +47,7 @@ Useful follow-on pages:
 - [REST API Basics](/reference/rest-api-basics)
 - [REST API Testing Concepts](/reference/testing-apis)
 - [OpenAPI](/reference/openapi)
-- [Swagger UI](/reference/open-api-uis/swagger)
+- [Swagger UI](/tools/online-clients/swagger/about)
 - [API Testing Summary](/reference/summary)
 
 ---

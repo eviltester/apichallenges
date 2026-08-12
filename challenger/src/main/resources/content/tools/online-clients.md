@@ -2,7 +2,7 @@
 title: Online API Clients and OpenAPI UI Tools
 seo_title: Online API Clients and OpenAPI UI Tools for Testing
 description: A summary of the browser based API clients and OpenAPI UI tools available on API Challenges.
-lastmod: 2026-08-09
+lastmod: 2026-08-12
 seo_description: Compare online REST clients, OpenAPI viewers, API consoles, and converter tools for browser based API testing, documentation review, and API exploration.
 schema_type: WebPage
 og_type: website
@@ -18,12 +18,12 @@ Browser tools are convenient for learning and quick checks. They are still limit
 ## Hosted Online Clients
 
 - [Basic Client](/tools/online-clients/basic-client) - a deliberately simple REST API client for sending custom methods, URLs, headers, and bodies without needing an OpenAPI file.
-- [Online Swagger UI](/tools/online-clients/swagger) - Swagger UI with URL and file loading, plus optional tester OpenAPI conversion for less restrictive exploratory requests.
-- [OpenAPI Explorer](/tools/online-clients/openapi-explorer) - an embeddable web component that renders resources, models, generated examples, and browser API calls from an OpenAPI file.
-- [Scalar](/tools/online-clients/scalar) - a modern OpenAPI reference and API client style experience with request examples and API documentation navigation.
-- [Stoplight Elements](/tools/online-clients/stoplight) - embeddable OpenAPI documentation components with navigation, schemas, code samples, and an interactive API console.
-- [Zudoku](/tools/online-clients/zudoku) - a developer portal and API reference framework that can render OpenAPI powered documentation from a URL.
-- [Redoc](/tools/online-clients/redoc) - a polished OpenAPI documentation viewer for reading and navigating API reference content.
+- [Online Swagger UI](/tools/online-clients/swagger) - Swagger UI with URL and file loading, plus optional tester OpenAPI conversion for less restrictive exploratory requests. Read [About Swagger UI](/tools/online-clients/swagger/about).
+- [OpenAPI Explorer](/tools/online-clients/openapi-explorer) - an embeddable web component that renders resources, models, generated examples, and browser API calls from an OpenAPI file. Read [About OpenAPI Explorer](/tools/online-clients/openapi-explorer/about).
+- [Scalar](/tools/online-clients/scalar) - a modern OpenAPI reference and API client style experience with request examples and API documentation navigation. Read [About Scalar](/tools/online-clients/scalar/about).
+- [Stoplight Elements](/tools/online-clients/stoplight) - embeddable OpenAPI documentation components with navigation, schemas, code samples, and an interactive API console. Read [About Stoplight Elements](/tools/online-clients/stoplight/about).
+- [Zudoku](/tools/online-clients/zudoku) - a developer portal and API reference framework that can render OpenAPI powered documentation from a URL. Read [About Zudoku](/tools/online-clients/zudoku/about).
+- [Redoc](/tools/online-clients/redoc) - a polished OpenAPI documentation viewer for reading and navigating API reference content. Read [About Redoc](/tools/online-clients/redoc/about).
 - [OpenAPI Tester Converter](/tools/online-clients/openapi-converter) - a browser tool for creating a less restrictive tester OpenAPI file to import into Swagger UI or other clients.
 
 ## How The Tools Differ

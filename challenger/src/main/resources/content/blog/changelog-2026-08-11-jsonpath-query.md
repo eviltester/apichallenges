@@ -1,6 +1,6 @@
 ---
 date: 2026-08-11T16:30:00Z
-lastmod: 2026-08-11
+lastmod: 2026-08-12
 title: JSONPath QUERY Request Body Support
 seo_title: JSONPath QUERY Request Body Support for API Testing
 description: API Challenges now supports JSONPath request bodies for the HTTP QUERY method.
@@ -16,19 +16,31 @@ showads: true
 
 API Challenges now supports JSONPath expressions in `QUERY` request bodies.
 
-This means endpoints powered by Thingifier can advertise and accept:
+This means our API `QUERY` endpoints advertise and accept:
 
 ```text
 Content-Type: application/jsonpath
 ```
 
-The original `QUERY` support used form-encoded content, for example:
+The original `QUERY` support used form-encoded content:
+
+```text
+Content-Type: application/x-www-form-urlencoded`
+```
+
+The payload would use normal form encoding like:
 
 ```text
 type=book
 ```
 
-That still works. JSONPath adds another way to describe read-only selection criteria in the body of a `QUERY` request.
+Form-encoded content still works. JSONPath adds another way to describe read-only selection criteria in the body of a `QUERY` request.
+
+One of the key advantages for `QUERY` is the support for multiple content types supporting different query styles and filtering representations. And when the API is properly written, the API itself will use the `accept-query` header to tell the client what formats are supported:
+
+```text
+accept-query: application/x-www-form-urlencoded, application/jsonpath
+```
 
 ## What is JSONPath?
 

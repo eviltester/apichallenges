@@ -1,32 +1,34 @@
 ---
-title: Redoc OpenAPI UI
-seo_title: Redoc OpenAPI UI for API Reference Documentation
-description: An introduction to Redoc as an open source OpenAPI reference documentation viewer.
-lastmod: 2026-08-11
+title: About Redoc
+seo_title: About Redoc OpenAPI UI for API Reference Documentation
+description: A review-style introduction to Redoc as an open source OpenAPI reference documentation viewer.
+lastmod: 2026-08-12
 seo_description: Learn how open source Redoc renders OpenAPI and Swagger descriptions as API reference documentation, and why it is a viewer rather than a client.
 showads: true
 ---
 
-# Redoc OpenAPI UI
+# About Redoc
 
 [Redoc](https://redocly.com/redoc) is an open source tool for rendering API reference documentation from OpenAPI and Swagger descriptions.
 
 The open source Redoc experience is primarily a documentation viewer. It helps people read and navigate an API description, but it is not a request-sending API client in the same way as Swagger UI or a REST client.
 
-Redoc does support sending requests but only in the paid plan. The Open Source version is view only.
+Redoc supports sending requests only in the paid plan. The open source version is view only.
 
-- [Redoc Github Repo](https://github.com/Redocly/redoc)
-- [Redoc Official Demo](https://redocly.github.io/redoc/) 
+- [Redoc GitHub Repo](https://github.com/Redocly/redoc)
+- [Redoc Official Demo](https://redocly.github.io/redoc/)
+
+Use our [Online Redoc OpenAPI Viewer](/tools/online-clients/redoc) page when you want to load an OpenAPI file from a URL or from disk and inspect the rendered reference on this site.
 
 ## What Redoc Shows
 
 Redoc renders OpenAPI documentation with navigation, detailed reference content, schemas, and request and response examples.
 
-The side-bar makes it easy to navigate through all the requests and see full scope of endpoints and operations available.
+The side-bar makes it easy to navigate through all the requests and see the full scope of endpoints and operations available.
 
 It is often used when a team wants a polished API reference page that can be published as documentation and browsed by API consumers.
 
-Like all tools offered by commercial vendors, Redoc has a non-configurable link back to the vendors site.
+Like all tools offered by commercial vendors, Redoc has a non-configurable link back to the vendor site.
 
 Redoc is supported natively in frameworks such as Docusaurus.
 
@@ -38,7 +40,7 @@ For exploratory requests and testing, Redoc can still be useful in combination w
 
 ## Related OpenAPI Pages
 
-Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare it with [Swagger UI](/reference/open-api-uis/swagger), [OpenAPI Explorer](/reference/open-api-uis/openapi-explorer), [Scalar](/reference/open-api-uis/scalar), [Stoplight Elements](/reference/open-api-uis/stoplight), and [Zudoku](/reference/open-api-uis/zudoku).
+Read [OpenAPI for API Testing](/reference/openapi) for the specification background, or compare Redoc with [Swagger UI](/tools/online-clients/swagger/about), [OpenAPI Explorer](/tools/online-clients/openapi-explorer/about), [Scalar](/tools/online-clients/scalar/about), [Stoplight Elements](/tools/online-clients/stoplight/about), and [Zudoku](/tools/online-clients/zudoku/about).
 
 ## Try Redoc With Our APIs
 
