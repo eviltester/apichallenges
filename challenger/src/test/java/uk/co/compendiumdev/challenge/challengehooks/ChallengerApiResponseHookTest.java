@@ -735,6 +735,86 @@ public class ChallengerApiResponseHookTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("repositoryProviders")
+    public void queryStructuredJsonFilteredTodosChallengeCompletesWhenOnlyDoneTodosReturned(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodo("done", "true");
+            fixture.addTodo("not done", "false");
+
+            fixture.hook.run(
+                    fixture.request("todos", QUERY)
+                            .addHeader(
+                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .setBody("{\"filter\":{\"doneStatus\":true}}"),
+                    fixture.apiResponseWithBody(
+                            200,
+                            "{\"todos\":[{\"id\":1,\"title\":\"done\",\"doneStatus\":true,\"description\":\"\"}]}"),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED));
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void queryStructuredJsonFilteredTodosChallengeDoesNotCompleteWhenNotDoneTodosReturned(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodo("done", "true");
+            fixture.addTodo("not done", "false");
+
+            fixture.hook.run(
+                    fixture.request("todos", QUERY)
+                            .addHeader(
+                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .setBody("{\"filter\":{\"doneStatus\":true}}"),
+                    fixture.apiResponseWithBody(
+                            200,
+                            "{\"todos\":[{\"id\":1,\"title\":\"done\",\"doneStatus\":true,\"description\":\"\"},"
+                                    + "{\"id\":2,\"title\":\"not done\",\"doneStatus\":false,\"description\":\"\"}]}"),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void queryStructuredJsonFilteredTodosChallengeRequiresStructuredJsonFilter(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            fixture.addTodo("done", "true");
+            fixture.addTodo("not done", "false");
+
+            fixture.hook.run(
+                    fixture.request("todos", QUERY)
+                            .addHeader(
+                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .setBody("{\"sort\":[{\"field\":\"id\",\"direction\":\"desc\"}]}"),
+                    fixture.apiResponseWithBody(
+                            200,
+                            "{\"todos\":[{\"id\":1,\"title\":\"done\",\"doneStatus\":true,\"description\":\"\"}]}"),
+                    fixture.thingifier.apiConfig());
+
+            Assertions.assertFalse(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
     public void sortedAscendingTodosChallengeCompletesForSingleTodoField(
             final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
 

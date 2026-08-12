@@ -5,7 +5,7 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
 public class PatchChallenges {
 
     public static ChallengeDefinitionData patchTodosPartial200(int challengeOrder) {
-        String patchLink = "<a href='/reference/http-verbs#toc18'>learn more about patch</a>";
+        String patchLink = "<a href='/reference/http-verbs/http-patch'>learn more about patch</a>";
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
@@ -14,7 +14,7 @@ public class PatchChallenges {
                                 + patchLink
                                 + ".");
 
-        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs#toc18");
+        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs/http-patch");
         aChallenge.addHint("Use `Content-Type: application/json`.");
         aChallenge.addHint("Only include the fields you want to change.");
         aChallenge.addHint("Do not include an `id` in the payload.");
@@ -26,7 +26,7 @@ public class PatchChallenges {
     }
 
     public static ChallengeDefinitionData patchTodosMergePatch200(int challengeOrder) {
-        String patchLink = "<a href='/reference/http-verbs#toc18'>learn more about patch</a>";
+        String patchLink = "<a href='/reference/http-verbs/http-patch'>learn more about patch</a>";
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
@@ -35,7 +35,7 @@ public class PatchChallenges {
                                 + patchLink
                                 + ".");
 
-        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs#toc18");
+        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs/http-patch");
         aChallenge.addHint(
                 "Use `Content-Type: application/merge-patch+json` for JSON Merge Patch.",
                 "https://www.rfc-editor.org/rfc/rfc7396");
@@ -48,7 +48,7 @@ public class PatchChallenges {
     }
 
     public static ChallengeDefinitionData patchTodosJsonPatch200(int challengeOrder) {
-        String patchLink = "<a href='/reference/http-verbs#toc18'>learn more about patch</a>";
+        String patchLink = "<a href='/reference/http-verbs/http-patch'>learn more about patch</a>";
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
@@ -57,7 +57,7 @@ public class PatchChallenges {
                                 + patchLink
                                 + ".");
 
-        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs#toc18");
+        aChallenge.addHint("Learn more about PATCH.", "/reference/http-verbs/http-patch");
         aChallenge.addHint(
                 "Use `Content-Type: application/json-patch+json` for JSON Patch.",
                 "https://www.rfc-editor.org/rfc/rfc6902");

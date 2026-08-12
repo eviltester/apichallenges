@@ -100,6 +100,7 @@ If a solution exposes a gap in your understanding, step back to the supporting m
 
 - [QUERY /todos (200)](/apichallenges/solutions/query/query-todos-200)
 - [QUERY /todos (200) JSONPath](/apichallenges/solutions/query/query-todos-200-jsonpath)
+- [QUERY /todos (200) Structured JSON](/apichallenges/solutions/query/query-todos-200-structured-json)
 
 ## PATCH Challenges
 

@@ -2,7 +2,7 @@
 title: Simple API OpenAPI JSON Files
 seo_title: Simple API OpenAPI JSON Downloads | API Practice Mode
 description: Download the OpenAPI JSON files for the Simple API.
-lastmod: 2026-08-11
+lastmod: 2026-08-12
 seo_description: Use Simple API OpenAPI JSON to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced.
 showads: true
 ---
@@ -74,7 +74,25 @@ $.items[?(@.type == 'book')]
 
 Useful JSONPath experiments include `$.items`, `$.items[?(@.type == 'cd')]`, `$.items[?(@.numberinstock == 0)]`, and `$.items[?(@.type == 'book' && @.numberinstock > 0)]`.
 
-Read [HTTP Methods and Verbs](/reference/http-verbs#http-query-verb) for more about `QUERY` request bodies and JSONPath.
+The same endpoint also supports Structured JSON QUERY bodies:
+
+```http
+QUERY /simpleapi/items HTTP/1.1
+Content-Type: application/vnd.apichallenges.todo-query+json
+Accept: application/json
+
+{"filter":{"type":"book"}}
+```
+
+Useful Structured JSON experiments include:
+
+- `{"filter":{"type":"cd"}}`
+- `{"filter":{"numberinstock":{"greaterThan":0}}}`
+- `{"filter":{"price":{"lessThan":10}}}`
+- `{"filter":{"isbn13":{"contains":"123"}}}`
+- `{"filter":{"type":"book"},"sort":[{"field":"price","direction":"asc"}]}`
+
+Read [HTTP Methods and Verbs](/reference/http-verbs/http-query#http-query-structured-json-body) for more about `QUERY` request bodies, JSONPath, and Structured JSON.
 
 ## Normal OpenAPI File Explained
 

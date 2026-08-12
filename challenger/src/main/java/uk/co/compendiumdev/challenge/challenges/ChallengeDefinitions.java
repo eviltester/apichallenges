@@ -299,6 +299,10 @@ public class ChallengeDefinitions {
                 CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED,
                 QueryChallenges.queryTodosJsonPathFiltered200(challengeOrder++),
                 queryChallenges);
+        storeChallengeAs(
+                CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED,
+                QueryChallenges.queryTodosStructuredJsonFiltered200(challengeOrder++),
+                queryChallenges);
 
         ChallengeSection patchChallenges =
                 new ChallengeSection(

@@ -32,6 +32,9 @@ import uk.co.compendiumdev.thingifier.core.repository.EntityInstanceQuery;
 
 public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
+    private static final String STRUCTURED_JSON_QUERY_CONTENT_TYPE =
+            "application/vnd.apichallenges.todo-query+json";
+
     Logger logger = LoggerFactory.getLogger(ChallengerApiResponseHook.class);
 
     private final Challengers challengers;
@@ -250,6 +253,19 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                     && !responseTodos.isEmpty()
                     && allDoneStatusTrue(responseTodos)) {
                 challengers.pass(challenger, CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED);
+            }
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.QUERY
+                && request.getPath().contentEquals("todos")
+                && contentTypeIs(contentTypeParser, STRUCTURED_JSON_QUERY_CONTENT_TYPE)
+                && queryStructuredJsonBodyTargetsDoneStatusTrue(request)
+                && response.getStatusCode() == 200) {
+            List<JsonObject> responseTodos = todosFromJsonResponse(response);
+            if (hasDoneAndNotDoneTodos(challenger)
+                    && !responseTodos.isEmpty()
+                    && allDoneStatusTrue(responseTodos)) {
+                challengers.pass(challenger, CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED);
             }
         }
 
@@ -1113,6 +1129,39 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
         final String normalized = body.toLowerCase();
         return normalized.contains("donestatus") && normalized.contains("true");
+    }
+
+    private boolean queryStructuredJsonBodyTargetsDoneStatusTrue(final HttpApiRequest request) {
+        final String body = request.getBody();
+        if (body == null) {
+            return false;
+        }
+
+        try {
+            final JsonElement parsed = JsonParser.parseString(body);
+            if (!parsed.isJsonObject()) {
+                return false;
+            }
+
+            final JsonElement filter = parsed.getAsJsonObject().get("filter");
+            if (filter == null || !filter.isJsonObject()) {
+                return false;
+            }
+
+            final JsonElement doneStatus = filter.getAsJsonObject().get("doneStatus");
+            return doneStatus != null
+                    && doneStatus.isJsonPrimitive()
+                    && doneStatus.getAsJsonPrimitive().isBoolean()
+                    && doneStatus.getAsBoolean();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean contentTypeIs(
+            final ContentTypeHeaderParser contentTypeParser, final String expectedMediaType) {
+        return contentTypeParser.mediaType() != null
+                && contentTypeParser.mediaType().equalsIgnoreCase(expectedMediaType);
     }
 
     private EntityInstance findTodoByIdentifier(

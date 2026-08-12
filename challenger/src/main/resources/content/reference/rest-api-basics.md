@@ -423,7 +423,7 @@ This is more useful than simply saying "this is not RESTful."
 - [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#name-head)
 - same as GET but does not return a body
 - can be useful for checking existence of an endpoint or entity
-- see the [HTTP HEAD verb tutorial](/reference/http-verbs#http-head-verb)
+- see the [HTTP HEAD verb tutorial](/reference/http-verbs/http-head)
 
 `HEAD` is useful when we want to inspect metadata without downloading the full response body.
 
@@ -473,7 +473,7 @@ If the API says `PUT` is a full replacement, then omitting a field should have a
 - Standard for [JSON Merge Patch format](https://www.rfc-editor.org/rfc/rfc7396)
 - Standard for [JSON Patch format](https://www.rfc-editor.org/rfc/rfc6902)
 - Proposed standard for [XML Patch Using XPath](https://tools.ietf.org/html/rfc5261)
-- see the [HTTP PATCH verb tutorial](/reference/http-verbs#http-patch-verb)
+- see the [HTTP PATCH verb tutorial](/reference/http-verbs/http-patch)
 
 `PATCH` is intended for partial updates.
 

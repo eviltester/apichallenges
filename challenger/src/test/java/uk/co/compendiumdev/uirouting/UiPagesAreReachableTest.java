@@ -1300,6 +1300,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/blog/all-posts\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/page/2\""));
         Assertions.assertTrue(response.body.contains("Page 1 of 2"));
+        Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
         Assertions.assertTrue(
                 response.body.contains("API Spector Review: Best New API Client for API Testing"));
@@ -1333,6 +1334,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
         Assertions.assertTrue(
                 response.body.contains(
+                        "<time datetime=\"2026-08-12T13:00:00Z\">2026-08-12</time> <a href=\"/blog/changelog-2026-08-12-structured-json-query\">Structured JSON QUERY Request Body Support</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "<time datetime=\"2026-08-11T16:30:00Z\">2026-08-11</time> <a href=\"/blog/changelog-2026-08-11-jsonpath-query\">JSONPath QUERY Request Body Support</a>"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -1343,6 +1347,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<time datetime=\"2024-04-13T15:36:44Z\">2024-04-13</time> <a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
+        Assertions.assertTrue(
+                response.body.indexOf("Structured JSON QUERY Request Body Support")
+                        < response.body.indexOf("JSONPath QUERY Request Body Support"));
         Assertions.assertTrue(
                 response.body.indexOf("JSONPath QUERY Request Body Support")
                         < response.body.indexOf(
@@ -1372,7 +1379,10 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<li><a href=\"/blog/categories\">categories</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">API Testing</li>"));
         Assertions.assertTrue(
-                response.body.contains("href=\"/blog/api-challenges-practice-api-overview\""));
+                response.body.contains(
+                        "href=\"/blog/changelog-2026-08-12-structured-json-query\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/blog/changelog-2026-08-11-jsonpath-query\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "href=\"/blog/changelog-2026-08-07-initial-api-spector-review\""));
@@ -1411,37 +1421,42 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<rss version=\"2.0\""));
         Assertions.assertTrue(response.body.contains("xmlns:content="));
         Assertions.assertTrue(response.body.contains("<content:encoded><![CDATA["));
+        Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
+        Assertions.assertTrue(response.body.contains("Multiple Online Open API Embedded Clients"));
         Assertions.assertTrue(
                 response.body.contains("API Spector Review: Best New API Client for API Testing"));
         Assertions.assertTrue(
                 response.body.contains("Interactive API Simulator Walkthrough Launch"));
         Assertions.assertTrue(
-                response.body.contains("Interactive REST API Tutorial and Raw Response View"));
-        Assertions.assertTrue(
                 response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-06-interactive-rest-api-tutorial"));
+                        "https://apichallenges.com/blog/changelog-2026-08-12-structured-json-query"));
         Assertions.assertTrue(
                 response.body.contains(
                         "https://apichallenges.com/blog/changelog-2026-08-11-jsonpath-query"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "https://apichallenges.com/blog/changelog-2026-08-11-online-clients"));
         Assertions.assertTrue(response.body.contains("<category>API Testing</category>"));
         Assertions.assertTrue(response.body.contains("<category>Change Log</category>"));
-        Assertions.assertTrue(response.body.contains("Thu, 6 Aug 2026 09:00:00 GMT"));
         Assertions.assertTrue(response.body.contains("api-spector.dev"));
-        Assertions.assertTrue(response.body.contains("raw response view"));
+        Assertions.assertTrue(
+                response.body.indexOf("Structured JSON QUERY Request Body Support")
+                        < response.body.indexOf("JSONPath QUERY Request Body Support"));
         Assertions.assertTrue(
                 response.body.indexOf("JSONPath QUERY Request Body Support")
+                        < response.body.indexOf("Multiple Online Open API Embedded Clients"));
+        Assertions.assertTrue(
+                response.body.indexOf("Multiple Online Open API Embedded Clients")
                         < response.body.indexOf(
                                 "API Spector Review: Best New API Client for API Testing"));
         Assertions.assertTrue(
                 response.body.indexOf("API Spector Review: Best New API Client for API Testing")
                         < response.body.indexOf("Interactive API Simulator Walkthrough Launch"));
-        Assertions.assertTrue(
-                response.body.indexOf("Interactive API Simulator Walkthrough Launch")
-                        < response.body.indexOf(
-                                "Interactive REST API Tutorial and Raw Response View"));
         Assertions.assertFalse(
                 response.body.contains("API Challenges Practice API Overview Video Summary"));
+        Assertions.assertFalse(
+                response.body.contains("Interactive REST API Tutorial and Raw Response View"));
         Assertions.assertTrue(response.body.split("<item>", -1).length - 1 <= 5);
     }
 
@@ -2511,15 +2526,48 @@ public class UiPagesAreReachableTest {
     }
 
     @Test
-    void queryJsonPathReferenceSolutionAndBlogPagesRender() {
+    void queryRequestBodyReferenceSolutionAndBlogPagesRender() {
 
         HttpResponseDetails response = http.send("/reference/http-verbs", "get");
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(response.body.contains("<h3>HTTP QUERY JSONPath Body</h3>"));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-get\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-query\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-trace\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/reference/http-verbs/http-connect\""));
+        Assertions.assertTrue(response.body.contains("id=\"toc8\""));
+        Assertions.assertTrue(response.body.contains("id=\"toc18\""));
+        Assertions.assertTrue(response.body.contains("id=\"http-query-structured-json-body\""));
+
+        for (String verbPage :
+                List.of(
+                        "/reference/http-verbs/http-get",
+                        "/reference/http-verbs/http-head",
+                        "/reference/http-verbs/http-options",
+                        "/reference/http-verbs/http-query",
+                        "/reference/http-verbs/http-post",
+                        "/reference/http-verbs/http-put",
+                        "/reference/http-verbs/http-patch",
+                        "/reference/http-verbs/http-delete",
+                        "/reference/http-verbs/http-trace",
+                        "/reference/http-verbs/http-connect")) {
+            response = http.send(verbPage, "get");
+            Assertions.assertEquals(200, response.statusCode);
+        }
+
+        response = http.send("/reference/http-verbs/http-query", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h2>HTTP QUERY JSONPath Body</h2>"));
         Assertions.assertTrue(response.body.contains("Content-Type: application/jsonpath"));
         Assertions.assertTrue(
                 response.body.contains("https://datatracker.ietf.org/doc/html/rfc9535"));
         Assertions.assertTrue(response.body.contains("$.todos[?(@.doneStatus == true)]"));
+        Assertions.assertTrue(response.body.contains("<h2>HTTP QUERY Structured JSON Body</h2>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+        Assertions.assertTrue(response.body.contains("greaterThan"));
+        Assertions.assertTrue(response.body.contains("id=\"http-query-structured-json-body\""));
 
         response = http.send("/apichallenges/solutions/query/query-todos-200-jsonpath", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -2531,7 +2579,8 @@ public class UiPagesAreReachableTest {
                 response.body.contains("data-body=\"$.todos[?(@.doneStatus == true)]\""));
         Assertions.assertTrue(response.body.contains("Content-Type: application/jsonpath"));
         Assertions.assertTrue(
-                response.body.contains("href=\"/reference/http-verbs#http-query-verb\""));
+                response.body.contains(
+                        "href=\"/reference/http-verbs/http-query#http-query-structured-json-body\""));
         Assertions.assertTrue(response.body.contains("$.todos[?(@.description != '')]"));
         Assertions.assertFalse(response.body.contains("$.todos[?(@.description ≠ '')]"));
 
@@ -2544,6 +2593,37 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "href=\"/apichallenges/solutions/query/query-todos-200-jsonpath\""));
+
+        response =
+                http.send("/apichallenges/solutions/query/query-todos-200-structured-json", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<h1>How to complete the challenge <code>QUERY /todos Structured JSON (200)</code></h1>"));
+        Assertions.assertTrue(response.body.contains("data-method=\"QUERY\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "data-body=\"{&quot;filter&quot;:{&quot;doneStatus&quot;:true}}\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/reference/http-verbs/http-query#http-query-structured-json-body\""));
+        Assertions.assertTrue(response.body.contains("greaterThan"));
+
+        response = http.send("/blog/changelog-2026-08-12-structured-json-query", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains("<h1>Structured JSON QUERY Request Body Support</h1>"));
+        Assertions.assertTrue(response.body.contains("QUERY /simpleapi/items"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+        Assertions.assertTrue(response.body.contains("JSONPath"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/apichallenges/solutions/query/query-todos-200-structured-json\""));
     }
 
     @Test

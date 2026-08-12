@@ -2,9 +2,9 @@
 title: API Challenges Solution For - QUERY todos 200 JSONPath
 seo_title: Solution: QUERY todos 200 JSONPath Body | API Challenges
 description: How to solve API challenge QUERY todos 200 using JSONPath query content in the request body.
-lastmod: 2026-08-11
+lastmod: 2026-08-12
 seo_description: Use this walkthrough to solve QUERY todos 200 JSONPath with request setup, headers, body content, and expected status code.
-next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-partial
+next_challenge: /apichallenges/solutions/query/query-todos-200-structured-json
 concepts_learned: HTTP QUERY||JSONPath||application/jsonpath||200 OK||safe method
 concept_summary: Use this challenge to learn how QUERY can send a JSONPath expression in the request body to filter resources without changing state.
 concept_reference_label: HTTP Methods and Verbs
@@ -70,7 +70,7 @@ Issue the QUERY request with the JSONPath filter in the body:
 ~~~~~~~~
 < HTTP/1.1 200 OK
 < Content-Type: application/json
-< Accept-Query: application/x-www-form-urlencoded, application/jsonpath
+< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
 < X-Challenger: x-challenger-guid
 ~~~~~~~~
 
@@ -94,7 +94,7 @@ Returned body:
 - `QUERY /todos` can use `Content-Type: application/jsonpath` when the request body is a `JSONPath` expression.
 - `JSONPath` starts from `$`, uses `@` for the current item in a filter, and can select matching objects from the collection.
 - API Challenges expects the `JSONPath` expression to select complete todo objects, not isolated fields such as titles.
-- The `Accept-Query` response header lists both supported `QUERY` body media types.
+- The `Accept-Query` response header lists the supported `QUERY` body media types.
 
 ## Suggested Experiments
 
@@ -102,4 +102,5 @@ Returned body:
 - Send `$.todos[?(@.doneStatus == false)]` to return todos that are not done.
 - Send `$.todos[?(@.description != '')]` after creating a todo with a description.
 - Try `$.todos[*].title` and observe that selecting only field values is rejected.
-- Use the [method reference](/reference/http-verbs#http-query-verb) for extra `QUERY` experiments and details on `application/jsonpath`.
+- Try the same completed-todo filter as a `Structured JSON` body with `Content-Type: application/vnd.apichallenges.todo-query+json` and `{"filter":{"doneStatus":true}}`.
+- Use the [method reference](/reference/http-verbs/http-query#http-query-structured-json-body) for extra `QUERY` experiments and details on structured query documents.

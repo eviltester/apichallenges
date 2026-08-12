@@ -30,7 +30,7 @@ Use [`PATCH`](https://www.rfc-editor.org/rfc/rfc5789) with `Content-Type: applic
 - Do not include `id` in the payload.
 - The response should be `200`.
 - Fields that are not in the payload should keep their existing values.
-- You can [learn more about PATCH](/reference/http-verbs#toc18) in the HTTP verbs tutorial.
+- You can [learn more about PATCH](/reference/http-verbs/http-patch) in the HTTP verbs tutorial.
 
 ## Basic Instructions
 

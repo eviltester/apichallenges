@@ -64,6 +64,7 @@ public class SolutionNextChallengeChainTest {
                     "application/vnd.api+json",
                     "application/x-www-form-urlencoded",
                     "application/jsonpath",
+                    "application/vnd.apichallenges.todo-query+json",
                     "application/merge-patch+json",
                     "application/json-patch+json",
                     "text/calendar",

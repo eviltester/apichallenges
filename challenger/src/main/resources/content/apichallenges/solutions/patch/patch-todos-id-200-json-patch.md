@@ -29,7 +29,7 @@ Use `PATCH` with `Content-Type: application/json-patch+json` when you want to se
 - Send an array of JSON Patch operations.
 - The response should be `200`.
 - Use JSON Pointer paths such as `/title`, `/description`, or `/doneStatus`.
-- You can [learn more about PATCH](/reference/http-verbs#toc18) in the HTTP verbs tutorial.
+- You can [learn more about PATCH](/reference/http-verbs/http-patch) in the HTTP verbs tutorial.
 
 ## Basic Instructions
 

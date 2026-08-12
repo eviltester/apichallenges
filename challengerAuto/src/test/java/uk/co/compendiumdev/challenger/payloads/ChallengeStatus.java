@@ -54,6 +54,8 @@ public class ChallengeStatus {
     public Boolean GET_TODOS_PAGINATED_SORTED;
     public Boolean GET_TODOS_PAGINATED_FILTERED;
     public Boolean QUERY_TODOS_FILTERED;
+    public Boolean QUERY_TODOS_JSONPATH_FILTERED;
+    public Boolean QUERY_TODOS_STRUCTURED_JSON_FILTERED;
     public Boolean POST_TODOS_BAD_DONE_STATUS;
     public Boolean GET_TODO_404;
     public Boolean GET_TODOS_NOT_PLURAL_404;

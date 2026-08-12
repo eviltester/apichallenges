@@ -31,7 +31,7 @@ Use `PATCH` with `Content-Type: application/merge-patch+json` when you want to s
 - Send a JSON object containing the fields to add, replace, or remove.
 - The response should be `200`.
 - Fields that are not in the merge patch document should keep their existing values.
-- You can [learn more about PATCH](/reference/http-verbs#toc18) in the HTTP verbs tutorial.
+- You can [learn more about PATCH](/reference/http-verbs/http-patch) in the HTTP verbs tutorial.
 
 ## Basic Instructions
 
