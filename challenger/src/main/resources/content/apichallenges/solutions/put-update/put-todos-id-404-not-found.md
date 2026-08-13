@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to solve PUT /todos/{id} not found 404 by 
 next_challenge: /apichallenges/solutions/put-update/put-todos-id-422-no-amend-id
 concepts_learned: HTTP PUT||404 Not Found||idempotent method||missing resource
 concept_summary: Use this challenge to learn how PUT handles missing resource for todo resources.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP PUT Verb
+concept_reference_url: /reference/http-verbs/http-put
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Find an id that does not exist||Create a PUT request to /todos/{id} with that missing URL id||Send a valid JSON payload without an id field||Send the request and verify the response status is 404

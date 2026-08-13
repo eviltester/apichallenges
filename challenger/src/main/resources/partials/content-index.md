@@ -24,7 +24,21 @@
             <ul class="side-toc-section-links">
                 <li><a href="/reference/web-basics">Web Applications</a></li>
                 <li><a href="/reference/http-basics">HTTP Basics</a></li>
-                <li><a href="/reference/http-verbs">HTTP Verbs</a></li>
+                <li>
+                    <a href="/reference/http-verbs">HTTP Verbs</a>
+                    <ul>
+                        <li><a href="/reference/http-verbs/http-get">GET</a></li>
+                        <li><a href="/reference/http-verbs/http-head">HEAD</a></li>
+                        <li><a href="/reference/http-verbs/http-options">OPTIONS</a></li>
+                        <li><a href="/reference/http-verbs/http-query">QUERY</a></li>
+                        <li><a href="/reference/http-verbs/http-post">POST</a></li>
+                        <li><a href="/reference/http-verbs/http-put">PUT</a></li>
+                        <li><a href="/reference/http-verbs/http-patch">PATCH</a></li>
+                        <li><a href="/reference/http-verbs/http-delete">DELETE</a></li>
+                        <li><a href="/reference/http-verbs/http-trace">TRACE</a></li>
+                        <li><a href="/reference/http-verbs/http-connect">CONNECT</a></li>
+                    </ul>
+                </li>
                 <li><a href="/reference/rest-api-basics">REST API Basics</a></li>
                 <li><a href="/reference/testing-apis">API Testing Concepts</a></li>
                 <li><a href="/reference/openapi">OpenAPI</a></li>

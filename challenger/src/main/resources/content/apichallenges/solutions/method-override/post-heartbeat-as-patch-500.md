@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to send POST /heartbeat with X-HTTP-Method
 next_challenge: /apichallenges/solutions/method-override/post-heartbeat-as-trace-501
 concepts_learned: HTTP POST||method override||HTTP PATCH||500 Internal Server Error
 concept_summary: Use this challenge to learn how method override changes a POST into PATCH and still returns the underlying endpoint status.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP POST Verb
+concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: API Testing Concepts and Coverage
 concept_reference_url_2: /reference/testing-apis
 schema_howto_steps: Create a POST request to /heartbeat||Add X-HTTP-Method-Override PATCH||Include X-CHALLENGER so progress is tracked||Verify the response status is 500

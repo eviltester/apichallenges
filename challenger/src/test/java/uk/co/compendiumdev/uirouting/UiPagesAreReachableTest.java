@@ -2483,7 +2483,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<aside class='concept-learned'"));
         Assertions.assertTrue(response.body.contains("Concept learned"));
         Assertions.assertTrue(response.body.contains("<li>HTTP GET</li>"));
-        Assertions.assertTrue(response.body.contains("href='/reference/http-verbs'"));
+        Assertions.assertTrue(response.body.contains("href='/reference/http-verbs/http-get'"));
         Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
 
         response = http.send("/apichallenges/solutions/accept-header/get-todos-200-xml", "get");
@@ -2554,6 +2554,16 @@ public class UiPagesAreReachableTest {
             response = http.send(verbPage, "get");
             Assertions.assertEquals(200, response.statusCode);
         }
+
+        response = http.send("/reference/http-verbs/http-trace", "get");
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(
+                response.body.contains("<h2>How to Test <code>TRACE</code> Request</h2>"));
+        Assertions.assertTrue(response.body.contains("X-Trace-Test: apichallenges"));
+        Assertions.assertTrue(response.body.contains("Cross-Site Tracing"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "https://owasp.org/www-community/attacks/Cross_Site_Tracing"));
 
         response = http.send("/reference/http-verbs/http-query", "get");
         Assertions.assertEquals(200, response.statusCode);

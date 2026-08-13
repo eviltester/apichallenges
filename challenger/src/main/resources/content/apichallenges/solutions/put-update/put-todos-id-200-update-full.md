@@ -8,8 +8,8 @@ seo_description: Master PUT /todos/{id} full updates by sending all required fie
 next_challenge: /apichallenges/solutions/put-update/put-todos-id-200-update-partial
 concepts_learned: HTTP PUT||200 OK||idempotent method||full update
 concept_summary: Use this challenge to learn how PUT handles full update for todo resources.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP PUT Verb
+concept_reference_url: /reference/http-verbs/http-put
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200

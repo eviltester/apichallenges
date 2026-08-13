@@ -7,8 +7,8 @@ seo_description: Use this walkthrough to solve GET todos id 200 with request set
 next_challenge: /apichallenges/solutions/get/get-todos-id-404
 concepts_learned: HTTP GET||200 OK||resource URL||safe method
 concept_summary: Use this challenge to learn how GET reads a single resource by id.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP GET Verb
+concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200

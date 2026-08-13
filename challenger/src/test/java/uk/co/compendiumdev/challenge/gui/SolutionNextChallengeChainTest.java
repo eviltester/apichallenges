@@ -41,10 +41,30 @@ public class SolutionNextChallengeChainTest {
                     "/reference/web-basics",
                     "/reference/http-basics",
                     "/reference/http-verbs",
+                    "/reference/http-verbs/http-delete",
+                    "/reference/http-verbs/http-get",
+                    "/reference/http-verbs/http-head",
+                    "/reference/http-verbs/http-options",
+                    "/reference/http-verbs/http-patch",
+                    "/reference/http-verbs/http-post",
+                    "/reference/http-verbs/http-put",
+                    "/reference/http-verbs/http-query",
+                    "/reference/http-verbs/http-trace",
                     "/reference/rest-api-basics",
                     "/reference/testing-apis",
                     "/reference/openapi",
                     "/tools/online-clients/swagger/about");
+    private static final Map<String, String> VERB_REFERENCE_URLS =
+            Map.of(
+                    "HTTP DELETE Verb", "/reference/http-verbs/http-delete",
+                    "HTTP GET Verb", "/reference/http-verbs/http-get",
+                    "HTTP HEAD Verb", "/reference/http-verbs/http-head",
+                    "HTTP OPTIONS Verb", "/reference/http-verbs/http-options",
+                    "HTTP PATCH Verb", "/reference/http-verbs/http-patch",
+                    "HTTP POST Verb", "/reference/http-verbs/http-post",
+                    "HTTP PUT Verb", "/reference/http-verbs/http-put",
+                    "HTTP QUERY Verb", "/reference/http-verbs/http-query",
+                    "HTTP TRACE Verb", "/reference/http-verbs/http-trace");
     private static final List<String> LEARNING_SECTION_INLINE_CODE_TERMS =
             List.of(
                     "Accept",
@@ -274,6 +294,7 @@ public class SolutionNextChallengeChainTest {
                     "concept_reference_url_2",
                     false,
                     metadataErrors);
+            validateVerbSpecificConceptReference(solutionPage, content, metadataErrors);
 
             if (content.contains("concept_reference_url: /tutorials/rest-api-tutorial")
                     || content.contains("concept_reference_url_2: /tutorials/rest-api-tutorial")) {
@@ -538,6 +559,23 @@ public class SolutionNextChallengeChainTest {
         final Path referencePage = contentRoot().resolve(url.get().substring(1) + ".md");
         if (!Files.exists(referencePage)) {
             metadataErrors.add(solutionPage + " reference URL does not exist: " + url.get());
+        }
+    }
+
+    private void validateVerbSpecificConceptReference(
+            final String solutionPage, final String content, final List<String> metadataErrors) {
+
+        final Optional<String> label = headerValue(content, "concept_reference_label");
+        final Optional<String> url = headerValue(content, "concept_reference_url");
+        if (label.isEmpty() || url.isEmpty()) {
+            return;
+        }
+
+        final String expectedUrl = VERB_REFERENCE_URLS.get(label.get());
+        if (expectedUrl != null && !expectedUrl.equals(url.get())) {
+            metadataErrors.add(
+                    "%s links %s to %s instead of %s"
+                            .formatted(solutionPage, label.get(), url.get(), expectedUrl));
         }
     }
 

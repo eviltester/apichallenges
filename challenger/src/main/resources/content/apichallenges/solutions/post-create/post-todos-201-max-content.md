@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to solve POST todos 201 - max out with req
 next_challenge: /apichallenges/solutions/post-create/post-todos-413-content-too-long
 concepts_learned: HTTP POST||201 Created||CRUD create||boundary values
 concept_summary: Use this challenge to learn how POST handles valid maximum-length field values.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP POST Verb
+concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201

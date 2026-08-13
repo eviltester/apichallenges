@@ -7,8 +7,8 @@ seo_description: Use this walkthrough to solve QUERY todos 200 with request setu
 next_challenge: /apichallenges/solutions/query/query-todos-200-jsonpath
 concepts_learned: HTTP QUERY||200 OK||safe method||request body query
 concept_summary: Use this challenge to learn how QUERY can send query criteria in the request body without changing state.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP QUERY Verb
+concept_reference_url: /reference/http-verbs/http-query
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a QUERY request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/x-www-form-urlencoded||Send doneStatus=true in the request body and verify the response status is 200

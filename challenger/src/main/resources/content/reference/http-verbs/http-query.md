@@ -171,7 +171,9 @@ A Structured JSON query body instead describes how to search the collection:
 }
 ```
 
-The body is still JSON, but the purpose is different. It does not create or update a todo. It gives the API a structured set of read-only query instructions.
+The body is JSON, but it doesn't represent the `todo` it represents a structured set of read-only query instructions.
+
+Different APIs will support the representation in different ways, so check your API documentation to find the correct representation, assuming that your API supports structured JSON queries.
 
 API Challenges Structured JSON supports these members:
 

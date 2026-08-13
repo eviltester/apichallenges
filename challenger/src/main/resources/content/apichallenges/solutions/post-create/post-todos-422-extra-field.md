@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to solve POST todos 422 extra field with r
 next_challenge: /apichallenges/solutions/put-create/put-todos-422-create
 concepts_learned: HTTP POST||422 Unprocessable Content||CRUD create||validation error
 concept_summary: Use this challenge to learn how APIs reject invalid create request bodies.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP POST Verb
+concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload with an unsupported extra field||Send the request and verify the response status is 422

@@ -7,8 +7,8 @@ seo_description: Use this walkthrough to solve GET Todos (200) with request setu
 next_challenge: /apichallenges/solutions/get/get-todo-404
 concepts_learned: HTTP GET||200 OK||safe method||collection resource
 concept_summary: Use this challenge to learn how GET reads a collection resource without changing server state.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP GET Verb
+concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200

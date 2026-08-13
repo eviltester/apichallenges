@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to solve GET todos filter description wild
 next_challenge: /apichallenges/solutions/get/get-todos-200-sort-ascending
 concepts_learned: HTTP GET||200 OK||query parameters||filtering
 concept_summary: Use this challenge to learn how query parameters filter a collection resource.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP GET Verb
+concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
 schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add a description wildcard filter and verify status 200

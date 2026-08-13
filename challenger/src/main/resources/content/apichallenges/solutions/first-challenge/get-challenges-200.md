@@ -7,8 +7,8 @@ seo_description: Use this walkthrough to solve GET Challenges (200) with request
 next_challenge: /apichallenges/solutions/get/get-todos-200
 concepts_learned: HTTP GET||200 OK||API discovery||safe method
 concept_summary: Use this challenge to learn how a safe GET request retrieves the list of available challenges.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP GET Verb
+concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a GET request to /challenges||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200

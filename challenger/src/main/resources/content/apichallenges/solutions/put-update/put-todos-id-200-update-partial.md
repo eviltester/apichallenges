@@ -8,8 +8,8 @@ seo_description: Learn how partial PUT /todos/{id} updates behave, which fields 
 next_challenge: /apichallenges/solutions/put-update/put-todos-200-body-id
 concepts_learned: HTTP PUT||200 OK||idempotent method||partial update
 concept_summary: Use this challenge to learn how PUT handles partial update for todo resources.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP PUT Verb
+concept_reference_url: /reference/http-verbs/http-put
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200

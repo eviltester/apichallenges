@@ -37,9 +37,9 @@ Accept-Query: application/x-www-form-urlencoded, application/jsonpath, applicati
 
 ## What is Structured JSON?
 
-Structured JSON is a JSON document designed to describe a query.
+Structured JSON is a JSON representation designed to describe a query.
 
-It is not the JSON representation of the resource you want to create or update. It is a read-only query document with known members such as `filter`, `sort`, `limit`, and `offset`.
+It is not the JSON representation of the resource you want to create or update. It is a read-only query with known members such as `filter`, `sort`, `limit`, and `offset`.
 
 For example, a Simple API item might be represented as:
 
@@ -62,7 +62,7 @@ A Structured JSON query for books is shaped differently:
 }
 ```
 
-The first JSON document is data. The second JSON document is a query about data.
+The first JSON represents data. The second JSON represents a query about that data.
 
 ## Structured JSON and JSONPath are Different
 

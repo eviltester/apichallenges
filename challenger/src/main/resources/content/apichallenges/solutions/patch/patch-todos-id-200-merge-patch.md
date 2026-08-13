@@ -7,8 +7,8 @@ seo_description: Use this walkthrough to solve PATCH todos/id 200 with JSON Merg
 next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-json-patch
 concepts_learned: HTTP PATCH||200 OK||JSON Merge Patch||partial update
 concept_summary: Use this challenge to learn how PATCH applies a JSON Merge Patch to an existing resource.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP PATCH Verb
+concept_reference_url: /reference/http-verbs/http-patch
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/merge-patch+json||Send a JSON Merge Patch object and verify the response status is 200

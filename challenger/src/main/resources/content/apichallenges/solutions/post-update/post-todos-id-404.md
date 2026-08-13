@@ -8,8 +8,8 @@ seo_description: Use this walkthrough to solve POST todos/id 404 with request se
 next_challenge: /apichallenges/solutions/put-update/put-todos-id-200-update-full
 concepts_learned: HTTP POST||404 Not Found||resource URL||missing resource
 concept_summary: Use this challenge to learn how this API uses POST to update an existing todo resource.
-concept_reference_label: HTTP Methods and Verbs
-concept_reference_url: /reference/http-verbs
+concept_reference_label: HTTP POST Verb
+concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
 schema_howto_steps: Create a POST request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 404
