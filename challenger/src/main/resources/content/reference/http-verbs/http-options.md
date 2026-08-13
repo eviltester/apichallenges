@@ -1,9 +1,9 @@
 ---
 title: HTTP OPTIONS Verb
-seo_title: HTTP OPTIONS Method for REST API Testing
+seo_title: HTTP OPTIONS Method for REST API Testing and Requests
 description: Learn how the HTTP OPTIONS method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP OPTIONS method is commonly used in REST API testing.
+seo_description: Learn how the HTTP OPTIONS method advertises supported methods, how Allow headers work, and what to check when testing REST API endpoints.
 showads: true
 ---
 
@@ -68,4 +68,3 @@ Content-Length: 0
 - **404** - target url was not found
 
 ---
-

@@ -1,9 +1,9 @@
 ---
 title: HTTP PUT Verb
-seo_title: HTTP PUT Method for REST API Testing
+seo_title: HTTP PUT Method for REST API Testing and Requests
 description: Learn how the HTTP PUT method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP PUT method is commonly used in REST API testing.
+seo_description: Learn how the HTTP PUT method replaces REST API resources, why it should be idempotent, and what request and response behaviour to test.
 showads: true
 ---
 
@@ -100,4 +100,3 @@ Content-Length: 0
 - **422** - request body was understood but failed validation
 
 ---
-

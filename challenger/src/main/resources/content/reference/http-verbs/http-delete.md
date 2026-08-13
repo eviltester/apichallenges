@@ -1,9 +1,9 @@
 ---
 title: HTTP DELETE Verb
-seo_title: HTTP DELETE Method for REST API Testing
+seo_title: HTTP DELETE Method for REST API Testing and Requests
 description: Learn how the HTTP DELETE method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP DELETE method is commonly used in REST API testing.
+seo_description: Learn how the HTTP DELETE method removes REST API resources, why it is commonly idempotent, and what status codes and side effects to test.
 showads: true
 ---
 
@@ -78,4 +78,3 @@ Server: Jetty(9.4.4.v20170414)
 
 
 ---
-

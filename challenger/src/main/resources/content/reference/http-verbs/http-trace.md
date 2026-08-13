@@ -1,9 +1,9 @@
 ---
 title: HTTP TRACE Verb
-seo_title: HTTP TRACE Method for REST API Testing
+seo_title: HTTP TRACE Method for REST API Testing and Requests
 description: Learn how the HTTP TRACE method is commonly used, how to test it, and why APIs often disable it.
 lastmod: 2026-08-13
-seo_description: Learn how the HTTP TRACE method is commonly used, how to test it, and why APIs often disable it.
+seo_description: Learn how the HTTP TRACE method echoes request data for diagnostics, how to test it safely, and why public REST APIs usually disable it.
 showads: true
 ---
 

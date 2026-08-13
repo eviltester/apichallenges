@@ -1,9 +1,9 @@
 ---
 title: HTTP GET Verb
-seo_title: HTTP GET Method for REST API Testing
+seo_title: HTTP GET Method for REST API Testing and Requests
 description: Learn how the HTTP GET method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP GET method is commonly used in REST API testing.
+seo_description: Learn how the HTTP GET method retrieves REST API resources, why it should be safe and idempotent, and what to check when testing requests.
 showads: true
 ---
 
@@ -65,4 +65,3 @@ For a specific item URL, `404` is common when the id does not match any resource
 
 
 ---
-

@@ -1,9 +1,9 @@
 ---
 title: HTTP QUERY Verb
-seo_title: HTTP QUERY Method for REST API Testing
+seo_title: HTTP QUERY Method for REST API Testing and Requests
 description: Learn how the HTTP QUERY method uses request body query content, JSONPath, and Structured JSON.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP QUERY method uses request body query content, JSONPath, and Structured JSON.
+seo_description: Learn how the HTTP QUERY method uses a request body for searches, including JSONPath and Structured JSON examples for API challenge testing.
 showads: true
 ---
 
@@ -288,4 +288,3 @@ Useful Structured JSON bodies to experiment with:
 
 
 ---
-

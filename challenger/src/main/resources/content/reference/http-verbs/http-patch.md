@@ -1,9 +1,9 @@
 ---
 title: HTTP PATCH Verb
-seo_title: HTTP PATCH Method for REST API Testing
+seo_title: HTTP PATCH Method for REST API Testing and Requests
 description: Learn how the HTTP PATCH method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP PATCH method is commonly used in REST API testing.
+seo_description: Learn how the HTTP PATCH method partially updates REST API resources, how it differs from PUT, and what behaviour to check in tests.
 showads: true
 ---
 
@@ -112,4 +112,3 @@ Accept: application/json
 
 
 ---
-

@@ -1,9 +1,9 @@
 ---
 title: HTTP HEAD Verb
-seo_title: HTTP HEAD Method for REST API Testing
+seo_title: HTTP HEAD Method for REST API Testing and Requests
 description: Learn how the HTTP HEAD method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP HEAD method is commonly used in REST API testing.
+seo_description: Learn how the HTTP HEAD method retrieves response headers without a body, and how to test metadata, caching, and availability in REST APIs.
 showads: true
 ---
 

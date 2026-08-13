@@ -1,9 +1,9 @@
 ---
 title: HTTP CONNECT Verb
-seo_title: HTTP CONNECT Method for REST API Testing
+seo_title: HTTP CONNECT Method for REST API Testing and Requests
 description: Learn how the HTTP CONNECT method is commonly used for tunnels and why REST APIs rarely expose it.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP CONNECT method is commonly used for tunnels and why REST APIs rarely expose it.
+seo_description: Learn how the HTTP CONNECT method starts tunnels through proxies, how to test its behaviour, and why normal REST APIs usually reject it.
 showads: true
 ---
 

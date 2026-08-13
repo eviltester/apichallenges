@@ -1,9 +1,9 @@
 ---
 title: HTTP POST Verb
-seo_title: HTTP POST Method for REST API Testing
+seo_title: HTTP POST Method for REST API Testing and Requests
 description: Learn how the HTTP POST method is commonly used in REST API testing.
 lastmod: 2026-08-12
-seo_description: Learn how the HTTP POST method is commonly used in REST API testing.
+seo_description: Learn how the HTTP POST method submits data to REST APIs, creates resources or actions, and what request and response behaviour to test.
 showads: true
 ---
 
@@ -108,4 +108,3 @@ Content-Length: 171
 
 
 ---
-
