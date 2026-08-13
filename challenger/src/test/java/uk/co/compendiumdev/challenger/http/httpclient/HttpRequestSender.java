@@ -82,17 +82,18 @@ public class HttpRequestSender implements CanSendHttpRequests {
             // SET HEADERS
             for (String headerName : headers.keySet()) {
                 con.setRequestProperty(headerName, headers.get(headerName));
-                logger.info("Header - " + headerName + " : " + headers.get(headerName));
+                HttpExchangeLogger.detail(
+                        logger, "Request header - " + headerName + " : " + headers.get(headerName));
                 lastRequest.addHeader(headerName, headers.get(headerName));
             }
 
             String payload = body;
 
-            logger.info("\nSending '" + verb + "' request to URL : " + url);
+            HttpExchangeLogger.detail(logger, "Sending '" + verb + "' request to URL : " + url);
 
             if (body.length() > 0) {
                 // Send post request
-                logger.info(verb + " Body : " + payload);
+                HttpExchangeLogger.detail(logger, verb + " Body : " + payload);
                 con.setDoOutput(true);
                 DataOutputStream wr = new DataOutputStream(con.getOutputStream());
                 wr.writeBytes(payload);
@@ -104,11 +105,8 @@ public class HttpRequestSender implements CanSendHttpRequests {
             int statusCode = con.getResponseCode();
             response.statusCode = statusCode;
 
-            logger.info("response Code : " + statusCode);
-
             String responseBody = getResponseBody(con);
 
-            logger.info("response Body: " + responseBody);
             response.body = responseBody.toString();
 
             // add the headers to readable response
@@ -116,14 +114,18 @@ public class HttpRequestSender implements CanSendHttpRequests {
             for (String headerKey : con.getHeaderFields().keySet()) {
                 String headerValue = con.getHeaderField(headerKey);
                 responseHeaders.put(headerKey, headerValue);
-                logger.info("Header: " + headerKey + " - " + headerValue);
+                HttpExchangeLogger.detail(
+                        logger, "Response header: " + headerKey + " - " + headerValue);
             }
             response.setHeaders(responseHeaders);
 
             lastResponse = response;
+            HttpExchangeLogger.summary(logger, verb, url, statusCode, response.body);
+            HttpExchangeLogger.detail(logger, "Response body: " + response.body);
 
             for (String sentHeader : lastRequest.getHeaders().keySet()) {
-                logger.info(
+                HttpExchangeLogger.detail(
+                        logger,
                         String.format(
                                 "request Header - %s:%s",
                                 sentHeader, lastRequest.getHeaders().get(sentHeader)));

@@ -66,18 +66,24 @@ public class HttpClientRequestSender implements CanSendHttpRequests {
             // SET HEADERS
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 request.header(header.getKey(), header.getValue());
-                logger.info("Header - " + header.getKey() + " : " + headers.get(header.getValue()));
+                HttpExchangeLogger.detail(
+                        logger, "Request header - " + header.getKey() + " : " + header.getValue());
             }
 
-            logger.info("\nSending '" + normalizedVerb + "' request to URL : " + url);
+            HttpExchangeLogger.detail(
+                    logger, "Sending '" + normalizedVerb + "' request to URL : " + url);
 
             final HttpRequest actualRequest = request.build();
 
             lastRequest.body = body;
+            if (!body.isEmpty()) {
+                HttpExchangeLogger.detail(logger, normalizedVerb + " body : " + body);
+            }
             for (Map.Entry<String, List<String>> actualHeader :
                     actualRequest.headers().map().entrySet()) {
                 lastRequest.addHeader(actualHeader.getKey(), actualHeader.getValue().get(0));
-                logger.info(
+                HttpExchangeLogger.detail(
+                        logger,
                         String.format(
                                 "request Header - %s:%s",
                                 actualHeader.getKey(), actualHeader.getValue().get(0)));
@@ -88,12 +94,7 @@ public class HttpClientRequestSender implements CanSendHttpRequests {
 
             response.statusCode = actualResponse.statusCode();
 
-            logger.info("response Code : " + response.statusCode);
-
             response.body = actualResponse.body();
-
-            // print result
-            logger.info("response Body: " + response.body);
 
             // add the headers
             Map<String, String> responseHeaders = new HashMap<>();
@@ -101,11 +102,15 @@ public class HttpClientRequestSender implements CanSendHttpRequests {
                     actualResponse.headers().map().entrySet()) {
                 String headerValue = header.getValue().get(0);
                 responseHeaders.put(header.getKey(), headerValue);
-                logger.info("Header: " + header.getKey() + " - " + headerValue);
+                HttpExchangeLogger.detail(
+                        logger, "Response header: " + header.getKey() + " - " + headerValue);
             }
             response.setHeaders(responseHeaders);
 
             lastResponse = response;
+            HttpExchangeLogger.summary(
+                    logger, normalizedVerb, url, response.statusCode, response.body);
+            HttpExchangeLogger.detail(logger, "Response body: " + response.body);
 
         } catch (Exception e) {
             e.printStackTrace();
