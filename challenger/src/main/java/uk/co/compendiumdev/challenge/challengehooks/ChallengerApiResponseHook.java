@@ -19,6 +19,7 @@ import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiResponseH
 import uk.co.compendiumdev.thingifier.api.ermodelconversion.JsonThing;
 import uk.co.compendiumdev.thingifier.api.http.HttpApiRequest;
 import uk.co.compendiumdev.thingifier.api.http.HttpApiResponse;
+import uk.co.compendiumdev.thingifier.api.http.ThingifierHttpApi;
 import uk.co.compendiumdev.thingifier.api.http.UrlQueryParamParser;
 import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.AcceptHeaderParser;
 import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.ContentTypeHeaderParser;
@@ -27,13 +28,14 @@ import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
 import uk.co.compendiumdev.thingifier.core.query.FilterBy;
+import uk.co.compendiumdev.thingifier.core.query.FilterOperation;
 import uk.co.compendiumdev.thingifier.core.query.QueryFilterParams;
 import uk.co.compendiumdev.thingifier.core.repository.EntityInstanceQuery;
 
 public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
     private static final String STRUCTURED_JSON_QUERY_CONTENT_TYPE =
-            "application/vnd.apichallenges.todo-query+json";
+            ThingifierHttpApi.STRUCTURED_QUERY_CONTENT_TYPE;
 
     Logger logger = LoggerFactory.getLogger(ChallengerApiResponseHook.class);
 
@@ -184,11 +186,13 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             List<JsonObject> responseTodos = todosFromJsonResponse(response);
             List<SortCriterion> sortCriteria = sortCriteriaFrom(request);
 
-            if (idFilterResponseIsProperSubset(request, responseTodos, challenger, ">")) {
+            if (idFilterResponseIsProperSubset(
+                    request, responseTodos, challenger, FilterOperation.GREATER_THAN)) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_ID_GREATER_THAN);
             }
 
-            if (idFilterResponseIsProperSubset(request, responseTodos, challenger, "<")) {
+            if (idFilterResponseIsProperSubset(
+                    request, responseTodos, challenger, FilterOperation.LESS_THAN)) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_FILTERED_ID_LESS_THAN);
             }
 
@@ -787,7 +791,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             final HttpApiRequest request,
             final List<JsonObject> responseTodos,
             final ChallengerAuthData challenger,
-            final String filterOperation) {
+            final FilterOperation filterOperation) {
 
         FilterBy filterBy = filterBy(request, "id", filterOperation);
         Integer filterValue = filterIntegerValue(filterBy);
@@ -795,10 +799,10 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return false;
         }
 
-        if (filterOperation.equals(">")) {
+        if (filterOperation == FilterOperation.GREATER_THAN) {
             return allTodoIdsGreaterThan(responseTodos, filterValue);
         }
-        if (filterOperation.equals("<")) {
+        if (filterOperation == FilterOperation.LESS_THAN) {
             return allTodoIdsLessThan(responseTodos, filterValue);
         }
         return false;
@@ -809,7 +813,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             final List<JsonObject> responseTodos,
             final ChallengerAuthData challenger) {
 
-        FilterBy filterBy = filterBy(request, "id", "=");
+        FilterBy filterBy = filterBy(request, "id", FilterOperation.EQUALS);
         Integer expectedId = filterIntegerValue(filterBy);
         if (expectedId == null || countTodos(challenger) <= 1 || responseTodos.size() != 1) {
             return false;
@@ -822,7 +826,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
     private boolean descriptionRegexFilterResponseMatches(
             final HttpApiRequest request, final List<JsonObject> responseTodos) {
 
-        FilterBy filterBy = filterBy(request, "description", "~=");
+        FilterBy filterBy = filterBy(request, "description", FilterOperation.REGEX_MATCH);
         if (filterBy == null || responseTodos.isEmpty()) {
             return false;
         }
@@ -846,7 +850,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
     private boolean descriptionWildcardFilterResponseMatches(
             final HttpApiRequest request, final List<JsonObject> responseTodos) {
 
-        FilterBy filterBy = filterBy(request, "description", "*=");
+        FilterBy filterBy = filterBy(request, "description", FilterOperation.WILDCARD_MATCH);
         if (filterBy == null || responseTodos.isEmpty()) {
             return false;
         }
@@ -862,10 +866,12 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
     }
 
     private FilterBy filterBy(
-            final HttpApiRequest request, final String fieldName, final String filterOperation) {
+            final HttpApiRequest request,
+            final String fieldName,
+            final FilterOperation filterOperation) {
         for (FilterBy filterBy : request.getFilterableQueryParams().toList()) {
             if (filterBy.fieldName.equals(fieldName)
-                    && filterBy.filterOperation.equals(filterOperation)) {
+                    && filterBy.filterOperation == filterOperation) {
                 return filterBy;
             }
         }
@@ -1113,7 +1119,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
         for (FilterBy filterBy : queryParams.toList()) {
             if (filterBy.fieldName.equals("doneStatus")
-                    && filterBy.filterOperation.equals("=")
+                    && filterBy.filterOperation == FilterOperation.EQUALS
                     && filterBy.fieldValue.equals("true")) {
                 return true;
             }

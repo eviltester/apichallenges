@@ -74,11 +74,11 @@ $.items[?(@.type == 'book')]
 
 Useful JSONPath experiments include `$.items`, `$.items[?(@.type == 'cd')]`, `$.items[?(@.numberinstock == 0)]`, and `$.items[?(@.type == 'book' && @.numberinstock > 0)]`.
 
-The same endpoint also supports Structured JSON QUERY bodies:
+The same endpoint also supports Thingifier Structured JSON QUERY bodies:
 
 ```http
 QUERY /simpleapi/items HTTP/1.1
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 Accept: application/json
 
 {"filter":{"type":"book"}}

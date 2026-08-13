@@ -2574,8 +2574,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("$.todos[?(@.doneStatus == true)]"));
         Assertions.assertTrue(response.body.contains("<h2>HTTP QUERY Structured JSON Body</h2>"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+                response.body.contains("Content-Type: application/vnd.thingifier.query+json"));
         Assertions.assertTrue(response.body.contains("greaterThan"));
         Assertions.assertTrue(response.body.contains("id=\"http-query-structured-json-body\""));
 
@@ -2615,8 +2614,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "data-body=\"{&quot;filter&quot;:{&quot;doneStatus&quot;:true}}\""));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+                response.body.contains("Content-Type: application/vnd.thingifier.query+json"));
         Assertions.assertTrue(
                 response.body.contains(
                         "href=\"/reference/http-verbs/http-query#http-query-structured-json-body\""));
@@ -2628,8 +2626,7 @@ public class UiPagesAreReachableTest {
                 response.body.contains("<h1>Structured JSON QUERY Request Body Support</h1>"));
         Assertions.assertTrue(response.body.contains("QUERY /simpleapi/items"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "Content-Type: application/vnd.apichallenges.todo-query+json"));
+                response.body.contains("Content-Type: application/vnd.thingifier.query+json"));
         Assertions.assertTrue(response.body.contains("JSONPath"));
         Assertions.assertTrue(
                 response.body.contains(

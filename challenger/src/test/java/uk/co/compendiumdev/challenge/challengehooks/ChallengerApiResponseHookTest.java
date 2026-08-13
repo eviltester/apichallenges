@@ -744,8 +744,7 @@ public class ChallengerApiResponseHookTest {
 
             fixture.hook.run(
                     fixture.request("todos", QUERY)
-                            .addHeader(
-                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .addHeader("Content-Type", "application/vnd.thingifier.query+json")
                             .setBody("{\"filter\":{\"doneStatus\":true}}"),
                     fixture.apiResponseWithBody(
                             200,
@@ -773,8 +772,7 @@ public class ChallengerApiResponseHookTest {
 
             fixture.hook.run(
                     fixture.request("todos", QUERY)
-                            .addHeader(
-                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .addHeader("Content-Type", "application/vnd.thingifier.query+json")
                             .setBody("{\"filter\":{\"doneStatus\":true}}"),
                     fixture.apiResponseWithBody(
                             200,
@@ -799,8 +797,7 @@ public class ChallengerApiResponseHookTest {
 
             fixture.hook.run(
                     fixture.request("todos", QUERY)
-                            .addHeader(
-                                    "Content-Type", "application/vnd.apichallenges.todo-query+json")
+                            .addHeader("Content-Type", "application/vnd.thingifier.query+json")
                             .setBody("{\"sort\":[{\"field\":\"id\",\"direction\":\"desc\"}]}"),
                     fixture.apiResponseWithBody(
                             200,

@@ -137,7 +137,7 @@ public class ChallengeDefinitionsTest {
                         .anyMatch(
                                 hint ->
                                         hint.hintText.contains(
-                                                "application/vnd.apichallenges.todo-query+json")));
+                                                "application/vnd.thingifier.query+json")));
         Assertions.assertTrue(
                 structuredJsonChallenge.hints.stream()
                         .anyMatch(

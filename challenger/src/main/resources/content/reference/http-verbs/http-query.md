@@ -2,7 +2,7 @@
 title: HTTP QUERY Verb
 seo_title: HTTP QUERY Method for REST API Testing and Requests
 description: Learn how the HTTP QUERY method uses request body query content, JSONPath, and Structured JSON.
-lastmod: 2026-08-12
+lastmod: 2026-08-13
 seo_description: Learn how the HTTP QUERY method uses a request body for searches, including JSONPath and Structured JSON examples for API challenge testing.
 showads: true
 ---
@@ -14,7 +14,7 @@ showads: true
 - [QUERY](https://www.rfc-editor.org/rfc/rfc10008.html) - safely retrieve data using query content in the request body
 - QUERY is intended for safe, read-only requests where the query content is too large, complex, or structured for a URI query string
 - A server can advertise supported QUERY request content types with `Accept-Query`
-- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded`, `Content-Type: application/jsonpath`, and `Content-Type: application/vnd.apichallenges.todo-query+json`
+- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded`, `Content-Type: application/jsonpath`, and `Content-Type: application/vnd.thingifier.query+json`
 
 `QUERY` is newer and less widely supported than the traditional verbs.
 
@@ -29,6 +29,54 @@ GET /todos?doneStatus=true
 But a more complex query might be easier to send in a request body. That is the type of use case `QUERY` is designed for.
 
 Because `QUERY` is not as widely supported as `GET` and `POST`, always check whether your client, proxy, gateway, and server framework support it before relying on it in a real API.
+
+---
+
+<a id="accept-query-header"></a>
+
+## Accept-Query Header
+
+`Accept-Query` is a response header defined by [RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html#name-the-accept-query-header-fi). A resource can use it to say, "this endpoint supports `QUERY`, and these are the media types I understand in the QUERY request body."
+
+This is different from the request `Accept` header:
+
+- `Accept` is sent by the client to say which response formats it wants back.
+- `Accept-Query` is sent by the server to say which query body formats the client can send with `QUERY`.
+
+For example, API Challenges advertises the supported `QUERY /todos` body formats in the response to `OPTIONS /todos`:
+
+~~~~~~~~
+HTTP/1.1 200 OK
+Allow: OPTIONS GET HEAD POST QUERY PUT
+Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
+Content-Type: text/plain
+~~~~~~~~
+
+That tells us that a `QUERY /todos` request can use any of these `Content-Type` values:
+
+| **Query Body Format** | **Content-Type** |
+|-----------------------|------------------|
+| Form encoded query fields | `application/x-www-form-urlencoded` |
+| JSONPath expression | `application/jsonpath` |
+| Thingifier Structured JSON query | `application/vnd.thingifier.query+json` |
+
+You might see `Accept-Query` in responses from:
+
+- `OPTIONS` requests, where the server describes what an endpoint supports.
+- Successful `QUERY` requests, where the server reminds the client which query formats are available.
+- Error responses such as `415 Unsupported Media Type`, where the server rejects the submitted `Content-Type` and advertises the supported alternatives.
+
+`Accept-Query` is useful for discovery. The `Allow` header can tell you that `QUERY` is allowed, but it does not tell you what kind of query body to send. `Accept-Query` fills that gap by listing the request body media types the endpoint understands.
+
+When using API Challenges, choose one of the advertised values as the request `Content-Type`, then send a body in that format. For example:
+
+~~~~~~~~
+QUERY /todos HTTP/1.1
+Content-Type: application/jsonpath
+Accept: application/json
+
+$.todos[?(@.doneStatus == true)]
+~~~~~~~~
 
 ---
 
@@ -135,18 +183,18 @@ JSONPath is useful with `QUERY` because the URL can stay focused on the resource
 
 ## HTTP QUERY Structured JSON Body
 
-`QUERY` can also send a JSON object that describes the query criteria. API Challenges calls this a Structured JSON query body and supports it using:
+`QUERY` can also send a JSON object that describes the query criteria. Thingifier calls this a Structured JSON query body, and API Challenges supports it using:
 
 ~~~~~~~~
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 ~~~~~~~~
 
 Structured JSON means that the request body is JSON, but it is not the normal resource representation. It is a query document with known top-level members such as `filter`, `sort`, `limit`, and `offset`.
 
-Structured JSON is a documented API Challenges query format, not a general web standard. JSON itself is standardized: [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259). JSONPath is also standardized: [RFC 9535](https://datatracker.ietf.org/doc/html/rfc9535). The media type reinforces that it is vendor/API-specific:
+Structured JSON is a documented Thingifier query format, not a general web standard. JSON itself is standardized: [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259). JSONPath is also standardized: [RFC 9535](https://datatracker.ietf.org/doc/html/rfc9535). The media type reinforces that it is vendor/API-specific:
 
 ```text
-application/vnd.apichallenges.todo-query+json
+application/vnd.thingifier.query+json
 ```
 
 The `vnd.` part is the vendor tree for media types, described by [RFC 6838](https://datatracker.ietf.org/doc/html/rfc6838). The `+json` suffix says the payload syntax is JSON, but the semantics are defined by the API, not by a general web standard.
@@ -175,7 +223,7 @@ The body is JSON, but it doesn't represent the `todo` it represents a structured
 
 Different APIs will support the representation in different ways, so check your API documentation to find the correct representation, assuming that your API supports structured JSON queries.
 
-API Challenges Structured JSON supports these members:
+Thingifier Structured JSON supports these members:
 
 | **Member** | **Purpose** | **Example** |
 |------------|-------------|-------------|
@@ -250,7 +298,7 @@ Use the Structured JSON media type when you want body-based query criteria witho
 
 ~~~~~~~~
 curl -X QUERY {{<ORIGIN_URL>}}/todos ^
--H "Content-Type: application/vnd.apichallenges.todo-query+json" ^
+-H "Content-Type: application/vnd.thingifier.query+json" ^
 -H "Accept: application/json" ^
 -d "{\"filter\":{\"doneStatus\":true}}"
 ~~~~~~~~
@@ -259,7 +307,7 @@ curl -X QUERY {{<ORIGIN_URL>}}/todos ^
 QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 Accept: application/json
 Content-Length: 30
 

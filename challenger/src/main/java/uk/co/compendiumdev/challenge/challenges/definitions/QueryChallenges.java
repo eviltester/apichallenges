@@ -50,7 +50,7 @@ public class QueryChallenges {
                         "Issue a QUERY request on the `/todos` end point with a Structured JSON query body to get only todos which are 'done'. There must exist both 'done' and 'not done' todos, to pass this challenge.");
 
         aChallenge.addHint(
-                "Use `Content-Type: application/vnd.apichallenges.todo-query+json` to tell the API the QUERY body is a Structured JSON query document.");
+                "Use `Content-Type: application/vnd.thingifier.query+json` to tell the API the QUERY body is a Structured JSON query document.");
         aChallenge.addHint(
                 "A body such as `{\"filter\":{\"doneStatus\":true}}` filters the todo collection.");
         aChallenge.addHint(

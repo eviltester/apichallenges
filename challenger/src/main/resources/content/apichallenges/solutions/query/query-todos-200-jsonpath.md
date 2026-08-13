@@ -70,7 +70,7 @@ Issue the QUERY request with the JSONPath filter in the body:
 ~~~~~~~~
 < HTTP/1.1 200 OK
 < Content-Type: application/json
-< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
+< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
 < X-Challenger: x-challenger-guid
 ~~~~~~~~
 
@@ -102,5 +102,5 @@ Returned body:
 - Send `$.todos[?(@.doneStatus == false)]` to return todos that are not done.
 - Send `$.todos[?(@.description != '')]` after creating a todo with a description.
 - Try `$.todos[*].title` and observe that selecting only field values is rejected.
-- Try the same completed-todo filter as a `Structured JSON` body with `Content-Type: application/vnd.apichallenges.todo-query+json` and `{"filter":{"doneStatus":true}}`.
+- Try the same completed-todo filter as a `Structured JSON` body with `Content-Type: application/vnd.thingifier.query+json` and `{"filter":{"doneStatus":true}}`.
 - Use the [method reference](/reference/http-verbs/http-query#http-query-structured-json-body) for extra `QUERY` experiments and details on structured query documents.

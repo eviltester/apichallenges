@@ -5,13 +5,13 @@ description: How to solve API challenge QUERY todos 200 using Structured JSON qu
 lastmod: 2026-08-12
 seo_description: Use this walkthrough to solve QUERY todos 200 Structured JSON with request setup, headers, body content, and expected status code.
 next_challenge: /apichallenges/solutions/patch/patch-todos-id-200-partial
-concepts_learned: HTTP QUERY||Structured JSON||application/vnd.apichallenges.todo-query+json||200 OK||safe method
+concepts_learned: HTTP QUERY||Structured JSON||application/vnd.thingifier.query+json||200 OK||safe method
 concept_summary: Use this challenge to learn how QUERY can send a Structured JSON query document in the request body to filter resources without changing state.
 concept_reference_label: HTTP QUERY Verb
 concept_reference_url: /reference/http-verbs/http-query
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a QUERY request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.apichallenges.todo-query+json||Send a Structured JSON filter for doneStatus true in the request body and verify the response status is 200
+schema_howto_steps: Create a QUERY request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.thingifier.query+json||Send a Structured JSON filter for doneStatus true in the request body and verify the response status is 200
 showads: true
 ---
 
@@ -24,7 +24,7 @@ showads: true
 > Issue a QUERY request on the `/todos` end point with a Structured JSON query body to get only todos which are done. There must exist both done and not done todos to pass this challenge.
 
 - Use the `QUERY` method with `/todos`.
-- Add `Content-Type: application/vnd.apichallenges.todo-query+json`.
+- Add `Content-Type: application/vnd.thingifier.query+json`.
 - Add `Accept: application/json` so you can inspect the response.
 - Send a `filter` object for `"doneStatus": true` in the request body.
 - Make sure your challenger data has at least one todo with `"doneStatus": true` and at least one with `"doneStatus": false`.
@@ -56,7 +56,7 @@ If you need fixture data, create one done todo and one not-done todo first. [See
 
 Issue the QUERY request with the Structured JSON filter in the body:
 
-{{<api-live-request method="QUERY" path="/todos" expected-status="200" headers="Content-Type: application/vnd.apichallenges.todo-query+json||Accept: application/json" body='{"filter":{"doneStatus":true}}' details="true" summary="QUERY /todos with a Structured JSON doneStatus filter" open="true">}}
+{{<api-live-request method="QUERY" path="/todos" expected-status="200" headers="Content-Type: application/vnd.thingifier.query+json||Accept: application/json" body='{"filter":{"doneStatus":true}}' details="true" summary="QUERY /todos with a Structured JSON doneStatus filter" open="true">}}
 
 ## Example Request
 
@@ -65,7 +65,7 @@ Issue the QUERY request with the Structured JSON filter in the body:
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
-> Content-Type: application/vnd.apichallenges.todo-query+json
+> Content-Type: application/vnd.thingifier.query+json
 > Accept: application/json
 >
 > {"filter":{"doneStatus":true}}
@@ -76,7 +76,7 @@ Issue the QUERY request with the Structured JSON filter in the body:
 ~~~~~~~~
 < HTTP/1.1 200 OK
 < Content-Type: application/json
-< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
+< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
 < X-Challenger: x-challenger-guid
 ~~~~~~~~
 
@@ -97,7 +97,7 @@ Returned body:
 
 ## Lessons Learned
 
-- `QUERY /todos` can use `Content-Type: application/vnd.apichallenges.todo-query+json` when the request body is a `Structured JSON` query document.
+- `QUERY /todos` can use `Content-Type: application/vnd.thingifier.query+json` when the request body is a `Structured JSON` query document.
 - The body describes query criteria; it is not a todo representation and it does not create or amend data.
 - A `filter` object can match fields by exact `JSON` values, so booleans are sent as `true` or `false`, not as strings.
 - `Structured JSON` differs from `JSONPath`: `JSONPath` selects from a response-shaped document, while `Structured JSON` describes query criteria for the API to apply.

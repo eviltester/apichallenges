@@ -14,12 +14,12 @@ showads: true
 
 # Structured JSON QUERY Request Body Support
 
-API Challenges now supports Structured JSON in `QUERY` request bodies.
+API Challenges now supports Thingifier Structured JSON in `QUERY` request bodies.
 
-This means `QUERY` endpoints can advertise and accept:
+This means Thingifier-backed `QUERY` endpoints can advertise and accept:
 
 ```text
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 ```
 
 The existing form-encoded and JSONPath options still work:
@@ -32,7 +32,7 @@ Content-Type: application/jsonpath
 With all three formats enabled, an API can use the `Accept-Query` response header to show clients what query body formats are supported:
 
 ```text
-Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
+Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
 ```
 
 ## What is Structured JSON?
@@ -172,7 +172,7 @@ To return books:
 
 ```http
 QUERY /simpleapi/items HTTP/1.1
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 Accept: application/json
 
 {"filter":{"type":"book"}}
@@ -200,7 +200,7 @@ For API Challenges todos, the equivalent completed-todo query is:
 
 ```http
 QUERY /todos HTTP/1.1
-Content-Type: application/vnd.apichallenges.todo-query+json
+Content-Type: application/vnd.thingifier.query+json
 Accept: application/json
 
 {"filter":{"doneStatus":true}}

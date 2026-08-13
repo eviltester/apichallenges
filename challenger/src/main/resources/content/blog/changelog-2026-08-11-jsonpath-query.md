@@ -39,7 +39,7 @@ Form-encoded content still works. JSONPath adds another way to describe read-onl
 One of the key advantages for `QUERY` is the support for multiple content types supporting different query styles and filtering representations. And when the API is properly written, the API itself will use the `accept-query` header to tell the client what formats are supported:
 
 ```text
-accept-query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
+accept-query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
 ```
 
 ## What is JSONPath?

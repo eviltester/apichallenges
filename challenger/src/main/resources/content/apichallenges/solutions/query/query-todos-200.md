@@ -71,7 +71,7 @@ Issue the QUERY request with the filter in the body:
 ~~~~~~~~
 < HTTP/1.1 200 OK
 < Content-Type: application/json
-< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.apichallenges.todo-query+json
+< Accept-Query: application/x-www-form-urlencoded, application/jsonpath, application/vnd.thingifier.query+json
 < X-Challenger: x-challenger-guid
 ~~~~~~~~
 
@@ -101,5 +101,5 @@ Returned body:
 - Send `doneStatus=false` in the `QUERY` body and compare with the `doneStatus=true` result.
 - Repeat the same criteria as `GET /todos?doneStatus=true` and compare URL visibility with body-based criteria.
 - Try the same completed-todo filter as a `JSONPath` `QUERY` body with `Content-Type: application/jsonpath` and `$.todos[?(@.doneStatus == true)]`.
-- Try the same completed-todo filter as a `Structured JSON` `QUERY` body with `Content-Type: application/vnd.apichallenges.todo-query+json` and `{"filter":{"doneStatus":true}}`.
-- Read the [method reference](/reference/http-verbs/http-query#http-query-structured-json-body) for more `QUERY` body formats, including `application/jsonpath` and `application/vnd.apichallenges.todo-query+json`.
+- Try the same completed-todo filter as a `Structured JSON` `QUERY` body with `Content-Type: application/vnd.thingifier.query+json` and `{"filter":{"doneStatus":true}}`.
+- Read the [method reference](/reference/http-verbs/http-query#http-query-structured-json-body) for more `QUERY` body formats, including `application/jsonpath` and `application/vnd.thingifier.query+json`.
