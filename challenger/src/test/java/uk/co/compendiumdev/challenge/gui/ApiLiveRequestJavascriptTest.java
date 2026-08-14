@@ -15,8 +15,12 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("function readableUrl(url)"));
         Assertions.assertTrue(javascript.contains(".replace(/%3E/gi, '>')"));
         Assertions.assertTrue(javascript.contains(".replace(/%3C/gi, '<')"));
+        Assertions.assertTrue(javascript.contains(".replace(/%7B/gi, '{')"));
+        Assertions.assertTrue(javascript.contains(".replace(/%7D/gi, '}')"));
         Assertions.assertTrue(javascript.contains(".replace(/%7E/gi, '~')"));
         Assertions.assertTrue(javascript.contains(".replace(/%2A/gi, '*')"));
+        Assertions.assertTrue(
+                javascript.contains("return readableUrl(`${parsed.pathname}${parsed.search}`)"));
         Assertions.assertTrue(javascript.contains("url.textContent = readableUrl(request.url)"));
         Assertions.assertTrue(javascript.contains("urlInput.value = readableUrl(request.url)"));
         Assertions.assertTrue(javascript.contains("\"${readableUrl(request.url)}\""));
@@ -125,6 +129,12 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(javascript.contains("function pathMatchesPrefix(path, prefix)"));
         Assertions.assertTrue(
                 javascript.contains("return path === prefix || path.indexOf(`${prefix}/`) === 0;"));
+        Assertions.assertTrue(
+                javascript.contains("function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
+        Assertions.assertTrue(
+                javascript.contains("pathMatchesPrefix(parsed.pathname, prefix)"));
+        Assertions.assertTrue(
+                javascript.contains("return `${window.location.origin}${fallback.pathname}${fallback.search}`"));
         Assertions.assertTrue(javascript.contains("hasUnresolvedPathParameter(parsed.pathname)"));
         Assertions.assertTrue(javascript.contains("request.allowedPathPrefixes.some"));
     }
@@ -187,6 +197,25 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(
                 javascript.contains(
                         "queryEditable: placeholder.dataset.queryEditable !== 'false'"));
+        Assertions.assertTrue(javascript.contains("'path'"));
+        Assertions.assertTrue(
+                javascript.contains("function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
+        Assertions.assertTrue(javascript.contains("request.editMode === 'path'"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "request.editMode === 'path' && request.customMethod"));
+        Assertions.assertTrue(javascript.contains("pathInput.className = 'sim-live-edit-path'"));
+        Assertions.assertTrue(javascript.contains("pathInput.type = 'text'"));
+        Assertions.assertTrue(javascript.contains("pathInput.value = pathAndQueryFromUrl"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "request.url = urlWithPathOnly(pathInput.value, request.allowedPathPrefixes, request.url)"));
+        Assertions.assertTrue(
+                javascript.contains("controls.pathInput.value = pathAndQueryFromUrl(request.url)"));
+        Assertions.assertTrue(
+                javascript.contains(
+                        "widgetState.controls.pathInput.value = pathAndQueryFromUrl(widgetState.request.url)"));
+        Assertions.assertTrue(javascript.contains("pathInput.addEventListener('blur'"));
         Assertions.assertTrue(javascript.contains("if (request.queryEditable)"));
         Assertions.assertTrue(javascript.contains("return 'apichallenges.readonly.xAuthToken'"));
         Assertions.assertTrue(

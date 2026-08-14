@@ -108,6 +108,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tutorials/api-simulator-walkthrough\">Interactive API Simulation</a></li>",
                 "<li><a href=\"/apichallenges\">API Challenges</a></li>",
                 "<li><a href=\"/apichallenges/solutions\">Challenge Solutions</a></li>",
+                "<li><a href=\"/practice-modes/simpleapi/experiments\">Simple API Experiments</a></li>",
                 "<details class=\"side-toc-section\" data-side-toc-section=\"reference-tutorials\">",
                 "<a class=\"side-toc-section-title\" href=\"/reference\">Reference</a>",
                 "<li><a href=\"/reference/web-basics\">Web Applications</a></li>",
@@ -383,7 +384,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
     }
 
     @Test
-    void restApiTutorialPathExplainsTheTenStepLearningRoute() {
+    void restApiTutorialPathExplainsTheElevenStepLearningRoute() {
 
         String html = renderContentPage("/tutorials/rest-api-tutorial-path");
 
@@ -412,7 +413,9 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "href=\"/apichallenges\"",
                 "main challenge application",
                 "href=\"/apichallenges/solutions\"",
-                "worked examples for the challenges");
+                "worked examples for the challenges",
+                "href=\"/practice-modes/simpleapi/experiments\"",
+                "exploratory test plan");
     }
 
     @Test

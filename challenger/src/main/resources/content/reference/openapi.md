@@ -37,6 +37,8 @@ Tools can read an OpenAPI file to:
 
 The more complete the OpenAPI file is, the more value those tools can provide.
 
+<a id="viewing-an-openapi-file"></a>
+
 ## Viewing An OpenAPI File
 
 You can view an OpenAPI file in any text editor because it is plain JSON or YAML.
@@ -56,6 +58,8 @@ These APIs also expose versioned OpenAPI JSON files:
 - OpenAPI v 3.1 JSON, which is the default `openapi.json` version
 - OpenAPI v 3.2 JSON, which can describe `QUERY` as a native HTTP method
 
+<a id="openapi-for-testing"></a>
+
 ## OpenAPI For Testing
 
 When testing, the OpenAPI file is a useful source of truth, but it is not the same as the running API.
@@ -70,6 +74,8 @@ The specification can help you identify:
 - unsupported methods
 
 It can also help you spot gaps. If the running API behaves differently from the OpenAPI description then either the API or the documentation may need to change.
+
+<a id="standard-and-permissive-files"></a>
 
 ## Standard And Permissive Files
 
@@ -91,6 +97,8 @@ Examples:
 Most REST clients can import an OpenAPI file and create a starter collection of requests.
 
 This is often the most flexible testing workflow because REST clients are not limited by browser security rules in the same way as browser-hosted API interfaces.
+
+<a id="openapi-uis"></a>
 
 ## OpenAPI UIs
 

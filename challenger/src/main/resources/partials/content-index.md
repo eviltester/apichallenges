@@ -13,6 +13,7 @@
             <li><a href="/tutorials/api-simulator-walkthrough">Interactive API Simulation</a></li>
             <li><a href="/apichallenges">API Challenges</a></li>
             <li><a href="/apichallenges/solutions">Challenge Solutions</a></li>
+            <li><a href="/practice-modes/simpleapi/experiments">Simple API Experiments</a></li>
         </ol>
     </li>
     <li>

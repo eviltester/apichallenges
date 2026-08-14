@@ -8,6 +8,7 @@ import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.PUT;
 import static uk.co.compendiumdev.thingifier.api.http.HttpApiRequest.VERB.QUERY;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -165,6 +166,102 @@ public class ChallengerApiResponseHookTest {
                     fixture.challenger.statusOfChallenge(CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR));
             Assertions.assertTrue(
                     fixture.challenger.statusOfChallenge(CHALLENGE.GET_UNSUPPORTED_ACCEPT_406));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void advancedAcceptChallengesCompleteForExpectedNegotiationRules(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        for (AcceptCase acceptCase :
+                List.of(
+                        new AcceptCase(
+                                CHALLENGE.GET_ACCEPT_XML_Q_PREFERRED,
+                                "application/json;q=0.5, application/xml;q=1",
+                                200,
+                                "application/xml"),
+                        new AcceptCase(
+                                CHALLENGE.GET_ACCEPT_JSON_Q_PREFERRED,
+                                "application/xml;q=0.5, application/json;q=1",
+                                200,
+                                "application/json"),
+                        new AcceptCase(
+                                CHALLENGE.GET_ACCEPT_Q_REJECTS_ALL_406,
+                                "application/json;q=0, application/xml;q=0",
+                                406,
+                                "application/json"),
+                        new AcceptCase(
+                                CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406,
+                                "application/problem+json",
+                                406,
+                                "application/json"),
+                        new AcceptCase(CHALLENGE.GET_ACCEPT_TEXT_XML, "text/xml", 200, "text/xml"),
+                        new AcceptCase(
+                                CHALLENGE.GET_ACCEPT_VENDOR_XML,
+                                "application/vnd.apichallenges.todo+xml",
+                                200,
+                                "application/vnd.apichallenges.todo+xml"),
+                        new AcceptCase(
+                                CHALLENGE.GET_ACCEPT_STRUCTURED_XML_WILDCARD,
+                                "application/*+xml",
+                                200,
+                                "application/todo+xml"))) {
+
+            try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+                HttpApiRequest request =
+                        fixture.request("todos", GET).addHeader("Accept", acceptCase.accept);
+                HttpApiResponse response = fixture.todoApiResponse(request, acceptCase.statusCode);
+
+                fixture.hook.run(request, response, fixture.thingifier.apiConfig());
+
+                Assertions.assertEquals(acceptCase.expectedResponseType, response.getType());
+                Assertions.assertTrue(
+                        fixture.challenger.statusOfChallenge(acceptCase.challenge),
+                        acceptCase.challenge + " should complete for " + acceptCase.accept);
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void unsupportedStructuredJsonWildcardCompletesAdvancedAcceptChallenge(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiRequest request =
+                    fixture.request("todos", GET).addHeader("Accept", "application/*+json");
+
+            fixture.hook.run(
+                    request, fixture.todoApiResponse(request, 406), fixture.thingifier.apiConfig());
+
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(
+                            CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406));
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("repositoryProviders")
+    public void vendorXmlContentTypeChallengeCompletesForTodoXmlRequestBody(
+            final String repositoryName, final Supplier<ThingStoreProvider> providerFactory) {
+
+        try (HookFixture fixture = new HookFixture(providerFactory.get())) {
+            HttpApiRequest request =
+                    fixture.request("todos", POST)
+                            .addHeader("Content-Type", "application/vnd.apichallenges.todo+xml")
+                            .addHeader("Accept", "application/json")
+                            .setBody(
+                                    "<todo><title>vendor xml</title><doneStatus>true</doneStatus></todo>");
+
+            HttpApiResponse response = fixture.todoApiResponse(request, 201);
+
+            fixture.hook.run(request, response, fixture.thingifier.apiConfig());
+
+            Assertions.assertEquals("application/json", response.getType());
+            Assertions.assertTrue(
+                    fixture.challenger.statusOfChallenge(CHALLENGE.POST_CREATE_VENDOR_XML));
+            Assertions.assertFalse(fixture.challenger.statusOfChallenge(CHALLENGE.POST_CREATE_XML));
         }
     }
 
@@ -1493,6 +1590,24 @@ public class ChallengerApiResponseHookTest {
                         (Supplier<ThingStoreProvider>) SqliteThingStoreProvider::inMemory));
     }
 
+    private static class AcceptCase {
+        private final CHALLENGE challenge;
+        private final String accept;
+        private final int statusCode;
+        private final String expectedResponseType;
+
+        AcceptCase(
+                final CHALLENGE challenge,
+                final String accept,
+                final int statusCode,
+                final String expectedResponseType) {
+            this.challenge = challenge;
+            this.accept = accept;
+            this.statusCode = statusCode;
+            this.expectedResponseType = expectedResponseType;
+        }
+    }
+
     private static class HookFixture implements AutoCloseable {
         private final Thingifier thingifier;
         private final Challengers challengers;
@@ -1554,6 +1669,18 @@ public class ChallengerApiResponseHookTest {
             ApiResponse response = new ApiResponse(statusCode);
             response.setBody(body);
             return apiResponse(response);
+        }
+
+        HttpApiResponse todoApiResponse(final HttpApiRequest request, final int statusCode) {
+            return apiResponse(request, new ApiResponse(statusCode).resultContainsType(todo));
+        }
+
+        HttpApiResponse apiResponse(final HttpApiRequest request, final ApiResponse apiResponse) {
+            return new HttpApiResponse(
+                    request.getHeaders(),
+                    apiResponse,
+                    new JsonThing(thingifier.apiConfig().jsonOutput()),
+                    thingifier.apiConfig());
         }
 
         HttpApiResponse apiResponse(final ApiResponse apiResponse) {

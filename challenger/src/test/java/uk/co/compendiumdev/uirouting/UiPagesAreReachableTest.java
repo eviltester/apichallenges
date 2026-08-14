@@ -1563,6 +1563,146 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(simpleApiTitle < simpleApiHero);
         Assertions.assertTrue(simpleApiHero < simpleApiToc);
         assertBodyContainsRandomSimpleApiIsbnGenerator(response);
+        Assertions.assertTrue(
+                response.body.contains("href=\"/practice-modes/simpleapi/experiments\""));
+        Assertions.assertFalse(response.body.contains("<h2>Content Negotiation Experiments</h2>"));
+    }
+
+    @Test
+    void simpleApiTestingExperimentsPageIsReachable() {
+
+        final HttpResponseDetails response =
+                http.send("/practice-modes/simpleapi/experiments", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>Simple API Testing Experiments</h1>"));
+        Assertions.assertTrue(response.body.contains("<h2>Content Negotiation Experiment</h2>"));
+        Assertions.assertTrue(response.body.contains("application/vnd.apichallenges.item+xml"));
+        Assertions.assertTrue(response.body.contains("data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#accept-header\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/reference/http-basics#content-type-header\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-put\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-patch\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/testing-apis#data-risks\""));
+        Assertions.assertTrue(response.body.contains("href=\"/reference/openapi#openapi-for-testing\""));
+        Assertions.assertTrue(countOccurrences(response.body, "class=\"api-live-request\"") >= 20);
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET simpleapi accept headers</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains("Experiment with GET /simpleapi/items Accept headers"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET /simpleapi/items/{id} to check the created item</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>PUT /simpleapi/items/{id} to replace an item</summary><div class=\"api-live-request\" data-method=\"PUT\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains("PUT /simpleapi/items/{id} to replace the created item"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>PATCH /simpleapi/items/{id} to amend values</summary><div class=\"api-live-request\" data-method=\"PATCH\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET /simpleapi/items/{id} after update</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>DELETE /simpleapi/items/{id} to remove an item</summary><div class=\"api-live-request\" data-method=\"DELETE\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET /simpleapi/items/{id} after delete</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items/{{lastCreatedSimpleApiItemId}}\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Experiment with requests to trigger errors</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items/999999\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<summary>Experiment with requests to trigger errors</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items/999999\" data-editable=\"true\" data-edit-mode=\"adhoc\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Experiment with Simple API requests to compare with the docs</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<summary>Experiment with Simple API requests to compare with the docs</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"adhoc\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Experiment with Simple API data lifecycle requests</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<summary>Experiment with Simple API data lifecycle requests</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"adhoc\""));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Experiment with API</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertTrue(countOccurrences(response.body, "data-custom-method=\"true\"") >= 3);
+        Assertions.assertTrue(countOccurrences(response.body, "data-body-methods=\"all\"") >= 3);
+        Assertions.assertFalse(
+                response.body.contains(
+                        "GET /simpleapi/items/999999 to inspect a missing item error"));
+        Assertions.assertFalse(
+                response.body.contains("POST /simpleapi/items with malformed JSON"));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "OPTIONS /simpleapi/items to compare allowed methods with the docs"));
+        Assertions.assertFalse(
+                response.body.contains("GET /simpleapi/items to inspect shared data lifecycle"));
+        Assertions.assertEquals(
+                1, countOccurrences(response.body, "Experiment with unsupported Simple API methods"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>Experiment with unsupported Simple API methods</summary><div class=\"api-live-request\" data-method=\"DELETE\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "<summary>Experiment with unsupported Simple API methods</summary><div class=\"api-live-request\" data-method=\"DELETE\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"adhoc\""));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "DELETE /simpleapi/items to check unsupported collection delete"));
+        Assertions.assertFalse(
+                response.body.contains(
+                        "POST /simpleapi/randomisbn to check unsupported method handling"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<summary>GET /simpleapi/items? to filter the collection</summary><div class=\"api-live-request\" data-method=\"GET\" data-path=\"/simpleapi/items?type=book\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));
+        Assertions.assertFalse(
+                response.body.contains("GET /simpleapi/items?type=book to filter the collection"));
+        Assertions.assertTrue(response.body.contains("data-method=\"QUERY\""));
+        Assertions.assertTrue(response.body.contains("data-expected-status=\"204\""));
+        Assertions.assertFalse(response.body.contains("sim-live-request-details\" open"));
+    }
+
+    @Test
+    void referencePagesExposeStableSectionAnchorsForSimpleApiExperiments() {
+
+        HttpResponseDetails response = http.send("/reference/http-basics", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("id=\"accept-header\""));
+        Assertions.assertTrue(response.body.contains("id=\"content-type-header\""));
+        Assertions.assertTrue(response.body.contains("id=\"query-strings\""));
+        Assertions.assertTrue(response.body.contains("id=\"common-http-status-codes\""));
+        Assertions.assertTrue(response.body.contains("id=\"json-body-format\""));
+        Assertions.assertTrue(response.body.contains("id=\"xml-body-format\""));
+
+        response = http.send("/reference/rest-api-basics", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("id=\"crud\""));
+        Assertions.assertTrue(response.body.contains("id=\"payloads-vs-body\""));
+        Assertions.assertTrue(response.body.contains("id=\"requesting-formats\""));
+        Assertions.assertTrue(response.body.contains("id=\"rest-guidance\""));
+
+        response = http.send("/reference/testing-apis", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("id=\"coverage-of-what\""));
+        Assertions.assertTrue(response.body.contains("id=\"data-risks\""));
+        Assertions.assertTrue(response.body.contains("id=\"common-api-issues\""));
+
+        response = http.send("/reference/openapi", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("id=\"openapi-for-testing\""));
+        Assertions.assertTrue(response.body.contains("id=\"viewing-an-openapi-file\""));
+        Assertions.assertTrue(response.body.contains("id=\"standard-and-permissive-files\""));
     }
 
     @Test

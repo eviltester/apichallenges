@@ -2,7 +2,7 @@
 title: REST API Basics for API Testing
 seo_title: REST API Basics for Testers: Resources, Verbs, CRUD, Auth
 description: Basic REST API tutorial to learn what is a REST API and how they work.
-lastmod: 2026-08-04
+lastmod: 2026-08-14
 seo_description: Learn REST API with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -91,6 +91,8 @@ But ultimately, an API is what the team and company decide it is. Even if it ign
 
 ---
 
+<a id="rest-guidance"></a>
+
 ## Guidance
 
 - Idempotent - same request, same result on the server, not necessarily in the response
@@ -125,6 +127,8 @@ When testing, these ideas help us spot risks:
 - does the API follow the HTTP standards it claims to follow?
 
 ---
+
+<a id="crud"></a>
 
 ## CRUD
 
@@ -163,6 +167,8 @@ Some APIs use `POST` for update because HTML forms historically only supported `
 For testing, avoid assuming that CRUD maps perfectly to one verb. Read the documentation, then test the documented behaviour and the edge cases around unsupported verbs.
 
 ---
+
+<a id="endpoints-vs-url"></a>
 
 ## Endpoints vs URL
 
@@ -205,6 +211,8 @@ We have to pay attention to this because a problem might be caused by:
 
 ---
 
+<a id="payloads-vs-body"></a>
+
 ## Payloads vs Body
 
 A payload is the content in the body of the HTTP request or response.
@@ -239,12 +247,16 @@ The server might not support every format. If we send XML to an endpoint that on
 
 ---
 
+<a id="requesting-formats"></a>
+
 ## Requesting Formats
 
 | Header | Means |
 |--------|-------|
 | `Accept: application/json` | Please return JSON |
 | `Accept: application/xml` | Please return XML |
+| `Accept: application/json;q=0.5, application/xml;q=1` | Please return XML if supported, otherwise JSON is still acceptable |
+| `Accept: application/*+xml` | Please return a supported structured XML representation |
 | `Content-Type: application/json` | This payload is JSON |
 | `Content-Type: application/xml` | This payload is XML |
 
@@ -266,7 +278,13 @@ Content-Type: application/json
 
 This tells the server "I am sending JSON."
 
-XML might also be sent as `text/xml`, depending on the API.
+XML might also be sent as `text/xml`, depending on the API. Some APIs also support explicit model or vendor XML media types such as `application/vnd.example.todo+xml`.
+
+Quality values in `Accept` are preferences from `0` to `1`. A missing `q` value means `1.0`, a higher `q` value wins, and `q=0` excludes that media type. If the most preferred media type is unsupported, the server can still return a lower-priority type that was listed as acceptable.
+
+Structured suffixes are exact media type patterns. `application/*+json` does not mean `application/json`; it means a supported media type ending in `+json`. Likewise, `application/*+xml` only works when the API can choose a supported structured XML representation.
+
+Error and protocol media types such as `application/problem+json`, `application/problem+xml`, and `application/soap+xml` should not be treated as normal resource representations unless the API explicitly documents them for that endpoint.
 
 The server might not support a particular format. It might default to JSON or XML and ignore the header. Or it might reject the request with a clear status code. The API documentation should tell us what to expect.
 
@@ -501,6 +519,8 @@ When testing `PATCH`, check:
 - conflicts when the resource has changed since the client last read it
 
 ---
+
+<a id="general-rest-guidelines"></a>
 
 ## General REST Guidelines
 

@@ -177,6 +177,7 @@ public class ChallengerWebGUI {
                                         <li><a href="/simpleapi/docs/swagger-ui">Swagger UI</a>
                                         <li><a href="/simpleapi/client">API Client</a></li>
                                         <li><a href="/simpleapi/gui/entities">Data Explorer</a></li>
+                                        <li><a href="/practice-modes/simpleapi/experiments">Testing Experiments</a></li>
                                         <li><a href="/practice-modes/simpleapi-openapi">OpenAPI File</a>
                                     </ul>
                                 </li>

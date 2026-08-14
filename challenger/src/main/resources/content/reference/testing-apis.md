@@ -64,6 +64,8 @@ The tool performs the request. The testing thinking designs the request for a pu
 
 ---
 
+<a id="what-would-we-test"></a>
+
 ## What Would We Test?
 
 - Risk
@@ -95,6 +97,8 @@ A purely functionality-driven approach might confirm the happy path but miss inv
 And, those categories are a high level starting point for building a model, go beyond them.
 
 ---
+
+<a id="coverage-driven-testing"></a>
 
 ## Coverage Driven Testing
 
@@ -145,6 +149,8 @@ But the current system state also matters.
 Coverage-driven API testing is about deliberately varying these inputs and states so that we learn how the API behaves.
 
 ---
+
+<a id="coverage-of-what"></a>
 
 ## Coverage of What?
 
@@ -324,6 +330,8 @@ It is worth reading through both the OWasp Web Guidance and OWASP API Testing Gu
 
 ---
 
+<a id="data-risks"></a>
+
 ## Data Risks
 
 - minimum data in requests - missing fields, headers
@@ -405,6 +413,8 @@ Don't just send 3 messages with max, min and just right. Automate sending 0 - ma
 
 ---
 
+<a id="document-your-testing"></a>
+
 ## Document Your Testing
 
 - How can you document your testing?
@@ -443,6 +453,8 @@ Proxy recordings are especially useful because they capture what was actually se
 Sometimes a REST client shows a tidy version of a request, but the proxy reveals extra headers, missing headers, redirects, cookies, or a different body than you expected.
 
 ---
+
+<a id="common-api-issues"></a>
 
 ## Other Risks or Common Issues?
 

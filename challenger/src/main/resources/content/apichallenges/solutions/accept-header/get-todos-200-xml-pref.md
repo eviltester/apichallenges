@@ -1,6 +1,6 @@
 ---
 date:  2021-05-29T10:30:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-14
 title: API Challenges Solution For - GET todos XML as Preference 200
 seo_title: Solution: GET todos XML Preference 200 | API Challenges
 description: How to solve API challenge GET todos XML 200 to accept the todos in XML format as preferred format.
@@ -45,7 +45,7 @@ It is possible to ask for multiple types in the Accept header, expressing a pref
 - Check the body of the message has JSON format data, which is the default from the server
 - Check the `content-type` header in the response has `application/json`
 
-The chained Accept header `application/xml,application/json` asks for XML as first preference, but if not supported then supply JSON.
+The chained Accept header `application/xml,application/json` asks for XML as first preference, but if not supported then supply JSON. Because no `q` values are supplied, both media types behave as if they had `q=1.0`, so order is used to choose between equally preferred supported formats.
 
 
 ### Try it now
@@ -108,8 +108,10 @@ Example Response body:
 - `Accept: application/xml,application/json` expresses a preference order without `q` values.
 - Negotiation should return `application/xml` when `XML` is supported, not simply the API default.
 - Preference lists are useful for clients that can process a fallback format.
+- A supported lower-priority format still matters when a higher-priority format is unavailable.
 
 ## Suggested Experiments
 
 - Reverse the header to `Accept: application/json,application/xml` and observe which `Content-Type` wins.
 - Add `q` values such as `application/xml;q=0.5, application/json;q=1` and compare with the comma-order request.
+- Try `Accept: application/problem+xml, application/xml;q=0.5` and confirm that the supported `XML` fallback can still be used.

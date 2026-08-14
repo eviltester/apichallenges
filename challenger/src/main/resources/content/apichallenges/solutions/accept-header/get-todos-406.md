@@ -1,6 +1,6 @@
 ---
 date:  2021-07-17T10:32:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-14
 title: API Challenges Solution For - GET todos Invalid Accept Header 406
 seo_title: Solution: GET todos Invalid Accept Head | API Challenges
 description: How to solve API challenge GET todos Invalid Accept 406 to GET the todos with an unsupported accept header present which generates a 406 error response.
@@ -23,7 +23,7 @@ Some APIs will report an error when asked for a return format that they do not s
 
 ## 	GET /todos (406)
 
-When we issue a request with an accept header, we are asking for a specific content format in the response. But... if we ask for a format that is not supported then the system may reespond with a 406 'NOT ACCEPTABLE' status code.
+When we issue a request with an accept header, we are asking for a specific content format in the response. But... if we ask for a format that is not supported then the system may respond with a 406 'NOT ACCEPTABLE' status code.
 
 > Issue a GET request on the `/todos` end point with an `Accept` header of `application/gzip` to receive a response with a `406` 'NOT ACCEPTABLE' status code.
 
@@ -97,8 +97,10 @@ Example Response body:
 - `406 Not Acceptable` proves the route exists but cannot produce the requested media type.
 - Unsupported `Accept` values are content negotiation failures, not missing-resource failures.
 - Negative negotiation tests help expose whether an API ignores client preferences.
+- Structured `+json` values still need explicit support and are not aliases for plain `application/json`.
 
 ## Suggested Experiments
 
 - Change `Accept: application/gzip` to `Accept: application/xml` and compare `406 Not Acceptable` with a successful representation.
-- Try `Accept: application/json;q=0` to see whether refusing `JSON` leaves the server with no acceptable format.
+- Try `Accept: application/json;q=0, application/xml;q=0` to see whether refusing all normal todo formats leaves the server with no acceptable representation.
+- Try `Accept: application/problem+json` or `Accept: application/*+json` and compare structured `JSON` rejection with plain `application/json`.

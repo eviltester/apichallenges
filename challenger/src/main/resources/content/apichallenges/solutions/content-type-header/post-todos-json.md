@@ -1,11 +1,11 @@
 ---
 date:  2021-07-17T11:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-14
 title: API Challenges Solution For - POST todos create todo with JSON
 seo_title: Solution: POST todos create with JSON | API Challenges
 description: How to solve API challenge POST todos JSON. Creating a todo with JSON format.
 seo_description: Create a todo with JSON by setting Content-Type and Accept to application/json, posting a valid payload, and confirming challenge completion.
-next_challenge: /apichallenges/solutions/content-type-header/post-todos-415
+next_challenge: /apichallenges/solutions/content-type-header/post-todos-vendor-xml
 concepts_learned: HTTP POST||201 Created||Content-Type header||JSON request body
 concept_summary: Use this challenge to learn how Content-Type tells the API that the request body is JSON.
 concept_reference_label: HTTP Basics

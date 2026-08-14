@@ -2,7 +2,7 @@
 title: HTTP Basics for API Testing
 seo_title: HTTP Basics for API Testing: Requests, Responses, Headers
 description: Basic HTTP tutorial and overview of key HTTP terminology and status codes.
-lastmod: 2026-08-04
+lastmod: 2026-08-14
 seo_description: Learn HTTP Basics with practical examples and clear guidance you can apply immediately when creating requests, analyzing responses, and testing APIs.
 showads: true
 ---
@@ -98,6 +98,8 @@ In testing, this gives us several places to investigate problems. The URL might 
 
 ---
 
+<a id="http-response"></a>
+
 ## HTTP Response to GET /heartbeat request
 
 ~~~~~~~~
@@ -139,6 +141,8 @@ We need to learn to read both response and request. To make sure we are sending 
 
 ---
 
+<a id="raw-http-requests-and-responses"></a>
+
 ## Raw HTTP Requests and Responses
 
 We need to be able to read raw HTTP requests and responses, but we rarely have to create them by hand.
@@ -162,6 +166,8 @@ When testing, pay attention to headers that affect behaviour:
 - custom headers can switch on application-specific features
 
 ---
+
+<a id="basic-http-verbs"></a>
 
 ## Basic HTTP Verbs
 
@@ -215,6 +221,8 @@ Instead of saying "this endpoint is broken", you can say "I sent a `PUT` request
 
 ---
 
+<a id="http-status-codes"></a>
+
 ## HTTP Status Codes
 
 Every HTTP response starts with a status code.
@@ -233,6 +241,8 @@ A `404` can be correct if you are testing that a missing resource is reported as
 
 
 ---
+
+<a id="common-http-status-codes"></a>
 
 ## Common HTTP Status Codes
 
@@ -275,6 +285,8 @@ Status code references are useful when you want to quickly check the meaning of 
 The standard explains what the code means generally. The application documentation explains what the code means for your system.
 
 ---
+
+<a id="json-body-format"></a>
 
 ## HTTP Message Body Format - JSON
 
@@ -349,6 +361,8 @@ When testing JSON responses, we often check:
 
 ---
 
+<a id="xml-body-format"></a>
+
 ## HTTP Message Body Format - XML
 
 - XML - Extensible Markup Language
@@ -422,6 +436,8 @@ When testing XML responses, we often check the same concepts as JSON, but with X
 
 ---
 
+<a id="uri"></a>
+
 ## URI - Uniform Resource Identifier
 
 `scheme:[//[user[:password]@]host[:port]][/path][?query][#fragment]`
@@ -478,6 +494,8 @@ The `https` scheme means HTTP is being sent over a secure TLS connection. This i
 
 ---
 
+<a id="query-strings"></a>
+
 ### Query Strings
 
 ~~~~~~~~
@@ -512,6 +530,8 @@ Query string parameters are commonly written as `name=value` pairs:
 The first parameter starts after the `?`. Additional parameters are separated with `&`.
 
 ---
+
+<a id="more-about-query-strings"></a>
 
 ### More About Query Strings
 
@@ -574,6 +594,8 @@ Projects often argue about interpretations. Some of the standards are exact enou
 
 ---
 
+<a id="http-headers"></a>
+
 ## HTTP Headers
 
 - Headers are `Key: value` pair attributes in the request
@@ -619,6 +641,8 @@ As a tester, it is worth knowing whether an API behaves differently when called 
 
 ---
 
+<a id="accept-header"></a>
+
 ### Accept Header
 
 The `Accept` header tells the server which response formats the client is willing to receive.
@@ -652,7 +676,28 @@ If the API does not support XML, it may ignore the preference, return a default 
 
 The `q=` values in longer `Accept` headers are quality values. They let a client express preferences when it can accept several formats.
 
+- Missing `q` means `q=1.0`, the highest preference.
+- Higher `q` values win over lower values.
+- `q=0` means "do not send me this media type."
+- If a high-priority type is unsupported, a lower-priority supported type can still be used.
+
+For example:
+
+~~~~~~~~
+Accept: application/problem+json;q=1, application/json;q=0.5
+~~~~~~~~
+
+If the API does not support `application/problem+json` as a normal resource representation, it can still return `application/json` because the client listed it as an acceptable fallback.
+
+Structured syntax suffixes are part of the media type. `application/*+json` matches supported media types whose subtype ends in `+json`; it does not automatically match plain `application/json`.
+
+XML negotiation has similar detail. An API might support `application/xml`, `text/xml`, explicit model or vendor media types such as `application/vnd.example.todo+xml`, or a structured wildcard such as `application/*+xml`. The wildcard only helps when the API has a supported `+xml` representation it can choose.
+
+Media types such as `application/problem+xml`, `application/problem+json`, `application/soap+xml`, `application/xhtml+xml`, `application/atom+xml`, `application/rss+xml`, and `image/svg+xml` have their own meanings. Do not assume they are normal representations of the resource being requested.
+
 ---
+
+<a id="content-type-header"></a>
 
 ### Content-Type Header
 

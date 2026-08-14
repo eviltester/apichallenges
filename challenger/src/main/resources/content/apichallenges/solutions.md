@@ -2,7 +2,7 @@
 title: API Challenges Solution Index
 seo_title: Solution Index and Walkthroughs | API Challenges
 description: A list of all the solutions for the API Challenges. Try them yourself, but if you get stuck, we have instructions and solution videos.
-lastmod: 2026-08-11
+lastmod: 2026-08-14
 seo_description: Explore API Challenges Solution with practical guidance and actionable next steps designed to improve API testing skills through hands-on practice.
 showads: true
 ---
@@ -122,10 +122,21 @@ If a solution exposes a gap in your understanding, step back to the supporting m
 - [GET /todos (406)](/apichallenges/solutions/accept-header/get-todos-406)
 - [GET /todos/{id} (200) text/calendar](/apichallenges/solutions/accept-header/get-todos-id-200-calendar)
 
+## Advanced Accept Challenges
+
+- [GET /todos (200) q XML preferred](/apichallenges/solutions/accept-header/get-todos-200-q-xml-preferred)
+- [GET /todos (200) q JSON preferred](/apichallenges/solutions/accept-header/get-todos-200-q-json-preferred)
+- [GET /todos (406) q rejects all](/apichallenges/solutions/accept-header/get-todos-406-q-rejects-all)
+- [GET /todos (406) unsupported +json](/apichallenges/solutions/accept-header/get-todos-406-unsupported-json-suffix)
+- [GET /todos (200) text/xml](/apichallenges/solutions/accept-header/get-todos-200-text-xml)
+- [GET /todos (200) vendor XML](/apichallenges/solutions/accept-header/get-todos-200-vendor-xml)
+- [GET /todos (200) structured XML wildcard](/apichallenges/solutions/accept-header/get-todos-200-structured-xml-wildcard)
+
 ## Content-Type Challenges
 
 - [POST /todos XML](/apichallenges/solutions/content-type-header/post-todos-xml)
 - [POST /todos JSON](/apichallenges/solutions/content-type-header/post-todos-json)
+- [POST /todos vendor XML](/apichallenges/solutions/content-type-header/post-todos-vendor-xml)
 - [POST /todos (415)](/apichallenges/solutions/content-type-header/post-todos-415)
 
 ## Content-Disposition Challenges

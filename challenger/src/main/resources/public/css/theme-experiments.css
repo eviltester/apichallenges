@@ -30,6 +30,9 @@ html[data-theme="clean-docs"] {
     --json-bg: #e9faf3;
     --xml-bg: #0e1726;
     --table-head-bg: #ecf4f8;
+    --live-client-bg: #e5f3ff;
+    --live-client-border: #83b9e5;
+    --live-client-shadow: 0 12px 28px rgba(15, 103, 149, 0.14);
     --shadow: 0 18px 48px rgba(31, 55, 78, 0.1);
     --shadow-soft: 0 8px 24px rgba(31, 55, 78, 0.08);
     --radius: 8px;
@@ -75,6 +78,9 @@ html[data-theme="learning-platform"] {
     --json-bg: #eef9f5;
     --xml-bg: #13213a;
     --table-head-bg: #fff1d6;
+    --live-client-bg: #e7f8ee;
+    --live-client-border: #79bf96;
+    --live-client-shadow: 0 12px 28px rgba(15, 118, 110, 0.14);
     --shadow: 0 18px 42px rgba(124, 77, 25, 0.12);
     --shadow-soft: 0 8px 22px rgba(124, 77, 25, 0.08);
     --radius: 8px;
@@ -120,6 +126,9 @@ html[data-theme="dark-lab"] {
     --json-bg: #03090b;
     --xml-bg: #03090b;
     --table-head-bg: #102429;
+    --live-client-bg: #123544;
+    --live-client-border: #38bdf8;
+    --live-client-shadow: 0 0 0 1px rgba(56, 189, 248, 0.18), 0 16px 34px rgba(0, 0, 0, 0.35);
     --shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
     --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.28);
     --radius: 6px;
@@ -630,6 +639,22 @@ html[data-theme] .sim-live-widget {
     box-sizing: border-box;
     margin: 1rem 0 1.35rem;
     padding: 1rem 1.15rem;
+}
+
+html[data-theme] .sim-live-widget {
+    background: var(--live-client-bg);
+    border-color: var(--live-client-border);
+    box-shadow: var(--live-client-shadow);
+}
+
+html[data-theme] .sim-live-request-details {
+    background: var(--live-client-bg);
+    border-color: var(--live-client-border);
+    box-shadow: var(--live-client-shadow);
+}
+
+html[data-theme] .sim-live-expected {
+    color: var(--text);
 }
 
 html[data-theme] .headertextblock {

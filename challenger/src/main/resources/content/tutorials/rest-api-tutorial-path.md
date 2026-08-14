@@ -1,8 +1,8 @@
 ---
 title: REST API Tutorial Path
 seo_title: REST API Tutorial Path | Learn HTTP, REST, OpenAPI and API Testing
-description: A guided learning path through the API Challenges tutorials, reference pages, practice modes, and challenge solutions.
-lastmod: 2026-08-12
+description: A guided learning path through the API Challenges tutorials, reference pages, practice modes, challenge solutions, and Simple API experiments.
+lastmod: 2026-08-14
 seo_description: Follow a structured REST API tutorial path from request basics through HTTP, REST, OpenAPI, API testing, practice modes, and challenge solutions.
 showads: true
 ---
@@ -74,6 +74,12 @@ Use it as the main route through the Learning Zone. Each step links to a page on
     These pages are worked examples for the challenges. They explain request setup, expected status codes, payload details, hints, and lessons learned.
 
     Use them after you try a challenge so you can compare your reasoning with a guided solution and improve your own testing approach.
+
+11. [Simple API Experiments](/practice-modes/simpleapi/experiments)
+
+    This page turns Simple API into an exploratory test plan. It suggests experiments for CRUD, validation, state checks, content negotiation, request body formats, error responses, documentation comparison, and automation candidates.
+
+    Use it when you want to move from guided challenge completion into broader test coverage thinking.
 
 ## How To Use The Path
 

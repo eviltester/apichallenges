@@ -36,6 +36,13 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
 
     private static final String STRUCTURED_JSON_QUERY_CONTENT_TYPE =
             ThingifierHttpApi.STRUCTURED_QUERY_CONTENT_TYPE;
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_XML = "application/xml";
+    private static final String TEXT_XML = "text/xml";
+    private static final String TODO_VENDOR_XML_CONTENT_TYPE =
+            "application/vnd.apichallenges.todo+xml";
+    private static final String TODO_STRUCTURED_XML_CONTENT_TYPE = "application/todo+xml";
+    private static final Collection<String> TODO_XML_ENTITY_NAMES = List.of("todo", "todos");
 
     Logger logger = LoggerFactory.getLogger(ChallengerApiResponseHook.class);
 
@@ -93,7 +100,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().contentEquals("todos")
                 && request.getQueryParams().isEmpty()
                 && acceptParser.hasAskedForXML()
-                && response.getType().contentEquals("application/xml")
+                && response.getType().contentEquals(APPLICATION_XML)
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_ACCEPT_XML);
         }
@@ -102,7 +109,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().contentEquals("todos")
                 && request.getQueryParams().isEmpty()
                 && acceptParser.hasAskedForJSON()
-                && response.getType().contentEquals("application/json")
+                && response.getType().contentEquals(APPLICATION_JSON)
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_ACCEPT_JSON);
         }
@@ -111,7 +118,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().contentEquals("todos")
                 && request.getQueryParams().isEmpty()
                 && acceptParser.missingAcceptHeader()
-                && response.getType().contentEquals("application/json")
+                && response.getType().contentEquals(APPLICATION_JSON)
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_JSON_BY_DEFAULT_NO_ACCEPT);
         }
@@ -128,7 +135,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().contentEquals("todos")
                 && request.getQueryParams().isEmpty()
                 && acceptParser.hasAskedForANY()
-                && response.getType().contentEquals("application/json")
+                && response.getType().contentEquals(APPLICATION_JSON)
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_ACCEPT_ANY_DEFAULT_JSON);
         }
@@ -139,9 +146,57 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && acceptParser.hasAskedForXML()
                 && acceptParser.hasAskedForJSON()
                 && acceptParser.hasAPreferenceForXml()
-                && response.getType().contentEquals("application/xml")
+                && response.getType().contentEquals(APPLICATION_XML)
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_ACCEPT_XML_PREFERRED);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, "application/json;q=0.5, application/xml;q=1")
+                && responseTypeIs(response, APPLICATION_XML)
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_XML_Q_PREFERRED);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, "application/xml;q=0.5, application/json;q=1")
+                && responseTypeIs(response, APPLICATION_JSON)
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_JSON_Q_PREFERRED);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, "application/json;q=0, application/xml;q=0")
+                && response.getStatusCode() == 406) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_Q_REJECTS_ALL_406);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && (acceptHeaderEquals(request, "application/problem+json")
+                        || acceptHeaderEquals(request, "application/*+json"))
+                && response.getStatusCode() == 406) {
+            challengers.pass(challenger, CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, TEXT_XML)
+                && responseTypeIs(response, TEXT_XML)
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_TEXT_XML);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, TODO_VENDOR_XML_CONTENT_TYPE)
+                && responseTypeIs(response, TODO_VENDOR_XML_CONTENT_TYPE)
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_VENDOR_XML);
+        }
+
+        if (isGetTodosWithoutQuery(request)
+                && acceptHeaderEquals(request, "application/*+xml")
+                && responseTypeIs(response, TODO_STRUCTURED_XML_CONTENT_TYPE)
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_ACCEPT_STRUCTURED_XML_WILDCARD);
         }
 
         if (request.getVerb() == HttpApiRequest.VERB.GET
@@ -318,7 +373,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().matches("todos")
                 && contentTypeParser.isXML()
-                && response.getType().contentEquals("application/xml")
+                && response.getType().contentEquals(APPLICATION_XML)
                 && response.getStatusCode() == 201) {
             challengers.pass(challenger, CHALLENGE.POST_CREATE_XML);
         }
@@ -327,15 +382,23 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().matches("todos")
                 && contentTypeParser.isJSON()
                 && acceptParser.hasAskedForJSON()
-                && response.getType().contentEquals("application/json")
+                && response.getType().contentEquals(APPLICATION_JSON)
                 && response.getStatusCode() == 201) {
             challengers.pass(challenger, CHALLENGE.POST_CREATE_JSON);
         }
 
         if (request.getVerb() == HttpApiRequest.VERB.POST
                 && request.getPath().matches("todos")
+                && contentTypeParser.isXML(TODO_XML_ENTITY_NAMES)
+                && contentTypeIs(contentTypeParser, TODO_VENDOR_XML_CONTENT_TYPE)
+                && response.getStatusCode() == 201) {
+            challengers.pass(challenger, CHALLENGE.POST_CREATE_VENDOR_XML);
+        }
+
+        if (request.getVerb() == HttpApiRequest.VERB.POST
+                && request.getPath().matches("todos")
                 && contentTypeParser.isJSON()
-                && response.getType().contentEquals("application/xml")
+                && response.getType().contentEquals(APPLICATION_XML)
                 && response.getStatusCode() == 201) {
             challengers.pass(challenger, CHALLENGE.POST_CREATE_JSON_ACCEPT_XML);
         }
@@ -344,7 +407,7 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
                 && request.getPath().matches("todos")
                 && acceptParser.hasAskedForJSON()
                 && contentTypeParser.isXML()
-                && response.getType().contentEquals("application/json")
+                && response.getType().contentEquals(APPLICATION_JSON)
                 && response.getStatusCode() == 201) {
             challengers.pass(challenger, CHALLENGE.POST_CREATE_XML_ACCEPT_JSON);
         }
@@ -755,6 +818,28 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
         }
 
         return false;
+    }
+
+    private boolean isGetTodosWithoutQuery(final HttpApiRequest request) {
+        return request.getVerb() == HttpApiRequest.VERB.GET
+                && request.getPath().contentEquals("todos")
+                && request.getQueryParams().isEmpty();
+    }
+
+    private boolean acceptHeaderEquals(final HttpApiRequest request, final String expectedValue) {
+        return normalizedHeaderValue(request.getHeader("accept", ""))
+                .contentEquals(normalizedHeaderValue(expectedValue));
+    }
+
+    private String normalizedHeaderValue(final String headerValue) {
+        if (headerValue == null) {
+            return "";
+        }
+        return headerValue.replaceAll("\\s+", "").toLowerCase();
+    }
+
+    private boolean responseTypeIs(final HttpApiResponse response, final String expectedType) {
+        return response.hasType() && response.getType().contentEquals(expectedType);
     }
 
     private boolean queryParamEquals(

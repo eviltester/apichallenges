@@ -540,6 +540,145 @@ public class GetChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData getTodosAcceptQXmlPreferred200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) q XML preferred",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json;q=0.5, application/xml;q=1` to receive results in XML format.");
+
+        aChallenge.addHint(
+                "Set the `Accept` header to `application/json;q=0.5, application/xml;q=1`.");
+        aChallenge.addHint(
+                "A missing `q` value means `1.0`, and the highest supported `q` value wins.");
+        aChallenge.addHint(
+                "The response should have status `200` and `Content-Type: application/xml`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-200-q-xml-preferred");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosAcceptQJsonPreferred200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) q JSON preferred",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml;q=0.5, application/json;q=1` to receive results in JSON format.");
+
+        aChallenge.addHint(
+                "Set the `Accept` header to `application/xml;q=0.5, application/json;q=1`.");
+        aChallenge.addHint("The lower `q` value keeps XML acceptable but makes JSON preferred.");
+        aChallenge.addHint(
+                "The response should have status `200` and `Content-Type: application/json`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-200-q-json-preferred");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosAcceptQRejectsAll406(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (406) q rejects all",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json;q=0, application/xml;q=0` to receive 406 'NOT ACCEPTABLE' status code.");
+
+        aChallenge.addHint(
+                "Set the `Accept` header to `application/json;q=0, application/xml;q=0`.");
+        aChallenge.addHint("A `q=0` value means that media type is explicitly not acceptable.");
+        aChallenge.addHint("When all supported formats are rejected, the API should return `406`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-406-q-rejects-all");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosUnsupportedStructuredJsonAccept406(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (406) unsupported +json",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header such as `application/problem+json` or `application/*+json` to receive 406 'NOT ACCEPTABLE' status code.");
+
+        aChallenge.addHint(
+                "Set the `Accept` header to `application/problem+json` or `application/*+json`.");
+        aChallenge.addHint(
+                "Structured `+json` media types do not automatically match plain `application/json`.");
+        aChallenge.addHint("If no supported representation remains, the API should return `406`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-406-unsupported-json-suffix");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosAcceptTextXml200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) text/xml",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `text/xml` to receive results in XML format.");
+
+        aChallenge.addHint("Set the `Accept` header to `text/xml`.");
+        aChallenge.addHint("This is an XML media type, even though it is not `application/xml`.");
+        aChallenge.addHint("The response should have status `200` and `Content-Type: text/xml`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-200-text-xml");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosAcceptVendorXml200(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) vendor XML",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/vnd.apichallenges.todo+xml` to receive results in todo XML format.");
+
+        aChallenge.addHint("Set the `Accept` header to `application/vnd.apichallenges.todo+xml`.");
+        aChallenge.addHint(
+                "The `+xml` suffix is only supported here because the media type names the `todo` model.");
+        aChallenge.addHint(
+                "The response should have status `200` and the same vendor XML `Content-Type`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-200-vendor-xml");
+        return aChallenge;
+    }
+
+    public static ChallengeDefinitionData getTodosAcceptStructuredXmlWildcard200(
+            int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "GET /todos (200) structured XML wildcard",
+                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/*+xml` to receive results in a supported structured XML format.");
+
+        aChallenge.addHint("Set the `Accept` header to `application/*+xml`.");
+        aChallenge.addHint("The wildcard can match a model-specific XML media type for todos.");
+        aChallenge.addHint(
+                "The response should have status `200` and a structured `+xml` `Content-Type`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/accept-header/get-todos-200-structured-xml-wildcard");
+        return aChallenge;
+    }
+
     public static ChallengeDefinitionData getTodosExportCsvContentDisposition200(
             int challengeOrder) {
         ChallengeDefinitionData aChallenge =

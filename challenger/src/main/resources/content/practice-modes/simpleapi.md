@@ -2,7 +2,7 @@
 title: API Challenges Simple API
 seo_title: Simple API Practice Mode | API Challenges Practice Mode
 description: The Simple API is a multi-user REST API that you can use to practice testing without any authentication.
-lastmod: 2026-02-18
+lastmod: 2026-08-14
 seo_description: Use API Challenges Simple API to practice safely, understand request-response behavior, and build confidence with guided exercises before advanced testing.
 og_image: /images/hero/simple-api-no-auth-practice-1600x720.jpg
 og_image_alt: Simple API hero image showing no-auth CRUD practice endpoints, the live Simple API page, data explorer, and API docs.
@@ -59,6 +59,10 @@ We wanted to put no barriers between yourself and your learning how to use APIs.
 
 The [documentation](/simpleapi/docs) explains the data formats and the validations. Additionally, you can download an
 Open API Swagger File to load into your API tool of choice and start testing straight away.
+
+## Testing Experiments
+
+When you want to move beyond the basic create, read, update, and delete flow, use the [Simple API testing experiments](/practice-modes/simpleapi/experiments) page. It describes practical coverage ideas as experiments: what to vary, what to observe, and what might indicate a bug.
 
 ## Swagger OpenAPI File
 

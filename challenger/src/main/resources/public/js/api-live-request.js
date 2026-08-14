@@ -5,7 +5,7 @@
   const DEFAULT_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD', 'TRACE', 'QUERY'];
   const CUSTOM_METHOD_VALUE = '__custom__';
   const BODY_METHODS = ['POST', 'PUT', 'PATCH', 'QUERY'];
-  const EDIT_MODES = ['readonly', 'fixed', 'adhoc'];
+  const EDIT_MODES = ['readonly', 'fixed', 'path', 'adhoc'];
   const BROWSER_UNSUPPORTED_METHODS = ['CONNECT', 'TRACE', 'TRACK'];
   const BROWSER_UNSUPPORTED_METHOD_OVERRIDE_HEADERS = [
     'x-http-method',
@@ -54,6 +54,8 @@
     return String(url || '')
       .replace(/%3E/gi, '>')
       .replace(/%3C/gi, '<')
+      .replace(/%7B/gi, '{')
+      .replace(/%7D/gi, '}')
       .replace(/%7E/gi, '~')
       .replace(/%2A/gi, '*');
   }
@@ -69,7 +71,7 @@
   function pathAndQueryFromUrl(url) {
     try {
       const parsed = new URL(url, window.location.origin);
-      return `${parsed.pathname}${parsed.search}`;
+      return readableUrl(`${parsed.pathname}${parsed.search}`);
     } catch (error) {
       return '';
     }
@@ -90,6 +92,33 @@
       ? (trimmedQuery.charAt(0) === '?' ? trimmedQuery : `?${trimmedQuery}`)
       : '';
     return parsed.toString();
+  }
+
+  function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl) {
+    const fallback = new URL(fallbackUrl || '/', window.location.origin);
+    const trimmedPath = (path || '').trim();
+    if (!trimmedPath) {
+      return `${window.location.origin}${fallback.pathname}${fallback.search}`;
+    }
+    let parsed;
+    if (trimmedPath.charAt(0) === '?') {
+      parsed = new URL(fallback.toString());
+      parsed.search = trimmedPath;
+    } else {
+      const pathToParse = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmedPath) || trimmedPath.indexOf('//') === 0
+        ? trimmedPath
+        : (trimmedPath.charAt(0) === '/' ? trimmedPath : `/${trimmedPath}`);
+      parsed = new URL(pathToParse, window.location.origin);
+    }
+    if (allowedPathPrefixes && allowedPathPrefixes.length > 0) {
+      const allowed = allowedPathPrefixes.some(function (prefix) {
+        return pathMatchesPrefix(parsed.pathname, prefix);
+      });
+      if (!allowed) {
+        return `${window.location.origin}${fallback.pathname}${fallback.search}`;
+      }
+    }
+    return `${window.location.origin}${parsed.pathname}${parsed.search}`;
   }
 
   function parseAllowedPathPrefixes(value) {
@@ -1064,10 +1093,14 @@
     let methodInput = null;
     let urlLabel = null;
     let urlInput = null;
+    let pathLabel = null;
+    let pathInput = null;
     let queryLabel = null;
     let queryTextarea = null;
     let lockedFields = null;
-    if (request.editMode === 'adhoc') {
+    const methodEditable =
+        request.editMode === 'adhoc' || (request.editMode === 'path' && request.customMethod);
+    if (methodEditable) {
       methodLabel = document.createElement('label');
       methodLabel.textContent = 'Verb';
       if (request.customMethod) {
@@ -1096,6 +1129,9 @@
         methodLabel.appendChild(methodSelect);
       }
 
+    }
+
+    if (request.editMode === 'adhoc') {
       urlLabel = document.createElement('label');
       urlLabel.textContent = 'URL';
       urlInput = document.createElement('input');
@@ -1104,12 +1140,22 @@
       urlInput.value = readableUrl(request.url);
       urlLabel.appendChild(urlInput);
     } else {
-      lockedFields = document.createElement('div');
-      lockedFields.className = 'sim-live-locked-fields';
-      lockedFields.textContent = `${request.method} ${pathAndQueryFromUrl(request.url)}`;
-      controls.appendChild(lockedFields);
+      if (!methodEditable) {
+        lockedFields = document.createElement('div');
+        lockedFields.className = 'sim-live-locked-fields';
+        lockedFields.textContent = `${request.method} ${pathAndQueryFromUrl(request.url)}`;
+        controls.appendChild(lockedFields);
+      }
 
-      if (request.queryEditable) {
+      if (request.editMode === 'path') {
+        pathLabel = document.createElement('label');
+        pathLabel.textContent = 'Path';
+        pathInput = document.createElement('input');
+        pathInput.className = 'sim-live-edit-path';
+        pathInput.type = 'text';
+        pathInput.value = pathAndQueryFromUrl(request.url);
+        pathLabel.appendChild(pathInput);
+      } else if (request.queryEditable) {
         queryLabel = document.createElement('label');
         queryLabel.textContent = 'Query string';
         queryTextarea = document.createElement('textarea');
@@ -1219,6 +1265,9 @@
       if (urlInput) {
         request.url = absoluteUrl(urlInput.value);
         urlInput.value = readableUrl(request.url);
+      } else if (pathInput) {
+        request.url = urlWithPathOnly(pathInput.value, request.allowedPathPrefixes, request.url);
+        pathInput.value = pathAndQueryFromUrl(request.url);
       } else if (queryTextarea) {
         request.url = urlWithQuery(request.url, queryTextarea.value);
       }
@@ -1250,6 +1299,10 @@
     if (urlInput) {
       urlInput.addEventListener('change', syncRequestFromControls);
     }
+    if (pathInput) {
+      pathInput.addEventListener('change', syncRequestFromControls);
+      pathInput.addEventListener('blur', syncRequestFromControls);
+    }
     if (queryTextarea) {
       queryTextarea.addEventListener('input', syncRequestFromControls);
     }
@@ -1266,6 +1319,9 @@
       syncMethodControlState();
       if (urlInput) {
         urlInput.value = readableUrl(request.url);
+      }
+      if (pathInput) {
+        pathInput.value = pathAndQueryFromUrl(request.url);
       }
       if (queryTextarea) {
         queryTextarea.value = queryFromUrl(request.url);
@@ -1285,6 +1341,9 @@
     if (urlLabel) {
       controls.appendChild(urlLabel);
     }
+    if (pathLabel) {
+      controls.appendChild(pathLabel);
+    }
     if (queryLabel) {
       controls.appendChild(queryLabel);
     }
@@ -1300,6 +1359,7 @@
       methodSelect: methodSelect,
       methodInput: methodInput,
       urlInput: urlInput,
+      pathInput: pathInput,
       headersTextarea: headersTextarea,
       bodyTextarea: bodyTextarea,
       queryTextarea: queryTextarea,
@@ -1727,6 +1787,9 @@
                 if (controls.queryTextarea) {
                   controls.queryTextarea.value = queryFromUrl(request.url);
                 }
+                if (controls.pathInput) {
+                  controls.pathInput.value = pathAndQueryFromUrl(request.url);
+                }
                 controls.headersTextarea.value = headersToEditableText(request.headers);
                 if (controls.bodyTextarea) {
                   controls.bodyTextarea.value = request.body;
@@ -1888,6 +1951,9 @@
       }
       if (widgetState.controls.queryTextarea) {
         widgetState.controls.queryTextarea.value = queryFromUrl(widgetState.request.url);
+      }
+      if (widgetState.controls.pathInput) {
+        widgetState.controls.pathInput.value = pathAndQueryFromUrl(widgetState.request.url);
       }
       widgetState.controls.headersTextarea.value = headersToEditableText(
         widgetState.request.headers);

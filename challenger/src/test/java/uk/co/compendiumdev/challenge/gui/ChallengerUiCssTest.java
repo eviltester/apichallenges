@@ -402,6 +402,36 @@ public class ChallengerUiCssTest {
     }
 
     @Test
+    void liveRequestWidgetsUseDedicatedThemeSurface() throws IOException {
+        String css = themeExperimentsCss();
+
+        Assertions.assertTrue(css.contains("--live-client-bg: #e5f3ff"));
+        Assertions.assertTrue(css.contains("--live-client-bg: #e7f8ee"));
+        Assertions.assertTrue(css.contains("--live-client-bg: #123544"));
+        Assertions.assertTrue(css.contains("--live-client-border: #38bdf8"));
+
+        Assertions.assertTrue(
+                css.contains(
+                        "html[data-theme] .sim-live-widget {\n"
+                                + "    background: var(--live-client-bg);\n"
+                                + "    border-color: var(--live-client-border);\n"
+                                + "    box-shadow: var(--live-client-shadow);\n"
+                                + "}"));
+        Assertions.assertTrue(
+                css.contains(
+                        "html[data-theme] .sim-live-request-details {\n"
+                                + "    background: var(--live-client-bg);\n"
+                                + "    border-color: var(--live-client-border);\n"
+                                + "    box-shadow: var(--live-client-shadow);\n"
+                                + "}"));
+        Assertions.assertTrue(
+                css.contains(
+                        "html[data-theme] .sim-live-expected {\n"
+                                + "    color: var(--text);\n"
+                                + "}"));
+    }
+
+    @Test
     void onlineSwaggerThemeOverridesSwaggerUiAfterCdnStyles() throws IOException {
         String css = onlineSwaggerThemeCss();
 

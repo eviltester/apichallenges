@@ -35,6 +35,8 @@ The `item` fields are:
 
 ## How To Experiment
 
+References: [HTTP requests and responses](/reference/http-basics#raw-http-requests-and-responses), [API testing coverage](/reference/testing-apis#coverage-of-what), [document your testing](/reference/testing-apis#document-your-testing).
+
 Work in small loops:
 
 1. Start with a request that should work.
@@ -55,6 +57,8 @@ Helpful pages:
 - [REST API testing tutorial](/tutorials/rest-api-testing)
 
 ## Baseline Collection Experiment
+
+References: [HTTP GET](/reference/http-verbs/http-get), [HTTP headers](/reference/http-basics#http-headers), [JSON response bodies](/reference/http-basics#json-body-format), [status codes](/reference/http-basics#http-status-codes).
 
 Start with a simple read:
 
@@ -85,6 +89,8 @@ This gives you a known-good response before you start changing data.
 
 ## Create And Verify Experiment
 
+References: [HTTP POST](/reference/http-verbs/http-post), [HTTP GET](/reference/http-verbs/http-get), [REST CRUD](/reference/rest-api-basics#crud), [HTTP headers](/reference/http-basics#http-headers).
+
 Create a fresh item and then check that it exists.
 
 First get a unique ISBN:
@@ -92,6 +98,8 @@ First get a unique ISBN:
 ~~~~~~~~
 GET /simpleapi/randomisbn
 ~~~~~~~~
+
+{{<api-live-request method="GET" path="/simpleapi/randomisbn" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: text/plain" query-editable="false" body-editable="false" details="true" summary="GET /simpleapi/randomisbn to generate an ISBN" open="false">}}
 
 Then create an item:
 
@@ -109,6 +117,8 @@ Accept: application/json
 ~~~~~~~~
 
 {{<api-live-request method="POST" path="/simpleapi/items" expected-status="201" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" query-editable="false" body='{"type":"book","isbn13":"{{randomSimpleApiIsbn}}","price":2.99,"numberinstock":3}' details="true" summary="POST /simpleapi/items to create a known item">}}
+
+{{<api-live-request method="GET" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="false" body-editable="false" details="true" summary="GET /simpleapi/items/{id} to check the created item" open="false">}}
 
 Look for:
 
@@ -132,6 +142,8 @@ Questions:
 
 ## Validation Experiment
 
+References: [Data risks](/reference/testing-apis#data-risks), [HTTP status codes](/reference/http-basics#http-status-codes), [Content-Type header](/reference/http-basics#content-type-header).
+
 Use invalid data to check whether the API rejects bad requests clearly and without side effects.
 
 Try variations such as:
@@ -150,7 +162,7 @@ Try variations such as:
 - check for field lengths - might it be possible that only the first few chars are used?
 - check for spaces padding, try other padding - might it be doing partial matching?
 
-{{<api-live-request method="POST" path="/simpleapi/items" expected-status="422" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" query-editable="false" body='{"type":"book","isbn13":"{{randomSimpleApiIsbn}}","price":2.99,"numberinstock":"3"}' details="true" summary="POST /simpleapi/items with numberinstock as text">}}
+{{<api-live-request method="POST" path="/simpleapi/items" expected-status="422" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" query-editable="false" body='{"type":"book","isbn13":"{{randomSimpleApiIsbn}}","price":2.99,"numberinstock":"3"}' details="true" summary="POST /simpleapi/items and experiment with invalid data">}}
 
 Look for:
 
@@ -170,6 +182,8 @@ Vary:
 
 ## ISBN Uniqueness Experiment
 
+References: [Data risks](/reference/testing-apis#data-risks), [REST CRUD](/reference/rest-api-basics#crud), [HTTP POST](/reference/http-verbs/http-post).
+
 The `isbn13` field must be unique. Hyphens are supposed to be ignored for uniqueness, so these should represent the same ISBN:
 
 ~~~~~~~~
@@ -183,6 +197,8 @@ Try:
 2. Create another item with the same ISBN.
 3. Create another item with the same digits but different hyphen placement.
 4. Check the collection for duplicates.
+
+{{<api-live-request method="POST" path="/simpleapi/items" expected-status="422" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" query-editable="false" body='{"type":"book","isbn13":"{{lastCreatedSimpleApiItemIsbn}}","price":2.99,"numberinstock":3}' details="true" summary="POST /simpleapi/items and experiment with duplicate ISBNs" open="false">}}
 
 Look for:
 
@@ -200,6 +216,8 @@ Vary:
 - check that case is actually not relevant, otherwise your earlier testing might be invalid
 
 ## Update Experiment
+
+References: [HTTP PUT](/reference/http-verbs/http-put), [HTTP PATCH](/reference/http-verbs/http-patch), [payloads vs body](/reference/rest-api-basics#payloads-vs-body), [REST CRUD](/reference/rest-api-basics#crud).
 
 Use `PUT` for full replacement and `PATCH` for partial change.
 
@@ -230,6 +248,12 @@ Accept: application/json
 }
 ~~~~~~~~
 
+{{<api-live-request method="PUT" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" editable="true" edit-mode="path" query-editable="false" body='{"type":"dvd","isbn13":"{{lastCreatedSimpleApiItemIsbn}}","price":4.56,"numberinstock":8}' details="true" summary="PUT /simpleapi/items/{id} to replace an item" open="false">}}
+
+{{<api-live-request method="PATCH" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/json||Accept: application/json" editable="true" edit-mode="path" query-editable="false" body='{"price":9.99}' details="true" summary="PATCH /simpleapi/items/{id} to amend values" open="false">}}
+
+{{<api-live-request method="GET" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="false" body-editable="false" details="true" summary="GET /simpleapi/items/{id} after update" open="false">}}
+
 Look for:
 
 - `PUT` changes the full item to match the submitted representation
@@ -248,11 +272,17 @@ Vary:
 
 ## Delete Experiment
 
+References: [HTTP DELETE](/reference/http-verbs/http-delete), [common HTTP status codes](/reference/http-basics#common-http-status-codes), [REST CRUD](/reference/rest-api-basics#crud).
+
 Delete an item and then prove it has gone.
 
 ~~~~~~~~
 DELETE /simpleapi/items/{id}
 ~~~~~~~~
+
+{{<api-live-request method="DELETE" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="204" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="false" body-editable="false" details="true" summary="DELETE /simpleapi/items/{id} to remove an item" open="false">}}
+
+{{<api-live-request method="GET" path="/simpleapi/items/{{lastCreatedSimpleApiItemId}}" expected-status="404" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="false" body-editable="false" details="true" summary="GET /simpleapi/items/{id} after delete" open="false">}}
 
 Look for:
 
@@ -271,6 +301,8 @@ Vary:
 
 ## Unsupported Method Experiment
 
+References: [HTTP methods](/reference/http-verbs), [HTTP OPTIONS](/reference/http-verbs/http-options), [HTTP TRACE](/reference/http-verbs/http-trace), [common HTTP status codes](/reference/http-basics#common-http-status-codes).
+
 Check that endpoints reject methods they do not support.
 
 Try:
@@ -283,6 +315,8 @@ PUT /simpleapi/randomisbn
 PATCH /simpleapi/randomisbn
 DELETE /simpleapi/randomisbn
 ~~~~~~~~
+
+{{<api-live-request method="DELETE" path="/simpleapi/items" expected-status="405" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" custom-method="true" query-editable="false" body-editable="false" details="true" summary="Experiment with unsupported Simple API methods" open="false">}}
 
 Look for:
 
@@ -299,6 +333,8 @@ Vary:
 
 ## Query And Selection Experiment
 
+References: [query strings](/reference/http-basics#query-strings), [HTTP GET](/reference/http-verbs/http-get), [HTTP QUERY](/reference/http-verbs/http-query), [coverage of query parameters](/reference/testing-apis#coverage-of-what).
+
 Use the collection endpoint to practise retrieving subsets of data.
 
 Try documented `QUERY` and `GET` filter approaches against:
@@ -308,6 +344,10 @@ Try documented `QUERY` and `GET` filter approaches against:
 - `price`
 - `numberinstock`
 - `id`
+
+{{<api-live-request method="GET" path="/simpleapi/items?type=book" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="true" body-editable="false" details="true" summary="GET /simpleapi/items? to filter the collection" open="false">}}
+
+{{<api-live-request method="QUERY" path="/simpleapi/items" expected-status="200" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/x-www-form-urlencoded||Accept: application/json" body="type=book" details="true" summary="QUERY /simpleapi/items with a form body" open="false">}}
 
 Look for:
 
@@ -327,6 +367,8 @@ Vary:
 
 ## Content Negotiation Experiment
 
+References: [Accept header](/reference/http-basics#accept-header), [HTTP headers](/reference/http-basics#http-headers), [requesting formats](/reference/rest-api-basics#requesting-formats).
+
 `/simpleapi/items` is useful for experimenting with response formats because the data is simple and safe to change.
 
 Try `GET /simpleapi/items` with different `Accept` headers:
@@ -339,6 +381,8 @@ Accept: application/*+xml
 Accept: application/xml;q=0.5, application/json;q=1
 Accept: application/problem+json
 ~~~~~~~~
+
+{{<api-live-request method="GET" path="/simpleapi/items" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" query-editable="false" body-editable="false" details="true" summary="GET simpleapi accept headers" open="false">}}
 
 Look for:
 
@@ -361,6 +405,8 @@ Vary:
 
 ## Request Body Format Experiment
 
+References: [Content-Type header](/reference/http-basics#content-type-header), [requesting formats](/reference/rest-api-basics#requesting-formats), [JSON body format](/reference/http-basics#json-body-format), [XML body format](/reference/http-basics#xml-body-format).
+
 For write requests, compare the request `Content-Type` with the response `Accept` header.
 
 Try:
@@ -378,6 +424,10 @@ Accept: application/json
 Content-Type: application/vnd.apichallenges.item+xml
 Accept: application/json
 ~~~~~~~~
+
+{{<api-live-request method="POST" path="/simpleapi/items" expected-status="201" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/xml||Accept: application/json" query-editable="false" body='<item><type>book</type><isbn13>{{randomSimpleApiIsbn}}</isbn13><price>2.99</price><numberinstock>3</numberinstock></item>' details="true" summary="POST /simpleapi/items with XML and Accept JSON" open="false">}}
+
+{{<api-live-request method="POST" path="/simpleapi/items" expected-status="201" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Content-Type: application/vnd.apichallenges.item+xml||Accept: application/json" query-editable="false" body='<item><type>book</type><isbn13>{{randomSimpleApiIsbn}}</isbn13><price>2.99</price><numberinstock>3</numberinstock></item>' details="true" summary="POST /simpleapi/items with vendor item XML" open="false">}}
 
 Look for:
 
@@ -397,6 +447,8 @@ Vary:
 
 ## Error Response Experiment
 
+References: [HTTP status codes](/reference/http-basics#http-status-codes), [common API issues](/reference/testing-apis#common-api-issues), [data risks](/reference/testing-apis#data-risks), [Accept header](/reference/http-basics#accept-header).
+
 Error responses are part of the API contract.
 
 Try:
@@ -407,6 +459,8 @@ Try:
 - unsupported `Content-Type`
 - invalid field type
 - missing mandatory field
+
+{{<api-live-request method="GET" path="/simpleapi/items/999999" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" custom-method="true" body-methods="all" body='{"type":"book","isbn13":"{{randomSimpleApiIsbn}}","price":2.99,"numberinstock":3' details="true" summary="Experiment with requests to trigger errors" open="false">}}
 
 Look for:
 
@@ -427,6 +481,8 @@ Vary:
 
 ## Documentation Comparison Experiment
 
+References: [OpenAPI for testing](/reference/openapi#openapi-for-testing), [viewing an OpenAPI file](/reference/openapi#viewing-an-openapi-file), [standard and permissive files](/reference/openapi#standard-and-permissive-files).
+
 Use the documentation as an oracle, then use the API to challenge it.
 
 Compare:
@@ -435,6 +491,8 @@ Compare:
 - [Simple API Swagger UI](/simpleapi/docs/swagger-ui)
 - [OpenAPI files](/practice-modes/simpleapi-openapi)
 - actual responses from your client
+
+{{<api-live-request method="GET" path="/simpleapi/items" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" custom-method="true" body-methods="all" details="true" summary="Experiment with Simple API requests to compare with the docs" open="false">}}
 
 Look for:
 
@@ -454,6 +512,8 @@ Vary:
 
 ## Multi-User And Data Lifecycle Experiment
 
+References: [REST guidance](/reference/rest-api-basics#rest-guidance), [data risks](/reference/testing-apis#data-risks), [coverage driven testing](/reference/testing-apis#coverage-driven-testing).
+
 The Simple API is shared and safe to change. Data refreshes automatically when low, and there is a maximum number of items.
 
 Try:
@@ -463,6 +523,8 @@ Try:
 - watch whether ids increase over time
 - observe what happens when the collection is near its maximum size
 - refresh the data explorer and compare it with API responses
+
+{{<api-live-request method="GET" path="/simpleapi/items" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" custom-method="true" body-methods="all" details="true" summary="Experiment with Simple API data lifecycle requests" open="false">}}
 
 Look for:
 
@@ -480,6 +542,8 @@ Vary:
 - avoid relying on collection order unless the API documents it
 
 ## Good Automated Execution Candidates
+
+References: [coverage of what](/reference/testing-apis#coverage-of-what), [document your testing](/reference/testing-apis#document-your-testing), [HTTP methods](/reference/http-verbs).
 
 After you have explored manually, automate the checks that are stable and valuable.
 
@@ -502,6 +566,8 @@ How are you protecting your automated execution against multiple users working a
 
 ## Continue Experimenting
 
+References: [what would we test?](/reference/testing-apis#what-would-we-test), [coverage driven testing](/reference/testing-apis#coverage-driven-testing), [HTTP clients](/tools/clients), [HTTP proxies](/tools/proxies).
+
 The scope of Testing possibilities is rarely every complete. There is a potentially infinite amount of inputs you can send to the API - many will not provide you any additional information because they are equivalent variations on a theme.
 
 Identify new experiments to try e.g.:
@@ -518,6 +584,8 @@ This is intended to be a practical thinking experiment - perform it multiple tim
 
 And use it as a basis for other APIs - explore the API Challenges [todo api](/gui/challenges) based on what you learn from this experiment set, also the [buggy API](/practice-modes/shoppingcart), and try your ideas using the [practice APIs](/practice-sites) we've listed.
 
+{{<api-live-request method="GET" path="/simpleapi/items" use-challenger="false" allowed-path-prefixes="/simpleapi" headers="Accept: application/json" editable="true" edit-mode="path" custom-method="true" body-methods="all" details="true" summary="Experiment with API" open="false">}}
+
 Keep Experimenting:
 
 - make notes on what you observe
@@ -525,5 +593,3 @@ Keep Experimenting:
 - interrogate and vary that endpoint and input data set more carefully
 - build a coverage model and see what you missed
 - what risks can you identify? experiment and see if they manifest.
-
-

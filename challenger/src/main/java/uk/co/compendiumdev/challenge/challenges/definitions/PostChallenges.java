@@ -248,6 +248,26 @@ public class PostChallenges {
         return aChallenge;
     }
 
+    public static ChallengeDefinitionData postCreateTodoWithVendorXml(int challengeOrder) {
+        ChallengeDefinitionData aChallenge =
+                new ChallengeDefinitionData(
+                        ChallengeRenderer.renderChallengeNumber(challengeOrder),
+                        "POST /todos vendor XML",
+                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/vnd.apichallenges.todo+xml`, a normal todo XML body, and a negotiated response.");
+
+        aChallenge.addHint(
+                "Set `Content-Type` to `application/vnd.apichallenges.todo+xml` for the XML request body.");
+        aChallenge.addHint("Send a normal `<todo>` XML payload with at least a title.");
+        aChallenge.addHint(
+                "Set `Accept` to a supported response format, for example `application/json`.");
+
+        aChallenge.addSolutionLink(
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/content-type-header/post-todos-vendor-xml");
+        return aChallenge;
+    }
+
     //      content type not supported 415 e.g. form encoded
     public static ChallengeDefinitionData postCreateUnsupportedContentType415(int challengeOrder) {
         ChallengeDefinitionData aChallenge =

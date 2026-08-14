@@ -36,10 +36,18 @@ public class ChallengeStatus {
     public Boolean POST_TODOS_TOO_LONG_TITLE_LENGTH;
     public Boolean GET_ACCEPT_JSON;
     public Boolean GET_ACCEPT_XML_PREFERRED;
+    public Boolean GET_ACCEPT_XML_Q_PREFERRED;
+    public Boolean GET_ACCEPT_JSON_Q_PREFERRED;
+    public Boolean GET_ACCEPT_Q_REJECTS_ALL_406;
+    public Boolean GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406;
+    public Boolean GET_ACCEPT_TEXT_XML;
+    public Boolean GET_ACCEPT_VENDOR_XML;
+    public Boolean GET_ACCEPT_STRUCTURED_XML_WILDCARD;
     public Boolean POST_CREATE_XML_ACCEPT_JSON;
     public Boolean POST_TODOS_415;
     public Boolean CREATE_SECRET_TOKEN_201;
     public Boolean POST_CREATE_XML;
+    public Boolean POST_CREATE_VENDOR_XML;
     public Boolean PUT_TODOS_422;
     public Boolean GET_SECRET_NOTE_200;
     public Boolean PUT_TODOS_422_NO_AMEND_ID;

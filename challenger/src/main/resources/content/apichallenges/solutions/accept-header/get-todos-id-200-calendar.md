@@ -1,11 +1,11 @@
 ---
 date: 2026-08-01T10:00:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-14
 title: API Challenges Solution For - GET todos id text calendar 200
 seo_title: Solution: GET todo id text calendar 200 | API Challenges
 description: How to solve API challenge GET todos id 200 text/calendar by requesting an existing todo as a calendar VTODO.
 seo_description: Request an existing todo with Accept text/calendar and verify the VTODO response so you can complete the API Challenges content negotiation challenge.
-next_challenge: /apichallenges/solutions/content-type-header/post-todos-xml
+next_challenge: /apichallenges/solutions/accept-header/get-todos-200-q-xml-preferred
 concepts_learned: HTTP GET||200 OK||Accept header||content negotiation
 concept_summary: Use this challenge to learn how the Accept header changes the response format for text/calendar.
 concept_reference_label: HTTP Basics

@@ -370,6 +370,41 @@ public class ChallengeDefinitions {
                 GetChallenges.getTodoAcceptTextCalendar200(challengeOrder++),
                 acceptChallenges);
 
+        ChallengeSection advancedAcceptChallenges =
+                new ChallengeSection(
+                        "Advanced Accept Challenges",
+                        "The `Accept` header can use quality values and structured media types to negotiate more precise response formats.");
+        sections.add(advancedAcceptChallenges);
+
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_XML_Q_PREFERRED,
+                GetChallenges.getTodosAcceptQXmlPreferred200(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_JSON_Q_PREFERRED,
+                GetChallenges.getTodosAcceptQJsonPreferred200(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_Q_REJECTS_ALL_406,
+                GetChallenges.getTodosAcceptQRejectsAll406(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406,
+                GetChallenges.getTodosUnsupportedStructuredJsonAccept406(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_TEXT_XML,
+                GetChallenges.getTodosAcceptTextXml200(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_VENDOR_XML,
+                GetChallenges.getTodosAcceptVendorXml200(challengeOrder++),
+                advancedAcceptChallenges);
+        storeChallengeAs(
+                CHALLENGE.GET_ACCEPT_STRUCTURED_XML_WILDCARD,
+                GetChallenges.getTodosAcceptStructuredXmlWildcard200(challengeOrder++),
+                advancedAcceptChallenges);
+
         ChallengeSection contentTypeChallenges =
                 new ChallengeSection(
                         "Content-Type Challenges",
@@ -383,6 +418,10 @@ public class ChallengeDefinitions {
         storeChallengeAs(
                 CHALLENGE.POST_CREATE_JSON,
                 PostChallenges.postCreateTodoWithJsonAcceptJson(challengeOrder++),
+                contentTypeChallenges);
+        storeChallengeAs(
+                CHALLENGE.POST_CREATE_VENDOR_XML,
+                PostChallenges.postCreateTodoWithVendorXml(challengeOrder++),
                 contentTypeChallenges);
         storeChallengeAs(
                 CHALLENGE.POST_TODOS_415,

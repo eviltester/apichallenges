@@ -63,6 +63,103 @@ public class ChallengeDefinitionsTest {
     }
 
     @Test
+    void advancedAcceptChallengesAreInTheirOwnSectionBeforeContentType() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        ChallengeDefinitions definitions = new ChallengeDefinitions(config);
+
+        List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
+        ChallengeSection advancedAccept =
+                sectionNamed(definitions.getChallengeSections(), "Advanced Accept Challenges");
+
+        List<String> expectedNames =
+                List.of(
+                        "GET /todos (200) q XML preferred",
+                        "GET /todos (200) q JSON preferred",
+                        "GET /todos (406) q rejects all",
+                        "GET /todos (406) unsupported +json",
+                        "GET /todos (200) text/xml",
+                        "GET /todos (200) vendor XML",
+                        "GET /todos (200) structured XML wildcard");
+
+        Assertions.assertEquals(
+                expectedNames,
+                advancedAccept.getChallenges().stream().map(challenge -> challenge.name).toList());
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar")
+                        < indexOfChallenge(challenges, "GET /todos (200) q XML preferred"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "GET /todos (200) structured XML wildcard")
+                        < indexOfChallenge(challenges, "POST /todos XML"));
+
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_XML_Q_PREFERRED,
+                definitions.getChallenge("GET /todos (200) q XML preferred"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_JSON_Q_PREFERRED,
+                definitions.getChallenge("GET /todos (200) q JSON preferred"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_Q_REJECTS_ALL_406,
+                definitions.getChallenge("GET /todos (406) q rejects all"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406,
+                definitions.getChallenge("GET /todos (406) unsupported +json"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_TEXT_XML,
+                definitions.getChallenge("GET /todos (200) text/xml"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_VENDOR_XML,
+                definitions.getChallenge("GET /todos (200) vendor XML"));
+        Assertions.assertEquals(
+                CHALLENGE.GET_ACCEPT_STRUCTURED_XML_WILDCARD,
+                definitions.getChallenge("GET /todos (200) structured XML wildcard"));
+
+        assertChallengeMentionsAndLinks(
+                challengeNamed(challenges, "GET /todos (200) q XML preferred"),
+                "application/json;q=0.5, application/xml;q=1",
+                "/apichallenges/solutions/accept-header/get-todos-200-q-xml-preferred");
+        assertChallengeMentionsAndLinks(
+                challengeNamed(challenges, "GET /todos (406) unsupported +json"),
+                "application/problem+json",
+                "/apichallenges/solutions/accept-header/get-todos-406-unsupported-json-suffix");
+        assertChallengeMentionsAndLinks(
+                challengeNamed(challenges, "GET /todos (200) vendor XML"),
+                "application/vnd.apichallenges.todo+xml",
+                "/apichallenges/solutions/accept-header/get-todos-200-vendor-xml");
+        assertChallengeMentionsAndLinks(
+                challengeNamed(challenges, "GET /todos (200) structured XML wildcard"),
+                "application/*+xml",
+                "/apichallenges/solutions/accept-header/get-todos-200-structured-xml-wildcard");
+    }
+
+    @Test
+    void vendorXmlContentTypeChallengeIsBeforeUnsupportedContentType() {
+        ChallengerConfig config = new ChallengerConfig();
+        config.setToMultiPlayerMode();
+        config.setToNoPersistenceMode();
+        ChallengeDefinitions definitions = new ChallengeDefinitions(config);
+
+        List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
+        ChallengeDefinitionData vendorXmlChallenge =
+                challengeNamed(challenges, "POST /todos vendor XML");
+
+        Assertions.assertEquals(
+                CHALLENGE.POST_CREATE_VENDOR_XML,
+                definitions.getChallenge("POST /todos vendor XML"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "POST /todos JSON")
+                        < indexOfChallenge(challenges, "POST /todos vendor XML"));
+        Assertions.assertTrue(
+                indexOfChallenge(challenges, "POST /todos vendor XML")
+                        < indexOfChallenge(challenges, "POST /todos (415)"));
+        assertChallengeMentionsAndLinks(
+                vendorXmlChallenge,
+                "application/vnd.apichallenges.todo+xml",
+                "/apichallenges/solutions/content-type-header/post-todos-vendor-xml");
+    }
+
+    @Test
     void collectionQueryChallengesMentionJsonResponseRequirement() {
         ChallengerConfig config = new ChallengerConfig();
         config.setToMultiPlayerMode();
@@ -172,6 +269,31 @@ public class ChallengeDefinitionsTest {
         Assertions.assertTrue(
                 missingHints.isEmpty(),
                 "Challenges missing hints: " + String.join(", ", missingHints));
+    }
+
+    private void assertChallengeMentionsAndLinks(
+            final ChallengeDefinitionData challenge,
+            final String expectedHintText,
+            final String expectedSolutionLink) {
+
+        Assertions.assertTrue(
+                challenge.hints.stream().anyMatch(hint -> hint.hintText.contains(expectedHintText)),
+                challenge.name + " should mention " + expectedHintText + " in a hint");
+        Assertions.assertTrue(
+                challenge.solutions.stream()
+                        .anyMatch(solution -> solution.linkData.equals(expectedSolutionLink)),
+                challenge.name + " should link to " + expectedSolutionLink);
+    }
+
+    private ChallengeSection sectionNamed(
+            final Collection<ChallengeSection> sections, final String sectionTitle) {
+        for (ChallengeSection section : sections) {
+            if (section.getTitle().equals(sectionTitle)) {
+                return section;
+            }
+        }
+        Assertions.fail("Missing challenge section " + sectionTitle);
+        return null;
     }
 
     private ChallengeDefinitionData challengeNamed(
