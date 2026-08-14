@@ -183,6 +183,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
         Assertions.assertTrue(
                 blogHtml.contains(
+                        "href=\"/blog/changelog-2026-08-14-simple-api-testing-experiments\""));
+        Assertions.assertTrue(
+                blogHtml.contains("Simple API Testing Experiments For API Test Planning"));
+        Assertions.assertTrue(
+                blogHtml.contains(
                         "href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\""));
         Assertions.assertTrue(
                 blogHtml.contains("Accept q Values, JSON, XML, And New API Challenges"));
@@ -245,6 +250,31 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<p class='article-byline'>",
                 "<p class='blog-post-categories'>",
                 "<div id='toc'></div>");
+
+        String simpleApiExperimentsPostHtml =
+                renderContentPage("/blog/changelog-2026-08-14-simple-api-testing-experiments");
+
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains(
+                        "<h1>Simple API Testing Experiments For API Test Planning</h1>"));
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains(
+                        "Published <time datetime='2026-08-14T10:00:00Z'>2026-08-14</time>"));
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains(
+                        "href=\"/practice-modes/simpleapi/experiments\""));
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains("href=\"/reference/testing-apis\""));
+        Assertions.assertTrue(simpleApiExperimentsPostHtml.contains("API test plan"));
+        Assertions.assertTrue(simpleApiExperimentsPostHtml.contains("API test approach"));
+        Assertions.assertTrue(simpleApiExperimentsPostHtml.contains("exploratory API testing"));
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains("href='/blog/categories/api-testing'"));
+        Assertions.assertTrue(
+                simpleApiExperimentsPostHtml.contains("href='/blog/categories/rest-api-tutorial'"));
+        Assertions.assertTrue(simpleApiExperimentsPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertFalse(simpleApiExperimentsPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(simpleApiExperimentsPostHtml.contains("<nav class='side-toc'"));
 
         String acceptPostHtml =
                 renderContentPage("/blog/changelog-2026-08-13-accept-q-json-xml-challenges");
