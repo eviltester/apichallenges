@@ -1579,13 +1579,16 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<h2>Content Negotiation Experiment</h2>"));
         Assertions.assertTrue(response.body.contains("application/vnd.apichallenges.item+xml"));
         Assertions.assertTrue(response.body.contains("data-allowed-path-prefixes=\"/simpleapi\""));
-        Assertions.assertTrue(response.body.contains("href=\"/reference/http-basics#accept-header\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/reference/http-basics#accept-header\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/reference/http-basics#content-type-header\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-put\""));
         Assertions.assertTrue(response.body.contains("href=\"/reference/http-verbs/http-patch\""));
-        Assertions.assertTrue(response.body.contains("href=\"/reference/testing-apis#data-risks\""));
-        Assertions.assertTrue(response.body.contains("href=\"/reference/openapi#openapi-for-testing\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/reference/testing-apis#data-risks\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/reference/openapi#openapi-for-testing\""));
         Assertions.assertTrue(countOccurrences(response.body, "class=\"api-live-request\"") >= 20);
         Assertions.assertTrue(
                 response.body.contains(
@@ -1638,15 +1641,15 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(
                 response.body.contains(
                         "GET /simpleapi/items/999999 to inspect a missing item error"));
-        Assertions.assertFalse(
-                response.body.contains("POST /simpleapi/items with malformed JSON"));
+        Assertions.assertFalse(response.body.contains("POST /simpleapi/items with malformed JSON"));
         Assertions.assertFalse(
                 response.body.contains(
                         "OPTIONS /simpleapi/items to compare allowed methods with the docs"));
         Assertions.assertFalse(
                 response.body.contains("GET /simpleapi/items to inspect shared data lifecycle"));
         Assertions.assertEquals(
-                1, countOccurrences(response.body, "Experiment with unsupported Simple API methods"));
+                1,
+                countOccurrences(response.body, "Experiment with unsupported Simple API methods"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<summary>Experiment with unsupported Simple API methods</summary><div class=\"api-live-request\" data-method=\"DELETE\" data-path=\"/simpleapi/items\" data-editable=\"true\" data-edit-mode=\"path\" data-allowed-path-prefixes=\"/simpleapi\""));

@@ -130,11 +130,12 @@ public class ApiLiveRequestJavascriptTest {
         Assertions.assertTrue(
                 javascript.contains("return path === prefix || path.indexOf(`${prefix}/`) === 0;"));
         Assertions.assertTrue(
-                javascript.contains("function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
+                javascript.contains(
+                        "function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
+        Assertions.assertTrue(javascript.contains("pathMatchesPrefix(parsed.pathname, prefix)"));
         Assertions.assertTrue(
-                javascript.contains("pathMatchesPrefix(parsed.pathname, prefix)"));
-        Assertions.assertTrue(
-                javascript.contains("return `${window.location.origin}${fallback.pathname}${fallback.search}`"));
+                javascript.contains(
+                        "return `${window.location.origin}${fallback.pathname}${fallback.search}`"));
         Assertions.assertTrue(javascript.contains("hasUnresolvedPathParameter(parsed.pathname)"));
         Assertions.assertTrue(javascript.contains("request.allowedPathPrefixes.some"));
     }
@@ -199,11 +200,11 @@ public class ApiLiveRequestJavascriptTest {
                         "queryEditable: placeholder.dataset.queryEditable !== 'false'"));
         Assertions.assertTrue(javascript.contains("'path'"));
         Assertions.assertTrue(
-                javascript.contains("function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
+                javascript.contains(
+                        "function urlWithPathOnly(path, allowedPathPrefixes, fallbackUrl)"));
         Assertions.assertTrue(javascript.contains("request.editMode === 'path'"));
         Assertions.assertTrue(
-                javascript.contains(
-                        "request.editMode === 'path' && request.customMethod"));
+                javascript.contains("request.editMode === 'path' && request.customMethod"));
         Assertions.assertTrue(javascript.contains("pathInput.className = 'sim-live-edit-path'"));
         Assertions.assertTrue(javascript.contains("pathInput.type = 'text'"));
         Assertions.assertTrue(javascript.contains("pathInput.value = pathAndQueryFromUrl"));
