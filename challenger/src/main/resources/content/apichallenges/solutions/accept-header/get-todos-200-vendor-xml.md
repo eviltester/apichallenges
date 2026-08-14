@@ -4,7 +4,7 @@ lastmod: 2026-08-14
 title: API Challenges Solution For - GET todos vendor XML 200
 seo_title: Solution: GET todos Vendor XML 200 | API Challenges
 description: How to solve API challenge GET todos 200 by requesting a todo-specific vendor XML media type.
-seo_description: Request todos with application/vnd.apichallenges.todo+xml and confirm the vendor XML response representation.
+seo_description: Request todos with application/vnd.apichallenges.todo+xml and confirm the vendor XML response representation and Content-Type header.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-200-structured-xml-wildcard
 concepts_learned: HTTP GET||200 OK||Accept header||vendor media types
 concept_summary: Use this challenge to learn how an explicit vendor +xml media type can represent a todo resource.

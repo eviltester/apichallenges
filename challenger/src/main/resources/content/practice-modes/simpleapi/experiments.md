@@ -3,7 +3,7 @@ title: Simple API Testing Experiments
 seo_title: Simple API Testing Experiments and Coverage Ideas
 description: A practical set of Simple API testing experiments covering CRUD, validation, state, headers, formats, methods, and documentation checks.
 lastmod: 2026-08-14
-seo_description: Use Simple API testing experiments to practise API test design with CRUD workflows, validation checks, content negotiation, state verification, and documentation comparison.
+seo_description: Use Simple API testing experiments to practise test design with CRUD workflows, validation checks, content negotiation, state checks, and documentation comparison.
 showads: true
 ---
 

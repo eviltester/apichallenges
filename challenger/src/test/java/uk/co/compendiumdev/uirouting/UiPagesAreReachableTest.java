@@ -151,6 +151,11 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
+                        "Accept q Values, JSON, XML, And New API Challenges",
+                        "/blog/changelog-2026-08-13-accept-q-json-xml-challenges"));
+        args.add(
+                Arguments.of(
+                        200,
                         "API Spector Review: Best New API Client for API Testing",
                         "/blog/changelog-2026-08-07-initial-api-spector-review"));
         args.add(
@@ -1300,6 +1305,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/blog/all-posts\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/page/2\""));
         Assertions.assertTrue(response.body.contains("Page 1 of 2"));
+        Assertions.assertTrue(
+                response.body.contains("Accept q Values, JSON, XML, And New API Challenges"));
         Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
         Assertions.assertTrue(
@@ -1334,6 +1341,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
         Assertions.assertTrue(
                 response.body.contains(
+                        "<time datetime=\"2026-08-13T10:00:00Z\">2026-08-13</time> <a href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\">Accept q Values, JSON, XML, And New API Challenges</a>"));
+        Assertions.assertTrue(
+                response.body.contains(
                         "<time datetime=\"2026-08-12T13:00:00Z\">2026-08-12</time> <a href=\"/blog/changelog-2026-08-12-structured-json-query\">Structured JSON QUERY Request Body Support</a>"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -1347,6 +1357,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<time datetime=\"2024-04-13T15:36:44Z\">2024-04-13</time> <a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
+        Assertions.assertTrue(
+                response.body.indexOf("Accept q Values, JSON, XML, And New API Challenges")
+                        < response.body.indexOf("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(
                 response.body.indexOf("Structured JSON QUERY Request Body Support")
                         < response.body.indexOf("JSONPath QUERY Request Body Support"));
@@ -1378,6 +1391,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("<li><a href=\"/blog/categories\">categories</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">API Testing</li>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "href=\"/blog/changelog-2026-08-12-structured-json-query\""));
@@ -1421,13 +1437,18 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<rss version=\"2.0\""));
         Assertions.assertTrue(response.body.contains("xmlns:content="));
         Assertions.assertTrue(response.body.contains("<content:encoded><![CDATA["));
+        Assertions.assertTrue(
+                response.body.contains("Accept q Values, JSON, XML, And New API Challenges"));
         Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
         Assertions.assertTrue(response.body.contains("Multiple Online Open API Embedded Clients"));
         Assertions.assertTrue(
                 response.body.contains("API Spector Review: Best New API Client for API Testing"));
-        Assertions.assertTrue(
+        Assertions.assertFalse(
                 response.body.contains("Interactive API Simulator Walkthrough Launch"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "https://apichallenges.com/blog/changelog-2026-08-13-accept-q-json-xml-challenges"));
         Assertions.assertTrue(
                 response.body.contains(
                         "https://apichallenges.com/blog/changelog-2026-08-12-structured-json-query"));
@@ -1440,6 +1461,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<category>API Testing</category>"));
         Assertions.assertTrue(response.body.contains("<category>Change Log</category>"));
         Assertions.assertTrue(response.body.contains("api-spector.dev"));
+        Assertions.assertTrue(
+                response.body.indexOf("Accept q Values, JSON, XML, And New API Challenges")
+                        < response.body.indexOf("Structured JSON QUERY Request Body Support"));
         Assertions.assertTrue(
                 response.body.indexOf("Structured JSON QUERY Request Body Support")
                         < response.body.indexOf("JSONPath QUERY Request Body Support"));
@@ -3343,6 +3367,9 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.com/blog/changelog-2026-08-07-initial-api-spector-review</loc>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<loc>https://apichallenges.com/blog/changelog-2026-08-13-accept-q-json-xml-challenges</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<loc>https://apichallenges.com/blog/api-simulator-walkthrough-launch</loc>"));

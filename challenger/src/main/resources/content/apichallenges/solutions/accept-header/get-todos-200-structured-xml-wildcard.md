@@ -4,7 +4,7 @@ lastmod: 2026-08-14
 title: API Challenges Solution For - GET todos structured XML wildcard 200
 seo_title: Solution: GET todos Structured XML Wildcard 200 | API Challenges
 description: How to solve API challenge GET todos 200 by requesting a supported structured XML wildcard media type.
-seo_description: Request todos with Accept application/*+xml and confirm the API chooses a supported todo XML media type.
+seo_description: Request todos with Accept application/*+xml and confirm the API chooses a supported todo XML media type with a structured Content-Type.
 next_challenge: /apichallenges/solutions/content-type-header/post-todos-xml
 concepts_learned: HTTP GET||200 OK||Accept header||structured media types
 concept_summary: Use this challenge to learn how application/*+xml can negotiate a supported model-specific XML response.

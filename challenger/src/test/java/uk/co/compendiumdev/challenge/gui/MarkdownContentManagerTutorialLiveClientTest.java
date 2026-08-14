@@ -181,6 +181,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(blogHtml.contains("href=\"/blog/page/2\""));
         Assertions.assertTrue(blogHtml.contains("Page 1 of 2"));
         Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
+        Assertions.assertTrue(
+                blogHtml.contains(
+                        "href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\""));
+        Assertions.assertTrue(
+                blogHtml.contains("Accept q Values, JSON, XML, And New API Challenges"));
         Assertions.assertFalse(
                 blogHtml.contains("href=\"/blog/api-challenges-practice-api-overview\""));
         Assertions.assertTrue(
@@ -240,6 +245,23 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<p class='article-byline'>",
                 "<p class='blog-post-categories'>",
                 "<div id='toc'></div>");
+
+        String acceptPostHtml =
+                renderContentPage("/blog/changelog-2026-08-13-accept-q-json-xml-challenges");
+
+        Assertions.assertTrue(
+                acceptPostHtml.contains(
+                        "<h1>Accept q Values, JSON, XML, And New API Challenges</h1>"));
+        Assertions.assertTrue(
+                acceptPostHtml.contains(
+                        "Published <time datetime='2026-08-13T10:00:00Z'>2026-08-13</time>"));
+        Assertions.assertTrue(
+                acceptPostHtml.contains("href=\"/reference/http-basics#accept-header\""));
+        Assertions.assertTrue(acceptPostHtml.contains("href=\"/gui/challenges\""));
+        Assertions.assertTrue(acceptPostHtml.contains("href='/blog/categories/change-log'"));
+        Assertions.assertTrue(acceptPostHtml.contains("\"@type\":\"BlogPosting\""));
+        Assertions.assertFalse(acceptPostHtml.contains("<aside class='left-column'"));
+        Assertions.assertFalse(acceptPostHtml.contains("<nav class='side-toc'"));
 
         String launchPostHtml = renderContentPage("/blog/api-simulator-walkthrough-launch");
 
