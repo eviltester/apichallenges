@@ -32,8 +32,9 @@ public class TodoExportRoutesTest {
         Assertions.assertEquals(204, response.statusCode);
         Assertions.assertEquals("GET, OPTIONS", response.getHeader("Allow"));
         Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Origin"));
-        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Headers"));
-        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Methods"));
+        Assertions.assertEquals("X-CHALLENGER", response.getHeader("Access-Control-Allow-Headers"));
+        Assertions.assertEquals("GET", response.getHeader("Access-Control-Allow-Methods"));
+        Assertions.assertNull(response.getHeader("Access-Control-Allow-Credentials"));
     }
 
     @ParameterizedTest(name = "todo export route status {0} for {1}")

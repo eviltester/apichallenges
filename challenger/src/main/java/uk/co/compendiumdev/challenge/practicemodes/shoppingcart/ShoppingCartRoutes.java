@@ -53,14 +53,31 @@ public final class ShoppingCartRoutes {
 
         final ThingifierHttpApiRoutings shopRouting =
                 new ThingifierHttpApiRoutings(shoppingCart, apiDocDefn);
-        shopRouting.registerHttpApiRequestHook(writeHook);
-        shopRouting.registerInternalHttpResponseHook(new ShoppingCartTokenStripResponseHook());
+        registerScopedThingifierHooks(shopRouting);
         shopRouting.registerInternalHttpResponseHook(new ShoppingCartMaintenanceHook(maintenance));
         shopRouting.registerInternalHttpResponseHook(new ShoppingCartCorsHeadersResponseHook());
     }
 
     Thingifier thingifier() {
         return shoppingCart;
+    }
+
+    private void registerScopedThingifierHooks(final ThingifierHttpApiRoutings shopRouting) {
+        final List<RoutingVerb> writeVerbs =
+                List.of(RoutingVerb.POST, RoutingVerb.PUT, RoutingVerb.DELETE);
+        shopRouting.registerHttpApiRequestHook("/carts", writeVerbs, writeHook);
+        shopRouting.registerHttpApiRequestHook("/carts/:cartId", writeVerbs, writeHook);
+        shopRouting.registerHttpApiRequestHook("/carts/:cartId/items", writeVerbs, writeHook);
+        shopRouting.registerHttpApiRequestHook(
+                "/carts/:cartId/items/:itemId", writeVerbs, writeHook);
+
+        final ShoppingCartTokenStripResponseHook tokenStripHook =
+                new ShoppingCartTokenStripResponseHook();
+        shopRouting.registerInternalHttpResponseHook("/shop/carts", tokenStripHook);
+        shopRouting.registerInternalHttpResponseHook("/shop/carts/:cartId", tokenStripHook);
+        shopRouting.registerInternalHttpResponseHook("/shop/carts/:cartId/items", tokenStripHook);
+        shopRouting.registerInternalHttpResponseHook(
+                "/shop/carts/:cartId/items/:itemId", tokenStripHook);
     }
 
     private ThingifierApiDocumentationDefn documentation() {

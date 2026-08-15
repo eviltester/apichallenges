@@ -7,6 +7,7 @@ import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.ChallengerState;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.challenge.challengesrouting.XChallengerHeader;
+import uk.co.compendiumdev.challenge.httpserver.CorsHeaders;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.messagehooks.InternalHttpResponseHook;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
@@ -23,25 +24,15 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
     @Override
     public void run(final InternalHttpRequest request, final InternalHttpResponse response) {
 
-        // allow cross origin requests
-        // and swagger
-        // https://support.smartbear.com/swaggerhub/docs/en/edit-apis/cors-requirements-for--try-it-out-.html
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        // this is necessary for swagger UI to show headers in the UI
-        response.setHeader("Access-Control-Expose-Headers", "*");
-        if (request.getVerb() == OPTIONS
-                && request.getHeaders().headerExists("Access-Control-Allow-Methods")) {
-            response.setHeader(
-                    "Access-Control-Allow-Methods",
-                    request.getHeader("Access-Control-Allow-Methods"));
-        }
-
         if (!ApiChallengeHookPath.isApiChallengesEndpoint(request.getPath())) {
             return;
         }
+
+        // allow cross origin requests
+        // and swagger
+        // https://support.smartbear.com/swaggerhub/docs/en/edit-apis/cors-requirements-for--try-it-out-.html
+        CorsHeaders.allowOpenCrossOriginRequests(request, response);
+
         final String path = ApiChallengeHookPath.normalize(request.getPath());
 
         ChallengerAuthData challenger =

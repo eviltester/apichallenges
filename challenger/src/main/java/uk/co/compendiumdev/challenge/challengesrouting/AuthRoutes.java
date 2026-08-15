@@ -40,6 +40,8 @@ import uk.co.compendiumdev.thingifier.core.reporting.ValidationReport;
 // TODO: This should be using a Thingifier to do the work of XML JSON etc... like the simulation
 public class AuthRoutes {
     private static final String LIVE_WIDGET_HEADER = "X-API-Challenges-Live-Widget";
+    private static final String WWW_AUTHENTICATE_HEADER = "WWW-Authenticate";
+    private static final String BEARER_CHALLENGE = "Bearer";
     static final String READ_ONLY_AUTH_TOKEN = "00000000-0000-4000-8000-000000000000";
     static final String READ_ONLY_SECRET_NOTE = "This is the read-only secret note.";
 
@@ -194,16 +196,14 @@ public class AuthRoutes {
 
                     if (challenger == null) {
                         if (hasXChallengerHeader(request)) {
-                            result.status(401);
                             XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
-                            return "";
+                            return unauthorizedSecretNote(result);
                         }
                         return getReadOnlySecretNote(request, result, authToken);
                     }
 
                     if (authToken == null || authToken.isEmpty()) {
-                        result.status(401);
-                        return "";
+                        return unauthorizedSecretNote(result);
                     }
 
                     if (!authToken.contentEquals(challenger.getXAuthToken())) {
@@ -278,9 +278,8 @@ public class AuthRoutes {
                             challengers.getChallenger(request.header("X-CHALLENGER"));
 
                     if (challenger == null) {
-                        result.status(401);
                         XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
-                        return "";
+                        return unauthorizedSecretNote(result);
                     }
 
                     result.header("X-CHALLENGER", challenger.getXChallenger());
@@ -301,8 +300,7 @@ public class AuthRoutes {
                     }
 
                     if (authToken == null || authToken.isEmpty()) {
-                        result.status(401);
-                        return "";
+                        return unauthorizedSecretNote(result);
                     }
 
                     if (!authToken.contentEquals(challenger.getXAuthToken())) {
@@ -416,7 +414,7 @@ public class AuthRoutes {
         // admin/password as default username:password
         if (!basicAuth.matches("admin", "password")) {
             if (!isLiveWidgetRequest(request)) {
-                result.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+                result.header(WWW_AUTHENTICATE_HEADER, "Basic realm=\"User Visible Realm\"");
             }
             result.status(401);
             return false;
@@ -446,8 +444,7 @@ public class AuthRoutes {
             final String authToken) {
 
         if (authToken == null || authToken.isEmpty()) {
-            result.status(401);
-            return "";
+            return unauthorizedSecretNote(result);
         }
 
         if (!READ_ONLY_AUTH_TOKEN.contentEquals(authToken)) {
@@ -462,6 +459,12 @@ public class AuthRoutes {
         }
 
         return renderSecretNoteResponse(request, result, READ_ONLY_SECRET_NOTE);
+    }
+
+    private String unauthorizedSecretNote(final HttpServerResponse result) {
+        result.header(WWW_AUTHENTICATE_HEADER, BEARER_CHALLENGE);
+        result.status(401);
+        return "";
     }
 
     private String renderSecretNoteResponse(

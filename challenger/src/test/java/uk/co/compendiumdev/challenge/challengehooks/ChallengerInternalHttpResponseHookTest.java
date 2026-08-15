@@ -17,6 +17,54 @@ import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
 public class ChallengerInternalHttpResponseHookTest {
 
     @Test
+    public void preflightCorsHeadersUseRequestedMethodAndHeadersWithoutCredentials() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        final ChallengerInternalHTTPResponseHook hook =
+                new ChallengerInternalHTTPResponseHook(challengers);
+
+        final InternalHttpRequest request =
+                new InternalHttpRequest("/api/todos")
+                        .setVerb("OPTIONS")
+                        .addHeader("Origin", "https://example.test")
+                        .addHeader("Access-Control-Request-Method", "POST")
+                        .addHeader("Access-Control-Request-Headers", "X-CHALLENGER, Content-Type");
+
+        final InternalHttpResponse response = new InternalHttpResponse().setStatus(204);
+
+        hook.run(request, response);
+
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Origin"));
+        Assertions.assertEquals("POST", response.getHeader("Access-Control-Allow-Methods"));
+        Assertions.assertEquals(
+                "X-CHALLENGER, Content-Type", response.getHeader("Access-Control-Allow-Headers"));
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Expose-Headers"));
+        Assertions.assertFalse(response.hasHeader("Access-Control-Allow-Credentials"));
+    }
+
+    @Test
+    public void corsHeadersAreNotAddedToNonApiChallengeEndpoints() {
+
+        Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
+        final ChallengerInternalHTTPResponseHook hook =
+                new ChallengerInternalHTTPResponseHook(challengers);
+
+        final InternalHttpRequest request =
+                new InternalHttpRequest("/shop/register")
+                        .setVerb("OPTIONS")
+                        .addHeader("Origin", "https://example.test")
+                        .addHeader("Access-Control-Request-Method", "POST");
+
+        final InternalHttpResponse response = new InternalHttpResponse().setStatus(204);
+
+        hook.run(request, response);
+
+        Assertions.assertFalse(response.hasHeader("Access-Control-Allow-Origin"));
+        Assertions.assertFalse(response.hasHeader("Access-Control-Allow-Headers"));
+        Assertions.assertFalse(response.hasHeader("Access-Control-Allow-Methods"));
+    }
+
+    @Test
     public void inMultUserModeWeNeedAnNonNullXChallengerHeaderOrSeeUnknownChallengerHeader() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));

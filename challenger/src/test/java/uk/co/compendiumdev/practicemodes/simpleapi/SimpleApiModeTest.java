@@ -67,6 +67,24 @@ public class SimpleApiModeTest {
     }
 
     @Test
+    public void optionsOnSimpleApiUsesPreflightCorsHeadersWithoutCredentials() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Origin", "https://example.test");
+        headers.put("Access-Control-Request-Method", "POST");
+        headers.put("Access-Control-Request-Headers", "Authorization, Content-Type");
+
+        final HttpResponseDetails response = http.send("/simpleapi/items", "options", headers, "");
+
+        Assertions.assertEquals(204, response.statusCode);
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Origin"));
+        Assertions.assertEquals(
+                "Authorization, Content-Type", response.getHeader("Access-Control-Allow-Headers"));
+        Assertions.assertEquals("POST", response.getHeader("Access-Control-Allow-Methods"));
+        Assertions.assertNull(response.getHeader("Access-Control-Allow-Credentials"));
+    }
+
+    @Test
     public void canQueryFilteredItems() {
 
         Map<String, String> headers = new HashMap<>();

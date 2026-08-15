@@ -58,6 +58,21 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertTrue(noteResponse.body.contains(AuthRoutes.READ_ONLY_SECRET_NOTE));
     }
 
+    @ParameterizedTest(name = "secret note 401 responses challenge Bearer auth under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void secretNoteUnauthorizedResponsesIncludeBearerChallenge(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails getResponse = http.send(path(prefix, "/secret/note"), "get");
+        Assertions.assertEquals(401, getResponse.statusCode);
+        assertBearerAuthenticationChallenge(getResponse);
+
+        http.clearHeaders();
+        http.setHeader("Content-Type", "application/json");
+        HttpResponseDetails postResponse = http.send(path(prefix, "/secret/note"), "post");
+        Assertions.assertEquals(401, postResponse.statusCode);
+        assertBearerAuthenticationChallenge(postResponse);
+    }
+
     @ParameterizedTest(name = "challenge completion works under {0}")
     @MethodSource("apiRoutePrefixes")
     void challengeCompletionWorksThroughCanonicalAndLegacyRoutes(final String prefix) {
@@ -163,6 +178,10 @@ public class ApiChallengeRouteCompatibilityTest {
     private String operationSummary(
             final JsonObject paths, final String path, final String operation) {
         return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
+    }
+
+    private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
+        Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
     }
 
     private static String path(final String prefix, final String route) {

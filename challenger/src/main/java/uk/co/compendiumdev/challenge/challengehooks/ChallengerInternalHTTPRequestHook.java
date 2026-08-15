@@ -5,6 +5,7 @@ import static uk.co.compendiumdev.thingifier.api.http.ThingifierHttpApi.HTTP_SES
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
+import uk.co.compendiumdev.challenge.httpserver.CorsHeaders;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.messagehooks.InternalHttpRequestHook;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpMethod;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
@@ -122,12 +123,8 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
                         .setType(contentType)
                         .setBody(
                                 ApiResponseError.asAppropriate(
-                                        request.getAcceptHeader(), X_CHALLENGER_TOO_LONG_MESSAGE))
-                        .setHeader("Access-Control-Allow-Origin", "*")
-                        .setHeader("Access-Control-Allow-Headers", "*")
-                        .setHeader("Access-Control-Allow-Credentials", "true")
-                        .setHeader("Access-Control-Allow-Methods", "*")
-                        .setHeader("Access-Control-Expose-Headers", "*");
+                                        request.getAcceptHeader(), X_CHALLENGER_TOO_LONG_MESSAGE));
+        CorsHeaders.allowOpenCrossOriginRequests(request, response);
 
         if (challenger != null) {
             response.setHeader("X-CHALLENGER", challenger.getXChallenger());

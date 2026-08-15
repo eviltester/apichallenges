@@ -219,6 +219,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "get");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -232,6 +233,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "get");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
     }
 
@@ -246,6 +248,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "get");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -261,6 +264,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "get");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(
                 XChallengerHeader.NOT_FOUND_ERROR_MESSAGE, response.getHeader("X-CHALLENGER"));
@@ -385,6 +389,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "post");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -401,6 +406,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "post");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -417,6 +423,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "post");
 
         Assertions.assertEquals(401, response.statusCode);
+        assertBearerAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(
                 XChallengerHeader.NOT_FOUND_ERROR_MESSAGE, response.getHeader("X-CHALLENGER"));
@@ -713,5 +720,9 @@ public class AuthRoutesTest {
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
         Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
         Assertions.assertEquals("", response.body);
+    }
+
+    private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
+        Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
     }
 }

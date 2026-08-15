@@ -115,6 +115,10 @@ public class ChallengerInternalHttpRequestHookTest {
         Assertions.assertNotNull(response);
         Assertions.assertEquals(431, response.getStatusCode());
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Origin"));
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Headers"));
+        Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Methods"));
+        Assertions.assertFalse(response.hasHeader("Access-Control-Allow-Credentials"));
         Assertions.assertTrue(response.getBody().contains("X-CHALLENGER header is too large"));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.X_CHALLENGER_TOO_LONG_431));
     }

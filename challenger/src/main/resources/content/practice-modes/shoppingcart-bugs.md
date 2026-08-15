@@ -2,7 +2,7 @@
 title: Buggy API Deliberate Bugs
 seo_title: Buggy API Deliberate Bugs for Testers | API Challenges
 description: Maintainer notes for the deliberate Buggy API bugs.
-lastmod: 2026-07-31
+lastmod: 2026-08-15
 seo_description: Maintainer notes for Buggy API deliberate bugs, trigger examples, clean-mode expectations, and regression coverage ideas.
 sitemap: false
 ---
@@ -29,6 +29,16 @@ The Buggy API is buggy by default. Start with `-shopbugs=none` to switch bugs of
 - `POST /shop/carts/{cartId}/items` accepts a valid bearer token from another cart when the body updates an existing `id`.
 - JSON input types are not fully validated against the domain model; for example, an integer such as `4` can be accepted for a STRING field because it can be converted to `"4"`.
 
+## HTTP and API Contract Bugs
+
+- `POST /shop/carts/{cartId}/items` returns `201 Created` for a new cart item but does not include a `Location` header for `/shop/carts/{cartId}/items/{itemId}`.
+- CORS responses include `Access-Control-Allow-Origin: *` with `Access-Control-Allow-Credentials: true`, which is invalid for credentialed browser requests.
+- CORS preflight handling checks for an incoming `Access-Control-Allow-Methods` header instead of `Access-Control-Request-Method`.
+- `401 Unauthorized` responses for missing bearer tokens do not include a `WWW-Authenticate: Bearer` challenge header.
+- The following JSON routes: `POST /shop/register` and `POST /shop/checkout/{cartId}` ignore unsupported `Accept` headers instead of returning `406 Not Acceptable`.
+- The following write routes: `POST /shop/carts/{cartId}/items`, `DELETE /shop/carts/{cartId}/items/{itemId}`, and `DELETE /shop/carts/{cartId}` can accept requests that should be rejected because `Accept`, `Content-Type`, request schema, and request-size checks are not consistently applied.
+- The following unsupported method requests: `GET`, `HEAD`, `PUT`, `DELETE`, `PATCH`, `TRACE`, and `QUERY` on `/shop/register` and `/shop/checkout/{cartId}` return `405 Method Not Allowed` without the required `Allow` header.
+
 ## Clean Behaviour Reference
 
 When started with `-shopbugs=none`:
@@ -40,6 +50,7 @@ When started with `-shopbugs=none`:
 - Checkout reduces product stock by the exact cart quantity.
 - Checkout can only happen once for a cart.
 - A token from another cart cannot amend or checkout this cart.
+The "HTTP and API Contract Bugs" still remain, the flag only fixes the functional issues.
 
 ## Testing Notes
 
