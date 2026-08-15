@@ -22,9 +22,18 @@ public class TodoExportRoutes {
 
     public void configure(
             final Thingifier thingifier, final ThingifierApiDocumentationDefn apiDefn) {
+        configure(thingifier, apiDefn, "");
+    }
+
+    public void configure(
+            final Thingifier thingifier,
+            final ThingifierApiDocumentationDefn apiDefn,
+            final String pathPrefix) {
+
+        final String endpoint = ApiChallengeRoutePath.withPrefix(pathPrefix, "/todos/export");
 
         get(
-                "/todos/export",
+                endpoint,
                 (request, result) ->
                         new HttpApiRequestResponseHandler(request, result, thingifier)
                                 .validateRequestSyntax(false)
@@ -37,7 +46,7 @@ public class TodoExportRoutes {
                                 .handle());
 
         SimpleHttpRouteCreator.addHandler(
-                "/todos/export",
+                endpoint,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -47,10 +56,7 @@ public class TodoExportRoutes {
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
-                                RoutingVerb.GET,
-                                "/todos/export",
-                                RoutingStatus.returnedFromCall(),
-                                null)
+                                RoutingVerb.GET, endpoint, RoutingStatus.returnedFromCall(), null)
                         .addDocumentation(
                                 "Export todos using a format query parameter. Supported values are: "
                                         + TodoExportFormat.supportedShortNames())
@@ -58,23 +64,20 @@ public class TodoExportRoutes {
                                 Field.is("format", STRING)
                                         .withDescription(
                                                 "Export format short name, e.g. csv, html, tsv,"
-                                                        + " json, xml, text, ndjson, jsonl, or"
-                                                        + " json-seq"))
+                                                        + " json, xml, text-xml, text, ndjson,"
+                                                        + " jsonl, or json-seq"))
                         .addResponseHeader(
                                 "Content-Disposition", "attachment; filename=\"todos.{extension}\"")
                         .addPossibleStatuses(200, 400, 431));
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
-                                RoutingVerb.OPTIONS,
-                                "/todos/export",
-                                RoutingStatus.returnValue(204),
-                                null)
+                                RoutingVerb.OPTIONS, endpoint, RoutingStatus.returnValue(204), null)
                         .addDocumentation("CORS preflight options for exporting todos")
                         .addResponseHeader("Allow", "GET, OPTIONS")
                         .addPossibleStatuses(204, 431));
 
-        SimpleHttpRouteCreator.routeStatusWhenNot(405, "/todos/export", List.of("get", "options"));
+        SimpleHttpRouteCreator.routeStatusWhenNot(405, endpoint, List.of("get", "options"));
     }
 
     private ApiResponse exportTodos(

@@ -44,7 +44,7 @@ public class C034PostTodosVendorXmlTest extends RestAssuredBaseTest {
         Assertions.assertTrue(challenge.status);
 
         String locationHeader = response.getHeader("Location");
-        Pattern getId = Pattern.compile("/todos/(.*)");
+        Pattern getId = Pattern.compile(Pattern.quote(routePath("/todos/")) + "(.*)");
         Matcher matcher = getId.matcher(locationHeader);
         Assertions.assertTrue(matcher.find());
 

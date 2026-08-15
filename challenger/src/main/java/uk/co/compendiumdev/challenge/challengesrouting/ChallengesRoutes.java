@@ -26,9 +26,20 @@ public class ChallengesRoutes {
             final boolean single_player_mode,
             final ThingifierApiDocumentationDefn apiDefn,
             final ChallengeDefinitions challengeDefinitions) {
+        configure(challengers, single_player_mode, apiDefn, challengeDefinitions, "");
+    }
+
+    public void configure(
+            final Challengers challengers,
+            final boolean single_player_mode,
+            final ThingifierApiDocumentationDefn apiDefn,
+            final ChallengeDefinitions challengeDefinitions,
+            final String pathPrefix) {
+
+        final String endpoint = ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenges");
 
         get(
-                "/challenges",
+                endpoint,
                 (request, result) -> {
                     ChallengerAuthData challenger =
                             challengers.getChallenger(request.header("X-CHALLENGER"));
@@ -71,10 +82,7 @@ public class ChallengesRoutes {
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
-                                RoutingVerb.GET,
-                                "/challenges",
-                                RoutingStatus.returnedFromCall(),
-                                null)
+                                RoutingVerb.GET, endpoint, RoutingStatus.returnedFromCall(), null)
                         .addDocumentation("Get list of challenges and their completion status")
                         .addPossibleStatuses(200, 431));
 
@@ -82,7 +90,7 @@ public class ChallengesRoutes {
         // wrapper available
         new AdhocDocumentedHttpRouteConfigurer(apiDefn)
                 .add(
-                        "/challenges",
+                        endpoint,
                         RoutingVerb.HEAD,
                         200,
                         "Headers for list of challenges endpoint",
@@ -92,7 +100,7 @@ public class ChallengesRoutes {
                             return "";
                         })
                 .add(
-                        "/challenges",
+                        endpoint,
                         RoutingVerb.OPTIONS,
                         200,
                         "Options for list of challenges endpoint",
@@ -103,7 +111,6 @@ public class ChallengesRoutes {
                             return "";
                         }));
 
-        SimpleHttpRouteCreator.routeStatusWhenNot(
-                405, "/challenges", List.of("get", "head", "options"));
+        SimpleHttpRouteCreator.routeStatusWhenNot(405, endpoint, List.of("get", "head", "options"));
     }
 }

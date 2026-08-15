@@ -84,19 +84,37 @@ jobs:
       - name: Package deployable app
         run: mvn -B -f apichallenges/pom.xml -pl challenger -am package -DskipTests
 
-      - name: Run ChallengerAuto memory regression
+      - name: Run ChallengerAuto memory canonical regression
         run: >
           mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=memory
           -Dchallenger.auto.local.playerMode=multi
+          -Dchallenger.auto.apiRouteMode=api
 
-      - name: Run ChallengerAuto sqlite-memory regression
+      - name: Run ChallengerAuto memory legacy regression
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          -Dchallenger.auto.target=local
+          -Dchallenger.auto.local.repository=memory
+          -Dchallenger.auto.local.playerMode=multi
+          -Dchallenger.auto.apiRouteMode=legacy
+
+      - name: Run ChallengerAuto sqlite-memory canonical regression
         run: >
           mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=sqlite-memory
           -Dchallenger.auto.local.playerMode=multi
+          -Dchallenger.auto.apiRouteMode=api
+
+      - name: Run ChallengerAuto sqlite-memory legacy regression
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          -Dchallenger.auto.target=local
+          -Dchallenger.auto.local.repository=sqlite-memory
+          -Dchallenger.auto.local.playerMode=multi
+          -Dchallenger.auto.apiRouteMode=legacy
 
       - name: Static analysis
         if: matrix.java == 21

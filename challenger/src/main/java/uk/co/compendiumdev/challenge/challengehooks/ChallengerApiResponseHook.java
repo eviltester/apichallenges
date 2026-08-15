@@ -352,12 +352,12 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             try {
 
                 String location = response.getHeaders().get("Location");
-                String[] locationParts = location.split("/");
+                String todoId = todoIdFromLocation(location);
 
-                if (locationParts.length > 2) {
+                if (todoId != null) {
                     // to check it is an int
-                    Integer.parseInt(locationParts[2]);
-                    EntityInstance aTodo = findTodoByIdentifier(challenger, locationParts[2]);
+                    Integer.parseInt(todoId);
+                    EntityInstance aTodo = findTodoByIdentifier(challenger, todoId);
                     if (aTodo != null
                             && aTodo.getFieldValue("title").asString().length() == 50
                             && aTodo.getFieldValue("description").asString().length() == 200) {
@@ -1263,6 +1263,18 @@ public class ChallengerApiResponseHook implements HttpApiResponseHook {
             return null;
         }
         return query.findByQueryIdentifier(todo, identifier);
+    }
+
+    private String todoIdFromLocation(final String location) {
+        if (location == null || location.trim().isEmpty()) {
+            return null;
+        }
+
+        String[] locationParts = location.split("/");
+        if (locationParts.length < 3) {
+            return null;
+        }
+        return locationParts[locationParts.length - 1];
     }
 
     private int countTodos(final ChallengerAuthData challenger) {

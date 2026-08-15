@@ -11,8 +11,12 @@ import uk.co.compendiumdev.thingifier.api.docgen.ThingifierApiDocumentationDefn;
 public class HeartBeatRoutes {
 
     public void configure(final ThingifierApiDocumentationDefn apiDefn) {
+        configure(apiDefn, "");
+    }
 
-        String endpoint = "/heartbeat";
+    public void configure(final ThingifierApiDocumentationDefn apiDefn, final String pathPrefix) {
+
+        String endpoint = ApiChallengeRoutePath.withPrefix(pathPrefix, "/heartbeat");
 
         final AdhocDocumentedHttpRouteConfigurer routeConfig =
                 new AdhocDocumentedHttpRouteConfigurer(apiDefn);

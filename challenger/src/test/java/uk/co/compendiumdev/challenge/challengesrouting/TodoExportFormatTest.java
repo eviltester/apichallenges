@@ -52,6 +52,8 @@ class TodoExportFormatTest {
         return Stream.of(
                 Arguments.of("json", "application/json", "todos.json", TodoExportFormat.JSON),
                 Arguments.of("xml", "application/xml", "todos.xml", TodoExportFormat.XML),
+                Arguments.of("text-xml", "text/xml", "todos.xml", TodoExportFormat.TEXT_XML),
+                Arguments.of("txml", "text/xml", "todos.xml", TodoExportFormat.TEXT_XML),
                 Arguments.of("csv", "text/csv", "todos.csv", TodoExportFormat.CSV),
                 Arguments.of("text", "text/plain", "todos.txt", TodoExportFormat.TEXT),
                 Arguments.of("txt", "text/plain", "todos.txt", TodoExportFormat.TEXT),

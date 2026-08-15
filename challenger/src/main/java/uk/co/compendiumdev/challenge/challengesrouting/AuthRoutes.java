@@ -51,6 +51,18 @@ public class AuthRoutes {
 
     public void configure(
             final Challengers challengers, final ThingifierApiDocumentationDefn apiDefn) {
+        configure(challengers, apiDefn, "");
+    }
+
+    public void configure(
+            final Challengers challengers,
+            final ThingifierApiDocumentationDefn apiDefn,
+            final String pathPrefix) {
+
+        final String secretTokenPath =
+                ApiChallengeRoutePath.withPrefix(pathPrefix, "/secret/token");
+        final String secretNotePath = ApiChallengeRoutePath.withPrefix(pathPrefix, "/secret/note");
+
         // authentication and authorisation
         // - create a 'secret' note which can be stored against session using an auth token
 
@@ -68,7 +80,7 @@ public class AuthRoutes {
         this.jsonThing = new JsonThing(this.secretNoteStore.apiConfig().jsonOutput());
 
         SimpleHttpRouteCreator.addHandler(
-                "/secret/token",
+                secretTokenPath,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -82,7 +94,7 @@ public class AuthRoutes {
 
         // GET /secret/token with basic auth returns a token for read-only tutorial examples.
         get(
-                "/secret/token",
+                secretTokenPath,
                 (request, result) -> {
                     if (!requestHasValidBasicAuth(request, result)) {
                         return "";
@@ -108,7 +120,7 @@ public class AuthRoutes {
         // POST /secret/token with basic auth to get a session token to use as X-AUTH-TOKEN header
         // todo: or {username, password} payload
         post(
-                "/secret/token",
+                secretTokenPath,
                 (request, result) -> {
                     if (!requestHasValidBasicAuth(request, result)) {
                         return "";
@@ -130,12 +142,12 @@ public class AuthRoutes {
                 });
 
         SimpleHttpRouteCreator.routeStatusWhenNot(
-                405, "/secret/token", List.of("get", "post", "options"));
+                405, secretTokenPath, List.of("get", "post", "options"));
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.POST,
-                                "/secret/token",
+                                secretTokenPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -146,7 +158,7 @@ public class AuthRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.GET,
-                                "/secret/token",
+                                secretTokenPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -160,7 +172,7 @@ public class AuthRoutes {
         // header X-AUTH-TOKEN: token given - if token not found (then) 401
 
         SimpleHttpRouteCreator.addHandler(
-                "/secret/note",
+                secretNotePath,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -212,13 +224,13 @@ public class AuthRoutes {
                 };
 
         get(
-                "/secret/note",
+                secretNotePath,
                 (request, result) -> {
                     return getSecretNote.handle(request, result);
                 });
 
         head(
-                "/secret/note",
+                secretNotePath,
                 (request, result) -> {
                     getSecretNote.handle(request, result);
                     return "";
@@ -227,7 +239,7 @@ public class AuthRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.GET,
-                                "/secret/note",
+                                secretNotePath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -236,7 +248,7 @@ public class AuthRoutes {
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
 
         post(
-                "/secret/note",
+                secretNotePath,
                 (request, result) -> {
                     final String authorization = request.header("Authorization");
                     String authToken = request.header("X-AUTH-TOKEN");
@@ -368,12 +380,12 @@ public class AuthRoutes {
                 });
 
         SimpleHttpRouteCreator.routeStatusWhenNot(
-                405, "/secret/note", List.of("get", "post", "head", "options"));
+                405, secretNotePath, List.of("get", "post", "head", "options"));
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.POST,
-                                "/secret/note",
+                                secretNotePath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(

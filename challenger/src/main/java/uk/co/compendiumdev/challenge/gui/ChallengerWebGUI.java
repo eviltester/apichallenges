@@ -32,7 +32,7 @@ public class ChallengerWebGUI {
     private static final String WWW_HOST = "www.apichallenges.com";
     private static final String LEGACY_CANONICAL_HOST = "https://" + LEGACY_HOST;
     private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
-            "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
+            "/api||/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
     private static final Gson GSON = new Gson();
 
     private final PageNotFoundResponse pageNotFoundHtmlResponse;
@@ -88,7 +88,7 @@ public class ChallengerWebGUI {
         guiManagement.appendMenuItem("Home", "/");
         guiManagement.appendMenuItem("Entities Explorer", "/gui/entities");
         guiManagement.appendMenuItem("Challenges", "/gui/challenges");
-        guiManagement.appendMenuItem("API documentation", "/docs");
+        guiManagement.appendMenuItem("API documentation", "/api/docs");
         guiManagement.appendMenuItem("Learning", "/learning");
 
         String actualMenu =
@@ -102,6 +102,7 @@ public class ChallengerWebGUI {
                             ['/shop/', 'shop-api-root-menu'],
                             ['/practice-modes/shoppingcart', 'shop-api-root-menu'],
                             ['/gui/', 'api-challenges-root-menu'],
+                            ['/api/docs', 'api-challenges-root-menu'],
                             ['/docs', 'api-challenges-root-menu'],
                             ['/apichallenges', 'api-challenges-root-menu'],
                             ['/sim/docs', 'sim-api-root-menu'],
@@ -160,8 +161,8 @@ public class ChallengerWebGUI {
                             <li id='api-challenges-root-menu'><a href="/gui/challenges">API Challenges</a>
                                     <ul>
                                         <li><a href="/apichallenges">About API Challenges</a></li>
-                                        <li><a href="/docs">API Docs</a></li>
-                                        <li><a href="/docs/swagger-ui">Swagger UI</a></li>
+                                        <li><a href="/api/docs">API Docs</a></li>
+                                        <li><a href="/api/docs/swagger-ui">Swagger UI</a></li>
                                         <li><a href="/apichallenges/client">API Client</a></li>
                                         <li><a href="/gui/challenges">Progress</a></li>
                                         <li><a href="/gui/entities">Data Explorer</a></li>
@@ -311,7 +312,7 @@ public class ChallengerWebGUI {
                     contentUrls.get(pathToMarkdownFile).toString());
         }
         siteMap.addUrl(CANONICAL_HOST, SEO_FIXED_LASTMOD.toString());
-        siteMap.addUrl(CANONICAL_HOST + "/docs", SEO_FIXED_LASTMOD.toString());
+        siteMap.addUrl(CANONICAL_HOST + "/api/docs", SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl(CANONICAL_HOST + "/gui/challenges", SEO_FIXED_LASTMOD.toString());
         siteMap.addUrl(CANONICAL_HOST + "/blog/all-posts", blogContentManager.latestLastMod());
         for (int pageNumber = 2; pageNumber <= blogContentManager.blogPageCount(); pageNumber++) {
@@ -766,7 +767,7 @@ public class ChallengerWebGUI {
                                 "API Challenges Client",
                                 "API Challenges Client",
                                 "GET",
-                                "/todos",
+                                "/api/todos",
                                 API_CHALLENGE_ALLOWED_PATH_PREFIXES,
                                 true),
                         new ApiClientPage(
@@ -1585,7 +1586,7 @@ public class ChallengerWebGUI {
         html.append("setInterval(function(){");
         html.append(
                 "var oReq = new XMLHttpRequest();\n"
-                        + "oReq.open('GET', '/challenger/"
+                        + "oReq.open('GET', '/api/challenger/"
                         + xChallenger
                         + "');\n"
                         + "oReq.send();");

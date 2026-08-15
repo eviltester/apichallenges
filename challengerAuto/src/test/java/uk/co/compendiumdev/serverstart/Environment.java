@@ -3,7 +3,11 @@ package uk.co.compendiumdev.serverstart;
 public class Environment {
 
     public static String getEnv(String urlPath) {
-        return getBaseUri() + urlPath;
+        return getBaseUri() + routePath(urlPath);
+    }
+
+    public static String routePath(final String urlPath) {
+        return ChallengerAutoRuntime.currentConfig().routePath(urlPath);
     }
 
     public static String getBaseUri() {

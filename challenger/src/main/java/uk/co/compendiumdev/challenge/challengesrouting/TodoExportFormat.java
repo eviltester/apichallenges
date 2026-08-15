@@ -9,6 +9,7 @@ import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.AcceptHeader
 public enum TodoExportFormat {
     JSON(AcceptHeaderParser.ACCEPT_TYPE.JSON, "json", "json"),
     XML(AcceptHeaderParser.ACCEPT_TYPE.XML, "xml", "xml"),
+    TEXT_XML(AcceptHeaderParser.ACCEPT_TYPE.TEXT_XML, "xml", "text-xml", "txml"),
     CSV(AcceptHeaderParser.ACCEPT_TYPE.CSV, "csv", "csv"),
     TEXT(AcceptHeaderParser.ACCEPT_TYPE.TEXT, "txt", "text", "txt", "plain"),
     HTML(AcceptHeaderParser.ACCEPT_TYPE.HTML, "html", "html"),

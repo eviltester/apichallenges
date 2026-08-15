@@ -17,6 +17,9 @@ import uk.co.compendiumdev.thingifier.api.docgen.ThingifierApiDocumentationDefn;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 
 public class ChallengeRouteHandler {
+    private static final String API_CHALLENGES_PREFIX = "/api";
+    private static final String THINGIFIER_API_CHALLENGES_PREFIX = "//api";
+
     private final Thingifier thingifier;
     // List<RoutingDefinition> routes;
 
@@ -32,6 +35,7 @@ public class ChallengeRouteHandler {
     private boolean guiStayAlive;
     private DefaultGUIHTML guiTemplates;
     private SimulationRoutes simulationRoutes;
+    private ApiChallengeCanonicalThingifierRoutes canonicalThingifierRoutes;
 
     // not needed when storing data
 
@@ -43,6 +47,7 @@ public class ChallengeRouteHandler {
         this.config = config;
         this.apiChallengesDocumentationDefn = apiDefn;
         apiDefn.setThingifier(thingifier);
+        apiDefn.setPathPrefix(THINGIFIER_API_CHALLENGES_PREFIX);
         apiDefn.setSeoTitle("API Challenges API Documentation | API Challenges");
         apiDefn.setSwaggerUiTitle("API Challenges - Swagger UI");
         apiDefn.setSeoDescription(
@@ -110,16 +115,28 @@ public class ChallengeRouteHandler {
                         apiChallengesDocumentationDefn,
                         persistenceLayer,
                         thingifier,
-                        challengeDefinitions);
+                        challengeDefinitions,
+                        API_CHALLENGES_PREFIX);
         new ChallengesRoutes()
                 .configure(
                         challengers,
                         single_player_mode,
                         apiChallengesDocumentationDefn,
-                        challengeDefinitions);
-        new HeartBeatRoutes().configure(apiChallengesDocumentationDefn);
-        new TodoExportRoutes().configure(thingifier, apiChallengesDocumentationDefn);
-        new AuthRoutes().configure(challengers, apiChallengesDocumentationDefn);
+                        challengeDefinitions,
+                        API_CHALLENGES_PREFIX);
+        new HeartBeatRoutes().configure(apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
+        new TodoExportRoutes()
+                .configure(thingifier, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
+        new AuthRoutes()
+                .configure(challengers, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
+
+        canonicalThingifierRoutes =
+                new ApiChallengeCanonicalThingifierRoutes(thingifier).configure();
+        new ApiChallengeCanonicalDocumentationRoutes(
+                        thingifier, apiChallengesDocumentationDefn, guiTemplates)
+                .configure();
+
+        configureApiChallengeLegacyPaths();
 
         // Mirror routes should not show up in the apichallenges apiDefn
         new MirrorRoutes().configure(mirrorModeDocumentationDefn, guiTemplates);
@@ -151,9 +168,15 @@ public class ChallengeRouteHandler {
 
         // These hooks run inside the Thingifier API bridge for this routing instance, so they are
         // scoped to this Thingifier's API request/response processing.
-        apiRoutings.registerHttpApiRequestHook(new ChallengerApiRequestHook(challengers));
-        apiRoutings.registerHttpApiResponseHook(
-                new ChallengerApiResponseHook(challengers, thingifier));
+        final ChallengerApiRequestHook apiRequestHook = new ChallengerApiRequestHook(challengers);
+        final ChallengerApiResponseHook apiResponseHook =
+                new ChallengerApiResponseHook(challengers, thingifier);
+        apiRoutings.registerHttpApiRequestHook(apiRequestHook);
+        apiRoutings.registerHttpApiResponseHook(apiResponseHook);
+        if (canonicalThingifierRoutes != null) {
+            canonicalThingifierRoutes.registerHttpApiRequestHook(apiRequestHook);
+            canonicalThingifierRoutes.registerHttpApiResponseHook(apiResponseHook);
+        }
     }
 
     public void setupGui(DefaultGUIHTML guiManagement) {
@@ -181,5 +204,16 @@ public class ChallengeRouteHandler {
     private void enableAdminApi() {
         thingifier.apiConfig().adminConfig().enableAdminSearch();
         thingifier.apiConfig().adminConfig().enableAdminDataClear();
+    }
+
+    private void configureApiChallengeLegacyPaths() {
+        new ApiChallengeLegacyPaths(
+                        challengers,
+                        single_player_mode,
+                        thingifier,
+                        persistenceLayer,
+                        challengeDefinitions,
+                        guiTemplates)
+                .configure();
     }
 }

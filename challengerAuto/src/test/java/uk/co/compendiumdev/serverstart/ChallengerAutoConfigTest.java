@@ -19,6 +19,7 @@ public class ChallengerAutoConfigTest {
         Assertions.assertEquals(ChallengerAutoConfig.PlayerMode.MULTI, config.getLocalPlayerMode());
         Assertions.assertTrue(config.isAutoPort());
         Assertions.assertTrue(config.shouldRunFullSuite());
+        Assertions.assertEquals(ChallengerAutoConfig.ApiRouteMode.API, config.getApiRouteMode());
     }
 
     @Test
@@ -160,5 +161,63 @@ public class ChallengerAutoConfigTest {
 
         Assertions.assertEquals(ChallengerAutoConfig.Target.EXISTING, config.getTarget());
         Assertions.assertEquals("http://localhost:5678", config.getBaseUrl());
+    }
+
+    @Test
+    void apiRouteModePrefixesOnlyApiChallengesPaths() {
+        ChallengerAutoConfig config =
+                ChallengerAutoConfig.from(
+                        Map.of(ChallengerAutoConfig.PROPERTY_API_ROUTE_MODE, "canonical"),
+                        Collections.emptyMap());
+
+        Assertions.assertEquals("/api/todos", config.routePath("/todos"));
+        Assertions.assertEquals("/api/todos/1", config.routePath("/todos/1"));
+        Assertions.assertEquals(
+                "/api/todos?doneStatus=false", config.routePath("/todos?doneStatus=false"));
+        Assertions.assertEquals("/api/challenger", config.routePath("/challenger"));
+        Assertions.assertEquals("/api/challenges", config.routePath("/challenges"));
+        Assertions.assertEquals("/api/heartbeat", config.routePath("/heartbeat"));
+        Assertions.assertEquals("/api/secret/token", config.routePath("/secret/token"));
+        Assertions.assertEquals("/api/docs/openapi.json", config.routePath("/docs/openapi.json"));
+
+        Assertions.assertEquals("/sim/entities", config.routePath("/sim/entities"));
+        Assertions.assertEquals("/simpleapi/randomisbn", config.routePath("/simpleapi/randomisbn"));
+        Assertions.assertEquals("/shop/cart", config.routePath("/shop/cart"));
+        Assertions.assertEquals(
+                "/fromhell/status-code/200", config.routePath("/fromhell/status-code/200"));
+    }
+
+    @Test
+    void apiRouteModeDoesNotDoublePrefixCanonicalPaths() {
+        ChallengerAutoConfig config =
+                ChallengerAutoConfig.from(
+                        Map.of(ChallengerAutoConfig.PROPERTY_API_ROUTE_MODE, "api"),
+                        Collections.emptyMap());
+
+        Assertions.assertEquals("/api/todos", config.routePath("/api/todos"));
+        Assertions.assertEquals("/api/challenger", config.routePath("/api/challenger"));
+    }
+
+    @Test
+    void legacyRouteModeLeavesApiChallengesPathsAtRoot() {
+        ChallengerAutoConfig config =
+                ChallengerAutoConfig.from(
+                        Map.of(ChallengerAutoConfig.PROPERTY_API_ROUTE_MODE, "legacy"),
+                        Collections.emptyMap());
+
+        Assertions.assertEquals(ChallengerAutoConfig.ApiRouteMode.LEGACY, config.getApiRouteMode());
+        Assertions.assertEquals("/todos", config.routePath("/todos"));
+        Assertions.assertEquals("/challenger", config.routePath("/challenger"));
+        Assertions.assertEquals("/docs/openapi.json", config.routePath("/docs/openapi.json"));
+    }
+
+    @Test
+    void invalidApiRouteModeIsRejected() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        ChallengerAutoConfig.from(
+                                Map.of(ChallengerAutoConfig.PROPERTY_API_ROUTE_MODE, "sideways"),
+                                Collections.emptyMap()));
     }
 }

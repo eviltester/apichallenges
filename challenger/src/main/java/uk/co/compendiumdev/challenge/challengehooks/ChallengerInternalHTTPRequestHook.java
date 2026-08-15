@@ -2,7 +2,6 @@ package uk.co.compendiumdev.challenge.challengehooks;
 
 import static uk.co.compendiumdev.thingifier.api.http.ThingifierHttpApi.HTTP_SESSION_HEADER_NAME;
 
-import java.util.List;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
@@ -34,15 +33,10 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
     @Override
     public InternalHttpResponse run(final InternalHttpRequest request) {
 
-        // TODO: fix hooks so that they only run on a specific thingifier basis.
-        // Until fixed so hooks only run on specific thingifiers, restrict this to Challenges API
-        // end points
-        List<String> validEndpointPrefixesToRunAgainst =
-                List.of("challenger", "todo", "todos", "challenges", "heartbeat", "secret");
-        String[] pathSegments = request.getPath().split("/");
-        if (!validEndpointPrefixesToRunAgainst.contains(pathSegments[0])) {
+        if (!ApiChallengeHookPath.isApiChallengesEndpoint(request.getPath())) {
             return null;
         }
+        final String path = ApiChallengeHookPath.normalize(request.getPath());
 
         InternalHttpResponse tooLongHeaderResponse = rejectTooLongXChallengerHeader(request);
         if (tooLongHeaderResponse != null) {
@@ -63,7 +57,6 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
         request.addHeader(HTTP_SESSION_HEADER_NAME, challenger.getXChallenger());
 
         InternalHttpMethod method = request.getVerb();
-        String path = request.getPath();
 
         if (method == InternalHttpMethod.GET && path.equals("challenges")) {
             challengers.pass(challenger, CHALLENGE.GET_CHALLENGES);
@@ -143,7 +136,8 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
     }
 
     private boolean isXChallengerTooLongChallengeRequest(final InternalHttpRequest request) {
-        return request.getVerb() == InternalHttpMethod.GET && request.getPath().equals("heartbeat");
+        return request.getVerb() == InternalHttpMethod.GET
+                && ApiChallengeHookPath.normalize(request.getPath()).equals("heartbeat");
     }
 
     private ChallengerAuthData challengerFromOversizedHeaderPrefix(final String xChallenger) {

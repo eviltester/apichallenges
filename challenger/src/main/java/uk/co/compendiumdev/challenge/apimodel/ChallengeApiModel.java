@@ -7,6 +7,7 @@ import static uk.co.compendiumdev.thingifier.apiconfig.PutIdentifierPolicy.OPTIO
 import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType.STRING;
 
 import uk.co.compendiumdev.thingifier.Thingifier;
+import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
 import uk.co.compendiumdev.thingifier.core.EntityRelModel;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.Field;
@@ -31,6 +32,7 @@ public class ChallengeApiModel {
         para.append("A Simple todo list");
 
         todoList.setDocumentation("API Challenges Simple Todo List", para.toString());
+        todoList.apiConfig().setFrom(new ThingifierApiConfig("/api"));
 
         // can create a maximum of 20 todos in the challenge todos list
         EntityDefinition todo = todoList.defineThing("todo", "todos", 20);

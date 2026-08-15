@@ -52,7 +52,11 @@ public class RestAssuredBaseTest {
     }
 
     public String apiPath(final String path) {
-        return environment + path;
+        return Environment.getEnv(path);
+    }
+
+    public String routePath(final String path) {
+        return Environment.routePath(path);
     }
 
     protected static boolean shouldSkipHeadGetHeaderComparison(final String headerName) {

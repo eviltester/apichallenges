@@ -151,7 +151,7 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
-                        "Simple API Testing Experiments For API Test Planning",
+                        "Simple API Testing Experiments, API Test Plan and Test Approach Ideas",
                         "/blog/changelog-2026-08-14-simple-api-testing-experiments"));
         args.add(
                 Arguments.of(
@@ -266,8 +266,8 @@ public class UiPagesAreReachableTest {
     void restrictedApiClientPagesUseAdhocLiveRequestWidgets() {
         assertClientPage(
                 "/apichallenges/client",
-                "/todos",
-                "/todos||/todo||/challenges||/challenger||/secret||/heartbeat",
+                "/api/todos",
+                "/api||/todos||/todo||/challenges||/challenger||/secret||/heartbeat",
                 "true");
         assertClientPage("/simpleapi/client", "/simpleapi/items", "/simpleapi", "false");
         assertClientPage("/shop/client", "/shop/products", "/shop", "false");
@@ -1137,18 +1137,18 @@ public class UiPagesAreReachableTest {
     @Test
     void generatedApiDocsDocumentPatchInstanceRoutesAsSupported() {
 
-        assertPatchRouteDocumentedAsSupported("/docs", "/todos/:id", "todo");
+        assertPatchRouteDocumentedAsSupported("/api/docs", "/api/todos/:id", "todo");
         assertPatchRouteDocumentedAsSupported("/simpleapi/docs", "/simpleapi/items/:id", "item");
     }
 
     @Test
     void generatedOpenApiDocumentsPatchForEntityInstanceRoutesOnly() {
 
-        HttpResponseDetails response = http.send("/docs/openapi.json", "get");
+        HttpResponseDetails response = http.send("/api/docs/openapi.json", "get");
         Assertions.assertEquals(200, response.statusCode);
 
-        JsonObject todoCollection = openApiPath(response.body, "/todos");
-        JsonObject todoInstance = openApiPath(response.body, "/todos/{id}");
+        JsonObject todoCollection = openApiPath(response.body, "/api/todos");
+        JsonObject todoInstance = openApiPath(response.body, "/api/todos/{id}");
         Assertions.assertFalse(todoCollection.has("patch"));
         Assertions.assertTrue(todoInstance.has("patch"));
         assertPatchRequestBodiesAndAcceptPatch(todoInstance);
@@ -2236,7 +2236,9 @@ public class UiPagesAreReachableTest {
         List<Arguments> args = new ArrayList<>();
         args.add(
                 Arguments.of(
-                        "/docs/swagger-ui", "/docs/openapi.json", "API Challenges - Swagger UI"));
+                        "/api/docs/swagger-ui",
+                        "/api/docs/openapi.json",
+                        "API Challenges - Swagger UI"));
         args.add(
                 Arguments.of(
                         "/simpleapi/docs/swagger-ui",
@@ -2310,7 +2312,7 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedStylesheet(response, "/css/content.css");
         assertBodyContainsVersionedStylesheet(response, "/css/theme-experiments.css");
         assertBodyContainsVersionedScript(response, "/js/theme-switcher.js");
-        Assertions.assertTrue(response.body.contains("href=\"/docs/swagger-ui\""));
+        Assertions.assertTrue(response.body.contains("href=\"/api/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/apichallenges/client\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("href=\"/simpleapi/client\""));
@@ -2357,12 +2359,12 @@ public class UiPagesAreReachableTest {
     @Test
     void docsPagesRenderPerApiSeoMetadata() {
 
-        final HttpResponseDetails docsResponse = http.send("/docs", "get");
+        final HttpResponseDetails docsResponse = http.send("/api/docs", "get");
         Assertions.assertEquals(200, docsResponse.statusCode);
         assertBodyContainsVersionedScript(docsResponse, "/js/api-live-request.js");
         assertBodyContainsVersionedScript(docsResponse, "/js/api-docs-live-request.js");
         Assertions.assertTrue(docsResponse.body.contains("Open Swagger UI"));
-        Assertions.assertTrue(docsResponse.body.contains("href='/docs/swagger-ui'"));
+        Assertions.assertTrue(docsResponse.body.contains("href='/api/docs/swagger-ui'"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
                         "<title>API Challenges API Documentation | API Challenges</title>"));
@@ -2373,13 +2375,13 @@ public class UiPagesAreReachableTest {
                 docsResponse.body.contains("<meta name='robots' content='index,follow'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
-                        "<meta property='og:url' content='https://apichallenges.com/docs'>"));
+                        "<meta property='og:url' content='https://apichallenges.com/api/docs'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
                         "<meta name='twitter:title' content='API Challenges API Documentation | API Challenges'>"));
         Assertions.assertTrue(
                 docsResponse.body.contains(
-                        "<link rel='canonical' href='https://apichallenges.com/docs'>"));
+                        "<link rel='canonical' href='https://apichallenges.com/api/docs'>"));
 
         final HttpResponseDetails simpleApiDocsResponse = http.send("/simpleapi/docs", "get");
         Assertions.assertEquals(200, simpleApiDocsResponse.statusCode);
@@ -3288,7 +3290,8 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<urlset xmlns=\"https://www.sitemaps.org/schemas/sitemap/0.9\""));
         Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com</loc>"));
-        Assertions.assertTrue(response.body.contains("<loc>https://apichallenges.com/docs</loc>"));
+        Assertions.assertTrue(
+                response.body.contains("<loc>https://apichallenges.com/api/docs</loc>"));
         Assertions.assertFalse(
                 response.body.contains("<loc>https://apichallenges.com/docs/swagger-ui</loc>"));
         Assertions.assertTrue(

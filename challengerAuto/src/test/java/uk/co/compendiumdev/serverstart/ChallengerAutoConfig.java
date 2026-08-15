@@ -17,6 +17,7 @@ public final class ChallengerAutoConfig {
     public static final String PROPERTY_LOCAL_PORT = "challenger.auto.local.port";
     public static final String PROPERTY_LOCAL_EXTRA_ARGS = "challenger.auto.local.extraArgs";
     public static final String PROPERTY_EXTERNAL_FULL = "challenger.auto.external.full";
+    public static final String PROPERTY_API_ROUTE_MODE = "challenger.auto.apiRouteMode";
 
     public static final String DEFAULT_EXISTING_BASE_URL = "http://localhost:4567";
     public static final String DEFAULT_LIVE_BASE_URL = "https://apichallenges.eviltester.com";
@@ -38,6 +39,11 @@ public final class ChallengerAutoConfig {
         MULTI
     }
 
+    public enum ApiRouteMode {
+        API,
+        LEGACY
+    }
+
     private final Target target;
     private final String baseUrl;
     private final Repository localRepository;
@@ -45,6 +51,7 @@ public final class ChallengerAutoConfig {
     private final String localPort;
     private final List<String> localExtraArgs;
     private final boolean externalFull;
+    private final ApiRouteMode apiRouteMode;
 
     private ChallengerAutoConfig(
             final Target target,
@@ -53,7 +60,8 @@ public final class ChallengerAutoConfig {
             final PlayerMode localPlayerMode,
             final String localPort,
             final List<String> localExtraArgs,
-            final boolean externalFull) {
+            final boolean externalFull,
+            final ApiRouteMode apiRouteMode) {
         this.target = target;
         this.baseUrl = normalizeBaseUrl(baseUrl);
         this.localRepository = localRepository;
@@ -61,6 +69,7 @@ public final class ChallengerAutoConfig {
         this.localPort = localPort;
         this.localExtraArgs = Collections.unmodifiableList(new ArrayList<>(localExtraArgs));
         this.externalFull = externalFull;
+        this.apiRouteMode = apiRouteMode;
         validate();
     }
 
@@ -82,11 +91,20 @@ public final class ChallengerAutoConfig {
         List<String> extraArgs =
                 parseExtraArgs(valueFor(props, env, PROPERTY_LOCAL_EXTRA_ARGS, ""));
         boolean externalFull = parseBoolean(valueFor(props, env, PROPERTY_EXTERNAL_FULL, "false"));
+        ApiRouteMode apiRouteMode =
+                parseApiRouteMode(valueFor(props, env, PROPERTY_API_ROUTE_MODE, "api"));
 
         String baseUrl = configuredBaseUrlFor(target, props, env);
 
         return new ChallengerAutoConfig(
-                target, baseUrl, repository, playerMode, port, extraArgs, externalFull);
+                target,
+                baseUrl,
+                repository,
+                playerMode,
+                port,
+                extraArgs,
+                externalFull,
+                apiRouteMode);
     }
 
     public static ChallengerAutoConfig localProfile(
@@ -147,6 +165,10 @@ public final class ChallengerAutoConfig {
         return externalFull;
     }
 
+    public ApiRouteMode getApiRouteMode() {
+        return apiRouteMode;
+    }
+
     public boolean isExternalTarget() {
         return target == Target.LIVE;
     }
@@ -166,6 +188,18 @@ public final class ChallengerAutoConfig {
         return "External Challenger target is smoke-only by default; set -D"
                 + PROPERTY_EXTERNAL_FULL
                 + "=true to run the mutating suite.";
+    }
+
+    public String routePath(final String path) {
+        if (apiRouteMode == ApiRouteMode.LEGACY || !isApiChallengesPath(path)) {
+            return path;
+        }
+
+        if (path.equals("/api") || path.startsWith("/api/")) {
+            return path;
+        }
+
+        return "/api" + path;
     }
 
     public List<String> challengeMainArgs(final int port) {
@@ -213,6 +247,8 @@ public final class ChallengerAutoConfig {
                 + localExtraArgs
                 + ", externalFull="
                 + externalFull
+                + ", apiRouteMode="
+                + apiRouteMode
                 + '}';
     }
 
@@ -327,6 +363,45 @@ public final class ChallengerAutoConfig {
                 throw new IllegalArgumentException(
                         "Unknown local player mode " + value + ". Expected single or multi.");
         }
+    }
+
+    private static ApiRouteMode parseApiRouteMode(final String value) {
+        String normalized = normalize(value);
+        switch (normalized) {
+            case "api":
+            case "canonical":
+                return ApiRouteMode.API;
+            case "legacy":
+            case "root":
+                return ApiRouteMode.LEGACY;
+            default:
+                throw new IllegalArgumentException(
+                        "Unknown API route mode " + value + ". Expected api or legacy.");
+        }
+    }
+
+    private static boolean isApiChallengesPath(final String path) {
+        final String pathWithoutQuery = pathWithoutQueryString(path);
+        return pathWithoutQuery.equals("/todos")
+                || pathWithoutQuery.startsWith("/todos/")
+                || pathWithoutQuery.equals("/todo")
+                || pathWithoutQuery.startsWith("/todo/")
+                || pathWithoutQuery.equals("/challenger")
+                || pathWithoutQuery.startsWith("/challenger/")
+                || pathWithoutQuery.equals("/challenges")
+                || pathWithoutQuery.equals("/heartbeat")
+                || pathWithoutQuery.equals("/secret")
+                || pathWithoutQuery.startsWith("/secret/")
+                || pathWithoutQuery.equals("/docs")
+                || pathWithoutQuery.startsWith("/docs/");
+    }
+
+    private static String pathWithoutQueryString(final String path) {
+        final int queryStart = path.indexOf('?');
+        if (queryStart < 0) {
+            return path;
+        }
+        return path.substring(0, queryStart);
     }
 
     private static String normalizePort(final String value) {

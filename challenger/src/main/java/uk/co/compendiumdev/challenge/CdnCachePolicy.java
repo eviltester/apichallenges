@@ -141,13 +141,13 @@ public final class CdnCachePolicy {
                 || path.equals("/sitemap.xml")
                 || path.equals("/docs")
                 || path.startsWith("/docs/")
-                || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs($|/.*)")
+                || path.matches("^/(api|simpleapi|sim|shop|mirror|fromhell)/docs($|/.*)")
                 || isContentDocumentationPath(path);
     }
 
     private static boolean isSwaggerUiPath(final String path) {
         return path.equals("/docs/swagger-ui")
-                || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs/swagger-ui$");
+                || path.matches("^/(api|simpleapi|sim|shop|mirror|fromhell)/docs/swagger-ui$");
     }
 
     private static boolean isNoindexFollowHtmlPagePath(final String path) {
@@ -171,9 +171,9 @@ public final class CdnCachePolicy {
         return path.equals("/docs/openapi.json")
                 || path.equals("/docs/swagger")
                 || path.matches("^/docs/openapi-3\\.[0-9]\\.json$")
-                || path.matches("^/(simpleapi|sim|shop|mirror|fromhell)/docs/swagger$")
+                || path.matches("^/(api|simpleapi|sim|shop|mirror|fromhell)/docs/swagger$")
                 || path.matches(
-                        "^/(simpleapi|sim|shop|mirror|fromhell)/docs/(openapi|openapi-3\\.[0-9])\\.json$")
+                        "^/(api|simpleapi|sim|shop|mirror|fromhell)/docs/(openapi|openapi-3\\.[0-9])\\.json$")
                 || path.equals("/gui/challenge-status")
                 || path.startsWith("/gui/challenge-status/")
                 || path.equals("/mirror/request")
@@ -192,7 +192,8 @@ public final class CdnCachePolicy {
     }
 
     private static boolean isPracticeApiResourcePath(final String path) {
-        return isApiResourceUnderPrefix(path, "/simpleapi")
+        return isApiResourceUnderPrefix(path, "/api")
+                || isApiResourceUnderPrefix(path, "/simpleapi")
                 || isApiResourceUnderPrefix(path, "/shop")
                 || isApiResourceUnderPrefix(path, "/sim")
                 || isApiResourceUnderPrefix(path, "/fromhell");

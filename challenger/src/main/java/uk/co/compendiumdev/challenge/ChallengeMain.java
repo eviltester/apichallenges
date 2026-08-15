@@ -85,13 +85,13 @@ public class ChallengeMain {
         thingifier.apiConfig().setApiToAllowRobotsIndexingResponses(false);
         thingifier.apiConfig().setSupportsMultipleDatabases(true);
 
-        // setup routes required for challenges
-        challenger = new ChallengeRouteHandler(thingifier, app.getApiDefn(), config);
-
         app.chooseThingifier();
         // can set profile by adding more configs, or just
         // app.setProfileToUse(aProfile)
         app.configureThingifierWithProfile();
+
+        // setup routes required for challenges
+        challenger = new ChallengeRouteHandler(thingifier, app.getApiDefn(), config);
 
         app.setupDefaultGui();
         app.getGuiManagement().setCanonicalHost("https://apichallenges.com");
@@ -146,6 +146,8 @@ public class ChallengeMain {
                     .getThingifier()
                     .ensureCreatedAndPopulatedInstanceDatabaseNamed(Challengers.SINGLE_PLAYER_GUID);
         }
+
+        app.getApiDefn().setPathPrefix("//__apichallenges_internal");
 
         final ThingifierHttpApiRoutings restServer = app.startRestServer();
 

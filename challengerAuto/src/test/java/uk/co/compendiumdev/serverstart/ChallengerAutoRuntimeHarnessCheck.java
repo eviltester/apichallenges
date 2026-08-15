@@ -71,7 +71,10 @@ public class ChallengerAutoRuntimeHarnessCheck {
     private void assertOwnedLocalRuntimeStarts(final ChallengerAutoConfig config) {
         try (ChallengerAutoRuntime runtime = ChallengerAutoRuntime.start(config)) {
             Assertions.assertTrue(runtime.ownsLocalProcess());
-            RestAssured.given().get(runtime.getBaseUrl() + "/heartbeat").then().statusCode(204);
+            RestAssured.given()
+                    .get(runtime.getBaseUrl() + config.routePath("/heartbeat"))
+                    .then()
+                    .statusCode(204);
         }
     }
 

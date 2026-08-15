@@ -174,7 +174,7 @@ public final class ChallengerAutoRuntime implements AutoCloseable {
 
     private void waitUntilReady() {
         long deadline = System.currentTimeMillis() + 30_000;
-        String heartbeat = baseUrl + "/heartbeat";
+        String heartbeat = baseUrl + config.routePath("/heartbeat");
         while (System.currentTimeMillis() < deadline) {
             if (localProcess != null && !localProcess.isAlive()) {
                 throw new IllegalStateException(

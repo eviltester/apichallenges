@@ -2,7 +2,6 @@ package uk.co.compendiumdev.challenge.challengehooks;
 
 import static uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpMethod.*;
 
-import java.util.List;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.ChallengerState;
@@ -40,32 +39,17 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
                     request.getHeader("Access-Control-Allow-Methods"));
         }
 
-        // TODO: fix hooks so that they only run on a specific thingifier basis.
-        // Until fixed so hooks only run on specific thingifiers, restrict this to Challenges API
-        // end points
-        List<String> validEndpointPrefixesToRunAgainst =
-                List.of("challenger", "todo", "todos", "challenges", "heartbeat", "secret");
-        String[] pathSegments = request.getPath().split("/");
-        if (!validEndpointPrefixesToRunAgainst.contains(pathSegments[0])) {
+        if (!ApiChallengeHookPath.isApiChallengesEndpoint(request.getPath())) {
             return;
         }
-        //        boolean validEndpoint=false;
-        //        for(String checkPrefix : validEndpointPrefixesToRunAgainst){
-        //            if(request.getPath().startsWith(checkPrefix)){
-        //                validEndpoint=true;
-        //                break;
-        //            }
-        //        }
-        //        if(!validEndpoint){
-        //            return;
-        //        }
+        final String path = ApiChallengeHookPath.normalize(request.getPath());
 
         ChallengerAuthData challenger =
                 challengers.getChallenger(request.getHeader("X-CHALLENGER"));
 
         // we can complete a challenge while the user is null - creating the user
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("challenger")
+                && path.contentEquals("challenger")
                 && response.getStatusCode() == 201) {
             // challenger did not exist so we need to find it to pass the challenge
 
@@ -81,7 +65,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().startsWith("challenger/")
+                && path.startsWith("challenger/")
                 && response.getStatusCode() == 200) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -93,7 +77,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().startsWith("challenger")
+                && path.startsWith("challenger")
                 && response.getStatusCode() == 200) {
 
             String givenChallengerId = request.getHeader("X-Challenger");
@@ -107,7 +91,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().startsWith("challenger/")
+                && path.startsWith("challenger/")
                 && (response.getStatusCode() == 200)) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -118,7 +102,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().startsWith("challenger/")
+                && path.startsWith("challenger/")
                 && (response.getStatusCode() == 409)
                 && response.getBody().contains("URL GUID does not match payload X-CHALLENGER")) {
 
@@ -130,7 +114,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().startsWith("challenger/")
+                && path.startsWith("challenger/")
                 && (response.getStatusCode() == 201)) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -141,7 +125,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().startsWith("challenger/database/")
+                && path.startsWith("challenger/database/")
                 && (response.getStatusCode() == 200)) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -152,7 +136,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().startsWith("challenger/database/")
+                && path.startsWith("challenger/database/")
                 && (response.getStatusCode() == 204)) {
 
             String challengerId = response.getHeader("X-Challenger");
@@ -163,10 +147,9 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (challenger == null) {
-            if (!request.getPath().contentEquals("challenger")
-                    && !request.getPath()
-                            .contains(
-                                    "mirror/r") // exclude mirror endpoints from adding a challenger
+            if (!path.contentEquals("challenger")
+                    && !path.contains(
+                            "mirror/r") // exclude mirror endpoints from adding a challenger
             ) {
 
                 if (!response.getHeaders().headerExists("X-CHALLENGER")) {
@@ -176,14 +159,14 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
             // cannot track challenges
             if (response.getStatusCode() == 404
                     && (response.getBody() == null || response.getBody().isEmpty())) {
-                setResponseAs404(request, response);
+                setResponseAs404(path, request, response);
             }
             return;
         }
 
         if (challenger != null) {
             if (!response.getHeaders().headerExists("X-CHALLENGER")) {
-                if (!request.getPath().contains("mirror/r")) {
+                if (!path.contains("mirror/r")) {
                     // exclude mirror endpoints from adding a challenger
                     XChallengerHeader.setResultHeaderBasedOnChallenger(response, challenger);
                 }
@@ -192,13 +175,13 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         // No endpoint defined so this 404 created by HTTP server routing
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("todo")
+                && path.contentEquals("todo")
                 && response.getStatusCode() == 404) {
             challengers.pass(challenger, CHALLENGE.GET_TODOS_NOT_PLURAL_404);
         }
 
         if (request.getVerb() == OPTIONS
-                && request.getPath().contentEquals("todos")
+                && path.contentEquals("todos")
                 && response.getStatusCode() == 204) {
             // hack for backwards compatibility with initial solutions
             response.setStatus(200);
@@ -206,7 +189,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("todos/export")
+                && path.contentEquals("todos/export")
                 && response.getStatusCode() == 200) {
             String contentDisposition = response.getHeader("Content-Disposition");
             if (contentDisposition.contains("attachment")
@@ -224,7 +207,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().matches("todos/.*")
+                && path.matches("todos/.*")
                 && response.getStatusCode() == 422) {
             if (response.getBody().contains("Cannot create todo with PUT due to Auto fields id")) {
                 challengers.pass(challenger, CHALLENGE.PUT_TODOS_422);
@@ -232,7 +215,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().matches("todos/.*")
+                && path.matches("todos/.*")
                 && response.getStatusCode() == 200) {
             if (request.getBody().toLowerCase().contains("donestatus")
                     && request.getBody().toLowerCase().contains("description")) {
@@ -241,7 +224,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().matches("todos/.*")
+                && path.matches("todos/.*")
                 && response.getStatusCode() == 422) {
             if (response.getBody().contains("title : field is mandatory")) {
                 challengers.pass(challenger, CHALLENGE.PUT_TODOS_MISSING_TITLE_422);
@@ -249,7 +232,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().matches("todos/.*")
+                && path.matches("todos/.*")
                 && response.getStatusCode() == 200) {
             if (!request.getBody().toLowerCase().contains("donestatus")
                     && !request.getBody().toLowerCase().contains("description")) {
@@ -258,7 +241,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == PUT
-                && request.getPath().matches("todos/.*")
+                && path.matches("todos/.*")
                 && response.getStatusCode() == 422) {
             if (response.getBody().contains("Can not amend id from")) {
                 challengers.pass(challenger, CHALLENGE.PUT_TODOS_422_NO_AMEND_ID);
@@ -266,7 +249,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/token")
+                && path.contentEquals("secret/token")
                 && request.getHeaders().headerExists("Authorization")
                 && request.getHeader("Authorization").length() > 10
                 && response.getStatusCode() == 401) {
@@ -274,7 +257,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/token")
+                && path.contentEquals("secret/token")
                 && request.getHeaders().headerExists("Authorization")
                 && request.getHeader("Authorization").length() > 10
                 && response.getStatusCode() == 201) {
@@ -282,7 +265,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && request.getHeader("X-AUTH-TOKEN").length() > 1
                 && response.getStatusCode() == 403) {
@@ -290,14 +273,14 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && !request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && response.getStatusCode() == 401) {
             challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_401);
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && request.getHeader("X-AUTH-TOKEN").length() > 1
                 && request.getBody().contains("\"note\"")
@@ -306,7 +289,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && !request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && request.getBody().contains("\"note\"")
                 && response.getStatusCode() == 401) {
@@ -314,7 +297,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && request.getBody().contains("\"note\"")
                 && response.getStatusCode() == 200) {
@@ -322,14 +305,14 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("X-AUTH-TOKEN")
                 && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_200);
         }
 
         if (request.getVerb() == GET
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("Authorization")
                 && new BearerAuthHeaderParser(request.getHeader("Authorization")).isValid()
                 && response.getStatusCode() == 200) {
@@ -337,7 +320,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
         }
 
         if (request.getVerb() == POST
-                && request.getPath().contentEquals("secret/note")
+                && path.contentEquals("secret/note")
                 && request.getHeaders().headerExists("Authorization")
                 && new BearerAuthHeaderParser(request.getHeader("Authorization")).isValid()
                 && request.getBody().contains("\"note\"")
@@ -347,17 +330,20 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (response.getStatusCode() == 404
                 && (response.getBody() == null || response.getBody().isEmpty())) {
-            setResponseAs404(request, response);
+            setResponseAs404(path, request, response);
         }
     }
 
-    private void setResponseAs404(InternalHttpRequest request, InternalHttpResponse response) {
+    private void setResponseAs404(
+            final String path,
+            final InternalHttpRequest request,
+            final InternalHttpResponse response) {
 
         if (request.getAcceptHeader() != null && !request.getAcceptHeader().isEmpty()) {
             if (request.getAcceptHeader().contains("html")) {
                 // treat as a GUI request and redirect
                 response.setStatus(307);
-                response.setHeader("Location", "/gui/404/" + request.getPath());
+                response.setHeader("Location", "/gui/404/" + path);
                 return;
             }
             if (request.getAcceptHeader().startsWith("application/")) {

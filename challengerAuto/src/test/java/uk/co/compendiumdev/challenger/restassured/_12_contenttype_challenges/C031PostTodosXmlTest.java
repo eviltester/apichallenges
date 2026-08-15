@@ -47,7 +47,7 @@ public class C031PostTodosXmlTest extends RestAssuredBaseTest {
 
         // GET on Location header to return the to do and check values
         String locationHeader = response.getHeader("Location");
-        String pattern = "/todos/(.*)";
+        String pattern = Pattern.quote(routePath("/todos/")) + "(.*)";
         Pattern getId = Pattern.compile(pattern);
         Matcher matcher = getId.matcher(locationHeader);
         matcher.find();

@@ -58,11 +58,14 @@ public class ChallengerAutoRunProfiles {
     }
 
     private void assertSmokeEndpoints(final String baseUrl) {
-        RestAssured.given().get(baseUrl + "/heartbeat").then().statusCode(204);
+        RestAssured.given()
+                .get(baseUrl + Environment.routePath("/heartbeat"))
+                .then()
+                .statusCode(204);
 
         RestAssured.given()
                 .accept(ContentType.JSON)
-                .get(baseUrl + "/challenges")
+                .get(baseUrl + Environment.routePath("/challenges"))
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON);

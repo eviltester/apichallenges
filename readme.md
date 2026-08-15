@@ -49,9 +49,9 @@ java -jar challenger/target/apichallenges.jar
 Then visit:
 
 - <http://localhost:4567>
-- <http://localhost:4567/challenges>
-- <http://localhost:4567/docs>
-- <http://localhost:4567/docs/swagger-ui>
+- <http://localhost:4567/api/challenges>
+- <http://localhost:4567/api/docs>
+- <http://localhost:4567/api/docs/swagger-ui>
 
 ## Challenger Auto
 
@@ -63,16 +63,21 @@ mvn -B -pl challengerAuto -am test
 
 Run specific repository modes:
 
+Set `challenger.auto.apiRouteMode` to `api` for canonical `/api/...` routes, or `legacy`
+for root compatibility routes.
+
 ```shell
 mvn -B -pl challengerAuto -am test \
   -Dchallenger.auto.target=local \
   -Dchallenger.auto.local.repository=memory \
-  -Dchallenger.auto.local.playerMode=multi
+  -Dchallenger.auto.local.playerMode=multi \
+  -Dchallenger.auto.apiRouteMode=api
 
 mvn -B -pl challengerAuto -am test \
   -Dchallenger.auto.target=local \
   -Dchallenger.auto.local.repository=sqlite-memory \
-  -Dchallenger.auto.local.playerMode=multi
+  -Dchallenger.auto.local.playerMode=multi \
+  -Dchallenger.auto.apiRouteMode=legacy
 ```
 
 ## Docker

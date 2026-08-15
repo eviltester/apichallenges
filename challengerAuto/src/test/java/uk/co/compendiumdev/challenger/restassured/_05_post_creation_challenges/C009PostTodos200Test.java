@@ -44,7 +44,7 @@ public class C009PostTodos200Test extends RestAssuredBaseTest {
         Assertions.assertTrue(createdTodo.id > 0);
 
         // GET on Location header should return the to do location but just check the format
-        Assertions.assertEquals("/todos/" + createdTodo.id, response.header("Location"));
+        Assertions.assertEquals(routePath("/todos/" + createdTodo.id), response.header("Location"));
 
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();

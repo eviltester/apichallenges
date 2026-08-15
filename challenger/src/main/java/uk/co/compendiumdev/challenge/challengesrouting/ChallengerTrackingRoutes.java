@@ -28,6 +28,34 @@ public class ChallengerTrackingRoutes {
             final PersistenceLayer persistenceLayer,
             final Thingifier thingifier,
             ChallengeDefinitions challengeDefinitions) {
+        configure(
+                challengers,
+                single_player_mode,
+                apiDefn,
+                persistenceLayer,
+                thingifier,
+                challengeDefinitions,
+                "");
+    }
+
+    public void configure(
+            final Challengers challengers,
+            final boolean single_player_mode,
+            final ThingifierApiDocumentationDefn apiDefn,
+            final PersistenceLayer persistenceLayer,
+            final Thingifier thingifier,
+            ChallengeDefinitions challengeDefinitions,
+            final String pathPrefix) {
+
+        final String challengerPath = ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger");
+        final String challengerIdPath =
+                ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger/:id");
+        final String challengerGuidPath =
+                ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger/:guid");
+        final String challengerDatabaseIdPath =
+                ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger/database/:id");
+        final String challengerDatabaseGuidPath =
+                ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger/database/:guid");
 
         // todo: control max challengers and ip address limiting dynamically through admin interface
         // and via environment variables
@@ -61,7 +89,7 @@ public class ChallengerTrackingRoutes {
                 };
 
         SimpleHttpRouteCreator.addHandler(
-                "/challenger/:id",
+                challengerIdPath,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -71,17 +99,17 @@ public class ChallengerTrackingRoutes {
                 });
 
         SimpleHttpRouteCreator.routeStatusWhenNot(
-                405, "/challenger/:id", List.of("get", "put", "head", "options"));
+                405, challengerIdPath, List.of("get", "put", "head", "options"));
 
         // refresh challenger to avoid purging
         get(
-                "/challenger/:id",
+                challengerIdPath,
                 (request, result) -> {
                     return getChallengerId.handle(request, result);
                 });
 
         head(
-                "/challenger/:id",
+                challengerIdPath,
                 (request, result) -> {
                     getChallengerId.handle(request, result);
                     return "";
@@ -90,7 +118,7 @@ public class ChallengerTrackingRoutes {
         if (!single_player_mode) {
             // make sure the X-CHALLENGER header shows up in the swagger when in multi-user mode
             apiDefn.addCustomHeaderWhenRouteNotMatches(
-                    new RoutingDefinition(RoutingVerb.POST, "/challenger", null, null),
+                    new RoutingDefinition(RoutingVerb.POST, challengerPath, null, null),
                     new HeaderDefinition("X-CHALLENGER", "guid"));
         }
 
@@ -100,7 +128,7 @@ public class ChallengerTrackingRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.GET,
-                                "/challenger/:guid",
+                                challengerGuidPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -110,7 +138,7 @@ public class ChallengerTrackingRoutes {
 
         // endpoint to restore a saved challenger status from UI
         put(
-                "/challenger/:id",
+                challengerIdPath,
                 (request, result) -> {
                     ChallengerAuthData challenger;
 
@@ -203,7 +231,7 @@ public class ChallengerTrackingRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.PUT,
-                                "/challenger/:guid",
+                                challengerGuidPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -217,7 +245,7 @@ public class ChallengerTrackingRoutes {
         */
 
         SimpleHttpRouteCreator.addHandler(
-                "/challenger",
+                challengerPath,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -228,7 +256,7 @@ public class ChallengerTrackingRoutes {
 
         // create a challenger
         post(
-                "/challenger",
+                challengerPath,
                 (request, result) -> {
                     if (single_player_mode) {
                         XChallengerHeader.setResultHeaderBasedOnChallenger(
@@ -273,13 +301,13 @@ public class ChallengerTrackingRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.POST,
-                                "/challenger",
+                                challengerPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation("Create a challenger using the X-CHALLENGER guid header.")
                         .addPossibleStatuses(200, 400, 405));
 
-        SimpleHttpRouteCreator.routeStatusWhenNot(405, "/challenger", List.of("post", "options"));
+        SimpleHttpRouteCreator.routeStatusWhenNot(405, challengerPath, List.of("post", "options"));
 
         /*
            The todos restore endpoint
@@ -289,7 +317,7 @@ public class ChallengerTrackingRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.GET,
-                                "/challenger/database/:guid",
+                                challengerDatabaseGuidPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
@@ -342,7 +370,7 @@ public class ChallengerTrackingRoutes {
                 };
 
         SimpleHttpRouteCreator.addHandler(
-                "/challenger/database/:id",
+                challengerDatabaseIdPath,
                 "options",
                 (request, result) -> {
                     result.status(204);
@@ -352,18 +380,18 @@ public class ChallengerTrackingRoutes {
                 });
 
         SimpleHttpRouteCreator.routeStatusWhenNot(
-                405, "/challenger/database/:id", List.of("get", "put", "head", "options"));
+                405, challengerDatabaseIdPath, List.of("get", "put", "head", "options"));
 
         // add a GET challenger/database/:id in the proper database format
 
         get(
-                "/challenger/database/:id",
+                challengerDatabaseIdPath,
                 (request, result) -> {
                     return getChallengerDatabaseId.handle(request, result);
                 });
 
         head(
-                "/challenger/database/:id",
+                challengerDatabaseIdPath,
                 (request, result) -> {
                     getChallengerDatabaseId.handle(request, result);
                     return "";
@@ -371,7 +399,7 @@ public class ChallengerTrackingRoutes {
 
         // endpoint to restore a saved challenger database from UI
         put(
-                "/challenger/database/:id",
+                challengerDatabaseIdPath,
                 (request, result) -> {
                     String xChallengerGuid = request.params("id");
 
@@ -422,7 +450,7 @@ public class ChallengerTrackingRoutes {
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
                                 RoutingVerb.PUT,
-                                "/challenger/database/:guid",
+                                challengerDatabaseGuidPath,
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
