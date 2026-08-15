@@ -15,6 +15,8 @@
 
   const DEFAULT_OPENAPI_URL = '/api/docs/openapi.json';
   const CONVERTED_SESSION_KEY_PREFIX = 'apiChallengesConvertedOpenApiSpec:';
+  const OPENAPI_EXPLORER_THEME_STYLE_ID = 'api-challenges-openapi-explorer-theme';
+  const OPENAPI_EXPLORER_NESTED_THEME_STYLE_ID = 'api-challenges-openapi-explorer-nested-theme';
   const CLIENT_LABELS = {
     'openapi-explorer': 'OpenAPI Explorer',
     scalar: 'Scalar',
@@ -205,17 +207,8 @@
     return storageKey;
   }
 
-  function applyOpenApiExplorerTheme(explorer) {
-    if (!explorer || !explorer.shadowRoot || !root.document) {
-      return;
-    }
-    if (explorer.shadowRoot.querySelector('#api-challenges-openapi-explorer-theme')) {
-      return;
-    }
-
-    const style = root.document.createElement('style');
-    style.id = 'api-challenges-openapi-explorer-theme';
-    style.textContent = `
+  function openApiExplorerThemeStyles() {
+    return `
       :host {
         background: var(--api-challenges-openapi-surface, var(--white)) !important;
         color: var(--api-challenges-openapi-text, var(--gray)) !important;
@@ -282,6 +275,40 @@
         color: var(--api-challenges-openapi-link, var(--blue)) !important;
       }
 
+      pre,
+      code,
+      textarea,
+      .font-mono,
+      .code,
+      .code-block,
+      .hljs,
+      .request-body,
+      .response-body,
+      .response-headers,
+      .sample-code {
+        background: var(--api-challenges-openapi-code-bg, #0e1726) !important;
+        border-color: var(--api-challenges-openapi-border, var(--gray)) !important;
+        color: var(--api-challenges-openapi-code-text, #e6f2ff) !important;
+        font-family: var(--mono-font, ui-monospace, SFMono-Regular, Consolas, monospace) !important;
+        text-shadow: none !important;
+      }
+
+      pre *,
+      code *,
+      textarea *,
+      .font-mono *,
+      .code *,
+      .code-block *,
+      .hljs *,
+      .request-body *,
+      .response-body *,
+      .response-headers *,
+      .sample-code * {
+        background: transparent !important;
+        color: var(--api-challenges-openapi-code-text, #e6f2ff) !important;
+        text-shadow: none !important;
+      }
+
       .nav-bar,
       .nav-scroll,
       .nav-bar-info,
@@ -307,7 +334,220 @@
         background: var(--api-challenges-openapi-nav-active-bg, rgba(255, 255, 255, 0.16)) !important;
       }
     `;
-    explorer.shadowRoot.appendChild(style);
+  }
+
+  function openApiExplorerNestedThemeStyles() {
+    return `
+      :host {
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+        color-scheme: var(--api-challenges-openapi-color-scheme, light);
+      }
+
+      :host([data-api-challenges-openapi-code]),
+      :host([data-api-challenges-openapi-code]) .fs-exclude,
+      .fs-exclude,
+      pre,
+      code {
+        background: var(--api-challenges-openapi-code-bg, #0e1726) !important;
+        border-color: var(--api-challenges-openapi-border, #d5e0ea) !important;
+        color: var(--api-challenges-openapi-code-text, #e6f2ff) !important;
+        font-family: var(--mono-font, ui-monospace, SFMono-Regular, Consolas, monospace) !important;
+        text-shadow: none !important;
+      }
+
+      pre *,
+      code * {
+        background: transparent !important;
+        text-shadow: none !important;
+      }
+
+      .token,
+      .token.header,
+      .token.header-value {
+        color: var(--api-challenges-openapi-code-text, #e6f2ff) !important;
+      }
+
+      .token.string {
+        color: var(--api-challenges-openapi-code-token-string, #7ee2b8) !important;
+      }
+
+      .token.property {
+        color: var(--api-challenges-openapi-code-token-property, #f0abfc) !important;
+      }
+
+      .token.keyword,
+      .token.header-name.keyword {
+        color: var(--api-challenges-openapi-code-token-keyword, #93c5fd) !important;
+      }
+
+      .token.boolean,
+      .token.function,
+      .token.number {
+        color: var(--api-challenges-openapi-code-token-value, #fda4af) !important;
+      }
+
+      .token.operator,
+      .token.punctuation {
+        color: var(--api-challenges-openapi-code-token-operator, #cbd5e1) !important;
+      }
+
+      button,
+      input,
+      select,
+      textarea,
+      .m-btn,
+      .tab-btn {
+        background: var(--api-challenges-openapi-surface-soft, var(--white, #ffffff)) !important;
+        border-color: var(--api-challenges-openapi-border, var(--gray, #d5e0ea)) !important;
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+        text-shadow: none !important;
+      }
+
+      button:hover,
+      button:focus-visible,
+      .m-btn:hover,
+      .m-btn:focus-visible,
+      .tab-btn:hover,
+      .tab-btn:focus-visible,
+      .tab-btn.active,
+      .m-btn.active,
+      [aria-selected="true"] {
+        background: var(
+          --api-challenges-openapi-surface-strong,
+          var(--api-challenges-openapi-surface-soft, var(--white, #ffffff))
+        ) !important;
+        border-color: var(--api-challenges-openapi-link, var(--blue, #0f6795)) !important;
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td,
+      .table,
+      .m-table {
+        background: var(--api-challenges-openapi-surface, var(--white, #ffffff)) !important;
+        border-color: var(--api-challenges-openapi-border, var(--gray, #d5e0ea)) !important;
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+      }
+
+      .table > div:first-child,
+      .table > div:first-child * {
+        background: var(--api-challenges-openapi-surface-soft, var(--white, #ffffff)) !important;
+        border-color: var(--api-challenges-openapi-border, var(--gray, #d5e0ea)) !important;
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+      }
+
+      .key-label,
+      .requiredStar,
+      .param-description,
+      p,
+      li {
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+      }
+
+      .string:not(.token) {
+        color: var(--api-challenges-openapi-schema-string, #087443) !important;
+      }
+
+      .boolean:not(.token),
+      .integer:not(.token),
+      .number:not(.token) {
+        color: var(--api-challenges-openapi-schema-value, #b42318) !important;
+      }
+
+      .toolbar-copy-btn {
+        background: var(--api-challenges-openapi-surface-soft, var(--white, #ffffff)) !important;
+        border-color: var(--api-challenges-openapi-border, var(--gray, #d5e0ea)) !important;
+        color: var(--api-challenges-openapi-text, var(--gray, #102033)) !important;
+      }
+    `;
+  }
+
+  function upsertShadowStyle(shadowRoot, styleId, styleText) {
+    if (!shadowRoot || !root.document) {
+      return null;
+    }
+
+    let style = shadowRoot.querySelector(`#${styleId}`);
+    if (!style) {
+      style = root.document.createElement('style');
+      style.id = styleId;
+      shadowRoot.appendChild(style);
+    }
+    style.textContent = styleText;
+    return style;
+  }
+
+  function markOpenApiExplorerShadowHost(host) {
+    if (!host || typeof host.setAttribute !== 'function') {
+      return;
+    }
+
+    const tagName = String(host.tagName || '').toLowerCase();
+    if (tagName === 'syntax-highlighter') {
+      host.setAttribute('data-api-challenges-openapi-code', 'true');
+    }
+  }
+
+  function collectOpenApiExplorerShadowHosts(node, hosts) {
+    if (!node || typeof node.querySelectorAll !== 'function') {
+      return hosts;
+    }
+
+    Array.prototype.forEach.call(node.querySelectorAll('*'), function (element) {
+      if (element.shadowRoot) {
+        hosts.push(element);
+        collectOpenApiExplorerShadowHosts(element.shadowRoot, hosts);
+      }
+    });
+    return hosts;
+  }
+
+  function applyOpenApiExplorerNestedTheme(explorer) {
+    if (!explorer || !explorer.shadowRoot) {
+      return;
+    }
+
+    const nestedThemeStyles = openApiExplorerNestedThemeStyles();
+    collectOpenApiExplorerShadowHosts(explorer.shadowRoot, []).forEach(function (host) {
+      markOpenApiExplorerShadowHost(host);
+      upsertShadowStyle(host.shadowRoot, OPENAPI_EXPLORER_NESTED_THEME_STYLE_ID, nestedThemeStyles);
+    });
+  }
+
+  function setupOpenApiExplorerThemeObserver(explorer) {
+    if (!root.MutationObserver || !explorer || !explorer.shadowRoot || !explorer.dataset) {
+      return;
+    }
+    if (explorer.dataset.apiChallengesOpenApiExplorerThemeObserver === 'true') {
+      return;
+    }
+
+    const observer = new root.MutationObserver(function () {
+      applyOpenApiExplorerNestedTheme(explorer);
+    });
+    observer.observe(explorer.shadowRoot, {
+      childList: true,
+      subtree: true,
+    });
+    explorer.dataset.apiChallengesOpenApiExplorerThemeObserver = 'true';
+  }
+
+  function applyOpenApiExplorerTheme(explorer) {
+    if (!explorer || !explorer.shadowRoot || !root.document) {
+      return;
+    }
+
+    upsertShadowStyle(
+      explorer.shadowRoot,
+      OPENAPI_EXPLORER_THEME_STYLE_ID,
+      openApiExplorerThemeStyles(),
+    );
+    applyOpenApiExplorerNestedTheme(explorer);
+    setupOpenApiExplorerThemeObserver(explorer);
   }
 
   function scheduleOpenApiExplorerTheme(explorer) {
@@ -332,7 +572,6 @@
     }
 
     const explorer = root.document.createElement('openapi-explorer');
-    explorer.setAttribute('hide-authentication', 'true');
     explorer.setAttribute('collapse', 'true');
     target.appendChild(explorer);
 

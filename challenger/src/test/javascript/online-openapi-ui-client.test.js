@@ -186,7 +186,7 @@ test('renderOpenApiExplorer loads parsed specs instead of asking Explorer to fet
 
     assert.equal(loadedSpec, spec);
     assert.equal(attributes['spec-url'], undefined);
-    assert.equal(attributes['hide-authentication'], 'true');
+    assert.equal(attributes['hide-authentication'], undefined);
     assert.equal(attributes.collapse, 'true');
     assert.ok(appendedElement);
   } finally {
@@ -204,6 +204,24 @@ test('renderOpenApiExplorer injects a theme bridge into Explorer shadow DOM', as
     paths: {},
   };
   let injectedStyle;
+  let nestedInjectedStyle;
+  const nestedAttributes = {};
+  const nestedHighlighter = {
+    tagName: 'syntax-highlighter',
+    shadowRoot: {
+      querySelector: (selector) => {
+        assert.equal(selector, '#api-challenges-openapi-explorer-nested-theme');
+        return nestedInjectedStyle || null;
+      },
+      appendChild: (style) => {
+        nestedInjectedStyle = style;
+      },
+      querySelectorAll: () => [],
+    },
+    setAttribute: (key, value) => {
+      nestedAttributes[key] = value;
+    },
+  };
 
   global.customElements = {
     get: (name) => name === 'openapi-explorer',
@@ -221,6 +239,7 @@ test('renderOpenApiExplorer injects a theme bridge into Explorer shadow DOM', as
             assert.equal(selector, '#api-challenges-openapi-explorer-theme');
             return injectedStyle ? injectedStyle : null;
           },
+          querySelectorAll: () => [nestedHighlighter],
           appendChild: (style) => {
             injectedStyle = style;
           },
@@ -241,6 +260,16 @@ test('renderOpenApiExplorer injects a theme bridge into Explorer shadow DOM', as
     assert.match(injectedStyle.textContent, /--api-challenges-openapi-nav-text/);
     assert.match(injectedStyle.textContent, /nav-bar-path/);
     assert.match(injectedStyle.textContent, /main-content/);
+    assert.match(injectedStyle.textContent, /--api-challenges-openapi-code-bg/);
+    assert.match(injectedStyle.textContent, /response-headers/);
+    assert.match(injectedStyle.textContent, /pre \*/);
+    assert.equal(nestedAttributes['data-api-challenges-openapi-code'], 'true');
+    assert.equal(nestedInjectedStyle.id, 'api-challenges-openapi-explorer-nested-theme');
+    assert.match(nestedInjectedStyle.textContent, /data-api-challenges-openapi-code/);
+    assert.match(nestedInjectedStyle.textContent, /token\.string/);
+    assert.match(nestedInjectedStyle.textContent, /m-btn/);
+    assert.match(nestedInjectedStyle.textContent, /schema-string/);
+    assert.match(nestedInjectedStyle.textContent, /table > div:first-child/);
   } finally {
     global.customElements = originalCustomElements;
     global.document = originalDocument;

@@ -151,7 +151,8 @@ public class AuthRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
-                                "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.")
+                                "POST %s with basic auth to get a secret token to use as X-AUTH-TOKEN header, to allow access to the %s end points."
+                                        .formatted(secretTokenPath, secretNotePath))
                         .addPossibleStatuses(201, 401)
                         .secureWithBasicAuth());
 
@@ -162,7 +163,8 @@ public class AuthRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
-                                "GET /secret/token with basic auth to get an X-AUTH-TOKEN header for read-only access to /secret/note.")
+                                "GET %s with basic auth to get an X-AUTH-TOKEN header for read-only access to %s."
+                                        .formatted(secretTokenPath, secretNotePath))
                         .addPossibleStatuses(200, 401)
                         .secureWithBasicAuth());
 
@@ -243,7 +245,8 @@ public class AuthRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
-                                "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.")
+                                "GET %s with X-AUTH-TOKEN to return the secret note for the user."
+                                        .formatted(secretNotePath))
                         .addPossibleStatuses(200, 401, 403)
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
 
@@ -389,7 +392,8 @@ public class AuthRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation(
-                                "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.")
+                                "POST %s with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note."
+                                        .formatted(secretNotePath))
                         .addPossibleStatuses(200, 400, 401, 403)
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
     }

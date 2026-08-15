@@ -9,7 +9,7 @@ public class PatchChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PATCH /todos/{id} (200) partial",
+                        "PATCH /api/todos/{id} (200) partial",
                         "Issue a PATCH request to update an existing todo using a partial JSON payload. "
                                 + patchLink
                                 + ".");
@@ -30,7 +30,7 @@ public class PatchChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PATCH /todos/{id} (200) merge-patch",
+                        "PATCH /api/todos/{id} (200) merge-patch",
                         "Issue a PATCH request to update an existing todo using JSON Merge Patch. "
                                 + patchLink
                                 + ".");
@@ -52,7 +52,7 @@ public class PatchChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PATCH /todos/{id} (200) json-patch",
+                        "PATCH /api/todos/{id} (200) json-patch",
                         "Issue a PATCH request to update an existing todo using JSON Patch operations. "
                                 + patchLink
                                 + ".");

@@ -3,12 +3,18 @@ package uk.co.compendiumdev.challenge.challenges;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerConfig;
 
 public class ChallengeDefinitionsTest {
+
+    private static final Pattern LEGACY_API_CHALLENGE_PATH =
+            Pattern.compile(
+                    "(?<!/api)/(todos|todo|challenger|challenges|heartbeat|secret)"
+                            + "(?=$|[^A-Za-z0-9_-])");
 
     @Test
     void allSinglePlayerChallengesHaveHints() {
@@ -33,6 +39,27 @@ public class ChallengeDefinitionsTest {
     }
 
     @Test
+    void challengeTextUsesCanonicalApiPaths() {
+        Collection<ChallengeDefinitionData> challenges =
+                new ChallengeDefinitions(new ChallengerConfig()).getChallenges();
+        List<String> legacyPathText = new ArrayList<>();
+
+        for (ChallengeDefinitionData challenge : challenges) {
+            addLegacyPathText(legacyPathText, challenge.id + " name", challenge.name);
+            addLegacyPathText(legacyPathText, challenge.id + " description", challenge.description);
+            challenge.hints.forEach(
+                    hint ->
+                            addLegacyPathText(
+                                    legacyPathText, challenge.id + " hint", hint.hintText));
+        }
+
+        Assertions.assertTrue(
+                legacyPathText.isEmpty(),
+                "Challenge text should use canonical /api paths: "
+                        + String.join("; ", legacyPathText));
+    }
+
+    @Test
     void textCalendarTodoInstanceChallengeIsInAcceptSectionAfterUnsupportedAccept() {
         ChallengerConfig config = new ChallengerConfig();
         config.setToMultiPlayerMode();
@@ -41,17 +68,17 @@ public class ChallengeDefinitionsTest {
 
         List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
         ChallengeDefinitionData calendarChallenge =
-                challengeNamed(challenges, "GET /todos/{id} (200) text/calendar");
+                challengeNamed(challenges, "GET /api/todos/{id} (200) text/calendar");
 
         Assertions.assertEquals(
                 CHALLENGE.GET_TODO_ACCEPT_TEXT_CALENDAR,
-                definitions.getChallenge("GET /todos/{id} (200) text/calendar"));
+                definitions.getChallenge("GET /api/todos/{id} (200) text/calendar"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "GET /todos (406)")
-                        < indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar"));
+                indexOfChallenge(challenges, "GET /api/todos (406)")
+                        < indexOfChallenge(challenges, "GET /api/todos/{id} (200) text/calendar"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar")
-                        < indexOfChallenge(challenges, "POST /todos XML"));
+                indexOfChallenge(challenges, "GET /api/todos/{id} (200) text/calendar")
+                        < indexOfChallenge(challenges, "POST /api/todos XML"));
         Assertions.assertTrue(
                 calendarChallenge.description.contains("Accept` header of `text/calendar`"));
         Assertions.assertTrue(
@@ -75,60 +102,60 @@ public class ChallengeDefinitionsTest {
 
         List<String> expectedNames =
                 List.of(
-                        "GET /todos (200) q XML preferred",
-                        "GET /todos (200) q JSON preferred",
-                        "GET /todos (406) q rejects all",
-                        "GET /todos (406) unsupported +json",
-                        "GET /todos (200) text/xml",
-                        "GET /todos (200) vendor XML",
-                        "GET /todos (200) structured XML wildcard");
+                        "GET /api/todos (200) q XML preferred",
+                        "GET /api/todos (200) q JSON preferred",
+                        "GET /api/todos (406) q rejects all",
+                        "GET /api/todos (406) unsupported +json",
+                        "GET /api/todos (200) text/xml",
+                        "GET /api/todos (200) vendor XML",
+                        "GET /api/todos (200) structured XML wildcard");
 
         Assertions.assertEquals(
                 expectedNames,
                 advancedAccept.getChallenges().stream().map(challenge -> challenge.name).toList());
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "GET /todos/{id} (200) text/calendar")
-                        < indexOfChallenge(challenges, "GET /todos (200) q XML preferred"));
+                indexOfChallenge(challenges, "GET /api/todos/{id} (200) text/calendar")
+                        < indexOfChallenge(challenges, "GET /api/todos (200) q XML preferred"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "GET /todos (200) structured XML wildcard")
-                        < indexOfChallenge(challenges, "POST /todos XML"));
+                indexOfChallenge(challenges, "GET /api/todos (200) structured XML wildcard")
+                        < indexOfChallenge(challenges, "POST /api/todos XML"));
 
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_XML_Q_PREFERRED,
-                definitions.getChallenge("GET /todos (200) q XML preferred"));
+                definitions.getChallenge("GET /api/todos (200) q XML preferred"));
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_JSON_Q_PREFERRED,
-                definitions.getChallenge("GET /todos (200) q JSON preferred"));
+                definitions.getChallenge("GET /api/todos (200) q JSON preferred"));
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_Q_REJECTS_ALL_406,
-                definitions.getChallenge("GET /todos (406) q rejects all"));
+                definitions.getChallenge("GET /api/todos (406) q rejects all"));
         Assertions.assertEquals(
                 CHALLENGE.GET_UNSUPPORTED_STRUCTURED_JSON_ACCEPT_406,
-                definitions.getChallenge("GET /todos (406) unsupported +json"));
+                definitions.getChallenge("GET /api/todos (406) unsupported +json"));
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_TEXT_XML,
-                definitions.getChallenge("GET /todos (200) text/xml"));
+                definitions.getChallenge("GET /api/todos (200) text/xml"));
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_VENDOR_XML,
-                definitions.getChallenge("GET /todos (200) vendor XML"));
+                definitions.getChallenge("GET /api/todos (200) vendor XML"));
         Assertions.assertEquals(
                 CHALLENGE.GET_ACCEPT_STRUCTURED_XML_WILDCARD,
-                definitions.getChallenge("GET /todos (200) structured XML wildcard"));
+                definitions.getChallenge("GET /api/todos (200) structured XML wildcard"));
 
         assertChallengeMentionsAndLinks(
-                challengeNamed(challenges, "GET /todos (200) q XML preferred"),
+                challengeNamed(challenges, "GET /api/todos (200) q XML preferred"),
                 "application/json;q=0.5, application/xml;q=1",
                 "/apichallenges/solutions/accept-header/get-todos-200-q-xml-preferred");
         assertChallengeMentionsAndLinks(
-                challengeNamed(challenges, "GET /todos (406) unsupported +json"),
+                challengeNamed(challenges, "GET /api/todos (406) unsupported +json"),
                 "application/problem+json",
                 "/apichallenges/solutions/accept-header/get-todos-406-unsupported-json-suffix");
         assertChallengeMentionsAndLinks(
-                challengeNamed(challenges, "GET /todos (200) vendor XML"),
+                challengeNamed(challenges, "GET /api/todos (200) vendor XML"),
                 "application/vnd.apichallenges.todo+xml",
                 "/apichallenges/solutions/accept-header/get-todos-200-vendor-xml");
         assertChallengeMentionsAndLinks(
-                challengeNamed(challenges, "GET /todos (200) structured XML wildcard"),
+                challengeNamed(challenges, "GET /api/todos (200) structured XML wildcard"),
                 "application/*+xml",
                 "/apichallenges/solutions/accept-header/get-todos-200-structured-xml-wildcard");
     }
@@ -142,17 +169,17 @@ public class ChallengeDefinitionsTest {
 
         List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
         ChallengeDefinitionData vendorXmlChallenge =
-                challengeNamed(challenges, "POST /todos vendor XML");
+                challengeNamed(challenges, "POST /api/todos vendor XML");
 
         Assertions.assertEquals(
                 CHALLENGE.POST_CREATE_VENDOR_XML,
-                definitions.getChallenge("POST /todos vendor XML"));
+                definitions.getChallenge("POST /api/todos vendor XML"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "POST /todos JSON")
-                        < indexOfChallenge(challenges, "POST /todos vendor XML"));
+                indexOfChallenge(challenges, "POST /api/todos JSON")
+                        < indexOfChallenge(challenges, "POST /api/todos vendor XML"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "POST /todos vendor XML")
-                        < indexOfChallenge(challenges, "POST /todos (415)"));
+                indexOfChallenge(challenges, "POST /api/todos vendor XML")
+                        < indexOfChallenge(challenges, "POST /api/todos (415)"));
         assertChallengeMentionsAndLinks(
                 vendorXmlChallenge,
                 "application/vnd.apichallenges.todo+xml",
@@ -169,20 +196,20 @@ public class ChallengeDefinitionsTest {
 
         for (String challengeName :
                 List.of(
-                        "GET /todos (200) ?filter",
-                        "GET /todos (200) ?filter id greater than",
-                        "GET /todos (200) ?filter id less than",
-                        "GET /todos (200) ?filter id single result",
-                        "GET /todos (200) ?filter description regex",
-                        "GET /todos (200) ?filter description wildcard",
-                        "GET /todos (200) ?_sortBy ascending",
-                        "GET /todos (200) ?_sortBy descending",
-                        "GET /todos (200) ?_sortBy multiple",
-                        "GET /todos (200) ?filter&_sortBy",
-                        "GET /todos (200) ?_limit",
-                        "GET /todos (200) ?_limit&_offset",
-                        "GET /todos (200) ?_sortBy&_limit&_offset",
-                        "GET /todos (200) ?filter&_limit&_offset")) {
+                        "GET /api/todos (200) ?filter",
+                        "GET /api/todos (200) ?filter id greater than",
+                        "GET /api/todos (200) ?filter id less than",
+                        "GET /api/todos (200) ?filter id single result",
+                        "GET /api/todos (200) ?filter description regex",
+                        "GET /api/todos (200) ?filter description wildcard",
+                        "GET /api/todos (200) ?_sortBy ascending",
+                        "GET /api/todos (200) ?_sortBy descending",
+                        "GET /api/todos (200) ?_sortBy multiple",
+                        "GET /api/todos (200) ?filter&_sortBy",
+                        "GET /api/todos (200) ?_limit",
+                        "GET /api/todos (200) ?_limit&_offset",
+                        "GET /api/todos (200) ?_sortBy&_limit&_offset",
+                        "GET /api/todos (200) ?filter&_limit&_offset")) {
             ChallengeDefinitionData challenge = challengeNamed(challenges, challengeName);
 
             Assertions.assertTrue(
@@ -204,25 +231,25 @@ public class ChallengeDefinitionsTest {
 
         List<ChallengeDefinitionData> challenges = new ArrayList<>(definitions.getChallenges());
         ChallengeDefinitionData jsonPathChallenge =
-                challengeNamed(challenges, "QUERY /todos (200) JSONPath");
+                challengeNamed(challenges, "QUERY /api/todos (200) JSONPath");
         ChallengeDefinitionData structuredJsonChallenge =
-                challengeNamed(challenges, "QUERY /todos (200) Structured JSON");
+                challengeNamed(challenges, "QUERY /api/todos (200) Structured JSON");
 
         Assertions.assertEquals(
                 CHALLENGE.QUERY_TODOS_JSONPATH_FILTERED,
-                definitions.getChallenge("QUERY /todos (200) JSONPath"));
+                definitions.getChallenge("QUERY /api/todos (200) JSONPath"));
         Assertions.assertEquals(
                 CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED,
-                definitions.getChallenge("QUERY /todos (200) Structured JSON"));
+                definitions.getChallenge("QUERY /api/todos (200) Structured JSON"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "QUERY /todos (200)")
-                        < indexOfChallenge(challenges, "QUERY /todos (200) JSONPath"));
+                indexOfChallenge(challenges, "QUERY /api/todos (200)")
+                        < indexOfChallenge(challenges, "QUERY /api/todos (200) JSONPath"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "QUERY /todos (200) JSONPath")
-                        < indexOfChallenge(challenges, "QUERY /todos (200) Structured JSON"));
+                indexOfChallenge(challenges, "QUERY /api/todos (200) JSONPath")
+                        < indexOfChallenge(challenges, "QUERY /api/todos (200) Structured JSON"));
         Assertions.assertTrue(
-                indexOfChallenge(challenges, "QUERY /todos (200) Structured JSON")
-                        < indexOfChallenge(challenges, "PATCH /todos/{id} (200) partial"));
+                indexOfChallenge(challenges, "QUERY /api/todos (200) Structured JSON")
+                        < indexOfChallenge(challenges, "PATCH /api/todos/{id} (200) partial"));
         Assertions.assertTrue(jsonPathChallenge.description.contains("JSONPath query body"));
         Assertions.assertTrue(
                 structuredJsonChallenge.description.contains("Structured JSON query body"));
@@ -269,6 +296,13 @@ public class ChallengeDefinitionsTest {
         Assertions.assertTrue(
                 missingHints.isEmpty(),
                 "Challenges missing hints: " + String.join(", ", missingHints));
+    }
+
+    private void addLegacyPathText(
+            final List<String> legacyPathText, final String label, final String text) {
+        if (LEGACY_API_CHALLENGE_PATH.matcher(text).find()) {
+            legacyPathText.add(label + ": " + text);
+        }
     }
 
     private void assertChallengeMentionsAndLinks(

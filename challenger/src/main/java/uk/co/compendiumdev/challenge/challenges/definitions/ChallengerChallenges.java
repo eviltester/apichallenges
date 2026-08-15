@@ -8,13 +8,13 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /challenger (201)",
-                        "Issue a POST request on the `/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.");
+                        "POST /api/challenger (201)",
+                        "Issue a POST request on the `/api/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.");
         aChallenge.addHint(
                 "In multi-user mode, you need to create an X-CHALLENGER Session in order to complete any challenges or make PUT, POST, DELETE requests",
                 "/gui/multiuser");
         aChallenge.addSolutionLink(
-                "Send request using POST to /challenger endpoint. The response has an X-CHALLENGER header, add this header X-CHALLENGER and the GUID value to all future requests.",
+                "Send request using POST to /api/challenger endpoint. The response has an X-CHALLENGER header, add this header X-CHALLENGER and the GUID value to all future requests.",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -25,13 +25,13 @@ public class ChallengerChallenges {
         return aChallenge;
     }
 
-    // challenge to GET /challenger/{guid} and restore a challenger session
+    // challenge to GET /api/challenger/{guid} and restore a challenger session
     public static ChallengeDefinitionData getRestoreExistingChallenger200(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /challenger/guid (200)",
-                        "Issue a GET request on the `/challenger` end point with an existing challenger GUID to restore that challenger's progress into memory.");
+                        "GET /api/challenger/guid (200)",
+                        "Issue a GET request on the `/api/challenger` end point with an existing challenger GUID to restore that challenger's progress into memory.");
         aChallenge.addHint(
                 "In multi-user mode, you need to create an X-CHALLENGER Session first and let it go idle so it is removed in the 10 minute purge",
                 "/gui/multiuser");
@@ -39,7 +39,7 @@ public class ChallengerChallenges {
         aChallenge.addHint("Add the guid in the URL as the last part of the path", "");
 
         aChallenge.addSolutionLink(
-                "GET /challenger/{guid} for a challenger previously saved in the persistence store",
+                "GET /api/challenger/{guid} for a challenger previously saved in the persistence store",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -51,21 +51,22 @@ public class ChallengerChallenges {
         return aChallenge;
     }
 
-    // challenge to POST /challenger with X-CHALLENGER header of existing challenger to restore a
+    // challenge to POST /api/challenger with X-CHALLENGER header of existing challenger to restore
+    // a
     // challenger
 
     public static ChallengeDefinitionData postRestoreExistingChallenger200(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /challenger (existing X-CHALLENGER)",
-                        "Issue a POST request on the `/challenger` end point, with an existing challenger GUID as the X-CHALLENGER header to restore that challenger's progress into memory.");
+                        "POST /api/challenger (existing X-CHALLENGER)",
+                        "Issue a POST request on the `/api/challenger` end point, with an existing challenger GUID as the X-CHALLENGER header to restore that challenger's progress into memory.");
         aChallenge.addHint(
                 "In multi-user mode, you need to create an X-CHALLENGER Session first and let it go idle so it is removed in the 10 minute purge",
                 "/gui/multiuser");
 
         aChallenge.addSolutionLink(
-                "POST /challenger with the challenger GUID in the X-CHALLENGER header for a challenger previously saved in the persistence store",
+                "POST /api/challenger with the challenger GUID in the X-CHALLENGER header for a challenger previously saved in the persistence store",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -83,8 +84,8 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /challenger/guid (existing X-CHALLENGER)",
-                        "Issue a GET request on the `/challenger/{guid}` end point, with an existing challenger GUID. This will return the progress data payload that can be used to later restore your progress to this status.");
+                        "GET /api/challenger/guid (existing X-CHALLENGER)",
+                        "Issue a GET request on the `/api/challenger/{guid}` end point, with an existing challenger GUID. This will return the progress data payload that can be used to later restore your progress to this status.");
         aChallenge.addHint("A challenger must have been created already for this to work", "");
         aChallenge.addHint("Remember to add the X-CHALLENGER header to track your progress", "");
 
@@ -101,8 +102,8 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /challenger/guid RESTORE",
-                        "Issue a PUT request on the `/challenger/{guid}` end point, with an existing challenger GUID to restore that challenger's progress into memory.");
+                        "PUT /api/challenger/guid RESTORE",
+                        "Issue a PUT request on the `/api/challenger/{guid}` end point, with an existing challenger GUID to restore that challenger's progress into memory.");
         aChallenge.addHint("Use the challenger payload returned from the earlier GET request", "");
         aChallenge.addHint("Remember to add the X-CHALLENGER header to track your progress", "");
         aChallenge.addHint(
@@ -110,7 +111,7 @@ public class ChallengerChallenges {
                 "");
 
         aChallenge.addSolutionLink(
-                "Using the payload from the earlier 'GET /challenger/guid' request, use PUT to reset the challenger progress",
+                "Using the payload from the earlier 'GET /api/challenger/guid' request, use PUT to reset the challenger progress",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -128,9 +129,9 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /challenger/guid (409) mismatch",
-                        "Issue a PUT request on the `/challenger/{guid}` end point where the URL GUID does not match the payload X-CHALLENGER value.");
-        aChallenge.addHint("Use the challenger payload returned from a GET /challenger/{guid}");
+                        "PUT /api/challenger/guid (409) mismatch",
+                        "Issue a PUT request on the `/api/challenger/{guid}` end point where the URL GUID does not match the payload X-CHALLENGER value.");
+        aChallenge.addHint("Use the challenger payload returned from a GET /api/challenger/{guid}");
         aChallenge.addHint(
                 "Change the xChallenger field in the payload so it differs from the GUID in the URL.");
 
@@ -146,8 +147,8 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /challenger/guid CREATE",
-                        "Issue a PUT request on the `/challenger/{guid}` end point, with a challenger GUID not currently in memory to restore that challenger's progress into memory.");
+                        "PUT /api/challenger/guid CREATE",
+                        "Issue a PUT request on the `/api/challenger/{guid}` end point, with a challenger GUID not currently in memory to restore that challenger's progress into memory.");
         aChallenge.addHint("Use the challenger payload returned from the earlier GET request", "");
         aChallenge.addHint("Remember to add the X-CHALLENGER header to track your progress", "");
         aChallenge.addHint(
@@ -155,7 +156,7 @@ public class ChallengerChallenges {
                 "");
 
         aChallenge.addSolutionLink(
-                "Using the payload from the earlier 'GET /challenger/guid' request, use PUT to reset the challenger progress",
+                "Using the payload from the earlier 'GET /api/challenger/guid' request, use PUT to reset the challenger progress",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -172,8 +173,8 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /challenger/database/guid (200)",
-                        "Issue a GET request on the `/challenger/database/{guid}` end point, to retrieve the current todos database for the user. You can use this to restore state later.");
+                        "GET /api/challenger/database/guid (200)",
+                        "Issue a GET request on the `/api/challenger/database/{guid}` end point, to retrieve the current todos database for the user. You can use this to restore state later.");
         aChallenge.addHint("Remember to add the X-CHALLENGER header to track your progress", "");
 
         aChallenge.addSolutionLink(
@@ -189,14 +190,14 @@ public class ChallengerChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PUT /challenger/database/guid (Update)",
-                        "Issue a PUT request on the `/challenger/database/{guid}` end point, with a payload to restore the Todos database in memory.");
+                        "PUT /api/challenger/database/guid (Update)",
+                        "Issue a PUT request on the `/api/challenger/database/{guid}` end point, with a payload to restore the Todos database in memory.");
         aChallenge.addHint(
                 "Use the Todos database payload returned from the earlier GET request", "");
         aChallenge.addHint("Remember to add the X-CHALLENGER header to track your progress", "");
 
         aChallenge.addSolutionLink(
-                "Using the payload from the earlier 'GET /challenger/database/guid' request, use PUT to reset the challenger todos data",
+                "Using the payload from the earlier 'GET /api/challenger/database/guid' request, use PUT to reset the challenger todos data",
                 "",
                 "");
         aChallenge.addSolutionLink(

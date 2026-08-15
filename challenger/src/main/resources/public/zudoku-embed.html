@@ -197,7 +197,7 @@
       'use strict';
 
       function absoluteZudokuUrl(value) {
-        var input = value || window.location.origin + '/docs/openapi.json';
+        var input = value || window.location.origin + '/api/docs/openapi.json';
         if (input.indexOf('://') > -1) {
           return input;
         }
@@ -324,7 +324,7 @@
     function openApiConfigFromHandoff() {
       const handoff = window.apiChallengesZudokuInput || {
         type: 'url',
-        input: new URL('/docs/openapi.json', window.location.origin).href,
+        input: new URL('/api/docs/openapi.json', window.location.origin).href,
       };
 
       if (handoff.type === 'raw') {

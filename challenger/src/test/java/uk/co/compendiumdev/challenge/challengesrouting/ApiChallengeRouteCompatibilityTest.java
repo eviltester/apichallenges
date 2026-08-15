@@ -1,8 +1,11 @@
 package uk.co.compendiumdev.challenge.challengesrouting;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -96,6 +99,36 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertTrue(response.body.contains("\"" + documentedRoute + "\""));
     }
 
+    @Test
+    void canonicalOpenApiOptionsSummariesUseCanonicalPaths() {
+        final JsonObject paths = canonicalOpenApiPaths();
+
+        Assertions.assertEquals(
+                "show all Options for endpoint of /api/todos",
+                operationSummary(paths, "/api/todos", "options"));
+        Assertions.assertEquals(
+                "show all Options for endpoint of /api/todos/:id",
+                operationSummary(paths, "/api/todos/{id}", "options"));
+    }
+
+    @Test
+    void canonicalOpenApiSecretSummariesUseCanonicalPaths() {
+        final JsonObject paths = canonicalOpenApiPaths();
+
+        Assertions.assertEquals(
+                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header for read-only access to /api/secret/note.",
+                operationSummary(paths, "/api/secret/token", "get"));
+        Assertions.assertEquals(
+                "POST /api/secret/token with basic auth to get a secret token to use as X-AUTH-TOKEN header, to allow access to the /api/secret/note end points.",
+                operationSummary(paths, "/api/secret/token", "post"));
+        Assertions.assertEquals(
+                "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.",
+                operationSummary(paths, "/api/secret/note", "get"));
+        Assertions.assertEquals(
+                "POST /api/secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
+                operationSummary(paths, "/api/secret/note", "post"));
+    }
+
     private static Stream<Arguments> apiRoutePrefixes() {
         return Stream.of(Arguments.of("/api"), Arguments.of(""));
     }
@@ -118,6 +151,18 @@ public class ApiChallengeRouteCompatibilityTest {
     private void assertStatus(final int statusCode, final String route, final String verb) {
         http.clearHeaders();
         Assertions.assertEquals(statusCode, http.send(route, verb).statusCode, route);
+    }
+
+    private JsonObject canonicalOpenApiPaths() {
+        final HttpResponseDetails response = http.send("/api/docs/openapi.json", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        return JsonParser.parseString(response.body).getAsJsonObject().getAsJsonObject("paths");
+    }
+
+    private String operationSummary(
+            final JsonObject paths, final String path, final String operation) {
+        return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
     }
 
     private static String path(final String prefix, final String route) {

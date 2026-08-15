@@ -50,10 +50,10 @@ Compare this with the [Online Swagger UI](/tools/online-clients/swagger), [OpenA
   <div class="openapi-ui-launch-group">
     <p>Try Zudoku with our APIs:</p>
     <p class="openapi-ui-launch-links">
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fapi%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fsimpleapi%2Fdocs%2Fopenapi.json">Simple API</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fsim%2Fdocs%2Fopenapi.json">API Simulator</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fapi%2Fdocs%2Fopenapi.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Fshop%2Fdocs%2Fopenapi.json">Buggy API</a>
     </p>
   </div>
 </div>

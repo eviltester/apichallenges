@@ -11,8 +11,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /challenges (200)",
-                        "Issue a GET request on the `/challenges` end point");
+                        "GET /api/challenges (200)",
+                        "Issue a GET request on the `/api/challenges` end point");
 
         aChallenge.addHint(
                 "Remember to add the X-CHALLENGER header so you see the progress of the challenges for your session.",
@@ -35,8 +35,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200)",
-                        "Issue a GET request on the `/todos` end point");
+                        "GET /api/todos (200)",
+                        "Issue a GET request on the `/api/todos` end point");
 
         aChallenge.addHint(
                 "Remember to add the X-CHALLENGER header so you see the data for your session.",
@@ -57,10 +57,10 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todo (404) not plural",
-                        "Issue a GET request on the `/todo` end point should 404 because nouns should be plural");
+                        "GET /api/todo (404) not plural",
+                        "Issue a GET request on the `/api/todo` end point should 404 because nouns should be plural");
 
-        aChallenge.addHint("Use the singular `/todo` endpoint, not `/todos`.");
+        aChallenge.addHint("Use the singular `/api/todo` endpoint, not `/api/todos`.");
         aChallenge.addHint(
                 "No todo id is needed for this request; the challenge is the 404 route.");
 
@@ -75,11 +75,11 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/{id} (200)",
-                        "Issue a GET request on the `/todos/{id}` end point to return a specific todo");
+                        "GET /api/todos/{id} (200)",
+                        "Issue a GET request on the `/api/todos/{id}` end point to return a specific todo");
 
         aChallenge.addHint(
-                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /todos/1");
+                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /api/todos/1");
 
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/get/get-todos-id-200");
@@ -92,13 +92,13 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/{id} (404)",
-                        "Issue a GET request on the `/todos/{id}` end point for a todo that does not exist");
+                        "GET /api/todos/{id} (404)",
+                        "Issue a GET request on the `/api/todos/{id}` end point for a todo that does not exist");
 
         aChallenge.addHint(
-                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /todos/1");
-        aChallenge.addHint("Make sure the id is an integer e.g. /todos/1");
-        aChallenge.addHint("Make sure you are using the /todos end point e.g. /todos/1");
+                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /api/todos/1");
+        aChallenge.addHint("Make sure the id is an integer e.g. /api/todos/1");
+        aChallenge.addHint("Make sure you are using the /api/todos end point e.g. /api/todos/1");
 
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/get/get-todos-id-404");
@@ -111,12 +111,12 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter",
-                        "Issue a GET request on the `/todos` end point with a query filter to get only todos which are 'done', requesting the response in JSON format. There must exist both 'done' and 'not done' todos, to pass this challenge.");
+                        "GET /api/todos (200) ?filter",
+                        "Issue a GET request on the `/api/todos` end point with a query filter to get only todos which are 'done', requesting the response in JSON format. There must exist both 'done' and 'not done' todos, to pass this challenge.");
 
         aChallenge.addHint("A query filter is a URL parameter using the field name and a value");
         aChallenge.addHint(
-                "A URL parameter is added to the end of a url with a ? e.g. /todos?id=1");
+                "A URL parameter is added to the end of a url with a ? e.g. /api/todos?id=1");
         aChallenge.addHint(
                 "To filter on 'done' we use the 'doneStatus' field  ? e.g. ?doneStatus=true");
         aChallenge.addHint(JSON_RESPONSE_HINT);
@@ -132,8 +132,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter id greater than",
-                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id greater than a supplied value, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter id greater than",
+                        "Issue a GET request on the `/api/todos` end point with an id filter to return todos with an id greater than a supplied value, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with the greater than operator.");
         aChallenge.addHint("For example, `?id>5` returns todos with an id greater than 5.");
@@ -151,8 +151,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter id less than",
-                        "Issue a GET request on the `/todos` end point with an id filter to return todos with an id less than a supplied value, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter id less than",
+                        "Issue a GET request on the `/api/todos` end point with an id filter to return todos with an id less than a supplied value, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with the less than operator.");
         aChallenge.addHint("For example, `?id<6` returns todos with an id less than 6.");
@@ -170,8 +170,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter id single result",
-                        "Issue a GET request on the `/todos` end point with an id filter that returns one todo while multiple todos exist in the database, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter id single result",
+                        "Issue a GET request on the `/api/todos` end point with an id filter that returns one todo while multiple todos exist in the database, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `id` field with an exact value.");
         aChallenge.addHint("For example, `?id=3` returns the todo with id 3.");
@@ -189,8 +189,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter description regex",
-                        "Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter description regex",
+                        "Issue a GET request on the `/api/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
 
         aChallenge.addHint(
                 "Use the `description` field with the regular expression operator `~=`.");
@@ -211,8 +211,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter description wildcard",
-                        "Issue a GET request on the `/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter description wildcard",
+                        "Issue a GET request on the `/api/todos` end point with a wildcard filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.");
 
         aChallenge.addHint("Use the `description` field with the wildcard operator `*=`.");
         aChallenge.addHint(
@@ -231,8 +231,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_sortBy ascending",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos ascending by a field, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_sortBy ascending",
+                        "Issue a GET request on the `/api/todos` end point with a query parameter to sort todos ascending by a field, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Use a field name to sort ascending, e.g. `?_sortBy=title`.");
@@ -252,8 +252,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_sortBy descending",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos descending by a field, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_sortBy descending",
+                        "Issue a GET request on the `/api/todos` end point with a query parameter to sort todos descending by a field, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Prefix a field name with `-` to sort descending.");
@@ -272,8 +272,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_sortBy multiple",
-                        "Issue a GET request on the `/todos` end point with a query parameter to sort todos by multiple fields, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_sortBy multiple",
+                        "Issue a GET request on the `/api/todos` end point with a query parameter to sort todos by multiple fields, requesting the response in JSON format.");
 
         aChallenge.addHint("Sorting is controlled by the `_sortBy` URL parameter.");
         aChallenge.addHint("Separate multiple sort fields with commas.");
@@ -293,8 +293,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter&_sortBy",
-                        "Issue a GET request on the `/todos` end point with a query filter and a query parameter to sort the filtered todos, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter&_sortBy",
+                        "Issue a GET request on the `/api/todos` end point with a query filter and a query parameter to sort the filtered todos, requesting the response in JSON format.");
 
         aChallenge.addHint("Use a todo field as a URL parameter to filter the collection.");
         aChallenge.addHint("Use `_sortBy` to sort the filtered results.");
@@ -312,8 +312,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_limit",
-                        "Issue a GET request on the `/todos` end point with a query parameter to limit the returned todos to 8 items, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_limit",
+                        "Issue a GET request on the `/api/todos` end point with a query parameter to limit the returned todos to 8 items, requesting the response in JSON format.");
 
         aChallenge.addHint(
                 "Pagination is controlled by the `_limit` and `_offset` URL parameters.");
@@ -331,8 +331,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to limit the returned todos to 5 items starting from offset 5, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_limit&_offset",
+                        "Issue a GET request on the `/api/todos` end point with query parameters to limit the returned todos to 5 items starting from offset 5, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `_limit=5` to set the page size.");
         aChallenge.addHint("Use `_offset=5` to skip the first 5 todos.");
@@ -350,8 +350,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (400) ?_limit too high",
-                        "Issue a GET request on the `/todos` end point with a pagination limit above the configured maximum to receive a 400 status code.");
+                        "GET /api/todos (400) ?_limit too high",
+                        "Issue a GET request on the `/api/todos` end point with a pagination limit above the configured maximum to receive a 400 status code.");
 
         aChallenge.addHint("The configured maximum `_limit` for todos is 20.");
         aChallenge.addHint("Use `_limit=21` to request more than the maximum page size.");
@@ -368,8 +368,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?_sortBy&_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to sort todos by id descending, then return a page of 5 todos from offset 5, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?_sortBy&_limit&_offset",
+                        "Issue a GET request on the `/api/todos` end point with query parameters to sort todos by id descending, then return a page of 5 todos from offset 5, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `_sortBy=-id` to sort todos by id descending.");
         aChallenge.addHint(
@@ -388,8 +388,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ?filter&_limit&_offset",
-                        "Issue a GET request on the `/todos` end point with query parameters to filter todos with doneStatus=false, then return a page of 2 todos from offset 1, requesting the response in JSON format.");
+                        "GET /api/todos (200) ?filter&_limit&_offset",
+                        "Issue a GET request on the `/api/todos` end point with query parameters to filter todos with doneStatus=false, then return a page of 2 todos from offset 1, requesting the response in JSON format.");
 
         aChallenge.addHint("Use `doneStatus=false` to filter the collection.");
         aChallenge.addHint(
@@ -419,11 +419,12 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) XML",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml` to receive results in XML format");
+                        "GET /api/todos (200) XML",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml` to receive results in XML format");
 
         aChallenge.addHint("Set the `Accept` header to `application/xml`.");
-        aChallenge.addHint("The request path is still `/todos`; only the response format changes.");
+        aChallenge.addHint(
+                "The request path is still `/api/todos`; only the response format changes.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -437,8 +438,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) JSON",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json` to receive results in JSON format");
+                        "GET /api/todos (200) JSON",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/json` to receive results in JSON format");
 
         aChallenge.addHint("Set the `Accept` header to `application/json`.");
         aChallenge.addHint("Use a GET request; there is no request body for this challenge.");
@@ -455,11 +456,11 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) ANY",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `*/*` to receive results in default JSON format");
+                        "GET /api/todos (200) ANY",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `*/*` to receive results in default JSON format");
 
         aChallenge.addHint("Set the `Accept` header to `*/*`.");
-        aChallenge.addHint("The API default response format for `/todos` is JSON.");
+        aChallenge.addHint("The API default response format for `/api/todos` is JSON.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -473,8 +474,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) XML pref",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml, application/json` to receive results in the preferred XML format");
+                        "GET /api/todos (200) XML pref",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml, application/json` to receive results in the preferred XML format");
 
         aChallenge.addHint("Send both media types in the `Accept` header.");
         aChallenge.addHint("Put `application/xml` before `application/json` to prefer XML.");
@@ -491,8 +492,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) no accept",
-                        "Issue a GET request on the `/todos` end point with no `Accept` header present in the message to receive results in default JSON format");
+                        "GET /api/todos (200) no accept",
+                        "Issue a GET request on the `/api/todos` end point with no `Accept` header present in the message to receive results in default JSON format");
 
         aChallenge.addHint("Remove the `Accept` header from the request.");
         aChallenge.addHint(
@@ -510,8 +511,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (406)",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header `application/gzip` to receive 406 'NOT ACCEPTABLE' status code");
+                        "GET /api/todos (406)",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header `application/gzip` to receive 406 'NOT ACCEPTABLE' status code");
 
         aChallenge.addHint("Set the `Accept` header to a response type the API does not support.");
         aChallenge.addHint("e.g. `application/gzip` could trigger a 406 response.");
@@ -526,12 +527,13 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/{id} (200) text/calendar",
-                        "Issue a GET request on the `/todos/{id}` end point with an `Accept` header of `text/calendar` to receive the todo as a VTODO.");
+                        "GET /api/todos/{id} (200) text/calendar",
+                        "Issue a GET request on the `/api/todos/{id}` end point with an `Accept` header of `text/calendar` to receive the todo as a VTODO.");
 
         aChallenge.addHint("Use an id for a todo that already exists.");
         aChallenge.addHint("Set the `Accept` header to `text/calendar`.");
-        aChallenge.addHint("The request is for one todo instance, e.g. `/todos/1`, not `/todos`.");
+        aChallenge.addHint(
+                "The request is for one todo instance, e.g. `/api/todos/1`, not `/api/todos`.");
 
         aChallenge.addSolutionLink(
                 "Read Solution",
@@ -544,8 +546,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) q XML preferred",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json;q=0.5, application/xml;q=1` to receive results in XML format.");
+                        "GET /api/todos (200) q XML preferred",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/json;q=0.5, application/xml;q=1` to receive results in XML format.");
 
         aChallenge.addHint(
                 "Set the `Accept` header to `application/json;q=0.5, application/xml;q=1`.");
@@ -565,8 +567,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) q JSON preferred",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml;q=0.5, application/json;q=1` to receive results in JSON format.");
+                        "GET /api/todos (200) q JSON preferred",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml;q=0.5, application/json;q=1` to receive results in JSON format.");
 
         aChallenge.addHint(
                 "Set the `Accept` header to `application/xml;q=0.5, application/json;q=1`.");
@@ -585,8 +587,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (406) q rejects all",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/json;q=0, application/xml;q=0` to receive 406 'NOT ACCEPTABLE' status code.");
+                        "GET /api/todos (406) q rejects all",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/json;q=0, application/xml;q=0` to receive 406 'NOT ACCEPTABLE' status code.");
 
         aChallenge.addHint(
                 "Set the `Accept` header to `application/json;q=0, application/xml;q=0`.");
@@ -605,8 +607,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (406) unsupported +json",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header such as `application/problem+json` or `application/*+json` to receive 406 'NOT ACCEPTABLE' status code.");
+                        "GET /api/todos (406) unsupported +json",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header such as `application/problem+json` or `application/*+json` to receive 406 'NOT ACCEPTABLE' status code.");
 
         aChallenge.addHint(
                 "Set the `Accept` header to `application/problem+json` or `application/*+json`.");
@@ -625,8 +627,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) text/xml",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `text/xml` to receive results in XML format.");
+                        "GET /api/todos (200) text/xml",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `text/xml` to receive results in XML format.");
 
         aChallenge.addHint("Set the `Accept` header to `text/xml`.");
         aChallenge.addHint("This is an XML media type, even though it is not `application/xml`.");
@@ -643,8 +645,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) vendor XML",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/vnd.apichallenges.todo+xml` to receive results in todo XML format.");
+                        "GET /api/todos (200) vendor XML",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/vnd.apichallenges.todo+xml` to receive results in todo XML format.");
 
         aChallenge.addHint("Set the `Accept` header to `application/vnd.apichallenges.todo+xml`.");
         aChallenge.addHint(
@@ -664,8 +666,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos (200) structured XML wildcard",
-                        "Issue a GET request on the `/todos` end point with an `Accept` header of `application/*+xml` to receive results in a supported structured XML format.");
+                        "GET /api/todos (200) structured XML wildcard",
+                        "Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/*+xml` to receive results in a supported structured XML format.");
 
         aChallenge.addHint("Set the `Accept` header to `application/*+xml`.");
         aChallenge.addHint("The wildcard can match a model-specific XML media type for todos.");
@@ -684,8 +686,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/export (200) CSV download",
-                        "Issue a GET request on the `/todos/export?format=csv` end point and receive a CSV response with a `Content-Disposition` header for `todos.csv`");
+                        "GET /api/todos/export (200) CSV download",
+                        "Issue a GET request on the `/api/todos/export?format=csv` end point and receive a CSV response with a `Content-Disposition` header for `todos.csv`");
 
         aChallenge.addHint("Use the `format=csv` query parameter.");
         aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");
@@ -703,8 +705,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/export (200) HTML download",
-                        "Issue a GET request on the `/todos/export?format=html` end point and receive an HTML response with a `Content-Disposition` header for `todos.html`");
+                        "GET /api/todos/export (200) HTML download",
+                        "Issue a GET request on the `/api/todos/export?format=html` end point and receive an HTML response with a `Content-Disposition` header for `todos.html`");
 
         aChallenge.addHint("Use the `format=html` query parameter.");
         aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");
@@ -722,8 +724,8 @@ public class GetChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /todos/export (200) tab-delimited download",
-                        "Issue a GET request on the `/todos/export?format=tsv` end point and receive a tab-delimited response with a `Content-Disposition` header for `todos.tsv`");
+                        "GET /api/todos/export (200) tab-delimited download",
+                        "Issue a GET request on the `/api/todos/export?format=tsv` end point and receive a tab-delimited response with a `Content-Disposition` header for `todos.tsv`");
 
         aChallenge.addHint("Use the `format=tsv` or `format=tab-delimited` query parameter.");
         aChallenge.addHint("Check the response has `Content-Disposition: attachment`.");

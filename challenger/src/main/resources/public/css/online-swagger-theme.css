@@ -312,9 +312,19 @@ html[data-theme] body.wide-tool-page .scalar-app-exit .scalar-code-block .hljs {
 html[data-theme] body.wide-tool-page #online-openapi-explorer-ui openapi-explorer {
     --api-challenges-openapi-surface: var(--surface);
     --api-challenges-openapi-surface-soft: var(--surface-soft);
+    --api-challenges-openapi-surface-strong: var(--surface-strong);
     --api-challenges-openapi-text: var(--text);
     --api-challenges-openapi-border: var(--border);
     --api-challenges-openapi-link: var(--accent-strong);
+    --api-challenges-openapi-code-bg: var(--code-bg);
+    --api-challenges-openapi-code-text: var(--code-text);
+    --api-challenges-openapi-code-token-keyword: #93c5fd;
+    --api-challenges-openapi-code-token-operator: #cbd5e1;
+    --api-challenges-openapi-code-token-property: #f0abfc;
+    --api-challenges-openapi-code-token-string: #7ee2b8;
+    --api-challenges-openapi-code-token-value: #fda4af;
+    --api-challenges-openapi-schema-string: #087443;
+    --api-challenges-openapi-schema-value: #b42318;
     --api-challenges-openapi-nav-bg: #21445f;
     --api-challenges-openapi-nav-text: #ffffff;
     --api-challenges-openapi-nav-active-bg: rgba(255, 255, 255, 0.16);
@@ -334,6 +344,8 @@ html[data-theme] body.wide-tool-page #online-openapi-explorer-ui openapi-explore
 
 html[data-theme="dark-lab"] body.wide-tool-page #online-openapi-explorer-ui openapi-explorer {
     --api-challenges-openapi-color-scheme: dark;
+    --api-challenges-openapi-schema-string: #7ee2b8;
+    --api-challenges-openapi-schema-value: #fda4af;
     --blue: var(--accent) !important;
     --green: #34d399 !important;
     --orange: #fbbf24 !important;

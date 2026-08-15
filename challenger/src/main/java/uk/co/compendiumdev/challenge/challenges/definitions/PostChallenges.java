@@ -11,12 +11,12 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (201)",
+                        "POST /api/todos (201)",
                         "Issue a POST request to successfully create a todo");
 
         aChallenge.addHint("Add a JSON payload in the request", "");
         aChallenge.addHint(
-                "If you don't know the format of the payload, use the response from a GET /todos/{id} request and amend it",
+                "If you don't know the format of the payload, use the response from a GET /api/todos/{id} request and amend it",
                 "");
         aChallenge.addHint("You must add an X-CHALLENGER header for a valid session", "");
 
@@ -30,14 +30,14 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (422) title too long",
+                        "POST /api/todos (422) title too long",
                         "Issue a POST request to create a todo but fail length validation on the `title` field because your title exceeds maximum allowable characters.");
 
         aChallenge.addHint(
                 "The API Documentation shows the maximum allowed length of the title field", "");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a title longer than 50 characters", "", "");
+                "Send a POST request to /api/todos with a title longer than 50 characters", "", "");
         aChallenge.addSolutionLink(
                 "Read Solution",
                 "HREF",
@@ -52,14 +52,14 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (422) doneStatus",
+                        "POST /api/todos (422) doneStatus",
                         "Issue a POST request to create a todo but fail validation on the `doneStatus` field");
 
         aChallenge.addHint(
                 "doneStatus should be boolean, an invalid status would be a String or a number e.g. \"invalid\"");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a non-boolean `doneStatus` e.g. {\"title\":\"a title\",\"doneStatus\":\"invalid\"}",
+                "Send a POST request to /api/todos with a non-boolean `doneStatus` e.g. {\"title\":\"a title\",\"doneStatus\":\"invalid\"}",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -71,7 +71,7 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (422) description too long",
+                        "POST /api/todos (422) description too long",
                         "Issue a POST request to create a todo but fail length validation on the `description` because your description exceeds maximum allowable characters.");
 
         aChallenge.addHint(
@@ -79,7 +79,7 @@ public class PostChallenges {
                 "");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a description longer than 200 characters",
+                "Send a POST request to /api/todos with a description longer than 200 characters",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -96,7 +96,7 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (201) max out content",
+                        "POST /api/todos (201) max out content",
                         "Issue a POST request to create a todo with maximum length title and description fields.");
 
         aChallenge.addHint("Max lengths are listed in the API Documentation");
@@ -106,7 +106,7 @@ public class PostChallenges {
         aChallenge.addHint("Both title and description should be the correct maximum lengths");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a description of 200 characters and a title with 50 characters",
+                "Send a POST request to /api/todos with a description of 200 characters and a title with 50 characters",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -121,7 +121,7 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (413) content too long",
+                        "POST /api/todos (413) content too long",
                         "Issue a POST request to create a todo but fail payload length validation on the `description` because your whole payload exceeds maximum allowable 5000 characters.");
 
         aChallenge.addHint("Try using a long 5000 char string as the description or title text");
@@ -130,7 +130,7 @@ public class PostChallenges {
                 "https://eviltester.github.io/TestingApp/apps/counterstrings/counterstrings.html");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a description of 5000 characters in length",
+                "Send a POST request to /api/todos with a description of 5000 characters in length",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -145,13 +145,13 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (422) extra",
+                        "POST /api/todos (422) extra",
                         "Issue a POST request to create a todo but fail validation because your payload contains an unrecognised field.");
 
         aChallenge.addHint("Try to create a todo with a title, description and a priority");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos with a priority field e.g. {\"title\":\"a title\",\"priority\":\"extra\"}",
+                "Send a POST request to /api/todos with a priority field e.g. {\"title\":\"a title\",\"priority\":\"extra\"}",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -169,11 +169,11 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos/{id} (200)",
+                        "POST /api/todos/{id} (200)",
                         "Issue a POST request to successfully update a todo");
 
         aChallenge.addHint(
-                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /todos/1");
+                "Make sure you don't use {id} in the url, replace that with the id of a todo e.g. /api/todos/1");
         aChallenge.addSolutionLink(
                 "Read Solution", "HREF", "/apichallenges/solutions/post-update/post-todos-id-200");
         aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "feXdRpZ_tgs");
@@ -184,14 +184,14 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos/{id} (404)",
+                        "POST /api/todos/{id} (404)",
                         "Issue a POST request for a todo which does not exist. Expect to receive a 404 response.");
 
         aChallenge.addHint(
-                "Make sure you don't use {id} in the url, replace that with the id of a todo that does not exist e.g. /todos/100");
+                "Make sure you don't use {id} in the url, replace that with the id of a todo that does not exist e.g. /api/todos/100");
 
         aChallenge.addSolutionLink(
-                "Send a POST request to /todos/{id} with a valid update payload where {id} does not exist",
+                "Send a POST request to /api/todos/{id} with a valid update payload where {id} does not exist",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -213,8 +213,8 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos XML",
-                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/xml`, and Accepting only XML ie. Accept header of `application/xml`");
+                        "POST /api/todos XML",
+                        "Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/xml`, and Accepting only XML ie. Accept header of `application/xml`");
 
         aChallenge.addHint("Set `Content-Type` to `application/xml` for the request body.");
         aChallenge.addHint("Set `Accept` to `application/xml` for the response format.");
@@ -233,8 +233,8 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos JSON",
-                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/json`, and Accepting only JSON ie. Accept header of `application/json`");
+                        "POST /api/todos JSON",
+                        "Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/json`, and Accepting only JSON ie. Accept header of `application/json`");
 
         aChallenge.addHint("Set `Content-Type` to `application/json` for the request body.");
         aChallenge.addHint("Set `Accept` to `application/json` for the response format.");
@@ -252,8 +252,8 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos vendor XML",
-                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/vnd.apichallenges.todo+xml`, a normal todo XML body, and a negotiated response.");
+                        "POST /api/todos vendor XML",
+                        "Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/vnd.apichallenges.todo+xml`, a normal todo XML body, and a negotiated response.");
 
         aChallenge.addHint(
                 "Set `Content-Type` to `application/vnd.apichallenges.todo+xml` for the XML request body.");
@@ -273,10 +273,10 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos (415)",
-                        "Issue a POST request on the `/todos` end point with an unsupported content type to generate a 415 status code");
+                        "POST /api/todos (415)",
+                        "Issue a POST request on the `/api/todos` end point with an unsupported content type to generate a 415 status code");
 
-        aChallenge.addHint("Send a POST request to `/todos` with a body.");
+        aChallenge.addHint("Send a POST request to `/api/todos` with a body.");
         aChallenge.addHint("Use a `Content-Type` the API does not support, such as `text/plain`.");
 
         aChallenge.addSolutionLink(
@@ -296,8 +296,8 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos XML to JSON",
-                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/xml` but Accept `application/json`");
+                        "POST /api/todos XML to JSON",
+                        "Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/xml` but Accept `application/json`");
 
         aChallenge.addHint(
                 "Set `Content-Type` to `application/xml` because the request body is XML.");
@@ -316,8 +316,8 @@ public class PostChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /todos JSON to XML",
-                        "Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/json` but Accept `application/xml`");
+                        "POST /api/todos JSON to XML",
+                        "Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/json` but Accept `application/xml`");
 
         aChallenge.addHint(
                 "Set `Content-Type` to `application/json` because the request body is JSON.");

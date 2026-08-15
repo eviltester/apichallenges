@@ -101,7 +101,7 @@ public class MultiUserDefectsTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
-                response.body.contains("POST /challenger (201)"),
+                response.body.contains("POST /api/challenger (201)"),
                 "Expected challenge information in response");
     }
 

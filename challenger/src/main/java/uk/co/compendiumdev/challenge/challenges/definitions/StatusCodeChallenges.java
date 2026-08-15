@@ -10,10 +10,10 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "DELETE /heartbeat (405)",
-                        "Issue a DELETE request on the `/heartbeat` end point and receive 405 (Method Not Allowed)");
+                        "DELETE /api/heartbeat (405)",
+                        "Issue a DELETE request on the `/api/heartbeat` end point and receive 405 (Method Not Allowed)");
 
-        aChallenge.addHint("Use the DELETE method on `/heartbeat`.");
+        aChallenge.addHint("Use the DELETE method on `/api/heartbeat`.");
         aChallenge.addHint("The endpoint exists, but DELETE is not allowed for it.");
 
         aChallenge.addSolutionLink(
@@ -29,10 +29,10 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "PATCH /heartbeat (500)",
-                        "Issue a PATCH request on the `/heartbeat` end point and receive 500 (internal server error)");
+                        "PATCH /api/heartbeat (500)",
+                        "Issue a PATCH request on the `/api/heartbeat` end point and receive 500 (internal server error)");
 
-        aChallenge.addHint("Use the PATCH method on `/heartbeat`.");
+        aChallenge.addHint("Use the PATCH method on `/api/heartbeat`.");
         aChallenge.addHint("This endpoint deliberately returns 500 for PATCH requests.");
 
         aChallenge.addSolutionLink(
@@ -48,10 +48,10 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "TRACE /heartbeat (501)",
-                        "Issue a TRACE request on the `/heartbeat` end point and receive 501 (Not Implemented)");
+                        "TRACE /api/heartbeat (501)",
+                        "Issue a TRACE request on the `/api/heartbeat` end point and receive 501 (Not Implemented)");
 
-        aChallenge.addHint("Use the TRACE method on `/heartbeat`.");
+        aChallenge.addHint("Use the TRACE method on `/api/heartbeat`.");
         aChallenge.addHint(
                 "If your API client cannot send TRACE, use one that supports custom methods.");
 
@@ -68,10 +68,10 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /heartbeat (204)",
-                        "Issue a GET request on the `/heartbeat` end point and receive 204 when server is running");
+                        "GET /api/heartbeat (204)",
+                        "Issue a GET request on the `/api/heartbeat` end point and receive 204 when server is running");
 
-        aChallenge.addHint("Use the GET method on `/heartbeat`.");
+        aChallenge.addHint("Use the GET method on `/api/heartbeat`.");
         aChallenge.addHint("A 204 response means success with no response body.");
 
         aChallenge.addSolutionLink(
@@ -84,8 +84,8 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "GET /heartbeat (431) X-CHALLENGER too long",
-                        "Issue a GET request on the `/heartbeat` end point with an X-CHALLENGER header value that is too long and receive 431 (Request Header Fields Too Large).");
+                        "GET /api/heartbeat (431) X-CHALLENGER too long",
+                        "Issue a GET request on the `/api/heartbeat` end point with an X-CHALLENGER header value that is too long and receive 431 (Request Header Fields Too Large).");
         aChallenge.addHint(
                 "Start the oversized X-CHALLENGER value with your real challenger GUID, then append extra characters.");
         aChallenge.addHint(
@@ -106,13 +106,13 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /heartbeat as PATCH (500)",
-                        "Issue a POST request on the `/heartbeat` end point and receive 500 when you override the Method Verb to a PATCH");
+                        "POST /api/heartbeat as PATCH (500)",
+                        "Issue a POST request on the `/api/heartbeat` end point and receive 500 when you override the Method Verb to a PATCH");
 
         aChallenge.addHint("Use a normal POST request, but add an X-HTTP-Method-Override header");
 
         aChallenge.addSolutionLink(
-                "Add a header 'X-HTTP-Method-Override: PATCH' to a POST /heartbeat request",
+                "Add a header 'X-HTTP-Method-Override: PATCH' to a POST /api/heartbeat request",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -127,13 +127,13 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /heartbeat as DELETE (405)",
-                        "Issue a POST request on the `/heartbeat` end point and receive 405 when you override the Method Verb to a DELETE");
+                        "POST /api/heartbeat as DELETE (405)",
+                        "Issue a POST request on the `/api/heartbeat` end point and receive 405 when you override the Method Verb to a DELETE");
 
         aChallenge.addHint("Use a normal POST request, but add an X-HTTP-Method-Override header");
 
         aChallenge.addSolutionLink(
-                "Add a header 'X-HTTP-Method-Override: DELETE' to a POST /heartbeat request",
+                "Add a header 'X-HTTP-Method-Override: DELETE' to a POST /api/heartbeat request",
                 "",
                 "");
         aChallenge.addSolutionLink(
@@ -149,12 +149,12 @@ public class StatusCodeChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /heartbeat as Trace (501)",
-                        "Issue a POST request on the `/heartbeat` end point and receive 501 (Not Implemented) when you override the Method Verb to a TRACE");
+                        "POST /api/heartbeat as Trace (501)",
+                        "Issue a POST request on the `/api/heartbeat` end point and receive 501 (Not Implemented) when you override the Method Verb to a TRACE");
         aChallenge.addHint("Use a normal POST request, but add an X-HTTP-Method-Override header");
 
         aChallenge.addSolutionLink(
-                "Add a header 'X-HTTP-Method-Override: TRACE' to a POST /heartbeat request",
+                "Add a header 'X-HTTP-Method-Override: TRACE' to a POST /api/heartbeat request",
                 "",
                 "");
         aChallenge.addSolutionLink(

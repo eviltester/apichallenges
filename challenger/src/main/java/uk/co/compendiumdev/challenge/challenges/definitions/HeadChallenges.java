@@ -8,8 +8,8 @@ public class HeadChallenges {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "HEAD /todos (200)",
-                        "Issue a HEAD request on the `/todos` end point");
+                        "HEAD /api/todos (200)",
+                        "Issue a HEAD request on the `/api/todos` end point");
 
         aChallenge.addHint("Use the HEAD method rather than GET.");
         aChallenge.addHint("A HEAD response should include headers but no response body.");

@@ -3029,7 +3029,8 @@ public class UiPagesAreReachableTest {
     @Test
     void progressSolveNowForCalendarChallengeDefaultsToCalendarRequest() {
 
-        final String calendarChallengeId = challengeIdFor("GET /todos/{id} (200) text/calendar");
+        final String calendarChallengeId =
+                challengeIdFor("GET /api/todos/{id} (200) text/calendar");
 
         final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
         apiHttp.clearHeaders();
@@ -3195,8 +3196,8 @@ public class UiPagesAreReachableTest {
     @Test
     void challengeStatusEndpointReportsCompletionWithoutCompletingChallengesListChallenge() {
 
-        final String getTodosChallengeId = challengeIdFor("GET /todos (200)");
-        final String getChallengesChallengeId = challengeIdFor("GET /challenges (200)");
+        final String getTodosChallengeId = challengeIdFor("GET /api/todos (200)");
+        final String getChallengesChallengeId = challengeIdFor("GET /api/challenges (200)");
 
         final HttpMessageSender apiHttp = new HttpMessageSender(Environment.getBaseUri());
         apiHttp.clearHeaders();
