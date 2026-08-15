@@ -55,7 +55,7 @@ public class MarkdownContentManager {
     private static final String DEFAULT_NEXT_CHALLENGE_CTA_RESOURCE =
             "partials/next-challenge-cta.html";
     private static final String API_CHALLENGE_ALLOWED_PATH_PREFIXES =
-            "/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
+            "/api||/todos||/todo||/challenges||/challenger||/secret||/heartbeat";
 
     private final DefaultGUIHTML guiManagement;
     private final Map<String, String> solutionChallengeIds;

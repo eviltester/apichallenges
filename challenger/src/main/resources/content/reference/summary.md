@@ -204,7 +204,7 @@ Low-level HTTP libraries give you control. Higher-level REST libraries often mak
 
 As an automation suite grows, domain abstractions become useful.
 
-For example, instead of repeating raw `POST /todos` request construction in every test, you might create helper methods such as:
+For example, instead of repeating raw `POST /api/todos` request construction in every test, you might create helper methods such as:
 
 - `createTodo`
 - `getTodo`

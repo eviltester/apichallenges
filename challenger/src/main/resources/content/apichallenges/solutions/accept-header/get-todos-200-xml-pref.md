@@ -12,23 +12,23 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
 
 
 # Use Accept Headers to GET XML Content as a preference
 
-How to complete the challenge `GET /todos XML (200)` to successfully GET all the todos in XML format as first preference.
+How to complete the challenge `GET /api/todos XML (200)` to successfully GET all the todos in XML format as first preference.
 
-## GET /todos XML Preference (200)
+## GET /api/todos XML Preference (200)
 
 It is possible to ask for multiple types in the Accept header, expressing a preference for the returned format. If none of the types are available then expect a 406 response.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml` followed by `application/json` to receive results in XML format if supported, or JSON if not.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml` followed by `application/json` to receive results in XML format if supported, or JSON if not.
 
 - `GET` request will receive a response with all the todo items
-    - e.g. `GET /todos` to get all the todo items
+    - e.g. `GET /api/todos` to get all the todo items
 - `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `Accept` means that an `Accept` header was added to specify that the todos should be returned in **XML** format as first preference, followed by **JSON** as second preference
 - add the `X-CHALLENGER` header to track progress
@@ -36,9 +36,9 @@ It is possible to ask for multiple types in the Accept header, expressing a pref
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
+- Issue a `GET` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Accept` header specifying XML format by using a value of `application/xml,application/json`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `200` when all the details are valid.
@@ -50,13 +50,13 @@ The chained Accept header `application/xml,application/json` asks for XML as fir
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml,application/json" details="true" summary="GET /todos with XML preferred over JSON" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/xml,application/json" details="true" summary="GET /api/todos with XML preferred over JSON" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

@@ -11,20 +11,20 @@ concept_reference_label: HTTP PATCH Verb
 concept_reference_url: /reference/http-verbs/http-patch
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json||Send only the todo fields to change and verify the response status is 200
+schema_howto_steps: Create a PATCH request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/json||Send only the todo fields to change and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `PATCH /todos/id (200) partial`
+# How to complete the challenge `PATCH /api/todos/id (200) partial`
 
 Use [`PATCH`](https://www.rfc-editor.org/rfc/rfc5789) with `Content-Type: application/json` when you want to update selected fields on an existing todo. Partial JSON updates are an API-specific PATCH style.
 
-## PATCH /todos/id (200) partial
+## PATCH /api/todos/id (200) partial
 
 > Issue a PATCH request to update an existing todo using a partial JSON payload.
 
-- Use `PATCH /todos/{id}` where `{id}` is an existing todo id.
+- Use `PATCH /api/todos/{id}` where `{id}` is an existing todo id.
 - Add `Content-Type: application/json`.
 - Send only the fields you want to change.
 - Do not include `id` in the payload.
@@ -35,7 +35,7 @@ Use [`PATCH`](https://www.rfc-editor.org/rfc/rfc5789) with `Content-Type: applic
 ## Basic Instructions
 
 - Issue a `PATCH` request to:
-  - `{{<ORIGIN_URL>}}/todos/{{firstTodoId}}`
+  - `{{<ORIGIN_URL>}}/api/todos/{{firstTodoId}}`
 - The request should have an `X-CHALLENGER` header so the challenge is tracked.
 - The request body can be a partial JSON object:
 
@@ -47,20 +47,20 @@ Use [`PATCH`](https://www.rfc-editor.org/rfc/rfc5789) with `Content-Type: applic
 
 ### Try it now
 
-If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+If you don't know what todos are available then you can check by `GET /api/todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
-If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+If you have already deleted all todos, create one using `POST /api/todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /api/todos to create a todo item for this challenge">}}
 
-{{<api-live-request method="PATCH" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"patched partial todo"}' details="true" summary="PATCH /todos/{id} with partial JSON to update a todo" open="true">}}
+{{<api-live-request method="PATCH" path="/api/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"patched partial todo"}' details="true" summary="PATCH /api/todos/{id} with partial JSON to update a todo" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> PATCH /todos/3 HTTP/1.1
+> PATCH /api/todos/3 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

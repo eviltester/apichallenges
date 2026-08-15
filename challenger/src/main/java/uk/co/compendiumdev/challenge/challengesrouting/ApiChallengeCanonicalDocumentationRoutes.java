@@ -78,7 +78,7 @@ public final class ApiChallengeCanonicalDocumentationRoutes {
     }
 
     private String openApi31(final HttpServerRequest request, final HttpServerResponse response) {
-        return openApi(request, response, OPENAPI_PATH, OpenApiSpecificationVersion.OPENAPI_3_1);
+        return openApi(request, response, request.path(), OpenApiSpecificationVersion.OPENAPI_3_1);
     }
 
     private String openApi32(final HttpServerRequest request, final HttpServerResponse response) {

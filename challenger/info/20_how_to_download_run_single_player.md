@@ -71,8 +71,8 @@ Make your api calls to `http://localhost:4567/{API}`
 
 e.g.
 
-- `http://localhost:4567/todos`
-- `http://localhost:4567/challenges` 
+- `http://localhost:4567/api/todos`
+- `http://localhost:4567/api/challenges` 
 
 ### Tracking Challenges
 
@@ -86,7 +86,7 @@ Stored in the same directory as the `apichallenger.jar`
 
 This file will be automatically loaded when the application is started.
 
-You don't need to `POST /challenger`.
+You don't need to `POST /api/challenger`.
 
 ### Example solving a challenge
 

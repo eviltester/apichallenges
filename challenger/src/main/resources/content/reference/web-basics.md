@@ -84,7 +84,7 @@ HTTP is the underlying protocol involved when sending requests to a server. Prot
 A request can be thought of as a simple text message with a standard format: e.g
 
 ```
-GET https://apichallenges.eviltester.com/heartbeat HTTP/1.1
+GET https://apichallenges.eviltester.com/api/heartbeat HTTP/1.1
 User-Agent: curl/7.39.0
 Host: localhost:4567
 Connection: Keep-Alive
@@ -94,7 +94,7 @@ accept: application/xml
 To break this down, the first line has the `verb`, `url` and `HTTP/1.1` is the protocol version being used:
 
 ```
-GET https://apichallenges.eviltester.com/heartbeat HTTP/1.1
+GET https://apichallenges.eviltester.com/api/heartbeat HTTP/1.1
 ```
 
 Each request has a `verb` or `method` to identify if the request is asking for information or sending information or a command to the server.

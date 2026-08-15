@@ -47,7 +47,7 @@ Technology and tooling give us ways to perform checks and gather evidence. The t
 For example, a tool can send:
 
 ~~~~~~~~
-POST /todos
+POST /api/todos
 ~~~~~~~~
 
 But testing asks:
@@ -80,7 +80,7 @@ API testing can be organised around three related ideas.
 
 `Functionality and Outcomes` means what the API is supposed to do, and whether the response and state changes match that expectation. I would also include - does it perform under stress and load? Is it secure? 'Outcomes' is a pretty broad category.
 
-For example, if we test `POST /todos`, we might think about:
+For example, if we test `POST /api/todos`, we might think about:
 
 - Risk: duplicate todos, unauthorised creation, invalid data accepted, server crash
 - Coverage: valid JSON, invalid JSON, missing fields, long fields, different users, different response formats
@@ -134,7 +134,7 @@ That simplicity is powerful for testing because it lets us model the API as comb
 For example:
 
 ~~~~~~~~
-GET /todos?doneStatus=true
+GET /api/todos?doneStatus=true
 Accept: application/json
 ~~~~~~~~
 
@@ -142,9 +142,9 @@ The request has a verb, an endpoint, a query parameter, and a header. Each of th
 
 But the current system state also matters.
 
-`GET /todos/999` means something different when todo `999` exists than when it does not exist.
+`GET /api/todos/999` means something different when todo `999` exists than when it does not exist.
 
-`POST /todos` means something different when the database is empty than when it already contains the maximum number of todos.
+`POST /api/todos` means something different when the database is empty than when it already contains the maximum number of todos.
 
 Coverage-driven API testing is about deliberately varying these inputs and states so that we learn how the API behaves.
 
@@ -189,9 +189,9 @@ Then compare the documentation with the actual behaviour.
 
 For example:
 
-- documentation says `POST /todos` can return `201`, but we also observe `422`
-- documentation says `GET /todos` supports XML, but XML returns `406`
-- documentation says `DELETE /todos/{id}` requires authentication, but it works without a token
+- documentation says `POST /api/todos` can return `201`, but we also observe `422`
+- documentation says `GET /api/todos` supports XML, but XML returns `406`
+- documentation says `DELETE /api/todos/{id}` requires authentication, but it works without a token
 
 These differences are useful findings. Sometimes the API is wrong. Sometimes the documentation is wrong. Either way, the team learns something.
 
@@ -271,7 +271,7 @@ Functional API testing often uses small amounts of data because we want fast fee
 
 When testing Capacity we deliberately change the amount, timing, and concurrency of requests.
 
-For example, a `GET /todos` test with 10 todos tells us something. A `GET /todos` test with 100,000 todos tells us a very different something.
+For example, a `GET /api/todos` test with 10 todos tells us something. A `GET /api/todos` test with 100,000 todos tells us a very different something.
 
 Even if a dedicated performance team handles load testing, API testers can still spot capacity risks early by paying attention to large payloads, slow queries, missing pagination, and repeated requests.
 
@@ -502,7 +502,7 @@ To practise API testing, choose one endpoint and build a small test model for it
 For example, choose:
 
 ~~~~~~~~
-POST /todos
+POST /api/todos
 ~~~~~~~~
 
 Then ask:

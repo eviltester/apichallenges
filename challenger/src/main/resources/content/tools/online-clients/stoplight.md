@@ -14,11 +14,11 @@ showads: true
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Stoplight Elements.
 
-<section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="stoplight" data-default-openapi-url="/docs/openapi.json">
+<section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="stoplight" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>
     <label>
       OpenAPI or Swagger URL
-      <input data-openapi-url type="text" value="/docs/openapi.json" placeholder="https://example.com/openapi.json">
+      <input data-openapi-url type="text" value="/api/docs/openapi.json" placeholder="https://example.com/openapi.json">
     </label>
     <button type="submit">Open URL</button>
   </form>
@@ -52,7 +52,7 @@ Compare this with the [Online Swagger UI](/tools/online-clients/swagger), [OpenA
     <p class="openapi-ui-launch-links">
       <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fapi%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
     </p>
   </div>

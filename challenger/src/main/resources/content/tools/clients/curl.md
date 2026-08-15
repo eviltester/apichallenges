@@ -22,9 +22,9 @@ Because it is a command line tool it can be more difficult to use. But it is an 
 cURL is useful because when you raise a defect, you don't want to try and attach a Postman of Bruno Collection, but you can easily paste in a `cUrl` command that can trigger the issue, and can reasonably expect that the programmers on the team will have cURL installed.
 
 ~~~~~~~~
-curl  {{<ORIGIN_URL>}}/heartbeat -i
-curl -X GET {{<ORIGIN_URL>}}/todos
-curl {{<ORIGIN_URL>}}/todos -H "accept: application/xml"
+curl  {{<ORIGIN_URL>}}/api/heartbeat -i
+curl -X GET {{<ORIGIN_URL>}}/api/todos
+curl {{<ORIGIN_URL>}}/api/todos -H "accept: application/xml"
 ~~~~~~~~
 
 You might also find cURL useful for data driven testing, if your REST Client does not support feeding in a file of data to a request then you can probably find a tutorial online for the operating system you are using, generate the request from the REST API Client, and feed a file of data into the request.

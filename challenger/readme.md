@@ -40,9 +40,9 @@ More information can be found at [eviltester.com/apichallenges](https://eviltest
 
 The challenges can be completed by issuing API requests to the API.
 
-e.g. `GET http://localhost:4567/todos` would complete the challenge to "GET the list of todos"
+e.g. `GET http://localhost:4567/api/todos` would complete the challenge to "GET the list of todos"
 
-You can also `GET http://localhost:4567/challenges` to get the list of challenges and their status as an API call.
+You can also `GET http://localhost:4567/api/challenges` to get the list of challenges and their status as an API call.
 
 ## Version Tracking
 

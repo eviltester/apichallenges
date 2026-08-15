@@ -23,7 +23,7 @@ You may find that you're HTTP Client doesn't support sending `CONNECT` requests 
 
 
 ```
-curl -i -X CONNECT https://apichallenges.com/heartbeat
+curl -i -X CONNECT https://apichallenges.com/api/heartbeat
 ```
 
 ## HTTP CONNECT Request Example

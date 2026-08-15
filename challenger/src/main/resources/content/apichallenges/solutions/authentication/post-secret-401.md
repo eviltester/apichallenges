@@ -12,7 +12,7 @@ concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 401
+schema_howto_steps: Create a POST request to /api/secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 401
 showads: true
 ---
 
@@ -26,12 +26,12 @@ the wrong details. In response the API returns a status code of 401.
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## POST /secret/token (401) - Authentication Failed
+## POST /api/secret/token (401) - Authentication Failed
 
-> Issue a POST request on the `/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
+> Issue a POST request on the `/api/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
 
 - `POST` request means use the HTTP Verb POST
-    - e.g. `POST /secret/token` sends to the secret token endpoint
+    - e.g. `POST /api/secret/token` sends to the secret token endpoint
 - `Basic auth` means include the [Basic Authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
 - `username/password is not admin/password` the authorisation header value is base 64 encoded, and the details should not match `admin` as the username, and `password` for the password
 - add the `X-CHALLENGER` header to track progress and because the authentication code we need is asociated with the `X-challenger` session
@@ -40,9 +40,9 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 
 ## Basic Instructions
 
-- Create a new request for the `/secret/token` end point
+- Create a new request for the `/api/secret/token` end point
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/secret/token`
+        - `{{<ORIGIN_URL>}}/api/secret/token`
 - The verb should be a `POST`
 - Add a Basic Auth header by selecting "Basic" from the "Auth" tab and entering a username and password but make sure it is not admin/password e.g. use username "Admin1", password "Pa55word" (or anything else you want)
 - There should be no payload in the message
@@ -51,13 +51,13 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*" details="true" summary="POST /secret/token with invalid credentials to trigger 401" open="true">}}
+{{<api-live-request method="POST" path="/api/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*" details="true" summary="POST /api/secret/token with invalid credentials to trigger 401" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /secret/token HTTP/1.1
+> POST /api/secret/token HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -111,7 +111,7 @@ Although we add an "Authorization" header, really we are trying to "authenticate
 
 ## Lessons Learned
 
-- `401 Unauthorized` on `/secret/token` means authentication failed before any authorization token exists.
+- `401 Unauthorized` on `/api/secret/token` means authentication failed before any authorization token exists.
 - Bad or missing `Basic Auth` should not return an `X-AUTH-TOKEN`.
 - Authentication failures are useful for checking `WWW-Authenticate` or challenge headers if provided.
 

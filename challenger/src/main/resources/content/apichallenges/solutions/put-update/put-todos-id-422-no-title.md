@@ -12,12 +12,12 @@ concept_reference_label: HTTP PUT Verb
 concept_reference_url: /reference/http-verbs/http-put
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a PUT request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Omit the mandatory title field||Send the request and verify the response status is 422
+schema_howto_steps: Create a PUT request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Omit the mandatory title field||Send the request and verify the response status is 422
 showads: true
 ---
 
 
-# How to complete the challenge `PUT /todos/{id} no title (422)`
+# How to complete the challenge `PUT /api/todos/{id} no title (422)`
 
 Issue a `PUT` request to an existing todo and omit the mandatory `title` field.
 
@@ -30,15 +30,15 @@ title : field is mandatory
 ```
 ### Try it now
 
-If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+If you don't know what todos are available then you can check by `GET /api/todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
-If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+If you have already deleted all todos, create one using `POST /api/todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /api/todos to create a todo item for this challenge">}}
 
-{{<api-live-request method="PUT" path="/todos/{{firstTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"doneStatus":true,"description":"missing title"}' details="true" summary="PUT /todos/{id} without a title to trigger 422" open="true">}}
+{{<api-live-request method="PUT" path="/api/todos/{{firstTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"doneStatus":true,"description":"missing title"}' details="true" summary="PUT /api/todos/{id} without a title to trigger 422" open="true">}}
 
 ## Lessons Learned
 

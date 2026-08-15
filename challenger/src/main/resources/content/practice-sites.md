@@ -144,7 +144,7 @@ These are full APIs online, which means you don't have to install anything and c
 [API Challenges](/gui/challenges)
 
 - Our API Challenges is a fully functional TODOs management application.
-- Create a session by issuing a `POST` request to `https://apichallenges.eviltester.com/challenger`, you will see an `X-CHALLENGER` header in the response and if you add that header into all your requests you will be able to update data and view your solved challengs progress in the UI.
+- Create a session by issuing a `POST` request to `https://apichallenges.eviltester.com/api/challenger`, you will see an `X-CHALLENGER` header in the response and if you add that header into all your requests you will be able to update data and view your solved challengs progress in the UI.
 - It is not deliberately buggy so if you experience problems, you've either found a bug or still have to learn to use the HTTP Client tooling.
 - There are 50+ challenges to complete which will guide you through an API testing process.
 - Since it is a working API you can make up your own challenges and try whatever tests you want.

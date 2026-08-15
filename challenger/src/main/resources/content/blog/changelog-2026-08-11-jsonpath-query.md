@@ -135,7 +135,7 @@ $.items
 For API Challenges todos, the equivalent completed-todo query is:
 
 ```http
-QUERY /todos HTTP/1.1
+QUERY /api/todos HTTP/1.1
 Content-Type: application/jsonpath
 Accept: application/json
 
@@ -160,7 +160,7 @@ This gives testers another useful behavior to explore. Does your REST client sup
 
 There is now an API Challenge for JSONPath query bodies:
 
-- [QUERY /todos JSONPath solution](/apichallenges/solutions/query/query-todos-200-jsonpath)
+- [QUERY /api/todos JSONPath solution](/apichallenges/solutions/query/query-todos-200-jsonpath)
 
 And the reference material has been expanded:
 

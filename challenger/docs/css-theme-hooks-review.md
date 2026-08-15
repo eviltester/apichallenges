@@ -42,7 +42,7 @@ The implementation intentionally avoids adding extra content wrappers, spans, or
 
 6. Split generated API route text into method and path spans.
 
-   Generated docs currently render route summaries as text like `GET /todos`. Console and dark-lab styles would be much better with method badges and path styling.
+   Generated docs currently render route summaries as text like `GET /api/todos`. Console and dark-lab styles would be much better with method badges and path styling.
 
    Suggested classes: `.http-method`, `.method-get`, `.method-post`, `.method-put`, `.method-delete`, `.endpoint-path`, `.endpoint-summary`.
 

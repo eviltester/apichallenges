@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/vnd.apichallenges.todo+xml||Send the request and verify status 200 and the vendor XML Content-Type
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/vnd.apichallenges.todo+xml||Send the request and verify status 200 and the vendor XML Content-Type
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (200) vendor XML`
+# How to complete the challenge `GET /api/todos (200) vendor XML`
 
 This challenge requests a todo-specific `+xml` media type.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/vnd.apichallenges.todo+xml` to receive results in todo XML format.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/vnd.apichallenges.todo+xml` to receive results in todo XML format.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `application/vnd.apichallenges.todo+xml`
 - Check that the response status is `200`
@@ -32,12 +32,12 @@ This challenge requests a todo-specific `+xml` media type.
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/vnd.apichallenges.todo+xml" details="true" summary="GET /todos with vendor todo XML" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/vnd.apichallenges.todo+xml" details="true" summary="GET /api/todos with vendor todo XML" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: application/vnd.apichallenges.todo+xml

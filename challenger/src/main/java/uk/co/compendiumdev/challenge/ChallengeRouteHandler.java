@@ -152,6 +152,8 @@ public class ChallengeRouteHandler {
 
         new FromHellRoutes(guiTemplates).configure();
 
+        OpenApiDocsLandingPageLinks.install();
+
         return this;
     }
 
@@ -212,8 +214,7 @@ public class ChallengeRouteHandler {
                         single_player_mode,
                         thingifier,
                         persistenceLayer,
-                        challengeDefinitions,
-                        guiTemplates)
+                        challengeDefinitions)
                 .configure();
     }
 }

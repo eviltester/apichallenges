@@ -11,37 +11,37 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a GET request to /challenges||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/challenges||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /challenges (200)`.
+# How to complete the challenge `GET /api/challenges (200)`.
 
 How to use a GET request with an x-challenger header to get the progress status of all the API Challenges.
 
-## GET /challenges (200)
+## GET /api/challenges (200)
 
-> Issue a `GET` request on the `/challenges` end point
+> Issue a `GET` request on the `/api/challenges` end point
 
 - This will show you the status of all the challenges in your REST Client, if you include an `X-CHALLENGER` guid header in your request.
 
 ## Basic Instructions
 
-- Issue a GET request to end point "/challenges"
-    - `{{<ORIGIN_URL>}}/challenges`
+- Issue a GET request to end point "/api/challenges"
+    - `{{<ORIGIN_URL>}}/api/challenges`
 - The request should have an `X-CHALLENGER` header
 - The response body shows the status of all the challenges.
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/challenges" expected-status="200" headers="Accept: application/json" details="true" summary="GET /challenges to list the available challenges" open="true">}}
+{{<api-live-request method="GET" path="/api/challenges" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/challenges to list the available challenges" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /challenges HTTP/1.1
+> GET /api/challenges HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -67,16 +67,16 @@ How to use a GET request with an x-challenger header to get the progress status 
 {
   "challenges": [
     {
-      "name": "POST /challenger (201)",
-      "description": "Issue a POST request on the `/challenger` end point, 
+      "name": "POST /api/challenger (201)",
+      "description": "Issue a POST request on the `/api/challenger` end point, 
             with no body, to create a new challenger session. 
             Use the generated X-CHALLENGER header in 
             future requests to track challenge completion.",
       "status": true
     },
     {
-      "name": "GET /challenges (200)",
-      "description": "Issue a GET request on the `/challenges` end point",
+      "name": "GET /api/challenges (200)",
+      "description": "Issue a GET request on the `/api/challenges` end point",
       "status": true
     }
   ]
@@ -91,11 +91,11 @@ How to use a GET request with an x-challenger header to get the progress status 
 
 ## Lessons Learned
 
-- `GET /challenges` exposes progress state rather than todo application data.
+- `GET /api/challenges` exposes progress state rather than todo application data.
 - This endpoint is a dashboard API: the response tells you what the server thinks you have completed.
 - Including `X-CHALLENGER` changes the result from generic challenge info to your tracked session.
 
 ## Suggested Experiments
 
-- Call `GET /challenges`, complete one challenge, then call it again and compare the completion flags.
-- Request `/challenges` with and without `X-CHALLENGER` to see how session tracking changes the response.
+- Call `GET /api/challenges`, complete one challenge, then call it again and compare the completion flags.
+- Request `/api/challenges` with and without `X-CHALLENGER` to see how session tracking changes the response.

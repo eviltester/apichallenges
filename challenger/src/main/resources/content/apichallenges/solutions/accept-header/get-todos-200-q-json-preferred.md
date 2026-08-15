@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/xml;q=0.5, application/json;q=1||Send the request and verify status 200 and Content-Type application/json
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/xml;q=0.5, application/json;q=1||Send the request and verify status 200 and Content-Type application/json
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (200) q JSON preferred`
+# How to complete the challenge `GET /api/todos (200) q JSON preferred`
 
 This challenge reverses the previous preference: both `XML` and `JSON` are acceptable, but `JSON` has the higher quality value.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml;q=0.5, application/json;q=1` to receive results in JSON format.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml;q=0.5, application/json;q=1` to receive results in JSON format.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `application/xml;q=0.5, application/json;q=1`
 - Check that the response status is `200`
@@ -32,12 +32,12 @@ This challenge reverses the previous preference: both `XML` and `JSON` are accep
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml;q=0.5, application/json;q=1" details="true" summary="GET /todos with q-values preferring JSON" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/xml;q=0.5, application/json;q=1" details="true" summary="GET /api/todos with q-values preferring JSON" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: application/xml;q=0.5, application/json;q=1

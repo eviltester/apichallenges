@@ -12,18 +12,18 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
 concept_reference_url_2: /reference/testing-apis
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=21 to exceed the configured maximum||Send the request and verify the response status is 400
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add _limit=21 to exceed the configured maximum||Send the request and verify the response status is 400
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (400) ?_limit too high`
+# How to complete the challenge `GET /api/todos (400) ?_limit too high`
 
 How to issue a GET request on a top level entity endpoint with a pagination limit above the allowed maximum.
 
-## GET /todos (400) ?_limit too high
+## GET /api/todos (400) ?_limit too high
 
-> Issue a GET request on the `/todos` end point with a pagination limit above the configured maximum to receive a 400 status code.
+> Issue a GET request on the `/api/todos` end point with a pagination limit above the configured maximum to receive a 400 status code.
 
 - the maximum supported `_limit` value is `20`
 - `_limit=21` is too high for this API
@@ -31,21 +31,21 @@ How to issue a GET request on a top level entity endpoint with a pagination limi
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `GET` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - Add `_limit=21` as a URL parameter:
-    - `{{<ORIGIN_URL>}}/todos?_limit=21`
+    - `{{<ORIGIN_URL>}}/api/todos?_limit=21`
 - The response status code should be `400` because the pagination limit is too high
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_limit=21" expected-status="400" headers="Accept: application/json" details="true" summary="GET /todos?_limit=21 to trigger validation for a high limit" open="true">}}
+{{<api-live-request method="GET" path="/api/todos?_limit=21" expected-status="400" headers="Accept: application/json" details="true" summary="GET /api/todos?_limit=21 to trigger validation for a high limit" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos?_limit=21 HTTP/1.1
+> GET /api/todos?_limit=21 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

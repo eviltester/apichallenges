@@ -1,6 +1,6 @@
-# POST /challenger (201)
+# POST /api/challenger (201)
 
-> Issue a POST request on the `/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.
+> Issue a POST request on the `/api/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.
 
 - This challenge is essential if you want to persist your sessions in multi-user mode
 - This challenge is optional if you want to work in single-user mode
@@ -9,7 +9,7 @@
 
 ~~~~~~~~
 curl --request POST \
-  --url http://localhost:4567/challenger \
+  --url http://localhost:4567/api/challenger \
   -v
 ~~~~~~~~
 
@@ -17,7 +17,7 @@ curl --request POST \
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 4567 (#0)
-> POST /challenger HTTP/1.1
+> POST /api/challenger HTTP/1.1
 > Host: localhost:4567
 > User-Agent: curl/7.64.1
 > Accept: */*
@@ -36,11 +36,11 @@ curl --request POST \
 
 ## Basic Instructions
 
-- Issue a POST request to end point "/challenger"
+- Issue a POST request to end point "/api/challenger"
     - if running locally that would be
-        - 'http://localhost:4567/challenger' 
+        - 'http://localhost:4567/api/challenger' 
     - if running in the cloud that would be
-        - 'https://apichallenges.eviltester.com/challenger' 
+        - 'https://apichallenges.eviltester.com/api/challenger' 
 - The response will have an `X-CHALLENGER` header
 - Use this in any future requests to track your progress
 - The `LOCATION` header has a url to access your challenge status through the GUI
@@ -48,7 +48,7 @@ curl --request POST \
 ## Insomnia
 
 ~~~~~~~~
-POST /challenger HTTP/1.1
+POST /api/challenger HTTP/1.1
 Host: localhost:4567
 User-Agent: insomnia/6.5.4
 Accept: */*

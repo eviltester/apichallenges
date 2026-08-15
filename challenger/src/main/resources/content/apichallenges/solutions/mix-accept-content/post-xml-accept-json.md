@@ -3,7 +3,7 @@ date:  2021-07-17T11:30:00Z
 lastmod: 2026-08-06
 title: API Challenges Solution For - POST XML accept JSON
 seo_title: Solution: POST XML accept JSON | API Challenges
-description: How to solve API challenge POST /todos XML to JSON. Creating a todo with XML and receiving response in JSON.
+description: How to solve API challenge POST /api/todos XML to JSON. Creating a todo with XML and receiving response in JSON.
 seo_description: Use this walkthrough to solve POST XML accept JSON with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/mix-accept-content/post-json-accept-xml
 concepts_learned: HTTP POST||Content-Type header||Accept header||content negotiation
@@ -12,22 +12,22 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid XML payload that matches the field and content constraints
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid XML payload that matches the field and content constraints
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos XML to JSON`
+# How to complete the challenge `POST /api/todos XML to JSON`
 
 When an API supports multiple formats in request and response we might be able to mix and match.
 In this challenge we send a POST request to create a todo item using XML but receive JSON response.
 
-## 	POST /todos XML to JSON
+## 	POST /api/todos XML to JSON
 
-> Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/xml` but Accept `application/json`
+> Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/xml` but Accept `application/json`
 
 - `POST` request means we will send information in the body of the message
-    - e.g. `POST /todos` sends to the todos endpoint
+    - e.g. `POST /api/todos` sends to the todos endpoint
 - `create a todo` means that the payload will be valid data to create a todo item
 - `using Content-Type` `application/xml` means that we will set `content-type` header to `application/xml` and the payload will be in XML format
 - `Accept` `application/json` means add an `accept` header of `application/json` to receive the response in JSON format
@@ -38,9 +38,9 @@ In this challenge we send a POST request to create a todo item using XML but rec
 
 We can mix different accept and content-types so we can send payloads in one format, and receive responses in another format. This challenge is about sending payload in XML but having the response in JSON.
 
-- Issue a `POST` request to end point "/todos"
+- Issue a `POST` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Content-Type` header of `application/xml`
 - add a valid payload in XML format to create a todo item e.g.
 
@@ -64,13 +64,13 @@ Extras:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/xml||Accept: application/json" body='<todo><title>xml solution widget</title><doneStatus>true</doneStatus><description>created from XML</description></todo>' details="true" summary="POST /todos with XML and Accept JSON to create a todo" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/xml||Accept: application/json" body='<todo><title>xml solution widget</title><doneStatus>true</doneStatus><description>created from XML</description></todo>' details="true" summary="POST /api/todos with XML and Accept JSON to create a todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

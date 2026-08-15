@@ -12,18 +12,18 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _sortBy with a minus-prefixed todo field to sort descending||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _sortBy with a minus-prefixed todo field to sort descending||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (200) ? _sortBy descending`
+# How to complete the challenge `GET /api/todos (200) ? _sortBy descending`
 
 How to issue a GET request on a top level entity endpoint and sort the returned todos in descending order.
 
-## GET /todos (200) ? _sortBy descending
+## GET /api/todos (200) ? _sortBy descending
 
-> Issue a GET request on the `/todos` end point with a query parameter to sort todos descending by a field, requesting the response in JSON format.
+> Issue a GET request on the `/api/todos` end point with a query parameter to sort todos descending by a field, requesting the response in JSON format.
 
 - `_sortBy` is the URL parameter used to sort collection results
 - prefix a field with `-` to sort descending
@@ -33,23 +33,23 @@ How to issue a GET request on a top level entity endpoint and sort the returned 
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `GET` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `_sortBy=-id` as a URL parameter:
-    - `{{<ORIGIN_URL>}}/todos?_sortBy=-id`
+    - `{{<ORIGIN_URL>}}/api/todos?_sortBy=-id`
 - The response status code should be `200` because the request is accepted
 - Check that the returned todos are ordered by `id` from highest to lowest
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_sortBy=-id" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_sortBy=-id to sort todos by id descending" open="true">}}
+{{<api-live-request method="GET" path="/api/todos?_sortBy=-id" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos?_sortBy=-id to sort todos by id descending" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos?_sortBy=-id HTTP/1.1
+> GET /api/todos?_sortBy=-id HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

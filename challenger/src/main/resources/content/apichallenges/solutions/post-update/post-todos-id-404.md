@@ -12,21 +12,21 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 404
+schema_howto_steps: Create a POST request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 404
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos/id (404)`
+# How to complete the challenge `POST /api/todos/id (404)`
 
 How to use a POST request to try to update a todo item in the application, but the todo item id should not exist.
 
-## POST /todos/id (404)
+## POST /api/todos/id (404)
 
 > Issue a POST request to try and update a todo, but no todo with this id should exist
 
-- `POST` request will update a todo if the provided `id` exists `/todos/id` end point
-    - e.g. `POST /todos/3` for a todo with `id==3`
+- `POST` request will update a todo if the provided `id` exists `/api/todos/id` end point
+    - e.g. `POST /api/todos/3` for a todo with `id==3`
 - `404` is a failure code, in this case it means no todo with this id exists
 - The body of the message should be a `json` or `xml` partial set of `todo` details,
 -  and the `json` or `xml` should be defined in the `content-type` header
@@ -35,10 +35,10 @@ How to use a POST request to try to update a todo item in the application, but t
 
 ## Basic Instructions
 
-- Issue a `POST` request to end point "/todos/id"
+- Issue a `POST` request to end point "/api/todos/id"
     - where `id` is replaced with the id of a todo that does not exist
-        - if you don't know any then a `GET /todos` would show a list of todos.
-    - `{{<ORIGIN_URL>}}/todos/id`
+        - if you don't know any then a `GET /api/todos` would show a list of todos.
+    - `{{<ORIGIN_URL>}}/api/todos/id`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The `content-type` in the message should be `application/json` because we are sending a JSON payload
 - The Payload should have a partial set of todo details. e.g.
@@ -61,13 +61,13 @@ How to use a POST request to try to update a todo item in the application, but t
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos/{{missingTodoId}}" expected-status="404" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos/{id} to update a missing todo and trigger 404" open="true">}}
+{{<api-live-request method="POST" path="/api/todos/{{missingTodoId}}" expected-status="404" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /api/todos/{id} to update a missing todo and trigger 404" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos/200 HTTP/1.1
+> POST /api/todos/200 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -102,7 +102,7 @@ How to use a POST request to try to update a todo item in the application, but t
 
 ## Lessons Learned
 
-- `POST /todos/{id}` to a missing `id` shows that update-style `POST` still depends on an existing target.
+- `POST /api/todos/{id}` to a missing `id` shows that update-style `POST` still depends on an existing target.
 - `404 Not Found` prevents the request from becoming an accidental create.
 - Missing-resource update tests should use a clearly absent `id` to avoid flaky results.
 

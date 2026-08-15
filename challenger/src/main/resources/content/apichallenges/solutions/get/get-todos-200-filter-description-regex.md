@@ -12,18 +12,18 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add a description regex filter and verify status 200
+schema_howto_steps: Create a todo with a non-empty matching description if needed||Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add a description regex filter and verify status 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (200) ? filter description regex`
+# How to complete the challenge `GET /api/todos (200) ? filter description regex`
 
 How to issue a GET request on a top level entity endpoint and filter todos by matching the description with a regular expression.
 
-## GET /todos (200) ? filter description regex
+## GET /api/todos (200) ? filter description regex
 
-> Issue a GET request on the `/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.
+> Issue a GET request on the `/api/todos` end point with a regular expression filter on description that returns todos with non-empty descriptions, requesting the response in JSON format.
 
 - `description~=.*fixture.*` means return todos where the description matches the regular expression
 - most tools and browsers will encode any reserved characters for you when sending the request
@@ -35,12 +35,12 @@ How to issue a GET request on a top level entity endpoint and filter todos by ma
 ## Basic Instructions
 
 - Create or update a todo so it has a description containing `fixture`
-- Issue a `GET` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `GET` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add a regular expression filter:
-    - `{{<ORIGIN_URL>}}/todos?description~=.*fixture.*`
+    - `{{<ORIGIN_URL>}}/api/todos?description~=.*fixture.*`
 - The response status code should be `200` because the request is accepted
 - Check that every returned description is non-empty and contains `fixture`
 
@@ -48,16 +48,16 @@ How to issue a GET request on a top level entity endpoint and filter todos by ma
 
 If you need a matching todo, create one with a non-empty description containing `fixture`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"regex filter fixture","doneStatus":false,"description":"created fixture for regex filter"}' details="true" summary="POST /todos to create a regex filter fixture">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"regex filter fixture","doneStatus":false,"description":"created fixture for regex filter"}' details="true" summary="POST /api/todos to create a regex filter fixture">}}
 
 Filter by regular expression:
 
-{{<api-live-request method="GET" path="/todos?description~=.*fixture.*" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?description~=.*fixture.* to filter descriptions by regex" open="true">}}
+{{<api-live-request method="GET" path="/api/todos?description~=.*fixture.*" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos?description~=.*fixture.* to filter descriptions by regex" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos?description~=.*fixture.* HTTP/1.1
+> GET /api/todos?description~=.*fixture.* HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

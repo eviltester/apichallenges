@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengeMain;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
@@ -77,12 +76,14 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_HEARTBEAT_204));
     }
 
-    @ParameterizedTest(name = "docs compatibility route {0} is available")
-    @ValueSource(strings = {"/docs", "/docs/swagger-ui", "/docs/openapi.json"})
-    void legacyDocsCompatibilityRoutesRemainAvailable(final String docsPath) {
+    @ParameterizedTest(name = "docs compatibility route {0} redirects to {1}")
+    @MethodSource("legacyDocsRedirectRoutes")
+    void legacyDocsCompatibilityRoutesRedirectToCanonicalDocs(
+            final String docsPath, final String canonicalPath) {
         HttpResponseDetails response = http.send(docsPath, "get");
 
-        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(301, response.statusCode);
+        Assertions.assertEquals(canonicalPath, response.getHeader("Location"));
     }
 
     @ParameterizedTest(name = "openapi route {0} documents {1}")
@@ -100,9 +101,18 @@ public class ApiChallengeRouteCompatibilityTest {
     }
 
     private static Stream<Arguments> openApiDocumentationRoutes() {
+        return Stream.of(Arguments.of("/api/docs/openapi.json", "/api/todos"));
+    }
+
+    private static Stream<Arguments> legacyDocsRedirectRoutes() {
         return Stream.of(
-                Arguments.of("/api/docs/openapi.json", "/api/todos"),
-                Arguments.of("/docs/openapi.json", "/todos"));
+                Arguments.of("/docs", "/api/docs"),
+                Arguments.of("/docs/swagger-ui", "/api/docs/swagger-ui"),
+                Arguments.of("/docs/openapi.json", "/api/docs/openapi.json"),
+                Arguments.of(
+                        "/docs/openapi-3.2.json?permissive",
+                        "/api/docs/openapi-3.2.json?permissive"),
+                Arguments.of("/docs/swagger?download", "/api/docs/swagger?download"));
     }
 
     private void assertStatus(final int statusCode, final String route, final String verb) {

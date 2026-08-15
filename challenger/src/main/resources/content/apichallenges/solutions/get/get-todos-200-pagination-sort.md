@@ -12,18 +12,18 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _sortBy=-id with _limit=5 and _offset=5||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add _sortBy=-id with _limit=5 and _offset=5||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (200) ?_sortBy&_limit&_offset`
+# How to complete the challenge `GET /api/todos (200) ?_sortBy&_limit&_offset`
 
 How to issue a GET request on a top level entity endpoint and combine sorting with pagination.
 
-## GET /todos (200) ?_sortBy&_limit&_offset
+## GET /api/todos (200) ?_sortBy&_limit&_offset
 
-> Issue a GET request on the `/todos` end point with sorting and pagination parameters, requesting the response in JSON format.
+> Issue a GET request on the `/api/todos` end point with sorting and pagination parameters, requesting the response in JSON format.
 
 - `_sortBy=-id` sorts todos by `id` from highest to lowest
 - `_limit=5` asks for 5 returned todos
@@ -34,23 +34,23 @@ How to issue a GET request on a top level entity endpoint and combine sorting wi
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `GET` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `_sortBy=-id`, `_limit=5`, and `_offset=5` as URL parameters:
-    - `{{<ORIGIN_URL>}}/todos?_sortBy=-id&_limit=5&_offset=5`
+    - `{{<ORIGIN_URL>}}/api/todos?_sortBy=-id&_limit=5&_offset=5`
 - The response status code should be `200` because the request is accepted
 - Check that the response body contains no more than 5 todos and the ids are still descending
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?_sortBy=-id&_limit=5&_offset=5" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_sortBy=-id&_limit=5&_offset=5 to sort and paginate todos" open="true">}}
+{{<api-live-request method="GET" path="/api/todos?_sortBy=-id&_limit=5&_offset=5" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos?_sortBy=-id&_limit=5&_offset=5 to sort and paginate todos" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos?_sortBy=-id&_limit=5&_offset=5 HTTP/1.1
+> GET /api/todos?_sortBy=-id&_limit=5&_offset=5 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

@@ -11,17 +11,17 @@ showads: true
 
 HTTP verbs, or methods, tell the server what type of action the client wants to perform against a resource.
 
-The resource is usually represented by the URL path. For example, `/todos` might represent a collection of todos, and `/todos/1` might represent one specific todo item.
+The resource is usually represented by the URL path. For example, `/api/todos` might represent a collection of todos, and `/api/todos/1` might represent one specific todo item.
 
 The verb and the URL work together:
 
 ~~~~~~~~
-GET /todos
-POST /todos
-GET /todos/1
-PUT /todos/1
-PATCH /todos/1
-DELETE /todos/1
+GET /api/todos
+POST /api/todos
+GET /api/todos/1
+PUT /api/todos/1
+PATCH /api/todos/1
+DELETE /api/todos/1
 ~~~~~~~~
 
 Those requests all look similar, but they ask the server to do different things.
@@ -65,9 +65,9 @@ This does not mean the server does absolutely nothing. A server might log the re
 
 An `idempotent` request is one where sending the same request once, twice, or several times has the same intended effect on the resource.
 
-For example, if `PUT /todos/1` replaces todo `1` with the same supplied JSON each time, then the todo ends in the same state each time.
+For example, if `PUT /api/todos/1` replaces todo `1` with the same supplied JSON each time, then the todo ends in the same state each time.
 
-`POST` is usually not idempotent. If you send the same `POST /todos` request twice, the API might create two todo items.
+`POST` is usually not idempotent. If you send the same `POST /api/todos` request twice, the API might create two todo items.
 
 When testing and automating retry behaviour is safer with idempotent methods. Retrying a failed `GET` or `PUT` is usually less risky than retrying a `POST` that might create another item.
 
@@ -153,7 +153,7 @@ Methods become clearer when you send different verbs to similar resources and wa
 
 HTTP verbs describe the intent of a request. The URL identifies the resource, and the verb tells the server whether the client wants to read, create, replace, update, delete, or inspect what is allowed.
 
-The common REST-style pattern is to use noun-like URLs such as `/todos` and `/todos/1`, then use verbs such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` to describe the action.
+The common REST-style pattern is to use noun-like URLs such as `/api/todos` and `/api/todos/1`, then use verbs such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` to describe the action.
 
 Some verbs are intended to be safe, such as `GET`, `HEAD`, `OPTIONS`, `TRACE`, and `QUERY`, because they are used to retrieve information rather than change resources. Some verbs are intended to be idempotent, such as `PUT` and `DELETE`, because sending the same request again should leave the resource in the same final state.
 

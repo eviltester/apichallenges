@@ -12,21 +12,21 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos XML (200)`
+# How to complete the challenge `GET /api/todos XML (200)`
 
 When we issue a GET request we can use the `Accept` header to request a specific format of result from the API. In this case we will ask for XML to successfully GET all the todos in XML format.
 
-## GET /todos XML (200)
+## GET /api/todos XML (200)
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/xml` to receive results in XML format
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/xml` to receive results in XML format
 
 - `GET` request will receive a response with all the todo items
-    - e.g. `GET /todos` to get all the todo items
+    - e.g. `GET /api/todos` to get all the todo items
 - `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `Accept` means that an `Accept` header was added to specify that the todos should be returned in XML format
 - add the `X-CHALLENGER` header to track progress
@@ -34,9 +34,9 @@ When we issue a GET request we can use the `Accept` header to request a specific
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
+- Issue a `GET` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Accept` header specifying XML format by using a value of `application/xml`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `200` when all the details are valid.
@@ -46,13 +46,13 @@ When we issue a GET request we can use the `Accept` header to request a specific
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/xml" details="true" summary="GET /todos with Accept: application/xml to request XML" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/xml" details="true" summary="GET /api/todos with Accept: application/xml to request XML" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -101,7 +101,7 @@ Example Response body:
 
 ## Lessons Learned
 
-- `Accept: application/xml` asks for an `XML` representation of the same `/todos` collection.
+- `Accept: application/xml` asks for an `XML` representation of the same `/api/todos` collection.
 - The resource stays the same even though element names, nesting, and parsing rules change from `JSON` to `XML`.
 - A successful `XML` response should be checked with an `XML` parser, not just by spotting angle brackets.
 

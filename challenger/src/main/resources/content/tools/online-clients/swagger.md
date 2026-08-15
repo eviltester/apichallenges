@@ -14,11 +14,11 @@ showads: true
 
 Load an OpenAPI or Swagger file from a URL, or open a local JSON or YAML file from disk, then explore the original API contract or a tester-friendly converted version in Swagger UI.
 
-<section class="online-swagger-client" data-online-swagger-client data-default-openapi-url="/docs/openapi.json">
+<section class="online-swagger-client" data-online-swagger-client data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>
     <label>
       OpenAPI or Swagger URL
-      <input data-openapi-url type="text" value="/docs/openapi.json" placeholder="https://example.com/openapi.json">
+      <input data-openapi-url type="text" value="/api/docs/openapi.json" placeholder="https://example.com/openapi.json">
     </label>
     <button type="submit">Open URL</button>
   </form>
@@ -105,7 +105,7 @@ You can compare standard and less-validating OpenAPI files for the [API Challeng
     <p class="openapi-ui-launch-links">
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fapi%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
     </p>
   </div>

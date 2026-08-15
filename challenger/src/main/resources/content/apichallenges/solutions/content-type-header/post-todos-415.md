@@ -12,26 +12,26 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
 concept_reference_url_2: /reference/testing-apis
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 415
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 415
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (415)`
+# How to complete the challenge `POST /api/todos (415)`
 
 Most APIs will report an error when the `content-type` is specified as a format that they do not support.
 Some APIs will parse the input using their default processing which can often result in a 500 error.
 The API Challenges checks the `content-type` and if it is unsupported returns a 415 status code,
 to see this we send a POST request to try and create a todo item but with unsupported content type.
 
-## 	POST /todos (415)
+## 	POST /api/todos (415)
 
-> Issue a POST request on the `/todos` end point with an unsupported content type to generate a 415 status code
+> Issue a POST request on the `/api/todos` end point with an unsupported content type to generate a 415 status code
 
 For this challenge we issue a request with a `content-type` which is unsupported.
 
 - `POST` request means we will send information in the body of the message
-    - e.g. `POST /todos` sends to the todos endpoint
+    - e.g. `POST /api/todos` sends to the todos endpoint
 - `unsupported content type` means that we will set `content-type` to something unknown eg. `bob`
 - add the `X-CHALLENGER` header to track progress
 - we know it has been rejected when we receive a `415` response
@@ -40,9 +40,9 @@ For this challenge we issue a request with a `content-type` which is unsupported
 
 ## Basic Instructions
 
-- Issue a `POST` request to end point "/todos"
+- Issue a `POST` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Content-Type` header with an unsupported value e.g `bob`
 - add a valid payload, but it won't match the content type so doesn't matter, but adding a valid payload makes sure that the system is not ignoring the content type specified.
 - The request should have an `X-CHALLENGER` header to track challenge completion
@@ -56,13 +56,13 @@ Extras:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="415" headers="Content-Type: application/gzip||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos with an unsupported Content-Type to trigger 415" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="415" headers="Content-Type: application/gzip||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /api/todos with an unsupported Content-Type to trigger 415" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

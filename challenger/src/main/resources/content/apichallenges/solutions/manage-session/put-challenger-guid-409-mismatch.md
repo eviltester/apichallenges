@@ -12,16 +12,16 @@ concept_reference_label: API Testing Concepts and Coverage
 concept_reference_url: /reference/testing-apis
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: GET your challenger state||PUT it to /challenger/{different-guid} while the payload keeps your real X-CHALLENGER||Verify the response status is 409
+schema_howto_steps: GET your challenger state||PUT it to /api/challenger/{different-guid} while the payload keeps your real X-CHALLENGER||Verify the response status is 409
 showads: true
 ---
 
 
-# How to complete the challenge `PUT /challenger/guid (409) mismatch`
+# How to complete the challenge `PUT /api/challenger/guid (409) mismatch`
 
-Get your current challenger state from `/challenger/{guid}`.
+Get your current challenger state from `/api/challenger/{guid}`.
 
-Then send that JSON payload to `PUT /challenger/{different-guid}` while leaving the payload `xChallenger` value unchanged.
+Then send that JSON payload to `PUT /api/challenger/{different-guid}` while leaving the payload `xChallenger` value unchanged.
 
 The response should be `409 Conflict`:
 
@@ -36,11 +36,11 @@ The response should be `409 Conflict`:
 This is a conflict because the URL identifies one challenger while the payload identifies another.
 ### Try it now
 
-If you want to inspect the challenger payload first, get it with `GET /challenger/{guid}`. [See the solution](/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200).
+If you want to inspect the challenger payload first, get it with `GET /api/challenger/{guid}`. [See the solution](/apichallenges/solutions/manage-session/get-challenger-guid-existing-x-challenger-200).
 
-{{<api-live-request method="GET" path="/challenger/{{currentChallenger}}" expected-status="200" headers="Accept: application/json" details="true" summary="GET /challenger/{guid} to get the challenger payload">}}
+{{<api-live-request method="GET" path="/api/challenger/{{currentChallenger}}" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/challenger/{guid} to get the challenger payload">}}
 
-{{<api-live-request method="PUT" path="/challenger/{{mismatchedChallenger}}" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{{currentChallengerJson}}' details="true" summary="PUT /challenger/{different-guid} to trigger a GUID mismatch" open="true">}}
+{{<api-live-request method="PUT" path="/api/challenger/{{mismatchedChallenger}}" expected-status="409" headers="Content-Type: application/json||Accept: application/json" body='{{currentChallengerJson}}' details="true" summary="PUT /api/challenger/{different-guid} to trigger a GUID mismatch" open="true">}}
 
 ## Lessons Learned
 

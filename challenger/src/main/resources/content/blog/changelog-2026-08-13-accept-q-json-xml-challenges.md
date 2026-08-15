@@ -24,7 +24,7 @@ This means you can now test more realistic `Accept` header behaviour for:
 - structured media type suffixes such as `+json` and `+xml`;
 - unsupported media types returning `406 Not Acceptable`.
 
-There are also new API Challenges so you can practise these concepts against the `/todos` API rather than only reading about them.
+There are also new API Challenges so you can practise these concepts against the `/api/todos` API rather than only reading about them.
 
 ## Why Accept q Values Matter
 

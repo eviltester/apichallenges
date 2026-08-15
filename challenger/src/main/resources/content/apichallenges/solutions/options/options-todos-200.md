@@ -3,7 +3,7 @@ date:  2021-04-21T09:30:00Z
 lastmod: 2026-08-06
 title: API Challenges Solution For - OPTIONS todos 200
 seo_title: Solution: OPTIONS todos 200 Guide | API Challenges
-description: How to solve OPTIONS /todos (200) to identify the allowed verbs for an API End Point.
+description: How to solve OPTIONS /api/todos (200) to identify the allowed verbs for an API End Point.
 seo_description: Use this walkthrough to solve OPTIONS todos 200 with request setup, key headers, and expected status codes so you can complete the challenge confidently.
 next_challenge: /apichallenges/solutions/accept-header/get-todos-200-xml
 concepts_learned: HTTP OPTIONS||200 OK||Allow header||capability discovery
@@ -12,21 +12,21 @@ concept_reference_label: HTTP OPTIONS Verb
 concept_reference_url: /reference/http-verbs/http-options
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create an OPTIONS request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
+schema_howto_steps: Create an OPTIONS request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `OPTIONS /todos (200)`
+# How to complete the challenge `OPTIONS /api/todos (200)`
 
 We can use `OPTIONS` request to identify the allowed verbs for an API End Point. This is useful to compare these with the Swagger/Open API documentation and also to check if the unlisted verbs are actually disallowed by the API.
 
-## OPTIONS /todos (200)
+## OPTIONS /api/todos (200)
 
-> Issue an OPTIONS request on the `/todos` end point. You might want to manually check the 'Allow' header in the response is as expected.
+> Issue an OPTIONS request on the `/api/todos` end point. You might want to manually check the 'Allow' header in the response is as expected.
 
-- `OPTIONS` request will receive a response with no body, just headers if the provided end point exists i.e the `/todos` end point
-    - e.g. `OPTIONS /todos` to show the allowed verbs for the `todos` endpoint
+- `OPTIONS` request will receive a response with no body, just headers if the provided end point exists i.e the `/api/todos` end point
+    - e.g. `OPTIONS /api/todos` to show the allowed verbs for the `todos` endpoint
 - `200` is a success code, in this case it means the end point exists and the `OPTIONS` verb is allowed
 - The body of the message is empty
 - add the `X-CHALLENGER` header to track progress
@@ -35,9 +35,9 @@ We can use `OPTIONS` request to identify the allowed verbs for an API End Point.
 
 ## Basic Instructions
 
-- Issue an `OPTIONS` request to end point "/todos"
+- Issue an `OPTIONS` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `200` when all the details are valid.
 - Check the `allow` header in the response has valid values
@@ -50,13 +50,13 @@ As a set of follow on exercises:
 
 ### Try it now
 
-{{<api-live-request method="OPTIONS" path="/todos" expected-status="200" headers="Accept: */*" details="true" summary="OPTIONS /todos to inspect allowed methods" open="true">}}
+{{<api-live-request method="OPTIONS" path="/api/todos" expected-status="200" headers="Accept: */*" details="true" summary="OPTIONS /api/todos to inspect allowed methods" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> OPTIONS /todos HTTP/1.1
+> OPTIONS /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: insomnia/2020.3.3
 > X-CHALLENGER: x-challenger-guid
@@ -86,11 +86,11 @@ As a set of follow on exercises:
 
 ## Lessons Learned
 
-- `OPTIONS /todos` advertises allowed methods without requiring a todo payload.
+- `OPTIONS /api/todos` advertises allowed methods without requiring a todo payload.
 - The `Allow` header is the primary assertion; the body may be empty.
 - Comparing `Allow` with documentation helps find hidden or missing endpoint capabilities.
 
 ## Suggested Experiments
 
-- Compare `OPTIONS /todos` with `OPTIONS /todos/{id}` and note which methods differ.
+- Compare `OPTIONS /api/todos` with `OPTIONS /api/todos/{id}` and note which methods differ.
 - Try one method listed in `Allow` and one method not listed to see whether runtime behavior matches the header.

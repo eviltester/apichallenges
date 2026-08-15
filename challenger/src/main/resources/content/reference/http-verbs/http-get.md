@@ -23,7 +23,7 @@ showads: true
 
 When you type a URL into a browser, click a link, load an image, or fetch data from JavaScript, there is a good chance a `GET` request is being sent.
 
-In a REST-style API, `GET /todos` would usually return a list of todo items, and `GET /todos/1` would usually return one todo item.
+In a REST-style API, `GET /api/todos` would usually return a list of todo items, and `GET /api/todos/1` would usually return one todo item.
 
 `GET` requests should not be used to create, edit, or delete resources. If a `GET` request changes important server state then it can cause problems with browser prefetching, search engine crawlers, caching, retries, and automated checks.
 
@@ -36,13 +36,13 @@ The `Accept` header is often important with `GET` because the client may ask for
 ## HTTP GET Verb Example
 
 ~~~~~~~~
-curl {{<ORIGIN_URL>}}/heartbeat ^
+curl {{<ORIGIN_URL>}}/api/heartbeat ^
 -H "accept: application/xml" ^
 --proxy 127.0.0.1:8888
 ~~~~~~~~
 
 ~~~~~~~~
-GET {{<ORIGIN_URL>}}/heartbeat HTTP/1.1
+GET {{<ORIGIN_URL>}}/api/heartbeat HTTP/1.1
 User-Agent: curl/7.39.0
 Host: localhost:4567
 Connection: Keep-Alive

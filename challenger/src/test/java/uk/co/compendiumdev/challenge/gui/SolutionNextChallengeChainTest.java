@@ -36,6 +36,10 @@ public class SolutionNextChallengeChainTest {
             Pattern.compile("\\bchallenge-request=(\"true\"|'true')", Pattern.CASE_INSENSITIVE);
     private static final Pattern SUMMARY_PATTERN =
             Pattern.compile("\\bsummary=(\"([^\"]+)\"|'([^']+)')", Pattern.CASE_INSENSITIVE);
+    private static final Pattern API_CHALLENGE_ROUTE_NAME_PATTERN =
+            Pattern.compile(
+                    "(?<!/api)/(todos|todo|challenger|challenges|heartbeat|secret)"
+                            + "(?=$|[^A-Za-z0-9_-])");
     private static final Set<String> ALLOWED_CONCEPT_REFERENCE_URLS =
             Set.of(
                     "/reference/web-basics",
@@ -105,6 +109,13 @@ public class SolutionNextChallengeChainTest {
                     "PATCH",
                     "DELETE",
                     "TRACE",
+                    "/api/todos",
+                    "/api/todo",
+                    "/api/heartbeat",
+                    "/api/secret/token",
+                    "/api/secret/note",
+                    "/api/challenges",
+                    "/api/challenger",
                     "/todos",
                     "/todo",
                     "/heartbeat",
@@ -334,7 +345,7 @@ public class SolutionNextChallengeChainTest {
                                 solutionPage ->
                                         sectionEntries.add(
                                                 "- ["
-                                                        + challenge.name
+                                                        + canonicalRouteLabel(challenge.name)
                                                         + "]("
                                                         + solutionPage
                                                         + ")"));
@@ -347,6 +358,10 @@ public class SolutionNextChallengeChainTest {
         }
 
         return indexEntries;
+    }
+
+    private String canonicalRouteLabel(final String challengeName) {
+        return API_CHALLENGE_ROUTE_NAME_PATTERN.matcher(challengeName).replaceAll("/api/$1");
     }
 
     private List<String> actualSolutionIndexSectionsAndLinks() throws IOException {

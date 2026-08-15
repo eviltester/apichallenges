@@ -12,21 +12,21 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
+schema_howto_steps: Create a POST request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos/id (200)`
+# How to complete the challenge `POST /api/todos/id (200)`
 
 How to use a POST request to successfully update a todo item in the application.
 
-## POST /todos/id (200)
+## POST /api/todos/id (200)
 
 > Issue a POST request to successfully update a todo
 
-- `POST` request will update a todo if the provided `id` exists `/todos/id` end point
-    - e.g. `POST /todos/3` for a todo with `id==3`
+- `POST` request will update a todo if the provided `id` exists `/api/todos/id` end point
+    - e.g. `POST /api/todos/3` for a todo with `id==3`
 - `200` is an success code, in this case it means the todo was updated
 - The body of the message should be a `json` or `xml` partial set of `todo` details,
 -  and the `json` or `xml` should be defined in the `content-type` header
@@ -34,10 +34,10 @@ How to use a POST request to successfully update a todo item in the application.
 
 ## Basic Instructions
 
-- Issue a `POST` request to end point "/todos/id"
+- Issue a `POST` request to end point "/api/todos/id"
     - where `id` is replaced with the id of an existing todo
-        - if you don't know any then a `GET /todos` would show a list of todos, or you could `POST /todos` to create one.
-    - `{{<ORIGIN_URL>}}/todos/id`
+        - if you don't know any then a `GET /api/todos` would show a list of todos, or you could `POST /api/todos` to create one.
+    - `{{<ORIGIN_URL>}}/api/todos/id`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The `content-type` in the message should be `application/json` because we are sending a JSON payload
 - The Payload should have a partial set of todo details. e.g.
@@ -64,21 +64,21 @@ NOTE: if you haven't read the documentation and don't know what format to use th
 
 ### Try it now
 
-If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+If you don't know what todos are available then you can check by `GET /api/todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
-If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+If you have already deleted all todos, create one using `POST /api/todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /api/todos to create a todo item for this challenge">}}
 
-{{<api-live-request method="POST" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos/{id} to update a specific todo" open="true">}}
+{{<api-live-request method="POST" path="/api/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /api/todos/{id} to update a specific todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos/49 HTTP/1.1
+> POST /api/todos/49 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -124,11 +124,11 @@ Returned body:
 
 ## Lessons Learned
 
-- This API supports `POST /todos/{id}` as an update action, even though many APIs reserve `POST` for create.
+- This API supports `POST /api/todos/{id}` as an update action, even though many APIs reserve `POST` for create.
 - Updating by path `id` requires verifying the existing resource changed rather than a new resource appearing.
 - A `200 OK` update response should be followed by a read of the same `id`.
 
 ## Suggested Experiments
 
-- Update only the `title` through `POST /todos/{id}` and then verify the `id` did not change.
-- Compare this `POST` update with `PUT /todos/{id}` to see which fields must be supplied.
+- Update only the `title` through `POST /api/todos/{id}` and then verify the `id` did not change.
+- Compare this `POST` update with `PUT /api/todos/{id}` to see which fields must be supplied.

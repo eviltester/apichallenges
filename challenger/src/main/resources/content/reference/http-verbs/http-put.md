@@ -17,14 +17,14 @@ showads: true
 For example:
 
 ~~~~~~~~
-PUT /todos/1
+PUT /api/todos/1
 ~~~~~~~~
 
 Means "replace todo `1` with the representation in this request body."
 
-This is different from `POST /todos`, where the server usually decides the new id.
+This is different from `POST /api/todos`, where the server usually decides the new id.
 
-With `PUT`, the URL often identifies the exact resource being created or replaced. If the API supports client-chosen ids, then `PUT /todos/123` might create todo `123` when it does not already exist. If the API does not support creation by `PUT`, then the same request might return `404` or `405`.
+With `PUT`, the URL often identifies the exact resource being created or replaced. If the API supports client-chosen ids, then `PUT /api/todos/123` might create todo `123` when it does not already exist. If the API does not support creation by `PUT`, then the same request might return `404` or `405`.
 
 Full information means the request body should contain the representation needed to replace the resource. If a field is missing, the server might remove it, reset it to a default, reject the request, or follow an application-specific rule. The API documentation should make this clear.
 

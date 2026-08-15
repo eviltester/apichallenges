@@ -1,6 +1,6 @@
-# POST /challenger (201)
+# POST /api/challenger (201)
 
-> Issue a POST request on the `/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.
+> Issue a POST request on the `/api/challenger` end point, with no body, to create a new challenger session. Use the generated X-CHALLENGER header in future requests to track challenge completion.
 
 - This challenge is essential if you want to persist your sessions in multi-user mode
 - This challenge is optional if you want to work in single-user mode
@@ -19,7 +19,7 @@ And sometimes we have to use APIs in certain ways, because they tell us to. APIs
 
 And so with the challenges app, if we want to persist our sessions then we have to comply with the process:
 
-- `POST /challenger`
+- `POST /api/challenger`
 - use the `X-CHALLENGER` header in all future requests.
 
 ### What does this do? Why is this a POST?

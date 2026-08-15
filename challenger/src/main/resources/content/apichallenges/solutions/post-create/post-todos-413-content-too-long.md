@@ -12,28 +12,28 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 413
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 413
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (413) content too long`
+# How to complete the challenge `POST /api/todos (413) content too long`
 
-How to complete the challenge `POST /todos (413) content too long` to fail to create a todo item in the application because the request payload sent to the API is too long.
+How to complete the challenge `POST /api/todos (413) content too long` to fail to create a todo item in the application because the request payload sent to the API is too long.
 
-## POST /todos (413) content too long
+## POST /api/todos (413) content too long
 
 > Issue a POST request to create a todo with total payload content greater than 5000 characters
 
-- `POST` request will create a todo if the details are valid when using the `/todos` end point
+- `POST` request will create a todo if the details are valid when using the `/api/todos` end point
 - `413` is a status code meaning "Request Entity Too Large" meaning that we supplied a request that is too long for the server to handle
 - The server is coded to only accept a maximum of 5000 characters
 - To pass this challenge write 5000 characters or more in the descripton field
 
 ## Basic Instructions
 
-- Issue a `POST` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `POST` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The `content-type` in the message should be `application/json` because we are sending a JSON payload
 - The Payload should be more than 5000 characters (the example below needs to be amended)
@@ -65,13 +65,13 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="413" headers="Content-Type: application/json||Accept: application/json" body='{"title":"too much content","doneStatus":true,"description":"{{description5000}}"}' details="true" summary="POST /todos with an oversized body to trigger 413" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="413" headers="Content-Type: application/json||Accept: application/json" body='{"title":"too much content","doneStatus":true,"description":"{{description5000}}"}' details="true" summary="POST /api/todos with an oversized body to trigger 413" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -117,4 +117,4 @@ Returned body:
 ## Suggested Experiments
 
 - Send just under and just over the documented total payload limit to locate the boundary.
-- After the `413` response, call `GET /todos` and confirm no oversized todo was created.
+- After the `413` response, call `GET /api/todos` and confirm no oversized todo was created.

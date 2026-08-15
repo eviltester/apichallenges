@@ -3,7 +3,7 @@ date:  2021-07-25T09:00:00Z
 lastmod: 2026-08-06
 title: API Challenges Solution For - POST amend secret note 200
 seo_title: Solution: POST amend secret note 200 | API Challenges
-description: How to solve POST /secret/note (200) - amend the secret note with a POST request and receive 200 status code
+description: How to solve POST /api/secret/note (200) - amend the secret note with a POST request and receive 200 status code
 seo_description: Use this walkthrough to solve POST amend secret note 200 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/post-secret-note-401
 concepts_learned: HTTP POST||200 OK||authorization||X-AUTH-TOKEN
@@ -12,7 +12,7 @@ concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a POST request to /secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
+schema_howto_steps: Create a POST request to /api/secret/note||Add the X-AUTH-TOKEN header from your authenticated challenger session||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 200
 showads: true
 ---
 
@@ -24,7 +24,7 @@ In the API Challenges we do this by POST request to the user's secrete note endp
 
 ## 	POST Amend Secret Note Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /api/secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -32,25 +32,25 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## POST /secret/note (200)
+## POST /api/secret/note (200)
 
-> Issue a POST request on the `/secret/note` end point with a note payload e.g. {"note":"my note"} and receive 200 when valid X-AUTH-TOKEN used. Note is maximum length 100 chars and will be truncated when stored.
+> Issue a POST request on the `/api/secret/note` end point with a note payload e.g. {"note":"my note"} and receive 200 when valid X-AUTH-TOKEN used. Note is maximum length 100 chars and will be truncated when stored.
 
 - `POST` request means use the HTTP Verb POST
-  - e.g. `POST /secret/note` sends to the secret note endpoint
+  - e.g. `POST /api/secret/note` sends to the secret note endpoint
 - `with a note payload` include a `JSON` formatted object as the payload    
-- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `POST /secret/token (201)` response
+- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `POST /api/secret/token (201)` response
 - add the `X-CHALLENGER` header to track progress and authenticate the request
 - Receive a 200 response because both `X-CHALLENGER` and `X-AUTH-TOKEN` are for the same user and the payload was well formatted.
 
 
 ## Basic Instructions
 
-- Create a new request for the `/secret/note` end point
+- Create a new request for the `/api/secret/note` end point
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/secret/note`
+        - `{{<ORIGIN_URL>}}/api/secret/note`
 - The verb should be a `POST`
-- Ensure there is a custom header with the name `X-AUTH-TOKEN` and the value is the same as received in the `/secret/token` response
+- Ensure there is a custom header with the name `X-AUTH-TOKEN` and the value is the same as received in the `/api/secret/token` response
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - Add a JSON Payload of the format `{"note":"my note"}`
 - Include header for `Content-type` value `application/json`  
@@ -61,17 +61,17 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-If you do not already have an auth token, create one with `POST /secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
+If you do not already have an auth token, create one with `POST /api/secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
 
-{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /secret/token to create an auth token">}}
+{{<api-live-request method="POST" path="/api/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /api/secret/token to create an auth token">}}
 
-{{<api-live-request method="POST" path="/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}' details="true" summary="POST /secret/note with X-AUTH-TOKEN to update the secret note" open="true">}}
+{{<api-live-request method="POST" path="/api/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}' details="true" summary="POST /api/secret/note with X-AUTH-TOKEN to update the secret note" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /secret/note HTTP/1.1
+> POST /api/secret/note HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: insomnia/2021.2.2
 > X-CHALLENGER: x-challenger-guid
@@ -120,11 +120,11 @@ Example body of the response:
 
 ## Lessons Learned
 
-- `POST /secret/note` changes protected state, so authorization controls write access as well as reads.
+- `POST /api/secret/note` changes protected state, so authorization controls write access as well as reads.
 - A valid `X-AUTH-TOKEN` must be combined with a valid `JSON` note payload.
-- Successful protected writes should be followed by a `GET /secret/note` verification step.
+- Successful protected writes should be followed by a `GET /api/secret/note` verification step.
 
 ## Suggested Experiments
 
-- Post a short note, then immediately read it back with `GET /secret/note` to confirm persistence.
+- Post a short note, then immediately read it back with `GET /api/secret/note` to confirm persistence.
 - Send a note longer than the documented limit and inspect whether it is rejected or truncated.

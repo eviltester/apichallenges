@@ -23,7 +23,7 @@ It tells the server "process this request body using whatever behaviour this end
 In REST-style APIs, `POST` is commonly used to create a new resource inside a collection:
 
 ~~~~~~~~
-POST /todos
+POST /api/todos
 ~~~~~~~~
 
 The client sends the representation in the request body. The server validates it, creates the new resource, assigns an id, and often returns `201 Created`.
@@ -31,7 +31,7 @@ The client sends the representation in the request body. The server validates it
 When the server creates a new resource, a `Location` header is often used to tell the client the URL of the new resource:
 
 ~~~~~~~~
-Location: /todos/42
+Location: /api/todos/42
 ~~~~~~~~
 
 `POST` can also be used for operations that do not fit cleanly into create, read, update, or delete. For example, a search endpoint, an upload, or a command-style operation might use `POST`.

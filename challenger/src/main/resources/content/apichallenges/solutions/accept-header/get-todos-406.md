@@ -12,32 +12,32 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 406
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 406
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (406)`
+# How to complete the challenge `GET /api/todos (406)`
 
 Some APIs will report an error when asked for a return format that they do not support. Other APIs will respond with a default. The API Challenges will respond with a `406` status code. We can test for this by sending a GET request for all todos but pass in an 'accept' format that the system does not support.
 
-## 	GET /todos (406)
+## 	GET /api/todos (406)
 
 When we issue a request with an accept header, we are asking for a specific content format in the response. But... if we ask for a format that is not supported then the system may respond with a 406 'NOT ACCEPTABLE' status code.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/gzip` to receive a response with a `406` 'NOT ACCEPTABLE' status code.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/gzip` to receive a response with a `406` 'NOT ACCEPTABLE' status code.
 
 - `GET` request asks for a response with all the todo items
-    - e.g. `GET /todos` to get all the todo items
+    - e.g. `GET /api/todos` to get all the todo items
 - `406` is a success code, in this case it means the accept header is not supported by the system
 - add the `X-CHALLENGER` header to track progress
 
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
+- Issue a `GET` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Accept` header with the value `application/gzip`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `406` when all the details are valid.
@@ -49,13 +49,13 @@ Some systems may simply ignore the 'accept' header and return the response in th
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/gzip" details="true" summary="GET /todos with an unsupported Accept header to trigger 406" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="406" headers="Accept: application/gzip" details="true" summary="GET /api/todos with an unsupported Accept header to trigger 406" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: insomnia/2021.2.2
 > Accept: application/gzip

@@ -12,21 +12,21 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
 concept_reference_url_2: /reference/testing-apis
-schema_howto_steps: Create a GET request to /todos/export?format=tsv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/tab-separated-values||Check the Content-Disposition header is attachment with filename todos.tsv
+schema_howto_steps: Create a GET request to /api/todos/export?format=tsv||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200||Check the Content-Type starts with text/tab-separated-values||Check the Content-Disposition header is attachment with filename todos.tsv
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos/export (200) tab-delimited download`
+# How to complete the challenge `GET /api/todos/export (200) tab-delimited download`
 
 This challenge exports todos as tab-delimited data. Tab-delimited content is often called TSV, which means tab-separated values. The endpoint accepts both `format=tsv` and `format=tab-delimited`.
 
-## GET /todos/export tab-delimited download
+## GET /api/todos/export tab-delimited download
 
-> Issue a GET request on the `/todos/export?format=tsv` end point and receive a tab-delimited response with a `Content-Disposition` header for `todos.tsv`.
+> Issue a GET request on the `/api/todos/export?format=tsv` end point and receive a tab-delimited response with a `Content-Disposition` header for `todos.tsv`.
 
 - `GET` asks the API to return the todos.
-- `/todos/export` uses a `format` query parameter to choose the representation.
+- `/api/todos/export` uses a `format` query parameter to choose the representation.
 - `format=tsv` requests tab-separated values.
 - `format=tab-delimited` is an alias for the same export.
 - `Content-Disposition: attachment` tells the client this can be treated as a file download.
@@ -35,9 +35,9 @@ This challenge exports todos as tab-delimited data. Tab-delimited content is oft
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos/export?format=tsv"
+- Issue a `GET` request to end point "/api/todos/export?format=tsv"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos/export?format=tsv`
+        - `{{<ORIGIN_URL>}}/api/todos/export?format=tsv`
 - The request should have an `X-CHALLENGER` header to track challenge completion.
 - The response status code should be `200`.
 - Check the `Content-Type` response header starts with `text/tab-separated-values`.
@@ -48,12 +48,12 @@ The `format` query parameter controls the export type for this endpoint. For thi
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/export?format=tsv" expected-status="200" headers="Accept: text/tab-separated-values" details="true" summary="GET /todos/export?format=tsv to download todos as TSV" open="true">}}
+{{<api-live-request method="GET" path="/api/todos/export?format=tsv" expected-status="200" headers="Accept: text/tab-separated-values" details="true" summary="GET /api/todos/export?format=tsv to download todos as TSV" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos/export?format=tsv HTTP/1.1
+> GET /api/todos/export?format=tsv HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -81,11 +81,11 @@ id	title	doneStatus	description
 
 ## Extra Experiment
 
-Open [todos.tsv](/todos/export?format=tsv) in your browser to request the tab-delimited export directly.
+Open [todos.tsv](/api/todos/export?format=tsv) in your browser to request the tab-delimited export directly.
 
-Other `format` parameter values to try include [json](/todos/export?format=json), [xml](/todos/export?format=xml), [csv](/todos/export?format=csv), [text](/todos/export?format=text), [html](/todos/export?format=html), [ndjson](/todos/export?format=ndjson), [jsonl](/todos/export?format=jsonl), [json-seq](/todos/export?format=json-seq), and [tab-delimited](/todos/export?format=tab-delimited). The text aliases `txt` and `plain`, JSON sequence alias `jsonseq`, and tab aliases `tab`, `tabs`, and `tab-separated` are also supported.
+Other `format` parameter values to try include [json](/api/todos/export?format=json), [xml](/api/todos/export?format=xml), [csv](/api/todos/export?format=csv), [text](/api/todos/export?format=text), [html](/api/todos/export?format=html), [ndjson](/api/todos/export?format=ndjson), [jsonl](/api/todos/export?format=jsonl), [json-seq](/api/todos/export?format=json-seq), and [tab-delimited](/api/todos/export?format=tab-delimited). The text aliases `txt` and `plain`, JSON sequence alias `jsonseq`, and tab aliases `tab`, `tabs`, and `tab-separated` are also supported.
 
-Repeat the request with `/todos/export?format=tab-delimited`. It should still return `Content-Type: text/tab-separated-values` and `Content-Disposition: attachment; filename="todos.tsv"`.
+Repeat the request with `/api/todos/export?format=tab-delimited`. It should still return `Content-Type: text/tab-separated-values` and `Content-Disposition: attachment; filename="todos.tsv"`.
 
 ## Lessons Learned
 

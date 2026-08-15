@@ -12,23 +12,23 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos No Accept (200)`
+# How to complete the challenge `GET /api/todos No Accept (200)`
 
 Accept headers are optional. Most API clients will add one by default. But we do not need to pass in an `Accept` header to successfully GET all the todos in JSON format. This challenge allows us to test this, to complete it we must ensure that we do not pass in an accept header.
 
-## GET /todos No Accept (200)
+## GET /api/todos No Accept (200)
 
 When we issue a request with no accept header, we should receive the default from the server. But... sending a request without an Accept header might be harder depending on the tool we use.
 
-> Issue a GET request on the `/todos` end point with no `Accept` header to receive results in JSON format.
+> Issue a GET request on the `/api/todos` end point with no `Accept` header to receive results in JSON format.
 
 - `GET` request will receive a response with all the todo items
-    - e.g. `GET /todos` to get all the todo items
+    - e.g. `GET /api/todos` to get all the todo items
 - `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `No Accept` means that the request should not include an `Accept` header
 - add the `X-CHALLENGER` header to track progress
@@ -36,9 +36,9 @@ When we issue a request with no accept header, we should receive the default fro
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
+- Issue a `GET` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should not have an `Accept` header at all
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `200` when all the details are valid.
@@ -58,7 +58,7 @@ In Insomnia, right click on the [Send] button and Generate Client Code for cURL.
 
 ~~~~~~~~
 curl --request GET \
-  --url {{<ORIGIN_URL>}}/todos \
+  --url {{<ORIGIN_URL>}}/api/todos \
   --header 'X-CHALLENGER: x-challenger-guid'
   --header 'Accept:'
   -v
@@ -74,13 +74,13 @@ Hints:
 
 The HTTP client below will send the request, but the browser will add an `Accept` header. You cannot complete this challenge from the client below; try it and see for yourself.
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="" details="true" challenge-request="true" summary="GET /todos without Accept to use the default response format">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="" details="true" challenge-request="true" summary="GET /api/todos without Accept to use the default response format">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: curl/7.64.1
 > X-CHALLENGER: x-challenger-guid

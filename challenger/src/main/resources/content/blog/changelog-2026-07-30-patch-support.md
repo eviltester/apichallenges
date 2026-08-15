@@ -14,7 +14,7 @@ showads: true
 
 # PATCH Support for API Challenges and Simple API
 
-The 2026-07-30 update added `PATCH` support for API Challenges todo instance routes and Simple API item instance routes. It also added challenge coverage and solution walkthroughs for `PATCH /todos/{id}`.
+The 2026-07-30 update added `PATCH` support for API Challenges todo instance routes and Simple API item instance routes. It also added challenge coverage and solution walkthroughs for `PATCH /api/todos/{id}`.
 
 This update added an important missing piece to the REST practice path. Learners could already practise create, read, replace, and delete behaviour. Adding `PATCH` lets them practise partial updates, media type differences, and more precise state-change assertions.
 
@@ -41,7 +41,7 @@ This gives learners a practical reason to care about headers. A request body alo
 
 ## What the New PATCH Challenges Add
 
-The new `PATCH /todos/{id} (200)` challenges give learners a guided way to practise three styles of partial update. That is better than only adding the endpoint because it also teaches expected behaviour and common request setup.
+The new `PATCH /api/todos/{id} (200)` challenges give learners a guided way to practise three styles of partial update. That is better than only adding the endpoint because it also teaches expected behaviour and common request setup.
 
 The solution walkthroughs help learners compare:
 

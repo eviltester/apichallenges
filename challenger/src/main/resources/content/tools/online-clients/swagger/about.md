@@ -29,7 +29,7 @@ It can show endpoints, supported HTTP methods, request bodies, response formats,
 Examples on this site:
 
 - [Simple API Swagger UI](/simpleapi/docs/swagger-ui)
-- [API Challenges Swagger UI](/docs/swagger-ui)
+- [API Challenges Swagger UI](/api/docs/swagger-ui)
 - [API Simulator Swagger UI](/sim/docs/swagger-ui)
 
 On our Test Pages site we also have:
@@ -49,7 +49,7 @@ You can import an OpenAPI file from a URL or from a downloaded JSON or YAML file
 Try these URLs in the Swagger Editor:
 
 - `https://apichallenges.eviltester.com/simpleapi/docs/openapi.json`
-- `https://apichallenges.eviltester.com/docs/openapi.json`
+- `https://apichallenges.eviltester.com/api/docs/openapi.json`
 - `https://api.practicesoftwaretesting.com/docs/api-docs.json`
 
 ## Running Swagger Editor Locally
@@ -119,7 +119,7 @@ Compare Swagger UI with [OpenAPI Explorer](/tools/online-clients/openapi-explore
     <p class="openapi-ui-launch-links">
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fapi%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
     </p>
   </div>

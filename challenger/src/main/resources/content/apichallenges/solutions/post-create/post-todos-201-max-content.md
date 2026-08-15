@@ -12,20 +12,20 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (201) max out content`
+# How to complete the challenge `POST /api/todos (201) max out content`
 
-How to complete the challenge `POST /todos (201) max out content` to successfully create a todo item in the application where the title and the description are the maximum length.
+How to complete the challenge `POST /api/todos (201) max out content` to successfully create a todo item in the application where the title and the description are the maximum length.
 
-## POST /todos (201) max out content
+## POST /api/todos (201) max out content
 
 > Issue a POST request to create a todo with maximum length allowed `title` and `description` fields
 
-- `POST` request will create a todo if the details are valid when using the `/todos` end point
+- `POST` request will create a todo if the details are valid when using the `/api/todos` end point
 - `201` is a status code meaning that we supplied valid details and a new item was created
 - In this case we are asked to make `title` field and `description` field contents the maximum length
 - The API Documentation for the todos endpoint says that a title `Maximum length allowed is 50`
@@ -33,8 +33,8 @@ How to complete the challenge `POST /todos (201) max out content` to successfull
 
 ## Basic Instructions
 
-- Issue a `POST` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `POST` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The `content-type` in the message should be `application/json` because we are sending a JSON payload
 - The Payload should have a `title` containing 50 characters and a `description` of 200 characters length.
@@ -64,13 +64,13 @@ Hints:
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"{{title50}}","doneStatus":true,"description":"{{description200}}"}' details="true" summary="POST /todos with maximum valid field lengths to create a todo" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"{{title50}}","doneStatus":true,"description":"{{description200}}"}' details="true" summary="POST /api/todos with maximum valid field lengths to create a todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -92,7 +92,7 @@ Hints:
 < Connection: close
 < Date: Thu, 27 Aug 2020 14:23:12 GMT
 < Content-Type: application/json
-< Location:	/todos/11
+< Location:	/api/todos/11
 < X-Challenger: x-challenger-guid
 < Server: Jetty(9.4.z-SNAPSHOT)
 < Via: 1.1 vegur

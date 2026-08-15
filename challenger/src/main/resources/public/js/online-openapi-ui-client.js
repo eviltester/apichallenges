@@ -13,7 +13,7 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
   'use strict';
 
-  const DEFAULT_OPENAPI_URL = '/docs/openapi.json';
+  const DEFAULT_OPENAPI_URL = '/api/docs/openapi.json';
   const CONVERTED_SESSION_KEY_PREFIX = 'apiChallengesConvertedOpenApiSpec:';
   const CLIENT_LABELS = {
     'openapi-explorer': 'OpenAPI Explorer',

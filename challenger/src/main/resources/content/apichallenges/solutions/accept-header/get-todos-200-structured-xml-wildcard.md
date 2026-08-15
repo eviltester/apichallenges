@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/*+xml||Send the request and verify status 200 and a structured +xml Content-Type
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/*+xml||Send the request and verify status 200 and a structured +xml Content-Type
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (200) structured XML wildcard`
+# How to complete the challenge `GET /api/todos (200) structured XML wildcard`
 
 This challenge uses a structured suffix wildcard: any supported `application` media type ending in `+xml`.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/*+xml` to receive results in a supported structured XML format.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/*+xml` to receive results in a supported structured XML format.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `application/*+xml`
 - Check that the response status is `200`
@@ -32,12 +32,12 @@ This challenge uses a structured suffix wildcard: any supported `application` me
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/*+xml" details="true" summary="GET /todos with a structured XML wildcard" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/*+xml" details="true" summary="GET /api/todos with a structured XML wildcard" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: application/*+xml

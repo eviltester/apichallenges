@@ -12,21 +12,21 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send the request and verify the response status is 200
 showads: true
 ---
 
 
 # GET all the todos in default format
 
-How to complete the challenge `GET /todos ANY (200)` to successfully GET all the todos in default format.
+How to complete the challenge `GET /api/todos ANY (200)` to successfully GET all the todos in default format.
 
-## GET /todos ANY (200)
+## GET /api/todos ANY (200)
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `*/*` to receive results in Default format
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `*/*` to receive results in Default format
 
 - `GET` request will receive a response with all the todo items
-    - e.g. `GET /todos` to get all the todo items
+    - e.g. `GET /api/todos` to get all the todo items
 - `200` is a success code, in this case it means the end point exists and the todo items were returned
 - `Accept` means that an `Accept` header was added to specify that the todos should be returned in **ANY** format i.e. the default from the server
 - add the `X-CHALLENGER` header to track progress
@@ -34,9 +34,9 @@ How to complete the challenge `GET /todos ANY (200)` to successfully GET all the
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
+- Issue a `GET` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Accept` header specifying ANY format by using a value of `*/*`, our application defaults to JSON
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The response status code should be `200` when all the details are valid.
@@ -46,13 +46,13 @@ How to complete the challenge `GET /todos ANY (200)` to successfully GET all the
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: */*" details="true" summary="GET /todos with Accept: */* to request any supported format" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: */*" details="true" summary="GET /api/todos with Accept: */* to request any supported format" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: insomnia/2021.2.2
 > X-CHALLENGER: x-challenger-guid

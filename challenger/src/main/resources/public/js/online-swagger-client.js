@@ -100,7 +100,7 @@
     const target = client.querySelector('[data-openapi-render-target]');
     const copyButton = client.querySelector('[data-openapi-copy-converted]');
     const downloadButton = client.querySelector('[data-openapi-download-converted]');
-    const defaultOpenApiUrl = client.dataset.defaultOpenapiUrl || '/docs/openapi.json';
+    const defaultOpenApiUrl = client.dataset.defaultOpenapiUrl || '/api/docs/openapi.json';
     const targetSelector = `#${target.id}`;
     let swaggerUi = null;
     let originalSpec = null;

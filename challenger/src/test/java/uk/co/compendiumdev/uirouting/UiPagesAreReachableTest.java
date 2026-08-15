@@ -30,6 +30,8 @@ public class UiPagesAreReachableTest {
     */
 
     private static HttpMessageSender http;
+    private static final String OPENAPI_FILE_PAGE_LINK_TEXT =
+            "Find OpenAPI file and OpenAPI Powered Client UIs like Swagger and Scalar here";
 
     @BeforeAll
     static void createHttp() {
@@ -211,7 +213,9 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200, "Multi-User Instructions | API Challenges Guide", "/gui/multiuser"));
-        args.add(Arguments.of(200, "API Challenges API Documentation | API Challenges", "/docs"));
+        args.add(
+                Arguments.of(
+                        200, "API Challenges API Documentation | API Challenges", "/api/docs"));
         args.add(
                 Arguments.of(
                         200,
@@ -417,11 +421,11 @@ public class UiPagesAreReachableTest {
                 "Zudoku In This Page",
                 "src=\"/js/online-openapi-ui-client.js");
 
-        response = http.send("/zudoku-embed?apiUrl=%2Fdocs%2Fopenapi.json", "get");
+        response = http.send("/zudoku-embed?apiUrl=%2Fapi%2Fdocs%2Fopenapi.json", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/html"));
         Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
-        Assertions.assertTrue(response.body.contains("data-api-url=\"/docs/openapi.json\""));
+        Assertions.assertTrue(response.body.contains("data-api-url=\"/api/docs/openapi.json\""));
         Assertions.assertTrue(response.body.contains("https://cdn.zudoku.dev/0.83.0/main.js"));
         Assertions.assertTrue(response.body.contains("showInfoPage: false"));
         Assertions.assertTrue(response.body.contains("basename: '/zudoku-embed'"));
@@ -439,11 +443,11 @@ public class UiPagesAreReachableTest {
                         || response.body.contains(
                                 "font-feature-settings: \"liga\" 0, \"calt\" 0 !important"));
 
-        response = http.send("/zudoku-embed/~endpoints?apiUrl=%2Fdocs%2Fopenapi.json", "get");
+        response = http.send("/zudoku-embed/~endpoints?apiUrl=%2Fapi%2Fdocs%2Fopenapi.json", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("text/html"));
         Assertions.assertEquals("noindex", response.getHeader("X-Robots-Tag"));
-        Assertions.assertTrue(response.body.contains("data-api-url=\"/docs/openapi.json\""));
+        Assertions.assertTrue(response.body.contains("data-api-url=\"/api/docs/openapi.json\""));
 
         assertOnlineOpenApiUiClientRoute(
                 "/tools/online-clients/redoc",
@@ -733,6 +737,47 @@ public class UiPagesAreReachableTest {
         return false;
     }
 
+    private void assertGeneratedDocsPageLinksToOpenApiFilePage(
+            final HttpResponseDetails response,
+            final String docsPath,
+            final String openApiFilePagePath) {
+
+        final String docsContent = mainContent(response.body);
+        Assertions.assertTrue(docsContent.contains(OPENAPI_FILE_PAGE_LINK_TEXT));
+        Assertions.assertTrue(docsContent.contains("href='" + openApiFilePagePath + "'"));
+        Assertions.assertFalse(docsContent.contains("Open Swagger UI"));
+        Assertions.assertFalse(docsContent.contains("Open Scalar UI"));
+        Assertions.assertFalse(docsContent.contains("href='" + docsPath + "/swagger-ui'"));
+        Assertions.assertFalse(docsContent.contains("href=\"" + docsPath + "/swagger-ui\""));
+        Assertions.assertFalse(docsContent.contains("href='" + docsPath + "/scalar-ui'"));
+        Assertions.assertFalse(docsContent.contains("href=\"" + docsPath + "/scalar-ui\""));
+
+        for (final String version : List.of("3.0", "3.1", "3.2")) {
+            final String openApiJsonPath = docsPath + "/openapi-" + version + ".json";
+            Assertions.assertFalse(docsContent.contains("<li>OpenAPI v " + version + " JSON"));
+            Assertions.assertFalse(docsContent.contains("href='" + openApiJsonPath + "'"));
+            Assertions.assertFalse(docsContent.contains("href=\"" + openApiJsonPath + "\""));
+            Assertions.assertFalse(docsContent.contains("href='" + openApiJsonPath + "?download'"));
+            Assertions.assertFalse(
+                    docsContent.contains("href=\"" + openApiJsonPath + "?download\""));
+        }
+    }
+
+    private String mainContent(final String body) {
+        final int mainStart = body.indexOf("<main");
+        if (mainStart < 0) {
+            return body;
+        }
+
+        final int mainContentStart = body.indexOf(">", mainStart);
+        final int mainContentEnd = body.indexOf("</main>", mainContentStart);
+        if (mainContentStart < 0 || mainContentEnd < 0) {
+            return body;
+        }
+
+        return body.substring(mainContentStart + 1, mainContentEnd);
+    }
+
     private void assertOpenApiFilePageLinks(
             final String body, final String docsPrefix, final String oldSwaggerPath) {
         assertOpenApiFilePageLinks(body, docsPrefix, oldSwaggerPath, true);
@@ -810,7 +855,8 @@ public class UiPagesAreReachableTest {
                 body, clientPath, "/simpleapi/docs/openapi-3.2.json", "Simple API");
         assertOpenApiUiToolLaunchLink(
                 body, clientPath, "/sim/docs/openapi-3.2.json", "API Simulator");
-        assertOpenApiUiToolLaunchLink(body, clientPath, "/docs/openapi-3.2.json", "API Challenges");
+        assertOpenApiUiToolLaunchLink(
+                body, clientPath, "/api/docs/openapi-3.2.json", "API Challenges");
         assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi-3.2.json", "Buggy API");
     }
 
@@ -824,7 +870,8 @@ public class UiPagesAreReachableTest {
                 body, clientPath, "/simpleapi/docs/openapi-3.2.json", "Simple API");
         assertOpenApiUiToolLaunchLink(
                 body, clientPath, "/sim/docs/openapi-3.2.json", "API Simulator");
-        assertOpenApiUiToolLaunchLink(body, clientPath, "/docs/openapi-3.2.json", "API Challenges");
+        assertOpenApiUiToolLaunchLink(
+                body, clientPath, "/api/docs/openapi-3.2.json", "API Challenges");
         assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi-3.2.json", "Buggy API");
     }
 
@@ -932,12 +979,11 @@ public class UiPagesAreReachableTest {
         // 404 page with the original url appended to allow javascript to render
         // as if it was a 404 page
 
-        final HttpResponseDetails response = http.send("/docs/swagger", "get");
+        final HttpResponseDetails response = http.send("/api/docs/swagger", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals(
-                "attachment; filename=\"API-Challenges-Simple-Todo-List-swagger.json\"",
-                response.getHeader("Content-Disposition"));
+                "attachment; filename=\"swagger.json\"", response.getHeader("Content-Disposition"));
         assertOpenApiVersion(response.body, "3.1.0");
         Assertions.assertTrue(
                 response.body.contains("\"title\" : \"API Challenges Simple Todo List\""));
@@ -946,7 +992,7 @@ public class UiPagesAreReachableTest {
     @Test
     void canFetchDefaultOpenApiJsonForSwaggerUi() {
 
-        final HttpResponseDetails response = http.send("/docs/openapi.json", "get");
+        final HttpResponseDetails response = http.send("/api/docs/openapi.json", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertNotNull(response.getHeader("Content-Type"));
@@ -967,7 +1013,7 @@ public class UiPagesAreReachableTest {
         proxyHttp.setHeader("X-Forwarded-Proto", "https");
         proxyHttp.setHeader("X-Forwarded-Host", "apichallenges.com");
 
-        final HttpResponseDetails response = proxyHttp.send("/docs/openapi.json", "get");
+        final HttpResponseDetails response = proxyHttp.send("/api/docs/openapi.json", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertNotNull(response.getHeader("Content-Type"));
@@ -980,7 +1026,7 @@ public class UiPagesAreReachableTest {
 
     static Stream<Arguments> versionedOpenApiJsonRoutes() {
         List<Arguments> args = new ArrayList<>();
-        for (String prefix : List.of("", "/simpleapi", "/sim", "/mirror", "/fromhell")) {
+        for (String prefix : List.of("/api", "/simpleapi", "/sim", "/mirror", "/fromhell")) {
             args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
@@ -1004,7 +1050,7 @@ public class UiPagesAreReachableTest {
 
     static Stream<Arguments> thingifierBackedVersionedOpenApiJsonRoutes() {
         List<Arguments> args = new ArrayList<>();
-        for (String prefix : List.of("", "/simpleapi", "/sim", "/mirror")) {
+        for (String prefix : List.of("/api", "/simpleapi", "/sim", "/mirror")) {
             args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
@@ -1060,7 +1106,7 @@ public class UiPagesAreReachableTest {
                 http.send("/apichallenges/openapi", "get");
 
         Assertions.assertEquals(200, apiChallengesOpenApiPage.statusCode);
-        assertOpenApiFilePageLinks(apiChallengesOpenApiPage.body, "", "/docs/swagger");
+        assertOpenApiFilePageLinks(apiChallengesOpenApiPage.body, "/api", "/docs/swagger");
 
         final HttpResponseDetails simpleApiOpenApiPage =
                 http.send("/practice-modes/simpleapi-openapi", "get");
@@ -1085,7 +1131,7 @@ public class UiPagesAreReachableTest {
 
     static Stream<Arguments> expandableThingifierBackedVersionedOpenApiJsonRoutes() {
         List<Arguments> args = new ArrayList<>();
-        for (String prefix : List.of("", "/simpleapi", "/sim")) {
+        for (String prefix : List.of("/api", "/simpleapi", "/sim")) {
             args.add(Arguments.of(prefix + "/docs/openapi.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.1.json", "3.1.0"));
             args.add(Arguments.of(prefix + "/docs/openapi-3.2.json", "3.2.0"));
@@ -1113,13 +1159,13 @@ public class UiPagesAreReachableTest {
     @Test
     void generatedOpenApiDocumentsQueryAccordingToSpecVersion() {
 
-        HttpResponseDetails response = http.send("/docs/openapi-3.2.json", "get");
+        HttpResponseDetails response = http.send("/api/docs/openapi-3.2.json", "get");
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertTrue(response.body.contains("\"/todos\""));
+        Assertions.assertTrue(response.body.contains("\"/api/todos\""));
         Assertions.assertTrue(response.body.contains("\"query\""));
         Assertions.assertFalse(response.body.contains("\"x-query-operation\""));
 
-        response = http.send("/docs/openapi-3.1.json", "get");
+        response = http.send("/api/docs/openapi-3.1.json", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("\"x-query-operation\""));
 
@@ -2150,7 +2196,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("javascript"));
         assertCacheControl(response, "public, max-age=31536000, immutable");
-        Assertions.assertTrue(response.body.contains("'/docs'"));
+        Assertions.assertTrue(response.body.contains("'/api/docs'"));
+        Assertions.assertFalse(response.body.contains("'/docs'"));
         Assertions.assertTrue(response.body.contains("'/simpleapi/docs'"));
         Assertions.assertTrue(response.body.contains("'/shop/docs'"));
         Assertions.assertFalse(response.body.contains("'/sim/docs'"));
@@ -2200,14 +2247,14 @@ public class UiPagesAreReachableTest {
                 response,
                 "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
 
-        response = http.send("/docs/swagger-ui", "get");
+        response = http.send("/api/docs/swagger-ui", "get");
         Assertions.assertEquals(200, response.statusCode);
         assertCacheControl(
                 response,
                 "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800");
         Assertions.assertEquals("noindex, follow", response.getHeader("X-Robots-Tag"));
 
-        response = http.send("/docs/openapi.json", "get");
+        response = http.send("/api/docs/openapi.json", "get");
         Assertions.assertEquals(200, response.statusCode);
         assertCacheControl(
                 response,
@@ -2363,8 +2410,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, docsResponse.statusCode);
         assertBodyContainsVersionedScript(docsResponse, "/js/api-live-request.js");
         assertBodyContainsVersionedScript(docsResponse, "/js/api-docs-live-request.js");
-        Assertions.assertTrue(docsResponse.body.contains("Open Swagger UI"));
-        Assertions.assertTrue(docsResponse.body.contains("href='/api/docs/swagger-ui'"));
+        assertGeneratedDocsPageLinksToOpenApiFilePage(
+                docsResponse, "/api/docs", "/apichallenges/openapi");
         Assertions.assertTrue(
                 docsResponse.body.contains(
                         "<title>API Challenges API Documentation | API Challenges</title>"));
@@ -2387,6 +2434,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, simpleApiDocsResponse.statusCode);
         assertBodyContainsVersionedScript(simpleApiDocsResponse, "/js/api-live-request.js");
         assertBodyContainsVersionedScript(simpleApiDocsResponse, "/js/api-docs-live-request.js");
+        assertGeneratedDocsPageLinksToOpenApiFilePage(
+                simpleApiDocsResponse, "/simpleapi/docs", "/practice-modes/simpleapi-openapi");
         Assertions.assertTrue(
                 simpleApiDocsResponse.body.contains(
                         "<title>Simple API Documentation | API Challenges</title>"));
@@ -2400,6 +2449,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, shopDocsResponse.statusCode);
         assertBodyContainsVersionedScript(shopDocsResponse, "/js/api-live-request.js");
         assertBodyContainsVersionedScript(shopDocsResponse, "/js/api-docs-live-request.js");
+        assertGeneratedDocsPageLinksToOpenApiFilePage(
+                shopDocsResponse, "/shop/docs", "/practice-modes/shoppingcart-openapi");
         Assertions.assertTrue(
                 shopDocsResponse.body.contains(
                         "<title>Buggy API Documentation | API Challenges</title>"));
@@ -2411,6 +2462,8 @@ public class UiPagesAreReachableTest {
 
         final HttpResponseDetails simDocsResponse = http.send("/sim/docs", "get");
         Assertions.assertEquals(200, simDocsResponse.statusCode);
+        assertGeneratedDocsPageLinksToOpenApiFilePage(
+                simDocsResponse, "/sim/docs", "/practice-modes/simulation-openapi");
         Assertions.assertTrue(
                 simDocsResponse.body.contains(
                         "<title>Simulation Mode API Documentation | API Challenges</title>"));
@@ -2420,17 +2473,14 @@ public class UiPagesAreReachableTest {
 
         final HttpResponseDetails mirrorDocsResponse = http.send("/mirror/docs", "get");
         Assertions.assertEquals(200, mirrorDocsResponse.statusCode);
+        assertGeneratedDocsPageLinksToOpenApiFilePage(
+                mirrorDocsResponse, "/mirror/docs", "/practice-modes/mirror");
         Assertions.assertTrue(
                 mirrorDocsResponse.body.contains(
                         "<title>Mirror Mode API Documentation | API Challenges</title>"));
         Assertions.assertTrue(
                 mirrorDocsResponse.body.contains("<meta name='robots' content='noindex,follow'>"));
         Assertions.assertEquals("noindex, follow", mirrorDocsResponse.getHeader("X-Robots-Tag"));
-        Assertions.assertFalse(mirrorDocsResponse.body.contains("href='/mirror/docs/swagger-ui'"));
-        Assertions.assertFalse(mirrorDocsResponse.body.contains("Open Swagger UI"));
-        Assertions.assertTrue(mirrorDocsResponse.body.contains("<li>OpenAPI v 3.2 JSON"));
-        Assertions.assertTrue(
-                mirrorDocsResponse.body.contains("href='/mirror/docs/openapi-3.2.json?download'"));
     }
 
     @Test
@@ -2699,10 +2749,11 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h2>Lessons Learned</h2>"));
         Assertions.assertTrue(
-                response.body.contains("<code>GET /todos</code> is the baseline collection read"));
+                response.body.contains(
+                        "<code>GET /api/todos</code> is the baseline collection read"));
         Assertions.assertTrue(response.body.contains("<h2>Suggested Experiments</h2>"));
         Assertions.assertTrue(
-                response.body.contains("Capture the ids returned by <code>GET /todos</code>"));
+                response.body.contains("Capture the ids returned by <code>GET /api/todos</code>"));
         Assertions.assertTrue(response.body.contains("<code>?doneStatus=false</code>"));
 
         final int lessonsIndex = response.body.indexOf("Lessons Learned");
@@ -2771,7 +2822,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "<h1>How to complete the challenge <code>QUERY /todos JSONPath (200)</code></h1>"));
+                        "<h1>How to complete the challenge <code>QUERY /api/todos JSONPath (200)</code></h1>"));
         Assertions.assertTrue(response.body.contains("data-method=\"QUERY\""));
         Assertions.assertTrue(
                 response.body.contains("data-body=\"$.todos[?(@.doneStatus == true)]\""));
@@ -2797,7 +2848,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(
                 response.body.contains(
-                        "<h1>How to complete the challenge <code>QUERY /todos Structured JSON (200)</code></h1>"));
+                        "<h1>How to complete the challenge <code>QUERY /api/todos Structured JSON (200)</code></h1>"));
         Assertions.assertTrue(response.body.contains("data-method=\"QUERY\""));
         Assertions.assertTrue(
                 response.body.contains(
@@ -2933,18 +2984,18 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
-        Assertions.assertTrue(response.body.contains("GET /todos/{id} (200) text/calendar"));
+        Assertions.assertTrue(response.body.contains("GET /api/todos/{id} (200) text/calendar"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<summary>GET /todos to see what todos are available now</summary>"));
+                        "<summary>GET /api/todos to see what todos are available now</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<summary>POST /todos to create a todo for the calendar request</summary>"));
+                        "<summary>POST /api/todos to create a todo for the calendar request</summary>"));
         Assertions.assertTrue(
                 response.body.matches(
                         "(?s).*<div class=\"api-live-request\""
                                 + "(?=[^>]*data-method=\"GET\")"
-                                + "(?=[^>]*data-path=\"/todos/\\{\\{firstTodoId}}\")"
+                                + "(?=[^>]*data-path=\"/api/todos/\\{\\{firstTodoId}}\")"
                                 + "(?=[^>]*data-edit-mode=\"fixed\")"
                                 + "(?=[^>]*data-headers=\"Accept: text/calendar\")"
                                 + "(?=[^>]*data-expected-status=\"200\")[^>]*>.*"));
@@ -2970,7 +3021,7 @@ public class UiPagesAreReachableTest {
                 response.body.matches(
                         "(?s).*<div class=\"api-live-request\""
                                 + "(?=[^>]*data-method=\"GET\")"
-                                + "(?=[^>]*data-path=\"/todos\\?doneStatus=true\")"
+                                + "(?=[^>]*data-path=\"/api/todos\\?doneStatus=true\")"
                                 + "(?=[^>]*data-headers=\"Accept: application/json\")"
                                 + "(?=[^>]*data-expected-status=\"200\")[^>]*>.*"));
     }
@@ -3000,7 +3051,7 @@ public class UiPagesAreReachableTest {
                         "(?s).*data-challenge-id='"
                                 + Pattern.quote(calendarChallengeId)
                                 + "'.*<summary>Solve Now</summary>.*"
-                                + "data-path=\"/todos/\\{\\{firstTodoId}}\".*"
+                                + "data-path=\"/api/todos/\\{\\{firstTodoId}}\".*"
                                 + "data-headers=\"Accept: text/calendar\".*"));
     }
 
@@ -3014,8 +3065,8 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
-                        "<details class=\"sim-live-request-details\" open><summary>POST /todos to"
-                                + " create a todo</summary>"));
+                        "<details class=\"sim-live-request-details\" open><summary>POST /api/todos"
+                                + " to create a todo</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<aside class=\"solution-challenge-completed\" data-challenge-id=\""));
@@ -3025,10 +3076,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.matches(
                         "(?s).*class=\"api-live-request\" data-method=\"POST\""
-                                + " data-path=\"/todos\" data-editable=\"true\""
+                                + " data-path=\"/api/todos\" data-editable=\"true\""
                                 + " data-edit-mode=\"fixed\" data-allowed-path-prefixes=\""
                                 + Pattern.quote(
-                                        "/todos||/todo||/challenges||/challenger||/secret||/heartbeat")
+                                        "/api||/todos||/todo||/challenges||/challenger||/secret||/heartbeat")
                                 + "\"[^>]* data-expected-status=\"201\".*"));
         Assertions.assertTrue(
                 response.body.contains("<summary>Experiment with this endpoint</summary>"));
@@ -3053,18 +3104,18 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(4, countOccurrences(response.body, "class=\"api-live-request\""));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<summary>GET /todos to see what todos are available now</summary>"));
+                        "<summary>GET /api/todos to see what todos are available now</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<summary>POST /todos to create a todo item for deletion</summary>"));
+                        "<summary>POST /api/todos to create a todo item for deletion</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "<details class=\"sim-live-request-details\" open><summary>DELETE"
-                                + " /todos/{id} to delete a specific todo</summary>"));
+                                + " /api/todos/{id} to delete a specific todo</summary>"));
         Assertions.assertTrue(
                 response.body.contains(
                         "class=\"api-live-request\" data-method=\"DELETE\""
-                                + " data-path=\"/todos/{{firstTodoId}}\""));
+                                + " data-path=\"/api/todos/{{firstTodoId}}\""));
         Assertions.assertTrue(response.body.contains("data-auto-create-first-todo=\"false\""));
         Assertions.assertTrue(response.body.contains("data-refresh-after-execute=\"false\""));
         Assertions.assertTrue(
@@ -3116,7 +3167,7 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertTrue(response.body.contains("<summary>Solve Now</summary>"));
         Assertions.assertTrue(response.body.contains("data-edit-mode=\"adhoc\""));
-        Assertions.assertTrue(response.body.contains("data-path=\"/challenger\""));
+        Assertions.assertTrue(response.body.contains("data-path=\"/api/challenger\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id=\""));
         Assertions.assertTrue(response.body.contains("data-challenge-id='"));
         Assertions.assertTrue(response.body.contains("<table class='challenge-progress-table'>"));

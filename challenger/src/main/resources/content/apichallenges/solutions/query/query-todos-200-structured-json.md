@@ -11,19 +11,19 @@ concept_reference_label: HTTP QUERY Verb
 concept_reference_url: /reference/http-verbs/http-query
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a QUERY request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.thingifier.query+json||Send a Structured JSON filter for doneStatus true in the request body and verify the response status is 200
+schema_howto_steps: Create a QUERY request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.thingifier.query+json||Send a Structured JSON filter for doneStatus true in the request body and verify the response status is 200
 showads: true
 ---
 
-# How to complete the challenge `QUERY /todos Structured JSON (200)`
+# How to complete the challenge `QUERY /api/todos Structured JSON (200)`
 
 `QUERY` is a safe read method that can send query content in the request body. For this challenge, use a Structured JSON query document to request todos where `doneStatus=true`.
 
-## QUERY /todos Structured JSON (200)
+## QUERY /api/todos Structured JSON (200)
 
-> Issue a QUERY request on the `/todos` end point with a Structured JSON query body to get only todos which are done. There must exist both done and not done todos to pass this challenge.
+> Issue a QUERY request on the `/api/todos` end point with a Structured JSON query body to get only todos which are done. There must exist both done and not done todos to pass this challenge.
 
-- Use the `QUERY` method with `/todos`.
+- Use the `QUERY` method with `/api/todos`.
 - Add `Content-Type: application/vnd.thingifier.query+json`.
 - Add `Accept: application/json` so you can inspect the response.
 - Send a `filter` object for `"doneStatus": true` in the request body.
@@ -32,7 +32,7 @@ showads: true
 ## Basic Instructions
 
 - Issue a `QUERY` request to:
-  - `{{<ORIGIN_URL>}}/todos`
+  - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header so the challenge is tracked.
 - The request body should be a Structured JSON query document:
 
@@ -50,18 +50,18 @@ showads: true
 
 If you need fixture data, create one done todo and one not-done todo first. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done Structured JSON query fixture","doneStatus":true,"description":"created for QUERY Structured JSON filtering"}' details="true" summary="POST /todos to create a done todo fixture">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"done Structured JSON query fixture","doneStatus":true,"description":"created for QUERY Structured JSON filtering"}' details="true" summary="POST /api/todos to create a done todo fixture">}}
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"not done Structured JSON query comparison","doneStatus":false,"description":"created for QUERY Structured JSON filtering"}' details="true" summary="POST /todos to create a not-done comparison todo">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"not done Structured JSON query comparison","doneStatus":false,"description":"created for QUERY Structured JSON filtering"}' details="true" summary="POST /api/todos to create a not-done comparison todo">}}
 
 Issue the QUERY request with the Structured JSON filter in the body:
 
-{{<api-live-request method="QUERY" path="/todos" expected-status="200" headers="Content-Type: application/vnd.thingifier.query+json||Accept: application/json" body='{"filter":{"doneStatus":true}}' details="true" summary="QUERY /todos with a Structured JSON doneStatus filter" open="true">}}
+{{<api-live-request method="QUERY" path="/api/todos" expected-status="200" headers="Content-Type: application/vnd.thingifier.query+json||Accept: application/json" body='{"filter":{"doneStatus":true}}' details="true" summary="QUERY /api/todos with a Structured JSON doneStatus filter" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> QUERY /todos HTTP/1.1
+> QUERY /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -97,7 +97,7 @@ Returned body:
 
 ## Lessons Learned
 
-- `QUERY /todos` can use `Content-Type: application/vnd.thingifier.query+json` when the request body is a `Structured JSON` query document.
+- `QUERY /api/todos` can use `Content-Type: application/vnd.thingifier.query+json` when the request body is a `Structured JSON` query document.
 - The body describes query criteria; it is not a todo representation and it does not create or amend data.
 - A `filter` object can match fields by exact `JSON` values, so booleans are sent as `true` or `false`, not as strings.
 - `Structured JSON` differs from `JSONPath`: `JSONPath` selects from a response-shaped document, while `Structured JSON` describes query criteria for the API to apply.

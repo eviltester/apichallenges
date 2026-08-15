@@ -3,7 +3,7 @@ date:  2021-07-24T08:30:00Z
 lastmod: 2026-08-06
 title: API Challenges Solution For - authentication passed 201
 seo_title: Solution: authentication passed 201 | API Challenges
-description: How to solve POST /secret/token (201) - authenticate with username and password for basic auth.
+description: How to solve POST /api/secret/token (201) - authenticate with username and password for basic auth.
 seo_description: Use this walkthrough to solve authentication passed 201 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-403
 concepts_learned: HTTP POST||201 Created||Basic Auth||authentication
@@ -12,7 +12,7 @@ concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a POST request to /secret/token||Add Basic Authorization with the username and password required by the challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 201||Capture the returned X-AUTH-TOKEN for later authorization challenges
+schema_howto_steps: Create a POST request to /api/secret/token||Add Basic Authorization with the username and password required by the challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 201||Capture the returned X-AUTH-TOKEN for later authorization challenges
 showads: true
 ---
 
@@ -25,12 +25,12 @@ One way of authenticating a user is through Basic Auth which requires a username
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## POST /secret/token (201)
+## POST /api/secret/token (201)
 
-> Issue a POST request on the `/secret/token` end point and receive 201 when Basic auth username/password is admin/password
+> Issue a POST request on the `/api/secret/token` end point and receive 201 when Basic auth username/password is admin/password
 
 - `POST` request means use the HTTP Verb POST
-    - e.g. `POST /secret/token` sends to the secret token endpoint
+    - e.g. `POST /api/secret/token` sends to the secret token endpoint
 - `Basic auth` means include the [Basic Authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
 - `username/password is admin/password` the authorisation header value is base 64 encoded, and the details should  match `admin` as the username, and `password` for the password
 - add the `X-CHALLENGER` header to track progress and because the authentication code we need is asociated with the `X-challenger` session
@@ -39,25 +39,25 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 
 ## Basic Instructions
 
-- Create a new request for the `/secret/token` end point
+- Create a new request for the `/api/secret/token` end point
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/secret/token`
+        - `{{<ORIGIN_URL>}}/api/secret/token`
 - The verb should be a `POST`
 - Add a Basic Auth header by selecting "Basic" from the "Auth" tab and entering a username and password of admin/password i.e. use username "admin", password "password"
 - There should be no payload in the message
 - You should receive a 201 response - meaning the token has been created
 - The request should have an `X-CHALLENGER` header to track challenge completion
-- The response should have an `X-AUTH-TOKEN` header which you will include in the messages for `GET /secret/note (200)`, `POST /secret/note (200)`, `GET /secret/note (Bearer)`, and `POST /secret/note (Bearer)`
+- The response should have an `X-AUTH-TOKEN` header which you will include in the messages for `GET /api/secret/note (200)`, `POST /api/secret/note (200)`, `GET /api/secret/note (Bearer)`, and `POST /api/secret/note (Bearer)`
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /secret/token with valid credentials to create an auth token" open="true">}}
+{{<api-live-request method="POST" path="/api/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /api/secret/token with valid credentials to create an auth token" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /secret/token HTTP/1.1
+> POST /api/secret/token HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -109,7 +109,7 @@ The command to encode a string as base64 is `btoa`
 ## Lessons Learned
 
 - `Basic Auth` sends username and password as `Base64` encoded credentials in the `Authorization` header.
-- A successful `POST /secret/token` creates a token for later protected requests, not a todo resource.
+- A successful `POST /api/secret/token` creates a token for later protected requests, not a todo resource.
 - The returned `X-AUTH-TOKEN` is tied to the current `X-CHALLENGER` session.
 
 ## Suggested Experiments

@@ -47,7 +47,7 @@ If you are new to OpenAPI then a dedicated tool is easier because it can render 
 
 Examples on this site:
 
-- [API Challenges OpenAPI JSON](/docs/openapi.json)
+- [API Challenges OpenAPI JSON](/api/docs/openapi.json)
 - [API Simulator OpenAPI JSON](/sim/docs/openapi.json)
 - [Simple API OpenAPI JSON](/simpleapi/docs/openapi.json)
 - [Buggy API OpenAPI JSON](/shop/docs/openapi.json)

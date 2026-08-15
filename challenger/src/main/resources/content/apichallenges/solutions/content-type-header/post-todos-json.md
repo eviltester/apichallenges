@@ -12,29 +12,29 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid JSON payload that matches the field and content constraints
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set the Accept header to the required media type and verify response format||Send a valid JSON payload that matches the field and content constraints
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos JSON`
+# How to complete the challenge `POST /api/todos JSON`
 
 To fully specify a request and response format we should control the `content-type` and `accept` headers. In this challenge we do this to send a POST request to create a todo item with body and response in JSON format.
 
-## 	POST /todos JSON
+## 	POST /api/todos JSON
 
 To create and amend items in a REST API we usually use a POST request. POST requests are defined as 'partial' requests in that they don't need to have all the fields, but they need to have enough fields to be valid for the request.
 
-> Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/json`, and Accepting only JSON ie. Accept header of `application/json`
+> Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/json`, and Accepting only JSON ie. Accept header of `application/json`
 
 For this challenge we issue a request with an accept header specifying JSON and we will send the message as JSON so we set the `content-type` header as well.
 
 - `POST` request means we will send information in the body of the message
-    - e.g. `POST /todos` sends to the todos endpoint
+    - e.g. `POST /api/todos` sends to the todos endpoint
 - `create a todo` means that we will not include a todo `id`, so a new todo is created
 - `Content-Type` `application/json` means set the `content-type` header to `application/json` because we are sending a JSON formatted message
 - `Accept header` of `application/json` means set the `accept` header to  `application/json` so the response is formatted as JSON
-- the body of the message will have to be a valid todo item, and we can see the format in the documentation, or by issuing a `GET` request on the `/todos` endpoint
+- the body of the message will have to be a valid todo item, and we can see the format in the documentation, or by issuing a `GET` request on the `/api/todos` endpoint
 - add the `X-CHALLENGER` header to track progress
 - we know it has been created when we receive a `201` response
 - the body of the response should contain the full details of the `todo` created in JSON format
@@ -42,12 +42,12 @@ For this challenge we issue a request with an accept header specifying JSON and 
 
 ## Basic Instructions
 
-- First issue a `GET` request on "/todos" with an `accept` header of `application/json` to see the format of a todo in JSON format
-    - or read the documentation at [/docs](/docs)
+- First issue a `GET` request on "/api/todos" with an `accept` header of `application/json` to see the format of a todo in JSON format
+    - or read the documentation at [/api/docs](/api/docs)
     - copy a todo from the response to edit as payload for the `POST` message
-- Issue a `POST` request to end point "/todos"
+- Issue a `POST` request to end point "/api/todos"
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/todos`
+        - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `Accept` header with the value `application/json` because we want the response to be in JSON
 - The request should have an `Content-Type` header with the value `application/json` because our payload in the message is in JSON format
 - Use the `todo` that you copied from the `GET` request, remembering to remove the `id` because when we create a todo, it will be issued with an `id` automatically
@@ -77,13 +77,13 @@ We only need to use the minimum details, but could add a description if we wante
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos with JSON to create a todo" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /api/todos with JSON to create a todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

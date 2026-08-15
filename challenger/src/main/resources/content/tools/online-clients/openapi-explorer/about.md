@@ -49,7 +49,7 @@ Read [OpenAPI for API Testing](/reference/openapi) for the specification backgro
     <p class="openapi-ui-launch-links">
       <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json">Simple API</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fsim%2Fdocs%2Fopenapi-3.2.json">API Simulator</a>
-      <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
+      <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fapi%2Fdocs%2Fopenapi-3.2.json">API Challenges</a>
       <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Fshop%2Fdocs%2Fopenapi-3.2.json">Buggy API</a>
     </p>
   </div>

@@ -17,7 +17,7 @@ showads: true
 For example:
 
 ~~~~~~~~
-DELETE /todos/1
+DELETE /api/todos/1
 ~~~~~~~~
 
 Means "delete todo `1`."

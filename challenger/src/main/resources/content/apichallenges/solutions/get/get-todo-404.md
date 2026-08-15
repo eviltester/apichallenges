@@ -11,39 +11,39 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a GET request to /todo||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
+schema_howto_steps: Create a GET request to /api/todo||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todo 404`.
+# How to complete the challenge `GET /api/todo 404`.
 
 How to solve challenge GET todo 404 by issuing a GET request on a non-existent endpoint and receive a 404 status code response.
 
-## GET /todo (404)
+## GET /api/todo (404)
 
-> Issue a `GET` request on the `/todo` end point should 404 because nouns should be plural
+> Issue a `GET` request on the `/api/todo` end point should 404 because nouns should be plural
 
 - This will show you an error status code 404
 - 404 means 'not found' i.e. we tried to access something that does not exist
-- REST API Endpoints are usually plural e.g. `/todos` we would not normally expect an API to respond to both `/todos` and `/todo`
+- REST API Endpoints are usually plural e.g. `/api/todos` we would not normally expect an API to respond to both `/api/todos` and `/api/todo`
 
 ## Basic Instructions
 
-- Issue a GET request to end point "/todo"
-    - `{{<ORIGIN_URL>}}/todo`
+- Issue a GET request to end point "/api/todo"
+    - `{{<ORIGIN_URL>}}/api/todo`
 - The request should have an `X-CHALLENGER` header
 - The response status code should be `404`
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todo" expected-status="404" headers="Accept: */*" details="true" summary="GET /todo to trigger 404 for the singular endpoint" open="true">}}
+{{<api-live-request method="GET" path="/api/todo" expected-status="404" headers="Accept: */*" details="true" summary="GET /api/todo to trigger 404 for the singular endpoint" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todo HTTP/1.1
+> GET /api/todo HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -71,11 +71,11 @@ How to solve challenge GET todo 404 by issuing a GET request on a non-existent e
 
 ## Lessons Learned
 
-- `/todo` is the wrong route, so `404 Not Found` here tests URL design and plural resource naming.
+- `/api/todo` is the wrong route, so `404 Not Found` here tests URL design and plural resource naming.
 - This is not a missing todo `id`; the route itself does not match the API contract.
 - Path typos can look like data problems unless you compare the documented URL.
 
 ## Suggested Experiments
 
-- Change only `/todo` to `/todos` and confirm the same `GET` style reaches a valid collection route.
-- Try `/todos/999999` after `/todo` and compare route-not-found with resource-not-found behavior.
+- Change only `/api/todo` to `/api/todos` and confirm the same `GET` style reaches a valid collection route.
+- Try `/api/todos/999999` after `/api/todo` and compare route-not-found with resource-not-found behavior.

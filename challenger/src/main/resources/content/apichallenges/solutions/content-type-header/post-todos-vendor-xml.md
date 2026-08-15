@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.apichallenges.todo+xml||Send a valid XML todo body and request a supported response format||Verify status 201
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/vnd.apichallenges.todo+xml||Send a valid XML todo body and request a supported response format||Verify status 201
 showads: true
 ---
 
-# How to complete the challenge `POST /todos vendor XML`
+# How to complete the challenge `POST /api/todos vendor XML`
 
 This challenge creates a todo with a model-specific `+xml` request body media type and asks for a negotiated response.
 
-> Issue a POST request on the `/todos` end point to create a todo using Content-Type `application/vnd.apichallenges.todo+xml`, a normal todo XML body, and a negotiated response.
+> Issue a POST request on the `/api/todos` end point to create a todo using Content-Type `application/vnd.apichallenges.todo+xml`, a normal todo XML body, and a negotiated response.
 
 ## Basic Instructions
 
-- Issue a `POST` request to `/todos`
+- Issue a `POST` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Content-Type` to `application/vnd.apichallenges.todo+xml`
 - Set `Accept` to a supported response format, for example `application/json`
@@ -34,12 +34,12 @@ This challenge creates a todo with a model-specific `+xml` request body media ty
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/vnd.apichallenges.todo+xml||Accept: application/json" body='<todo><title>vendor XML todo</title><doneStatus>true</doneStatus><description>created with vendor XML</description></todo>' details="true" summary="POST /todos with vendor todo XML" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/vnd.apichallenges.todo+xml||Accept: application/json" body='<todo><title>vendor XML todo</title><doneStatus>true</doneStatus><description>created with vendor XML</description></todo>' details="true" summary="POST /api/todos with vendor todo XML" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Content-Type: application/vnd.apichallenges.todo+xml

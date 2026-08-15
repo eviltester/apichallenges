@@ -57,7 +57,7 @@ The challenge solutions are longer walkthroughs for specific API testing ideas. 
 
 - [Read the API Challenge Solutions](/apichallenges/solutions)
 - [Try the API Challenges app](/gui/challenges)
-- [Read the API Challenges Documentation](/docs)
+- [Read the API Challenges Documentation](/api/docs)
 
 ## Download Some Tools
 

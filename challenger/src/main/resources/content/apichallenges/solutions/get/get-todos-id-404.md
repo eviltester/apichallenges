@@ -12,18 +12,18 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
+schema_howto_steps: Create a GET request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 404
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos/id 404`.
+# How to complete the challenge `GET /api/todos/id 404`.
 
 How to receive a 404 status code response by trying to GET a todo item by id for a non-existent todo item.
 
-## GET /todos/id (404)
+## GET /api/todos/id (404)
 
-> 	Issue a GET request on the `/todos/{id}` end point for a todo that does not exist
+> 	Issue a GET request on the `/api/todos/{id}` end point for a todo that does not exist
 
 - This will show you a 404 status code in the API response
 - 404 status code means Not Found
@@ -31,21 +31,21 @@ How to receive a 404 status code response by trying to GET a todo item by id for
 
 ## Basic Instructions
 
-- Issue a GET request to end point "/todos/{id}"
-    - `{{<ORIGIN_URL>}}/todos/{id}`
+- Issue a GET request to end point "/api/todos/{id}"
+    - `{{<ORIGIN_URL>}}/api/todos/{id}`
 - The request should have an `X-CHALLENGER` header
 - The response status code should be `404` because `{id}` does not exist
 - an error message should be shown in the response body
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos/{{missingTodoId}}" expected-status="404" headers="Accept: application/json" details="true" summary="GET /todos/{id} to request a missing todo" open="true">}}
+{{<api-live-request method="GET" path="/api/todos/{{missingTodoId}}" expected-status="404" headers="Accept: application/json" details="true" summary="GET /api/todos/{id} to request a missing todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos/20 HTTP/1.1
+> GET /api/todos/20 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -83,11 +83,11 @@ How to receive a 404 status code response by trying to GET a todo item by id for
 
 ## Lessons Learned
 
-- `GET /todos/{id}` with a missing `id` tests resource absence, not route absence.
+- `GET /api/todos/{id}` with a missing `id` tests resource absence, not route absence.
 - `404 Not Found` can be a valid outcome when the URL pattern is correct but the item is gone.
 - A good missing-id test proves the `id` was absent before making the request.
 
 ## Suggested Experiments
 
-- Delete a known todo, then request the same `/todos/{id}` and compare with a never-used `id`.
-- Request `/todo/{id}` as a separate test to see route mismatch versus missing resource.
+- Delete a known todo, then request the same `/api/todos/{id}` and compare with a never-used `id`.
+- Request `/api/todo/{id}` as a separate test to see route mismatch versus missing resource.

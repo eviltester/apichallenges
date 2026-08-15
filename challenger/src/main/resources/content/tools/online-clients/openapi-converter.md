@@ -17,7 +17,7 @@ Convert an OpenAPI 3 JSON or YAML file into a more permissive tester OpenAPI spe
   <form class="online-swagger-controls" data-openapi-url-form>
     <label>
       OpenAPI URL
-      <input data-openapi-url type="text" value="/docs/openapi.json" placeholder="https://example.com/openapi.json">
+      <input data-openapi-url type="text" value="/api/docs/openapi.json" placeholder="https://example.com/openapi.json">
     </label>
     <button type="submit">Open URL</button>
   </form>

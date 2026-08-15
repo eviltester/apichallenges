@@ -199,7 +199,7 @@ To return books sorted by price:
 For API Challenges todos, the equivalent completed-todo query is:
 
 ```http
-QUERY /todos HTTP/1.1
+QUERY /api/todos HTTP/1.1
 Content-Type: application/vnd.thingifier.query+json
 Accept: application/json
 
@@ -210,7 +210,7 @@ Accept: application/json
 
 There is now an API Challenge for Structured JSON query bodies:
 
-- [QUERY /todos Structured JSON solution](/apichallenges/solutions/query/query-todos-200-structured-json)
+- [QUERY /api/todos Structured JSON solution](/apichallenges/solutions/query/query-todos-200-structured-json)
 
 And the reference material has been expanded:
 

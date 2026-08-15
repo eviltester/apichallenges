@@ -12,31 +12,31 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/problem+json or application/*+json||Send the request and verify status 406
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/problem+json or application/*+json||Send the request and verify status 406
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (406) unsupported +json`
+# How to complete the challenge `GET /api/todos (406) unsupported +json`
 
 This challenge asks for a structured `+json` media type that the todo endpoint does not support as a normal resource representation.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header such as `application/problem+json` or `application/*+json` to receive 406 'NOT ACCEPTABLE' status code.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header such as `application/problem+json` or `application/*+json` to receive 406 'NOT ACCEPTABLE' status code.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `application/problem+json`
 - Check that the response status is `406`
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/problem+json" details="true" summary="GET /todos with unsupported problem JSON Accept" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="406" headers="Accept: application/problem+json" details="true" summary="GET /api/todos with unsupported problem JSON Accept" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: application/problem+json

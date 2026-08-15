@@ -33,8 +33,8 @@ A REST API is an HTTP API that is designed around resources.
 
 A resource is something the API exposes. For example:
 
-- a collection of todos: `/todos`
-- a specific todo: `/todos/1`
+- a collection of todos: `/api/todos`
+- a specific todo: `/api/todos/1`
 - a collection of users: `/users`
 - a specific user: `/users/123`
 
@@ -43,12 +43,12 @@ The resource is identified by the URI, often the path part of the URL.
 The HTTP verb then describes what we want to do with that resource:
 
 ~~~~~~~~
-GET /todos
-POST /todos
-GET /todos/1
-PUT /todos/1
-PATCH /todos/1
-DELETE /todos/1
+GET /api/todos
+POST /api/todos
+GET /api/todos/1
+PUT /api/todos/1
+PATCH /api/todos/1
+DELETE /api/todos/1
 ~~~~~~~~
 
 This is different from an HTTP API where "anything goes". An HTTP API might use `POST` for every action, or use action-based URLs such as `/deleteTodo` or `/createUser`.
@@ -104,9 +104,9 @@ REST guidance helps us ask better questions about an API.
 
 `Idempotent` means that sending the same request more than once should leave the server in the same final state.
 
-For example, sending the same `PUT /todos/1` request twice should still leave todo `1` with the same values. Sending the same `DELETE /todos/1` request twice should still leave todo `1` deleted, even if the second response is different.
+For example, sending the same `PUT /api/todos/1` request twice should still leave todo `1` with the same values. Sending the same `DELETE /api/todos/1` request twice should still leave todo `1` deleted, even if the second response is different.
 
-`POST` is usually not idempotent. Sending the same `POST /todos` request twice might create two todo items.
+`POST` is usually not idempotent. Sending the same `POST /api/todos` request twice might create two todo items.
 
 `Stateless` means that each request should contain the information the server needs to process it.
 
@@ -153,11 +153,11 @@ The mapping depends on the API design.
 For example, a common REST-style design is:
 
 ~~~~~~~~
-POST /todos       -> create a todo
-GET /todos/1      -> read a todo
-PUT /todos/1      -> replace a todo
-PATCH /todos/1    -> partially update a todo
-DELETE /todos/1   -> delete a todo
+POST /api/todos       -> create a todo
+GET /api/todos/1      -> read a todo
+PUT /api/todos/1      -> replace a todo
+PATCH /api/todos/1    -> partially update a todo
+DELETE /api/todos/1   -> delete a todo
 ~~~~~~~~
 
 But real APIs vary.
@@ -426,7 +426,7 @@ Use standards and documentation as support:
 Expect discussions and debates on a team. When they happen, concrete examples help:
 
 ~~~~~~~~
-I sent PUT /todos/1 twice with the same body.
+I sent PUT /api/todos/1 twice with the same body.
 The first response was 200.
 The second response created a duplicate todo.
 That does not match the usual idempotent expectation for PUT.
@@ -447,7 +447,7 @@ This is more useful than simply saying "this is not RESTful."
 
 For example, a `HEAD` request might tell us whether a resource exists, what `Content-Type` it would return, or whether a cached copy is still valid.
 
-When testing REST APIs, check that `HEAD` behaves consistently with `GET` for the same resource. If `GET /todos/1` returns `200`, then `HEAD /todos/1` would usually return `200` with the same kind of response headers and no body.
+When testing REST APIs, check that `HEAD` behaves consistently with `GET` for the same resource. If `GET /api/todos/1` returns `200`, then `HEAD /api/todos/1` would usually return `200` with the same kind of response headers and no body.
 
 ---
 
@@ -458,9 +458,9 @@ When testing REST APIs, check that `HEAD` behaves consistently with `GET` for th
 
 Teams often choose one of three identifier styles for update requests:
 
-- `PUT /todos/{id}` with no id in the payload
-- `PUT /todos/{id}` with a matching id in the payload
-- `PUT /todos` with the id in the payload
+- `PUT /api/todos/{id}` with no id in the payload
+- `PUT /api/todos/{id}` with a matching id in the payload
+- `PUT /api/todos` with the id in the payload
 
 Each style has tradeoffs:
 

@@ -27,11 +27,11 @@ For testing, `HEAD` is useful because some APIs accidentally route it differentl
 ## HTTP HEAD Verb Example
 
 ~~~~~~~~
-curl -I {{<ORIGIN_URL>}}/todos
+curl -I {{<ORIGIN_URL>}}/api/todos
 ~~~~~~~~
 
 ~~~~~~~~
-HEAD {{<ORIGIN_URL>}}/todos HTTP/1.1
+HEAD {{<ORIGIN_URL>}}/api/todos HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
 Accept: */*

@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to text/xml||Send the request and verify status 200 and Content-Type text/xml
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to text/xml||Send the request and verify status 200 and Content-Type text/xml
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (200) text/xml`
+# How to complete the challenge `GET /api/todos (200) text/xml`
 
 This challenge requests the todo collection using `text/xml`, an older generic `XML` media type.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `text/xml` to receive results in XML format.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `text/xml` to receive results in XML format.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `text/xml`
 - Check that the response status is `200`
@@ -32,12 +32,12 @@ This challenge requests the todo collection using `text/xml`, an older generic `
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: text/xml" details="true" summary="GET /todos with Accept text/xml" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: text/xml" details="true" summary="GET /api/todos with Accept text/xml" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: text/xml

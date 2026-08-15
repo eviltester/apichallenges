@@ -12,14 +12,14 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send JSON with an invalid doneStatus value||Send the request and verify the response status is 422
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send JSON with an invalid doneStatus value||Send the request and verify the response status is 422
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (422)`
+# How to complete the challenge `POST /api/todos (422)`
 
-Issue a `POST` request to `/todos` with syntactically valid JSON that fails todo validation.
+Issue a `POST` request to `/api/todos` with syntactically valid JSON that fails todo validation.
 
 For this challenge, send `doneStatus` as a string rather than a boolean:
 
@@ -44,7 +44,7 @@ The response should be `422 Unprocessable Content` because the request body can 
 Remember to include your `X-CHALLENGER` header so the challenge is tracked.
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"invalid doneStatus","doneStatus":"truthy","description":"created from the solution page"}' details="true" summary="POST /todos with invalid doneStatus to trigger 422" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"invalid doneStatus","doneStatus":"truthy","description":"created from the solution page"}' details="true" summary="POST /api/todos with invalid doneStatus to trigger 422" open="true">}}
 
 ## Lessons Learned
 

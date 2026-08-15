@@ -12,30 +12,30 @@ concept_reference_label: HTTP PUT Verb
 concept_reference_url: /reference/http-verbs/http-put
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Send GET /todos?_sortBy=-id to identify an id that does not exist||Create a PUT request to /todos/{id} using that missing id||Include X-CHALLENGER so the challenge is tracked in your current session||Send todo JSON with an id field that matches the missing URL id||Send the request and verify the response status is 422
+schema_howto_steps: Send GET /api/todos?_sortBy=-id to identify an id that does not exist||Create a PUT request to /api/todos/{id} using that missing id||Include X-CHALLENGER so the challenge is tracked in your current session||Send todo JSON with an id field that matches the missing URL id||Send the request and verify the response status is 422
 showads: true
 ---
 
 
-# How to complete the challenge `PUT /todos/{id} (422)`
+# How to complete the challenge `PUT /api/todos/{id} (422)`
 
-Issue a `PUT` request to `/todos/{id}` using an id that does not exist.
+Issue a `PUT` request to `/api/todos/{id}` using an id that does not exist.
 
 This API does not allow creating todos with a caller-selected auto-generated id, so the valid JSON reaches the write use case but is rejected as unprocessable.
 
 If you do not know which todo ids already exist, first send:
 
 ```http
-GET /todos?_sortBy=-id
+GET /api/todos?_sortBy=-id
 ```
 
 This lists the todos from highest id to lowest id. If you are using the public site, the URL is:
 
 ```text
-https://apichallenges.eviltester.com/todos?_sortBy=-id
+https://apichallenges.eviltester.com/api/todos?_sortBy=-id
 ```
 
-{{<api-live-request method="GET" path="/todos?_sortBy=-id" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?_sortBy=-id to identify an id that does not exist">}}
+{{<api-live-request method="GET" path="/api/todos?_sortBy=-id" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos?_sortBy=-id to identify an id that does not exist">}}
 
 Choose an id higher than the highest returned id, then use that same missing id in the `PUT` URL and in the request body.
 
@@ -50,15 +50,15 @@ The response should be `422 Unprocessable Content` with this message:
 ```
 ### Try it now
 
-{{<api-live-request method="PUT" path="/todos/{{missingTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"id":{{missingTodoId}},"title":"solution widget todo","doneStatus":false,"description":"created from the solution page"}' details="true" summary="PUT /todos/{id} with a matching body id to attempt creating a todo and trigger 422" open="true">}}
+{{<api-live-request method="PUT" path="/api/todos/{{missingTodoId}}" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"id":{{missingTodoId}},"title":"solution widget todo","doneStatus":false,"description":"created from the solution page"}' details="true" summary="PUT /api/todos/{id} with a matching body id to attempt creating a todo and trigger 422" open="true">}}
 
 ## Lessons Learned
 
-- `PUT /todos/{id}` can be used for create-or-replace in some APIs, but this API rejects caller-selected auto ids.
+- `PUT /api/todos/{id}` can be used for create-or-replace in some APIs, but this API rejects caller-selected auto ids.
 - `422 Unprocessable Content` here comes from a business rule after the request shape is understood.
 - Idempotent method semantics do not override resource-specific validation rules.
 
 ## Suggested Experiments
 
 - Try a missing `id` with and without a matching body `id` and compare validation messages.
-- Create the resource another way first, then repeat `PUT /todos/{id}` against that existing `id`.
+- Create the resource another way first, then repeat `PUT /api/todos/{id}` against that existing `id`.

@@ -21,7 +21,7 @@ You don't need to do any of this if you download the application and run it in s
 
 The first thing we have to do is Create a Challenger Session.
 
-And we do that by issuing a `POST` request against the `/challenger` end point.
+And we do that by issuing a `POST` request against the `/api/challenger` end point.
 
 If it worked then you should receive a `201` `Created` response. With no body. But with a bunch of headers.
 
@@ -70,14 +70,14 @@ Sessions can be stored in localstorage in the browser, or on your local machine 
 
 To start a session:
 
-- issue a `POST` request to `{{<ORIGIN_URL>}}/challenges`
+- issue a `POST` request to `{{<ORIGIN_URL>}}/api/challenges`
 - the response status code will be `201` if successful.
 - The response will contain an `X-CHALLENGER` header with a unique session value
 - Add this header to every request you make on the API, and challenge completion status will be stored against this session.
 
 To view the status of your session:
 
-- issue a `GET` request to `{{<ORIGIN_URL>}}/challenges`
+- issue a `GET` request to `{{<ORIGIN_URL>}}/api/challenges`
 - the response will contain all the challenges and the status of the challenges for your session
 
 To view the status of your session in the GUI:

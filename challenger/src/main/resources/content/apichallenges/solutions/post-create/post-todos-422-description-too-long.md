@@ -12,21 +12,21 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a description longer than 200 characters||Send the request and verify the response status is 422
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a description longer than 200 characters||Send the request and verify the response status is 422
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (422) description too long`
+# How to complete the challenge `POST /api/todos (422) description too long`
 
-Issue a `POST` request to `/todos` with a `description` longer than the maximum allowed length.
+Issue a `POST` request to `/api/todos` with a `description` longer than the maximum allowed length.
 
 The response should be `422 Unprocessable Content` and include a validation error explaining that the description exceeded the maximum length.
 
 Keep the JSON syntax valid; the point of the challenge is entity validation, not malformed JSON.
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"description too long","doneStatus":true,"description":"{{description201}}"}' details="true" summary="POST /todos with a long description to trigger 422" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"description too long","doneStatus":true,"description":"{{description201}}"}' details="true" summary="POST /api/todos with a long description to trigger 422" open="true">}}
 
 ## Lessons Learned
 

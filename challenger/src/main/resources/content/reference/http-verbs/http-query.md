@@ -14,7 +14,7 @@ showads: true
 - [QUERY](https://www.rfc-editor.org/rfc/rfc10008.html) - safely retrieve data using query content in the request body
 - QUERY is intended for safe, read-only requests where the query content is too large, complex, or structured for a URI query string
 - A server can advertise supported QUERY request content types with `Accept-Query`
-- API Challenges supports `QUERY /todos` with `Content-Type: application/x-www-form-urlencoded`, `Content-Type: application/jsonpath`, and `Content-Type: application/vnd.thingifier.query+json`
+- API Challenges supports `QUERY /api/todos` with `Content-Type: application/x-www-form-urlencoded`, `Content-Type: application/jsonpath`, and `Content-Type: application/vnd.thingifier.query+json`
 
 `QUERY` is newer and less widely supported than the traditional verbs.
 
@@ -23,7 +23,7 @@ It exists for the situation where we want the read-only behaviour of a `GET`, bu
 For example, a simple filter might fit neatly into a URL:
 
 ~~~~~~~~
-GET /todos?doneStatus=true
+GET /api/todos?doneStatus=true
 ~~~~~~~~
 
 But a more complex query might be easier to send in a request body. That is the type of use case `QUERY` is designed for.
@@ -43,7 +43,7 @@ This is different from the request `Accept` header:
 - `Accept` is sent by the client to say which response formats it wants back.
 - `Accept-Query` is sent by the server to say which query body formats the client can send with `QUERY`.
 
-For example, API Challenges advertises the supported `QUERY /todos` body formats in the response to `OPTIONS /todos`:
+For example, API Challenges advertises the supported `QUERY /api/todos` body formats in the response to `OPTIONS /api/todos`:
 
 ~~~~~~~~
 HTTP/1.1 200 OK
@@ -52,7 +52,7 @@ Accept-Query: application/x-www-form-urlencoded, application/jsonpath, applicati
 Content-Type: text/plain
 ~~~~~~~~
 
-That tells us that a `QUERY /todos` request can use any of these `Content-Type` values:
+That tells us that a `QUERY /api/todos` request can use any of these `Content-Type` values:
 
 | **Query Body Format** | **Content-Type** |
 |-----------------------|------------------|
@@ -71,7 +71,7 @@ You might see `Accept-Query` in responses from:
 When using API Challenges, choose one of the advertised values as the request `Content-Type`, then send a body in that format. For example:
 
 ~~~~~~~~
-QUERY /todos HTTP/1.1
+QUERY /api/todos HTTP/1.1
 Content-Type: application/jsonpath
 Accept: application/json
 
@@ -83,14 +83,14 @@ $.todos[?(@.doneStatus == true)]
 ## HTTP QUERY Form Body Example
 
 ~~~~~~~~
-curl -X QUERY {{<ORIGIN_URL>}}/todos ^
+curl -X QUERY {{<ORIGIN_URL>}}/api/todos ^
 -H "Content-Type: application/x-www-form-urlencoded" ^
 -H "Accept: application/json" ^
 -d "doneStatus=true"
 ~~~~~~~~
 
 ~~~~~~~~
-QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
+QUERY {{<ORIGIN_URL>}}/api/todos HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
 Content-Type: application/x-www-form-urlencoded
@@ -112,7 +112,7 @@ Content-Type: application/jsonpath
 
 JSONPath is defined by [RFC 9535](https://datatracker.ietf.org/doc/html/rfc9535). The standard describes JSONPath as a string syntax for selecting and extracting values from a JSON value. In practice, it gives us a compact way to describe which parts of a JSON document we want to select.
 
-JSONPath expressions usually start at the root with `$`. For API Challenges, `QUERY /todos` evaluates the expression against a JSON document shaped like the normal collection response:
+JSONPath expressions usually start at the root with `$`. For API Challenges, `QUERY /api/todos` evaluates the expression against a JSON document shaped like the normal collection response:
 
 ```json
 {
@@ -148,14 +148,14 @@ JSONPath `QUERY` requests should select complete resource objects from the colle
 ## HTTP QUERY JSONPath Example
 
 ~~~~~~~~
-curl -X QUERY {{<ORIGIN_URL>}}/todos ^
+curl -X QUERY {{<ORIGIN_URL>}}/api/todos ^
 -H "Content-Type: application/jsonpath" ^
 -H "Accept: application/json" ^
 -d "$.todos[?(@.doneStatus == true)]"
 ~~~~~~~~
 
 ~~~~~~~~
-QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
+QUERY {{<ORIGIN_URL>}}/api/todos HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
 Content-Type: application/jsonpath
@@ -297,14 +297,14 @@ Use the Structured JSON media type when you want body-based query criteria witho
 ## HTTP QUERY Structured JSON Example
 
 ~~~~~~~~
-curl -X QUERY {{<ORIGIN_URL>}}/todos ^
+curl -X QUERY {{<ORIGIN_URL>}}/api/todos ^
 -H "Content-Type: application/vnd.thingifier.query+json" ^
 -H "Accept: application/json" ^
 -d "{\"filter\":{\"doneStatus\":true}}"
 ~~~~~~~~
 
 ~~~~~~~~
-QUERY {{<ORIGIN_URL>}}/todos HTTP/1.1
+QUERY {{<ORIGIN_URL>}}/api/todos HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
 Content-Type: application/vnd.thingifier.query+json

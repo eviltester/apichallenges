@@ -11,40 +11,40 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos 200`.
+# How to complete the challenge `GET /api/todos 200`.
 
 How to solve the API challenge and issue a GET request to return all the Todos in default JSON format.
 
-## GET /todos (200)
+## GET /api/todos (200)
 
-> Issue a `GET` request on the `/todos` end point
+> Issue a `GET` request on the `/api/todos` end point
 
 - This will show you all the todos in the system
 - The return format is a useful guide for the syntax of the request you will send in POST messages
 - Perform a `GET` prior to any amendment or deletion, to make sure that the data in the system is what you expect it to be.
-- remember not to add a trailing `/` on the request e.g. `/todos/` - that is a different end point
+- remember not to add a trailing `/` on the request e.g. `/api/todos/` - that is a different end point
 
 ## Basic Instructions
 
-- Issue a GET request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a GET request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header
 - The response body shows all the todos.
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to list all todos" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to list all todos" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -92,11 +92,11 @@ How to solve the API challenge and issue a GET request to return all the Todos i
 
 ## Lessons Learned
 
-- `GET /todos` is the baseline collection read used before most state-changing challenges.
+- `GET /api/todos` is the baseline collection read used before most state-changing challenges.
 - Safe reads let you inspect current state without creating or changing todos.
 - A collection response is the easiest place to learn the default todo representation.
 
 ## Suggested Experiments
 
-- Capture the ids returned by `GET /todos`, create a new todo, then call `GET /todos` again to see the collection change.
+- Capture the ids returned by `GET /api/todos`, create a new todo, then call `GET /api/todos` again to see the collection change.
 - Add `?doneStatus=false` and compare the filtered collection with the full baseline.

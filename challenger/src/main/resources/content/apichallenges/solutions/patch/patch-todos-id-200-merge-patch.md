@@ -11,22 +11,22 @@ concept_reference_label: HTTP PATCH Verb
 concept_reference_url: /reference/http-verbs/http-patch
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a PATCH request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/merge-patch+json||Send a JSON Merge Patch object and verify the response status is 200
+schema_howto_steps: Create a PATCH request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Content-Type to application/merge-patch+json||Send a JSON Merge Patch object and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `PATCH /todos/id (200) merge-patch`
+# How to complete the challenge `PATCH /api/todos/id (200) merge-patch`
 
 Use `PATCH` with `Content-Type: application/merge-patch+json` when you want to send a [JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396) document.
 
 > The merge-patch may look similar to the `application/json` patch. But the main difference is the standard handling. Any API can use whatever conventions it wants to handle an `application/json` patch. The API Challenges app ignores your request if you try to set a mandatory field to `null`. But in a `merge-patch+json` standard, a `null` is a delete and you can't delete a mandatory field so you would see an error. Feel free to experiment with this after you complete the challenge.
 
-## PATCH /todos/id (200) merge-patch
+## PATCH /api/todos/id (200) merge-patch
 
 > Issue a PATCH request to update an existing todo using JSON Merge Patch.
 
-- Use `PATCH /todos/{id}` where `{id}` is an existing todo id.
+- Use `PATCH /api/todos/{id}` where `{id}` is an existing todo id.
 - Add `Content-Type: application/merge-patch+json` for the [JSON Merge Patch standard](https://www.rfc-editor.org/rfc/rfc7396).
 - Send a JSON object containing the fields to add, replace, or remove.
 - The response should be `200`.
@@ -36,7 +36,7 @@ Use `PATCH` with `Content-Type: application/merge-patch+json` when you want to s
 ## Basic Instructions
 
 - Issue a `PATCH` request to:
-  - `{{<ORIGIN_URL>}}/todos/{{firstTodoId}}`
+  - `{{<ORIGIN_URL>}}/api/todos/{{firstTodoId}}`
 - The request should have an `X-CHALLENGER` header so the challenge is tracked.
 - The request body can be a JSON Merge Patch object:
 
@@ -48,20 +48,20 @@ Use `PATCH` with `Content-Type: application/merge-patch+json` when you want to s
 
 ### Try it now
 
-If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+If you don't know what todos are available then you can check by `GET /api/todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
-If you have already deleted all todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+If you have already deleted all todos, create one using `POST /api/todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo item for this challenge">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo fixture","doneStatus":false,"description":"created from the solution page"}' details="true" summary="POST /api/todos to create a todo item for this challenge">}}
 
-{{<api-live-request method="PATCH" path="/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/merge-patch+json||Accept: application/json" body='{"description":"patched with merge patch"}' details="true" summary="PATCH /todos/{id} with JSON Merge Patch to update a todo" open="true">}}
+{{<api-live-request method="PATCH" path="/api/todos/{{firstTodoId}}" expected-status="200" headers="Content-Type: application/merge-patch+json||Accept: application/json" body='{"description":"patched with merge patch"}' details="true" summary="PATCH /api/todos/{id} with JSON Merge Patch to update a todo" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> PATCH /todos/3 HTTP/1.1
+> PATCH /api/todos/3 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

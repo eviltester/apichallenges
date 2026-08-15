@@ -12,14 +12,14 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload with an unsupported extra field||Send the request and verify the response status is 422
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload with an unsupported extra field||Send the request and verify the response status is 422
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (422) extra`
+# How to complete the challenge `POST /api/todos (422) extra`
 
-Issue a `POST` request to `/todos` with a field that is not part of the todo schema.
+Issue a `POST` request to `/api/todos` with a field that is not part of the todo schema.
 
 ```json
 {
@@ -33,7 +33,7 @@ Issue a `POST` request to `/todos` with a field that is not part of the todo sch
 The response should be `422 Unprocessable Content` because the payload is syntactically valid, but the todo data cannot be processed as a todo.
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"extra field","doneStatus":true,"description":"created from the solution page","priority":"high"}' details="true" summary="POST /todos with an extra field to trigger 422" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="422" headers="Content-Type: application/json||Accept: application/json" body='{"title":"extra field","doneStatus":true,"description":"created from the solution page","priority":"high"}' details="true" summary="POST /api/todos with an extra field to trigger 422" open="true">}}
 
 ## Lessons Learned
 

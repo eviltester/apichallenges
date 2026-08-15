@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  const API_CHALLENGE_PREFIXES = '/todos||/todo||/challenges||/challenger||/secret||/heartbeat';
+  const API_CHALLENGE_PREFIXES = '/api||/todos||/todo||/challenges||/challenger||/secret||/heartbeat';
   const DOC_CONFIGS = {
-    '/docs': {
+    '/api/docs': {
       allowedPathPrefixes: API_CHALLENGE_PREFIXES,
       useChallenger: 'true',
     },

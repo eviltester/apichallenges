@@ -91,7 +91,7 @@ The API root is `http://localhost:4567/listicator`, with all the endpoints exist
 
 The main endpoints are:
 
-- `/heartbeat` - is the server alive?
+- `/api/heartbeat` - is the server alive?
 - `/lists` - manage the List entities - create, amend lists
 - `/lists/{guid}` - create, amend, delete a List
 - `/users` - user management - create, delete

@@ -11,7 +11,7 @@ showads: true
 
 This REST API tutorial teaches the main REST concepts by sending real HTTP requests to live APIs. You will try `GET`, `HEAD`, `POST`, `PATCH`, and `DELETE`, inspect status codes and headers, switch between JSON and XML, use auth tokens, and run a small CRUD flow from the page.
 
-The read-only examples use the [API Challenges API](/apichallenges) `/todos` endpoint, and the CRUD examples use the [Simple API](/practice-modes/simpleapi) when we need to create, update, or delete data. When you want to learn a topic in more detail, follow the links to the expanded reference material.
+The read-only examples use the [API Challenges API](/apichallenges) `/api/todos` endpoint, and the CRUD examples use the [Simple API](/practice-modes/simpleapi) when we need to create, update, or delete data. When you want to learn a topic in more detail, follow the links to the expanded reference material.
 
 By the end of this tutorial you should understand the basics of:
 
@@ -45,10 +45,10 @@ REST was introduced by Roy Fielding in his thesis, [Architectural Styles and the
 A high level starting point is:
 
 - a URL identifies a resource
-  - Example: `/todos` identifies the collection of todo resources.
-  - Example: `/todos/1` identifies a single todo resource, the one with `id=1`.
+  - Example: `/api/todos` identifies the collection of todo resources.
+  - Example: `/api/todos/1` identifies a single todo resource, the one with `id=1`.
 - an HTTP method describes what you want to do
-  - Example: `GET /todos` asks to read the todo collection and retrieve todo details.
+  - Example: `GET /api/todos` asks to read the todo collection and retrieve todo details.
 - headers describe message details
   - Example: `Accept: application/json` asks for a JSON response.
 - a body contains a representation such as JSON or XML
@@ -67,19 +67,19 @@ A resource is something the API exposes. In the API Challenges API, a todo item 
 There is a collection resource:
 
 ~~~~~~~~
-/todos
+/api/todos
 ~~~~~~~~
 
 And there are individual item resources:
 
 ~~~~~~~~
-/todos/1
-/todos/2
+/api/todos/1
+/api/todos/2
 ~~~~~~~~
 
 Try listing the todo collection:
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /todos to list todo resources">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/todos to list todo resources">}}
 
 When you execute the request, look for the collection in the response body. Each todo has fields such as `id`, `title`, `doneStatus`, and `description`.
 
@@ -95,13 +95,13 @@ For example:
 
 | URL | Meaning |
 |-----|---------|
-| `/todos` | the collection of todos |
-| `/todos/1` | todo `1` |
-| `/docs/openapi.json` | the OpenAPI description for API Challenges |
+| `/api/todos` | the collection of todos |
+| `/api/todos/1` | todo `1` |
+| `/api/docs/openapi.json` | the OpenAPI description for API Challenges |
 
 Try reading a single todo resource:
 
-{{<api-live-request method="GET" path="/todos/1" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /todos/1 to read one todo resource">}}
+{{<api-live-request method="GET" path="/api/todos/1" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/todos/1 to read one todo resource">}}
 
 The URL does not usually contain the action. Instead of `/deleteItem/1`, a REST-style API would usually combine an HTTP method (e.g. `DELETE`) with a resource URL (e.g. `/items/1`). In the CRUD section below, the Simple API uses this request format:
 
@@ -130,12 +130,12 @@ Common REST-style method usage:
 
 `HEAD` is similar to `GET`, but the server should only return the response status and headers. This is useful when a client wants to check whether a resource exists, or inspect metadata, without downloading the response body.
 
-{{<api-live-request method="HEAD" path="/todos/1" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="HEAD /todos/1 to get Headers Only">}}
+{{<api-live-request method="HEAD" path="/api/todos/1" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/todos" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="HEAD /api/todos/1 to get Headers Only">}}
 
 > **Exercise: Compare `HEAD` and `GET`**
 >
-> The earlier `GET /todos/1` request returned a response body.
-> After sending the `HEAD /todos/1` request, compare the status and headers with the `GET` response. The `HEAD` response should not contain a body, but the headers should be mostly the same.
+> The earlier `GET /api/todos/1` request returned a response body.
+> After sending the `HEAD /api/todos/1` request, compare the status and headers with the `GET` response. The `HEAD` response should not contain a body, but the headers should be mostly the same.
 
 
 
@@ -169,11 +169,11 @@ Common examples:
 | `422 Unprocessable Content` | the body was understood but failed validation |
 | `500 Internal Server Error` | the server failed unexpectedly |
 
-When you execute the first `GET /todos` request on this page, check that the response status is `200`.
+When you execute the first `GET /api/todos` request on this page, check that the response status is `200`.
 
-You can also ask the API for something the route does not support. Execute this `DELETE /heartbeat` request and check that the response status is `405`.
+You can also ask the API for something the route does not support. Execute this `DELETE /api/heartbeat` request and check that the response status is `405`.
 
-{{<api-live-request method="DELETE" path="/heartbeat" expected-status="405" use-challenger="false" allowed-path-prefixes="/heartbeat" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="DELETE /heartbeat to see a 405 status code">}}
+{{<api-live-request method="DELETE" path="/api/heartbeat" expected-status="405" use-challenger="false" allowed-path-prefixes="/api/heartbeat" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="DELETE /api/heartbeat to see a 405 status code">}}
 
 If you open the `Raw` response tab, the first line in the response shows the HTTP status returned by the server.
 
@@ -197,9 +197,9 @@ XML is also used by some APIs:
 Accept: application/xml
 ~~~~~~~~
 
-The API Challenges `/todos` API supports both JSON and XML for most requests. Try asking for XML:
+The API Challenges `/api/todos` API supports both JSON and XML for most requests. Try asking for XML:
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/xml" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /todos as XML">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/todos" headers="Accept: application/xml" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/todos as XML">}}
 
 The resource is the same, but the representation format changes.
 
@@ -224,14 +224,14 @@ Response headers describe the returned content and provide follow-on information
 
 Issue the request below and look at the headers in both the response and the request to see the difference.
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/todos" headers="Accept: application/json" editable="true" edit-mode="fixed" query-editable="false" body-editable="false" details="true" summary="GET /todos and inspect the headers in the response">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/todos" headers="Accept: application/json" editable="true" edit-mode="fixed" query-editable="false" body-editable="false" details="true" summary="GET /api/todos and inspect the headers in the response">}}
 
 To see the actual headers sent in the request, open the browser Dev Tools and look in the Network tab. This shows the full request and response details sent to the server. The browser may add headers that are not listed in the embedded HTTP client, and those extra headers can sometimes affect API testing.
 
 > **Exercise: Change the `Accept` Header**
 >
 > In our default request we asked for JSON.
-> Use the editable request above. Keep the URL as `/todos`, but change the `Accept` header between:
+> Use the editable request above. Keep the URL as `/api/todos`, but change the `Accept` header between:
 >
 > `Accept: application/json`
 > 
@@ -272,11 +272,11 @@ Authorization: Basic YWRtaW46cGFzc3dvcmQ=
 
 Base64 is only an encoding, not encryption. Anyone who can see the header can decode it, so Basic Auth should be sent over HTTPS in real systems.
 
-Authentication is often the first step. The API asks "can you prove who you are?" The `GET /secret/token` endpoint uses Basic Auth to prove who you are, then returns an auth token to allow access to private data.
+Authentication is often the first step. The API asks "can you prove who you are?" The `GET /api/secret/token` endpoint uses Basic Auth to prove who you are, then returns an auth token to allow access to private data.
 
 Run this request first to get the auth token:
 
-{{<api-live-request method="GET" path="/secret/token" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/token with Basic Auth to receive a read-only token">}}
+{{<api-live-request method="GET" path="/api/secret/token" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/secret" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/secret/token with Basic Auth to receive a read-only token">}}
 
 The auth token is shown in the response body and in the `X-AUTH-TOKEN` response header.
 
@@ -290,7 +290,7 @@ The auth token is shown in the response body and in the `X-AUTH-TOKEN` response 
 
 Authorization is the next step. The API asks "is this caller allowed to access this resource?" Use the token from the previous response as a Bearer token in the standard `Authorization` request header to read the protected secret note:
 
-{{<api-live-request method="GET" path="/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="Authorization: Bearer {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/note with Bearer Token to read the secret note">}}
+{{<api-live-request method="GET" path="/api/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/secret" headers="Authorization: Bearer {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/secret/note with Bearer Token to read the secret note">}}
 
 > **Exercise - Amend Authorization Header**
 >
@@ -304,7 +304,7 @@ Custom HTTP request and response headers are sometimes prefixed by `X-`. Some AP
 
 The API Challenges API also accepts the token in the custom `X-AUTH-TOKEN` request header, so the same protected note can be read this way:
 
-{{<api-live-request method="GET" path="/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/secret" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /secret/note with Custom header X-AUTH-TOKEN to read the secret note">}}
+{{<api-live-request method="GET" path="/api/secret/note" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/secret" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/secret/note with Custom header X-AUTH-TOKEN to read the secret note">}}
 
 > **Exercise - Amend X-AUTH-TOKEN Header**
 >
@@ -337,7 +337,7 @@ An OpenAPI file can describe:
 
 View the API Challenges OpenAPI file:
 
-{{<api-live-request method="GET" path="/docs/openapi.json" expected-status="200" use-challenger="false" allowed-path-prefixes="/docs" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /docs/openapi.json to view the OpenAPI description">}}
+{{<api-live-request method="GET" path="/api/docs/openapi.json" expected-status="200" use-challenger="false" allowed-path-prefixes="/api/docs" headers="Accept: application/json" editable="false" query-editable="false" body-editable="false" details="true" summary="GET /api/docs/openapi.json to view the OpenAPI description">}}
 
 OpenAPI files can be used in REST Client tools to create collections of requests that make it easier to test and use the API. We have reviews of many popular [REST Clients](/tools/clients), and most will import OpenAPI specifications.
 

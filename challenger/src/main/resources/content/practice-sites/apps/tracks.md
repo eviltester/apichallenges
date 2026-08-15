@@ -53,18 +53,18 @@ The API payloads are `XML` rather than `JSON`.
 
 The available endpoints are:
 
-- `/todos.xml`
-- `/todos/{ID}.xml`
+- `/api/todos.xml`
+- `/api/todos/{ID}.xml`
 - `/tickler.xml`
 - `/done.xml`
 - `/hidden.xml`
 - `/calendar.xml`
 - `/contexts.xml`
 - `/contexts/{ID}.xml`
-- `/contexts/{ID}/todos.xml`
+- `/contexts/{ID}/api/todos.xml`
 - `/projects.xml`
 - `/projects/{ID}.xml`
-- `/projects/{ID}/todos.xml`
+- `/projects/{ID}/api/todos.xml`
 
 You may find it easier to create data in the back end using the UI before issuing API requests.
 
@@ -84,14 +84,14 @@ Some examples for automating the Tracks API can be found in the source code for 
 
 ### Exercise - Create `todo` Data Using the API and `POST`
 
-- each of the GET endpoints returns an XML response e.g. `/todos.xml` returns an array of todos
+- each of the GET endpoints returns an XML response e.g. `/api/todos.xml` returns an array of todos
 - use the `todo` element as a request payload with `POST` to create a todo
 - experiment with the payload to find out what fields are optional and which are mandatory
 - remember to `GET` the data to check the `todo` was created as expected
 
 ### Exercise - Amend `todo` Data Using the API and `PUT`
 
-- to amend a todo you need to use the `/todos/{id}.xml` endpoint
+- to amend a todo you need to use the `/api/todos/{id}.xml` endpoint
 - `{id}` would be replaced with the id of the todo you wish to amend
 - experiment with the various fields and see what it is possible to amend and what it is not possible to amend
 

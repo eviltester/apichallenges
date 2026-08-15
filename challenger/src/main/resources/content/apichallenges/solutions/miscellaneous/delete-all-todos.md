@@ -1,10 +1,10 @@
 ---
 date:  2025-01-01T15:26:00Z
 lastmod: 2026-08-06
-title: API Challenges Solution For - Delete /todos/id (204) all
-seo_title: Solution: Delete /todos/id (204) all | API Challenges
+title: API Challenges Solution For - Delete /api/todos/id (204) all
+seo_title: Solution: Delete /api/todos/id (204) all | API Challenges
 description: How to solve API challenges to Delete all the todos
-seo_description: Use this walkthrough to solve Delete /todos/id (204) all with request setup, key headers, and expected status codes so you can complete the challenge.
+seo_description: Use this walkthrough to solve Delete /api/todos/id (204) all with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/miscellaneous/create-maximum-number-todos
 concepts_learned: HTTP DELETE||state cleanup||bulk operation||API test data
 concept_summary: Use this challenge to learn how cleanup requests reset API test data between scenarios.
@@ -12,7 +12,7 @@ concept_reference_label: API Testing Concepts and Coverage
 concept_reference_url: /reference/testing-apis
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: GET /todos and capture all todo ids currently returned by the API||Send DELETE /todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
+schema_howto_steps: GET /api/todos and capture all todo ids currently returned by the API||Send DELETE /api/todos/{id} for every id until no todos remain||Include X-CHALLENGER on each delete request to track challenge completion||GET /api/todos again and confirm the response contains an empty todo list||Verify the Delete All Todos challenge is marked complete in your session
 showads: true
 ---
 
@@ -32,8 +32,8 @@ I have an automated Java execution using Rest Assured to complete this:
 
 This uses a bunch of abstractions to keep the code simple but the basic process is:
 
-- `GET` the `/todos` and create a list of all the ids
-- Issue a `DELETE` request for each of the `/todos/id`
+- `GET` the `/api/todos` and create a list of all the ids
+- Issue a `DELETE` request for each of the `/api/todos/id`
 
 ```
         TodosApi api = new TodosApi();
@@ -80,7 +80,7 @@ If I don't know how to create the `culr` command I can generate the `curl` comma
 
 ```
 curl --request GET \
-  --url https://apichallenges.eviltester.com/todos \
+  --url https://apichallenges.eviltester.com/api/todos \
   --header 'X-CHALLENGER: 07466215-9bab-4bf4-9b7d-34b7ac765915'
 ```
 
@@ -90,7 +90,7 @@ I will actually save the response into a file to make it easier to work with.
 
 ```
 curl --request GET \
-  --url https://apichallenges.eviltester.com/todos \
+  --url https://apichallenges.eviltester.com/api/todos \
   --header 'X-CHALLENGER: 07466215-9bab-4bf4-9b7d-34b7ac765915'
   > todos.json
 ```
@@ -131,17 +131,17 @@ I then want to call curl for each of these values and I can use `xargs` to do th
 
 ```
 cat ids.txt | xargs -I % curl --request DELETE \
-  --url https://apichallenges.eviltester.com/todos/% \
+  --url https://apichallenges.eviltester.com/api/todos/% \
   --header 'X-CHALLENGER: 07466215-9bab-4bf4-9b7d-34b7ac765915'
 ```
 
 I can double check that I have deleted them by looking at the API Challenges progress page.
 
-Or just call the `GET /todos` and see an empty array
+Or just call the `GET /api/todos` and see an empty array
 
 ```
 > curl --request GET \
-  --url https://apichallenges.eviltester.com/todos \
+  --url https://apichallenges.eviltester.com/api/todos \
   --header 'X-CHALLENGER: 07466215-9bab-4bf4-9b7d-34b7ac765915'
 
 {"todos":[]}
@@ -152,11 +152,11 @@ Or I could do it all in one command:
 
 ```
 curl --request GET \
-  --url https://apichallenges.eviltester.com/todos \
+  --url https://apichallenges.eviltester.com/api/todos \
   --header 'X-CHALLENGER: 880c5857-dbff-4266-b419-701efa804679' |
 jq '.todos[].id' |
 xargs -I % curl --request DELETE \
-  --url https://apichallenges.eviltester.com/todos/% \
+  --url https://apichallenges.eviltester.com/api/todos/% \
   --header 'X-CHALLENGER: 880c5857-dbff-4266-b419-701efa804679'
 ```
 
@@ -167,17 +167,17 @@ xargs -I % curl --request DELETE \
 [Patreon ad free version](https://www.patreon.com/posts/119362209)
 ### Try it now
 
-If you don't know what todos are available then you can check by `GET /todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
+If you don't know what todos are available then you can check by `GET /api/todos`. [See the solution](/apichallenges/solutions/get/get-todos-200).
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
-If there are no todos, create one using `POST /todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
+If there are no todos, create one using `POST /api/todos`. [See the solution](/apichallenges/solutions/post-create/post-todos-201).
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created from the delete all solution page"}' details="true" summary="POST /todos to create a todo item to delete">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"todo to delete","doneStatus":false,"description":"created from the delete all solution page"}' details="true" summary="POST /api/todos to create a todo item to delete">}}
 
-Use the delete request repeatedly until `GET /todos` returns an empty todo list.
+Use the delete request repeatedly until `GET /api/todos` returns an empty todo list.
 
-{{<api-live-request method="DELETE" path="/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" details="true" summary="DELETE /todos/{id} to remove each todo until none remain" open="true">}}
+{{<api-live-request method="DELETE" path="/api/todos/{{firstTodoId}}" expected-status="204" headers="Accept: application/json" auto-create-first-todo="false" details="true" summary="DELETE /api/todos/{id} to remove each todo until none remain" open="true">}}
 
 ## Lessons Learned
 
@@ -187,5 +187,5 @@ Use the delete request repeatedly until `GET /todos` returns an empty todo list.
 
 ## Suggested Experiments
 
-- Call delete-all, then `GET /todos` and confirm the collection is empty or reset as documented.
+- Call delete-all, then `GET /api/todos` and confirm the collection is empty or reset as documented.
 - Run delete-all twice and compare whether the second call is treated as a no-op or a fresh success.

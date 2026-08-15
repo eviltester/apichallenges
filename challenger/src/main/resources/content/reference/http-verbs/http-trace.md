@@ -17,7 +17,7 @@ showads: true
 
 `TRACE` asks the server to send back, or loop back, the request message it received.
 
-For API testing, `TRACE` is useful mostly as a discovery and security check. Many APIs do not implement it, and that is usually expected. API Challenges includes `TRACE /heartbeat` so you can practise checking unsupported or unimplemented methods.
+For API testing, `TRACE` is useful mostly as a discovery and security check. Many APIs do not implement it, and that is usually expected. API Challenges includes `TRACE /api/heartbeat` so you can practise checking unsupported or unimplemented methods.
 
 Unlike `CONNECT`, `TRACE` does not establish a tunnel. It is a diagnostic request. If it succeeds, the important evidence is the echoed request in the response body.
 
@@ -26,7 +26,7 @@ Unlike `CONNECT`, `TRACE` does not establish a tunnel. It is a diagnostic reques
 ## HTTP TRACE Send Example
 
 ~~~~~~~~
-curl -i -v -X TRACE {{<ORIGIN_URL>}}/heartbeat
+curl -i -v -X TRACE {{<ORIGIN_URL>}}/api/heartbeat
 ~~~~~~~~
 
 Some browser-based HTTP clients cannot send `TRACE` requests. If your API client does not support `TRACE`, use `cURL` with `-X TRACE` or use a dedicated testing proxy/tool that allows uncommon methods.
@@ -38,7 +38,7 @@ When testing `TRACE`, avoid sending real authentication tokens, session cookies,
 ## HTTP TRACE Request Example
 
 ~~~~~~~~
-TRACE {{<ORIGIN_URL>}}/heartbeat HTTP/1.1
+TRACE {{<ORIGIN_URL>}}/api/heartbeat HTTP/1.1
 User-Agent: curl/8.0.0
 Host: localhost:4567
 Accept: */*
@@ -61,13 +61,13 @@ Accept: */*
 You can add a harmless diagnostic header to make the loop-back easier to see:
 
 ~~~~~~~~
-curl -i -v -X TRACE {{<ORIGIN_URL>}}/heartbeat ^
+curl -i -v -X TRACE {{<ORIGIN_URL>}}/api/heartbeat ^
   -H "X-Trace-Test: apichallenges"
 ~~~~~~~~
 
 If the server performs the loop-back, the response body may contain the request line and headers it received, including the `X-Trace-Test` header.
 
-For API Challenges, `TRACE /heartbeat` is deliberately used as an unsupported-method challenge and returns `501 Not Implemented`.
+For API Challenges, `TRACE /api/heartbeat` is deliberately used as an unsupported-method challenge and returns `501 Not Implemented`.
 
 ### Normally we expect `TRACE` to fail
 

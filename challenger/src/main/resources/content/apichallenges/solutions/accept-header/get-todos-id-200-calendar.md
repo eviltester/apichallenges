@@ -12,18 +12,18 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create or identify an existing todo||Create a GET request to /todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to text/calendar||Send the request and verify the response status is 200 and Content-Type is text/calendar
+schema_howto_steps: Create or identify an existing todo||Create a GET request to /api/todos/{id}||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to text/calendar||Send the request and verify the response status is 200 and Content-Type is text/calendar
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos/{id} (200) text/calendar`
+# How to complete the challenge `GET /api/todos/{id} (200) text/calendar`
 
 This challenge asks for one existing todo in calendar format. The API returns a minimal `VCALENDAR` containing a single `VTODO`.
 
-## GET /todos/{id} (200) text/calendar
+## GET /api/todos/{id} (200) text/calendar
 
-> Issue a GET request on the `/todos/{id}` end point with an `Accept` header of `text/calendar` to receive the todo as a VTODO.
+> Issue a GET request on the `/api/todos/{id}` end point with an `Accept` header of `text/calendar` to receive the todo as a VTODO.
 
 - Use a real todo id, not the literal text `{id}`
 - Add the `Accept: text/calendar` header
@@ -33,27 +33,27 @@ This challenge asks for one existing todo in calendar format. The API returns a 
 
 ## Basic Instructions
 
-- Find an existing todo by calling `GET /todos`
-- If there are no todos, create one with `POST /todos`
-- Issue a `GET` request to `/todos/{id}`
+- Find an existing todo by calling `GET /api/todos`
+- If there are no todos, create one with `POST /api/todos`
+- Issue a `GET` request to `/api/todos/{id}`
 - Send `Accept: text/calendar`
 
 ### Try it now
 
 If you don't know what todos are available, list them first.
 
-{{<api-live-request method="GET" path="/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos to see what todos are available now">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos to see what todos are available now">}}
 
 If there are no todos, create one.
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"calendar todo","doneStatus":false,"description":"created for the text/calendar solution"}' details="true" summary="POST /todos to create a todo for the calendar request">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"calendar todo","doneStatus":false,"description":"created for the text/calendar solution"}' details="true" summary="POST /api/todos to create a todo for the calendar request">}}
 
-{{<api-live-request method="GET" path="/todos/{{firstTodoId}}" expected-status="200" headers="Accept: text/calendar" details="true" summary="GET /todos/{id} as text/calendar" open="true">}}
+{{<api-live-request method="GET" path="/api/todos/{{firstTodoId}}" expected-status="200" headers="Accept: text/calendar" details="true" summary="GET /api/todos/{id} as text/calendar" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos/1 HTTP/1.1
+> GET /api/todos/1 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: text/calendar
@@ -90,5 +90,5 @@ END:VCALENDAR
 
 ## Suggested Experiments
 
-- Request `GET /todos/{id}` with `Accept: text/calendar` and then with `Accept: application/json` to compare fields.
-- Try `Accept: text/calendar` on `/todos` and observe whether the collection supports the calendar representation.
+- Request `GET /api/todos/{id}` with `Accept: text/calendar` and then with `Accept: application/json` to compare fields.
+- Try `Accept: text/calendar` on `/api/todos` and observe whether the collection supports the calendar representation.

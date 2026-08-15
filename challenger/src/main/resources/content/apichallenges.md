@@ -23,7 +23,7 @@ As you interact with the API there are a variety of challenges to complete e.g. 
 
 Each challenge is designed to teach you some aspect of how APIs work, and how to test them.
 
-The API has [documentation available](/docs).
+The API has [documentation available](/api/docs).
 
 <p class="content-centered-cta"><a class="next-challenge-cta-link" href="/gui/challenges">Do The Challenges</a></p>
 
@@ -60,9 +60,9 @@ More information on how to play the challenges in multi-user mode i.e. `apichall
 
 The [Challenges](/gui/challenges) can be completed by issuing HTTP API requests.
 
-e.g. `GET {{<ORIGIN_URL>}}/todos` would complete the challenge to "GET the list of todos"
+e.g. `GET {{<ORIGIN_URL>}}/api/todos` would complete the challenge to "GET the list of todos"
 
-You can also `GET {{<ORIGIN_URL>}}/challenges` to get the list of challenges and their status as an API call.
+You can also `GET {{<ORIGIN_URL>}}/api/challenges` to get the list of challenges and their status as an API call.
 
 ## Challenge Solutions
 
@@ -78,7 +78,7 @@ The actual challenges page is available from the site menu:
 
 To track your challenges and use the gamification tracking to view your progress you'll need to:
 
-- create a challenger by issuing a `POST` request on the `/challenger` endpoint
+- create a challenger by issuing a `POST` request on the `/api/challenger` endpoint
 - the response will include an `X-CHALLENGER` header with a unique GUID
 - this GUID is the reference for an in-memory database in the API Challenges
 - make requests to the API with the `X-CHALLENGER` header in the request headers

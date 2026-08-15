@@ -24,7 +24,7 @@ showads: true
 For example:
 
 ~~~~~~~~
-PATCH /todos/1
+PATCH /api/todos/1
 ~~~~~~~~
 
 Might mean "change only the fields described in this request body."
@@ -44,7 +44,7 @@ If two clients patch the same resource at the same time, one change can accident
 ## HTTP PATCH Send Example
 
 ~~~~~~~~
-curl -X PATCH {{<ORIGIN_URL>}}/todos/3 ^
+curl -X PATCH {{<ORIGIN_URL>}}/api/todos/3 ^
 -H "Content-Type: application/json" ^
 -H "Accept: application/json" ^
 -d "{\"title\":\"patched title\"}"
@@ -55,7 +55,7 @@ curl -X PATCH {{<ORIGIN_URL>}}/todos/3 ^
 ## HTTP PATCH Partial JSON Example
 
 ~~~~~~~~
-PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+PATCH {{<ORIGIN_URL>}}/api/todos/3 HTTP/1.1
 User-Agent: rest-client
 Host: localhost:4567
 Content-Type: application/json
@@ -69,7 +69,7 @@ Accept: application/json
 ## HTTP PATCH JSON Merge Patch Example
 
 ~~~~~~~~
-PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+PATCH {{<ORIGIN_URL>}}/api/todos/3 HTTP/1.1
 User-Agent: rest-client
 Host: localhost:4567
 Content-Type: application/merge-patch+json
@@ -89,7 +89,7 @@ But in a `merge-patch+json` standard, a `null` is a delete, so if you try to del
 ## HTTP PATCH JSON Patch Example
 
 ~~~~~~~~
-PATCH {{<ORIGIN_URL>}}/todos/3 HTTP/1.1
+PATCH {{<ORIGIN_URL>}}/api/todos/3 HTTP/1.1
 User-Agent: rest-client
 Host: localhost:4567
 Content-Type: application/json-patch+json

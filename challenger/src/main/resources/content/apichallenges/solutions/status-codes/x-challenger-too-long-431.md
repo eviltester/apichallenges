@@ -12,14 +12,14 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: API Testing Concepts and Coverage
 concept_reference_url_2: /reference/testing-apis
-schema_howto_steps: Start with your real X-CHALLENGER value||Append enough characters to make the header longer than 100 characters||GET /heartbeat and verify the response status is 431
+schema_howto_steps: Start with your real X-CHALLENGER value||Append enough characters to make the header longer than 100 characters||GET /api/heartbeat and verify the response status is 431
 showads: true
 ---
 
 
-# How to complete the challenge `GET /heartbeat (431) X-CHALLENGER too long`
+# How to complete the challenge `GET /api/heartbeat (431) X-CHALLENGER too long`
 
-Issue a `GET` request to `/heartbeat` with an `X-CHALLENGER` header longer than 100 characters.
+Issue a `GET` request to `/api/heartbeat` with an `X-CHALLENGER` header longer than 100 characters.
 
 To have the challenge tracked, start the header value with your real challenger GUID, then append extra characters.
 
@@ -40,7 +40,7 @@ The response should be `431 Request Header Fields Too Large`.
 ```
 ### Try it now
 
-{{<api-live-request method="GET" path="/heartbeat" expected-status="431" headers="X-CHALLENGER: {{oversizedChallenger}}||Accept: application/json" use-challenger="false" details="true" summary="GET /heartbeat with an oversized X-CHALLENGER to trigger 431" open="true">}}
+{{<api-live-request method="GET" path="/api/heartbeat" expected-status="431" headers="X-CHALLENGER: {{oversizedChallenger}}||Accept: application/json" use-challenger="false" details="true" summary="GET /api/heartbeat with an oversized X-CHALLENGER to trigger 431" open="true">}}
 
 ## Lessons Learned
 

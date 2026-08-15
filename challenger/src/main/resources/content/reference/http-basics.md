@@ -48,12 +48,12 @@ If we want to send custom requests then we need to use a different tool e.g. `cU
 Command:
 
 ~~~~~~~~
-curl {{<ORIGIN_URL>}}/heartbeat ^
+curl {{<ORIGIN_URL>}}/api/heartbeat ^
 -H "accept: application/xml" ^
 --proxy 127.0.0.1:8888
 ~~~~~~~~
 
-The command above uses `cURL` to send a request to the `/heartbeat` endpoint.
+The command above uses `cURL` to send a request to the `/api/heartbeat` endpoint.
 
 By default, `cURL` sends a `GET` request when you provide a URL and no other command to use a different verb.
 
@@ -66,7 +66,7 @@ The `--proxy` option routes the request through a proxy running on `127.0.0.1:88
 This command sends a GET Request:
 
 ~~~~~~~~
-GET {{<ORIGIN_URL>}}/heartbeat HTTP/1.1
+GET {{<ORIGIN_URL>}}/api/heartbeat HTTP/1.1
 User-Agent: curl/7.39.0
 Host: {{<HOST_URL>}}
 Connection: Keep-Alive
@@ -78,13 +78,13 @@ A raw HTTP request is mostly a text message with a standard layout.
 The first line is the request line:
 
 ~~~~~~~~
-GET {{<ORIGIN_URL>}}/heartbeat HTTP/1.1
+GET {{<ORIGIN_URL>}}/api/heartbeat HTTP/1.1
 ~~~~~~~~
 
 This tells us:
 
 - `GET` is the HTTP verb, or method
-- `{{<ORIGIN_URL>}}/heartbeat` is the resource being requested
+- `{{<ORIGIN_URL>}}/api/heartbeat` is the resource being requested
 - `HTTP/1.1` is the HTTP version being used
 
 After the request line we see the headers:
@@ -100,7 +100,7 @@ In testing, this gives us several places to investigate problems. The URL might 
 
 <a id="http-response"></a>
 
-## HTTP Response to GET /heartbeat request
+## HTTP Response to GET /api/heartbeat request
 
 ~~~~~~~~
 HTTP/1.1 204 No Content
@@ -133,7 +133,7 @@ The headers describe the response:
 - `Transfer-Encoding` describes how the message body is transferred
 - `Server` describes the server software
 
-For `/heartbeat`, a `204` status code means the server handled the request successfully and has no response body to send back.
+For `/api/heartbeat`, a `204` status code means the server handled the request successfully and has no response body to send back.
 
 If the same request is sent with `accept: application/xml`, a server that supports XML might respond with an XML `Content-Type`. If it cannot satisfy the requested format then the response may be different, for example `406 Not Acceptable`.
 
@@ -193,8 +193,8 @@ Additional verbs:
 For example, these two requests use the same URL but have different intent:
 
 ~~~~~~~~
-GET /todos/1 HTTP/1.1
-DELETE /todos/1 HTTP/1.1
+GET /api/todos/1 HTTP/1.1
+DELETE /api/todos/1 HTTP/1.1
 ~~~~~~~~
 
 The first request asks to retrieve the todo item. The second asks to delete it.
@@ -451,9 +451,9 @@ A URI identifies a resource.
 
 For day to day API testing, the resource is usually something the server can route to:
 
-- a collection such as `/todos`
-- a specific item such as `/todos/1`
-- an action-like endpoint such as `/heartbeat`
+- a collection such as `/api/todos`
+- a specific item such as `/api/todos/1`
+- an action-like endpoint such as `/api/heartbeat`
 
 The path matters because it is part of how the application decides which code should handle the request.
 

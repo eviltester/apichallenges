@@ -3,7 +3,7 @@ date:  2021-07-25T08:30:00Z
 lastmod: 2026-08-06
 title: API Challenges Solution For - unauthorized secret note 401
 seo_title: Solution: unauthorized secret note 401 | API Challenges
-description: How to solve GET /secret/note (401) - unauthorized to access secret note
+description: How to solve GET /api/secret/note (401) - unauthorized to access secret note
 seo_description: Use this walkthrough to solve unauthorized secret note 401 with request setup, key headers, and expected status codes so you can complete the challenge.
 next_challenge: /apichallenges/solutions/authorization/get-secret-note-200
 concepts_learned: HTTP GET||401 Unauthorized||authorization||missing auth token
@@ -12,7 +12,7 @@ concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /secret/note||Add an invalid or missing X-AUTH-TOKEN value to trigger unauthorized access||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
+schema_howto_steps: Create a GET request to /api/secret/note||Add an invalid or missing X-AUTH-TOKEN value to trigger unauthorized access||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
 showads: true
 ---
 
@@ -24,7 +24,7 @@ This post and video shows how to complete the unauthorized secret note challenge
 
 ## 	Authorization Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /api/secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -32,21 +32,21 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - Authorization is "do you have the right permissions" (`X-AUTH-TOKEN`)
 
 
-## GET /secret/note (401)
+## GET /api/secret/note (401)
 
-> Issue a GET request on the `/secret/note` end point and receive 401 when no X-AUTH-TOKEN header present
+> Issue a GET request on the `/api/secret/note` end point and receive 401 when no X-AUTH-TOKEN header present
 
 - `GET` request means use the HTTP Verb GET
-    - e.g. `GET /secret/note` sends to the secret note endpoint
+    - e.g. `GET /api/secret/note` sends to the secret note endpoint
 - `no X-AUTH-TOKEN header present` means no custom header named `X-AUTH-TOKEN` should be added to the message
 - add the `X-CHALLENGER` header to track progress
 - Receive a 401 UNAUTHORIZED response because no authorization token is present
 
 ## Basic Instructions
 
-- Create a new request for the `/secret/note` end point
+- Create a new request for the `/api/secret/note` end point
     - if running locally that endpoint would be
-        - `{{<ORIGIN_URL>}}/secret/note`
+        - `{{<ORIGIN_URL>}}/api/secret/note`
 - The verb should be a `GET`
 - Ensure there is no custom header with the name `X-AUTH-TOKEN`
 - The request should have an `X-CHALLENGER` header to track challenge completion
@@ -54,13 +54,13 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/secret/note" expected-status="401" headers="Accept: application/json" details="true" summary="GET /secret/note without an auth token to trigger 401" open="true">}}
+{{<api-live-request method="GET" path="/api/secret/note" expected-status="401" headers="Accept: application/json" details="true" summary="GET /api/secret/note without an auth token to trigger 401" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> GET /secret/note HTTP/1.1
+> GET /api/secret/note HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: insomnia/2021.2.2
 > X-CHALLENGER: x-challenger-guid
@@ -96,5 +96,5 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ## Suggested Experiments
 
-- Send `GET /secret/note` without `X-AUTH-TOKEN`, then add a real token and compare status plus body exposure.
+- Send `GET /api/secret/note` without `X-AUTH-TOKEN`, then add a real token and compare status plus body exposure.
 - Keep `X-CHALLENGER` present but remove only `X-AUTH-TOKEN` to isolate the failing header.

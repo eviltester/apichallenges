@@ -374,12 +374,14 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertEquals(15, countOccurrences(html, "data-use-challenger=\"false\""));
         Assertions.assertEquals(
                 5, countOccurrences(html, "data-allowed-path-prefixes=\"/simpleapi\""));
-        Assertions.assertEquals(5, countOccurrences(html, "data-allowed-path-prefixes=\"/todos\""));
-        Assertions.assertEquals(1, countOccurrences(html, "data-allowed-path-prefixes=\"/docs\""));
         Assertions.assertEquals(
-                1, countOccurrences(html, "data-allowed-path-prefixes=\"/heartbeat\""));
+                5, countOccurrences(html, "data-allowed-path-prefixes=\"/api/todos\""));
         Assertions.assertEquals(
-                3, countOccurrences(html, "data-allowed-path-prefixes=\"/secret\""));
+                1, countOccurrences(html, "data-allowed-path-prefixes=\"/api/docs\""));
+        Assertions.assertEquals(
+                1, countOccurrences(html, "data-allowed-path-prefixes=\"/api/heartbeat\""));
+        Assertions.assertEquals(
+                3, countOccurrences(html, "data-allowed-path-prefixes=\"/api/secret\""));
         Assertions.assertEquals(14, countOccurrences(html, "data-editable=\"false\""));
         Assertions.assertEquals(1, countOccurrences(html, "data-editable=\"true\""));
         Assertions.assertEquals(
@@ -389,15 +391,15 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 countOccurrences(html, "<details class=\"sim-live-request-details\"><summary>"));
         Assertions.assertEquals(
                 0, countOccurrences(html, "<details class=\"sim-live-request-details\" open"));
-        Assertions.assertTrue(html.contains("data-path=\"/todos\""));
-        Assertions.assertTrue(html.contains("data-path=\"/todos/1\""));
-        Assertions.assertTrue(html.contains("data-method=\"HEAD\" data-path=\"/todos/1\""));
-        Assertions.assertTrue(html.contains("data-path=\"/heartbeat\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/todos\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/todos/1\""));
+        Assertions.assertTrue(html.contains("data-method=\"HEAD\" data-path=\"/api/todos/1\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/heartbeat\""));
         Assertions.assertTrue(html.contains("data-expected-status=\"405\""));
-        Assertions.assertTrue(html.contains("data-path=\"/secret/token\""));
-        Assertions.assertTrue(html.contains("data-path=\"/secret/note\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/secret/token\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/secret/note\""));
         Assertions.assertTrue(html.contains("{{authToken}}"));
-        Assertions.assertTrue(html.contains("data-path=\"/docs/openapi.json\""));
+        Assertions.assertTrue(html.contains("data-path=\"/api/docs/openapi.json\""));
         Assertions.assertFalse(html.contains("data-path=\"/simpleapi/docs/openapi.json\""));
         Assertions.assertTrue(html.contains("data-path=\"/simpleapi/items\""));
         Assertions.assertTrue(
@@ -875,7 +877,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         assertOpenApiUiReferenceLaunchLink(
                 html, clientPath, "%2Fsim%2Fdocs%2Fopenapi-3.2.json", "API Simulator");
         assertOpenApiUiReferenceLaunchLink(
-                html, clientPath, "%2Fdocs%2Fopenapi-3.2.json", "API Challenges");
+                html, clientPath, "%2Fapi%2Fdocs%2Fopenapi-3.2.json", "API Challenges");
         assertOpenApiUiReferenceLaunchLink(
                 html, clientPath, "%2Fshop%2Fdocs%2Fopenapi-3.2.json", "Buggy API");
     }

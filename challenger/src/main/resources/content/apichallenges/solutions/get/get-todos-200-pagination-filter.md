@@ -12,18 +12,18 @@ concept_reference_label: HTTP GET Verb
 concept_reference_url: /reference/http-verbs/http-get
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add doneStatus=false with _limit=2 and _offset=1||Send the request and verify the response status is 200
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Add Accept application/json so the response is JSON||Add doneStatus=false with _limit=2 and _offset=1||Send the request and verify the response status is 200
 showads: true
 ---
 
 
-# How to complete the challenge `GET /todos (200) ?filter&_limit&_offset`
+# How to complete the challenge `GET /api/todos (200) ?filter&_limit&_offset`
 
 How to issue a GET request on a top level entity endpoint and combine a todo field filter with pagination.
 
-## GET /todos (200) ?filter&_limit&_offset
+## GET /api/todos (200) ?filter&_limit&_offset
 
-> Issue a GET request on the `/todos` end point with a query filter and pagination parameters, requesting the response in JSON format.
+> Issue a GET request on the `/api/todos` end point with a query filter and pagination parameters, requesting the response in JSON format.
 
 - `doneStatus=false` filters the collection to only not done todos
 - `_limit=2` asks for 2 returned todos
@@ -34,23 +34,23 @@ How to issue a GET request on a top level entity endpoint and combine a todo fie
 
 ## Basic Instructions
 
-- Issue a `GET` request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a `GET` request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - The request should have an `Accept: application/json` header so the API returns todos in JSON format
 - Add `doneStatus=false`, `_limit=2`, and `_offset=1` as URL parameters:
-    - `{{<ORIGIN_URL>}}/todos?doneStatus=false&_limit=2&_offset=1`
+    - `{{<ORIGIN_URL>}}/api/todos?doneStatus=false&_limit=2&_offset=1`
 - The response status code should be `200` because the request is accepted
 - Check that the response body contains no more than 2 todos and all returned todos have `doneStatus` set to `false`
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos?doneStatus=false&_limit=2&_offset=1" expected-status="200" headers="Accept: application/json" details="true" summary="GET /todos?doneStatus=false&_limit=2&_offset=1 to filter and paginate todos" open="true">}}
+{{<api-live-request method="GET" path="/api/todos?doneStatus=false&_limit=2&_offset=1" expected-status="200" headers="Accept: application/json" details="true" summary="GET /api/todos?doneStatus=false&_limit=2&_offset=1 to filter and paginate todos" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos?doneStatus=false&_limit=2&_offset=1 HTTP/1.1
+> GET /api/todos?doneStatus=false&_limit=2&_offset=1 HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid

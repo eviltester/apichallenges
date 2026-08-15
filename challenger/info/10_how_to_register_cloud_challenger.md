@@ -6,16 +6,16 @@ But if you want to use the cloud hosted multi-user version then you need to regi
 
 And to do that...
 
-## POST /challenger
+## POST /api/challenger
 
-We need to make an API call to the `/challenger` uri.
+We need to make an API call to the `/api/challenger` uri.
 
-In my API testing tool. I will issue a POST request to `https://apichallenges.eviltester.com/challenger`
+In my API testing tool. I will issue a POST request to `https://apichallenges.eviltester.com/api/challenger`
 
 - _Issue POST Request_
 
 ~~~~~~~~
-POST https://apichallenges.eviltester.com/challenger
+POST https://apichallenges.eviltester.com/api/challenger
 ~~~~~~~~
 
 And if I receive a `201` response then that means that I have created a challenger session.
@@ -41,14 +41,14 @@ In the response there should be an `X-CHALLENGER` header.
 
 This is my unique session id, and if I use this as a header in all my requests then every challenge I complete will be tracked.
 
-I will make a request to the `/challenges` URI which lets me see the status of the challenges.
+I will make a request to the `/api/challenges` URI which lets me see the status of the challenges.
 
 And I will add the `X-CHALLENGER` header with the session I was just allocated.
 
-- _Issue GET /challenges with `X-CHALLENGER` header_
+- _Issue GET /api/challenges with `X-CHALLENGER` header_
 
 ~~~~~~~~~
-GET https://apichallenges.eviltester.com/challenges
+GET https://apichallenges.eviltester.com/api/challenges
 ~~~~~~~~~
 
 ## See Status in the GUI
@@ -73,7 +73,7 @@ The challenger progress and todo data can also be saved in local storage and loa
 
 Basically to track my challenges in multi-user mode.
 
-- `POST /challenger`
+- `POST /api/challenger`
 - use the `X-CHALLENGER` header in all requests
 - _visit https://apichallenges.eviltester.com/gui/challenges/{guid}_
 - save/restore the challenger progress and data in local storage from the GUI buttons
@@ -92,7 +92,7 @@ The sessions on the cloud will be deleted from memory when not used for 10 minut
 
 The API Challenges application for helping you train and practice in Testing REST APIs requires creating a session for tracking challenges in multi-user mode.
 
-- `POST /challenger`
+- `POST /api/challenger`
 - use the `X-CHALLENGER` header in all requests
 - visit https://apichallenges.eviltester.com/gui/challenges/{guid}
 

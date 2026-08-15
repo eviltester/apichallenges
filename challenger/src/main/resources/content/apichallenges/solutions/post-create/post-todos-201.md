@@ -12,16 +12,16 @@ concept_reference_label: HTTP POST Verb
 concept_reference_url: /reference/http-verbs/http-post
 concept_reference_label_2: REST API Basics
 concept_reference_url_2: /reference/rest-api-basics
-schema_howto_steps: Create a POST request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
+schema_howto_steps: Create a POST request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Send a valid JSON payload that matches the field and content constraints||Send the request and verify the response status is 201
 showads: true
 ---
 
 
-# How to complete the challenge `POST /todos (201)`
+# How to complete the challenge `POST /api/todos (201)`
 
 How to use a POST request to create a todo item in the application and receive a 201 status response code.
 
-## POST /todos (201)
+## POST /api/todos (201)
 
 > 	Issue a `POST` request to successfully create a todo
 
@@ -33,8 +33,8 @@ How to use a POST request to create a todo item in the application and receive a
 
 ## Basic Instructions
 
-- Issue a POST request to end point "/todos"
-    - `{{<ORIGIN_URL>}}/todos`
+- Issue a POST request to end point "/api/todos"
+    - `{{<ORIGIN_URL>}}/api/todos`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - Use the format for the todo which you see in the `GET` response
 - Do not include an 'id' in the request because that is added automatically by the system
@@ -43,13 +43,13 @@ How to use a POST request to create a todo item in the application and receive a
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /todos to create a todo" open="true">}}
+{{<api-live-request method="POST" path="/api/todos" expected-status="201" headers="Content-Type: application/json||Accept: application/json" body='{"title":"solution widget todo","doneStatus":true,"description":"created from the solution page"}' details="true" summary="POST /api/todos to create a todo" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /todos HTTP/1.1
+> POST /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
@@ -87,11 +87,11 @@ How to use a POST request to create a todo item in the application and receive a
 
 ## Lessons Learned
 
-- `POST /todos` creates a server-assigned todo resource and should return `201 Created`.
+- `POST /api/todos` creates a server-assigned todo resource and should return `201 Created`.
 - The client should omit `id` because the server owns identity assignment for new todos.
 - A successful create response becomes fixture data for later read, update, and delete tests.
 
 ## Suggested Experiments
 
-- Create a todo, capture its returned `id`, then request `GET /todos/{id}` to verify it was stored.
+- Create a todo, capture its returned `id`, then request `GET /api/todos/{id}` to verify it was stored.
 - Repeat the same create body twice and compare whether the API creates two resources or detects duplicates.

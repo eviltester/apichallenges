@@ -12,19 +12,19 @@ concept_reference_label: HTTP Basics
 concept_reference_url: /reference/http-basics
 concept_reference_label_2: HTTP Methods and Verbs
 concept_reference_url_2: /reference/http-verbs
-schema_howto_steps: Create a GET request to /todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/json;q=0, application/xml;q=0||Send the request and verify status 406
+schema_howto_steps: Create a GET request to /api/todos||Include X-CHALLENGER so the challenge is tracked in your current session||Set Accept to application/json;q=0, application/xml;q=0||Send the request and verify status 406
 showads: true
 ---
 
-# How to complete the challenge `GET /todos (406) q rejects all`
+# How to complete the challenge `GET /api/todos (406) q rejects all`
 
 This challenge sends an `Accept` header that names supported formats but explicitly rejects both of them.
 
-> Issue a GET request on the `/todos` end point with an `Accept` header of `application/json;q=0, application/xml;q=0` to receive 406 'NOT ACCEPTABLE' status code.
+> Issue a GET request on the `/api/todos` end point with an `Accept` header of `application/json;q=0, application/xml;q=0` to receive 406 'NOT ACCEPTABLE' status code.
 
 ## Basic Instructions
 
-- Issue a `GET` request to `/todos`
+- Issue a `GET` request to `/api/todos`
 - Add the `X-CHALLENGER` header to track challenge completion
 - Set `Accept` to `application/json;q=0, application/xml;q=0`
 - Check that the response status is `406`
@@ -32,12 +32,12 @@ This challenge sends an `Accept` header that names supported formats but explici
 
 ### Try it now
 
-{{<api-live-request method="GET" path="/todos" expected-status="406" headers="Accept: application/json;q=0, application/xml;q=0" details="true" summary="GET /todos while rejecting JSON and XML" open="true">}}
+{{<api-live-request method="GET" path="/api/todos" expected-status="406" headers="Accept: application/json;q=0, application/xml;q=0" details="true" summary="GET /api/todos while rejecting JSON and XML" open="true">}}
 
 ## Example Request
 
 ~~~~~~~~
-> GET /todos HTTP/1.1
+> GET /api/todos HTTP/1.1
 > Host: {{<HOST_URL>}}
 > X-CHALLENGER: x-challenger-guid
 > Accept: application/json;q=0, application/xml;q=0
