@@ -2,9 +2,11 @@ package uk.co.compendiumdev.challenger.restassured._02_first_real_challenge;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.co.compendiumdev.challenger.payloads.Challenge;
+import uk.co.compendiumdev.challenger.payloads.Challenges;
+import uk.co.compendiumdev.challenger.restassured.api.ChallengesStatus;
 import uk.co.compendiumdev.challenger.restassured.api.RestAssuredBaseTest;
 
 public class C002GetChallengesTest extends RestAssuredBaseTest {
@@ -25,12 +27,11 @@ public class C002GetChallengesTest extends RestAssuredBaseTest {
                         .response();
 
         // challenge should be met
-        // this fails on RestAssured 4.3.1 - downgraded to 4.2.0
-        Map<String, Object> challenge =
-                response.body()
-                        .jsonPath()
-                        .get("challenges.find { it.name == 'GET /challenges (200)' }");
+        final Challenges challenges = response.body().as(Challenges.class);
+        final Challenge challenge =
+                ChallengesStatus.getChallengeNamed(challenges.challenges, "GET /challenges (200)");
 
-        Assertions.assertTrue((Boolean) challenge.get("status"));
+        Assertions.assertNotNull(challenge);
+        Assertions.assertTrue(challenge.status);
     }
 }

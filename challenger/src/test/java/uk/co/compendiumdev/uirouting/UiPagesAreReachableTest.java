@@ -852,12 +852,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(body.contains("openapi-ui-launch-panel"));
         Assertions.assertTrue(body.contains("openapi-ui-launch-link"));
         assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/simpleapi/docs/openapi-3.2.json", "Simple API");
-        assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/sim/docs/openapi-3.2.json", "API Simulator");
-        assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/api/docs/openapi-3.2.json", "API Challenges");
-        assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi-3.2.json", "Buggy API");
+                body, clientPath, "/simpleapi/docs/openapi.json", "Simple API");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/sim/docs/openapi.json", "API Simulator");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/api/docs/openapi.json", "API Challenges");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi.json", "Buggy API");
     }
 
     private void assertOnlineOpenApiUiLaunchLinks(
@@ -867,12 +865,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(body.contains("openapi-ui-launch-panel"));
         Assertions.assertTrue(body.contains("openapi-ui-launch-link"));
         assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/simpleapi/docs/openapi-3.2.json", "Simple API");
-        assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/sim/docs/openapi-3.2.json", "API Simulator");
-        assertOpenApiUiToolLaunchLink(
-                body, clientPath, "/api/docs/openapi-3.2.json", "API Challenges");
-        assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi-3.2.json", "Buggy API");
+                body, clientPath, "/simpleapi/docs/openapi.json", "Simple API");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/sim/docs/openapi.json", "API Simulator");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/api/docs/openapi.json", "API Challenges");
+        assertOpenApiUiToolLaunchLink(body, clientPath, "/shop/docs/openapi.json", "Buggy API");
     }
 
     private void assertOpenApiUiToolLaunchLink(

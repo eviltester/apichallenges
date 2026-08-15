@@ -43,11 +43,38 @@ public class ChallengesStatus {
     }
 
     public Challenge getChallengeNamed(String name) {
-        for (Challenge challenge : challengeStatuses.challenges) {
+        return getChallengeNamed(challengeStatuses.challenges, name);
+    }
+
+    public static Challenge getChallengeNamed(final List<Challenge> challenges, final String name) {
+        Challenge challengeByName = findChallengeNamed(challenges, name);
+        if (challengeByName != null) {
+            return challengeByName;
+        }
+
+        return findChallengeNamed(challenges, canonicalApiChallengeName(name));
+    }
+
+    private static Challenge findChallengeNamed(
+            final List<Challenge> challenges, final String name) {
+        if (challenges == null) {
+            return null;
+        }
+
+        for (Challenge challenge : challenges) {
             if (challenge.name.equals(name)) {
                 return challenge;
             }
         }
         return null;
+    }
+
+    private static String canonicalApiChallengeName(final String name) {
+        if (name == null || name.contains(" /api/")) {
+            return name;
+        }
+
+        return name.replaceFirst(
+                " /(todos|todo|challenger|challenges|heartbeat|secret)(?=$|[ /{(])", " /api/$1");
     }
 }

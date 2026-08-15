@@ -873,13 +873,13 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("openapi-ui-launch-panel"));
         Assertions.assertTrue(html.contains("openapi-ui-launch-link"));
         assertOpenApiUiReferenceLaunchLink(
-                html, clientPath, "%2Fsimpleapi%2Fdocs%2Fopenapi-3.2.json", "Simple API");
+                html, clientPath, "%2Fsimpleapi%2Fdocs%2Fopenapi.json", "Simple API");
         assertOpenApiUiReferenceLaunchLink(
-                html, clientPath, "%2Fsim%2Fdocs%2Fopenapi-3.2.json", "API Simulator");
+                html, clientPath, "%2Fsim%2Fdocs%2Fopenapi.json", "API Simulator");
         assertOpenApiUiReferenceLaunchLink(
-                html, clientPath, "%2Fapi%2Fdocs%2Fopenapi-3.2.json", "API Challenges");
+                html, clientPath, "%2Fapi%2Fdocs%2Fopenapi.json", "API Challenges");
         assertOpenApiUiReferenceLaunchLink(
-                html, clientPath, "%2Fshop%2Fdocs%2Fopenapi-3.2.json", "Buggy API");
+                html, clientPath, "%2Fshop%2Fdocs%2Fopenapi.json", "Buggy API");
     }
 
     private void assertOpenApiUiToolAboutBreadcrumb(
