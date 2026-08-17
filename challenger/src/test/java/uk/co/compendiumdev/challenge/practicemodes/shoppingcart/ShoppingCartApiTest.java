@@ -37,7 +37,9 @@ class ShoppingCartApiTest {
                 cart.token.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
 
         final Product product = api.productByCode("MUG_TESTER");
-        Assertions.assertEquals(401, api.addItem(cart.cartId, "", product.id, 1).statusCode);
+        final HttpResponseDetails missingBearer = api.addItem(cart.cartId, "", product.id, 1);
+        Assertions.assertEquals(401, missingBearer.statusCode);
+        Assertions.assertEquals("Bearer", missingBearer.getHeader("WWW-Authenticate"));
         Assertions.assertEquals(
                 403,
                 api.addItem(cart.cartId, "00000000-0000-4000-8000-000000000000", product.id, 1)
@@ -185,6 +187,53 @@ class ShoppingCartApiTest {
                 ShoppingCartSupport.GSON.fromJson(response.body, CartItemResponse.class);
         Assertions.assertEquals(mug.unitPrice, item.unitPriceAtAdd, 0.001f);
         Assertions.assertEquals(mug.stock, item.stockAtAdd);
+    }
+
+    @Test
+    void cartItemPostWorkflowDoesNotReturnLocationHeaders() {
+        startApp("-shopbugs=none");
+
+        final RegisterResponse cart = api.registerCart();
+        final Product mug = api.productByCode("MUG_TESTER");
+        final HttpResponseDetails createResponse = api.addItem(cart.cartId, cart.token, mug.id, 1);
+
+        Assertions.assertEquals(201, createResponse.statusCode);
+        Assertions.assertNull(createResponse.getHeader("Location"));
+
+        final CartItemResponse item =
+                ShoppingCartSupport.GSON.fromJson(createResponse.body, CartItemResponse.class);
+        final HttpResponseDetails updateResponse =
+                api.updateItem(cart.cartId, cart.token, item.id, 2);
+
+        Assertions.assertEquals(200, updateResponse.statusCode);
+        Assertions.assertNull(updateResponse.getHeader("Location"));
+    }
+
+    @Test
+    void deleteWorkflowsReturnShoppingCartJsonBodies() {
+        startApp("-shopbugs=none");
+
+        final RegisterResponse cart = api.registerCart();
+        final Product mug = api.productByCode("MUG_TESTER");
+        final CartItemResponse item = api.addItemOk(cart.cartId, cart.token, mug.id, 1);
+
+        final HttpResponseDetails deleteItem = api.deleteItem(cart.cartId, cart.token, item.id);
+        final JsonObject deleteItemBody = JsonParser.parseString(deleteItem.body).getAsJsonObject();
+        Assertions.assertEquals(200, deleteItem.statusCode);
+        Assertions.assertEquals(cart.cartId, deleteItemBody.get("cartId").getAsInt());
+        Assertions.assertEquals(item.id, deleteItemBody.get("deletedItemId").getAsInt());
+        Assertions.assertEquals("open", deleteItemBody.get("state").getAsString());
+
+        final RegisterResponse cartToDelete = api.registerCart();
+        api.addItemOk(cartToDelete.cartId, cartToDelete.token, mug.id, 1);
+        final HttpResponseDetails deleteCart =
+                api.deleteCart(cartToDelete.cartId, cartToDelete.token);
+        final JsonObject deleteCartBody = JsonParser.parseString(deleteCart.body).getAsJsonObject();
+
+        Assertions.assertEquals(200, deleteCart.statusCode);
+        Assertions.assertEquals(
+                cartToDelete.cartId, deleteCartBody.get("deletedCartId").getAsInt());
+        Assertions.assertEquals(404, api.getCart(cartToDelete.cartId).statusCode);
     }
 
     @Test
@@ -478,7 +527,7 @@ class ShoppingCartApiTest {
         Assertions.assertTrue(openApi.body.contains("/shop/carts/{id}/items"));
         Assertions.assertFalse(openApi.body.contains("/shop/cartitems"));
         Assertions.assertFalse(openApi.body.contains("/shop/products/{id}/cartitems"));
-        Assertions.assertTrue(openApi.body.contains("\"bearerAuth\""));
+        Assertions.assertTrue(openApi.body.contains("\"cartToken\""));
         Assertions.assertTrue(openApi.body.contains("\"scheme\" : \"bearer\""));
         Assertions.assertTrue(openApi.body.contains("\"securitySchemes\""));
         Assertions.assertTrue(openApi.body.contains("requestBody"));
@@ -521,25 +570,13 @@ class ShoppingCartApiTest {
     }
 
     @Test
-    void directWritesToInternalThingifierCollectionsAreBlocked() {
+    void directWritesToDisabledInternalThingifierCollectionsAreBlocked() {
         startApp();
 
         Assertions.assertEquals(
                 404,
                 http.send(
                                 "/shop/products",
-                                "POST",
-                                java.util.Map.of(
-                                        "Content-Type",
-                                        "application/json",
-                                        "Accept",
-                                        "application/json"),
-                                "{}")
-                        .statusCode);
-        Assertions.assertEquals(
-                404,
-                http.send(
-                                "/shop/carts",
                                 "POST",
                                 java.util.Map.of(
                                         "Content-Type",
@@ -597,6 +634,42 @@ class ShoppingCartApiTest {
                                         "Accept",
                                         "application/json"),
                                 "{\"stock\":1}")
+                        .statusCode);
+    }
+
+    @Test
+    void generatedShoppingCartWritesConfiguredAsMethodNotAllowedReturn405() {
+        startApp();
+
+        final RegisterResponse cart = api.registerCart();
+        final Product product = api.productByCode("MUG_TESTER");
+        final CartItemResponse item = api.addItemOk(cart.cartId, cart.token, product.id, 1);
+
+        assertJsonWriteStatus(405, "/shop/carts", "POST", "{}");
+        assertJsonWriteStatus(405, "/shop/carts", "PUT", "{}");
+        assertJsonWriteStatus(405, "/shop/carts", "DELETE", "");
+        assertJsonWriteStatus(405, "/shop/carts/" + cart.cartId, "POST", "{}");
+        assertJsonWriteStatus(405, "/shop/carts/" + cart.cartId, "PUT", "{}");
+        assertJsonWriteStatus(405, "/shop/carts/" + cart.cartId + "/items", "PUT", "{}");
+        assertJsonWriteStatus(405, "/shop/carts/" + cart.cartId + "/items", "DELETE", "");
+        assertJsonWriteStatus(
+                405, "/shop/carts/" + cart.cartId + "/items/" + item.id, "POST", "{}");
+        assertJsonWriteStatus(405, "/shop/carts/" + cart.cartId + "/items/" + item.id, "PUT", "{}");
+    }
+
+    private void assertJsonWriteStatus(
+            final int expectedStatus, final String path, final String method, final String body) {
+        Assertions.assertEquals(
+                expectedStatus,
+                http.send(
+                                path,
+                                method,
+                                java.util.Map.of(
+                                        "Content-Type",
+                                        "application/json",
+                                        "Accept",
+                                        "application/json"),
+                                body)
                         .statusCode);
     }
 

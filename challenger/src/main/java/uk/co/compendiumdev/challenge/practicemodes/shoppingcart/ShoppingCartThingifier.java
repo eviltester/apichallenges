@@ -168,19 +168,29 @@ public final class ShoppingCartThingifier {
     }
 
     private static void configurePublicApiSpec(final Thingifier shop) {
+        final ShoppingCartAuth auth = new ShoppingCartAuth(shop);
+
+        shop.apiSpec().entity("cart").defaultEntityView("PublicCart");
+        shop.apiSpec()
+                .authenticator(
+                        ShoppingCartAuth.CART_TOKEN_SCHEME, auth::authenticateKnownCartToken);
+
         shop.apiSpec()
                 .route(RoutingVerb.POST, "/carts/{cartId}/items")
                 .entityView("AddedCartItem")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::requireParentCartToExist)
                 .addDocumentation("add a product line to a cart using the cart bearer token")
                 .requestPayload("create_AddedCartItem");
         shop.apiSpec()
                 .route(RoutingVerb.DELETE, "/carts/{cartId}/items/{itemId}")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::authorizeTokenForParentCart)
                 .addDocumentation("delete a product line from a cart using the cart bearer token");
         shop.apiSpec()
                 .route(RoutingVerb.DELETE, "/carts/{cartId}")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::authorizeTokenForTargetCart)
                 .addDocumentation("delete or abandon a cart using the cart bearer token");
 
         shop.apiSpec().route(RoutingVerb.POST, "/products").disable();
@@ -189,9 +199,16 @@ public final class ShoppingCartThingifier {
         shop.apiSpec().route(RoutingVerb.DELETE, "/products/{productId}").disable();
         shop.apiSpec().disableRelationshipRoutes("/products", "cartitems");
 
-        shop.apiSpec().route(RoutingVerb.POST, "/carts").disable();
-        shop.apiSpec().route(RoutingVerb.POST, "/carts/{cartId}").hide();
-        shop.apiSpec().route(RoutingVerb.PUT, "/carts/{cartId}").hide();
+        shop.apiSpec()
+                .route("/carts")
+                .methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT, RoutingVerb.DELETE);
+        shop.apiSpec().route("/carts/{cartId}").methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT);
+        shop.apiSpec()
+                .route("/carts/{cartId}/items")
+                .methodNotAllowed(RoutingVerb.PUT, RoutingVerb.DELETE);
+        shop.apiSpec()
+                .route("/carts/{cartId}/items/{itemId}")
+                .methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT);
 
         shop.apiSpec().disableEntityRoutes("/cartitems");
         shop.apiSpec().disableRelationshipRoutes("/cartitems", "cart");

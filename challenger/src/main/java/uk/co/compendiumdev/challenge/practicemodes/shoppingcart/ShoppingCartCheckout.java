@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartAuth.AuthResult;
+import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartAuth.CustomRouteAuthResult;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
@@ -43,8 +43,8 @@ final class ShoppingCartCheckout {
                     ShoppingCartSupport.body("errorMessages", List.of("Cart not found")));
         }
 
-        final AuthResult authResult =
-                auth.authorize(store, cart, request.header("Authorization"), false);
+        final CustomRouteAuthResult authResult =
+                auth.authorizeCustomRouteBearerTokenForCart(cart, request.header("Authorization"));
         if (!authResult.authorized()) {
             return json(
                     response,

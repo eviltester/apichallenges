@@ -40,6 +40,10 @@ class ShoppingCartModelTest {
         Assertions.assertTrue(cart.hasViewNamed("PublicCart"));
         Assertions.assertEquals(
                 "PublicCart", shop.guiConfig().dataExplorer().responseViewNameFor(cart).orElse(""));
+        Assertions.assertEquals(
+                "PublicCart", shop.apiSpec().defaultRequestEntityViewFor(cart).orElse(""));
+        Assertions.assertEquals(
+                "PublicCart", shop.apiSpec().defaultResponseEntityViewFor(cart).orElse(""));
         final EntityViewDefinition publicCart = cart.getViewNamed("PublicCart");
         Assertions.assertTrue(publicCart.isResponseVisible("id"));
         Assertions.assertTrue(publicCart.isResponseVisible("state"));
