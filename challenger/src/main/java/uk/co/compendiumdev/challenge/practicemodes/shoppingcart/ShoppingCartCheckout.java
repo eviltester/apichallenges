@@ -13,9 +13,9 @@ import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
 final class ShoppingCartCheckout {
 
-    private static final String STALE_STOCK_PRODUCT = "BOOK_API";
-    private static final String DECREMENT_ONE_PRODUCT = "DVD_BUGS";
-    private static final String NEGATIVE_STOCK_PRODUCT = "CD_STATUS";
+    private static final String PRODUCT_ALLOWED_TO_USE_STALE_STOCK_CAPTURED_AT_ADD = "BOOK_API";
+    private static final String PRODUCT_REDUCED_BY_ONE_INSTEAD_OF_QUANTITY = "DVD_BUGS";
+    private static final String PRODUCT_ALLOWED_TO_CHECKOUT_INTO_NEGATIVE_STOCK = "CD_STATUS";
 
     private final Thingifier thingifier;
     private final ShoppingCartBugMode bugMode;
@@ -52,8 +52,7 @@ final class ShoppingCartCheckout {
                     ShoppingCartSupport.body("errorMessages", List.of(authResult.message())));
         }
 
-        if ("closed".equals(ShoppingCartSupport.stringValue(cart, "state"))
-                && !bugMode.bugsEnabled()) {
+        if (cartIsClosed(cart) && !doubleCheckoutBugAllowsClosedCartCheckout(cart)) {
             return json(
                     response,
                     409,
@@ -66,7 +65,7 @@ final class ShoppingCartCheckout {
         final List<CheckoutLine> lines = checkoutLines(store, items);
 
         if (!bugMode.bugsEnabled()) {
-            final String stockProblem = firstStockProblem(lines);
+            final String stockProblem = firstCurrentStockShortage(lines);
             if (stockProblem != null) {
                 return json(
                         response,
@@ -76,7 +75,8 @@ final class ShoppingCartCheckout {
         }
 
         if (bugMode.bugsEnabled()) {
-            final String stockProblem = firstBuggyStockProblem(lines);
+            final String stockProblem =
+                    bookApiStaleStockAndCdStatusNegativeStockBugsFirstStockShortage(lines);
             if (stockProblem != null) {
                 return json(
                         response,
@@ -130,7 +130,7 @@ final class ShoppingCartCheckout {
         return lines;
     }
 
-    private String firstStockProblem(final List<CheckoutLine> lines) {
+    private String firstCurrentStockShortage(final List<CheckoutLine> lines) {
         final Map<String, Integer> requiredByProduct = new LinkedHashMap<>();
         final Map<String, Integer> currentStockByProduct = new LinkedHashMap<>();
         for (CheckoutLine line : lines) {
@@ -146,16 +146,18 @@ final class ShoppingCartCheckout {
         return null;
     }
 
-    private String firstBuggyStockProblem(final List<CheckoutLine> lines) {
+    private String bookApiStaleStockAndCdStatusNegativeStockBugsFirstStockShortage(
+            final List<CheckoutLine> lines) {
         final Map<String, Integer> requiredByProduct = new LinkedHashMap<>();
         final Map<String, Integer> availableByProduct = new LinkedHashMap<>();
         for (CheckoutLine line : lines) {
             requiredByProduct.merge(line.productCode(), line.quantity(), Integer::sum);
-            availableByProduct.put(line.productCode(), availableForBuggyStockCheck(line));
+            availableByProduct.put(
+                    line.productCode(), bookApiStaleStockAtAddBugOrCurrentStock(line));
         }
 
         for (Map.Entry<String, Integer> required : requiredByProduct.entrySet()) {
-            if (NEGATIVE_STOCK_PRODUCT.equals(required.getKey())) {
+            if (cdStatusNegativeStockBugAllowsCheckout(required.getKey())) {
                 continue;
             }
             if (required.getValue() > availableByProduct.get(required.getKey())) {
@@ -165,8 +167,13 @@ final class ShoppingCartCheckout {
         return null;
     }
 
-    private int availableForBuggyStockCheck(final CheckoutLine line) {
-        if (STALE_STOCK_PRODUCT.equals(line.productCode()) || line.currentStock() == 0) {
+    private boolean cdStatusNegativeStockBugAllowsCheckout(final String productCode) {
+        return PRODUCT_ALLOWED_TO_CHECKOUT_INTO_NEGATIVE_STOCK.equals(productCode);
+    }
+
+    private int bookApiStaleStockAtAddBugOrCurrentStock(final CheckoutLine line) {
+        if (PRODUCT_ALLOWED_TO_USE_STALE_STOCK_CAPTURED_AT_ADD.equals(line.productCode())
+                || line.currentStock() == 0) {
             return line.stockAtAdd();
         }
         return line.currentStock();
@@ -184,7 +191,7 @@ final class ShoppingCartCheckout {
             final ThingStore store, final List<CheckoutLine> lines) {
         final List<Map<String, Object>> changes = new ArrayList<>();
         for (CheckoutLine line : lines) {
-            final int reduction = stockReductionFor(line);
+            final int reduction = dvdBugsReduceStockByOneBugOrQuantity(line);
             final int before = ShoppingCartSupport.intValue(line.product(), "stock");
             final int after = before - reduction;
             ShoppingCartSupport.patch(store, line.product(), "stock", String.valueOf(after));
@@ -199,11 +206,20 @@ final class ShoppingCartCheckout {
         return changes;
     }
 
-    private int stockReductionFor(final CheckoutLine line) {
-        if (bugMode.bugsEnabled() && DECREMENT_ONE_PRODUCT.equals(line.productCode())) {
+    private int dvdBugsReduceStockByOneBugOrQuantity(final CheckoutLine line) {
+        if (bugMode.bugsEnabled()
+                && PRODUCT_REDUCED_BY_ONE_INSTEAD_OF_QUANTITY.equals(line.productCode())) {
             return 1;
         }
         return line.quantity();
+    }
+
+    private boolean doubleCheckoutBugAllowsClosedCartCheckout(final EntityInstance cart) {
+        return bugMode.bugsEnabled() && cartIsClosed(cart);
+    }
+
+    private boolean cartIsClosed(final EntityInstance cart) {
+        return "closed".equals(ShoppingCartSupport.stringValue(cart, "state"));
     }
 
     private float roundedMoney(final double amount) {

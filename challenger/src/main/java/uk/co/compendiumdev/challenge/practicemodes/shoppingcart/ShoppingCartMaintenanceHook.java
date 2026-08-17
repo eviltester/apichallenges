@@ -14,9 +14,6 @@ final class ShoppingCartMaintenanceHook implements InternalHttpResponseHook {
 
     @Override
     public void run(final InternalHttpRequest request, final InternalHttpResponse response) {
-        if (!request.getPath().startsWith("shop")) {
-            return;
-        }
         maintenance.run();
     }
 }

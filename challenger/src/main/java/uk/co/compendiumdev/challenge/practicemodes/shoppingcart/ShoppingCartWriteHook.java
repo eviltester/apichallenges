@@ -19,91 +19,81 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
     private final ShoppingCartState state;
     private final ShoppingCartMaintenance maintenance;
     private final ShoppingCartAuth auth;
+    private final HookBehaviour behaviour;
+
+    static ShoppingCartWriteHook cartItemWriteBugsForPostCartItems(
+            final Thingifier thingifier,
+            final ShoppingCartBugMode bugMode,
+            final ShoppingCartState state,
+            final ShoppingCartMaintenance maintenance) {
+        return new ShoppingCartWriteHook(
+                thingifier,
+                bugMode,
+                state,
+                maintenance,
+                ShoppingCartWriteHook::cartItemWriteBugsCreateOrUpdateByBodyId);
+    }
+
+    static ShoppingCartWriteHook closedCartCanStillDeleteCartItemBug(
+            final Thingifier thingifier,
+            final ShoppingCartBugMode bugMode,
+            final ShoppingCartState state,
+            final ShoppingCartMaintenance maintenance) {
+        return new ShoppingCartWriteHook(
+                thingifier,
+                bugMode,
+                state,
+                maintenance,
+                ShoppingCartWriteHook::closedCartCanStillDeleteCartItemBug);
+    }
+
+    static ShoppingCartWriteHook deleteCartAndItsItems(
+            final Thingifier thingifier,
+            final ShoppingCartBugMode bugMode,
+            final ShoppingCartState state,
+            final ShoppingCartMaintenance maintenance) {
+        return new ShoppingCartWriteHook(
+                thingifier, bugMode, state, maintenance, ShoppingCartWriteHook::deleteCartAndItems);
+    }
+
+    static ShoppingCartWriteHook rejectWritesToReadOnlyShoppingCartRoutes(
+            final Thingifier thingifier,
+            final ShoppingCartBugMode bugMode,
+            final ShoppingCartState state,
+            final ShoppingCartMaintenance maintenance) {
+        return new ShoppingCartWriteHook(
+                thingifier,
+                bugMode,
+                state,
+                maintenance,
+                ShoppingCartWriteHook::rejectReadOnlyRouteWrite);
+    }
 
     ShoppingCartWriteHook(
             final Thingifier thingifier,
             final ShoppingCartBugMode bugMode,
             final ShoppingCartState state,
-            final ShoppingCartMaintenance maintenance) {
+            final ShoppingCartMaintenance maintenance,
+            final HookBehaviour behaviour) {
         this.thingifier = thingifier;
         this.bugMode = bugMode;
         this.state = state;
         this.maintenance = maintenance;
         this.auth = new ShoppingCartAuth(thingifier);
+        this.behaviour = behaviour;
     }
 
     @Override
     public HttpApiResponse run(final HttpApiRequest request, final ThingifierApiConfig config) {
         final List<String> segments = ShoppingCartSupport.segments(request.getPath());
-        if (segments.isEmpty()) {
-            return null;
-        }
-
-        if (isCartItemCreate(request, segments)) {
-            return handleCartItemCreate(request, config, segments.get(1));
-        }
-
-        if (isCartItemRelationshipDelete(request, segments)) {
-            return handleCartItemRelationshipDelete(
-                    request, config, segments.get(1), segments.get(3));
-        }
-
-        if (isCartDelete(request, segments)) {
-            return handleCartDelete(request, config, segments.get(1));
-        }
-
-        if (isBlockedWrite(request, segments)) {
-            return ShoppingCartSupport.error(
-                    request, config, 405, "Use the Shopping Cart workflow routes for writes");
-        }
-
-        return null;
+        return behaviour.run(this, request, config, segments);
     }
 
-    private boolean isCartItemCreate(final HttpApiRequest request, final List<String> segments) {
-        return request.getVerb() == HttpApiRequest.VERB.POST
-                && segments.size() == 3
-                && "carts".equals(segments.get(0))
-                && "items".equals(segments.get(2));
-    }
-
-    private boolean isCartItemRelationshipDelete(
-            final HttpApiRequest request, final List<String> segments) {
-        return request.getVerb() == HttpApiRequest.VERB.DELETE
-                && segments.size() == 4
-                && "carts".equals(segments.get(0))
-                && "items".equals(segments.get(2));
-    }
-
-    private boolean isCartDelete(final HttpApiRequest request, final List<String> segments) {
-        return request.getVerb() == HttpApiRequest.VERB.DELETE
-                && segments.size() == 2
-                && "carts".equals(segments.get(0));
-    }
-
-    private boolean isBlockedWrite(final HttpApiRequest request, final List<String> segments) {
-        if (request.getVerb() != HttpApiRequest.VERB.POST
-                && request.getVerb() != HttpApiRequest.VERB.PUT
-                && request.getVerb() != HttpApiRequest.VERB.DELETE) {
-            return false;
-        }
-
-        final String root = segments.get(0);
-        if ("products".equals(root)) {
-            return true;
-        }
-        if ("cartitems".equals(root)) {
-            return true;
-        }
-        if ("carts".equals(root)) {
-            return request.getVerb() != HttpApiRequest.VERB.GET
-                    && request.getVerb() != HttpApiRequest.VERB.HEAD;
-        }
-        return false;
-    }
-
-    private HttpApiResponse handleCartItemCreate(
-            final HttpApiRequest request, final ThingifierApiConfig config, final String cartId) {
+    private HttpApiResponse cartItemWriteBugsCreateOrUpdateByBodyId(
+            final HttpApiRequest request,
+            final ThingifierApiConfig config,
+            final List<String> segments) {
+        final String cartId = segments.get(1);
         final ThingStore store = ShoppingCartSupport.store(thingifier);
         final EntityInstance cart = ShoppingCartSupport.findById(thingifier, store, "cart", cartId);
         if (cart == null) {
@@ -115,34 +105,38 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
             return ShoppingCartSupport.error(request, config, 400, "Invalid JSON body");
         }
 
-        final boolean updateExistingItem = body.id != null;
-        final boolean allowAnyValidToken = bugMode.bugsEnabled() && updateExistingItem;
         final AuthResult authResult =
                 auth.authorize(
-                        store, cart, request.getHeader("Authorization", ""), allowAnyValidToken);
+                        store,
+                        cart,
+                        request.getHeader("Authorization", ""),
+                        allowAnyValidCartTokenToUpdateAnyCartItemBug(body));
         if (!authResult.authorized()) {
             return ShoppingCartSupport.error(
                     request, config, authResult.status(), authResult.message());
         }
 
-        if (cartIsClosed(cart) && !bugMode.bugsEnabled()) {
-            return ShoppingCartSupport.error(
-                    request, config, 409, "Closed carts cannot be modified");
+        final HttpApiResponse closedCartError =
+                closedCartMutationBugOrRejectClosedCartWrite(request, config, cart);
+        if (closedCartError != null) {
+            return closedCartError;
         }
 
-        if (updateExistingItem) {
-            return updateCartItemQuantity(
+        if (requestBodyUpdatesExistingCartItem(body)) {
+            return badQuantityBugUpdatesExistingCartItem(
                     request, config, store, cart, String.valueOf(body.id), body.quantity);
         }
 
-        return addCartItem(request, config, store, cart, body);
+        return badQuantityAndHiddenCapturedFieldBugsCreateNewCartItem(
+                request, config, store, cart, body);
     }
 
-    private HttpApiResponse handleCartItemRelationshipDelete(
+    private HttpApiResponse closedCartCanStillDeleteCartItemBug(
             final HttpApiRequest request,
             final ThingifierApiConfig config,
-            final String cartId,
-            final String itemId) {
+            final List<String> segments) {
+        final String cartId = segments.get(1);
+        final String itemId = segments.get(3);
         final ThingStore store = ShoppingCartSupport.store(thingifier);
         final EntityInstance cart = ShoppingCartSupport.findById(thingifier, store, "cart", cartId);
         if (cart == null) {
@@ -156,15 +150,16 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
                     request, config, authResult.status(), authResult.message());
         }
 
-        if (cartIsClosed(cart) && !bugMode.bugsEnabled()) {
-            return ShoppingCartSupport.error(
-                    request, config, 409, "Closed carts cannot be modified");
+        final HttpApiResponse closedCartError =
+                closedCartMutationBugOrRejectClosedCartWrite(request, config, cart);
+        if (closedCartError != null) {
+            return closedCartError;
         }
 
         return deleteCartItem(request, config, store, cart, itemId);
     }
 
-    private HttpApiResponse addCartItem(
+    private HttpApiResponse badQuantityAndHiddenCapturedFieldBugsCreateNewCartItem(
             final HttpApiRequest request,
             final ThingifierApiConfig config,
             final ThingStore store,
@@ -183,20 +178,15 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
         }
 
         final HttpApiResponse quantityError =
-                validateRequestedQuantity(request, config, product, body.quantity);
+                badQuantityBugsOrRejectInvalidQuantity(request, config, product, body.quantity);
         if (quantityError != null) {
             return quantityError;
         }
 
         try {
             final float unitPriceAtAdd =
-                    bugMode.bugsEnabled() && body.unitPriceAtAdd != null
-                            ? body.unitPriceAtAdd
-                            : ShoppingCartSupport.floatValue(product, "unitPrice");
-            final int stockAtAdd =
-                    bugMode.bugsEnabled() && body.stockAtAdd != null
-                            ? body.stockAtAdd
-                            : ShoppingCartSupport.intValue(product, "stock");
+                    hiddenUnitPriceAtAddOverrideBugOrProductPrice(product, body);
+            final int stockAtAdd = hiddenStockAtAddOverrideBugOrProductStock(product, body);
             final EntityInstance item =
                     store.entities()
                             .create(
@@ -219,7 +209,7 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
         }
     }
 
-    private HttpApiResponse updateCartItemQuantity(
+    private HttpApiResponse badQuantityBugUpdatesExistingCartItem(
             final HttpApiRequest request,
             final ThingifierApiConfig config,
             final ThingStore store,
@@ -238,7 +228,7 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
 
         final EntityInstance product = ShoppingCartSupport.firstRelated(store, item, "product");
         final HttpApiResponse quantityError =
-                validateRequestedQuantity(request, config, product, quantity);
+                badQuantityBugsOrRejectInvalidQuantity(request, config, product, quantity);
         if (quantityError != null) {
             return quantityError;
         }
@@ -275,8 +265,11 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
                         "state", ShoppingCartSupport.stringValue(cart, "state")));
     }
 
-    private HttpApiResponse handleCartDelete(
-            final HttpApiRequest request, final ThingifierApiConfig config, final String cartId) {
+    private HttpApiResponse deleteCartAndItems(
+            final HttpApiRequest request,
+            final ThingifierApiConfig config,
+            final List<String> segments) {
+        final String cartId = segments.get(1);
         final ThingStore store = ShoppingCartSupport.store(thingifier);
         final EntityInstance cart = ShoppingCartSupport.findById(thingifier, store, "cart", cartId);
         if (cart == null) {
@@ -298,12 +291,29 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
                 ShoppingCartSupport.body("deletedCartId", Integer.parseInt(cartId)));
     }
 
-    private HttpApiResponse validateRequestedQuantity(
+    private HttpApiResponse rejectReadOnlyRouteWrite(
+            final HttpApiRequest request,
+            final ThingifierApiConfig config,
+            final List<String> segments) {
+        if (segments.isEmpty()) {
+            return null;
+        }
+        return ShoppingCartSupport.error(
+                request, config, 405, "Use the Shopping Cart workflow routes for writes");
+    }
+
+    private HttpApiResponse badQuantityBugsOrRejectInvalidQuantity(
             final HttpApiRequest request,
             final ThingifierApiConfig config,
             final EntityInstance product,
             final int quantity) {
-        if (bugMode.bugsEnabled()) {
+        if (allowQuantityLessThanZeroBug(quantity)) {
+            return null;
+        }
+        if (allowQuantityZeroBug(quantity)) {
+            return null;
+        }
+        if (allowQuantityGreaterThanStockBug(product, quantity)) {
             return null;
         }
         if (quantity <= 0) {
@@ -329,6 +339,67 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
 
     private boolean cartIsClosed(final EntityInstance cart) {
         return "closed".equals(ShoppingCartSupport.stringValue(cart, "state"));
+    }
+
+    private boolean requestBodyUpdatesExistingCartItem(final CartItemRequest body) {
+        return body.id != null;
+    }
+
+    private boolean allowAnyValidCartTokenToUpdateAnyCartItemBug(final CartItemRequest body) {
+        return bugMode.bugsEnabled() && requestBodyUpdatesExistingCartItem(body);
+    }
+
+    private HttpApiResponse closedCartMutationBugOrRejectClosedCartWrite(
+            final HttpApiRequest request,
+            final ThingifierApiConfig config,
+            final EntityInstance cart) {
+        if (!cartIsClosed(cart) || allowClosedCartMutationBug(cart)) {
+            return null;
+        }
+        return ShoppingCartSupport.error(request, config, 409, "Closed carts cannot be modified");
+    }
+
+    private boolean allowClosedCartMutationBug(final EntityInstance cart) {
+        return bugMode.bugsEnabled() && cartIsClosed(cart);
+    }
+
+    private boolean allowQuantityLessThanZeroBug(final int quantity) {
+        return bugMode.bugsEnabled() && quantity < 0;
+    }
+
+    private boolean allowQuantityZeroBug(final int quantity) {
+        return bugMode.bugsEnabled() && quantity == 0;
+    }
+
+    private boolean allowQuantityGreaterThanStockBug(
+            final EntityInstance product, final int quantity) {
+        return bugMode.bugsEnabled()
+                && product != null
+                && quantity > ShoppingCartSupport.intValue(product, "stock");
+    }
+
+    private float hiddenUnitPriceAtAddOverrideBugOrProductPrice(
+            final EntityInstance product, final CartItemRequest body) {
+        if (allowHiddenUnitPriceAtAddOverrideBug(body)) {
+            return body.unitPriceAtAdd;
+        }
+        return ShoppingCartSupport.floatValue(product, "unitPrice");
+    }
+
+    private boolean allowHiddenUnitPriceAtAddOverrideBug(final CartItemRequest body) {
+        return bugMode.bugsEnabled() && body.unitPriceAtAdd != null;
+    }
+
+    private int hiddenStockAtAddOverrideBugOrProductStock(
+            final EntityInstance product, final CartItemRequest body) {
+        if (allowHiddenStockAtAddOverrideBug(body)) {
+            return body.stockAtAdd;
+        }
+        return ShoppingCartSupport.intValue(product, "stock");
+    }
+
+    private boolean allowHiddenStockAtAddOverrideBug(final CartItemRequest body) {
+        return bugMode.bugsEnabled() && body.stockAtAdd != null;
     }
 
     private void touchCart(final ThingStore store, final EntityInstance cart) {
@@ -361,5 +432,13 @@ final class ShoppingCartWriteHook implements HttpApiRequestHook {
         Integer quantity;
         Float unitPriceAtAdd;
         Integer stockAtAdd;
+    }
+
+    private interface HookBehaviour {
+        HttpApiResponse run(
+                ShoppingCartWriteHook hook,
+                HttpApiRequest request,
+                ThingifierApiConfig config,
+                List<String> segments);
     }
 }

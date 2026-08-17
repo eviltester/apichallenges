@@ -12,10 +12,6 @@ final class ShoppingCartTokenStripResponseHook implements InternalHttpResponseHo
 
     @Override
     public void run(final InternalHttpRequest request, final InternalHttpResponse response) {
-        final String path = request.getPath();
-        if (!path.startsWith("shop/carts")) {
-            return;
-        }
         if (response.getBody() == null || response.getBody().isBlank()) {
             return;
         }
