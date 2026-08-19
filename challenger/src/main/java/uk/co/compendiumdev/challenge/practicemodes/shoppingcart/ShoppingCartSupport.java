@@ -107,8 +107,7 @@ final class ShoppingCartSupport {
             final ThingifierApiConfig config,
             final int status,
             final Object body) {
-        final ApiResponse apiResponse = new ApiResponse(status);
-        apiResponse.setBody(GSON.toJson(body));
+        final ApiResponse apiResponse = apiJsonResponse(status, body);
         return new HttpApiResponse(
                 request.getHeaders(), apiResponse, new JsonThing(config.jsonOutput()), config);
     }
@@ -121,6 +120,16 @@ final class ShoppingCartSupport {
         final Map<String, Object> body = new LinkedHashMap<>();
         body.put("errorMessages", List.of(message));
         return jsonResponse(request, config, status, body);
+    }
+
+    static ApiResponse apiJsonResponse(final int status, final Object body) {
+        final ApiResponse apiResponse = new ApiResponse(status);
+        apiResponse.setBody(GSON.toJson(body));
+        return apiResponse;
+    }
+
+    static ApiResponse apiError(final int status, final String message) {
+        return apiJsonResponse(status, body("errorMessages", List.of(message)));
     }
 
     static Map<String, Object> body(final Object... pairs) {

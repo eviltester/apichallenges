@@ -5,12 +5,9 @@ import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.defin
 
 import java.util.List;
 import uk.co.compendiumdev.thingifier.Thingifier;
-import uk.co.compendiumdev.thingifier.adapter.hooks.HookScope;
-import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiRequestHook;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierAutoDocGenRouting;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierHttpApiRoutings;
-import uk.co.compendiumdev.thingifier.adapter.httpserver.messagehooks.InternalHttpResponseHook;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingDefinition;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingStatus;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
@@ -24,19 +21,6 @@ import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 import uk.co.compendiumdev.thingifier.htmlgui.routing.DefaultGuiRoutings;
 
 public final class ShoppingCartRoutes {
-    private static final List<String> SHOP_API_HOOK_ENDPOINTS =
-            List.of(
-                    "/shop/products",
-                    "/shop/products/:productId",
-                    "/shop/carts",
-                    "/shop/carts/:cartId",
-                    "/shop/carts/:cartId/items",
-                    "/shop/carts/:cartId/items/:itemId",
-                    "/shop/cartitems",
-                    "/shop/cartitems/:itemId",
-                    "/shop/register",
-                    "/shop/checkout/:cartId");
-
     private final DefaultGUIHTML guiTemplates;
     private final ShoppingCartBugMode bugMode;
     private final ShoppingCartState state;
@@ -66,132 +50,12 @@ public final class ShoppingCartRoutes {
 
         final ThingifierHttpApiRoutings shopRouting =
                 new ThingifierHttpApiRoutings(shoppingCart, apiDocDefn);
-        registerBadQuantityHiddenFieldClosedCartAndCrossCartTokenBugsForPostCartItems(shopRouting);
-        registerClosedCartCanStillDeleteCartItemBug(shopRouting);
-        registerCartDeleteHook(shopRouting);
-        registerReadOnlyRouteWriteRejectionHooks(shopRouting);
-        registerTokenStrippingFromCartResponses(shopRouting);
-        registerMaintenanceAfterShopApiResponses(shopRouting);
-        registerBuggyCorsHeadersThatAllowCredentialsForWildcardOrigin(shopRouting);
-        registerBuggyCorsPreflightThatReadsAllowMethodsRequestHeader(shopRouting);
+        new ShoppingCartHookRoutes(shopRouting, shoppingCart, bugMode, state, maintenance)
+                .register();
     }
 
     Thingifier thingifier() {
         return shoppingCart;
-    }
-
-    private void registerBadQuantityHiddenFieldClosedCartAndCrossCartTokenBugsForPostCartItems(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId/items",
-                ShoppingCartWriteHook.cartItemWriteBugsForPostCartItems(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.POST);
-    }
-
-    private void registerClosedCartCanStillDeleteCartItemBug(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId/items/:itemId",
-                ShoppingCartWriteHook.closedCartCanStillDeleteCartItemBug(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.DELETE);
-    }
-
-    private void registerCartDeleteHook(final ThingifierHttpApiRoutings shopRouting) {
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId",
-                ShoppingCartWriteHook.deleteCartAndItsItems(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.DELETE);
-    }
-
-    private void registerReadOnlyRouteWriteRejectionHooks(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerWriteHook(
-                shopRouting,
-                "/carts",
-                ShoppingCartWriteHook.rejectWritesToReadOnlyShoppingCartRoutes(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.POST,
-                RoutingVerb.PUT,
-                RoutingVerb.DELETE);
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId",
-                ShoppingCartWriteHook.rejectWritesToReadOnlyShoppingCartRoutes(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.POST,
-                RoutingVerb.PUT);
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId/items",
-                ShoppingCartWriteHook.rejectWritesToReadOnlyShoppingCartRoutes(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.PUT,
-                RoutingVerb.DELETE);
-        registerWriteHook(
-                shopRouting,
-                "/carts/:cartId/items/:itemId",
-                ShoppingCartWriteHook.rejectWritesToReadOnlyShoppingCartRoutes(
-                        shoppingCart, bugMode, state, maintenance),
-                RoutingVerb.POST,
-                RoutingVerb.PUT);
-    }
-
-    private void registerTokenStrippingFromCartResponses(
-            final ThingifierHttpApiRoutings shopRouting) {
-        final ShoppingCartTokenStripResponseHook tokenStripHook =
-                new ShoppingCartTokenStripResponseHook();
-        shopRouting.registerInternalHttpResponseHook("/shop/carts", tokenStripHook);
-        shopRouting.registerInternalHttpResponseHook("/shop/carts/:cartId", tokenStripHook);
-        shopRouting.registerInternalHttpResponseHook("/shop/carts/:cartId/items", tokenStripHook);
-        shopRouting.registerInternalHttpResponseHook(
-                "/shop/carts/:cartId/items/:itemId", tokenStripHook);
-    }
-
-    private void registerMaintenanceAfterShopApiResponses(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerShopResponseHook(shopRouting, new ShoppingCartMaintenanceHook(maintenance));
-    }
-
-    private void registerBuggyCorsHeadersThatAllowCredentialsForWildcardOrigin(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerShopResponseHook(shopRouting, new ShoppingCartCorsHeadersResponseHook());
-    }
-
-    private void registerBuggyCorsPreflightThatReadsAllowMethodsRequestHeader(
-            final ThingifierHttpApiRoutings shopRouting) {
-        registerShopResponseHook(
-                shopRouting, new ShoppingCartCorsPreflightResponseHook(), RoutingVerb.OPTIONS);
-    }
-
-    private void registerWriteHook(
-            final ThingifierHttpApiRoutings shopRouting,
-            final String endpoint,
-            final HttpApiRequestHook hook,
-            final RoutingVerb... verbs) {
-        shopRouting.registerHttpApiRequestHook(HookScope.endpointAndVerbs(endpoint, verbs), hook);
-    }
-
-    private void registerShopResponseHook(
-            final ThingifierHttpApiRoutings shopRouting, final InternalHttpResponseHook hook) {
-        for (String endpoint : SHOP_API_HOOK_ENDPOINTS) {
-            shopRouting.registerInternalHttpResponseHook(endpoint, hook);
-        }
-    }
-
-    private void registerShopResponseHook(
-            final ThingifierHttpApiRoutings shopRouting,
-            final InternalHttpResponseHook hook,
-            final RoutingVerb... verbs) {
-        for (String endpoint : SHOP_API_HOOK_ENDPOINTS) {
-            shopRouting.registerInternalHttpResponseHook(
-                    HookScope.endpointAndVerbs(endpoint, verbs), hook);
-        }
     }
 
     private ThingifierApiDocumentationDefn documentation() {
@@ -249,7 +113,7 @@ public final class ShoppingCartRoutes {
                         .addDocumentation(
                                 "checkout a cart using its bearer token in the Authorization header")
                         .addRequestUrlParam(cartIdField())
-                        .secureWithBearerAuth()
+                        .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
                         .addPossibleStatuses(200, 401, 403, 404, 409)
                         .returnPayload(200, "checkout"));
     }

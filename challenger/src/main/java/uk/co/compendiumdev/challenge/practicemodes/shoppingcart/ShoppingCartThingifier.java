@@ -1,5 +1,8 @@
 package uk.co.compendiumdev.challenge.practicemodes.shoppingcart;
 
+import static uk.co.compendiumdev.thingifier.apiconfig.RelationshipWriteOperation.CONNECT_EXISTING;
+import static uk.co.compendiumdev.thingifier.apiconfig.RelationshipWriteOperation.CREATE_AND_CONNECT;
+import static uk.co.compendiumdev.thingifier.apiconfig.RelationshipWriteOperation.UPDATE_CONNECTED;
 import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType.*;
 
 import uk.co.compendiumdev.thingifier.Thingifier;
@@ -10,6 +13,7 @@ import uk.co.compendiumdev.thingifier.core.EntityRelModel;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.Cardinality;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.Field;
+import uk.co.compendiumdev.thingifier.core.domain.definitions.relationship.RelationshipDefinition;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStoreProvider;
 
 public final class ShoppingCartThingifier {
@@ -102,6 +106,7 @@ public final class ShoppingCartThingifier {
                         .withDescription("Product identifier requested for this cart line.")
                         .withMinMaxValues(1, MAX_PRODUCTS)
                         .withDefaultValue("1")
+                        .references(product, "id", "product")
                         .makeMandatory(),
                 Field.is("quantity", INTEGER)
                         .withDescription("Requested quantity for this cart line.")
@@ -120,8 +125,11 @@ public final class ShoppingCartThingifier {
                 .hideRequestFields("unitPriceAtAdd", "stockAtAdd")
                 .allowInputFields("unitPriceAtAdd", "stockAtAdd");
 
-        shop.defineRelationship(cart, cartItem, "items", Cardinality.ONE_TO_MANY())
-                .whenReversed(Cardinality.ONE_TO_ONE(), "cart");
+        final RelationshipDefinition cartItems =
+                shop.defineRelationship(cart, cartItem, "items", Cardinality.ONE_TO_MANY());
+        cartItems.deleteTargetWhenDisconnected();
+        cartItems.deleteTargetsWhenSourceDeleted();
+        cartItems.whenReversed(Cardinality.ONE_TO_ONE(), "cart");
         shop.defineRelationship(product, cartItem, "cartitems", Cardinality.ONE_TO_MANY())
                 .whenReversed(Cardinality.ONE_TO_ONE(), "product");
 
@@ -168,19 +176,30 @@ public final class ShoppingCartThingifier {
     }
 
     private static void configurePublicApiSpec(final Thingifier shop) {
+        final ShoppingCartAuth auth = new ShoppingCartAuth(shop);
+
+        shop.apiSpec().entity("cart").defaultEntityView("PublicCart");
+        shop.apiSpec()
+                .authenticator(
+                        ShoppingCartAuth.CART_TOKEN_SCHEME, auth::authenticateKnownCartToken);
+
         shop.apiSpec()
                 .route(RoutingVerb.POST, "/carts/{cartId}/items")
+                .relationshipCan(CREATE_AND_CONNECT, UPDATE_CONNECTED, CONNECT_EXISTING)
                 .entityView("AddedCartItem")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::requireParentCartToExist)
                 .addDocumentation("add a product line to a cart using the cart bearer token")
                 .requestPayload("create_AddedCartItem");
         shop.apiSpec()
                 .route(RoutingVerb.DELETE, "/carts/{cartId}/items/{itemId}")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::authorizeTokenForParentCart)
                 .addDocumentation("delete a product line from a cart using the cart bearer token");
         shop.apiSpec()
                 .route(RoutingVerb.DELETE, "/carts/{cartId}")
-                .secureWithBearerAuth()
+                .secureWithBearerAuth(ShoppingCartAuth.CART_TOKEN_SCHEME)
+                .authorizeWith(auth::authorizeTokenForTargetCart)
                 .addDocumentation("delete or abandon a cart using the cart bearer token");
 
         shop.apiSpec().route(RoutingVerb.POST, "/products").disable();
@@ -189,9 +208,16 @@ public final class ShoppingCartThingifier {
         shop.apiSpec().route(RoutingVerb.DELETE, "/products/{productId}").disable();
         shop.apiSpec().disableRelationshipRoutes("/products", "cartitems");
 
-        shop.apiSpec().route(RoutingVerb.POST, "/carts").disable();
-        shop.apiSpec().route(RoutingVerb.POST, "/carts/{cartId}").hide();
-        shop.apiSpec().route(RoutingVerb.PUT, "/carts/{cartId}").hide();
+        shop.apiSpec()
+                .route("/carts")
+                .methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT, RoutingVerb.DELETE);
+        shop.apiSpec().route("/carts/{cartId}").methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT);
+        shop.apiSpec()
+                .route("/carts/{cartId}/items")
+                .methodNotAllowed(RoutingVerb.PUT, RoutingVerb.DELETE);
+        shop.apiSpec()
+                .route("/carts/{cartId}/items/{itemId}")
+                .methodNotAllowed(RoutingVerb.POST, RoutingVerb.PUT);
 
         shop.apiSpec().disableEntityRoutes("/cartitems");
         shop.apiSpec().disableRelationshipRoutes("/cartitems", "cart");
