@@ -118,6 +118,24 @@ class ShoppingCartApiTest {
     }
 
     @Test
+    void cartItemUpdateRequiresItemToBelongToCart() {
+        startApp("-shopbugs=none");
+
+        final RegisterResponse cart = api.registerCart();
+        final RegisterResponse otherCart = api.registerCart();
+        final Product mug = api.productByCode("MUG_TESTER");
+        final CartItemResponse otherCartItem =
+                api.addItemOk(otherCart.cartId, otherCart.token, mug.id, 1);
+
+        Assertions.assertEquals(
+                404, api.updateItem(cart.cartId, cart.token, otherCartItem.id, 2).statusCode);
+        Assertions.assertEquals(
+                404,
+                api.addItemRaw(cart.cartId, cart.token, "{\"id\":" + otherCartItem.id + "}")
+                        .statusCode);
+    }
+
+    @Test
     void cleanModeCheckoutUsesCurrentStockNotStockAtAdd() {
         startApp("-shopbugs=none");
 

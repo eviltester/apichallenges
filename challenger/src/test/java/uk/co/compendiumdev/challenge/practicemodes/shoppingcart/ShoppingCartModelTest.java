@@ -7,7 +7,9 @@ import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.core.EntityRelModel;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityViewDefinition;
+import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.Field;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType;
+import uk.co.compendiumdev.thingifier.core.domain.definitions.relationship.RelationshipVectorDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
@@ -54,7 +56,12 @@ class ShoppingCartModelTest {
         Assertions.assertFalse(publicCart.isRequestVisible("token"));
         Assertions.assertFalse(publicCart.isInputAllowed("token"));
 
-        Assertions.assertEquals(FieldType.INTEGER, cartItem.getField("productId").getType());
+        final Field productId = cartItem.getField("productId");
+        Assertions.assertEquals(FieldType.INTEGER, productId.getType());
+        Assertions.assertTrue(productId.hasRelationshipReference());
+        Assertions.assertEquals(product, productId.relationshipReference().targetEntity());
+        Assertions.assertEquals("id", productId.relationshipReference().targetFieldName());
+        Assertions.assertEquals("product", productId.relationshipReference().relationshipName());
         Assertions.assertEquals(FieldType.INTEGER, cartItem.getField("quantity").getType());
         Assertions.assertEquals(FieldType.FLOAT, cartItem.getField("unitPriceAtAdd").getType());
         Assertions.assertEquals(FieldType.INTEGER, cartItem.getField("stockAtAdd").getType());
@@ -73,6 +80,10 @@ class ShoppingCartModelTest {
         Assertions.assertTrue(shop.hasRelationshipNamed("cartitems"));
         Assertions.assertTrue(shop.hasRelationshipNamed("cart"));
         Assertions.assertTrue(shop.hasRelationshipNamed("product"));
+        final RelationshipVectorDefinition cartItems =
+                cart.getNamedRelationshipTo("items", cartItem);
+        Assertions.assertTrue(cartItems.shouldDeleteTargetWhenDisconnected());
+        Assertions.assertTrue(cartItems.shouldDeleteTargetsWhenSourceDeleted());
     }
 
     @Test

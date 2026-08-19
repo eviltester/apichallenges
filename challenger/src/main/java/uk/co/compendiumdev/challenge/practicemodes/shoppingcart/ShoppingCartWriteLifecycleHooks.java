@@ -1,7 +1,6 @@
 package uk.co.compendiumdev.challenge.practicemodes.shoppingcart;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.http.lifecycle.AfterActionContext;
@@ -12,9 +11,6 @@ import uk.co.compendiumdev.thingifier.adapter.http.lifecycle.BodyParsedContext;
 import uk.co.compendiumdev.thingifier.adapter.http.lifecycle.ThingifierApiLifecycleContextView;
 import uk.co.compendiumdev.thingifier.api.http.bodyparser.ApiBodyFields;
 import uk.co.compendiumdev.thingifier.application.ThingCommandResult;
-import uk.co.compendiumdev.thingifier.application.command.AmendThingCommand;
-import uk.co.compendiumdev.thingifier.application.command.BodyFieldValue;
-import uk.co.compendiumdev.thingifier.core.domain.definitions.field.instance.NamedValue;
 import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
@@ -23,19 +19,36 @@ final class ShoppingCartWriteLifecycleHooks {
     private final Thingifier thingifier;
     private final ShoppingCartBugMode bugMode;
     private final ShoppingCartState state;
-    private final ShoppingCartMaintenance maintenance;
     private final ShoppingCartAuth auth;
 
     ShoppingCartWriteLifecycleHooks(
             final Thingifier thingifier,
             final ShoppingCartBugMode bugMode,
-            final ShoppingCartState state,
-            final ShoppingCartMaintenance maintenance) {
+            final ShoppingCartState state) {
         this.thingifier = thingifier;
         this.bugMode = bugMode;
         this.state = state;
-        this.maintenance = maintenance;
         this.auth = new ShoppingCartAuth(thingifier);
+    }
+
+    /**
+     * The Buggy API deliberately accepts loose numeric values such as "1.0" for integer fields.
+     * Thingifier's field-reference relationship binding uses productId to find the product, so the
+     * product id is normalized before that binding runs.
+     */
+    void coerceProductIdForFieldReference(final BodyParsedContext context) {
+        final Integer productId = bodyInteger(context, "productId");
+        if (productId == null) {
+            return;
+        }
+
+        final Map<String, Object> body = editableBody(context);
+        if (productIdAlreadyNormalized(body, productId)) {
+            return;
+        }
+
+        body.put("productId", productId);
+        context.replaceBodyFields(ApiBodyFields.fromMap(body));
     }
 
     /**
@@ -106,30 +119,35 @@ final class ShoppingCartWriteLifecycleHooks {
     }
 
     /**
-     * POST /shop/carts/{cartId}/items creates a new item unless the body contains an item id. When
-     * an id is present, the Buggy API treats the request as a quantity update for that existing
-     * item, so this replaces the generated create command with an update command.
+     * A POST body id means "update this existing cart item". Thingifier now performs that update
+     * for connected items, but this public API still reports 404 when the id is missing or belongs
+     * to a different cart.
      */
-    void updateExistingCartItemWhenPostBodyContainsId(final BeforeValidationContext context) {
-        final Integer itemId = cartItemIdFromPostBody(context);
-        if (itemId == null) {
+    void rejectUnknownOrUnconnectedCartItemForPostBodyId(final BeforeValidationContext context) {
+        if (!postBodyContainsCartItemId(context)) {
             return;
         }
 
         final EntityInstance cart = cartFromParent(context);
-        final EntityInstance item = cartItemFromPostBody(context, itemId);
+        final EntityInstance item = cartItemFromPostBody(context);
         if (!cartItemBelongsToCart(context.store(), cart, item)) {
             rejectCartItemNotFound(context);
+        }
+    }
+
+    /**
+     * Thingifier can update a connected cart item when the POST body contains an id. The Buggy API
+     * still requires callers to send quantity for that update, so this rejects id-only update
+     * bodies before Thingifier would treat them as a no-op update.
+     */
+    void rejectMissingQuantityForExistingCartItemUpdate(final BeforeValidationContext context) {
+        if (!postBodyContainsCartItemId(context)) {
             return;
         }
 
-        final Integer quantity = quantityFromBody(context);
-        if (quantity == null) {
+        if (!quantityWasSupplied(context)) {
             rejectQuantityRequired(context);
-            return;
         }
-
-        replacePostWithCartItemQuantityUpdateCommand(context, itemId, quantity);
     }
 
     /**
@@ -225,8 +243,8 @@ final class ShoppingCartWriteLifecycleHooks {
 
     /**
      * The public response includes cart and product details and deliberately omits the Location
-     * header. This replaces Thingifier's generated create/update response after the data change
-     * succeeds.
+     * header. Thingifier now connects the item to the product from productId automatically. This
+     * replaces Thingifier's generated create/update response after the data change succeeds.
      */
     void returnCartItemWriteWorkflowResponse(final AfterActionContext context) {
         if (writeActionFailed(context)) {
@@ -239,17 +257,14 @@ final class ShoppingCartWriteLifecycleHooks {
             return;
         }
 
-        if (creatingNewCartItem(context)) {
-            connectItemToProduct(context.store(), item);
-        }
-
         touchCart(context.store(), cart);
         returnCartItemWriteResponse(context, cart, item);
     }
 
     /**
-     * The generated relationship DELETE only removes the link between cart and item. The Shopping
-     * Cart API also deletes the item record itself and returns JSON showing which item was removed.
+     * The model tells Thingifier to delete the cart item when it is removed from the cart
+     * relationship. This hook keeps the public JSON body and cart update tick used by the Shopping
+     * Cart API.
      */
     void returnCartItemDeleteWorkflowResponse(final AfterActionContext context) {
         if (writeActionFailed(context)) {
@@ -257,29 +272,24 @@ final class ShoppingCartWriteLifecycleHooks {
         }
 
         final EntityInstance cart = cartFromParent(context);
-        final EntityInstance item =
-                findById(context.store(), "cartitem", context.childIdentifier());
-        if (cart == null || item == null) {
+        if (cart == null) {
             return;
         }
 
-        deleteCartItemEntity(context.store(), item);
         touchCart(context.store(), cart);
         returnDeletedCartItemResponse(context, cart);
     }
 
     /**
-     * A generated cart delete would remove only the cart. The Shopping Cart API must delete the
-     * cart's items first and return the documented JSON body.
+     * The model tells Thingifier to delete cart items when their cart is deleted. This hook keeps
+     * the public JSON body used by the Shopping Cart API.
      */
-    void deleteCartAndItemsInsteadOfNativeDelete(final BeforeActionContext context) {
-        final EntityInstance cart = cartFromTarget(context);
-        if (cart == null) {
-            rejectCartNotFound(context);
+    void returnCartDeleteWorkflowResponse(final AfterActionContext context) {
+        if (writeActionFailed(context)) {
             return;
         }
 
-        deleteCartAndItemsAndReturnWorkflowResponse(context, cart);
+        returnDeletedCartResponse(context);
     }
 
     private boolean hiddenUnitPriceAtAddOverrideBugApplies(final Map<String, Object> body) {
@@ -306,18 +316,21 @@ final class ShoppingCartWriteLifecycleHooks {
         context.replaceBodyFields(ApiBodyFields.fromMap(body));
     }
 
+    private boolean productIdAlreadyNormalized(
+            final Map<String, Object> body, final Integer productId) {
+        final Object rawProductId = body.get("productId");
+        return rawProductId instanceof Number
+                && ((Number) rawProductId).intValue() == productId
+                && String.valueOf(rawProductId).equals(String.valueOf(productId));
+    }
+
     private boolean anyValidCartTokenCanUpdateExistingCartItemBugApplies(
             final ThingifierApiLifecycleContextView context) {
         return bugMode.bugsEnabled() && postBodyContainsCartItemId(context);
     }
 
-    private Integer cartItemIdFromPostBody(final ThingifierApiLifecycleContextView context) {
-        return bodyInteger(context, "id");
-    }
-
-    private EntityInstance cartItemFromPostBody(
-            final ThingifierApiLifecycleContextView context, final Integer itemId) {
-        return findById(context.store(), "cartitem", String.valueOf(itemId));
+    private EntityInstance cartItemFromPostBody(final ThingifierApiLifecycleContextView context) {
+        return findById(context.store(), "cartitem", String.valueOf(bodyInteger(context, "id")));
     }
 
     private boolean cartItemBelongsToCart(
@@ -327,20 +340,6 @@ final class ShoppingCartWriteLifecycleHooks {
 
     private Integer quantityFromBody(final ThingifierApiLifecycleContextView context) {
         return bodyInteger(context, "quantity");
-    }
-
-    private void replacePostWithCartItemQuantityUpdateCommand(
-            final BeforeValidationContext context, final Integer itemId, final Integer quantity) {
-        final List<NamedValue> fieldValues =
-                List.of(new NamedValue("quantity", String.valueOf(quantity)));
-        context.replaceWriteCommand(
-                new AmendThingCommand(
-                        "cartitem",
-                        String.valueOf(itemId),
-                        fieldValues,
-                        BodyFieldValue.fromNamedValues(fieldValues),
-                        false,
-                        List.of()));
     }
 
     private boolean productAndQuantityArePresent(final ThingifierApiLifecycleContextView context) {
@@ -430,11 +429,6 @@ final class ShoppingCartWriteLifecycleHooks {
                         itemResponse(context.store(), cart, item)));
     }
 
-    private void deleteCartItemEntity(final ThingStore store, final EntityInstance item) {
-        store.relationships().removeAll(item);
-        store.entities().delete(item);
-    }
-
     private void returnDeletedCartItemResponse(
             final AfterActionContext context, final EntityInstance cart) {
         context.replaceApiResponse(
@@ -446,25 +440,16 @@ final class ShoppingCartWriteLifecycleHooks {
                                 "state", ShoppingCartSupport.stringValue(cart, "state"))));
     }
 
-    private void deleteCartAndItemsAndReturnWorkflowResponse(
-            final BeforeActionContext context, final EntityInstance cart) {
-        final int cartId = Integer.parseInt(cart.getPrimaryKeyValue());
-        maintenance.deleteCartAndItems(context.store(), cart);
-        context.shortCircuitWith(
+    private void returnDeletedCartResponse(final AfterActionContext context) {
+        context.replaceApiResponse(
                 ShoppingCartSupport.apiJsonResponse(
-                        200, ShoppingCartSupport.body("deletedCartId", cartId)));
+                        200,
+                        ShoppingCartSupport.body(
+                                "deletedCartId", Integer.parseInt(context.targetIdentifier()))));
     }
 
     private void rejectCartNotFound(final BeforeValidationContext context) {
         context.shortCircuitWith(ShoppingCartSupport.apiError(404, "Cart not found"));
-    }
-
-    private void rejectCartNotFound(final BeforeActionContext context) {
-        context.shortCircuitWith(ShoppingCartSupport.apiError(404, "Cart not found"));
-    }
-
-    private void rejectCartItemNotFound(final BeforeValidationContext context) {
-        context.shortCircuitWith(ShoppingCartSupport.apiError(404, "Cart item not found"));
     }
 
     private void rejectBearerTokenDoesNotMatchCart(final BeforeValidationContext context) {
@@ -474,6 +459,10 @@ final class ShoppingCartWriteLifecycleHooks {
 
     private void rejectQuantityRequired(final BeforeValidationContext context) {
         context.shortCircuitWith(ShoppingCartSupport.apiError(422, "quantity is required"));
+    }
+
+    private void rejectCartItemNotFound(final BeforeValidationContext context) {
+        context.shortCircuitWith(ShoppingCartSupport.apiError(404, "Cart item not found"));
     }
 
     private EntityInstance productForCartItemWrite(
@@ -497,23 +486,15 @@ final class ShoppingCartWriteLifecycleHooks {
         return findById(context.store(), "product", String.valueOf(productId));
     }
 
-    private void connectItemToProduct(final ThingStore store, final EntityInstance item) {
-        final EntityInstance product =
-                findById(
-                        store,
-                        "product",
-                        String.valueOf(ShoppingCartSupport.intValue(item, "productId")));
-        if (product != null) {
-            store.relationships().connect(product, "cartitems", item);
-        }
-    }
-
     private EntityInstance cartFromParent(final ThingifierApiLifecycleContextView context) {
         return findById(context.store(), "cart", context.parentIdentifier());
     }
 
-    private EntityInstance cartFromTarget(final ThingifierApiLifecycleContextView context) {
-        return findById(context.store(), "cart", context.targetIdentifier());
+    private boolean cartContainsItem(
+            final ThingStore store, final EntityInstance cart, final EntityInstance item) {
+        return ShoppingCartSupport.related(store, cart, "items").stream()
+                .anyMatch(
+                        related -> related.getPrimaryKeyValue().equals(item.getPrimaryKeyValue()));
     }
 
     private EntityInstance findById(
@@ -522,13 +503,6 @@ final class ShoppingCartWriteLifecycleHooks {
             return null;
         }
         return ShoppingCartSupport.findById(thingifier, store, entityName, identifier);
-    }
-
-    private boolean cartContainsItem(
-            final ThingStore store, final EntityInstance cart, final EntityInstance item) {
-        return ShoppingCartSupport.related(store, cart, "items").stream()
-                .anyMatch(
-                        related -> related.getPrimaryKeyValue().equals(item.getPrimaryKeyValue()));
     }
 
     private boolean cartIsClosed(final EntityInstance cart) {

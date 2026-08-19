@@ -37,8 +37,7 @@ final class ShoppingCartHookRoutes {
             final ShoppingCartState state,
             final ShoppingCartMaintenance maintenance) {
         this.shopRouting = shopRouting;
-        this.writeHooks =
-                new ShoppingCartWriteLifecycleHooks(shoppingCart, bugMode, state, maintenance);
+        this.writeHooks = new ShoppingCartWriteLifecycleHooks(shoppingCart, bugMode, state);
         this.maintenance = maintenance;
     }
 
@@ -55,15 +54,17 @@ final class ShoppingCartHookRoutes {
     /**
      * POST /shop/carts/{cartId}/items is where users add a product to a cart. The generated route
      * can create a cart item record, and Thingifier route auth checks that the bearer token belongs
-     * to a cart. These hooks add the remaining shopping-cart rules: treat a body id as an item
-     * quantity update, preserve the classic cross-cart token bug for that update, copy price and
-     * stock from the product, enforce quantity and closed-cart rules, and return JSON with cart and
-     * item details.
+     * to a cart. Thingifier relationship handling now treats a body id as an update to an already
+     * connected item. These hooks add the remaining shopping-cart rules: preserve the classic
+     * cross-cart token bug for that update, copy price and stock from the product, enforce quantity
+     * and closed-cart rules, and return JSON with cart and item details.
      */
     private void registerCartItemWriteLifecycleHooks() {
         final HookScope postCartItems =
                 HookScope.endpointAndVerbs("/carts/:cartId/items", RoutingVerb.POST);
 
+        shopRouting.registerBodyParsedHook(
+                postCartItems, writeHooks::coerceProductIdForFieldReference);
         shopRouting.registerBodyParsedHook(
                 postCartItems, writeHooks::allowHiddenUnitPriceAtAddOverrideBug);
         shopRouting.registerBodyParsedHook(
@@ -71,7 +72,9 @@ final class ShoppingCartHookRoutes {
         shopRouting.registerBeforeValidationHook(
                 postCartItems, writeHooks::allowAnyValidCartTokenToUpdateExistingCartItemBug);
         shopRouting.registerBeforeValidationHook(
-                postCartItems, writeHooks::updateExistingCartItemWhenPostBodyContainsId);
+                postCartItems, writeHooks::rejectUnknownOrUnconnectedCartItemForPostBodyId);
+        shopRouting.registerBeforeValidationHook(
+                postCartItems, writeHooks::rejectMissingQuantityForExistingCartItemUpdate);
         shopRouting.registerAfterValidationHook(
                 postCartItems, writeHooks::rejectMissingProductOrQuantity);
         shopRouting.registerAfterValidationHook(
@@ -88,9 +91,10 @@ final class ShoppingCartHookRoutes {
 
     /**
      * DELETE /shop/carts/{cartId}/items/{itemId} removes an item from a user's cart. The generated
-     * route can remove the cart-to-item relationship, and Thingifier route auth checks the cart's
-     * bearer token. These hooks add closed-cart bug handling, deletion of the underlying item
-     * record, cart update tracking, and a JSON body showing what changed.
+     * route removes the cart-to-item relationship and deletes the item record because the model
+     * declares that cascade policy. Thingifier route auth checks the cart's bearer token. These
+     * hooks add closed-cart bug handling, cart update tracking, and a JSON body showing what
+     * changed.
      */
     private void registerCartItemDeleteLifecycleHooks() {
         final HookScope deleteCartItem =
@@ -103,16 +107,16 @@ final class ShoppingCartHookRoutes {
     }
 
     /**
-     * DELETE /shop/carts/{cartId} must delete the cart's items before the cart disappears, so the
-     * Shopping Cart API replaces Thingifier's generated delete action after Thingifier route auth
-     * checks the cart's bearer token.
+     * DELETE /shop/carts/{cartId} deletes the cart and its items because the model declares that
+     * cascade policy. This hook keeps the public Shopping Cart API JSON body after Thingifier route
+     * auth and generated deletion succeed.
      */
     private void registerCartDeleteLifecycleHooks() {
         final HookScope deleteCart =
                 HookScope.endpointAndVerbs("/carts/:cartId", RoutingVerb.DELETE);
 
-        shopRouting.registerBeforeActionHook(
-                deleteCart, writeHooks::deleteCartAndItemsInsteadOfNativeDelete);
+        shopRouting.registerAfterActionHook(
+                deleteCart, writeHooks::returnCartDeleteWorkflowResponse);
     }
 
     /**
