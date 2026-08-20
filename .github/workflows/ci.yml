@@ -61,7 +61,7 @@ jobs:
             apichallenges/api-from-hell/implementations/python-flask
           node --check apichallenges/api-from-hell/implementations/node-native-http/server.js
           node --check apichallenges/api-from-hell/implementations/node-express/server.js
-          mvn -B -f apichallenges/api-from-hell/implementations/java-javalin/pom.xml test
+          mvn -B -f apichallenges/api-from-hell/implementations/java-raw-http/pom.xml test
           python apichallenges/api-from-hell/tooling/openapi-generator/generate_openapi.py \
             apichallenges/api-from-hell/catalog/fromhell-catalog.json \
             --output /tmp/fromhell-openapi.json
