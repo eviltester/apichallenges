@@ -321,6 +321,28 @@ I've listed a few applications here initially and will expand the instructions t
    - Can be run locally if you have Node and npm installed.
 
 
+## Fun
+
+There are some APIs and quizzes available that might help.
+
+
+
+### API Sleuth
+
+API Sleuth is an online Quiz game to test your knowledge of APIs and API Automating.
+
+- [API Sleuth](https://beinghumantester.com/projects/api-sleuth/) 
+
+
+### Decrypt the Narrative
+
+An API designed to return malformed and 'wrong' results at different times. See if you can automate it in a robust fashion and handle the different response formats it throws at you.
+
+- [dcrypt.run](https://dcrypt.run/)
+- [Github](https://github.com/webmull/dcrypt.run)
+
+
+
 <!--
 
 TODO: evaluate

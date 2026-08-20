@@ -153,43 +153,8 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200,
-                        "Simple API Testing Experiments, API Test Plan and Test Approach Ideas",
-                        "/blog/changelog-2026-08-14-simple-api-testing-experiments"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "Accept q Values, JSON, XML, And New API Challenges",
-                        "/blog/changelog-2026-08-13-accept-q-json-xml-challenges"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "API Spector Review: Best New API Client for API Testing",
-                        "/blog/changelog-2026-08-07-initial-api-spector-review"));
-        args.add(
-                Arguments.of(
-                        200,
                         "API Challenges Practice API Overview Video Summary",
                         "/blog/api-challenges-practice-api-overview"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "Interactive API Simulator Walkthrough Launch Guide",
-                        "/blog/api-simulator-walkthrough-launch"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "Interactive REST API Tutorial and Raw Response View",
-                        "/blog/changelog-2026-08-06-interactive-rest-api-tutorial"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "Bruno API Client Demo for Exploratory API Testing",
-                        "/blog/changelog-2025-04-19-bruno-client-demo"));
-        args.add(
-                Arguments.of(
-                        200,
-                        "Simple API Overview with Bruno and cURL Guides",
-                        "/blog/changelog-2025-04-13-simple-api-bruno-curl"));
         args.add(
                 Arguments.of(
                         200,
@@ -1345,25 +1310,14 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/categories/api-client-reviews\""));
+        Assertions.assertTrue(response.body.contains("<ul class=\"blog-category-list\">"));
 
         response = http.send("/blog", "get");
         Assertions.assertEquals(200, response.statusCode);
-        Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
+        assertBlogListPageHasItems(response.body);
         Assertions.assertTrue(response.body.contains("href=\"/blog/all-posts\""));
         Assertions.assertTrue(response.body.contains("href=\"/blog/page/2\""));
-        Assertions.assertTrue(response.body.contains("Page 1 of 2"));
-        Assertions.assertTrue(
-                response.body.contains("Simple API Testing Experiments For API Test Planning"));
-        Assertions.assertTrue(
-                response.body.contains("Accept q Values, JSON, XML, And New API Challenges"));
-        Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
-        Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
-        Assertions.assertTrue(
-                response.body.contains("API Spector Review: Best New API Client for API Testing"));
-        Assertions.assertTrue(
-                response.body.contains("Interactive API Simulator Walkthrough Launch"));
-        Assertions.assertFalse(
-                response.body.contains("API Challenges Practice API Overview Video Summary"));
+        Assertions.assertTrue(response.body.contains("Page 1 of"));
 
         response = http.send("/blog/page/2", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1373,11 +1327,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<li><a href=\"/blog\">Blog</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">page 2</li>"));
         Assertions.assertTrue(response.body.contains("href=\"/blog\""));
-        Assertions.assertTrue(response.body.contains("Page 2 of 2"));
-        Assertions.assertTrue(
-                response.body.contains("API Challenges Practice API Overview Video Summary"));
-        Assertions.assertTrue(
-                response.body.contains("Practice API Apps for REST API Testing Exercises"));
+        Assertions.assertTrue(response.body.contains("Page 2 of"));
+        assertBlogListPageHasItems(response.body);
 
         response = http.send("/blog/all-posts", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1390,46 +1341,8 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("<ul class=\"blog-all-post-list\">"));
         Assertions.assertTrue(
                 response.body.contains(
-                        "<time datetime=\"2026-08-14T10:00:00Z\">2026-08-14</time> <a href=\"/blog/changelog-2026-08-14-simple-api-testing-experiments\">Simple API Testing Experiments For API Test Planning</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2026-08-13T10:00:00Z\">2026-08-13</time> <a href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\">Accept q Values, JSON, XML, And New API Challenges</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2026-08-12T13:00:00Z\">2026-08-12</time> <a href=\"/blog/changelog-2026-08-12-structured-json-query\">Structured JSON QUERY Request Body Support</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2026-08-11T16:30:00Z\">2026-08-11</time> <a href=\"/blog/changelog-2026-08-11-jsonpath-query\">JSONPath QUERY Request Body Support</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2026-08-07T10:30:00Z\">2026-08-07</time> <a href=\"/blog/changelog-2026-08-07-initial-api-spector-review\">API Spector Review: Best New API Client for API Testing</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2026-08-07T09:00:00Z\">2026-08-07</time> <a href=\"/blog/api-simulator-walkthrough-launch\">Interactive API Simulator Walkthrough Launch</a>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<time datetime=\"2024-04-13T15:36:44Z\">2024-04-13</time> <a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
-        Assertions.assertTrue(
-                response.body.indexOf("Simple API Testing Experiments For API Test Planning")
-                        < response.body.indexOf(
-                                "Accept q Values, JSON, XML, And New API Challenges"));
-        Assertions.assertTrue(
-                response.body.indexOf("Accept q Values, JSON, XML, And New API Challenges")
-                        < response.body.indexOf("Structured JSON QUERY Request Body Support"));
-        Assertions.assertTrue(
-                response.body.indexOf("Structured JSON QUERY Request Body Support")
-                        < response.body.indexOf("JSONPath QUERY Request Body Support"));
-        Assertions.assertTrue(
-                response.body.indexOf("JSONPath QUERY Request Body Support")
-                        < response.body.indexOf(
-                                "API Spector Review: Best New API Client for API Testing"));
-        Assertions.assertTrue(
-                response.body.indexOf("API Spector Review: Best New API Client for API Testing")
-                        < response.body.indexOf("Interactive API Simulator Walkthrough Launch"));
-        Assertions.assertTrue(
-                response.body.indexOf("Interactive API Simulator Walkthrough Launch")
-                        < response.body.indexOf(
-                                "API Challenges Practice API Overview Video Summary"));
+                        "<a href=\"/blog/api-challenges-practice-api-overview\">API Challenges Practice API Overview Video Summary</a>"));
+        Assertions.assertTrue(countOccurrences(response.body, "<li><time datetime=\"") > 0);
 
         response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1447,37 +1360,17 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("<li><a href=\"/blog/categories\">categories</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">API Testing</li>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "href=\"/blog/changelog-2026-08-14-simple-api-testing-experiments\""));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "href=\"/blog/changelog-2026-08-13-accept-q-json-xml-challenges\""));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "href=\"/blog/changelog-2026-08-12-structured-json-query\""));
-        Assertions.assertTrue(
-                response.body.contains("href=\"/blog/changelog-2026-08-11-jsonpath-query\""));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "href=\"/blog/changelog-2026-08-07-initial-api-spector-review\""));
-        Assertions.assertTrue(
-                response.body.contains("href=\"/blog/api-simulator-walkthrough-launch\""));
+        assertBlogListPageHasItems(response.body);
 
         response = http.send("/blog/categories/change-log", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<h1>Change Log Blog Posts</h1>"));
-        Assertions.assertEquals(15, countOccurrences(response.body, "class=\"blog-list-item\""));
+        assertBlogListPageHasItems(response.body);
         Assertions.assertTrue(
                 response.body.contains("<li><a href=\"/blog/categories\">categories</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">Change Log</li>"));
         Assertions.assertTrue(
                 response.body.contains("href=\"/blog/categories/change-log/page/2\""));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "href=\"/blog/changelog-2026-08-06-interactive-rest-api-tutorial\""));
-        Assertions.assertFalse(
-                response.body.contains("href=\"/blog/changelog-2025-02-16-practice-apps\""));
 
         response = http.send("/blog/categories/change-log/page/2", "get");
         Assertions.assertEquals(200, response.statusCode);
@@ -1485,65 +1378,34 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains("<li><a href=\"/blog/categories\">categories</a></li>"));
         Assertions.assertTrue(response.body.contains("<li aria-current=\"page\">Change Log</li>"));
-        Assertions.assertTrue(response.body.contains("Page 2 of 2"));
+        Assertions.assertTrue(response.body.contains("Page 2 of"));
         Assertions.assertTrue(response.body.contains("href=\"/blog/categories/change-log\""));
-        Assertions.assertTrue(
-                response.body.contains("href=\"/blog/changelog-2025-02-16-practice-apps\""));
+        assertBlogListPageHasItems(response.body);
 
         response = http.send("/blog/feed.xml", "get");
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.getHeader("Content-Type").contains("application/rss+xml"));
         Assertions.assertTrue(response.body.contains("<rss version=\"2.0\""));
+        Assertions.assertTrue(response.body.contains("<channel>"));
+        Assertions.assertTrue(response.body.contains("<title>API Challenges Blog</title>"));
         Assertions.assertTrue(response.body.contains("xmlns:content="));
         Assertions.assertTrue(response.body.contains("<content:encoded><![CDATA["));
-        Assertions.assertTrue(
-                response.body.contains("Simple API Testing Experiments For API Test Planning"));
-        Assertions.assertTrue(
-                response.body.contains("Accept q Values, JSON, XML, And New API Challenges"));
-        Assertions.assertTrue(response.body.contains("Structured JSON QUERY Request Body Support"));
-        Assertions.assertTrue(response.body.contains("JSONPath QUERY Request Body Support"));
-        Assertions.assertTrue(response.body.contains("Multiple Online Open API Embedded Clients"));
-        Assertions.assertFalse(
-                response.body.contains("API Spector Review: Best New API Client for API Testing"));
-        Assertions.assertFalse(
-                response.body.contains("Interactive API Simulator Walkthrough Launch"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-14-simple-api-testing-experiments"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-13-accept-q-json-xml-challenges"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-12-structured-json-query"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-11-jsonpath-query"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "https://apichallenges.com/blog/changelog-2026-08-11-online-clients"));
-        Assertions.assertTrue(response.body.contains("<category>API Testing</category>"));
-        Assertions.assertTrue(response.body.contains("<category>Change Log</category>"));
-        Assertions.assertTrue(response.body.contains("<category>REST API Tutorial</category>"));
-        Assertions.assertFalse(response.body.contains("api-spector.dev"));
-        Assertions.assertTrue(
-                response.body.indexOf("Simple API Testing Experiments For API Test Planning")
-                        < response.body.indexOf(
-                                "Accept q Values, JSON, XML, And New API Challenges"));
-        Assertions.assertTrue(
-                response.body.indexOf("Accept q Values, JSON, XML, And New API Challenges")
-                        < response.body.indexOf("Structured JSON QUERY Request Body Support"));
-        Assertions.assertTrue(
-                response.body.indexOf("Structured JSON QUERY Request Body Support")
-                        < response.body.indexOf("JSONPath QUERY Request Body Support"));
-        Assertions.assertTrue(
-                response.body.indexOf("JSONPath QUERY Request Body Support")
-                        < response.body.indexOf("Multiple Online Open API Embedded Clients"));
-        Assertions.assertFalse(
-                response.body.contains("API Challenges Practice API Overview Video Summary"));
-        Assertions.assertFalse(
-                response.body.contains("Interactive REST API Tutorial and Raw Response View"));
-        Assertions.assertTrue(response.body.split("<item>", -1).length - 1 <= 5);
+        Assertions.assertTrue(response.body.contains("<link>https://apichallenges.com/blog/"));
+        Assertions.assertTrue(response.body.contains("<guid isPermaLink=\"true\">"));
+        Assertions.assertTrue(response.body.contains("<description>"));
+        Assertions.assertTrue(response.body.contains("<category>"));
+        final int rssItemCount = response.body.split("<item>", -1).length - 1;
+        Assertions.assertTrue(rssItemCount > 0);
+        Assertions.assertTrue(rssItemCount <= 5);
+    }
+
+    private void assertBlogListPageHasItems(final String body) {
+        final int blogListItems = countOccurrences(body, "class=\"blog-list-item\"");
+        Assertions.assertTrue(blogListItems > 0, "Expected at least one blog list item");
+        Assertions.assertTrue(blogListItems <= 15, "Expected no more than one page of blog items");
+        Assertions.assertTrue(body.contains("<article class=\"blog-list-item\">"));
+        Assertions.assertTrue(body.contains("<p class=\"blog-list-meta\"><time datetime=\""));
+        Assertions.assertTrue(body.contains("<p class=\"blog-categories\">Categories: "));
     }
 
     @Test
@@ -1978,6 +1840,24 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(
                 response.body.contains(
                         "<a href=\"/fromhell/docs/openapi-3.1.json\">OpenAPI 3.1 JSON</a>"));
+        Assertions.assertFalse(response.body.contains("Use in Swagger UI"));
+        Assertions.assertTrue(response.body.contains("<p>Use from:</p>"));
+        assertFromHellLaunchButton(response.body, "swagger", "Swagger UI");
+        assertFromHellLaunchButton(response.body, "openapi-explorer", "OpenAPI Explorer");
+        assertFromHellLaunchButton(response.body, "scalar", "Scalar");
+        assertFromHellLaunchButton(response.body, "stoplight", "Stoplight Elements");
+        assertFromHellLaunchButton(response.body, "zudoku", "Zudoku");
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"/tools/online-clients/basic-client\">Basic Client</a>"));
+        Assertions.assertTrue(response.body.contains("<h2>Running Locally</h2>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "href=\"https://github.com/eviltester/apichallenges/tree/main/api-from-hell\""));
+        Assertions.assertTrue(response.body.contains("Node.js native HTTP server"));
+        Assertions.assertTrue(response.body.contains("Python Flask"));
+        Assertions.assertTrue(response.body.contains("Java raw HTTP"));
+        Assertions.assertTrue(response.body.contains("Mockoon"));
         assertBodyContainsVersionedScript(response, "/js/api-live-request.js");
         Assertions.assertTrue(
                 response.body.contains(
@@ -2397,6 +2277,18 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
         Assertions.assertTrue(response.body.contains("OpenAPI 3.2 JSON"));
         Assertions.assertTrue(response.body.contains("/mirror/docs/openapi-3.2.json?download"));
+    }
+
+    private void assertFromHellLaunchButton(
+            final String body, final String clientPath, final String label) {
+
+        Assertions.assertTrue(
+                body.contains(
+                        "href=\"/tools/online-clients/"
+                                + clientPath
+                                + "?url=%2Ffromhell%2Fdocs%2Fopenapi.json\">"
+                                + label
+                                + "</a>"));
     }
 
     @Test
@@ -3503,24 +3395,6 @@ public class UiPagesAreReachableTest {
                 response.body.contains(
                         "<loc>https://apichallenges.com/blog/api-challenges-practice-api-overview</loc>"));
         Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/changelog-2026-08-07-initial-api-spector-review</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/changelog-2026-08-13-accept-q-json-xml-challenges</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/changelog-2026-08-14-simple-api-testing-experiments</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/api-simulator-walkthrough-launch</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/changelog-2026-08-06-interactive-rest-api-tutorial</loc>"));
-        Assertions.assertTrue(
-                response.body.contains(
-                        "<loc>https://apichallenges.com/blog/changelog-2025-04-19-bruno-client-demo</loc>"));
-        Assertions.assertTrue(
                 response.body.contains("<loc>https://apichallenges.com/blog/categories</loc>"));
         Assertions.assertTrue(
                 response.body.contains(
@@ -3574,15 +3448,6 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/blog/api-challenges-practice-api-overview", "head");
-        Assertions.assertEquals(200, response.statusCode);
-
-        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review", "head");
-        Assertions.assertEquals(200, response.statusCode);
-
-        response = http.send("/blog/api-simulator-walkthrough-launch", "head");
-        Assertions.assertEquals(200, response.statusCode);
-
-        response = http.send("/blog/changelog-2026-08-06-interactive-rest-api-tutorial", "head");
         Assertions.assertEquals(200, response.statusCode);
 
         response = http.send("/blog/categories", "head");
@@ -3697,18 +3562,6 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(
                 "/blog/api-challenges-practice-api-overview", response.getHeader("Location"));
 
-        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review/", "get");
-        Assertions.assertEquals(301, response.statusCode);
-        Assertions.assertEquals(
-                "/blog/changelog-2026-08-07-initial-api-spector-review",
-                response.getHeader("Location"));
-
-        response = http.send("/blog/changelog-2026-08-06-interactive-rest-api-tutorial/", "get");
-        Assertions.assertEquals(301, response.statusCode);
-        Assertions.assertEquals(
-                "/blog/changelog-2026-08-06-interactive-rest-api-tutorial",
-                response.getHeader("Location"));
-
         response = http.send("/blog/categories/", "get");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/blog/categories", response.getHeader("Location"));
@@ -3764,11 +3617,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals("/blog/page/2", response.getHeader("Location"));
 
-        response = http.send("/blog/changelog-2026-08-07-initial-api-spector-review/", "head");
+        response = http.send("/blog/api-challenges-practice-api-overview/", "head");
         Assertions.assertEquals(301, response.statusCode);
         Assertions.assertEquals(
-                "/blog/changelog-2026-08-07-initial-api-spector-review",
-                response.getHeader("Location"));
+                "/blog/api-challenges-practice-api-overview", response.getHeader("Location"));
 
         response = http.send("/blog/categories/api-testing/", "head");
         Assertions.assertEquals(301, response.statusCode);

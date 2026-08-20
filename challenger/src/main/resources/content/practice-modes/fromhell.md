@@ -25,9 +25,16 @@ The API deliberately returns a mix of good responses, malformed responses, valid
 
 Known `/fromhell` paths respond with `405 Method Not Allowed` and an `Allow` header when you call them with the wrong HTTP method, except for the deliberately broken 405 example below.
 
-Use in Swagger UI:
+Use from:
 
-- [From Hell Swagger UI](/fromhell/docs/swagger-ui)
+<p class="openapi-ui-launch-links">
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/swagger?url=%2Ffromhell%2Fdocs%2Fopenapi.json">Swagger UI</a>
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/openapi-explorer?url=%2Ffromhell%2Fdocs%2Fopenapi.json">OpenAPI Explorer</a>
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/scalar?url=%2Ffromhell%2Fdocs%2Fopenapi.json">Scalar</a>
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/stoplight?url=%2Ffromhell%2Fdocs%2Fopenapi.json">Stoplight Elements</a>
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/zudoku?url=%2Ffromhell%2Fdocs%2Fopenapi.json">Zudoku</a>
+  <a class="openapi-ui-launch-link" href="/tools/online-clients/basic-client">Basic Client</a>
+</p>
 
 Open API JSON Files
 
@@ -42,6 +49,21 @@ All endpoints are under:
 ```text
 {{<ORIGIN_URL>}}/fromhell
 ```
+
+## Running Locally
+
+You can run API From Hell locally this allows you to test 100% of the responses (internet proxies, CDNs and servers do 'fix' some of our server responses). Running it locally is the only way to guarantee that you are getting the full API From Hell experience. The standalone implementations and Docker setup are in the [api-from-hell folder on GitHub](https://github.com/eviltester/apichallenges/tree/main/api-from-hell).
+
+The local implementations include:
+
+- Node.js native HTTP server - uses Node's built-in HTTP module for low-level response control.
+- Node.js Express - shows what is possible through Express when default response behaviour needs to be bypassed.
+- Python native HTTP server - uses the Python standard-library HTTP server.
+- Python Flask - uses Flask/Werkzeug while working around framework defaults for awkward responses.
+- Java raw HTTP - uses raw sockets so Jetty/Javalin response normalisation cannot remove the deliberate edge cases.
+- Mockoon - a generated Mockoon environment, useful for comparing mock-server behaviour and limitations.
+
+The GitHub folder includes command-line instructions for running each implementation directly or with Docker.
 
 ## Status
 
