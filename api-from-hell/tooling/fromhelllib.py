@@ -6,8 +6,9 @@ can be validated and transformed in lightweight CI jobs.
 
 from __future__ import annotations
 
-import http.client
 import json
+import socket
+import ssl
 import sys
 import urllib.parse
 from pathlib import Path
@@ -249,22 +250,187 @@ def request_raw(
     path: str,
     prefix: str = "/fromhell",
     timeout: float = 5.0,
+    proxy: str | None = None,
 ) -> tuple[int, dict[str, str], bytes]:
     parsed = urllib.parse.urlparse(base_url)
-    connection_class = (
-        http.client.HTTPSConnection if parsed.scheme == "https" else http.client.HTTPConnection
-    )
     port = parsed.port
     host = parsed.hostname or "localhost"
-    connection = connection_class(host, port, timeout=timeout)
     full_path = path_with_prefix(path, prefix)
+    connection = connection_for_request(parsed, host, port, timeout, proxy)
+    request_target = request_target_for(parsed, host, port, full_path, proxy)
     try:
-        connection.request(method, full_path, headers={"Accept": "*/*"})
-        response = connection.getresponse()
-        headers = {name.lower(): value for name, value in response.getheaders()}
-        return response.status, headers, response.read()
+        connection.sendall(raw_http_request(method, request_target, parsed, host, port, proxy))
+        return parse_raw_http_response(read_all(connection))
     finally:
         connection.close()
+
+
+def connection_for_request(
+    parsed: urllib.parse.ParseResult,
+    host: str,
+    port: int | None,
+    timeout: float,
+    proxy: str | None,
+) -> socket.socket:
+    if not proxy:
+        connection = socket.create_connection(
+            (host, port or default_port(parsed)), timeout=timeout
+        )
+        if parsed.scheme == "https":
+            return ssl.create_default_context().wrap_socket(connection, server_hostname=host)
+        return connection
+
+    proxy_parsed = parse_proxy(proxy)
+    connection = socket.create_connection(
+        (proxy_parsed.hostname, proxy_parsed.port or 80), timeout=timeout
+    )
+
+    if parsed.scheme == "https":
+        tunnel_through_proxy(connection, host, port or 443, timeout)
+        return ssl.create_default_context().wrap_socket(connection, server_hostname=host)
+
+    return connection
+
+
+def request_target_for(
+    parsed: urllib.parse.ParseResult,
+    host: str,
+    port: int | None,
+    full_path: str,
+    proxy: str | None,
+) -> str:
+    if proxy and parsed.scheme == "http":
+        return absolute_request_uri(parsed, host, port, full_path)
+    return full_path
+
+
+def raw_http_request(
+    method: str,
+    request_target: str,
+    parsed: urllib.parse.ParseResult,
+    host: str,
+    port: int | None,
+    proxy: str | None,
+) -> bytes:
+    lines = [
+        f"{method} {request_target} HTTP/1.1",
+        f"Host: {host_header(parsed, host, port)}",
+        "Accept: */*",
+        "User-Agent: api-from-hell-conformance",
+        "Connection: close",
+    ]
+    if proxy and parsed.scheme == "http":
+        lines.append("Proxy-Connection: close")
+    if method_allows_request_body(method):
+        lines.append("Content-Length: 0")
+    return ("\r\n".join(lines) + "\r\n\r\n").encode("iso-8859-1")
+
+
+def method_allows_request_body(method: str) -> bool:
+    return method.upper() in {"POST", "PUT", "PATCH"}
+
+
+def read_all(connection: socket.socket) -> bytes:
+    chunks = []
+    while True:
+        chunk = connection.recv(8192)
+        if not chunk:
+            return b"".join(chunks)
+        chunks.append(chunk)
+
+
+def parse_raw_http_response(response: bytes) -> tuple[int, dict[str, str], bytes]:
+    header_end = response.find(b"\r\n\r\n")
+    if header_end == -1:
+        raise ValueError("HTTP response did not contain a header terminator")
+    header_text = response[:header_end].decode("iso-8859-1")
+    header_lines = header_text.split("\r\n")
+    status = int(header_lines[0].split(" ", 2)[1])
+    headers = {}
+    for header_line in header_lines[1:]:
+        separator = header_line.find(":")
+        if separator > 0:
+            headers[header_line[:separator].lower()] = header_line[separator + 1 :].strip()
+    body = response[header_end + 4 :]
+    if "chunked" in headers.get("transfer-encoding", "").lower():
+        body = decode_chunked_body(body)
+    elif "content-length" in headers:
+        body = body[: int(headers["content-length"])]
+    return status, headers, body
+
+
+def decode_chunked_body(body: bytes) -> bytes:
+    decoded = bytearray()
+    position = 0
+    while True:
+        line_end = body.find(b"\r\n", position)
+        if line_end == -1:
+            raise ValueError("Chunked body did not contain a complete chunk size")
+        size_text = body[position:line_end].split(b";", 1)[0]
+        size = int(size_text, 16)
+        position = line_end + 2
+        if size == 0:
+            return bytes(decoded)
+        decoded.extend(body[position : position + size])
+        position = position + size + 2
+
+
+def tunnel_through_proxy(
+    connection: socket.socket, host: str, port: int, timeout: float
+) -> None:
+    connection.settimeout(timeout)
+    target = f"{host}:{port}"
+    request = (
+        f"CONNECT {target} HTTP/1.1\r\n"
+        + f"Host: {target}\r\n"
+        + "Proxy-Connection: close\r\n\r\n"
+    )
+    connection.sendall(request.encode("iso-8859-1"))
+    status, _headers, _body = parse_raw_http_response(read_until_headers(connection))
+    if status < 200 or status >= 300:
+        raise ConnectionError(f"Proxy CONNECT failed with HTTP {status}")
+
+
+def read_until_headers(connection: socket.socket) -> bytes:
+    response = bytearray()
+    while b"\r\n\r\n" not in response:
+        chunk = connection.recv(8192)
+        if not chunk:
+            break
+        response.extend(chunk)
+    return bytes(response)
+
+
+def default_port(parsed: urllib.parse.ParseResult) -> int:
+    return 443 if parsed.scheme == "https" else 80
+
+
+def parse_proxy(proxy: str) -> urllib.parse.ParseResult:
+    proxy_with_scheme = proxy if "://" in proxy else "http://" + proxy
+    parsed = urllib.parse.urlparse(proxy_with_scheme)
+    if parsed.scheme != "http" or not parsed.hostname:
+        raise ValueError("Proxy must be an HTTP URL, e.g. http://127.0.0.1:8080")
+    return parsed
+
+
+def absolute_request_uri(
+    parsed: urllib.parse.ParseResult,
+    host: str,
+    port: int | None,
+    full_path: str,
+) -> str:
+    scheme = parsed.scheme or "http"
+    return urllib.parse.urlunparse(
+        (scheme, host_header(parsed, host, port), full_path, "", "", "")
+    )
+
+
+def host_header(parsed: urllib.parse.ParseResult, host: str, port: int | None) -> str:
+    if port is None or (parsed.scheme == "http" and port == 80) or (
+        parsed.scheme == "https" and port == 443
+    ):
+        return host
+    return f"{host}:{port}"
 
 
 def dump_json(data: dict[str, Any]) -> str:

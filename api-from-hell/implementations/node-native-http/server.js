@@ -16,6 +16,7 @@ const commonHeaders = {
   "Access-Control-Allow-Headers":
     "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
 };
+const noBodyStatusCodes = new Set([204, 205, 304]);
 
 const endpointsByPath = new Map();
 for (const endpoint of catalog.endpoints) {
@@ -60,8 +61,7 @@ const server = http.createServer((request, response) => {
     headers[header.name] = header.value;
   }
 
-  response.writeHead(endpoint.statusCode, headers);
-  response.end(request.method === "HEAD" ? "" : (endpoint.body || ""));
+  sendEndpointResponse(request, response, endpoint.statusCode, headers, endpoint.body || "");
 });
 
 server.listen(PORT, () => {
@@ -100,6 +100,34 @@ function allowedMethodsFor(endpointsForPath) {
 function sendJson(response, data) {
   response.writeHead(200, { ...commonHeaders, "Content-Type": "application/json" });
   response.end(JSON.stringify(data, null, 2));
+}
+
+function sendEndpointResponse(request, response, statusCode, headers, body) {
+  const responseBody = request.method === "HEAD" ? "" : body;
+  if (responseBody && noBodyStatusCodes.has(statusCode)) {
+    sendRawResponse(response, statusCode, headers, responseBody);
+    return;
+  }
+
+  response.writeHead(statusCode, headers);
+  response.end(Buffer.from(responseBody, "utf8"));
+}
+
+function sendRawResponse(response, statusCode, headers, body) {
+  const bodyBytes = Buffer.from(body, "utf8");
+  const rawHeaders = {
+    ...headers,
+    "Content-Length": String(bodyBytes.length),
+    "Connection": "close"
+  };
+  const headerLines = [
+    `HTTP/1.1 ${statusCode} ${http.STATUS_CODES[statusCode] || ""}`,
+    ...Object.entries(rawHeaders).map(([name, value]) => `${name}: ${value}`)
+  ];
+
+  response.socket.write(headerLines.join("\r\n") + "\r\n\r\n");
+  response.socket.write(bodyBytes);
+  response.socket.end();
 }
 
 function openApiFor(request) {

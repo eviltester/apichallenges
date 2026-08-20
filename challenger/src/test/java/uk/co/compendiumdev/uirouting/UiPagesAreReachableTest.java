@@ -2479,6 +2479,73 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals("noindex, follow", mirrorDocsResponse.getHeader("X-Robots-Tag"));
     }
 
+    static Stream<Arguments> generatedSwaggerAndClientSeoPages() {
+        return Stream.of(
+                Arguments.of(
+                        "/sim/docs/swagger-ui",
+                        "API Simulator - Swagger UI",
+                        "Use Swagger UI to inspect the API Simulator OpenAPI definition and compare deterministic request behaviour, payload formats, and guided practice responses.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/simpleapi/docs/swagger-ui",
+                        "Simple API - Swagger UI",
+                        "Use Swagger UI to explore the Simple API OpenAPI documentation, schemas, examples, and response expectations for hands-on HTTP testing practice.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/api/docs/swagger-ui",
+                        "API Challenges - Swagger UI",
+                        "Use Swagger UI to explore and try the API Challenges OpenAPI documentation, request formats, payload examples, and expected responses in the browser.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/shop/docs/swagger-ui",
+                        "Buggy API - Swagger UI",
+                        "Use Swagger UI to explore the Buggy API OpenAPI documentation for practising auth, stock, checkout, and business-rule testing workflows.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/apichallenges/client",
+                        "API Challenges Client",
+                        "Send browser-based requests to the API Challenges practice API, inspect JSON responses, and experiment with challenge endpoints from one simple client.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/simpleapi/client",
+                        "Simple API Client",
+                        "Send browser-based requests to the Simple API, generate test ISBNs, inspect JSON responses, and practise create, read, update, and delete calls.",
+                        "noindex,follow"),
+                Arguments.of(
+                        "/shop/client",
+                        "Buggy API Client",
+                        "Send browser-based requests to the Buggy API shopping cart, inspect JSON responses, and practise product, cart, auth, and checkout workflows.",
+                        "noindex,follow"));
+    }
+
+    @ParameterizedTest(name = "generated page SEO metadata exists for {0}")
+    @MethodSource("generatedSwaggerAndClientSeoPages")
+    void generatedSwaggerAndClientPagesRenderSeoMetadata(
+            final String path, final String title, final String description, final String robots) {
+
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<title>" + title + "</title>"));
+        Assertions.assertTrue(
+                response.body.contains("<meta name='description' content='" + description + "'>"));
+        Assertions.assertTrue(
+                response.body.contains("<meta name='robots' content='" + robots + "'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta property='og:description' content='" + description + "'>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<meta name='twitter:description' content='" + description + "'>"));
+        Assertions.assertTrue(response.body.contains("<script type='application/ld+json'>"));
+        Assertions.assertTrue(response.body.contains("\"@type\":\"WebPage\""));
+        Assertions.assertTrue(response.body.contains("\"description\":\"" + description + "\""));
+        Assertions.assertTrue(
+                response.body.contains("\"url\":\"https://apichallenges.com" + path + "\""));
+        Assertions.assertEquals(1, countOccurrences(response.body, "<meta name='description'"));
+        Assertions.assertEquals(1, countOccurrences(response.body, "application/ld+json"));
+    }
+
     @Test
     void markdownPageWithMetadataOverridesRendersExpectedSeoAndSocialTags() {
 

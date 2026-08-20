@@ -8,6 +8,8 @@ import os
 from pathlib import Path
 
 from flask import Flask, Response, jsonify, request
+from werkzeug.datastructures import Headers
+from werkzeug.wsgi import ClosingIterator
 
 
 PORT = int(os.environ.get("PORT", "3001"))
@@ -27,6 +29,32 @@ for endpoint in CATALOG["endpoints"]:
     ENDPOINTS_BY_PATH.setdefault(endpoint["path"], {})[endpoint["method"].upper()] = endpoint
 
 app = Flask(__name__)
+
+
+class ExactResponse(Response):
+    def get_app_iter(self, environ):
+        if environ["REQUEST_METHOD"] == "HEAD":
+            iterable = ()
+        elif self.direct_passthrough:
+            return self.response
+        else:
+            iterable = self.iter_encoded()
+        return ClosingIterator(iterable, self.close)
+
+    def get_wsgi_headers(self, environ):
+        return Headers(self.headers)
+
+
+def allowed_methods(endpoints_for_path: dict) -> list[str]:
+    methods = list(endpoints_for_path.keys())
+    if "GET" in methods and "HEAD" not in methods:
+        methods.append("HEAD")
+    methods.append("OPTIONS")
+    return list(dict.fromkeys(methods))
+
+
+def has_content_type(endpoint: dict) -> bool:
+    return any(header["name"].lower() == "content-type" for header in endpoint.get("headers", []))
 
 
 @app.after_request
@@ -52,15 +80,18 @@ for catalog_path, endpoints_for_path in ENDPOINTS_BY_PATH.items():
 
         endpoint = endpoints.get(request.method)
         if endpoint is None:
-            response = Response("Method Not Allowed", status=405)
+            response = ExactResponse(b"Method Not Allowed", status=405)
             response.headers["Allow"] = ", ".join(allowed_methods(endpoints))
+            response.headers["Content-Length"] = "18"
             return response
 
-        response = Response(endpoint.get("body", ""), status=endpoint["statusCode"])
+        body = endpoint.get("body", "").encode("utf-8")
+        response = ExactResponse(body, status=endpoint["statusCode"])
         for header in endpoint.get("headers", []):
             response.headers[header["name"]] = header["value"]
         if not has_content_type(endpoint):
             response.headers.pop("Content-Type", None)
+        response.headers["Content-Length"] = str(len(body))
         return response
 
     app.add_url_rule(
@@ -100,18 +131,6 @@ def openapi():
             },
         }
     )
-
-
-def allowed_methods(endpoints_for_path: dict) -> list[str]:
-    methods = list(endpoints_for_path.keys())
-    if "GET" in methods and "HEAD" not in methods:
-        methods.append("HEAD")
-    methods.append("OPTIONS")
-    return list(dict.fromkeys(methods))
-
-
-def has_content_type(endpoint: dict) -> bool:
-    return any(header["name"].lower() == "content-type" for header in endpoint.get("headers", []))
 
 
 if __name__ == "__main__":

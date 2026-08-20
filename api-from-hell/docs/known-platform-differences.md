@@ -18,6 +18,10 @@ Production proxies may also remove it before it reaches the client.
 Use a proxy between the API and the API client when you need to inspect the actual bytes that reach
 the client.
 
+The conformance runner checks these bodies strictly by default. Use
+`--allow-normalized-no-body-statuses` only when documenting a server, proxy, or platform that is
+expected to suppress them.
+
 ## Missing `Content-Type`
 
 The catalog includes responses with body content but no explicit `Content-Type`. Some frameworks set

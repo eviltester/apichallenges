@@ -10,6 +10,7 @@ const catalogPath = process.env.FROMHELL_CATALOG ||
   path.resolve(__dirname, "../../catalog/fromhell-catalog.json");
 const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
 const app = express();
+const noBodyStatusCodes = new Set([204, 205, 304]);
 
 const endpointsByPath = new Map();
 for (const endpoint of catalog.endpoints) {
@@ -31,9 +32,8 @@ app.use((_request, response, next) => {
 for (const [catalogPathForEndpoint, endpointsForPath] of endpointsByPath.entries()) {
   const routePath = PREFIX + catalogPathForEndpoint;
   for (const endpoint of endpointsForPath.values()) {
-    app[endpoint.method.toLowerCase()](routePath, (_request, response) => {
-      applyEndpoint(response, endpoint);
-      response.send(endpoint.body || "");
+    app[endpoint.method.toLowerCase()](routePath, (request, response) => {
+      sendEndpointResponse(request, response, endpoint);
     });
   }
 
@@ -68,6 +68,53 @@ function applyEndpoint(response, endpoint) {
   if (!(endpoint.headers || []).some((header) => header.name.toLowerCase() === "content-type")) {
     response.removeHeader("Content-Type");
   }
+}
+
+function sendEndpointResponse(request, response, endpoint) {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+  };
+  for (const header of endpoint.headers || []) {
+    headers[header.name] = header.value;
+  }
+
+  const body = request.method === "HEAD" ? "" : (endpoint.body || "");
+  if (body && noBodyStatusCodes.has(endpoint.statusCode)) {
+    sendRawResponse(response, endpoint.statusCode, headers, body);
+    return;
+  }
+
+  response.writeHead(endpoint.statusCode, headers);
+  response.end(Buffer.from(body, "utf8"));
+}
+
+function sendRawResponse(response, statusCode, headers, body) {
+  const bodyBytes = Buffer.from(body, "utf8");
+  const rawHeaders = {
+    ...headers,
+    "Content-Length": String(bodyBytes.length),
+    "Connection": "close"
+  };
+  const headerLines = [
+    `HTTP/1.1 ${statusCode} ${httpStatusMessage(statusCode)}`,
+    ...Object.entries(rawHeaders).map(([name, value]) => `${name}: ${value}`)
+  ];
+
+  response.socket.write(headerLines.join("\r\n") + "\r\n\r\n");
+  response.socket.write(bodyBytes);
+  response.socket.end();
+}
+
+function httpStatusMessage(statusCode) {
+  const statuses = {
+    204: "No Content",
+    205: "Reset Content",
+    304: "Not Modified"
+  };
+  return statuses[statusCode] || "";
 }
 
 function normalizePrefix(prefix) {

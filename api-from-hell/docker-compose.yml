@@ -27,9 +27,9 @@ services:
     ports:
       - "3004:3001"
 
-  fromhell-java-javalin:
+  fromhell-java-raw-http:
     build:
       context: .
-      dockerfile: implementations/java-javalin/Dockerfile
+      dockerfile: implementations/java-raw-http/Dockerfile
     ports:
       - "3005:3001"

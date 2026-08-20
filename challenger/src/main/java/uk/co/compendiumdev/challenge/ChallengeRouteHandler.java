@@ -5,6 +5,7 @@ import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitions;
 import uk.co.compendiumdev.challenge.challengesrouting.*;
 import uk.co.compendiumdev.challenge.gui.ChallengerWebGUI;
+import uk.co.compendiumdev.challenge.gui.GeneratedPageSeoMetadata;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
 import uk.co.compendiumdev.challenge.practicemodes.fromhell.FromHellRoutes;
 import uk.co.compendiumdev.challenge.practicemodes.mirror.MirrorRoutes;
@@ -153,6 +154,7 @@ public class ChallengeRouteHandler {
         new FromHellRoutes(guiTemplates).configure();
 
         OpenApiDocsLandingPageLinks.install();
+        GeneratedPageSeoMetadata.install();
 
         return this;
     }

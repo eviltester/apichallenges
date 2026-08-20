@@ -41,7 +41,7 @@ public class FromHellStandaloneImplementationTest {
         Assertions.assertTrue(
                 root.resolve("implementations/python-flask/server.py").toFile().isFile());
         Assertions.assertTrue(
-                root.resolve("implementations/java-javalin/pom.xml").toFile().isFile());
+                root.resolve("implementations/java-raw-http/pom.xml").toFile().isFile());
         Assertions.assertTrue(
                 root.resolve("implementations/mockoon/fromhell.generated.json").toFile().isFile());
 
@@ -64,7 +64,7 @@ public class FromHellStandaloneImplementationTest {
         Assertions.assertTrue(
                 fileContains(
                         root.resolve(
-                                "implementations/java-javalin/src/main/java/dev/eviltester/fromhell/ApiFromHellJavalinMain.java"),
+                                "implementations/java-raw-http/src/main/java/dev/eviltester/fromhell/ApiFromHellRawHttpMain.java"),
                         "FROMHELL_CATALOG"));
     }
 
