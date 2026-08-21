@@ -343,8 +343,8 @@ public class AuthRoutes {
                                             .getFieldNamesOfType(
                                                     FieldType.AUTO_INCREMENT, FieldType.AUTO_GUID);
                             ValidationReport validity =
-                                    stateValidator.validateFields(
-                                            returnedInstance, protectedFieldNames, false);
+                                    stateValidator.validateFieldsForNormalWrite(
+                                            returnedInstance, protectedFieldNames);
                             validity.combine(
                                     secretNoteStore
                                             .getStore(EntityRelModel.DEFAULT_DATABASE_NAME)

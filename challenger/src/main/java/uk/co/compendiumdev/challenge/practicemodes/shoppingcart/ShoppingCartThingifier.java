@@ -23,10 +23,21 @@ public final class ShoppingCartThingifier {
     public static final int MAX_CART_ITEMS = 400;
 
     public Thingifier get() {
-        return get(null);
+        return get(null, ShoppingCartBugMode.CLASSIC);
+    }
+
+    public Thingifier get(final ShoppingCartBugMode bugMode) {
+        return get(null, bugMode);
     }
 
     public Thingifier get(final ThingStoreProvider storeProvider) {
+        return get(storeProvider, ShoppingCartBugMode.CLASSIC);
+    }
+
+    public Thingifier get(
+            final ThingStoreProvider storeProvider, final ShoppingCartBugMode bugMode) {
+        final ShoppingCartBugMode effectiveBugMode =
+                bugMode == null ? ShoppingCartBugMode.CLASSIC : bugMode;
         final EntityRelModel model =
                 storeProvider == null ? new EntityRelModel() : new EntityRelModel(storeProvider);
         final Thingifier shop = new Thingifier(model);
@@ -121,6 +132,12 @@ public final class ShoppingCartThingifier {
                         .withDescription("Product stock captured when the line was added.")
                         .withMinMaxValues(-1000, 9999)
                         .withDefaultValue("0"));
+        if (!effectiveBugMode.bugsEnabled()) {
+            cartItem.getField("quantity")
+                    .withCustomValidation(ShoppingCartValidationRules::quantityMustBePositive);
+            cartItem.withDomainValidation(
+                    ShoppingCartValidationRules::quantityMustNotExceedProductStock);
+        }
         cartItem.defineView("AddedCartItem")
                 .hideRequestFields("unitPriceAtAdd", "stockAtAdd")
                 .allowInputFields("unitPriceAtAdd", "stockAtAdd");
