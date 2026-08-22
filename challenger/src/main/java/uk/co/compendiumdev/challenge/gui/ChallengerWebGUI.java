@@ -18,6 +18,7 @@ import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.challenge.challenges.*;
+import uk.co.compendiumdev.challenge.challengesrouting.ChallengerDatabasePayloads;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
 import uk.co.compendiumdev.challenge.persistence.PersistenceResponse;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerRequest;
@@ -521,10 +522,9 @@ public class ChallengerWebGUI {
                                 .getDatabaseNames()
                                 .contains(EntityRelModel.DEFAULT_DATABASE_NAME)) {
                             json =
-                                    challengers
-                                            .getErModel()
-                                            .exportInstanceDataAsJson(
-                                                    EntityRelModel.DEFAULT_DATABASE_NAME);
+                                    ChallengerDatabasePayloads.publicDatabaseExportAsJson(
+                                            challengers.getErModel(),
+                                            EntityRelModel.DEFAULT_DATABASE_NAME);
                         }
                         html.append(outputChallengeDataAsJS(challengers.SINGLE_PLAYER, json));
                         html.append(showAchievements());
@@ -665,7 +665,9 @@ public class ChallengerWebGUI {
 
                         String json = "{}";
                         if (challengers.getErModel().getDatabaseNames().contains(xChallenger)) {
-                            json = challengers.getErModel().exportInstanceDataAsJson(xChallenger);
+                            json =
+                                    ChallengerDatabasePayloads.publicDatabaseExportAsJson(
+                                            challengers.getErModel(), xChallenger);
                         }
                         html.append(outputChallengeDataAsJS(challenger, json));
                         html.append(showAchievements());
@@ -1360,22 +1362,10 @@ public class ChallengerWebGUI {
         }
 
         if (challengers.getErModel().getDatabaseNames().contains(databaseName)) {
-            return parseJsonObjectOrEmpty(
-                    challengers.getErModel().exportInstanceDataAsJson(databaseName));
+            return ChallengerDatabasePayloads.publicDatabaseExport(
+                    challengers.getErModel(), databaseName);
         }
 
-        return new JsonObject();
-    }
-
-    private JsonObject parseJsonObjectOrEmpty(final String json) {
-        try {
-            final JsonElement element = JsonParser.parseString(json);
-            if (element != null && element.isJsonObject()) {
-                return element.getAsJsonObject();
-            }
-        } catch (Exception ignored) {
-            // Return empty JSON below.
-        }
         return new JsonObject();
     }
 

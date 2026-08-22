@@ -13,7 +13,9 @@ import static uk.co.compendiumdev.thingifier.adapter.httpserver.ServerRoutes.tra
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiRequestHook;
 import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiResponseHook;
@@ -34,6 +36,7 @@ public final class ApiChallengeCanonicalThingifierRoutes {
 
     private static final String CANONICAL_API_PREFIX = "/api";
     private static final String TODOS_ROUTE = "/todos";
+    private static final String SECRET_ROUTE = "/secret";
     private static final String LOCATION_HEADER = "Location";
 
     private final ThingifierHttpApiBridge bridge;
@@ -59,16 +62,33 @@ public final class ApiChallengeCanonicalThingifierRoutes {
     public ApiChallengeCanonicalThingifierRoutes configure() {
         final ApiRoutingDefinition routeDefinitions =
                 new ApiRoutingDefinitionDocGenerator(thingifier).generate("");
+        final Map<String, RoutingDefinition> publicRouteDefinitions = new LinkedHashMap<>();
 
         for (final RoutingDefinition routeDefinition : routeDefinitions.definitions()) {
-            if (routeDefinition.isDisabled() || !isTodosRoute(routeDefinition.url())) {
+            if (routeDefinition.isDisabled() || !isPublicApiRoute(routeDefinition.url())) {
                 continue;
             }
 
+            publicRouteDefinitions.put(routeKey(routeDefinition), routeDefinition);
+        }
+
+        final List<RoutingDefinition> routeDefinitionsToRegister =
+                new ArrayList<>(publicRouteDefinitions.values());
+        routeDefinitionsToRegister.sort(
+                (left, right) ->
+                        Boolean.compare(
+                                left.status().isReturnedFromCall(),
+                                right.status().isReturnedFromCall()));
+
+        for (final RoutingDefinition routeDefinition : routeDefinitionsToRegister) {
             register(routeDefinition, canonicalPathFor(routeDefinition.url()));
         }
 
         return this;
+    }
+
+    private String routeKey(final RoutingDefinition routeDefinition) {
+        return routeDefinition.verb().name() + " " + routeDefinition.url();
     }
 
     public void registerHttpApiRequestHook(final HttpApiRequestHook hook) {
@@ -79,10 +99,15 @@ public final class ApiChallengeCanonicalThingifierRoutes {
         httpApiResponseHooks.add(hook);
     }
 
-    private boolean isTodosRoute(final String routeUrl) {
+    private boolean isPublicApiRoute(final String routeUrl) {
+        return isRouteUnder(routeUrl, TODOS_ROUTE) || isRouteUnder(routeUrl, SECRET_ROUTE);
+    }
+
+    private boolean isRouteUnder(final String routeUrl, final String routeRoot) {
         final String normalizedRouteUrl = withoutLeadingSlash(routeUrl);
-        return withoutLeadingSlash(TODOS_ROUTE).equals(normalizedRouteUrl)
-                || normalizedRouteUrl.startsWith(withoutLeadingSlash(TODOS_ROUTE) + "/");
+        final String normalizedRouteRoot = withoutLeadingSlash(routeRoot);
+        return normalizedRouteRoot.equals(normalizedRouteUrl)
+                || normalizedRouteUrl.startsWith(normalizedRouteRoot + "/");
     }
 
     private String canonicalPathFor(final String routeUrl) {
@@ -103,22 +128,10 @@ public final class ApiChallengeCanonicalThingifierRoutes {
 
     private void register(final RoutingDefinition routeDefinition, final String path) {
         switch (routeDefinition.verb()) {
-            case GET ->
-                    get(
-                            path,
-                            dynamicHandler(
-                                    (internalRequest, request) -> bridge.get(internalRequest)));
-            case POST ->
-                    post(
-                            path,
-                            dynamicHandler(
-                                    (internalRequest, request) -> bridge.post(internalRequest)));
+            case GET -> registerGet(routeDefinition, path);
+            case POST -> registerPost(routeDefinition, path);
             case QUERY -> registerQuery(routeDefinition, path);
-            case HEAD ->
-                    head(
-                            path,
-                            dynamicHandler(
-                                    (internalRequest, request) -> bridge.head(internalRequest)));
+            case HEAD -> registerHead(routeDefinition, path);
             case DELETE -> registerDelete(routeDefinition, path);
             case PATCH -> registerPatch(routeDefinition, path);
             case PUT -> registerPut(routeDefinition, path);
@@ -127,6 +140,30 @@ public final class ApiChallengeCanonicalThingifierRoutes {
             default -> {
                 // No route required.
             }
+        }
+    }
+
+    private void registerGet(final RoutingDefinition routeDefinition, final String path) {
+        if (routeDefinition.status().isReturnedFromCall()) {
+            get(path, dynamicHandler((internalRequest, request) -> bridge.get(internalRequest)));
+        } else {
+            get(path, staticHandler(routeDefinition));
+        }
+    }
+
+    private void registerPost(final RoutingDefinition routeDefinition, final String path) {
+        if (routeDefinition.status().isReturnedFromCall()) {
+            post(path, dynamicHandler((internalRequest, request) -> bridge.post(internalRequest)));
+        } else {
+            post(path, staticHandler(routeDefinition));
+        }
+    }
+
+    private void registerHead(final RoutingDefinition routeDefinition, final String path) {
+        if (routeDefinition.status().isReturnedFromCall()) {
+            head(path, dynamicHandler((internalRequest, request) -> bridge.head(internalRequest)));
+        } else {
+            head(path, staticHandler(routeDefinition));
         }
     }
 
@@ -218,13 +255,16 @@ public final class ApiChallengeCanonicalThingifierRoutes {
             return url;
         }
 
-        final String canonicalTodosPath = routePrefix + TODOS_ROUTE;
-        final int prefixIndex = url.indexOf(canonicalTodosPath);
-        if (prefixIndex < 0) {
-            return url;
+        for (final String routeRoot : List.of(TODOS_ROUTE, SECRET_ROUTE)) {
+            final String canonicalPath = routePrefix + routeRoot;
+            final int prefixIndex = url.indexOf(canonicalPath);
+            if (prefixIndex >= 0) {
+                return url.substring(0, prefixIndex)
+                        + url.substring(prefixIndex + routePrefix.length());
+            }
         }
 
-        return url.substring(0, prefixIndex) + url.substring(prefixIndex + routePrefix.length());
+        return url;
     }
 
     private void rewriteLocationHeader(final InternalHttpResponse internalResponse) {

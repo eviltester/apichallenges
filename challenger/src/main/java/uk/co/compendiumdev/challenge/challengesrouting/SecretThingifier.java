@@ -1,17 +1,19 @@
 package uk.co.compendiumdev.challenge.challengesrouting;
 
 import static uk.co.compendiumdev.thingifier.apiconfig.EntityWriteOperation.UPDATE;
+import static uk.co.compendiumdev.thingifier.core.EntityRelModel.DEFAULT_DATABASE_NAME;
 import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType.STRING;
 
-import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
 import uk.co.compendiumdev.thingifier.api.spec.ThingifierApiRouteRule;
 import uk.co.compendiumdev.thingifier.api.validation.ApiOperationValidators;
-import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
+import uk.co.compendiumdev.thingifier.core.domain.datapopulator.RepositoryDataPopulator;
+import uk.co.compendiumdev.thingifier.core.domain.definitions.ERSchema;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.Field;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.validation.MaximumLengthValidationRule;
+import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
 final class SecretThingifier {
     static final String NOTE_ENTITY = "secretnote";
@@ -27,15 +29,11 @@ final class SecretThingifier {
     static final String BASIC_SCHEME = "secretTokenBasic";
     static final String BASIC_REALM = "User Visible Realm";
 
-    Thingifier get(
-            final String pathPrefix, final SecretNoteAuth auth, final Challengers challengers) {
-        final Thingifier secrets = new Thingifier();
-        secrets.setDocumentation(
-                "Secret Notes",
-                "Authentication challenge support for secret token and note endpoints.");
-        secrets.setDataGenerator(new SecretDataPopulator(challengers));
-
-        final EntityDefinition note = secrets.defineThing(NOTE_ENTITY, NOTE_COLLECTION, 1);
+    void configure(
+            final Thingifier thingifier,
+            final SecretNoteAuth auth,
+            final SecretDataPopulator secretDataPopulator) {
+        final EntityDefinition note = thingifier.defineThing(NOTE_ENTITY, NOTE_COLLECTION, 1);
         note.addAsPrimaryKeyField(Field.is("id", STRING).makeMandatory());
         note.addFields(
                 Field.is("note", STRING)
@@ -43,49 +41,54 @@ final class SecretThingifier {
                         .withValidation(new MaximumLengthValidationRule(100)));
         note.defineView(NOTE_VIEW).hideFields("id");
 
-        final EntityDefinition token = secrets.defineThing(TOKEN_ENTITY, TOKEN_COLLECTION, 1);
+        final EntityDefinition token = thingifier.defineThing(TOKEN_ENTITY, TOKEN_COLLECTION, 1);
         token.addAsPrimaryKeyField(Field.is("id", STRING).makeMandatory());
         token.addFields(Field.is("token", STRING).makeMandatory());
         token.defineView(TOKEN_VIEW).hideFields("id");
 
-        final ThingifierApiConfig config = new ThingifierApiConfig(pathPrefix);
-        config.setSupportsMultipleDatabases(true);
-        config.setReturnSingleGetItemsAsCollection(false);
-        config.setDefaultContentTypeAsJson(true);
-        config.writeMethods().entities().postCan(UPDATE);
-        secrets.apiDefaults().setFrom(config);
+        thingifier.setDataGenerator(
+                new CompositeRepositoryDataPopulator(
+                        thingifier.getDefaultDataPopulator(), secretDataPopulator));
+        secretDataPopulator.populate(thingifier, DEFAULT_DATABASE_NAME);
 
-        secrets.apiContract().entity(NOTE_ENTITY).defaultEntityView(NOTE_VIEW);
-        secrets.apiContract().entity(TOKEN_ENTITY).defaultEntityView(TOKEN_VIEW);
-        secrets.apiContract().disableEntityRoutes(NOTE_COLLECTION);
-        secrets.apiContract().disableEntityRoutes(TOKEN_COLLECTION);
-        secrets.apiContract().security().basic(BASIC_SCHEME, BASIC_REALM);
-        secrets.apiContract().security().bearer(TOKEN_SCHEME);
-        secrets.apiContract().security().apiKey(API_KEY_SCHEME, "X-AUTH-TOKEN");
-        secrets.apiContract().authenticator(BASIC_SCHEME, auth::authenticateAdminPassword);
-        secrets.apiContract().authenticator(TOKEN_SCHEME, auth::authenticateSecretToken);
-        secrets.apiContract().authenticator(API_KEY_SCHEME, auth::authenticateSecretToken);
+        thingifier.apiContract().entity(NOTE_ENTITY).defaultEntityView(NOTE_VIEW);
+        thingifier.apiContract().entity(TOKEN_ENTITY).defaultEntityView(TOKEN_VIEW);
+        thingifier.apiContract().disableEntityRoutes(NOTE_COLLECTION);
+        thingifier.apiContract().disableEntityRoutes(TOKEN_COLLECTION);
+        thingifier.apiContract().security().basic(BASIC_SCHEME, BASIC_REALM);
+        thingifier.apiContract().security().bearer(TOKEN_SCHEME);
+        thingifier.apiContract().security().apiKey(API_KEY_SCHEME, "X-AUTH-TOKEN");
+        thingifier.apiContract().authenticator(BASIC_SCHEME, auth::authenticateAdminPassword);
+        thingifier.apiContract().authenticator(TOKEN_SCHEME, auth::authenticateSecretToken);
+        thingifier.apiContract().authenticator(API_KEY_SCHEME, auth::authenticateSecretToken);
         final ThingifierApiRouteRule getSecretToken =
-                secrets.apiContract()
+                thingifier
+                        .apiContract()
                         .route(RoutingVerb.GET, "/secret/token")
                         .mapsToEntity(TOKEN_ENTITY)
                         .withFixedIdentifier(TOKEN_ID)
                         .defaultEntityView(TOKEN_VIEW)
-                        .secureWithBasicAuth(BASIC_SCHEME);
+                        .secureWithBasicAuth(BASIC_SCHEME)
+                        .addDocumentation(
+                                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
         getSecretToken.onSuccess().addInstanceFieldAsHeader("X-AUTH-TOKEN", "token");
 
         final ThingifierApiRouteRule getSecretNote =
-                secrets.apiContract()
+                thingifier
+                        .apiContract()
                         .route(RoutingVerb.GET, "/secret/note")
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
-                        .authorizeWith(auth::authorizeSecretNote);
+                        .authorizeWith(auth::authorizeSecretNote)
+                        .addDocumentation(
+                                "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.");
         getSecretNote.onError(406).suppressBody();
 
         final ThingifierApiRouteRule headSecretNote =
-                secrets.apiContract()
+                thingifier
+                        .apiContract()
                         .route(RoutingVerb.HEAD, "/secret/note")
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
@@ -95,7 +98,8 @@ final class SecretThingifier {
         headSecretNote.onError(406).suppressBody();
 
         final ThingifierApiRouteRule postSecretNote =
-                secrets.apiContract()
+                thingifier
+                        .apiContract()
                         .route(RoutingVerb.POST, "/secret/note")
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
@@ -103,28 +107,30 @@ final class SecretThingifier {
                         .entityCan(UPDATE)
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
+                        .addDocumentation(
+                                "POST /api/secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.")
                         .withApiOperationValidator(
                                 "note-body-required",
                                 ApiOperationValidators.requireBodyFields("note")
                                         .onMissing(422, "note is required"));
         postSecretNote.onError(406).suppressBody();
 
-        fixedMethodNotAllowed(secrets, RoutingVerb.HEAD, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.POST, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.PUT, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.DELETE, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.PATCH, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.TRACE, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(
+                thingifier, RoutingVerb.HEAD, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(
+                thingifier, RoutingVerb.POST, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(thingifier, RoutingVerb.PUT, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(
+                thingifier, RoutingVerb.DELETE, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(
+                thingifier, RoutingVerb.PATCH, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
+        fixedMethodNotAllowed(
+                thingifier, RoutingVerb.TRACE, "/secret/token", TOKEN_ENTITY, TOKEN_ID);
 
-        fixedMethodNotAllowed(secrets, RoutingVerb.PUT, "/secret/note", NOTE_ENTITY, NOTE_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.DELETE, "/secret/note", NOTE_ENTITY, NOTE_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.PATCH, "/secret/note", NOTE_ENTITY, NOTE_ID);
-        fixedMethodNotAllowed(secrets, RoutingVerb.TRACE, "/secret/note", NOTE_ENTITY, NOTE_ID);
-
-        secrets.generateData(
-                uk.co.compendiumdev.thingifier.core.EntityRelModel.DEFAULT_DATABASE_NAME);
-
-        return secrets;
+        fixedMethodNotAllowed(thingifier, RoutingVerb.PUT, "/secret/note", NOTE_ENTITY, NOTE_ID);
+        fixedMethodNotAllowed(thingifier, RoutingVerb.DELETE, "/secret/note", NOTE_ENTITY, NOTE_ID);
+        fixedMethodNotAllowed(thingifier, RoutingVerb.PATCH, "/secret/note", NOTE_ENTITY, NOTE_ID);
+        fixedMethodNotAllowed(thingifier, RoutingVerb.TRACE, "/secret/note", NOTE_ENTITY, NOTE_ID);
     }
 
     private void fixedMethodNotAllowed(
@@ -139,5 +145,26 @@ final class SecretThingifier {
                 .withFixedIdentifier(identifier)
                 .methodNotAllowed()
                 .hide();
+    }
+
+    private static final class CompositeRepositoryDataPopulator implements RepositoryDataPopulator {
+        private final RepositoryDataPopulator first;
+        private final RepositoryDataPopulator second;
+
+        private CompositeRepositoryDataPopulator(
+                final RepositoryDataPopulator first, final RepositoryDataPopulator second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        @Override
+        public void populate(final ERSchema schema, final ThingStore store) {
+            if (first != null) {
+                first.populate(schema, store);
+            }
+            if (second != null) {
+                second.populate(schema, store);
+            }
+        }
     }
 }

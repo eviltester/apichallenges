@@ -84,6 +84,28 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertEquals(404, response.statusCode);
     }
 
+    @ParameterizedTest(name = "challenger database export only exposes todos under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void challengerDatabaseExportDoesNotExposeHiddenSecretEntities(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challengerId);
+        HttpResponseDetails databaseResponse =
+                http.send(path(prefix, "/challenger/database/" + challengerId), "get");
+
+        Assertions.assertEquals(200, databaseResponse.statusCode);
+        final JsonObject databaseExport =
+                JsonParser.parseString(databaseResponse.body).getAsJsonObject();
+        Assertions.assertTrue(databaseExport.has("todos"));
+        Assertions.assertFalse(databaseExport.has(SecretThingifier.TOKEN_COLLECTION));
+        Assertions.assertFalse(databaseExport.has(SecretThingifier.NOTE_COLLECTION));
+    }
+
     @ParameterizedTest(name = "challenge completion works under {0}")
     @MethodSource("apiRoutePrefixes")
     void challengeCompletionWorksThroughCanonicalAndLegacyRoutes(final String prefix) {

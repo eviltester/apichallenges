@@ -1,7 +1,10 @@
 package uk.co.compendiumdev.challenge.challengesrouting;
 
+import static uk.co.compendiumdev.thingifier.core.EntityRelModel.DEFAULT_DATABASE_NAME;
+
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
+import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
 import uk.co.compendiumdev.thingifier.api.response.ApiResponse;
 import uk.co.compendiumdev.thingifier.api.security.DataScopeCreationPolicy;
@@ -13,9 +16,16 @@ import uk.co.compendiumdev.thingifier.api.security.ThingifierApiAuthorizationRes
 final class SecretNoteAuth {
     private static final String LIVE_WIDGET_HEADER = "X-API-Challenges-Live-Widget";
     private final Challengers challengers;
+    private final Thingifier thingifier;
+    private final SecretDataPopulator secretDataPopulator;
 
-    SecretNoteAuth(final Challengers challengers) {
+    SecretNoteAuth(
+            final Challengers challengers,
+            final Thingifier thingifier,
+            final SecretDataPopulator secretDataPopulator) {
         this.challengers = challengers;
+        this.thingifier = thingifier;
+        this.secretDataPopulator = secretDataPopulator;
     }
 
     ThingifierApiAuthenticationResult authenticateAdminPassword(
@@ -32,6 +42,7 @@ final class SecretNoteAuth {
 
         final String challengerId = context.headers().get("X-CHALLENGER");
         if (missing(challengerId)) {
+            seedSecretDataScope(DEFAULT_DATABASE_NAME);
             return ThingifierApiAuthenticationResult.authenticated("admin").useDefaultDataScope();
         }
 
@@ -43,6 +54,7 @@ final class SecretNoteAuth {
             return ThingifierApiAuthenticationResult.rejected(response);
         }
 
+        seedSecretDataScope(challenger.getXChallenger());
         return ThingifierApiAuthenticationResult.authenticated("admin")
                 .useDataScope(
                         challenger.getXChallenger(),
@@ -56,6 +68,7 @@ final class SecretNoteAuth {
 
         if (missing(challengerId)) {
             if (AuthRoutes.READ_ONLY_AUTH_TOKEN.equals(token)) {
+                seedSecretDataScope(DEFAULT_DATABASE_NAME);
                 return ThingifierApiAuthenticationResult.authenticated(
                                 SecretPrincipal.readOnlyPrincipal())
                         .useDefaultDataScope();
@@ -72,6 +85,7 @@ final class SecretNoteAuth {
             return ThingifierApiAuthenticationResult.rejected(rejection(403));
         }
 
+        seedSecretDataScope(challenger.getXChallenger());
         return ThingifierApiAuthenticationResult.authenticated(
                         SecretPrincipal.challenger(challenger.getXChallenger()))
                 .useDataScope(
@@ -97,6 +111,11 @@ final class SecretNoteAuth {
 
     private ThingifierApiAuthorizationResult unauthorized() {
         return ThingifierApiAuthorizationResult.rejected(rejection(401));
+    }
+
+    private void seedSecretDataScope(final String databaseName) {
+        thingifier.ensureCreatedAndPopulatedInstanceDatabaseNamed(databaseName);
+        secretDataPopulator.populate(thingifier, databaseName);
     }
 
     private ApiResponse rejection(final int statusCode) {

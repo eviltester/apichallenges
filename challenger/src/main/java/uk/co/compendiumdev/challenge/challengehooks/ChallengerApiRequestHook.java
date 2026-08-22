@@ -36,10 +36,11 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
             // if there is no x-challenger and we are in multi-player mode then do not allow any
             // POST, DELETE, PUT, PATCH through to the API as this would amend the default database
             if (challengers.isMultiPlayerMode()) {
-                if (request.getVerb().equals(HttpApiRequest.VERB.POST)
-                        || request.getVerb().equals(HttpApiRequest.VERB.PUT)
-                        || request.getVerb().equals(HttpApiRequest.VERB.PATCH)
-                        || request.getVerb().equals(HttpApiRequest.VERB.DELETE)) {
+                if (!isThingifierManagedSecretRoute(request)
+                        && (request.getVerb().equals(HttpApiRequest.VERB.POST)
+                                || request.getVerb().equals(HttpApiRequest.VERB.PUT)
+                                || request.getVerb().equals(HttpApiRequest.VERB.PATCH)
+                                || request.getVerb().equals(HttpApiRequest.VERB.DELETE))) {
                     return new HttpApiResponse(
                             request.getHeaders(),
                             new ApiResponse(
@@ -83,6 +84,26 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
         }
 
         return null;
+    }
+
+    private boolean isThingifierManagedSecretRoute(final HttpApiRequest request) {
+        final String path = normalizedPath(request.getPath());
+        return "secret/note".equals(path) || "secret/token".equals(path);
+    }
+
+    private String normalizedPath(final String path) {
+        if (path == null || path.isBlank()) {
+            return "";
+        }
+
+        String normalized = path.trim().replace('\\', '/');
+        while (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        if (normalized.startsWith("api/")) {
+            normalized = normalized.substring("api/".length());
+        }
+        return normalized;
     }
 
     private boolean isTodosPaginationLimitTooHigh(

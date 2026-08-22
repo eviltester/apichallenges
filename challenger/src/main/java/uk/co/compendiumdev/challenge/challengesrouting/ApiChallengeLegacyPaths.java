@@ -52,13 +52,14 @@ public final class ApiChallengeLegacyPaths {
                 .configure(challengers, singlePlayerMode, legacyApiDefn, challengeDefinitions, "");
         new HeartBeatRoutes().configure(legacyApiDefn, "");
         new TodoExportRoutes().configure(thingifier, legacyApiDefn, "");
-        new AuthRoutes().configure(challengers, legacyApiDefn, "");
 
         configureLegacyDocumentationRedirects();
 
         final ApiChallengeCanonicalThingifierRoutes legacyTodoRoutes =
                 new ApiChallengeCanonicalThingifierRoutes(thingifier, "", "").configure();
         legacyTodoRoutes.registerHttpApiRequestHook(new ChallengerApiRequestHook(challengers));
+        legacyTodoRoutes.registerHttpApiResponseHook(
+                AuthRoutes.secretNoteResponseHook(thingifier, challengers));
         legacyTodoRoutes.registerHttpApiResponseHook(
                 new ChallengerApiResponseHook(challengers, thingifier));
     }

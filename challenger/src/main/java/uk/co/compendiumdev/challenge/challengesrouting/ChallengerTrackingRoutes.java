@@ -361,7 +361,8 @@ public class ChallengerTrackingRoutes {
                         }
 
                         result.status(200);
-                        return challengers.getErModel().exportInstanceDataAsJson(xChallengerGuid);
+                        return ChallengerDatabasePayloads.publicDatabaseExportAsJson(
+                                challengers.getErModel(), xChallengerGuid);
                     } else {
                         result.status(404);
                         return ApiResponseAsJson.getErrorMessageJson(
@@ -429,6 +430,8 @@ public class ChallengerTrackingRoutes {
                     try {
                         thingifier.ensureCreatedAndPopulatedInstanceDatabaseFromJson(
                                 xChallengerGuid.trim(), request.body());
+                        new SecretDataPopulator(challengers)
+                                .populate(thingifier, xChallengerGuid.trim());
                     } catch (Exception e) {
                         result.status(400);
                         return ApiResponseAsJson.getErrorMessageJson(e.getMessage());

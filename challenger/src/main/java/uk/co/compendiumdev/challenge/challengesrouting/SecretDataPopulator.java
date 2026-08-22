@@ -4,6 +4,7 @@ import static uk.co.compendiumdev.thingifier.core.EntityRelModel.DEFAULT_DATABAS
 
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
+import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.core.domain.datapopulator.RepositoryDataPopulator;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.ERSchema;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
@@ -37,6 +38,16 @@ final class SecretDataPopulator implements RepositoryDataPopulator {
                 SecretThingifier.TOKEN_ID,
                 "token",
                 seedData.token());
+    }
+
+    void populate(final Thingifier thingifier, final String databaseName) {
+        final ThingStore store = thingifier.getStore(databaseName);
+        if (store == null) {
+            return;
+        }
+
+        store.administration().refreshSchema(thingifier.getERmodel().getSchema());
+        populate(thingifier.getERmodel().getSchema(), store);
     }
 
     private SecretSeedData seedDataFor(final String databaseKey) {
