@@ -128,14 +128,14 @@ public class ChallengeRouteHandler {
         new HeartBeatRoutes().configure(apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
         new TodoExportRoutes()
                 .configure(thingifier, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
-        new AuthRoutes()
-                .configure(challengers, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
 
         canonicalThingifierRoutes =
                 new ApiChallengeCanonicalThingifierRoutes(thingifier).configure();
         new ApiChallengeCanonicalDocumentationRoutes(
                         thingifier, apiChallengesDocumentationDefn, guiTemplates)
                 .configure();
+        new AuthRoutes()
+                .configure(challengers, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
 
         configureApiChallengeLegacyPaths();
 

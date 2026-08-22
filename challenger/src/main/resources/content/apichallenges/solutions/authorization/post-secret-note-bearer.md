@@ -12,22 +12,22 @@ concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Authenticate with POST /api/secret/token to obtain X-AUTH-TOKEN||Create a POST request to /api/secret/note||Use Authorization Bearer with that token value||Send a valid JSON note body and verify the response status is 200
+schema_howto_steps: Authenticate with GET /api/secret/token to obtain X-AUTH-TOKEN||Create a POST request to /api/secret/note||Use Authorization Bearer with that token value||Send a valid JSON note body and verify the response status is 200
 showads: true
 ---
 
 
 # How to complete the challenge `POST /api/secret/note (Bearer)`
 
-First complete [`POST /api/secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201) to obtain an `X-AUTH-TOKEN` value.
+First complete [`GET /api/secret/token (200)`](/apichallenges/solutions/authentication/get-secret-token-200) to obtain an `X-AUTH-TOKEN` value.
 
 Then send `POST /api/secret/note` with a JSON note payload and use the token as a Bearer token in the `Authorization` header. Do not send the token as `X-AUTH-TOKEN` for this challenge.
 
 ### Try it now
 
-If you do not already have an auth token, create one with `POST /api/secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
+If you do not already have an auth token, retrieve one with `GET /api/secret/token`. [See the solution](/apichallenges/solutions/authentication/get-secret-token-200).
 
-{{<api-live-request method="POST" path="/api/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /api/secret/token to create an auth token">}}
+{{<api-live-request method="GET" path="/api/secret/token" expected-status="200" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="GET /api/secret/token to retrieve an auth token">}}
 
 {{<api-live-request method="POST" path="/api/secret/note" expected-status="200" headers="Authorization: Bearer {{authToken}}||Accept: application/json" body='{"note":"bearer note from solution widget"}' details="true" summary="POST /api/secret/note with a Bearer token to update the secret note" open="true">}}
 

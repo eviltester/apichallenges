@@ -239,20 +239,20 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
             }
         }
 
-        if (request.getVerb() == POST
+        if (request.getVerb() == GET
                 && path.contentEquals("secret/token")
                 && request.getHeaders().headerExists("Authorization")
                 && request.getHeader("Authorization").length() > 10
                 && response.getStatusCode() == 401) {
-            challengers.pass(challenger, CHALLENGE.CREATE_SECRET_TOKEN_401);
+            challengers.pass(challenger, CHALLENGE.GET_SECRET_TOKEN_401);
         }
 
-        if (request.getVerb() == POST
+        if (request.getVerb() == GET
                 && path.contentEquals("secret/token")
                 && request.getHeaders().headerExists("Authorization")
                 && request.getHeader("Authorization").length() > 10
-                && response.getStatusCode() == 201) {
-            challengers.pass(challenger, CHALLENGE.CREATE_SECRET_TOKEN_201);
+                && response.getStatusCode() == 200) {
+            challengers.pass(challenger, CHALLENGE.GET_SECRET_TOKEN_200);
         }
 
         if (request.getVerb() == GET

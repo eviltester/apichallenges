@@ -1725,7 +1725,7 @@ public abstract class ChallengeCompleteTest {
     */
 
     @Test
-    public void canCreateSecretToken401() {
+    public void canGetSecretToken401() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -1733,14 +1733,14 @@ public abstract class ChallengeCompleteTest {
         headers.putAll(x_challenger_header);
         headers.put("Authorization", "basic YWRtaW46YWRtaW4="); // admin:admin
 
-        final HttpResponseDetails response = http.send("/secret/token", "POST", headers, "");
+        final HttpResponseDetails response = http.send("/secret/token", "GET", headers, "");
 
         Assertions.assertEquals(401, response.statusCode);
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.CREATE_SECRET_TOKEN_401));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_401));
     }
 
     @Test
-    public void canCreateSecretToken201() {
+    public void canGetSecretToken200() {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
@@ -1748,10 +1748,10 @@ public abstract class ChallengeCompleteTest {
         headers.putAll(x_challenger_header);
         headers.put("Authorization", "basic YWRtaW46cGFzc3dvcmQ="); // admin:password
 
-        final HttpResponseDetails response = http.send("/secret/token", "POST", headers, "");
+        final HttpResponseDetails response = http.send("/secret/token", "GET", headers, "");
 
-        Assertions.assertEquals(201, response.statusCode);
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.CREATE_SECRET_TOKEN_201));
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_200));
     }
 
     /** SECRET NOTE */

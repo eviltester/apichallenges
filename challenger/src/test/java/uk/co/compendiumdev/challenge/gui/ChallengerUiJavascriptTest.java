@@ -150,7 +150,7 @@ public class ChallengerUiJavascriptTest {
         Assertions.assertTrue(javascript.contains("challengeKey: \"CREATE_NEW_CHALLENGER\""));
         Assertions.assertTrue(javascript.contains("challengeKey: \"GET_CHALLENGES\""));
         Assertions.assertTrue(javascript.contains("challengeKeys: ["));
-        Assertions.assertTrue(javascript.contains("\"CREATE_SECRET_TOKEN_401\""));
+        Assertions.assertTrue(javascript.contains("\"GET_SECRET_TOKEN_401\""));
         Assertions.assertTrue(javascript.contains("\"POST_SECRET_NOTE_BEARER_200\""));
         Assertions.assertTrue(javascript.contains("\"DELETE_ALL_TODOS\""));
         Assertions.assertTrue(javascript.contains("\"POST_ALL_TODOS\""));

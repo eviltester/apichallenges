@@ -1,18 +1,18 @@
 ---
 date:  2021-07-24T08:15:00Z
-lastmod: 2026-08-06
+lastmod: 2026-08-22
 title: API Challenges Solution For - authentication failed 401
 seo_title: Solution: authentication failed 401 | API Challenges
 description: How to solve API challenge - authentication failed with username and password.
 seo_description: Use this walkthrough to solve authentication failed 401 with request setup, key headers, and expected status codes so you can complete the challenge.
-next_challenge: /apichallenges/solutions/authentication/post-secret-201
-concepts_learned: HTTP POST||401 Unauthorized||Basic Auth||authentication
+next_challenge: /apichallenges/solutions/authentication/get-secret-token-200
+concepts_learned: HTTP GET||401 Unauthorized||Basic Auth||authentication
 concept_summary: Use this challenge to learn how invalid Basic Auth returns an authentication failure.
 concept_reference_label: REST API Basics
 concept_reference_url: /reference/rest-api-basics
 concept_reference_label_2: HTTP Basics
 concept_reference_url_2: /reference/http-basics
-schema_howto_steps: Create a POST request to /api/secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request with no body and verify the response status is 401
+schema_howto_steps: Create a GET request to /api/secret/token||Add Basic Authorization with credentials that should fail for this challenge||Include X-CHALLENGER so the challenge is tracked in your current session||Send the request and verify the response status is 401
 showads: true
 ---
 
@@ -26,15 +26,15 @@ the wrong details. In response the API returns a status code of 401.
 
 Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password.
 
-## POST /api/secret/token (401) - Authentication Failed
+## GET /api/secret/token (401) - Authentication Failed
 
-> Issue a POST request on the `/api/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
+> Issue a GET request on the `/api/secret/token` end point and receive 401 when Basic auth username/password is not admin/password
 
-- `POST` request means use the HTTP Verb POST
-    - e.g. `POST /api/secret/token` sends to the secret token endpoint
+- `GET` request means use the HTTP Verb GET
+    - e.g. `GET /api/secret/token` sends to the secret token endpoint
 - `Basic auth` means include the [Basic Authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
 - `username/password is not admin/password` the authorisation header value is base 64 encoded, and the details should not match `admin` as the username, and `password` for the password
-- add the `X-CHALLENGER` header to track progress and because the authentication code we need is asociated with the `X-challenger` session
+- add the `X-CHALLENGER` header to track progress and because the authentication code we need is associated with the `X-CHALLENGER` session
 - Receive a 401 response
 
 
@@ -43,27 +43,26 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 - Create a new request for the `/api/secret/token` end point
     - if running locally that endpoint would be
         - `{{<ORIGIN_URL>}}/api/secret/token`
-- The verb should be a `POST`
+- The verb should be a `GET`
 - Add a Basic Auth header by selecting "Basic" from the "Auth" tab and entering a username and password but make sure it is not admin/password e.g. use username "Admin1", password "Pa55word" (or anything else you want)
-- There should be no payload in the message
+- No request body is needed
 - You should receive a 401 response - meaning "Unauthorized" because you entered the wrong username or password
 - The request should have an `X-CHALLENGER` header to track challenge completion
 
 ### Try it now
 
-{{<api-live-request method="POST" path="/api/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*" details="true" summary="POST /api/secret/token with invalid credentials to trigger 401" open="true">}}
+{{<api-live-request method="GET" path="/api/secret/token" expected-status="401" headers="Authorization: Basic YWRtaW46cGFzc3dvcmRk||Accept: */*" details="true" summary="GET /api/secret/token with invalid credentials to trigger 401" open="true">}}
 
 
 ## Example Request
 
 ~~~~~~~~
-> POST /api/secret/token HTTP/1.1
+> GET /api/secret/token HTTP/1.1
 > Host: {{<HOST_URL>}}
 > User-Agent: rest-client
 > X-CHALLENGER: x-challenger-guid
 > Authorization: Basic YWRtaW46cGFzc3dvcmRk
 > Accept: */*
-> Content-Length: 0
 ~~~~~~~~
 
 ## Example Response
@@ -76,7 +75,6 @@ Most of the challenges simply require the correct payload, and an X-Challenger h
 < Access-Control-Allow-Origin: *
 < Access-Control-Allow-Headers: *
 < X-Challenger: x-challenger-guid
-< Content-Type: text/html;charset=utf-8
 < Server: Jetty(9.4.z-SNAPSHOT)
 < Via: 1.1 vegur
 ~~~~~~~~
@@ -102,12 +100,6 @@ Although we add an "Authorization" header, really we are trying to "authenticate
 
 - try creating a base64 Authorization header by hand, without using the "Auth" tab in Insomnia
 
-
-## Overview Video
-
-{{<youtube-embed key="RSQGADU3SLA" title="Solution to failed basic auth challenge">}}
-
-[Patreon ad free version](https://www.patreon.com/posts/54057993)
 
 ## Lessons Learned
 

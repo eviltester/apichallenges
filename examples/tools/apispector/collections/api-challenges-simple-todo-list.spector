@@ -707,8 +707,8 @@
     },
     "a9609911-cafb-487b-af55-e4517137fa77": {
       "id": "a9609911-cafb-487b-af55-e4517137fa77",
-      "name": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
-      "method": "POST",
+      "name": "GET /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "method": "GET",
       "url": "{{baseUrl}}/secret/token",
       "headers": [],
       "params": [],
@@ -720,7 +720,7 @@
       "body": {
         "mode": "none"
       },
-      "description": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "description": "GET /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
       "meta": {
         "tags": [
           "default"
@@ -1430,8 +1430,8 @@
     },
     "84fb0770-67ad-4cbe-82fa-23326b54ac9e": {
       "id": "84fb0770-67ad-4cbe-82fa-23326b54ac9e",
-      "name": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
-      "method": "POST",
+      "name": "GET /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "method": "GET",
       "url": "{{baseUrl}}/secret/token",
       "headers": [],
       "params": [],
@@ -1443,7 +1443,7 @@
       "body": {
         "mode": "none"
       },
-      "description": "POST /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
+      "description": "GET /secret/token with basic auth to get a secret/token to use as X-AUTH-TOKEN header, to allow access to the /secret/note end points.",
       "meta": {
         "tags": [
           "default"

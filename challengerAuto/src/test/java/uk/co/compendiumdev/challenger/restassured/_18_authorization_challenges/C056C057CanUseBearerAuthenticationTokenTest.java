@@ -25,9 +25,9 @@ public class C056C057CanUseBearerAuthenticationTokenTest extends RestAssuredBase
                         .preemptive()
                         .basic("admin", "password")
                         .when()
-                        .post(apiPath("/secret/token"))
+                        .get(apiPath("/secret/token"))
                         .then()
-                        .statusCode(201)
+                        .statusCode(200)
                         .extract()
                         .header("X-AUTH-TOKEN");
 

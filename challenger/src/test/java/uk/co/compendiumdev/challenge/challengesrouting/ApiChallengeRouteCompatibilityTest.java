@@ -73,6 +73,16 @@ public class ApiChallengeRouteCompatibilityTest {
         assertBearerAuthenticationChallenge(postResponse);
     }
 
+    @ParameterizedTest(name = "generated secret entity route {1} is not public under {0}")
+    @MethodSource("generatedSecretEntityRoutes")
+    void generatedSecretEntityRoutesAreNotPublic(final String prefix, final String route) {
+        http.clearHeaders();
+
+        HttpResponseDetails response = http.send(path(prefix, route), "get");
+
+        Assertions.assertEquals(404, response.statusCode);
+    }
+
     @ParameterizedTest(name = "challenge completion works under {0}")
     @MethodSource("apiRoutePrefixes")
     void challengeCompletionWorksThroughCanonicalAndLegacyRoutes(final String prefix) {
@@ -131,11 +141,9 @@ public class ApiChallengeRouteCompatibilityTest {
         final JsonObject paths = canonicalOpenApiPaths();
 
         Assertions.assertEquals(
-                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header for read-only access to /api/secret/note.",
+                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.",
                 operationSummary(paths, "/api/secret/token", "get"));
-        Assertions.assertEquals(
-                "POST /api/secret/token with basic auth to get a secret token to use as X-AUTH-TOKEN header, to allow access to the /api/secret/note end points.",
-                operationSummary(paths, "/api/secret/token", "post"));
+        Assertions.assertFalse(paths.getAsJsonObject("/api/secret/token").has("post"));
         Assertions.assertEquals(
                 "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.",
                 operationSummary(paths, "/api/secret/note", "get"));
@@ -150,6 +158,17 @@ public class ApiChallengeRouteCompatibilityTest {
 
     private static Stream<Arguments> openApiDocumentationRoutes() {
         return Stream.of(Arguments.of("/api/docs/openapi.json", "/api/todos"));
+    }
+
+    private static Stream<Arguments> generatedSecretEntityRoutes() {
+        return Stream.of("/api", "")
+                .flatMap(
+                        prefix ->
+                                Stream.of(
+                                        Arguments.of(prefix, "/secrettokens"),
+                                        Arguments.of(prefix, "/secrettokens/token"),
+                                        Arguments.of(prefix, "/secretnotes"),
+                                        Arguments.of(prefix, "/secretnotes/note")));
     }
 
     private static Stream<Arguments> legacyDocsRedirectRoutes() {

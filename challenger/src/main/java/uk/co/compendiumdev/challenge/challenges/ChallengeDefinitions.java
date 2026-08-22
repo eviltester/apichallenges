@@ -573,12 +573,12 @@ public class ChallengeDefinitions {
         sections.add(authenticationChallenges);
 
         storeChallengeAs(
-                CHALLENGE.CREATE_SECRET_TOKEN_401,
+                CHALLENGE.GET_SECRET_TOKEN_401,
                 SecretTokenChallenges.createSecretTokenNotAuthenticated401(challengeOrder++),
                 authenticationChallenges);
         storeChallengeAs(
-                CHALLENGE.CREATE_SECRET_TOKEN_201,
-                SecretTokenChallenges.createSecretTokenAuthenticated201(challengeOrder++),
+                CHALLENGE.GET_SECRET_TOKEN_200,
+                SecretTokenChallenges.getSecretTokenAuthenticated200(challengeOrder++),
                 authenticationChallenges);
 
         ChallengeSection authorizationChallenges =

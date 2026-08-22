@@ -304,7 +304,7 @@ public class ChallengerInternalHttpResponseHookTest {
     }
 
     @Test
-    public void postSecretTokenWrongAuthorizationChallenge() {
+    public void getSecretTokenWrongAuthorizationChallenge() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
         challengers.setMultiPlayerMode();
@@ -316,7 +316,7 @@ public class ChallengerInternalHttpResponseHookTest {
 
         InternalHttpRequest request =
                 new InternalHttpRequest("/secret/token")
-                        .setVerb("POST")
+                        .setVerb("GET")
                         .addHeader("Authorization", "ididntcheck")
                         .addHeader("X-CHALLENGER", challenger.getXChallenger());
 
@@ -324,11 +324,11 @@ public class ChallengerInternalHttpResponseHookTest {
 
         hook.run(request, response);
 
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.CREATE_SECRET_TOKEN_401));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_401));
     }
 
     @Test
-    public void postSecretTokenCorrectAuthorizationChallenge() {
+    public void getSecretTokenCorrectAuthorizationChallenge() {
 
         Challengers challengers = new Challengers(null, Arrays.asList(CHALLENGE.values()));
         challengers.setMultiPlayerMode();
@@ -340,15 +340,15 @@ public class ChallengerInternalHttpResponseHookTest {
 
         InternalHttpRequest request =
                 new InternalHttpRequest("/secret/token")
-                        .setVerb("POST")
+                        .setVerb("GET")
                         .addHeader("Authorization", "ididntcheck")
                         .addHeader("X-CHALLENGER", challenger.getXChallenger());
 
-        InternalHttpResponse response = new InternalHttpResponse().setStatus(201);
+        InternalHttpResponse response = new InternalHttpResponse().setStatus(200);
 
         hook.run(request, response);
 
-        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.CREATE_SECRET_TOKEN_201));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_200));
     }
 
     @Test

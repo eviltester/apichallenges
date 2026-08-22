@@ -23,7 +23,7 @@ When we are not authorized to access information we should receive a status code
 
 ## 	Authorization Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /api/secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`GET /api/secret/token (200)`](/apichallenges/solutions/authentication/get-secret-token-200).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -39,7 +39,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
     - e.g. `GET /api/secret/note` sends to the secret note endpoint
 - `X-AUTH-TOKEN` means include a header named `X-AUTH-TOKEN` in the message. The `X-` implies it is a non-standard custom header
 - `does not match a valid token` means that the value in the header should be different from the value returned from the `secret/token` endpoint
-- add the `X-CHALLENGER` header to track progress and because the authentication code we need is asociated with the `X-challenger` session
+- add the `X-CHALLENGER` header to track progress and because the authentication code we need is associated with the `X-CHALLENGER` session
 - Receive a 403 FORBIDDEN response because the authorization token does not match the token required to access the data
 
 ## Basic Instructions
@@ -48,7 +48,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
     - if running locally that endpoint would be
         - `{{<ORIGIN_URL>}}/api/secret/note`
 - The verb should be a `GET`
-- Add a custom header with the name `X-AUTH-TOKEN`; the value should be different from the value returned by `POST /api/secret/token (201)`
+- Add a custom header with the name `X-AUTH-TOKEN`; the value should be different from the value returned by `GET /api/secret/token (200)`
 - The request should have an `X-CHALLENGER` header to track challenge completion
 - You should receive a 403 response - meaning you are not authorized
 

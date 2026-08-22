@@ -100,6 +100,12 @@ public class ChallengerAuthData {
         if (challenge == CHALLENGE.PUT_TODOS_422_NO_AMEND_ID) {
             return statusOfDeprecatedChallenge(CHALLENGE.PUT_TODOS_400_NO_AMEND_ID);
         }
+        if (challenge == CHALLENGE.GET_SECRET_TOKEN_401) {
+            return statusOfDeprecatedChallenge(CHALLENGE.CREATE_SECRET_TOKEN_401);
+        }
+        if (challenge == CHALLENGE.GET_SECRET_TOKEN_200) {
+            return statusOfDeprecatedChallenge(CHALLENGE.CREATE_SECRET_TOKEN_201);
+        }
         return false;
     }
 

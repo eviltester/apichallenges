@@ -192,8 +192,8 @@ const ACHIEVEMENT_DEFINITIONS = [
         tier: "clearance",
         condition: "Complete Authentication and Authorization challenges",
         challengeKeys: [
-            "CREATE_SECRET_TOKEN_401",
-            "CREATE_SECRET_TOKEN_201",
+            "GET_SECRET_TOKEN_401",
+            "GET_SECRET_TOKEN_200",
             "GET_SECRET_NOTE_403",
             "GET_SECRET_NOTE_401",
             "GET_SECRET_NOTE_200",

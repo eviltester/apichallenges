@@ -2687,7 +2687,7 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("href='/reference/http-basics'"));
         Assertions.assertFalse(response.body.contains("href='/tutorials/rest-api-tutorial'"));
 
-        response = http.send("/apichallenges/solutions/authentication/post-secret-201", "get");
+        response = http.send("/apichallenges/solutions/authentication/get-secret-token-200", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("<li>Basic Auth</li>"));
@@ -3274,11 +3274,11 @@ public class UiPagesAreReachableTest {
     void articleSchemaIncludesDatePublishedAndDateModifiedWhenDateAndLastmodExist() {
 
         final HttpResponseDetails response =
-                http.send("/apichallenges/solutions/authentication/post-secret-201", "get");
+                http.send("/apichallenges/solutions/authentication/get-secret-token-200", "get");
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(response.body.contains("\"datePublished\":\"2021-07-24T08:30:00Z\""));
-        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-06\""));
+        Assertions.assertTrue(response.body.contains("\"dateModified\":\"2026-08-22\""));
         Assertions.assertTrue(
                 response.body.contains(
                         "Published <time datetime='2021-07-24T08:30:00Z'>2021-07-24</time>"));
