@@ -88,6 +88,28 @@ public class AuthRoutesTest {
     }
 
     @Test
+    void optionsSecretTokenAllowsOnlyPublicFixedRouteVerbs() {
+
+        http.clearHeaders();
+
+        final HttpResponseDetails response = http.send("/secret/token", "options");
+
+        Assertions.assertEquals(204, response.statusCode);
+        assertAllowHeaderContainsOnly(response, "GET", "OPTIONS");
+    }
+
+    @Test
+    void optionsSecretNoteAllowsOnlyPublicFixedRouteVerbs() {
+
+        http.clearHeaders();
+
+        final HttpResponseDetails response = http.send("/secret/note", "options");
+
+        Assertions.assertEquals(204, response.statusCode);
+        assertAllowHeaderContainsOnly(response, "GET", "HEAD", "POST", "OPTIONS");
+    }
+
+    @Test
     void noProcessingWhenNoBasicAuth() {
 
         http.clearHeaders();
@@ -780,5 +802,19 @@ public class AuthRoutesTest {
 
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
         Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
+    }
+
+    private void assertAllowHeaderContainsOnly(
+            final HttpResponseDetails response, final String... methods) {
+        final String allowHeader = response.getHeader("Allow");
+        Assertions.assertNotNull(allowHeader);
+
+        final List<String> actualMethods =
+                Stream.of(allowHeader.split(",")).map(String::trim).toList();
+
+        Assertions.assertEquals(methods.length, actualMethods.size(), allowHeader);
+        for (String method : methods) {
+            Assertions.assertTrue(actualMethods.contains(method), allowHeader);
+        }
     }
 }

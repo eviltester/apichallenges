@@ -2,7 +2,6 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
-import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierHttpApiRoutings;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
@@ -31,25 +30,6 @@ public class AuthRoutes {
 
         // authentication and authorisation
         // - create a 'secret' note which can be stored against session using an auth token
-
-        SimpleHttpRouteCreator.addHandler(
-                secretTokenPath,
-                "options",
-                (request, result) -> {
-                    result.status(204);
-                    result.header("Allow", "GET, OPTIONS");
-                    return "";
-                });
-
-        SimpleHttpRouteCreator.addHandler(
-                secretNotePath,
-                "options",
-                (request, result) -> {
-                    result.status(204);
-                    // disallow POST, DELETE, PATCH, TRACE
-                    result.header("Allow", "GET, HEAD, POST, OPTIONS");
-                    return "";
-                });
 
         final SecretNoteAuth secretNoteAuth = new SecretNoteAuth(challengers);
         final Thingifier secretNoteStore =
