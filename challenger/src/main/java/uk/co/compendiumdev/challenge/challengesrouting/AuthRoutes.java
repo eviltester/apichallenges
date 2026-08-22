@@ -3,8 +3,6 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierHttpApiRoutings;
-import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
-import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingDefinition;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingStatus;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
@@ -40,7 +38,7 @@ public class AuthRoutes {
                 new ThingifierHttpApiRoutings(
                         secretNoteStore, routingDocumentation(secretNoteStore, pathPrefix));
         secretRoutes.registerHttpApiResponseHook(secretNoteModel.responseHook());
-        secretRoutes.registerInternalHttpRequestHook(this::acceptXAuthTokenAsBearerToken);
+        documentSecretNoteAuthSchemes(apiDefn);
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
@@ -69,6 +67,8 @@ public class AuthRoutes {
                                 "GET %s with X-AUTH-TOKEN to return the secret note for the user."
                                         .formatted(secretNotePath))
                         .addPossibleStatuses(200, 401, 403)
+                        .secureWithAnyOf(
+                                SecretThingifier.TOKEN_SCHEME, SecretThingifier.API_KEY_SCHEME)
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
 
         apiDefn.addRouteToDocumentation(
@@ -81,7 +81,17 @@ public class AuthRoutes {
                                 "POST %s with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note."
                                         .formatted(secretNotePath))
                         .addPossibleStatuses(200, 400, 401, 403, 422)
+                        .secureWithAnyOf(
+                                SecretThingifier.TOKEN_SCHEME, SecretThingifier.API_KEY_SCHEME)
                         .addCustomHeader("X-AUTH-TOKEN", "string"));
+    }
+
+    private void documentSecretNoteAuthSchemes(final ThingifierApiDocumentationDefn apiDefn) {
+        apiDefn.getThingifier().apiContract().security().bearer(SecretThingifier.TOKEN_SCHEME);
+        apiDefn.getThingifier()
+                .apiContract()
+                .security()
+                .apiKey(SecretThingifier.API_KEY_SCHEME, "X-AUTH-TOKEN");
     }
 
     private ThingifierApiDocumentationDefn routingDocumentation(
@@ -94,38 +104,7 @@ public class AuthRoutes {
         return routeDefn;
     }
 
-    private InternalHttpResponse acceptXAuthTokenAsBearerToken(final InternalHttpRequest request) {
-        if (!isSecretNoteRoute(request.getPath())) {
-            return null;
-        }
-
-        final String token = request.getHeader("X-AUTH-TOKEN");
-        if (!missing(token) && !isBearerAuth(request.getHeader("Authorization"))) {
-            request.addHeader("Authorization", "Bearer " + token);
-        }
-
-        return null;
-    }
-
-    private boolean isSecretNoteRoute(final String path) {
-        final String normalizedPath = path == null ? "" : path.trim().replace('\\', '/');
-        return "secret/note".equals(withoutLeadingSlash(normalizedPath))
-                || withoutLeadingSlash(normalizedPath).endsWith("/secret/note");
-    }
-
-    private String withoutLeadingSlash(final String value) {
-        String normalized = value;
-        while (normalized.startsWith("/")) {
-            normalized = normalized.substring(1);
-        }
-        return normalized;
-    }
-
     private boolean missing(final String value) {
         return value == null || value.trim().isEmpty();
-    }
-
-    private boolean isBearerAuth(final String value) {
-        return value != null && value.trim().toLowerCase().startsWith("bearer ");
     }
 }

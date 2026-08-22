@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.challenge.challengesrouting;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.stream.Stream;
@@ -152,6 +153,33 @@ public class ApiChallengeRouteCompatibilityTest {
                 operationSummary(paths, "/api/secret/note", "post"));
     }
 
+    @Test
+    void canonicalOpenApiSecretNoteDocumentsBearerAndApiKeySecurity() {
+        final JsonObject openApi = canonicalOpenApi();
+        final JsonObject securitySchemes =
+                openApi.getAsJsonObject("components").getAsJsonObject("securitySchemes");
+        final JsonObject bearerScheme =
+                securitySchemes.getAsJsonObject(SecretThingifier.TOKEN_SCHEME);
+        final JsonObject apiKeyScheme =
+                securitySchemes.getAsJsonObject(SecretThingifier.API_KEY_SCHEME);
+        final JsonObject secretNotePath =
+                openApi.getAsJsonObject("paths").getAsJsonObject("/api/secret/note");
+
+        Assertions.assertEquals("http", bearerScheme.get("type").getAsString());
+        Assertions.assertEquals("bearer", bearerScheme.get("scheme").getAsString());
+        Assertions.assertEquals("apiKey", apiKeyScheme.get("type").getAsString());
+        Assertions.assertEquals("header", apiKeyScheme.get("in").getAsString());
+        Assertions.assertEquals("X-AUTH-TOKEN", apiKeyScheme.get("name").getAsString());
+        assertSecurityAlternatives(
+                secretNotePath.getAsJsonObject("get"),
+                SecretThingifier.TOKEN_SCHEME,
+                SecretThingifier.API_KEY_SCHEME);
+        assertSecurityAlternatives(
+                secretNotePath.getAsJsonObject("post"),
+                SecretThingifier.TOKEN_SCHEME,
+                SecretThingifier.API_KEY_SCHEME);
+    }
+
     private static Stream<Arguments> apiRoutePrefixes() {
         return Stream.of(Arguments.of("/api"), Arguments.of(""));
     }
@@ -188,15 +216,31 @@ public class ApiChallengeRouteCompatibilityTest {
     }
 
     private JsonObject canonicalOpenApiPaths() {
+        return canonicalOpenApi().getAsJsonObject("paths");
+    }
+
+    private JsonObject canonicalOpenApi() {
         final HttpResponseDetails response = http.send("/api/docs/openapi.json", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        return JsonParser.parseString(response.body).getAsJsonObject().getAsJsonObject("paths");
+        return JsonParser.parseString(response.body).getAsJsonObject();
     }
 
     private String operationSummary(
             final JsonObject paths, final String path, final String operation) {
         return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
+    }
+
+    private void assertSecurityAlternatives(
+            final JsonObject operation, final String... expectedSchemeNames) {
+        final JsonArray security = operation.getAsJsonArray("security");
+
+        Assertions.assertEquals(expectedSchemeNames.length, security.size());
+        for (int index = 0; index < expectedSchemeNames.length; index++) {
+            Assertions.assertTrue(
+                    security.get(index).getAsJsonObject().has(expectedSchemeNames[index]),
+                    security.toString());
+        }
     }
 
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {

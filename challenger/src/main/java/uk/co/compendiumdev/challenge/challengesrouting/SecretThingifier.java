@@ -23,6 +23,7 @@ final class SecretThingifier {
     static final String TOKEN_ID = "token";
     static final String TOKEN_VIEW = "SecretTokenResponse";
     static final String TOKEN_SCHEME = "secretNoteToken";
+    static final String API_KEY_SCHEME = "secretNoteApiKey";
     static final String BASIC_SCHEME = "secretTokenBasic";
     static final String BASIC_REALM = "User Visible Realm";
 
@@ -59,8 +60,11 @@ final class SecretThingifier {
         secrets.apiContract().disableEntityRoutes(NOTE_COLLECTION);
         secrets.apiContract().disableEntityRoutes(TOKEN_COLLECTION);
         secrets.apiContract().security().basic(BASIC_SCHEME, BASIC_REALM);
+        secrets.apiContract().security().bearer(TOKEN_SCHEME);
+        secrets.apiContract().security().apiKey(API_KEY_SCHEME, "X-AUTH-TOKEN");
         secrets.apiContract().authenticator(BASIC_SCHEME, auth::authenticateAdminPassword);
         secrets.apiContract().authenticator(TOKEN_SCHEME, auth::authenticateSecretToken);
+        secrets.apiContract().authenticator(API_KEY_SCHEME, auth::authenticateSecretToken);
         final ThingifierApiRouteRule getSecretToken =
                 secrets.apiContract()
                         .route(RoutingVerb.GET, "/secret/token")
@@ -76,7 +80,7 @@ final class SecretThingifier {
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
-                        .secureWithBearerAuth(TOKEN_SCHEME)
+                        .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote);
         getSecretNote.onError(406).suppressBody();
 
@@ -86,7 +90,7 @@ final class SecretThingifier {
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
-                        .secureWithBearerAuth(TOKEN_SCHEME)
+                        .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote);
         headSecretNote.onError(406).suppressBody();
 
@@ -97,7 +101,7 @@ final class SecretThingifier {
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
                         .entityCan(UPDATE)
-                        .secureWithBearerAuth(TOKEN_SCHEME)
+                        .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
                         .withApiOperationValidator(
                                 "note-body-required",

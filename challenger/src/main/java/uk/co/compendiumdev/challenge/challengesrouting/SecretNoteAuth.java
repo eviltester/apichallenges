@@ -52,7 +52,7 @@ final class SecretNoteAuth {
     ThingifierApiAuthenticationResult authenticateSecretToken(
             final ThingifierApiAuthenticationContext context) {
         final String challengerId = context.headers().get("X-CHALLENGER");
-        final String token = context.bearerToken();
+        final String token = context.authCredential();
 
         if (missing(challengerId)) {
             if (AuthRoutes.READ_ONLY_AUTH_TOKEN.equals(token)) {
