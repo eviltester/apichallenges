@@ -176,6 +176,15 @@ public class ApiChallengeRouteCompatibilityTest {
     }
 
     @Test
+    void canonicalOpenApiSecretResponsesUseSingleEntitySchemas() {
+        final JsonObject paths = canonicalOpenApiPaths();
+
+        assertJsonResponseSchemaRef(paths, "/api/secret/token", "get", SecretThingifier.TOKEN_VIEW);
+        assertJsonResponseSchemaRef(paths, "/api/secret/note", "get", SecretThingifier.NOTE_VIEW);
+        assertJsonResponseSchemaRef(paths, "/api/secret/note", "post", SecretThingifier.NOTE_VIEW);
+    }
+
+    @Test
     void canonicalOpenApiSecretNoteDocumentsBearerAndApiKeySecurity() {
         final JsonObject openApi = canonicalOpenApi();
         final JsonObject securitySchemes =
@@ -251,6 +260,24 @@ public class ApiChallengeRouteCompatibilityTest {
     private String operationSummary(
             final JsonObject paths, final String path, final String operation) {
         return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
+    }
+
+    private void assertJsonResponseSchemaRef(
+            final JsonObject paths,
+            final String path,
+            final String operation,
+            final String schemaName) {
+        final JsonObject schema =
+                paths.getAsJsonObject(path)
+                        .getAsJsonObject(operation)
+                        .getAsJsonObject("responses")
+                        .getAsJsonObject("200")
+                        .getAsJsonObject("content")
+                        .getAsJsonObject("application/json")
+                        .getAsJsonObject("schema");
+
+        Assertions.assertEquals(
+                "#/components/schemas/" + schemaName, schema.get("$ref").getAsString());
     }
 
     private void assertSecurityAlternatives(

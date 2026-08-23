@@ -68,6 +68,7 @@ final class SecretThingifier {
                         .mapsToEntity(TOKEN_ENTITY)
                         .withFixedIdentifier(TOKEN_ID)
                         .defaultEntityView(TOKEN_VIEW)
+                        .respondWithSingleInstance()
                         .secureWithBasicAuth(BASIC_SCHEME)
                         .addDocumentation(
                                 "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
@@ -80,6 +81,7 @@ final class SecretThingifier {
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
+                        .respondWithSingleInstance()
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
@@ -93,6 +95,7 @@ final class SecretThingifier {
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
+                        .respondWithSingleInstance()
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote);
         headSecretNote.onError(406).suppressBody();
@@ -104,6 +107,7 @@ final class SecretThingifier {
                         .mapsToEntity(NOTE_ENTITY)
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
+                        .respondWithSingleInstance()
                         .entityCan(UPDATE)
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
