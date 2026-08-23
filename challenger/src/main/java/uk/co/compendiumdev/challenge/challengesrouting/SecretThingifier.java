@@ -73,6 +73,7 @@ final class SecretThingifier {
                         .addDocumentation(
                                 "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
         getSecretToken.onSuccess().addInstanceFieldAsHeader("X-AUTH-TOKEN", "token");
+        configureSecretTokenAuthFailurePolicies(getSecretToken);
 
         final ThingifierApiRouteRule getSecretNote =
                 thingifier
@@ -86,6 +87,7 @@ final class SecretThingifier {
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
                                 "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.");
+        configureSecretNoteAuthFailurePolicies(getSecretNote);
         getSecretNote.onError(406).suppressBody();
 
         final ThingifierApiRouteRule headSecretNote =
@@ -98,6 +100,7 @@ final class SecretThingifier {
                         .respondWithSingleInstance()
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote);
+        configureSecretNoteAuthFailurePolicies(headSecretNote);
         headSecretNote.onError(406).suppressBody();
 
         final ThingifierApiRouteRule postSecretNote =
@@ -117,6 +120,7 @@ final class SecretThingifier {
                                 "note-body-required",
                                 ApiOperationValidators.requireBodyFields("note")
                                         .onMissing(422, "note is required"));
+        configureSecretNoteAuthFailurePolicies(postSecretNote);
         postSecretNote.onError(406).suppressBody();
 
         fixedMethodNotAllowed(
@@ -135,6 +139,23 @@ final class SecretThingifier {
         fixedMethodNotAllowed(thingifier, RoutingVerb.DELETE, "/secret/note", NOTE_ENTITY, NOTE_ID);
         fixedMethodNotAllowed(thingifier, RoutingVerb.PATCH, "/secret/note", NOTE_ENTITY, NOTE_ID);
         fixedMethodNotAllowed(thingifier, RoutingVerb.TRACE, "/secret/note", NOTE_ENTITY, NOTE_ID);
+    }
+
+    private void configureSecretTokenAuthFailurePolicies(final ThingifierApiRouteRule route) {
+        route.onError(401).suppressBody();
+        route.onErrorWhen(401)
+                .whenRequestHeader("X-API-Challenges-Live-Widget", "true")
+                .removeHeader("WWW-Authenticate")
+                .suppressBody();
+    }
+
+    private void configureSecretNoteAuthFailurePolicies(final ThingifierApiRouteRule route) {
+        route.onError(401).header("WWW-Authenticate", "Bearer").suppressBody();
+        route.onErrorWhen(401)
+                .whenRequestHeader("X-AUTH-TOKEN", "")
+                .removeHeader("WWW-Authenticate")
+                .suppressBody();
+        route.onError(403).suppressBody();
     }
 
     private void fixedMethodNotAllowed(

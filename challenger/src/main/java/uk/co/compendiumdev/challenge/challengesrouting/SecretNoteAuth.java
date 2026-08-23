@@ -14,7 +14,6 @@ import uk.co.compendiumdev.thingifier.api.security.ThingifierApiAuthorizationCon
 import uk.co.compendiumdev.thingifier.api.security.ThingifierApiAuthorizationResult;
 
 final class SecretNoteAuth {
-    private static final String LIVE_WIDGET_HEADER = "X-API-Challenges-Live-Widget";
     private final Challengers challengers;
     private final Thingifier thingifier;
     private final SecretDataPopulator secretDataPopulator;
@@ -32,11 +31,6 @@ final class SecretNoteAuth {
             final ThingifierApiAuthenticationContext context) {
         if (!"admin".equals(context.basicUsername())
                 || !"password".equals(context.basicPassword())) {
-            if ("true".equalsIgnoreCase(context.headers().get(LIVE_WIDGET_HEADER))) {
-                final ApiResponse response = ApiResponse.error(401, "");
-                response.clearBody();
-                return ThingifierApiAuthenticationResult.rejected(response);
-            }
             return ThingifierApiAuthenticationResult.rejected(401, "");
         }
 

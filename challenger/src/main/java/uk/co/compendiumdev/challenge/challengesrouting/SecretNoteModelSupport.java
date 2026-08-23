@@ -30,8 +30,6 @@ final class SecretNoteModelSupport {
             final HttpApiRequest request,
             final HttpApiResponse response,
             final ThingifierApiConfig config) {
-        addSecretNoteAuthenticationChallenge(request, response);
-
         if (request.getVerb() != HttpApiRequest.VERB.POST || response.getStatusCode() != 200) {
             return null;
         }
@@ -47,40 +45,6 @@ final class SecretNoteModelSupport {
             challenger.setNote(note.getFieldValue("note").asString());
         }
         return null;
-    }
-
-    private void addSecretNoteAuthenticationChallenge(
-            final HttpApiRequest request, final HttpApiResponse response) {
-        if (response.getStatusCode() != 401
-                || response.getHeaders().get("WWW-Authenticate") != null
-                || !isSecretNotePath(normalizedPath(request.getPath()))) {
-            return;
-        }
-
-        final String authToken = request.getHeader("X-AUTH-TOKEN");
-        final String challengerId = request.getHeader("X-CHALLENGER");
-        if (authToken == null || challengerIsUnknown(challengerId)) {
-            response.getHeaders().put("WWW-Authenticate", "Bearer");
-        }
-    }
-
-    private boolean challengerIsUnknown(final String challengerId) {
-        return challengerId != null
-                && !challengerId.isBlank()
-                && challengers.getChallenger(challengerId) == null;
-    }
-
-    private String normalizedPath(final String path) {
-        if (path == null || path.isBlank()) {
-            return "";
-        }
-
-        final String normalized = path.trim().replace('\\', '/');
-        return normalized.startsWith("/") ? normalized : "/" + normalized;
-    }
-
-    private boolean isSecretNotePath(final String path) {
-        return "/secret/note".equals(path) || path.endsWith("/secret/note");
     }
 
     private EntityInstance noteInstance(final String databaseName) {
