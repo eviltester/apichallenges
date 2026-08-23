@@ -2,7 +2,6 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 
 import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
-import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiResponseHook;
 
 public class AuthRoutes {
     static final String READ_ONLY_AUTH_TOKEN = "00000000-0000-4000-8000-000000000000";
@@ -12,11 +11,7 @@ public class AuthRoutes {
         final SecretDataPopulator secretDataPopulator = new SecretDataPopulator(challengers);
         final SecretNoteAuth secretNoteAuth =
                 new SecretNoteAuth(challengers, thingifier, secretDataPopulator);
-        new SecretThingifier().configure(thingifier, secretNoteAuth, secretDataPopulator);
-    }
-
-    public static HttpApiResponseHook secretNoteResponseHook(
-            final Thingifier thingifier, final Challengers challengers) {
-        return new SecretNoteModelSupport(thingifier, challengers).responseHook();
+        new SecretThingifier()
+                .configure(thingifier, secretNoteAuth, secretDataPopulator, challengers);
     }
 }

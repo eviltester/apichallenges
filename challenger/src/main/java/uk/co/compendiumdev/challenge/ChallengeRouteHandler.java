@@ -13,7 +13,6 @@ import uk.co.compendiumdev.challenge.practicemodes.shoppingcart.ShoppingCartRout
 import uk.co.compendiumdev.challenge.practicemodes.simpleapi.SimpleApiRoutes;
 import uk.co.compendiumdev.challenge.practicemodes.simulation.SimulationRoutes;
 import uk.co.compendiumdev.thingifier.Thingifier;
-import uk.co.compendiumdev.thingifier.adapter.http.messagehooks.HttpApiResponseHook;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.ThingifierHttpApiRoutings;
 import uk.co.compendiumdev.thingifier.api.docgen.ThingifierApiDocumentationDefn;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
@@ -175,14 +174,10 @@ public class ChallengeRouteHandler {
         final ChallengerApiRequestHook apiRequestHook = new ChallengerApiRequestHook(challengers);
         final ChallengerApiResponseHook apiResponseHook =
                 new ChallengerApiResponseHook(challengers, thingifier);
-        final HttpApiResponseHook secretNoteResponseHook =
-                AuthRoutes.secretNoteResponseHook(thingifier, challengers);
         apiRoutings.registerHttpApiRequestHook(apiRequestHook);
-        apiRoutings.registerHttpApiResponseHook(secretNoteResponseHook);
         apiRoutings.registerHttpApiResponseHook(apiResponseHook);
         if (canonicalThingifierRoutes != null) {
             canonicalThingifierRoutes.registerHttpApiRequestHook(apiRequestHook);
-            canonicalThingifierRoutes.registerHttpApiResponseHook(secretNoteResponseHook);
             canonicalThingifierRoutes.registerHttpApiResponseHook(apiResponseHook);
         }
     }

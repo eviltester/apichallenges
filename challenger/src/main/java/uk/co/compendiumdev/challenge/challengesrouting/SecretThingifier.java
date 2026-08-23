@@ -4,7 +4,11 @@ import static uk.co.compendiumdev.thingifier.apiconfig.EntityWriteOperation.UPDA
 import static uk.co.compendiumdev.thingifier.core.EntityRelModel.DEFAULT_DATABASE_NAME;
 import static uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType.STRING;
 
+import uk.co.compendiumdev.challenge.ChallengerAuthData;
+import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.thingifier.Thingifier;
+import uk.co.compendiumdev.thingifier.api.callbacks.ThingifierApiOperationContext;
+import uk.co.compendiumdev.thingifier.api.callbacks.ThingifierApiOperationResult;
 import uk.co.compendiumdev.thingifier.api.docgen.RoutingVerb;
 import uk.co.compendiumdev.thingifier.api.spec.ThingifierApiRouteRule;
 import uk.co.compendiumdev.thingifier.api.validation.ApiOperationValidators;
@@ -13,6 +17,7 @@ import uk.co.compendiumdev.thingifier.core.domain.definitions.ERSchema;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.EntityDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.Field;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.validation.MaximumLengthValidationRule;
+import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
 final class SecretThingifier {
@@ -32,7 +37,8 @@ final class SecretThingifier {
     void configure(
             final Thingifier thingifier,
             final SecretNoteAuth auth,
-            final SecretDataPopulator secretDataPopulator) {
+            final SecretDataPopulator secretDataPopulator,
+            final Challengers challengers) {
         final EntityDefinition note = thingifier.defineThing(NOTE_ENTITY, NOTE_COLLECTION, 1);
         note.addAsPrimaryKeyField(Field.is("id", STRING).makeMandatory());
         note.addFields(
@@ -120,6 +126,9 @@ final class SecretThingifier {
                                 "note-body-required",
                                 ApiOperationValidators.requireBodyFields("note")
                                         .onMissing(422, "note is required"));
+        postSecretNote.afterSuccessfulOperation(
+                "sync-challenger-secret-note",
+                (context, result) -> syncChallengerSecretNote(challengers, context, result));
         configureSecretNoteAuthFailurePolicies(postSecretNote);
         postSecretNote.onError(406).suppressBody();
 
@@ -156,6 +165,17 @@ final class SecretThingifier {
                 .removeHeader("WWW-Authenticate")
                 .suppressBody();
         route.onError(403).suppressBody();
+    }
+
+    private void syncChallengerSecretNote(
+            final Challengers challengers,
+            final ThingifierApiOperationContext context,
+            final ThingifierApiOperationResult result) {
+        final ChallengerAuthData challenger = challengers.getChallenger(context.dataScopeName());
+        final EntityInstance note = result.maybeSingleInstance().orElse(null);
+        if (challenger != null && note != null) {
+            challenger.setNote(note.getFieldValue("note").asString());
+        }
     }
 
     private void fixedMethodNotAllowed(

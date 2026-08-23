@@ -509,6 +509,7 @@ public class AuthRoutesTest {
 
         final HttpResponseDetails getresponse = http.get("/secret/note");
         Assertions.assertEquals("{\"note\":\"hello\"}", getresponse.body);
+        Assertions.assertEquals("hello", challenger.getNote());
     }
 
     @Test

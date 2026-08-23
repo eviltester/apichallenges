@@ -59,8 +59,6 @@ public final class ApiChallengeLegacyPaths {
                 new ApiChallengeCanonicalThingifierRoutes(thingifier, "", "").configure();
         legacyTodoRoutes.registerHttpApiRequestHook(new ChallengerApiRequestHook(challengers));
         legacyTodoRoutes.registerHttpApiResponseHook(
-                AuthRoutes.secretNoteResponseHook(thingifier, challengers));
-        legacyTodoRoutes.registerHttpApiResponseHook(
                 new ChallengerApiResponseHook(challengers, thingifier));
     }
 
