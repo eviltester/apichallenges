@@ -1,7 +1,5 @@
 package uk.co.compendiumdev.challenge.challengehooks;
 
-import static uk.co.compendiumdev.thingifier.api.http.ThingifierHttpApi.HTTP_SESSION_HEADER_NAME;
-
 import java.util.List;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
@@ -39,9 +37,6 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
 
         if (challengers.isSinglePlayerMode()) {
             challenger.touch();
-            if (isWriteVerb(request)) {
-                request.addHeader(HTTP_SESSION_HEADER_NAME, challenger.getXChallenger());
-            }
         }
 
         if (paginationLimitTooHigh) {
@@ -71,13 +66,6 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
                 && config.forParams().willAllowPagingThroughUrlParams()
                 && queryParamIntegerGreaterThan(
                         request, "_limit", config.forParams().maxPagingLimit());
-    }
-
-    private boolean isWriteVerb(final HttpApiRequest request) {
-        return request.getVerb() == HttpApiRequest.VERB.POST
-                || request.getVerb() == HttpApiRequest.VERB.PUT
-                || request.getVerb() == HttpApiRequest.VERB.PATCH
-                || request.getVerb() == HttpApiRequest.VERB.DELETE;
     }
 
     private boolean queryParamIntegerGreaterThan(

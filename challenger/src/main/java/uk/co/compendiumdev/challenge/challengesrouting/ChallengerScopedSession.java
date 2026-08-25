@@ -27,8 +27,11 @@ public final class ChallengerScopedSession {
                         .authenticateWith(context -> authenticate(challengers, context));
 
         if (singlePlayerMode) {
-            scopedSession.allowAnonymousReadsUsingDataScope(
-                    Challengers.SINGLE_PLAYER_GUID, ENSURE_EXISTS);
+            scopedSession
+                    .allowAnonymousReadsUsingDataScope(
+                            Challengers.SINGLE_PLAYER_GUID, ENSURE_EXISTS)
+                    .allowAnonymousWritesUsingDataScope(
+                            Challengers.SINGLE_PLAYER_GUID, ENSURE_EXISTS);
         } else {
             scopedSession.allowAnonymousDefaultScopeForReads().requireAuthenticatedScopeForWrites();
         }

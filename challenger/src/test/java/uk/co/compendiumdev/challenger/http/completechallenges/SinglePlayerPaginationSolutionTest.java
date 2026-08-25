@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengeMain;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
@@ -97,6 +99,40 @@ public class SinglePlayerPaginationSolutionTest {
         Assertions.assertTrue(containsTodoTitled(title));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"PUT", "PATCH"})
+    public void amendRequestsWithoutHeaderStillUseSinglePlayerDataScope(final String verb) {
+        final EntityInstance todo = firstTodo();
+        final String title = "single player " + verb.toLowerCase() + " without x-challenger";
+        final Map<String, String> headers =
+                Map.of("Accept", "application/json", "Content-Type", "application/json");
+        final String body =
+                "PUT".equals(verb)
+                        ? "{\"title\":\"" + title + "\",\"doneStatus\":false}"
+                        : "{\"title\":\"" + title + "\"}";
+
+        final HttpResponseDetails response =
+                http.send("/todos/" + todo.getPrimaryKeyValue(), verb, headers, body);
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(containsTodoTitled(title));
+    }
+
+    @Test
+    public void deleteRequestsWithoutHeaderStillUseSinglePlayerDataScope() {
+        final EntityInstance todo = firstTodo();
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos/" + todo.getPrimaryKeyValue(),
+                        "DELETE",
+                        Map.of("Accept", "application/json"),
+                        "");
+
+        Assertions.assertEquals(204, response.statusCode);
+        Assertions.assertFalse(containsTodoWithId(todo.getPrimaryKeyValue()));
+    }
+
     private void createTodo(final String title) {
         repository
                 .entities()
@@ -115,8 +151,17 @@ public class SinglePlayerPaginationSolutionTest {
         Assertions.assertEquals(expectedSize, returnedTodos.todos.size());
     }
 
+    private EntityInstance firstTodo() {
+        return new ArrayList<>(repository.entityQueries().list(todos)).get(0);
+    }
+
     private boolean containsTodoTitled(final String title) {
         return repository.entityQueries().list(todos).stream()
                 .anyMatch(todo -> title.equals(todo.getFieldValue("title").asString()));
+    }
+
+    private boolean containsTodoWithId(final String id) {
+        return repository.entityQueries().list(todos).stream()
+                .anyMatch(todo -> id.equals(todo.getPrimaryKeyValue()));
     }
 }
