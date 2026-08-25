@@ -75,6 +75,7 @@ final class SecretThingifier {
                         .withFixedIdentifier(TOKEN_ID)
                         .defaultEntityView(TOKEN_VIEW)
                         .respondWithSingleInstance()
+                        .disableScopedSession()
                         .secureWithBasicAuth(BASIC_SCHEME)
                         .addDocumentation(
                                 "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
@@ -89,6 +90,7 @@ final class SecretThingifier {
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
                         .respondWithSingleInstance()
+                        .disableScopedSession()
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
@@ -104,6 +106,7 @@ final class SecretThingifier {
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
                         .respondWithSingleInstance()
+                        .disableScopedSession()
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote);
         configureSecretNoteAuthFailurePolicies(headSecretNote);
@@ -117,6 +120,7 @@ final class SecretThingifier {
                         .withFixedIdentifier(NOTE_ID)
                         .defaultEntityView(NOTE_VIEW)
                         .respondWithSingleInstance()
+                        .disableScopedSession()
                         .entityCan(UPDATE)
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
@@ -188,6 +192,7 @@ final class SecretThingifier {
                 .route(verb, path)
                 .mapsToEntity(entityName)
                 .withFixedIdentifier(identifier)
+                .disableScopedSession()
                 .methodNotAllowed()
                 .hide();
     }

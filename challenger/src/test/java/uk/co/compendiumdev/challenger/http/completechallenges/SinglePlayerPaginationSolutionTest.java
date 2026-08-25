@@ -80,6 +80,23 @@ public class SinglePlayerPaginationSolutionTest {
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS_PAGINATED_FILTERED));
     }
 
+    @Test
+    public void writeRequestsWithoutHeaderStillUseSinglePlayerDataScope() {
+        final String title = "single player write without x-challenger";
+        final Map<String, String> headers =
+                Map.of("Accept", "application/json", "Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                http.send(
+                        "/todos",
+                        "POST",
+                        headers,
+                        "{\"title\":\"" + title + "\",\"doneStatus\":false}");
+
+        Assertions.assertEquals(201, response.statusCode);
+        Assertions.assertTrue(containsTodoTitled(title));
+    }
+
     private void createTodo(final String title) {
         repository
                 .entities()
@@ -96,5 +113,10 @@ public class SinglePlayerPaginationSolutionTest {
         Assertions.assertEquals(200, response.statusCode);
         Todos returnedTodos = new Gson().fromJson(response.body, Todos.class);
         Assertions.assertEquals(expectedSize, returnedTodos.todos.size());
+    }
+
+    private boolean containsTodoTitled(final String title) {
+        return repository.entityQueries().list(todos).stream()
+                .anyMatch(todo -> title.equals(todo.getFieldValue("title").asString()));
     }
 }

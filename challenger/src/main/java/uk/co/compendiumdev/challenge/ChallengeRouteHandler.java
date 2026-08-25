@@ -84,6 +84,7 @@ public class ChallengeRouteHandler {
                 new Challengers(
                         thingifier.getERmodel(), challengeDefinitions.getDefinedChallenges());
         challengers.setPersistenceLayer(persistenceLayer);
+        new ChallengerScopedSession().configure(thingifier, challengers, single_player_mode);
         new AuthRoutes().configure(thingifier, challengers);
         persistenceLayer.startCloudCleanup(challengers::getChallengerGuids);
         if (!single_player_mode) {
