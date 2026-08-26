@@ -44,18 +44,6 @@ public class ChallengerApiRequestHook implements HttpApiRequestHook {
             return rejectPaginationLimitTooHigh(request, config);
         }
 
-        if (request.getVerb() == HttpApiRequest.VERB.GET
-                && request.getPath().contentEquals("todos")
-                && request.getQueryParams().size() == 0) {
-            challengers.pass(challenger, CHALLENGE.GET_TODOS);
-        }
-
-        if (request.getVerb() == HttpApiRequest.VERB.HEAD
-                && request.getPath().contentEquals("todos")
-                && request.getQueryParams().size() == 0) {
-            challengers.pass(challenger, CHALLENGE.GET_HEAD_TODOS);
-        }
-
         return null;
     }
 

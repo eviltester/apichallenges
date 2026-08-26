@@ -86,6 +86,7 @@ public class ChallengeRouteHandler {
         challengers.setPersistenceLayer(persistenceLayer);
         new ChallengerScopedSession().configure(thingifier, challengers, single_player_mode);
         new AuthRoutes().configure(thingifier, challengers);
+        new ChallengerRouteResponseCallbacks().configure(thingifier, challengers);
         persistenceLayer.startCloudCleanup(challengers::getChallengerGuids);
         if (!single_player_mode) {
             challengers.setMultiPlayerMode();
