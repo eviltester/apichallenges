@@ -36,7 +36,6 @@ public class ChallengeRouteHandler {
     private boolean guiStayAlive;
     private DefaultGUIHTML guiTemplates;
     private SimulationRoutes simulationRoutes;
-    private ApiChallengeCanonicalThingifierRoutes canonicalThingifierRoutes;
 
     // not needed when storing data
 
@@ -132,13 +131,12 @@ public class ChallengeRouteHandler {
         new TodoExportRoutes()
                 .configure(thingifier, apiChallengesDocumentationDefn, API_CHALLENGES_PREFIX);
 
-        canonicalThingifierRoutes =
-                new ApiChallengeCanonicalThingifierRoutes(thingifier).configure();
+        configureApiChallengeLegacyPaths();
+        configureThingifierApiMounts();
+
         new ApiChallengeCanonicalDocumentationRoutes(
                         thingifier, apiChallengesDocumentationDefn, guiTemplates)
                 .configure();
-
-        configureApiChallengeLegacyPaths();
 
         // Mirror routes should not show up in the apichallenges apiDefn
         new MirrorRoutes().configure(mirrorModeDocumentationDefn, guiTemplates);
@@ -178,10 +176,6 @@ public class ChallengeRouteHandler {
                 new ChallengerApiResponseHook(challengers, thingifier);
         apiRoutings.registerHttpApiRequestHook(apiRequestHook);
         apiRoutings.registerHttpApiResponseHook(apiResponseHook);
-        if (canonicalThingifierRoutes != null) {
-            canonicalThingifierRoutes.registerHttpApiRequestHook(apiRequestHook);
-            canonicalThingifierRoutes.registerHttpApiResponseHook(apiResponseHook);
-        }
     }
 
     public void setupGui(DefaultGUIHTML guiManagement) {
@@ -219,5 +213,15 @@ public class ChallengeRouteHandler {
                         persistenceLayer,
                         challengeDefinitions)
                 .configure();
+    }
+
+    private void configureThingifierApiMounts() {
+        thingifier
+                .apiContract()
+                .mount("api")
+                .at(API_CHALLENGES_PREFIX)
+                .includeRoutes("/todos/**", "/secret/**")
+                .rewriteLocationHeadersToMount()
+                .exposeInDocs();
     }
 }

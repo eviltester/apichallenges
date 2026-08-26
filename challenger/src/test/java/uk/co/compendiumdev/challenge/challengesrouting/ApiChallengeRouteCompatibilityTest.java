@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -125,6 +126,28 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertNotNull(challenger);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_HEARTBEAT_204));
+    }
+
+    @ParameterizedTest(name = "created todo Location uses active route prefix under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void createdTodoLocationHeaderUsesActiveRoutePrefix(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        HttpResponseDetails created =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        Map.of("X-CHALLENGER", challengerId, "Content-Type", "application/json"),
+                        "{\"title\":\"mounted route todo\",\"doneStatus\":false,\"description\":\"\"}");
+
+        Assertions.assertEquals(201, created.statusCode);
+        Assertions.assertTrue(
+                created.getHeader("Location").startsWith(path(prefix, "/todos/")),
+                created.getHeader("Location"));
     }
 
     @ParameterizedTest(name = "docs compatibility route {0} redirects to {1}")

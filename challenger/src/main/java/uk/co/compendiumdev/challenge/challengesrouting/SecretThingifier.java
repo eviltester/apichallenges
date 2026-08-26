@@ -78,7 +78,7 @@ final class SecretThingifier {
                         .disableScopedSession()
                         .secureWithBasicAuth(BASIC_SCHEME)
                         .addDocumentation(
-                                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
+                                "GET /secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
         getSecretToken.onSuccess().addInstanceFieldAsHeader("X-AUTH-TOKEN", "token");
         configureSecretTokenAuthFailurePolicies(getSecretToken);
 
@@ -94,7 +94,7 @@ final class SecretThingifier {
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
-                                "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.");
+                                "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.");
         configureSecretNoteAuthFailurePolicies(getSecretNote);
         getSecretNote.onError(406).suppressBody();
 
@@ -125,7 +125,7 @@ final class SecretThingifier {
                         .secureWithAnyOf(TOKEN_SCHEME, API_KEY_SCHEME)
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
-                                "POST /api/secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.")
+                                "POST /secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.")
                         .withApiOperationValidator(
                                 "note-body-required",
                                 ApiOperationValidators.requireBodyFields("note")
