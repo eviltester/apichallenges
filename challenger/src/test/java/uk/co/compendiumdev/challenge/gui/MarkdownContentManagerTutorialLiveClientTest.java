@@ -189,6 +189,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(blogHtml.contains("Page 1 of 2"));
         Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
         Assertions.assertTrue(
+                blogHtml.contains("href=\"/blog/changelog-2026-09-16-openapi-evomaster-fixes\""));
+        Assertions.assertTrue(
+                blogHtml.contains("API Challenges OpenAPI Files, EvoMaster Review, And Bug Fixes"));
+        Assertions.assertTrue(
                 blogHtml.contains(
                         "href=\"/blog/changelog-2026-08-14-simple-api-testing-experiments\""));
         Assertions.assertTrue(

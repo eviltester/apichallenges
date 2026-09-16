@@ -305,6 +305,10 @@ I haven't pushed the fuzzing for this length yet but I did get a lot of value fr
 
 I upped the white box execution to 20 minutes and it found a few extra issues relating to OpenAPI contracts. So there may well be some additional benefit in running it longer.
 
+I upped the white box execution time to 3 hours and it found some additional XSS reflections that were ultimately HTML false positives. With the white box code coverage, and what I know about how the application is built, I'm not sure much longer will add much value for me.
+
+But... I still have another 3 APIs in this system and I will certainly be using this tool on other systems.
+
 ## Reading The Report
 
 The output folder contains:
