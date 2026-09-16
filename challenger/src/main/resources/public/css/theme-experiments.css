@@ -1564,6 +1564,15 @@ html[data-theme] .side-toc .side-toc-section-links li {
     font-weight: 500;
 }
 
+html[data-theme] .side-toc .side-toc-tool-category {
+    margin: 0.2rem 0 0.25rem;
+}
+
+html[data-theme] .side-toc .side-toc-tool-category > .side-toc-section-summary {
+    font-weight: 600;
+    padding: 0.05rem 0;
+}
+
 html[data-theme] .side-toc-syllabus {
     border-bottom-color: var(--border);
 }

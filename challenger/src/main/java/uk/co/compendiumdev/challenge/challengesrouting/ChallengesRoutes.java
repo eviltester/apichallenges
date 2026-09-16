@@ -44,13 +44,11 @@ public class ChallengesRoutes {
                     ChallengerAuthData challenger =
                             challengers.getChallenger(request.header("X-CHALLENGER"));
 
-                    if (!single_player_mode) {
-                        if (challenger != null) {
-                            result.header(
-                                    "Location", "/gui/challenges/" + challenger.getXChallenger());
-                        }
-                    } else {
-                        result.header("Location", "/gui/challenges");
+                    if (challenger != null) {
+                        result.header(
+                                "Location",
+                                ApiChallengeRoutePath.withPrefix(
+                                        pathPrefix, "/challenger/" + challenger.getXChallenger()));
                     }
 
                     // Todo: use the cloneThingifierWithNewData here and simplify the
@@ -84,7 +82,11 @@ public class ChallengesRoutes {
                 new RoutingDefinition(
                                 RoutingVerb.GET, endpoint, RoutingStatus.returnedFromCall(), null)
                         .addDocumentation("Get list of challenges and their completion status")
-                        .addPossibleStatuses(200, 431));
+                        .addPossibleStatuses(200, 431)
+                        .responseSchema(
+                                200,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.challengeList()));
 
         // TODO: because these hardcode contentType and ignore Accept there should be a light weight
         // wrapper available

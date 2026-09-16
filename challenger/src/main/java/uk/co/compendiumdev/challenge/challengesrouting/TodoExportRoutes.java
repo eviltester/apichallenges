@@ -54,13 +54,13 @@ public class TodoExportRoutes {
                     return "";
                 });
 
-        apiDefn.addRouteToDocumentation(
+        final RoutingDefinition exportRoute =
                 new RoutingDefinition(
                                 RoutingVerb.GET, endpoint, RoutingStatus.returnedFromCall(), null)
                         .addDocumentation(
                                 "Export todos using a format query parameter. Supported values are: "
                                         + TodoExportFormat.supportedShortNames())
-                        .addRequestUrlParam(
+                        .addRequestQueryParam(
                                 Field.is("format", STRING)
                                         .withDescription(
                                                 "Export format short name, e.g. csv, html, tsv,"
@@ -68,7 +68,9 @@ public class TodoExportRoutes {
                                                         + " jsonl, or json-seq"))
                         .addResponseHeader(
                                 "Content-Disposition", "attachment; filename=\"todos.{extension}\"")
-                        .addPossibleStatuses(200, 400, 431));
+                        .addPossibleStatuses(200, 400, 431);
+        documentExportResponseContent(exportRoute);
+        apiDefn.addRouteToDocumentation(exportRoute);
 
         apiDefn.addRouteToDocumentation(
                 new RoutingDefinition(
@@ -103,5 +105,20 @@ public class TodoExportRoutes {
         }
 
         return response;
+    }
+
+    private void documentExportResponseContent(final RoutingDefinition route) {
+        for (TodoExportFormat format : TodoExportFormat.values()) {
+            if (format == TodoExportFormat.JSON) {
+                route.responseSchema(
+                        200,
+                        format.mediaType(),
+                        ApiChallengeOpenApiResponseSchemas.todoCollection());
+            } else {
+                route.responseStringSchema(200, format.mediaType());
+            }
+        }
+        route.responseSchema(
+                400, "application/json", ApiChallengeOpenApiResponseSchemas.errorMessages());
     }
 }

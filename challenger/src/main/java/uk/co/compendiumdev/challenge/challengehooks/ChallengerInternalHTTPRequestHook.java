@@ -138,7 +138,7 @@ public class ChallengerInternalHTTPRequestHook implements InternalHttpRequestHoo
     }
 
     private ChallengerAuthData challengerFromOversizedHeaderPrefix(final String xChallenger) {
-        if (xChallenger.startsWith(Challengers.SINGLE_PLAYER_GUID)) {
+        if (Challengers.startsWithSinglePlayerGuid(xChallenger)) {
             return challengers.getChallenger(Challengers.SINGLE_PLAYER_GUID);
         }
         if (xChallenger.length() < UUID_TEXT_LENGTH) {

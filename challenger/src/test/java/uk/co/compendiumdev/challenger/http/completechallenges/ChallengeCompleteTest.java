@@ -311,7 +311,6 @@ public abstract class ChallengeCompleteTest {
         final HttpResponseDetails response =
                 http.send("/todos", "OPTIONS", x_challenger_header, "");
 
-        // initial challenge had options as 200, so we have a hack to keep that
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.OPTIONS_TODOS));
     }
@@ -2076,7 +2075,7 @@ public abstract class ChallengeCompleteTest {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
-        if (!challenger.getXChallenger().equals("rest-api-challenges-single-player")) {
+        if (!challenger.getXChallenger().equals(Challengers.SINGLE_PLAYER_GUID)) {
             ChallengeMain.getChallenger()
                     .getThingifier()
                     .ensureCreatedAndPopulatedInstanceDatabaseNamed(challenger.getXChallenger());
@@ -2101,7 +2100,7 @@ public abstract class ChallengeCompleteTest {
 
         Map<String, String> x_challenger_header = getXChallengerHeader(challenger.getXChallenger());
 
-        if (!challenger.getXChallenger().equals("rest-api-challenges-single-player")) {
+        if (!challenger.getXChallenger().equals(Challengers.SINGLE_PLAYER_GUID)) {
             ChallengeMain.getChallenger()
                     .getThingifier()
                     .ensureCreatedAndPopulatedInstanceDatabaseNamed(challenger.getXChallenger());

@@ -55,7 +55,7 @@ How to use a GET request with an x-challenger header to get the progress status 
 < Connection: close
 < Date: Thu, 27 Aug 2020 13:38:45 GMT
 < Content-Type: application/json
-< Location: /gui/challenges/x-challenger-guid
+< Location: /api/challenger/x-challenger-guid
 < X-Challenger: x-challenger-guid
 < Server: Jetty(9.4.z-SNAPSHOT)
 < Via: 1.1 vegur

@@ -451,6 +451,18 @@ a.side-toc-syllabus-title {
     padding-top: 0.2em;
 }
 
+.side-toc-tool-category {
+    margin: 0.2rem 0 0.25rem;
+}
+
+.side-toc-tool-category > .side-toc-section-summary {
+    padding: 0.05rem 0;
+}
+
+.side-toc-tool-category > .side-toc-section-links {
+    padding-top: 0.1rem;
+}
+
 .left-column {
     padding-right: 2em;
 }

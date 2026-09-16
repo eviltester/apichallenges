@@ -228,10 +228,11 @@ public class ChallengerInternalHttpResponseHookTest {
                         .setVerb("OPTIONS")
                         .addHeader("X-CHALLENGER", challenger.getXChallenger());
 
-        InternalHttpResponse response = new InternalHttpResponse().setStatus(204);
+        InternalHttpResponse response = new InternalHttpResponse().setStatus(200);
 
         hook.run(request, response);
 
+        Assertions.assertEquals(200, response.getStatusCode());
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.OPTIONS_TODOS));
     }
 

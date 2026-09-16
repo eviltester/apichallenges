@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import uk.co.compendiumdev.challenge.CHALLENGE;
 import uk.co.compendiumdev.challenge.ChallengeMain;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
+import uk.co.compendiumdev.challenge.challengers.Challengers;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpMessageSender;
 import uk.co.compendiumdev.challenger.http.httpclient.HttpResponseDetails;
 import uk.co.compendiumdev.serverstart.Environment;
@@ -34,6 +35,7 @@ public class ApiChallengeRouteCompatibilityTest {
         assertStatus(204, path(prefix, "/heartbeat"), "get");
         assertStatus(200, path(prefix, "/challenges"), "get");
         assertStatus(200, path(prefix, "/todos"), "get");
+        assertStatus(200, path(prefix, "/todos"), "options");
 
         HttpResponseDetails exportResponse =
                 http.send(path(prefix, "/todos/export?format=csv"), "get");
@@ -46,6 +48,9 @@ public class ApiChallengeRouteCompatibilityTest {
         HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
         Assertions.assertEquals(201, challengerResponse.statusCode);
         Assertions.assertNotNull(challengerResponse.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals(
+                path(prefix, "/challenger/" + challengerResponse.getHeader("X-CHALLENGER")),
+                challengerResponse.getHeader("Location"));
 
         http.clearHeaders();
         http.setBasicAuth("admin", "password");
@@ -94,6 +99,9 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertEquals(201, challengerResponse.statusCode);
         String challengerId = challengerResponse.getHeader("X-CHALLENGER");
         Assertions.assertNotNull(challengerId);
+        Assertions.assertEquals(
+                path(prefix, "/challenger/" + challengerId),
+                challengerResponse.getHeader("Location"));
 
         http.clearHeaders();
         http.setHeader("X-CHALLENGER", challengerId);
@@ -237,6 +245,82 @@ public class ApiChallengeRouteCompatibilityTest {
                 created.getHeader("Location"));
     }
 
+    @ParameterizedTest(name = "challenger API Locations use active route prefix under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void challengerLocationHeadersUseApiRoutes(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+        Assertions.assertEquals(
+                path(prefix, "/challenger/" + challengerId),
+                challengerResponse.getHeader("Location"));
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challengerId);
+        HttpResponseDetails challengesResponse = http.send(path(prefix, "/challenges"), "get");
+        Assertions.assertEquals(200, challengesResponse.statusCode);
+        Assertions.assertEquals(
+                path(prefix, "/challenger/" + challengerId),
+                challengesResponse.getHeader("Location"));
+    }
+
+    @ParameterizedTest(name = "challenger documented errors return JSON under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void challengerDocumentedErrorsReturnJson(final String prefix) {
+        http.clearHeaders();
+        http.setHeader("Accept", "*/*");
+        assertJsonError(
+                http.send(
+                        path(prefix, "/challenger/b593b008-7e4b-4225-8dde-9d0be805d80d"),
+                        "put",
+                        Map.of("Accept", "*/*"),
+                        ""),
+                400);
+
+        http.clearHeaders();
+        http.setHeader("Accept", "*/*");
+        assertJsonError(
+                http.send(
+                        path(prefix, "/challenger/database/S3PuZh"),
+                        "put",
+                        Map.of("Accept", "*/*"),
+                        ""),
+                400);
+
+        http.clearHeaders();
+        http.setHeader("Accept", "*/*");
+        assertJsonError(
+                http.send(
+                        path(prefix, "/challenger/database/11111111-2222-4333-8444-555555555555"),
+                        "put",
+                        Map.of("Accept", "*/*"),
+                        ""),
+                404);
+    }
+
+    @ParameterizedTest(name = "empty API 404 fallbacks return JSON under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void emptyApi404FallbacksReturnJson(final String prefix) {
+        http.clearHeaders();
+        http.setHeader("Accept", "*/*");
+
+        assertJsonError(http.send(path(prefix, "/challenger/database/extra/path"), "get"), 404);
+    }
+
+    @ParameterizedTest(name = "todo instance HEAD responses do not write a body under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void todoInstanceHeadResponsesDoNotRaiseServerErrors(final String prefix) {
+        final String challengerId = createChallengerId(prefix);
+        final Map<String, String> headers = Map.of("X-CHALLENGER", challengerId);
+
+        assertHeadResponseWithoutBody(
+                http.send(path(prefix, "/todos/3"), "head", headers, ""), 200);
+        assertHeadResponseWithoutBody(
+                http.send(path(prefix, "/todos/26"), "head", headers, ""), 404);
+    }
+
     @ParameterizedTest(name = "docs compatibility route {0} redirects to {1}")
     @MethodSource("legacyDocsRedirectRoutes")
     void legacyDocsCompatibilityRoutesRedirectToCanonicalDocs(
@@ -267,6 +351,40 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertEquals(
                 "show all Options for endpoint of /api/todos/:id",
                 operationSummary(paths, "/api/todos/{id}", "options"));
+        assertResponseStatus(paths, "/api/todos", "options", "200");
+        assertResponseStatus(paths, "/api/todos/{id}", "options", "200");
+    }
+
+    @Test
+    void canonicalOpenApiDocumentsHandWrittenRouteResponses() {
+        final JsonObject paths = canonicalOpenApiPaths();
+
+        assertResponseHasJsonContent(paths, "/api/challenges", "get", "200");
+        assertResponseStatus(paths, "/api/challenger", "post", "200");
+        assertResponseStatus(paths, "/api/challenger", "post", "201");
+        assertResponseHasJsonContent(paths, "/api/challenger", "post", "404");
+        assertResponseHasJsonContent(paths, "/api/challenger/{guid}", "get", "200");
+        assertResponseHasJsonContent(paths, "/api/challenger/{guid}", "get", "404");
+        assertResponseHasJsonContent(paths, "/api/challenger/{guid}", "put", "200");
+        assertResponseStatus(paths, "/api/challenger/{guid}", "put", "201");
+        assertResponseHasJsonContent(paths, "/api/challenger/{guid}", "put", "400");
+        assertResponseHasJsonContent(paths, "/api/challenger/{guid}", "put", "409");
+        assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "get", "200");
+        assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "get", "400");
+        assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "get", "404");
+        assertResponseStatus(paths, "/api/challenger/database/{guid}", "put", "204");
+        assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "put", "400");
+        assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "put", "404");
+        assertChallengerSchemaKeepsUuidFormat(paths, "/api/challenger/{guid}", "get");
+        assertResponseHasJsonContent(paths, "/api/todos", "put", "400");
+        assertResponseHasJsonContent(paths, "/api/todos/{id}", "post", "400");
+        assertResponseHasJsonContent(paths, "/api/todos/{id}", "put", "400");
+        assertResponseHasJsonContent(paths, "/api/todos/export", "get", "200");
+        Assertions.assertTrue(
+                operationResponse(paths, "/api/todos/export", "get", "200")
+                        .getAsJsonObject("content")
+                        .has("text/csv"));
+        assertResponseHasJsonContent(paths, "/api/todos/export", "get", "400");
     }
 
     @Test
@@ -283,6 +401,19 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertEquals(
                 "POST /api/secret/note with X-AUTH-TOKEN, and a payload of `{'note':'contents of note'}` to amend the contents of the secret note.",
                 operationSummary(paths, "/api/secret/note", "post"));
+    }
+
+    @Test
+    void canonicalOpenApiTodoExportDocumentsFormatAsQueryParameter() {
+        final JsonObject get =
+                canonicalOpenApiPaths().getAsJsonObject("/api/todos/export").getAsJsonObject("get");
+
+        final JsonObject formatParam = operationParameter(get, "format");
+
+        Assertions.assertEquals("query", formatParam.get("in").getAsString());
+        Assertions.assertFalse(formatParam.get("required").getAsBoolean());
+        Assertions.assertEquals(
+                "string", formatParam.getAsJsonObject("schema").get("type").getAsString());
     }
 
     @Test
@@ -372,6 +503,53 @@ public class ApiChallengeRouteCompatibilityTest {
         return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
     }
 
+    private void assertResponseStatus(
+            final JsonObject paths,
+            final String path,
+            final String operation,
+            final String status) {
+        Assertions.assertTrue(
+                paths.getAsJsonObject(path)
+                        .getAsJsonObject(operation)
+                        .getAsJsonObject("responses")
+                        .has(status),
+                path + " " + operation + " " + status);
+    }
+
+    private void assertResponseHasJsonContent(
+            final JsonObject paths,
+            final String path,
+            final String operation,
+            final String status) {
+        final JsonObject response = operationResponse(paths, path, operation, status);
+        Assertions.assertTrue(response.has("content"), path + " " + operation + " " + status);
+        Assertions.assertTrue(
+                response.getAsJsonObject("content").has("application/json"),
+                path + " " + operation + " " + status);
+    }
+
+    private JsonObject operationResponse(
+            final JsonObject paths,
+            final String path,
+            final String operation,
+            final String status) {
+        return paths.getAsJsonObject(path)
+                .getAsJsonObject(operation)
+                .getAsJsonObject("responses")
+                .getAsJsonObject(status);
+    }
+
+    private JsonObject operationParameter(final JsonObject operation, final String parameterName) {
+        final JsonArray parameters = operation.getAsJsonArray("parameters");
+        for (int index = 0; index < parameters.size(); index++) {
+            JsonObject parameter = parameters.get(index).getAsJsonObject();
+            if (parameterName.equals(parameter.get("name").getAsString())) {
+                return parameter;
+            }
+        }
+        throw new AssertionError("OpenAPI parameter not found: " + parameterName);
+    }
+
     private void assertJsonResponseSchemaRef(
             final JsonObject paths,
             final String path,
@@ -404,6 +582,47 @@ public class ApiChallengeRouteCompatibilityTest {
 
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
         Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
+    }
+
+    private void assertJsonError(final HttpResponseDetails response, final int expectedStatus) {
+        Assertions.assertEquals(expectedStatus, response.statusCode);
+        Assertions.assertTrue(
+                response.getHeader("Content-Type").contains("application/json"),
+                response.getHeader("Content-Type"));
+        Assertions.assertTrue(response.body.contains("\"errorMessages\""), response.body);
+    }
+
+    private void assertHeadResponseWithoutBody(
+            final HttpResponseDetails response, final int expectedStatus) {
+        Assertions.assertEquals(expectedStatus, response.statusCode);
+        Assertions.assertEquals("", response.body);
+    }
+
+    private String createChallengerId(final String prefix) {
+        http.clearHeaders();
+        final HttpResponseDetails challengerResponse =
+                http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        final String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+        return challengerId;
+    }
+
+    private void assertChallengerSchemaKeepsUuidFormat(
+            final JsonObject paths, final String path, final String operation) {
+        final JsonObject schema =
+                operationResponse(paths, path, operation, "200")
+                        .getAsJsonObject("content")
+                        .getAsJsonObject("application/json")
+                        .getAsJsonObject("schema");
+
+        Assertions.assertEquals(
+                "uuid",
+                schema.getAsJsonObject("properties")
+                        .getAsJsonObject("xChallenger")
+                        .get("format")
+                        .getAsString());
+        Assertions.assertEquals(Challengers.SINGLE_PLAYER_GUID.length(), 36);
     }
 
     private Map<String, String> headersFor(final String challengerId, final String contentType) {

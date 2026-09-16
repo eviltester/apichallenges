@@ -80,7 +80,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                         "<a class=\"side-toc-section-title\" href=\"/tutorials\">Interactive Tutorials</a>"));
         Assertions.assertTrue(
                 html.contains(
-                        "Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing."));
+                        "Tool reviews for REST HTTP clients, proxies, online API clients, and automation tools to help with API testing."));
         Assertions.assertTrue(
                 html.contains(
                         "Hands-on tutorial pages for learning REST concepts and API testing workflows."));
@@ -147,9 +147,13 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertFalse(html.contains("Guided Tutorials"));
         assertContainsInOrder(
                 html,
-                "<a href=\"/tools/clients\">REST/HTTP Clients</a>",
-                "<li><a href=\"/tools/proxies\">Proxies</a></li>",
-                "<a href=\"/tools/online-clients\">Online Clients</a>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-rest-clients\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/clients\">REST Clients</a>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-proxies\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/proxies\">Proxies</a>",
+                "<li><a href=\"/tools/proxies\">Proxies Overview</a></li>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-online-clients\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/online-clients\">Online Clients</a>",
                 "<li><a href=\"/tools/online-clients/basic-client\">Basic Client</a></li>",
                 "<a href=\"/tools/online-clients/swagger\">Swagger UI</a>",
                 "<li><a href=\"/tools/online-clients/swagger/about\">About Swagger UI</a></li>",
@@ -163,7 +167,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tools/online-clients/zudoku/about\">About Zudoku</a></li>",
                 "<a href=\"/tools/online-clients/redoc\">Redoc</a>",
                 "<li><a href=\"/tools/online-clients/redoc/about\">About Redoc</a></li>",
-                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
+                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-automation\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/automation\">Automation</a>",
+                "<li><a href=\"/tools/automation/evomaster\">EvoMaster</a></li>");
         Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
         Assertions.assertFalse(html.contains("href=\"/changes\""));
         Assertions.assertFalse(html.contains("All Practice Sites"));
@@ -181,6 +188,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(blogHtml.contains("href=\"/blog/page/2\""));
         Assertions.assertTrue(blogHtml.contains("Page 1 of 2"));
         Assertions.assertEquals(15, countOccurrences(blogHtml, "class=\"blog-list-item\""));
+        Assertions.assertTrue(
+                blogHtml.contains("href=\"/blog/changelog-2026-09-16-openapi-evomaster-fixes\""));
+        Assertions.assertTrue(
+                blogHtml.contains("API Challenges OpenAPI Files, EvoMaster Review, And Bug Fixes"));
         Assertions.assertTrue(
                 blogHtml.contains(
                         "href=\"/blog/changelog-2026-08-14-simple-api-testing-experiments\""));
@@ -613,6 +624,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/redoc/about\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation/evomaster\""));
 
         html = renderContentPage("/tools/online-clients/basic-client");
 
@@ -806,6 +819,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation\""));
     }
 
     private void assertOnlineOpenApiUiClientPage(

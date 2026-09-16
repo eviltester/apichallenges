@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.challenger.http.completechallenges;
 
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.co.compendiumdev.challenge.challengers.Challengers;
@@ -35,6 +36,21 @@ public class CompleteAllChallengesSingleUserTest extends ChallengeCompleteTest {
 
         final HttpResponseDetails response = http.get("/challenges");
 
-        Assertions.assertEquals("/gui/challenges", response.getHeader("Location"));
+        Assertions.assertEquals(
+                "/challenger/" + Challengers.SINGLE_PLAYER_GUID, response.getHeader("Location"));
+    }
+
+    @Test
+    void apiDatabaseRestoreForUnknownUuidReturnsJson404() {
+        final HttpResponseDetails response =
+                http.send(
+                        "/api/challenger/database/11111111-2222-4333-8444-555555555555",
+                        "put",
+                        Map.of("Accept", "*/*"),
+                        "");
+
+        Assertions.assertEquals(404, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        Assertions.assertTrue(response.body.contains("\"errorMessages\""));
     }
 }

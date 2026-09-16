@@ -108,7 +108,7 @@ public class ChallengerUiJavascriptTest {
         Assertions.assertTrue(javascript.contains("isProtectedSinglePlayerGuid"));
         Assertions.assertTrue(
                 javascript.contains(
-                        "const SINGLE_PLAYER_CHALLENGER_GUID = \"rest-api-challenges-single-player\""));
+                        "const SINGLE_PLAYER_CHALLENGER_GUID = \"5afe0000-5eed-4000-8000-000000defa17\""));
         Assertions.assertTrue(javascript.contains("removeSavedGuidData(myguid)"));
         Assertions.assertTrue(
                 javascript.contains("localStorage.removeItem(`${sanitizedGuid}.data`)"));

@@ -81,12 +81,17 @@ jobs:
       - name: Run API Challenges tests
         run: mvn -B -f apichallenges/pom.xml clean test
 
-      - name: Package deployable app
-        run: mvn -B -f apichallenges/pom.xml -pl challenger -am package -DskipTests
+      - name: Build Challenger dependency and package deployable app
+        run: >
+          mvn -B -f apichallenges/pom.xml -pl challenger -am install
+          -DskipTests
+          -Dspotless.check.skip=true
+          -Dcheckstyle.skip=true
+          -Dpmd.skip=true
 
       - name: Run ChallengerAuto memory canonical regression
         run: >
-          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=memory
           -Dchallenger.auto.local.playerMode=multi
@@ -94,7 +99,7 @@ jobs:
 
       - name: Run ChallengerAuto memory legacy regression
         run: >
-          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=memory
           -Dchallenger.auto.local.playerMode=multi
@@ -102,7 +107,7 @@ jobs:
 
       - name: Run ChallengerAuto sqlite-memory canonical regression
         run: >
-          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=sqlite-memory
           -Dchallenger.auto.local.playerMode=multi
@@ -110,7 +115,7 @@ jobs:
 
       - name: Run ChallengerAuto sqlite-memory legacy regression
         run: >
-          mvn -B -f apichallenges/pom.xml -pl challengerAuto -am test
+          mvn -B -f apichallenges/pom.xml -pl challengerAuto test
           -Dchallenger.auto.target=local
           -Dchallenger.auto.local.repository=sqlite-memory
           -Dchallenger.auto.local.playerMode=multi

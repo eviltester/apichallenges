@@ -20,7 +20,8 @@ public class Challengers {
     private boolean singlePlayerMode;
     Map<String, ChallengerAuthData> authData;
     public ChallengerAuthData SINGLE_PLAYER;
-    public static final String SINGLE_PLAYER_GUID = "rest-api-challenges-single-player";
+    public static final String SINGLE_PLAYER_GUID = "5afe0000-5eed-4000-8000-000000defa17";
+    public static final String LEGACY_SINGLE_PLAYER_GUID = "rest-api-challenges-single-player";
     public ChallengerAuthData DEFAULT_PLAYER_DATA;
     PersistenceLayer persistenceLayer;
     private ThingifierApiConfig apiConfig;
@@ -159,7 +160,8 @@ public class Challengers {
 
     public void put(final ChallengerAuthData challenger) {
         // todo: this should really check for single player mode and not just trust the GUID
-        if (challenger.getXChallenger().contentEquals(SINGLE_PLAYER_GUID)) {
+        if (isSinglePlayerGuid(challenger.getXChallenger())) {
+            challenger.setXChallengerGUID(SINGLE_PLAYER_GUID);
             SINGLE_PLAYER = challenger; // we just loaded the single player session
         } else {
             authData.put(challenger.getXChallenger(), challenger);
@@ -202,5 +204,15 @@ public class Challengers {
 
     public Set<String> getChallengerGuids() {
         return authData.keySet();
+    }
+
+    public static boolean isSinglePlayerGuid(final String guid) {
+        return SINGLE_PLAYER_GUID.equals(guid) || LEGACY_SINGLE_PLAYER_GUID.equals(guid);
+    }
+
+    public static boolean startsWithSinglePlayerGuid(final String value) {
+        return value != null
+                && (value.startsWith(SINGLE_PLAYER_GUID)
+                        || value.startsWith(LEGACY_SINGLE_PLAYER_GUID));
     }
 }

@@ -40,7 +40,7 @@ public class SimpleApiModeTest {
 
         args.add(Arguments.of(200, "get", "/simpleapi/items"));
         args.add(Arguments.of(200, "head", "/simpleapi/items"));
-        args.add(Arguments.of(204, "options", "/simpleapi/items"));
+        args.add(Arguments.of(200, "options", "/simpleapi/items"));
         args.add(Arguments.of(405, "patch", "/simpleapi/items"));
         args.add(Arguments.of(501, "trace", "/simpleapi/items"));
         args.add(Arguments.of(405, "delete", "/simpleapi/items"));
@@ -76,7 +76,7 @@ public class SimpleApiModeTest {
 
         final HttpResponseDetails response = http.send("/simpleapi/items", "options", headers, "");
 
-        Assertions.assertEquals(204, response.statusCode);
+        Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals("*", response.getHeader("Access-Control-Allow-Origin"));
         Assertions.assertEquals(
                 "Authorization, Content-Type", response.getHeader("Access-Control-Allow-Headers"));

@@ -3,6 +3,8 @@ package uk.co.compendiumdev.uirouting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,6 +34,20 @@ public class UiPagesAreReachableTest {
     private static HttpMessageSender http;
     private static final String OPENAPI_FILE_PAGE_LINK_TEXT =
             "Find OpenAPI file and OpenAPI Powered Client UIs like Swagger and Scalar here";
+    private static final List<String> OPENAPI_PROFILE_QUERY_STRINGS =
+            List.of(
+                    "",
+                    "?strongschema=true",
+                    "?pathparams=operation",
+                    "?strongschema=true&pathparams=operation",
+                    "?permissive");
+    private static final List<String> OPENAPI_PROFILE_DOWNLOAD_QUERY_STRINGS =
+            List.of(
+                    "?download",
+                    "?strongschema=true&download",
+                    "?pathparams=operation&download",
+                    "?strongschema=true&pathparams=operation&download",
+                    "?permissive&download");
 
     @BeforeAll
     static void createHttp() {
@@ -192,10 +208,17 @@ public class UiPagesAreReachableTest {
                         "API Practice Modes | Challenges, Simulator, Simple API and Buggy API",
                         "/practice-modes"));
         args.add(
+                Arguments.of(200, "API Testing Tools | Clients, Proxies and Automation", "/tools"));
+        args.add(
                 Arguments.of(
                         200,
-                        "API Testing Tools | REST Clients, Online Clients and Proxies",
-                        "/tools"));
+                        "API Automation Tools and Fuzzers for REST API Testing",
+                        "/tools/automation"));
+        args.add(
+                Arguments.of(
+                        200,
+                        "EvoMaster API Fuzzer Review for OpenAPI Based API Testing",
+                        "/tools/automation/evomaster"));
         args.add(
                 Arguments.of(
                         200,
@@ -754,7 +777,6 @@ public class UiPagesAreReachableTest {
             final String oldSwaggerPath,
             final boolean expectRepeatedDownloadLinks) {
 
-        Assertions.assertTrue(body.contains("currently returns OpenAPI v 3.1"));
         Assertions.assertFalse(body.contains("Download Normal OpenAPI File"));
         Assertions.assertFalse(body.contains("Download Permissive OpenAPI File"));
         Assertions.assertFalse(body.contains("href=\"" + oldSwaggerPath + "\""));
@@ -762,50 +784,75 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(body.contains("href=\"" + oldSwaggerPath + "?permissive\""));
         Assertions.assertFalse(body.contains("href='" + oldSwaggerPath + "?permissive'"));
 
-        for (final String version : List.of("3.0", "3.1", "3.2")) {
-            final String openApiJsonPath = docsPrefix + "/docs/openapi-" + version + ".json";
-            final String normalizedBody = body.replace("&amp;", "&");
-            Assertions.assertTrue(body.contains("OpenAPI v " + version + " JSON"));
-            Assertions.assertTrue(body.contains(openApiJsonPath));
-            Assertions.assertTrue(body.contains(openApiJsonPath + "?download"));
-            Assertions.assertTrue(body.contains(openApiJsonPath + "?permissive"));
-            Assertions.assertTrue(
-                    body.contains(openApiJsonPath + "?permissive&amp;download")
-                            || body.contains(openApiJsonPath + "?permissive&download"));
-            final int minimumDownloadLinks = expectRepeatedDownloadLinks ? 2 : 1;
-            Assertions.assertTrue(
-                    countOccurrences(normalizedBody, openApiJsonPath + "?download")
-                            >= minimumDownloadLinks);
-            Assertions.assertTrue(
-                    countOccurrences(normalizedBody, openApiJsonPath + "?permissive&download")
-                            >= minimumDownloadLinks);
-        }
+        assertOpenApiProfileLinks(body, docsPrefix, expectRepeatedDownloadLinks);
+
+        Assertions.assertTrue(body.contains("strong schemas"));
+        Assertions.assertTrue(body.contains("operation parameters"));
+        Assertions.assertTrue(body.contains("strong schemas + operation parameters"));
 
         assertOpenApiUiLaunchLinks(body, docsPrefix + "/docs/openapi-3.2.json");
     }
 
-    private void assertOpenApiUiLaunchLinks(final String body, final String openApiJsonPath) {
+    private void assertOpenApiProfileLinks(
+            final String body, final String docsPrefix, final boolean expectRepeatedDownloadLinks) {
 
-        final String encodedStandardPath = encodeOpenApiUiUrl(openApiJsonPath);
-        final String encodedPermissivePath = encodeOpenApiUiUrl(openApiJsonPath + "?permissive");
+        final String normalizedBody = body.replace("&amp;", "&");
+        Assertions.assertTrue(body.contains("This is our"));
+        Assertions.assertTrue(body.contains("default openapi.json"));
+        Assertions.assertTrue(body.contains("standard validation and is in v3.1 format"));
+        Assertions.assertTrue(
+                body.contains(
+                        "We've created the different validation and parameter style files for v3.0, v3.1 and v3.2."));
+        Assertions.assertTrue(normalizedBody.contains(docsPrefix + "/docs/openapi.json"));
+
+        for (final String version : List.of("3.0", "3.1", "3.2")) {
+            final String openApiJsonPath = docsPrefix + "/docs/openapi-" + version + ".json";
+            Assertions.assertTrue(body.contains("OpenAPI v " + version + " JSON"));
+            Assertions.assertTrue(normalizedBody.contains(openApiJsonPath));
+            for (final String queryString : OPENAPI_PROFILE_QUERY_STRINGS) {
+                Assertions.assertTrue(
+                        normalizedBody.contains(openApiJsonPath + queryString),
+                        openApiJsonPath + queryString);
+            }
+            for (final String queryString : OPENAPI_PROFILE_DOWNLOAD_QUERY_STRINGS) {
+                Assertions.assertTrue(
+                        normalizedBody.contains(openApiJsonPath + queryString),
+                        openApiJsonPath + queryString);
+            }
+            for (final String queryString : OPENAPI_PROFILE_DOWNLOAD_QUERY_STRINGS) {
+                final int minimumDownloadLinks =
+                        expectRepeatedOpenApiDownloadLink(expectRepeatedDownloadLinks, queryString)
+                                ? 2
+                                : 1;
+                Assertions.assertTrue(
+                        countOccurrences(normalizedBody, openApiJsonPath + queryString)
+                                >= minimumDownloadLinks,
+                        openApiJsonPath + queryString);
+            }
+        }
+    }
+
+    private boolean expectRepeatedOpenApiDownloadLink(
+            final boolean expectRepeatedDownloadLinks, final String queryString) {
+        return expectRepeatedDownloadLinks
+                && List.of("?download", "?permissive&download").contains(queryString);
+    }
+
+    private void assertOpenApiUiLaunchLinks(final String body, final String openApiJsonPath) {
 
         Assertions.assertTrue(body.contains("Open OpenAPI 3.2 In Online UIs"));
         for (final String client :
                 List.of("swagger", "openapi-explorer", "scalar", "stoplight", "zudoku", "redoc")) {
-            Assertions.assertTrue(
-                    body.contains(
-                            "href=\"/tools/online-clients/"
-                                    + client
-                                    + "?url="
-                                    + encodedStandardPath
-                                    + "\""));
-            Assertions.assertTrue(
-                    body.contains(
-                            "href=\"/tools/online-clients/"
-                                    + client
-                                    + "?url="
-                                    + encodedPermissivePath
-                                    + "\""));
+            for (final String queryString : OPENAPI_PROFILE_QUERY_STRINGS) {
+                Assertions.assertTrue(
+                        body.contains(
+                                "href=\"/tools/online-clients/"
+                                        + client
+                                        + "?url="
+                                        + encodeOpenApiUiUrl(openApiJsonPath + queryString)
+                                        + "\""),
+                        client + " " + openApiJsonPath + queryString);
+            }
         }
     }
 
@@ -929,7 +976,7 @@ public class UiPagesAreReachableTest {
     }
 
     private String encodeOpenApiUiUrl(final String openApiJsonPath) {
-        return openApiJsonPath.replace("/", "%2F").replace("?", "%3F");
+        return URLEncoder.encode(openApiJsonPath, StandardCharsets.UTF_8).replace("+", "%20");
     }
 
     @Test
@@ -1037,31 +1084,40 @@ public class UiPagesAreReachableTest {
     void versionedOpenApiJsonCanBeDownloaded(
             final String openApiJsonPath, final String expectedVersion) {
 
-        final HttpResponseDetails downloadResponse =
-                http.send(openApiJsonPath + "?download", "get");
-        final HttpResponseDetails permissiveDownloadResponse =
-                http.send(openApiJsonPath + "?permissive&download", "get");
-
-        Assertions.assertEquals(200, downloadResponse.statusCode);
-        Assertions.assertEquals(200, permissiveDownloadResponse.statusCode);
-        Assertions.assertTrue(
-                downloadResponse.getHeader("Content-Type").contains("application/json"));
-        Assertions.assertTrue(
-                permissiveDownloadResponse.getHeader("Content-Type").contains("application/json"));
-        assertOpenApiVersion(downloadResponse.body, expectedVersion);
-        assertOpenApiVersion(permissiveDownloadResponse.body, expectedVersion);
-
         final String filename = openApiJsonPath.substring(openApiJsonPath.lastIndexOf("/") + 1);
+        assertOpenApiDownload(openApiJsonPath + "?download", expectedVersion, filename);
+        assertOpenApiDownload(
+                openApiJsonPath + "?strongschema=true&download",
+                expectedVersion,
+                "strong-" + filename);
+        assertOpenApiDownload(
+                openApiJsonPath + "?pathparams=operation&download",
+                expectedVersion,
+                "operational-" + filename);
+        assertOpenApiDownload(
+                openApiJsonPath + "?strongschema=true&pathparams=operation&download",
+                expectedVersion,
+                "strong-operational-" + filename);
+        assertOpenApiDownload(
+                openApiJsonPath + "?permissive&download",
+                expectedVersion,
+                "permissive-" + filename);
+    }
+
+    private void assertOpenApiDownload(
+            final String path, final String expectedVersion, final String expectedFilename) {
+        final HttpResponseDetails response = http.send(path, "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.getHeader("Content-Type").contains("application/json"));
+        assertOpenApiVersion(response.body, expectedVersion);
         Assertions.assertEquals(
-                "attachment; filename=\"" + filename + "\"",
-                downloadResponse.getHeader("Content-Disposition"));
-        Assertions.assertEquals(
-                "attachment; filename=\"permissive-" + filename + "\"",
-                permissiveDownloadResponse.getHeader("Content-Disposition"));
+                "attachment; filename=\"" + expectedFilename + "\"",
+                response.getHeader("Content-Disposition"));
     }
 
     @Test
-    void openApiFilePagesUseVersionedStandardPermissiveAndDownloadLinks() {
+    void openApiFilePagesUseVersionedProfileAndDownloadLinks() {
 
         final HttpResponseDetails apiChallengesOpenApiPage =
                 http.send("/apichallenges/openapi", "get");
@@ -1088,6 +1144,15 @@ public class UiPagesAreReachableTest {
         Assertions.assertEquals(200, shoppingCartOpenApiPage.statusCode);
         assertOpenApiFilePageLinks(
                 shoppingCartOpenApiPage.body, "/shop", "/shop/docs/swagger", false);
+
+        final HttpResponseDetails mirrorOpenApiPage = http.send("/practice-modes/mirror", "get");
+
+        Assertions.assertEquals(200, mirrorOpenApiPage.statusCode);
+        assertOpenApiProfileLinks(mirrorOpenApiPage.body, "/mirror", false);
+        Assertions.assertTrue(mirrorOpenApiPage.body.contains("strong schemas"));
+        Assertions.assertTrue(mirrorOpenApiPage.body.contains("operation parameters"));
+        Assertions.assertTrue(
+                mirrorOpenApiPage.body.contains("strong schemas + operation parameters"));
     }
 
     static Stream<Arguments> expandableThingifierBackedVersionedOpenApiJsonRoutes() {
@@ -1172,11 +1237,112 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(itemCollection.toString().contains("Accept-Patch"));
     }
 
+    @Test
+    void canonicalApiOpenApiCanMovePathParametersToOperations() {
+
+        final HttpResponseDetails response =
+                http.send("/api/docs/openapi-3.0.json?pathparams=operation", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals(0, pathLevelPathParameterCount(response.body));
+        Assertions.assertTrue(operationLevelPathParameterCount(response.body) > 0);
+
+        final JsonObject todoInstance = openApiPath(response.body, "/api/todos/{id}");
+        Assertions.assertTrue(
+                operationPathParameterNames(todoInstance.getAsJsonObject("get")).contains("id"));
+    }
+
+    @Test
+    void canonicalApiOpenApiStrongSchemaOverridesPermissiveSchemaWeakening() {
+
+        final HttpResponseDetails response =
+                http.send("/api/docs/openapi-3.0.json?permissive&strongschema=true", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        final JsonObject createTodo =
+                JsonParser.parseString(response.body)
+                        .getAsJsonObject()
+                        .getAsJsonObject("components")
+                        .getAsJsonObject("schemas")
+                        .getAsJsonObject("create_todo");
+
+        Assertions.assertTrue(
+                createTodo
+                        .getAsJsonArray("required")
+                        .contains(JsonParser.parseString("\"title\"")));
+        Assertions.assertEquals(
+                1,
+                createTodo
+                        .getAsJsonObject("properties")
+                        .getAsJsonObject("title")
+                        .get("minLength")
+                        .getAsInt());
+    }
+
     private JsonObject openApiPath(final String body, final String path) {
         final JsonObject paths =
                 JsonParser.parseString(body).getAsJsonObject().getAsJsonObject("paths");
         Assertions.assertTrue(paths.has(path), "Expected OpenAPI path " + path);
         return paths.getAsJsonObject(path);
+    }
+
+    private int pathLevelPathParameterCount(final String body) {
+        int count = 0;
+        final JsonObject paths =
+                JsonParser.parseString(body).getAsJsonObject().getAsJsonObject("paths");
+        for (String path : paths.keySet()) {
+            final JsonObject pathItem = paths.getAsJsonObject(path);
+            if (pathItem.has("parameters")) {
+                count += pathParameterCount(pathItem.getAsJsonArray("parameters"));
+            }
+        }
+        return count;
+    }
+
+    private int operationLevelPathParameterCount(final String body) {
+        int count = 0;
+        final JsonObject paths =
+                JsonParser.parseString(body).getAsJsonObject().getAsJsonObject("paths");
+        for (String path : paths.keySet()) {
+            final JsonObject pathItem = paths.getAsJsonObject(path);
+            for (String method : List.of("get", "put", "post", "delete", "patch")) {
+                if (pathItem.has(method)) {
+                    count +=
+                            pathParameterCount(
+                                    pathItem.getAsJsonObject(method).getAsJsonArray("parameters"));
+                }
+            }
+        }
+        return count;
+    }
+
+    private Set<String> operationPathParameterNames(final JsonObject operation) {
+        final Set<String> names = new LinkedHashSet<>();
+        if (!operation.has("parameters")) {
+            return names;
+        }
+        final JsonArray parameters = operation.getAsJsonArray("parameters");
+        for (int index = 0; index < parameters.size(); index++) {
+            final JsonObject parameter = parameters.get(index).getAsJsonObject();
+            if ("path".equals(parameter.get("in").getAsString())) {
+                names.add(parameter.get("name").getAsString());
+            }
+        }
+        return names;
+    }
+
+    private int pathParameterCount(final JsonArray parameters) {
+        if (parameters == null) {
+            return 0;
+        }
+        int count = 0;
+        for (int index = 0; index < parameters.size(); index++) {
+            final JsonObject parameter = parameters.get(index).getAsJsonObject();
+            if ("path".equals(parameter.get("in").getAsString())) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void assertPatchRequestBodiesAndAcceptPatch(final JsonObject instancePath) {
@@ -2275,8 +2441,7 @@ public class UiPagesAreReachableTest {
 
         Assertions.assertEquals(200, response.statusCode);
         Assertions.assertFalse(response.body.contains("href=\"/mirror/docs/swagger-ui\""));
-        Assertions.assertTrue(response.body.contains("OpenAPI 3.2 JSON"));
-        Assertions.assertTrue(response.body.contains("/mirror/docs/openapi-3.2.json?download"));
+        assertOpenApiProfileLinks(response.body, "/mirror", false);
     }
 
     private void assertFromHellLaunchButton(
