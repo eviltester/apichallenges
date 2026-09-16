@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.compendiumdev.challenge.ChallengerAuthData;
+import uk.co.compendiumdev.challenge.challengers.Challengers;
 
 public class ChallengerFileStorage
         implements ChallengerPersistenceMechanism, DatabaseContentPersistenceMechanism {
@@ -48,10 +49,13 @@ public class ChallengerFileStorage
 
     public PersistenceResponse loadChallengerStatus(final String guid) {
         File file = getStatusFileFor(guid);
+        if (!file.exists() && Challengers.SINGLE_PLAYER_GUID.equals(guid)) {
+            file = getStatusFileFor(Challengers.LEGACY_SINGLE_PLAYER_GUID);
+        }
 
         if (!file.exists()) {
             String message = "Could not find challenger status file: " + file.getAbsolutePath();
-            if (guid.startsWith("rest-api-challenges-single-player")) {
+            if (Challengers.startsWithSinglePlayerGuid(guid)) {
                 message =
                         message
                                 + "\nChallenger status file will be created when a challenge is completed.";
@@ -101,10 +105,13 @@ public class ChallengerFileStorage
     public PersistenceResponse loadDatabaseContent(String guid) {
         File folder = new File(System.getProperty("User.dir"), "challengersessions");
         File file = new File(folder, getDatabaseFileNameFor(guid));
+        if (!file.exists() && Challengers.SINGLE_PLAYER_GUID.equals(guid)) {
+            file = new File(folder, getDatabaseFileNameFor(Challengers.LEGACY_SINGLE_PLAYER_GUID));
+        }
 
         if (!file.exists()) {
             String message = "Could not find database contents file: " + file.getAbsolutePath();
-            if (guid.startsWith("rest-api-challenges-single-player")) {
+            if (Challengers.startsWithSinglePlayerGuid(guid)) {
                 message =
                         message
                                 + "\nDatabase content file will be created when a challenge is completed.";

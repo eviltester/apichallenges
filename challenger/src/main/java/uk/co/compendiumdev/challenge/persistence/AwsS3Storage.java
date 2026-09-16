@@ -260,7 +260,7 @@ public class AwsS3Storage
     }
 
     private boolean isProtectedSinglePlayer(final String guid) {
-        return Challengers.SINGLE_PLAYER_GUID.equals(guid) && !config.cleanupSinglePlayer();
+        return Challengers.isSinglePlayerGuid(guid) && !config.cleanupSinglePlayer();
     }
 
     private Optional<S3ObjectDetails> firstExistingObject(final List<String> keys) {
@@ -316,11 +316,29 @@ public class AwsS3Storage
     }
 
     private List<String> challengerLoadKeys(final String guid) {
+        if (Challengers.SINGLE_PLAYER_GUID.equals(guid)) {
+            return List.of(
+                    challengerKey(guid),
+                    config.managedPrefix() + guid,
+                    guid + CHALLENGER_SUFFIX,
+                    guid,
+                    challengerKey(Challengers.LEGACY_SINGLE_PLAYER_GUID),
+                    config.managedPrefix() + Challengers.LEGACY_SINGLE_PLAYER_GUID,
+                    Challengers.LEGACY_SINGLE_PLAYER_GUID + CHALLENGER_SUFFIX,
+                    Challengers.LEGACY_SINGLE_PLAYER_GUID);
+        }
         return List.of(
                 challengerKey(guid), config.managedPrefix() + guid, guid + CHALLENGER_SUFFIX, guid);
     }
 
     private List<String> databaseLoadKeys(final String guid) {
+        if (Challengers.SINGLE_PLAYER_GUID.equals(guid)) {
+            return List.of(
+                    databaseKey(guid),
+                    guid + DATABASE_SUFFIX,
+                    databaseKey(Challengers.LEGACY_SINGLE_PLAYER_GUID),
+                    Challengers.LEGACY_SINGLE_PLAYER_GUID + DATABASE_SUFFIX);
+        }
         return List.of(databaseKey(guid), guid + DATABASE_SUFFIX);
     }
 

@@ -145,7 +145,7 @@ public class ChallengerAuthData {
         setNote(data.secretNote);
 
         // only allow setting the uuid if we are not in single player mode
-        if (!xChallenger.equals(Challengers.SINGLE_PLAYER_GUID)) {
+        if (!Challengers.isSinglePlayerGuid(xChallenger)) {
             try {
                 setXChallengerGUID(UUID.fromString(data.getXChallenger()).toString());
             } catch (Exception e) {

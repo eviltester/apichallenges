@@ -172,9 +172,7 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
 
         if (request.getVerb() == OPTIONS
                 && path.contentEquals("todos")
-                && response.getStatusCode() == 204) {
-            // hack for backwards compatibility with initial solutions
-            response.setStatus(200);
+                && response.getStatusCode() == 200) {
             challengers.pass(challenger, CHALLENGE.OPTIONS_TODOS);
         }
 
@@ -207,26 +205,24 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
             final InternalHttpRequest request,
             final InternalHttpResponse response) {
 
-        if (request.getAcceptHeader() != null && !request.getAcceptHeader().isEmpty()) {
-            if (request.getAcceptHeader().contains("html")) {
+        final String acceptHeader = request.getAcceptHeader();
+
+        if (acceptHeader != null && !acceptHeader.isEmpty()) {
+            if (acceptHeader.contains("html")) {
                 // treat as a GUI request and redirect
                 response.setStatus(307);
                 response.setHeader("Location", "/gui/404/" + path);
                 return;
             }
-            if (request.getAcceptHeader().startsWith("application/")) {
-                if (request.getAcceptHeader().endsWith("xml")) {
-                    response.setType("application/xml");
-                    response.setBody(
-                            "<errorMessages><message>404 resource Unknown</message></errorMessages>");
-                    return;
-                }
-                if (request.getAcceptHeader().endsWith("json")) {
-                    response.setType("application/json");
-                    response.setBody("{\"errorMessages\":[\"404 resource Unknown\"]}");
-                    return;
-                }
+            if (acceptHeader.contains("xml") && !acceptHeader.contains("json")) {
+                response.setType("application/xml");
+                response.setBody(
+                        "<errorMessages><message>404 resource Unknown</message></errorMessages>");
+                return;
             }
         }
+
+        response.setType("application/json");
+        response.setBody("{\"errorMessages\":[\"404 resource Unknown\"]}");
     }
 }

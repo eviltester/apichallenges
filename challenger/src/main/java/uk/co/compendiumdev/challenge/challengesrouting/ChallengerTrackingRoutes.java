@@ -10,6 +10,7 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitions;
 import uk.co.compendiumdev.challenge.persistence.PersistenceLayer;
 import uk.co.compendiumdev.thingifier.Thingifier;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpRouteHandler;
+import uk.co.compendiumdev.thingifier.adapter.httpserver.HttpServerResponse;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.SimpleHttpRouteCreator;
 import uk.co.compendiumdev.thingifier.api.docgen.*;
 import uk.co.compendiumdev.thingifier.api.response.ApiResponseAsJson;
@@ -134,7 +135,15 @@ public class ChallengerTrackingRoutes {
                         .addDocumentation(
                                 "Get a challenger in Json format to allow continued tracking of challenges.")
                         .addPossibleStatuses(200, 404)
-                        .addRequestUrlParam(guidField));
+                        .addRequestUrlParam(guidField)
+                        .responseSchema(
+                                200,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.challenger())
+                        .responseSchema(
+                                404,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages()));
 
         // endpoint to restore a saved challenger status from UI
         put(
@@ -146,17 +155,15 @@ public class ChallengerTrackingRoutes {
                     String xChallengerGuid = request.params("id");
 
                     if (xChallengerGuid == null) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson("Invalid Challenger GUID");
+                        return jsonError(result, 400, "Invalid Challenger GUID");
                     }
 
                     if (!single_player_mode) {
                         try {
                             UUID.fromString(xChallengerGuid);
                         } catch (Exception e) {
-                            result.status(400);
-                            return ApiResponseAsJson.getErrorMessageJson(
-                                    "Invalid Challenger GUID " + e.getMessage());
+                            return jsonError(
+                                    result, 400, "Invalid Challenger GUID " + e.getMessage());
                         }
                     }
 
@@ -164,22 +171,19 @@ public class ChallengerTrackingRoutes {
                     try {
                         challenger = new Gson().fromJson(request.body(), ChallengerAuthData.class);
                     } catch (Exception e) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson(e.getMessage());
+                        return jsonError(result, 400, e.getMessage());
                     }
 
                     XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
 
                     if (challenger == null) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson("Invalid Payload");
+                        return jsonError(result, 400, "Invalid Payload");
                     }
 
                     // check payload against id
                     if (!challenger.getXChallenger().equals(xChallengerGuid)) {
-                        result.status(409);
-                        return ApiResponseAsJson.getErrorMessageJson(
-                                "URL GUID does not match payload X-CHALLENGER");
+                        return jsonError(
+                                result, 409, "URL GUID does not match payload X-CHALLENGER");
                     }
 
                     // does id exist in memory, if so just replace state data
@@ -237,7 +241,19 @@ public class ChallengerTrackingRoutes {
                         .addDocumentation(
                                 "Restore a saved challenger matching the supplied X-CHALLENGER guid to allow continued tracking of challenges.")
                         .addPossibleStatuses(200, 201, 400, 409)
-                        .addRequestUrlParam(guidField));
+                        .addRequestUrlParam(guidField)
+                        .responseSchema(
+                                200,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.challenger())
+                        .responseSchema(
+                                400,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages())
+                        .responseSchema(
+                                409,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages()));
 
         /*
            / challenger
@@ -261,7 +277,10 @@ public class ChallengerTrackingRoutes {
                     if (single_player_mode) {
                         XChallengerHeader.setResultHeaderBasedOnChallenger(
                                 result, challengers.SINGLE_PLAYER.getXChallenger());
-                        result.header("Location", "/gui/challenges");
+                        result.header(
+                                "Location",
+                                challengerLocation(
+                                        pathPrefix, challengers.SINGLE_PLAYER.getXChallenger()));
                         result.status(201);
                         return "";
                     }
@@ -274,14 +293,18 @@ public class ChallengerTrackingRoutes {
                         thingifier.ensureCreatedAndPopulatedInstanceDatabaseNamed(
                                 challenger.getXChallenger());
                         XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
-                        result.header("Location", "/gui/challenges/" + challenger.getXChallenger());
+                        result.header(
+                                "Location",
+                                challengerLocation(pathPrefix, challenger.getXChallenger()));
                         result.status(201);
                     } else {
                         ChallengerAuthData challenger = challengers.getChallenger(xChallengerGuid);
                         if (challenger == null) {
                             // if X-CHALLENGER header exists, and is not a known UUID,
                             // return 404, challenger ID not valid
-                            result.status(404);
+                            XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
+                            return jsonError(
+                                    result, 404, "Challenger not found " + xChallengerGuid);
                         } else {
                             // challenger already exists, ensure the database does
                             // create the database for the user
@@ -290,7 +313,8 @@ public class ChallengerTrackingRoutes {
                             // if X-CHALLENGER header exists, and has a valid UUID, and UUID exists,
                             // then return 200
                             result.header(
-                                    "Location", "/gui/challenges/" + challenger.getXChallenger());
+                                    "Location",
+                                    challengerLocation(pathPrefix, challenger.getXChallenger()));
                             result.status(200);
                         }
                         XChallengerHeader.setResultHeaderBasedOnChallenger(result, challenger);
@@ -305,7 +329,11 @@ public class ChallengerTrackingRoutes {
                                 RoutingStatus.returnedFromCall(),
                                 null)
                         .addDocumentation("Create a challenger using the X-CHALLENGER guid header.")
-                        .addPossibleStatuses(200, 400, 405));
+                        .addPossibleStatuses(200, 201, 404)
+                        .responseSchema(
+                                404,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages()));
 
         SimpleHttpRouteCreator.routeStatusWhenNot(405, challengerPath, List.of("post", "options"));
 
@@ -323,7 +351,19 @@ public class ChallengerTrackingRoutes {
                         .addDocumentation(
                                 "Get the todo data for the supplied X-CHALLENGER guid to allow later restoration of the todos.")
                         .addPossibleStatuses(200, 400, 404)
-                        .addRequestUrlParam(guidField));
+                        .addRequestUrlParam(guidField)
+                        .responseSchema(
+                                200,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.todoCollection())
+                        .responseSchema(
+                                400,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages())
+                        .responseSchema(
+                                404,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages()));
 
         HttpRouteHandler getChallengerDatabaseId =
                 (request, result) -> {
@@ -333,18 +373,17 @@ public class ChallengerTrackingRoutes {
                     String xChallengerGuid = request.params("id");
 
                     if (xChallengerGuid == null) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson("Invalid Challenger GUID");
+                        return jsonError(result, 400, "Invalid Challenger GUID");
                     }
 
-                    if (!single_player_mode) {
-                        try {
-                            UUID.fromString(xChallengerGuid);
-                        } catch (Exception e) {
-                            result.status(400);
-                            return ApiResponseAsJson.getErrorMessageJson(
-                                    "Invalid Challenger GUID " + e.getMessage());
-                        }
+                    try {
+                        UUID.fromString(xChallengerGuid);
+                    } catch (Exception e) {
+                        return jsonError(result, 400, "Invalid Challenger GUID " + e.getMessage());
+                    }
+
+                    if (single_player_mode && !Challengers.isSinglePlayerGuid(xChallengerGuid)) {
+                        return jsonError(result, 404, "Challenger not found " + xChallengerGuid);
                     }
 
                     challenger = challengers.getChallenger(xChallengerGuid);
@@ -355,8 +394,9 @@ public class ChallengerTrackingRoutes {
                         result.header("content-type", "application/json");
 
                         if (challengers.getErModel().getStore(xChallengerGuid) == null) {
-                            result.status(404);
-                            return ApiResponseAsJson.getErrorMessageJson(
+                            return jsonError(
+                                    result,
+                                    404,
                                     "Challenger database not instantiated " + xChallengerGuid);
                         }
 
@@ -364,9 +404,7 @@ public class ChallengerTrackingRoutes {
                         return ChallengerDatabasePayloads.publicDatabaseExportAsJson(
                                 challengers.getErModel(), xChallengerGuid);
                     } else {
-                        result.status(404);
-                        return ApiResponseAsJson.getErrorMessageJson(
-                                "Challenger not found " + xChallengerGuid);
+                        return jsonError(result, 404, "Challenger not found " + xChallengerGuid);
                     }
                 };
 
@@ -406,23 +444,26 @@ public class ChallengerTrackingRoutes {
 
                     // challenger uuid must exist and be valid
                     if (xChallengerGuid == null) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson("Invalid Challenger GUID");
+                        return jsonError(result, 400, "Invalid Challenger GUID");
                     }
 
-                    if (!single_player_mode) {
-                        try {
-                            UUID.fromString(xChallengerGuid);
-                        } catch (Exception e) {
-                            result.status(400);
-                            return ApiResponseAsJson.getErrorMessageJson(
-                                    "Invalid Challenger GUID " + e.getMessage());
-                        }
+                    try {
+                        UUID.fromString(xChallengerGuid);
+                    } catch (Exception e) {
+                        return jsonError(result, 400, "Invalid Challenger GUID " + e.getMessage());
+                    }
+
+                    if (single_player_mode && !Challengers.isSinglePlayerGuid(xChallengerGuid)) {
+                        return jsonError(
+                                result,
+                                404,
+                                "Unknown Challenger GUID - have you created or loaded the challenger state");
                     }
 
                     if (!challengers.inMemory(xChallengerGuid)) {
-                        result.status(404);
-                        return ApiResponseAsJson.getErrorMessageJson(
+                        return jsonError(
+                                result,
+                                404,
                                 "Unknown Challenger GUID - have you created or loaded the challenger state");
                     }
 
@@ -433,8 +474,7 @@ public class ChallengerTrackingRoutes {
                         new SecretDataPopulator(challengers)
                                 .populate(thingifier, xChallengerGuid.trim());
                     } catch (Exception e) {
-                        result.status(400);
-                        return ApiResponseAsJson.getErrorMessageJson(e.getMessage());
+                        return jsonError(result, 400, e.getMessage());
                     }
 
                     if (challengers.getErModel().getDatabaseNames().contains(xChallengerGuid)) {
@@ -443,9 +483,7 @@ public class ChallengerTrackingRoutes {
                         result.header("X-CHALLENGER", xChallengerGuid);
                         return "";
                     } else {
-                        result.status(500);
-                        return ApiResponseAsJson.getErrorMessageJson(
-                                "Unknown error, database not found");
+                        return jsonError(result, 404, "Unknown error, database not found");
                     }
                 });
 
@@ -458,9 +496,29 @@ public class ChallengerTrackingRoutes {
                                 null)
                         .addDocumentation(
                                 "Restore a saved set of todos for a challenger matching the supplied X-CHALLENGER guid.")
-                        .addPossibleStatuses(204, 400)
-                        .addRequestUrlParam(guidField));
+                        .addPossibleStatuses(204, 400, 404)
+                        .addRequestUrlParam(guidField)
+                        .suppressResponseBodyFor(204)
+                        .responseSchema(
+                                400,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages())
+                        .responseSchema(
+                                404,
+                                "application/json",
+                                ApiChallengeOpenApiResponseSchemas.errorMessages()));
 
         // TODO: add a protected admin page with an environment variable protection as password
+    }
+
+    private String challengerLocation(final String pathPrefix, final String challengerGuid) {
+        return ApiChallengeRoutePath.withPrefix(pathPrefix, "/challenger/" + challengerGuid);
+    }
+
+    private String jsonError(
+            final HttpServerResponse result, final int statusCode, final String message) {
+        result.status(statusCode);
+        result.type("application/json");
+        return ApiResponseAsJson.getErrorMessageJson(message);
     }
 }

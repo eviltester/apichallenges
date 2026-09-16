@@ -13,6 +13,7 @@ import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.DefaultGUIHTML;
 import uk.co.compendiumdev.thingifier.htmlgui.htmlgen.RestApiDocumentationGenerator;
 import uk.co.compendiumdev.thingifier.swaggerizer.OpenApiSpecificationVersion;
 import uk.co.compendiumdev.thingifier.swaggerizer.ScalarUiPage;
+import uk.co.compendiumdev.thingifier.swaggerizer.SwaggerGenerationConfig;
 import uk.co.compendiumdev.thingifier.swaggerizer.SwaggerUiPage;
 import uk.co.compendiumdev.thingifier.swaggerizer.Swaggerizer;
 
@@ -87,19 +88,17 @@ public final class ApiChallengeCanonicalDocumentationRoutes {
 
     private String legacySwaggerJson(
             final HttpServerRequest request, final HttpServerResponse response) {
+        final SwaggerGenerationConfig config =
+                swaggerGenerationConfig(OpenApiSpecificationVersion.OPENAPI_3_1, request);
         response.header(
                 "Content-Disposition",
-                "attachment; filename=\""
-                        + (request.queryParam("permissive") == null ? "" : "permissive-")
-                        + "swagger.json\"");
+                "attachment; filename=\"" + downloadFilename("swagger.json", config) + "\"");
         response.header("Content-Type", "application/octet-stream");
         response.status(200);
         return withCanonicalThingifierDocsPrefix(
                 () ->
                         new Swaggerizer(apiDefn)
-                                .asJsonWithPreferredServer(
-                                        request.queryParam("permissive") != null,
-                                        requestOrigin(request)));
+                                .asJsonWithPreferredServer(config, requestOrigin(request)));
     }
 
     private String openApi(
@@ -110,21 +109,74 @@ public final class ApiChallengeCanonicalDocumentationRoutes {
         response.type("application/json");
         response.status(200);
 
-        final boolean permissive = request.queryParam("permissive") != null;
+        final SwaggerGenerationConfig config = swaggerGenerationConfig(version, request);
         if (request.queryParam("download") != null) {
             response.header(
                     "Content-Disposition",
                     "attachment; filename=\""
-                            + (permissive ? "permissive-" : "")
-                            + openApiPath.substring(openApiPath.lastIndexOf("/") + 1)
+                            + openApiDownloadFilename(openApiPath, config)
                             + "\"");
         }
 
         return withCanonicalThingifierDocsPrefix(
                 () ->
                         new Swaggerizer(apiDefn)
-                                .asJsonWithPreferredServer(
-                                        version, permissive, requestOrigin(request)));
+                                .asJsonWithPreferredServer(config, requestOrigin(request)));
+    }
+
+    private SwaggerGenerationConfig swaggerGenerationConfig(
+            final OpenApiSpecificationVersion version, final HttpServerRequest request) {
+        final boolean permissive = request.queryParam("permissive") != null;
+        final boolean strongSchemas = truthyQueryParam(request.queryParam("strongschema"));
+
+        final SwaggerGenerationConfig config = new SwaggerGenerationConfig();
+        config.openApiSpecificationVersion = version;
+        config.includeMethodNotAllowedEndpoints = permissive;
+        config.includeFieldValidation = !permissive || strongSchemas;
+        config.strongSchemas = strongSchemas;
+        config.pathParameterPlacement = pathParameterPlacement(request.queryParam("pathparams"));
+        return config;
+    }
+
+    private boolean truthyQueryParam(final String value) {
+        if (value == null) {
+            return false;
+        }
+        return !"false".equalsIgnoreCase(value.trim()) && !"0".equals(value.trim());
+    }
+
+    private SwaggerGenerationConfig.PathParameterPlacement pathParameterPlacement(
+            final String placement) {
+        if ("operation".equalsIgnoreCase(placement)) {
+            return SwaggerGenerationConfig.PathParameterPlacement.OPERATION;
+        }
+        return SwaggerGenerationConfig.PathParameterPlacement.PATH;
+    }
+
+    private String openApiDownloadFilename(
+            final String openApiPath, final SwaggerGenerationConfig config) {
+        return downloadFilename(openApiPath.substring(openApiPath.lastIndexOf("/") + 1), config);
+    }
+
+    private String downloadFilename(final String filename, final SwaggerGenerationConfig config) {
+        return variantFilenamePrefix(config) + filename;
+    }
+
+    private String variantFilenamePrefix(final SwaggerGenerationConfig config) {
+        final StringBuilder prefix = new StringBuilder();
+
+        if (config.includeMethodNotAllowedEndpoints) {
+            prefix.append("permissive-");
+        }
+        if (config.strongSchemas) {
+            prefix.append("strong-");
+        }
+        if (config.pathParameterPlacement
+                == SwaggerGenerationConfig.PathParameterPlacement.OPERATION) {
+            prefix.append("operational-");
+        }
+
+        return prefix.toString();
     }
 
     private String swaggerUi(final HttpServerResponse response) {

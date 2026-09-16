@@ -80,7 +80,7 @@
         <details class="side-toc-section" data-side-toc-section="tools">
             <summary class="side-toc-section-summary">
                 <a class="side-toc-section-title" href="/tools">Tools</a>
-                <span class="side-toc-section-description">Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing.</span>
+                <span class="side-toc-section-description">Tool reviews for REST HTTP clients, proxies, online API clients, and automation tools to help with API testing.</span>
             </summary>
             <ul class="side-toc-section-links">
                 <li>
@@ -147,6 +147,12 @@
                             </ul>
                         </li>
                         <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/tools/automation">Automation</a>
+                    <ul>
+                        <li><a href="/tools/automation/evomaster">EvoMaster</a></li>
                     </ul>
                 </li>
             </ul>

@@ -189,17 +189,91 @@ Very often we are not aware of this level of amendment when testing and may not 
 
 The Mirror mode makes it clear that there are multiple systems involved in issuing a request and they can all pose a risk to the system or our testing. e.g. some REST Clients will not send duplicate headers: some will combine headers, some will pick the first (or last) header.
 
-## Swagger OpenAPI File
+## OpenAPI File Download Links
 
 You can download a simple Swagger [OpenAPI File for mirror mode](/mirror/docs/swagger).
 
-Versioned OpenAPI JSON files are also available:
+This is our [default openapi.json](/mirror/docs/openapi.json) file which has standard validation and is in v3.1 format.
 
-- [OpenAPI JSON default](/mirror/docs/openapi.json) - currently OpenAPI 3.1
-- [OpenAPI 3.0 JSON](/mirror/docs/openapi-3.0.json)
-- [OpenAPI 3.1 JSON](/mirror/docs/openapi-3.1.json)
-- [OpenAPI 3.2 JSON](/mirror/docs/openapi-3.2.json)
+OpenAPI JSON files are available in specific OpenAPI versions.
 
-Add `?permissive` to any JSON link to generate the less-validating version, e.g. [OpenAPI 3.2 JSON permissive](/mirror/docs/openapi-3.2.json?permissive).
+We offer five different styles of each OpenAPI version:
 
-Add `?download` to any JSON link to download it as an attachment, e.g. [OpenAPI 3.2 JSON download](/mirror/docs/openapi-3.2.json?download). You can combine both as `?permissive&download`.
+- standard validation - the normal file for using the API as intended, with supported routes and the usual validation rules.
+- strong schemas - keeps the normal API surface but adds more explicit schema detail for tools that benefit from stronger request and response shapes.
+- operation parameters - keeps the normal schema style but repeats path parameters on each operation for tools that do not fully process path-level parameters.
+- strong schemas + operation parameters - combines stronger schemas with operation-level path parameters.
+- less validation - a more permissive testing file that relaxes constraints and documents more method/status possibilities.
+
+We've created the different validation and parameter style files for v3.0, v3.1 and v3.2.
+
+- OpenAPI v 3.0 JSON
+  - [standard validation](/mirror/docs/openapi-3.0.json) ([download JSON file](/mirror/docs/openapi-3.0.json?download))
+  - [strong schemas](/mirror/docs/openapi-3.0.json?strongschema=true) ([download JSON file](/mirror/docs/openapi-3.0.json?strongschema=true&download))
+  - [operation parameters](/mirror/docs/openapi-3.0.json?pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.0.json?pathparams=operation&download))
+  - [strong schemas + operation parameters](/mirror/docs/openapi-3.0.json?strongschema=true&pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.0.json?strongschema=true&pathparams=operation&download))
+  - [less validation](/mirror/docs/openapi-3.0.json?permissive) ([download JSON file](/mirror/docs/openapi-3.0.json?permissive&download))
+- OpenAPI v 3.1 JSON
+  - [standard validation](/mirror/docs/openapi-3.1.json) ([download JSON file](/mirror/docs/openapi-3.1.json?download))
+  - [strong schemas](/mirror/docs/openapi-3.1.json?strongschema=true) ([download JSON file](/mirror/docs/openapi-3.1.json?strongschema=true&download))
+  - [operation parameters](/mirror/docs/openapi-3.1.json?pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.1.json?pathparams=operation&download))
+  - [strong schemas + operation parameters](/mirror/docs/openapi-3.1.json?strongschema=true&pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.1.json?strongschema=true&pathparams=operation&download))
+  - [less validation](/mirror/docs/openapi-3.1.json?permissive) ([download JSON file](/mirror/docs/openapi-3.1.json?permissive&download))
+- OpenAPI v 3.2 JSON
+  - [standard validation](/mirror/docs/openapi-3.2.json) ([download JSON file](/mirror/docs/openapi-3.2.json?download))
+  - [strong schemas](/mirror/docs/openapi-3.2.json?strongschema=true) ([download JSON file](/mirror/docs/openapi-3.2.json?strongschema=true&download))
+  - [operation parameters](/mirror/docs/openapi-3.2.json?pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.2.json?pathparams=operation&download))
+  - [strong schemas + operation parameters](/mirror/docs/openapi-3.2.json?strongschema=true&pathparams=operation) ([download JSON file](/mirror/docs/openapi-3.2.json?strongschema=true&pathparams=operation&download))
+  - [less validation](/mirror/docs/openapi-3.2.json?permissive) ([download JSON file](/mirror/docs/openapi-3.2.json?permissive&download))
+
+## About Mirror API's Normal OpenAPI File
+
+The Normal OpenAPI File is the best starting point when you want to use the API as intended.
+
+It lists the supported endpoints and includes the normal validation rules for parameters and payloads. When this file is loaded into a Swagger UI generation application it makes it easy to use the API, while still keeping the client inside the expected contract.
+
+- [OpenAPI v 3.0 JSON](/mirror/docs/openapi-3.0.json?download)
+- [OpenAPI v 3.1 JSON](/mirror/docs/openapi-3.1.json?download)
+- [OpenAPI v 3.2 JSON](/mirror/docs/openapi-3.2.json?download)
+
+## About Mirror API's Strong Schemas OpenAPI File
+
+The Strong Schemas OpenAPI File keeps the same API surface as the normal file, but adds more explicit schema detail.
+
+Use it when your tools make better choices from stronger request and response shapes, or when you want a stricter generated client or schema-aware test tool.
+
+- [OpenAPI v 3.0 JSON](/mirror/docs/openapi-3.0.json?strongschema=true&download)
+- [OpenAPI v 3.1 JSON](/mirror/docs/openapi-3.1.json?strongschema=true&download)
+- [OpenAPI v 3.2 JSON](/mirror/docs/openapi-3.2.json?strongschema=true&download)
+
+## About Mirror API's Operation Parameters OpenAPI File
+
+The Operation Parameters OpenAPI File keeps the normal schema style but repeats path parameters on each operation.
+
+Use it with OpenAPI tools that do not fully process shared path-level parameters, or when generated client code is clearer with the parameters declared directly on each operation.
+
+- [OpenAPI v 3.0 JSON](/mirror/docs/openapi-3.0.json?pathparams=operation&download)
+- [OpenAPI v 3.1 JSON](/mirror/docs/openapi-3.1.json?pathparams=operation&download)
+- [OpenAPI v 3.2 JSON](/mirror/docs/openapi-3.2.json?pathparams=operation&download)
+
+## About Mirror API's Strong Schemas + Operation Parameters OpenAPI File
+
+The Strong Schemas + Operation Parameters OpenAPI File combines the stronger schema detail with operation-level path parameters.
+
+Use it when a tool benefits from both stricter schemas and operation-level path parameter declarations.
+
+- [OpenAPI v 3.0 JSON](/mirror/docs/openapi-3.0.json?strongschema=true&pathparams=operation&download)
+- [OpenAPI v 3.1 JSON](/mirror/docs/openapi-3.1.json?strongschema=true&pathparams=operation&download)
+- [OpenAPI v 3.2 JSON](/mirror/docs/openapi-3.2.json?strongschema=true&pathparams=operation&download)
+
+## About Mirror API's Less Validation OpenAPI File
+
+The Less Validation OpenAPI File is intended for testing.
+
+It relaxes parameter constraints and documents more method/status possibilities, including methods that are not available for normal use.
+
+This makes it possible to use Swagger UI applications to test more extreme situations because the client is less likely to block the request before it reaches the server.
+
+- [OpenAPI v 3.0 JSON](/mirror/docs/openapi-3.0.json?permissive&download)
+- [OpenAPI v 3.1 JSON](/mirror/docs/openapi-3.1.json?permissive&download)
+- [OpenAPI v 3.2 JSON](/mirror/docs/openapi-3.2.json?permissive&download)

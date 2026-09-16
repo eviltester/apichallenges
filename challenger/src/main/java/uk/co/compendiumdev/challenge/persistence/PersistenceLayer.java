@@ -49,8 +49,8 @@ public class PersistenceLayer implements AutoCloseable {
             ChallengerAuthData challenger =
                     new ChallengerAuthData(challengers.getDefinedChallenges())
                             .fromData(response.getAuthData(), challengers.getDefinedChallenges());
-            if (xChallengerGuid.equals(Challengers.SINGLE_PLAYER_GUID)) {
-                challenger.setXChallengerGUID(xChallengerGuid);
+            if (Challengers.isSinglePlayerGuid(xChallengerGuid)) {
+                challenger.setXChallengerGUID(Challengers.SINGLE_PLAYER_GUID);
             }
             challenger.touch();
             challenger.setState(

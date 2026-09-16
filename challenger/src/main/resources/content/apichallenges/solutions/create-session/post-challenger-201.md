@@ -55,8 +55,8 @@ Content-Length: 0
 ~~~~~~~~
 HTTP/1.1 201 Created
 Date: Tue, 28 Jul 2020 14:26:48 GMT
-X-CHALLENGER: rest-api-challenges-single-player
-Location: /gui/challenges
+X-CHALLENGER: 5afe0000-5eed-4000-8000-000000defa17
+Location: /api/challenger/5afe0000-5eed-4000-8000-000000defa17
 Content-Type: text/html;charset=utf-8
 Transfer-Encoding: chunked
 Server: Jetty(9.4.z-SNAPSHOT)

@@ -80,7 +80,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                         "<a class=\"side-toc-section-title\" href=\"/tutorials\">Interactive Tutorials</a>"));
         Assertions.assertTrue(
                 html.contains(
-                        "Tool reviews for REST HTTP clients, proxies, and online API clients to help with API testing."));
+                        "Tool reviews for REST HTTP clients, proxies, online API clients, and automation tools to help with API testing."));
         Assertions.assertTrue(
                 html.contains(
                         "Hands-on tutorial pages for learning REST concepts and API testing workflows."));
@@ -163,7 +163,9 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<li><a href=\"/tools/online-clients/zudoku/about\">About Zudoku</a></li>",
                 "<a href=\"/tools/online-clients/redoc\">Redoc</a>",
                 "<li><a href=\"/tools/online-clients/redoc/about\">About Redoc</a></li>",
-                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
+                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>",
+                "<a href=\"/tools/automation\">Automation</a>",
+                "<li><a href=\"/tools/automation/evomaster\">EvoMaster</a></li>");
         Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
         Assertions.assertFalse(html.contains("href=\"/changes\""));
         Assertions.assertFalse(html.contains("All Practice Sites"));
@@ -613,6 +615,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/redoc/about\""));
         Assertions.assertTrue(html.contains("href=\"/tools/clients/summary-reviews\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation/evomaster\""));
 
         html = renderContentPage("/tools/online-clients/basic-client");
 
@@ -806,6 +810,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("href=\"/practice-modes/simpleapi-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/practice-modes/shoppingcart-openapi\""));
         Assertions.assertTrue(html.contains("href=\"/tools/proxies\""));
+        Assertions.assertTrue(html.contains("href=\"/tools/automation\""));
     }
 
     private void assertOnlineOpenApiUiClientPage(

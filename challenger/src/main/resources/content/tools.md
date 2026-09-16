@@ -1,9 +1,9 @@
 ---
 title: API Testing Tools
-seo_title: API Testing Tools | REST Clients, Online Clients and Proxies
-description: Tool guidance for REST clients, online OpenAPI clients, API viewers, converters, and proxies used in API testing.
-lastmod: 2026-08-10
-seo_description: Compare API testing tools including REST clients, online OpenAPI clients, Swagger UI, OpenAPI viewers, converters, and proxies.
+seo_title: API Testing Tools | REST Clients, Online Clients, Proxies and Automation
+description: Tool guidance for REST clients, online OpenAPI clients, API viewers, converters, proxies, and automation tools used in API testing.
+lastmod: 2026-09-16
+seo_description: Compare API testing tools including REST clients, online OpenAPI clients, Swagger UI, OpenAPI viewers, converters, proxies, and automation tools.
 showads: true
 ---
 
@@ -20,6 +20,7 @@ Tools help you create requests, inspect responses, compare API documentation wit
 | [Online Clients](/tools/online-clients) | Which browser-based clients and OpenAPI UI showcases are hosted on this site. |
 | [OpenAPI Converter](/tools/online-clients/openapi-converter) | How to create more permissive OpenAPI files for tester-friendly exploration. |
 | [Proxies](/tools/proxies) | Why proxies help you trust the actual HTTP traffic rather than only the client UI. |
+| [Automation](/tools/automation) | Tools that run API tests or fuzz an API from its OpenAPI description. |
 
 ## Recommended Starting Points
 
@@ -28,3 +29,5 @@ For day-to-day exploratory API testing, start with a REST client such as [API Sp
 For quick OpenAPI exploration in the browser, use the [Online Clients](/tools/online-clients) section. It includes Swagger UI, OpenAPI Explorer, Scalar, Stoplight Elements, Zudoku, Redoc, the Basic Client, and the OpenAPI Converter.
 
 For deeper investigation, add a proxy so you can inspect exactly what was sent and received.
+
+For automated discovery, try the [Automation](/tools/automation) section. These tools are not replacements for exploratory testing, but they can generate useful coverage and contract feedback from an OpenAPI file.

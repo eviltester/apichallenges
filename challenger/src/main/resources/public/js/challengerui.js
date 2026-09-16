@@ -126,7 +126,7 @@ function closeChallengerGuidDialog(){
     }
 }
 
-const SINGLE_PLAYER_CHALLENGER_GUID = "rest-api-challenges-single-player";
+const SINGLE_PLAYER_CHALLENGER_GUID = "5afe0000-5eed-4000-8000-000000defa17";
 const PREVIOUS_CHALLENGER_GUIDS_MAX = 5;
 const ACHIEVEMENT_DEFINITIONS = [
     {
