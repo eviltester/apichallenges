@@ -177,8 +177,8 @@ If a solution exposes a gap in your understanding, step back to the supporting m
 
 ## Authentication Challenges
 
-- [POST /api/secret/token (401)](/apichallenges/solutions/authentication/post-secret-401)
-- [POST /api/secret/token (201)](/apichallenges/solutions/authentication/post-secret-201)
+- [GET /api/secret/token (401)](/apichallenges/solutions/authentication/get-secret-token-401)
+- [GET /api/secret/token (200)](/apichallenges/solutions/authentication/get-secret-token-200)
 
 ## Authorization Challenges
 

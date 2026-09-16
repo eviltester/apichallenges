@@ -1,7 +1,10 @@
 package uk.co.compendiumdev.challenge.challengesrouting;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,6 +76,38 @@ public class ApiChallengeRouteCompatibilityTest {
         assertBearerAuthenticationChallenge(postResponse);
     }
 
+    @ParameterizedTest(name = "generated secret entity route {1} is not public under {0}")
+    @MethodSource("generatedSecretEntityRoutes")
+    void generatedSecretEntityRoutesAreNotPublic(final String prefix, final String route) {
+        http.clearHeaders();
+
+        HttpResponseDetails response = http.send(path(prefix, route), "get");
+
+        Assertions.assertEquals(404, response.statusCode);
+    }
+
+    @ParameterizedTest(name = "challenger database export only exposes todos under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void challengerDatabaseExportDoesNotExposeHiddenSecretEntities(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challengerId);
+        HttpResponseDetails databaseResponse =
+                http.send(path(prefix, "/challenger/database/" + challengerId), "get");
+
+        Assertions.assertEquals(200, databaseResponse.statusCode);
+        final JsonObject databaseExport =
+                JsonParser.parseString(databaseResponse.body).getAsJsonObject();
+        Assertions.assertTrue(databaseExport.has("todos"));
+        Assertions.assertFalse(databaseExport.has(SecretThingifier.TOKEN_COLLECTION));
+        Assertions.assertFalse(databaseExport.has(SecretThingifier.NOTE_COLLECTION));
+    }
+
     @ParameterizedTest(name = "challenge completion works under {0}")
     @MethodSource("apiRoutePrefixes")
     void challengeCompletionWorksThroughCanonicalAndLegacyRoutes(final String prefix) {
@@ -92,6 +127,114 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertNotNull(challenger);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_HEARTBEAT_204));
+    }
+
+    @ParameterizedTest(name = "Thingifier afterResponse callbacks run under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void thingifierRouteCallbacksRunThroughCanonicalAndLegacyAliases(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        Map<String, String> jsonHeaders = headersFor(challengerId, "application/json");
+        HttpResponseDetails createdDoneTodo =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        jsonHeaders,
+                        "{\"title\":\"alias callback done\",\"doneStatus\":true,\"description\":\"\"}");
+        Assertions.assertEquals(201, createdDoneTodo.statusCode);
+
+        HttpResponseDetails createdNotDoneTodo =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        jsonHeaders,
+                        "{\"title\":\"alias callback not done\",\"doneStatus\":false,\"description\":\"\"}");
+        Assertions.assertEquals(201, createdNotDoneTodo.statusCode);
+
+        Map<String, String> xmlAcceptHeaders = headersFor(challengerId, "application/json");
+        xmlAcceptHeaders.put("Accept", "text/xml");
+        Assertions.assertEquals(
+                200, http.send(path(prefix, "/todos"), "get", xmlAcceptHeaders, "").statusCode);
+
+        Map<String, String> vendorXmlHeaders =
+                headersFor(challengerId, "application/vnd.apichallenges.todo+xml");
+        vendorXmlHeaders.put("Accept", "application/json");
+        Assertions.assertEquals(
+                201,
+                http.send(
+                                path(prefix, "/todos"),
+                                "post",
+                                vendorXmlHeaders,
+                                "<todo><title>alias vendor xml</title><doneStatus>true</doneStatus></todo>")
+                        .statusCode);
+
+        Map<String, String> structuredQueryHeaders =
+                headersFor(challengerId, "application/vnd.thingifier.query+json");
+        structuredQueryHeaders.put("Accept", "application/json");
+        Assertions.assertEquals(
+                200,
+                http.send(
+                                path(prefix, "/todos"),
+                                "query",
+                                structuredQueryHeaders,
+                                "{\"filter\":{\"doneStatus\":true}}")
+                        .statusCode);
+
+        Map<String, String> jsonPatchHeaders =
+                headersFor(challengerId, "application/json-patch+json");
+        Assertions.assertEquals(
+                200,
+                http.send(
+                                path(
+                                        prefix,
+                                        "/todos/"
+                                                + lastPathSegment(
+                                                        createdDoneTodo.getHeader("Location"))),
+                                "patch",
+                                jsonPatchHeaders,
+                                "[{\"op\":\"replace\",\"path\":\"/title\",\"value\":\"alias patched\"}]")
+                        .statusCode);
+
+        Map<String, String> basicAuthHeaders = headersFor(challengerId, "application/json");
+        basicAuthHeaders.put("Authorization", "basic YWRtaW46cGFzc3dvcmQ=");
+        Assertions.assertEquals(
+                200,
+                http.send(path(prefix, "/secret/token"), "get", basicAuthHeaders, "").statusCode);
+
+        ChallengerAuthData challenger = challengerFor(challengerId);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_TODOS));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_ACCEPT_TEXT_XML));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_CREATE_VENDOR_XML));
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PATCH_TODOS_JSON_PATCH_200));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_200));
+    }
+
+    @ParameterizedTest(name = "created todo Location uses active route prefix under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void createdTodoLocationHeaderUsesActiveRoutePrefix(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        HttpResponseDetails created =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        Map.of("X-CHALLENGER", challengerId, "Content-Type", "application/json"),
+                        "{\"title\":\"mounted route todo\",\"doneStatus\":false,\"description\":\"\"}");
+
+        Assertions.assertEquals(201, created.statusCode);
+        Assertions.assertTrue(
+                created.getHeader("Location").startsWith(path(prefix, "/todos/")),
+                created.getHeader("Location"));
     }
 
     @ParameterizedTest(name = "docs compatibility route {0} redirects to {1}")
@@ -131,11 +274,9 @@ public class ApiChallengeRouteCompatibilityTest {
         final JsonObject paths = canonicalOpenApiPaths();
 
         Assertions.assertEquals(
-                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header for read-only access to /api/secret/note.",
+                "GET /api/secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.",
                 operationSummary(paths, "/api/secret/token", "get"));
-        Assertions.assertEquals(
-                "POST /api/secret/token with basic auth to get a secret token to use as X-AUTH-TOKEN header, to allow access to the /api/secret/note end points.",
-                operationSummary(paths, "/api/secret/token", "post"));
+        Assertions.assertFalse(paths.getAsJsonObject("/api/secret/token").has("post"));
         Assertions.assertEquals(
                 "GET /api/secret/note with X-AUTH-TOKEN to return the secret note for the user.",
                 operationSummary(paths, "/api/secret/note", "get"));
@@ -144,12 +285,59 @@ public class ApiChallengeRouteCompatibilityTest {
                 operationSummary(paths, "/api/secret/note", "post"));
     }
 
+    @Test
+    void canonicalOpenApiSecretResponsesUseSingleEntitySchemas() {
+        final JsonObject paths = canonicalOpenApiPaths();
+
+        assertJsonResponseSchemaRef(paths, "/api/secret/token", "get", SecretThingifier.TOKEN_VIEW);
+        assertJsonResponseSchemaRef(paths, "/api/secret/note", "get", SecretThingifier.NOTE_VIEW);
+        assertJsonResponseSchemaRef(paths, "/api/secret/note", "post", SecretThingifier.NOTE_VIEW);
+    }
+
+    @Test
+    void canonicalOpenApiSecretNoteDocumentsBearerAndApiKeySecurity() {
+        final JsonObject openApi = canonicalOpenApi();
+        final JsonObject securitySchemes =
+                openApi.getAsJsonObject("components").getAsJsonObject("securitySchemes");
+        final JsonObject bearerScheme =
+                securitySchemes.getAsJsonObject(SecretThingifier.TOKEN_SCHEME);
+        final JsonObject apiKeyScheme =
+                securitySchemes.getAsJsonObject(SecretThingifier.API_KEY_SCHEME);
+        final JsonObject secretNotePath =
+                openApi.getAsJsonObject("paths").getAsJsonObject("/api/secret/note");
+
+        Assertions.assertEquals("http", bearerScheme.get("type").getAsString());
+        Assertions.assertEquals("bearer", bearerScheme.get("scheme").getAsString());
+        Assertions.assertEquals("apiKey", apiKeyScheme.get("type").getAsString());
+        Assertions.assertEquals("header", apiKeyScheme.get("in").getAsString());
+        Assertions.assertEquals("X-AUTH-TOKEN", apiKeyScheme.get("name").getAsString());
+        assertSecurityAlternatives(
+                secretNotePath.getAsJsonObject("get"),
+                SecretThingifier.TOKEN_SCHEME,
+                SecretThingifier.API_KEY_SCHEME);
+        assertSecurityAlternatives(
+                secretNotePath.getAsJsonObject("post"),
+                SecretThingifier.TOKEN_SCHEME,
+                SecretThingifier.API_KEY_SCHEME);
+    }
+
     private static Stream<Arguments> apiRoutePrefixes() {
         return Stream.of(Arguments.of("/api"), Arguments.of(""));
     }
 
     private static Stream<Arguments> openApiDocumentationRoutes() {
         return Stream.of(Arguments.of("/api/docs/openapi.json", "/api/todos"));
+    }
+
+    private static Stream<Arguments> generatedSecretEntityRoutes() {
+        return Stream.of("/api", "")
+                .flatMap(
+                        prefix ->
+                                Stream.of(
+                                        Arguments.of(prefix, "/secrettokens"),
+                                        Arguments.of(prefix, "/secrettokens/token"),
+                                        Arguments.of(prefix, "/secretnotes"),
+                                        Arguments.of(prefix, "/secretnotes/note")));
     }
 
     private static Stream<Arguments> legacyDocsRedirectRoutes() {
@@ -169,10 +357,14 @@ public class ApiChallengeRouteCompatibilityTest {
     }
 
     private JsonObject canonicalOpenApiPaths() {
+        return canonicalOpenApi().getAsJsonObject("paths");
+    }
+
+    private JsonObject canonicalOpenApi() {
         final HttpResponseDetails response = http.send("/api/docs/openapi.json", "get");
 
         Assertions.assertEquals(200, response.statusCode);
-        return JsonParser.parseString(response.body).getAsJsonObject().getAsJsonObject("paths");
+        return JsonParser.parseString(response.body).getAsJsonObject();
     }
 
     private String operationSummary(
@@ -180,8 +372,57 @@ public class ApiChallengeRouteCompatibilityTest {
         return paths.getAsJsonObject(path).getAsJsonObject(operation).get("summary").getAsString();
     }
 
+    private void assertJsonResponseSchemaRef(
+            final JsonObject paths,
+            final String path,
+            final String operation,
+            final String schemaName) {
+        final JsonObject schema =
+                paths.getAsJsonObject(path)
+                        .getAsJsonObject(operation)
+                        .getAsJsonObject("responses")
+                        .getAsJsonObject("200")
+                        .getAsJsonObject("content")
+                        .getAsJsonObject("application/json")
+                        .getAsJsonObject("schema");
+
+        Assertions.assertEquals(
+                "#/components/schemas/" + schemaName, schema.get("$ref").getAsString());
+    }
+
+    private void assertSecurityAlternatives(
+            final JsonObject operation, final String... expectedSchemeNames) {
+        final JsonArray security = operation.getAsJsonArray("security");
+
+        Assertions.assertEquals(expectedSchemeNames.length, security.size());
+        for (int index = 0; index < expectedSchemeNames.length; index++) {
+            Assertions.assertTrue(
+                    security.get(index).getAsJsonObject().has(expectedSchemeNames[index]),
+                    security.toString());
+        }
+    }
+
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
         Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
+    }
+
+    private Map<String, String> headersFor(final String challengerId, final String contentType) {
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("X-CHALLENGER", challengerId);
+        headers.put("Content-Type", contentType);
+        return headers;
+    }
+
+    private ChallengerAuthData challengerFor(final String challengerId) {
+        ChallengerAuthData challenger =
+                ChallengeMain.getChallenger().getChallengers().getChallenger(challengerId);
+        Assertions.assertNotNull(challenger);
+        return challenger;
+    }
+
+    private String lastPathSegment(final String location) {
+        Assertions.assertNotNull(location);
+        return location.substring(location.lastIndexOf("/") + 1);
     }
 
     private static String path(final String prefix, final String route) {

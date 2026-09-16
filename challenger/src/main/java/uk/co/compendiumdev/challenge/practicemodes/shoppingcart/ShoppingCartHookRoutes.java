@@ -77,14 +77,11 @@ final class ShoppingCartHookRoutes {
                 postCartItems, writeHooks::rejectMissingQuantityForExistingCartItemUpdate);
         shopRouting.registerAfterValidationHook(
                 postCartItems, writeHooks::rejectMissingProductOrQuantity);
-        shopRouting.registerAfterValidationHook(
-                postCartItems, writeHooks::allowQuantityLessThanZeroBug);
-        shopRouting.registerAfterValidationHook(postCartItems, writeHooks::allowQuantityZeroBug);
-        shopRouting.registerAfterValidationHook(
-                postCartItems, writeHooks::allowQuantityGreaterThanStockBug);
         shopRouting.registerAfterValidationHook(postCartItems, writeHooks::rejectUnknownProduct);
         shopRouting.registerBeforeActionHook(
                 postCartItems, writeHooks::allowClosedCartModificationBug);
+        shopRouting.registerAfterActionHook(
+                postCartItems, writeHooks::returnStockDomainValidationAsConflict);
         shopRouting.registerAfterActionHook(
                 postCartItems, writeHooks::returnCartItemWriteWorkflowResponse);
     }

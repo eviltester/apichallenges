@@ -131,8 +131,7 @@ public final class CdnCachePolicy {
                 || path.startsWith("/js/")
                 || path.startsWith("/favicon/")
                 || path.startsWith("/images/")
-                || path.equals("/robots.txt")
-                || path.equals("/sitemap.bak");
+                || path.equals("/robots.txt");
     }
 
     private static boolean isDocsPath(final String path) {

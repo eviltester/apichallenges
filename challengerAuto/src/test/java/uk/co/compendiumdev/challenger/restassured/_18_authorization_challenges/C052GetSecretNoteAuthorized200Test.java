@@ -25,9 +25,9 @@ public class C052GetSecretNoteAuthorized200Test extends RestAssuredBaseTest {
                         .preemptive()
                         .basic("admin", "password")
                         .when()
-                        .post(apiPath("/secret/token"))
+                        .get(apiPath("/secret/token"))
                         .then()
-                        .statusCode(201)
+                        .statusCode(200)
                         .extract()
                         .header("X-AUTH-TOKEN");
 

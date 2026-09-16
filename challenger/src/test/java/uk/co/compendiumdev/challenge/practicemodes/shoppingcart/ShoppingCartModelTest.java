@@ -11,6 +11,7 @@ import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.F
 import uk.co.compendiumdev.thingifier.core.domain.definitions.field.definition.FieldType;
 import uk.co.compendiumdev.thingifier.core.domain.definitions.relationship.RelationshipVectorDefinition;
 import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstance;
+import uk.co.compendiumdev.thingifier.core.domain.instances.EntityInstanceDraft;
 import uk.co.compendiumdev.thingifier.core.repository.ThingStore;
 
 class ShoppingCartModelTest {
@@ -116,5 +117,66 @@ class ShoppingCartModelTest {
         Assertions.assertTrue(stockedProducts >= ShoppingCartMaintenance.MIN_STOCKED_PRODUCTS);
         Assertions.assertEquals(0, ShoppingCartSupport.list(shop, store, "cart").size());
         Assertions.assertEquals(0, ShoppingCartSupport.list(shop, store, "cartitem").size());
+    }
+
+    @Test
+    void cleanModeMovesCartItemQuantityRulesIntoModelValidation() {
+        final Thingifier shop = new ShoppingCartThingifier().get(ShoppingCartBugMode.NONE);
+        final EntityDefinition cartItem = shop.getDefinitionNamed("cartitem");
+        final ThingStore store = shop.getERmodel().getStore(EntityRelModel.DEFAULT_DATABASE_NAME);
+        final EntityInstance product = ShoppingCartSupport.list(shop, store, "product").get(0);
+
+        Assertions.assertEquals(1, cartItem.getField("quantity").customValidators().size());
+        Assertions.assertEquals(1, cartItem.domainValidators().size());
+
+        final IllegalArgumentException zeroQuantity =
+                Assertions.assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                store.entities()
+                                        .create(
+                                                EntityInstanceDraft.forEntity(cartItem)
+                                                        .withField(
+                                                                "productId",
+                                                                product.getPrimaryKeyValue())
+                                                        .withField("quantity", "0")));
+        Assertions.assertTrue(
+                zeroQuantity
+                        .getMessage()
+                        .contains(ShoppingCartValidationRules.QUANTITY_MUST_BE_POSITIVE));
+
+        final IllegalArgumentException overStock =
+                Assertions.assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                store.entities()
+                                        .create(
+                                                EntityInstanceDraft.forEntity(cartItem)
+                                                        .withField(
+                                                                "productId",
+                                                                product.getPrimaryKeyValue())
+                                                        .withField(
+                                                                "quantity",
+                                                                String.valueOf(
+                                                                        ShoppingCartSupport
+                                                                                        .intValue(
+                                                                                                product,
+                                                                                                "stock")
+                                                                                + 1))));
+        Assertions.assertTrue(
+                overStock
+                        .getMessage()
+                        .contains(
+                                ShoppingCartValidationRules
+                                        .QUANTITY_EXCEEDS_CURRENT_PRODUCT_STOCK));
+    }
+
+    @Test
+    void classicModeKeepsCartItemQuantityBugsOutOfModelValidation() {
+        final Thingifier shop = new ShoppingCartThingifier().get();
+        final EntityDefinition cartItem = shop.getDefinitionNamed("cartitem");
+
+        Assertions.assertEquals(0, cartItem.getField("quantity").customValidators().size());
+        Assertions.assertEquals(0, cartItem.domainValidators().size());
     }
 }

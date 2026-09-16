@@ -4,33 +4,35 @@ import uk.co.compendiumdev.challenge.challenges.ChallengeDefinitionData;
 
 public class SecretTokenChallenges {
 
-    //    POST /api/secret/token with incorrect username and password credentials get 401
+    //    GET /api/secret/token with incorrect username and password credentials get 401
     public static ChallengeDefinitionData createSecretTokenNotAuthenticated401(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /api/secret/token (401)",
-                        "Issue a POST request on the `/api/secret/token` end point and receive 401 when Basic auth username/password is not admin/password");
+                        "GET /api/secret/token (401)",
+                        "Issue a GET request on the `/api/secret/token` end point and receive 401 when Basic auth username/password is not admin/password");
 
         aChallenge.addHint("Remember to add your X-CHALLENGER guid header");
         aChallenge.addSolutionLink(
-                "Read Solution", "HREF", "/apichallenges/solutions/authentication/post-secret-401");
-        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "RSQGADU3SLA");
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/authentication/get-secret-token-401");
         return aChallenge;
     }
 
-    //    POST /api/secret/token with correct username and password credentials get secret token 201
-    public static ChallengeDefinitionData createSecretTokenAuthenticated201(int challengeOrder) {
+    //    GET /api/secret/token with correct username and password credentials get secret token 200
+    public static ChallengeDefinitionData getSecretTokenAuthenticated200(int challengeOrder) {
         ChallengeDefinitionData aChallenge =
                 new ChallengeDefinitionData(
                         ChallengeRenderer.renderChallengeNumber(challengeOrder),
-                        "POST /api/secret/token (201)",
-                        "Issue a POST request on the `/api/secret/token` end point and receive 201 when Basic auth username/password is admin/password");
+                        "GET /api/secret/token (200)",
+                        "Issue a GET request on the `/api/secret/token` end point and receive 200 when Basic auth username/password is admin/password");
 
         aChallenge.addHint("Remember to add your X-CHALLENGER guid header");
         aChallenge.addSolutionLink(
-                "Read Solution", "HREF", "/apichallenges/solutions/authentication/post-secret-201");
-        aChallenge.addSolutionLink("Watch Insomnia Solution", "YOUTUBE", "J2GQiuEfHkI");
+                "Read Solution",
+                "HREF",
+                "/apichallenges/solutions/authentication/get-secret-token-200");
         return aChallenge;
     }
 

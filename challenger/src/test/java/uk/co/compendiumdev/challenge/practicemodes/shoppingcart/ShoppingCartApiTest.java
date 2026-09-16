@@ -698,14 +698,43 @@ class ShoppingCartApiTest {
     }
 
     private void startApp(final String... extraArgs) {
-        Environment.stop();
         final List<String> args = new ArrayList<>();
         args.add("-multiplayer");
         args.add("-nostorage");
         args.addAll(List.of(extraArgs));
-        ChallengeMain.main(args.toArray(String[]::new));
-        Environment.waitTillRunningStatus(true);
-        http = new HttpMessageSender("http://localhost:4567");
-        api = new ShoppingCartApiClient(http);
+        RuntimeException bindException = null;
+
+        for (int attempt = 0; attempt < 3; attempt++) {
+            Environment.stop();
+            try {
+                ChallengeMain.main(args.toArray(String[]::new));
+                Environment.waitTillRunningStatus(true);
+                http = new HttpMessageSender("http://localhost:4567");
+                api = new ShoppingCartApiClient(http);
+                return;
+            } catch (RuntimeException e) {
+                if (!isBindException(e)) {
+                    throw e;
+                }
+                bindException = e;
+                Environment.stop();
+                waitBeforeRetryingStart();
+            }
+        }
+
+        throw bindException;
+    }
+
+    private boolean isBindException(final RuntimeException exception) {
+        return "io.javalin.util.JavalinBindException".equals(exception.getClass().getName());
+    }
+
+    private void waitBeforeRetryingStart() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
     }
 }

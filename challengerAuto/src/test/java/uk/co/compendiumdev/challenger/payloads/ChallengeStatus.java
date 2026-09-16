@@ -45,7 +45,7 @@ public class ChallengeStatus {
     public Boolean GET_ACCEPT_STRUCTURED_XML_WILDCARD;
     public Boolean POST_CREATE_XML_ACCEPT_JSON;
     public Boolean POST_TODOS_415;
-    public Boolean CREATE_SECRET_TOKEN_201;
+    public Boolean GET_SECRET_TOKEN_200;
     public Boolean POST_CREATE_XML;
     public Boolean POST_CREATE_VENDOR_XML;
     public Boolean PUT_TODOS_422;
@@ -80,7 +80,7 @@ public class ChallengeStatus {
     public Boolean POST_ALL_TODOS;
     public Boolean GET_TODOS;
     public Boolean POST_SECRET_NOTE_403;
-    public Boolean CREATE_SECRET_TOKEN_401;
+    public Boolean GET_SECRET_TOKEN_401;
     public Boolean GET_SECRET_NOTE_401;
     public Boolean POST_MAX_OUT_TITLE_DESCRIPTION_LENGTH;
     public Boolean PUT_TODOS_FULL_200;

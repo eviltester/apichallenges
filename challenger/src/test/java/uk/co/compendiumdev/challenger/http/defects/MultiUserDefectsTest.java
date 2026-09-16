@@ -48,26 +48,20 @@ public class MultiUserDefectsTest {
         http.setHeader("X-CHALLENGER", notLoadedChallengerGUID);
         http.setHeader("Authorization", "basic YWRtaW46cGFzc3dvcmQ="); // admin:password
 
-        final HttpResponseDetails response = http.send("/secret/token", "POST");
-        Assertions.assertEquals(201, response.statusCode);
+        final HttpResponseDetails response = http.send("/secret/token", "GET");
+        Assertions.assertEquals(200, response.statusCode);
 
         Environment.stop();
     }
 
     @Test
-    public void inMultiPlayerModeNoXChallengerHeaderPostTokenCausedNullPointer() {
-
-        // in single player mode this test will 201 because we don't need challenger header
-        int expectedResponse = 401;
-        //        if(Environment.SINGLE_PLAYER_MODE){
-        //            expectedResponse=201;
-        //        }
+    public void inMultiPlayerModeNoXChallengerHeaderGetTokenReturnsReadOnlyToken() {
 
         final HttpMessageSender http = new HttpMessageSender(Environment.getBaseUri(false));
         http.setHeader("Authorization", "basic YWRtaW46cGFzc3dvcmQ="); // admin:password
 
-        final HttpResponseDetails response = http.send("/secret/token", "POST");
-        Assertions.assertEquals(expectedResponse, response.statusCode);
+        final HttpResponseDetails response = http.send("/secret/token", "GET");
+        Assertions.assertEquals(200, response.statusCode);
     }
 
     @Test

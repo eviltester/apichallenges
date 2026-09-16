@@ -32,7 +32,7 @@ public final class ShoppingCartRoutes {
         this.guiTemplates = guiTemplates;
         this.bugMode = bugMode;
         this.state = new ShoppingCartState();
-        this.shoppingCart = new ShoppingCartThingifier().get();
+        this.shoppingCart = new ShoppingCartThingifier().get(bugMode);
         this.maintenance = new ShoppingCartMaintenance(shoppingCart);
     }
 

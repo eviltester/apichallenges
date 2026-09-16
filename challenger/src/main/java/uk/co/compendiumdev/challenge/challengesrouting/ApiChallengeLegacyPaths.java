@@ -52,7 +52,6 @@ public final class ApiChallengeLegacyPaths {
                 .configure(challengers, singlePlayerMode, legacyApiDefn, challengeDefinitions, "");
         new HeartBeatRoutes().configure(legacyApiDefn, "");
         new TodoExportRoutes().configure(thingifier, legacyApiDefn, "");
-        new AuthRoutes().configure(challengers, legacyApiDefn, "");
 
         configureLegacyDocumentationRedirects();
 

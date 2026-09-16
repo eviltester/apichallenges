@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import uk.co.compendiumdev.challenger.restassured.api.ChallengesStatus;
 import uk.co.compendiumdev.challenger.restassured.api.RestAssuredBaseTest;
 
-public class C049PostAuthenticated201Test extends RestAssuredBaseTest {
+public class C049GetAuthenticated200Test extends RestAssuredBaseTest {
 
     @Test
     public void canGetASecretTokenWithCorrectAuth() {
@@ -20,15 +20,15 @@ public class C049PostAuthenticated201Test extends RestAssuredBaseTest {
                         .preemptive()
                         .basic("admin", "password")
                         .when()
-                        .post(apiPath("/secret/token"))
+                        .get(apiPath("/secret/token"))
                         .then()
-                        .statusCode(201)
+                        .statusCode(200)
                         .extract()
                         .header("X-AUTH-TOKEN");
 
         ChallengesStatus statuses = new ChallengesStatus();
         statuses.get();
-        Assertions.assertTrue(statuses.getChallengeNamed("POST /secret/token (201)").status);
+        Assertions.assertTrue(statuses.getChallengeNamed("GET /secret/token (200)").status);
 
         Assertions.assertNotNull(token);
         Assertions.assertTrue(token.length() > 10);

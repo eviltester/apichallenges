@@ -42,8 +42,8 @@ public class AuthRoutesTest {
 
         args.add(Arguments.of(401, "get", "/secret/token"));
         args.add(Arguments.of(405, "head", "/secret/token"));
+        args.add(Arguments.of(405, "post", "/secret/token"));
         args.add(Arguments.of(204, "options", "/secret/token"));
-        // post
         args.add(Arguments.of(405, "put", "/secret/token"));
         args.add(Arguments.of(405, "delete", "/secret/token"));
         args.add(Arguments.of(405, "patch", "/secret/token"));
@@ -64,8 +64,8 @@ public class AuthRoutesTest {
 
         args.add(Arguments.of(200, "get", "/secret/token"));
         args.add(Arguments.of(405, "head", "/secret/token"));
+        args.add(Arguments.of(405, "post", "/secret/token"));
         args.add(Arguments.of(204, "options", "/secret/token"));
-        // post
         args.add(Arguments.of(405, "put", "/secret/token"));
         args.add(Arguments.of(405, "delete", "/secret/token"));
         args.add(Arguments.of(405, "patch", "/secret/token"));
@@ -88,6 +88,28 @@ public class AuthRoutesTest {
     }
 
     @Test
+    void optionsSecretTokenAllowsOnlyPublicFixedRouteVerbs() {
+
+        http.clearHeaders();
+
+        final HttpResponseDetails response = http.send("/secret/token", "options");
+
+        Assertions.assertEquals(204, response.statusCode);
+        assertAllowHeaderContainsOnly(response, "GET", "OPTIONS");
+    }
+
+    @Test
+    void optionsSecretNoteAllowsOnlyPublicFixedRouteVerbs() {
+
+        http.clearHeaders();
+
+        final HttpResponseDetails response = http.send("/secret/note", "options");
+
+        Assertions.assertEquals(204, response.statusCode);
+        assertAllowHeaderContainsOnly(response, "GET", "HEAD", "POST", "OPTIONS");
+    }
+
+    @Test
     void noProcessingWhenNoBasicAuth() {
 
         http.clearHeaders();
@@ -95,7 +117,7 @@ public class AuthRoutesTest {
         // admin:password YWRtaW46cGFzc3dvcmQ=
         http.setHeader("Authentication", "basic " + base64("wrong:wrong"));
 
-        final HttpResponseDetails response = http.send("/secret/token", "post");
+        final HttpResponseDetails response = http.send("/secret/token", "get");
 
         Assertions.assertEquals(401, response.statusCode);
         Assertions.assertEquals(
@@ -112,7 +134,7 @@ public class AuthRoutesTest {
         http.setHeader("Authorization", "basic " + base64("wrong:wrong"));
         http.setHeader("X-API-Challenges-Live-Widget", "true");
 
-        final HttpResponseDetails response = http.send("/secret/token", "post");
+        final HttpResponseDetails response = http.send("/secret/token", "get");
 
         Assertions.assertEquals(401, response.statusCode);
         Assertions.assertNull(response.getHeader("WWW-Authenticate"));
@@ -121,18 +143,15 @@ public class AuthRoutesTest {
     }
 
     @Test
-    void noProcessingWhenPassBasicAuthButNoChallenger() {
+    void postSecretTokenIsNoLongerSupported() {
 
         http.clearHeaders();
-        // http.setHeader("X-CHALLENGER", challenger.getXChallenger());
-        // admin:password YWRtaW46cGFzc3dvcmQ=
+        http.setHeader("X-CHALLENGER", challenger.getXChallenger());
         http.setHeader("Authorization", "basic " + base64("admin:password"));
 
         final HttpResponseDetails response = http.send("/secret/token", "post");
 
-        Assertions.assertEquals(401, response.statusCode);
-        Assertions.assertEquals(
-                XChallengerHeader.NOT_FOUND_ERROR_MESSAGE, response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals(405, response.statusCode);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
     }
 
@@ -144,7 +163,7 @@ public class AuthRoutesTest {
         // admin:password YWRtaW46cGFzc3dvcmQ=
         http.setHeader("Authorization", "basic " + base64("admin:password"));
 
-        final HttpResponseDetails response = http.send("/secret/token", "post");
+        final HttpResponseDetails response = http.send("/secret/token", "get");
 
         Assertions.assertEquals(401, response.statusCode);
         Assertions.assertEquals(
@@ -157,14 +176,15 @@ public class AuthRoutesTest {
 
         http.clearHeaders();
         http.setHeader("X-CHALLENGER", challenger.getXChallenger());
-        // admin:password YWRtaW46cGFzc3dvcmQ=
         http.setHeader("Authorization", "basic " + base64("admin:password"));
 
-        final HttpResponseDetails response = http.send("/secret/token", "post");
+        final HttpResponseDetails response = http.send("/secret/token", "get");
 
-        Assertions.assertEquals(201, response.statusCode);
+        Assertions.assertEquals(200, response.statusCode);
         Assertions.assertEquals(challenger.getXAuthToken(), response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals(
+                "{\"token\":\"" + challenger.getXAuthToken() + "\"}", response.body);
     }
 
     @Test
@@ -248,7 +268,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "get");
 
         Assertions.assertEquals(401, response.statusCode);
-        assertBearerAuthenticationChallenge(response);
+        assertNoAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -335,6 +355,27 @@ public class AuthRoutesTest {
     }
 
     @Test
+    void canGetSecretNoteSeededFromChallengerDataScopePopulation() {
+
+        final ChallengerAuthData aNewChallenger =
+                ChallengeMain.getChallenger().getChallengers().createNewChallenger();
+        aNewChallenger.setNote("seeded by challenger custom data");
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", aNewChallenger.getXChallenger());
+        http.setHeader("X-AUTH-TOKEN", aNewChallenger.getXAuthToken());
+        http.setHeader("Authorization", "basic " + base64("admin:password"));
+
+        final HttpResponseDetails response = http.send("/secret/note", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals(
+                aNewChallenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals("{\"note\":\"seeded by challenger custom data\"}", response.body);
+    }
+
+    @Test
     void canGetSecretNoteAsXML() {
 
         final ChallengerAuthData aNewChallenger =
@@ -406,7 +447,7 @@ public class AuthRoutesTest {
         final HttpResponseDetails response = http.send("/secret/note", "post");
 
         Assertions.assertEquals(401, response.statusCode);
-        assertBearerAuthenticationChallenge(response);
+        assertNoAuthenticationChallenge(response);
         Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
         Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
     }
@@ -468,6 +509,44 @@ public class AuthRoutesTest {
 
         final HttpResponseDetails getresponse = http.get("/secret/note");
         Assertions.assertEquals("{\"note\":\"hello\"}", getresponse.body);
+        Assertions.assertEquals("hello", challenger.getNote());
+    }
+
+    @Test
+    void canPostSecretNoteWhenPayloadIdentifierMatchesFixedRouteIdentifier() {
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challenger.getXChallenger());
+        http.setHeader("X-AUTH-TOKEN", challenger.getXAuthToken());
+        http.setHeader("Authorization", "basic " + base64("admin:password"));
+        http.setHeader("Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                http.post("/secret/note", "{\"id\":\"note\",\"note\":\"hello\"}");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
+        Assertions.assertEquals("{\"note\":\"hello\"}", response.body);
+    }
+
+    @Test
+    void cannotPostSecretNoteWhenPayloadIdentifierConflictsWithFixedRouteIdentifier() {
+
+        http.clearHeaders();
+        http.setHeader("X-CHALLENGER", challenger.getXChallenger());
+        http.setHeader("X-AUTH-TOKEN", challenger.getXAuthToken());
+        http.setHeader("Authorization", "basic " + base64("admin:password"));
+        http.setHeader("Content-Type", "application/json");
+
+        final HttpResponseDetails response =
+                http.post("/secret/note", "{\"id\":\"wrong\",\"note\":\"hello\"}");
+
+        Assertions.assertEquals(422, response.statusCode);
+        Assertions.assertNull(response.getHeader("X-AUTH-TOKEN"));
+        Assertions.assertEquals(challenger.getXChallenger(), response.getHeader("X-CHALLENGER"));
+        Assertions.assertEquals("application/json", response.getHeader("Content-Type"));
     }
 
     @Test
@@ -724,5 +803,23 @@ public class AuthRoutesTest {
 
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
         Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
+    }
+
+    private void assertNoAuthenticationChallenge(final HttpResponseDetails response) {
+        Assertions.assertNull(response.getHeader("WWW-Authenticate"));
+    }
+
+    private void assertAllowHeaderContainsOnly(
+            final HttpResponseDetails response, final String... methods) {
+        final String allowHeader = response.getHeader("Allow");
+        Assertions.assertNotNull(allowHeader);
+
+        final List<String> actualMethods =
+                Stream.of(allowHeader.split(",")).map(String::trim).toList();
+
+        Assertions.assertEquals(methods.length, actualMethods.size(), allowHeader);
+        for (String method : methods) {
+            Assertions.assertTrue(actualMethods.contains(method), allowHeader);
+        }
     }
 }

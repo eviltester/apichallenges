@@ -24,7 +24,7 @@ In the API Challenges we do this by POST request to the user's secrete note endp
 
 ## 	POST Amend Secret Note Challenge
 
-Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`POST /api/secret/token (201)`](/apichallenges/solutions/authentication/post-secret-201).
+Most of the challenges simply require the correct payload, and an X-Challenger header to track the session. The authentication challenges require an extra header, the value for which can only be obtained with a username and password. This value is obtained when completing [`GET /api/secret/token (200)`](/apichallenges/solutions/authentication/get-secret-token-200).
 
 The `X-CHALLENGER` header authenticates you to access a specific set of secret notes, and the `X-AUTH-TOKEN` authorizes you to gain access.
 
@@ -39,7 +39,7 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 - `POST` request means use the HTTP Verb POST
   - e.g. `POST /api/secret/note` sends to the secret note endpoint
 - `with a note payload` include a `JSON` formatted object as the payload    
-- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `POST /api/secret/token (201)` response
+- `valid X-AUTH-TOKEN used` means a custom header named `X-AUTH-TOKEN` should be added to the message with the value received from the `GET /api/secret/token (200)` response
 - add the `X-CHALLENGER` header to track progress and authenticate the request
 - Receive a 200 response because both `X-CHALLENGER` and `X-AUTH-TOKEN` are for the same user and the payload was well formatted.
 
@@ -61,9 +61,9 @@ The `X-CHALLENGER` header authenticates you to access a specific set of secret n
 
 ### Try it now
 
-If you do not already have an auth token, create one with `POST /api/secret/token`. [See the solution](/apichallenges/solutions/authentication/post-secret-201).
+If you do not already have an auth token, retrieve one with `GET /api/secret/token`. [See the solution](/apichallenges/solutions/authentication/get-secret-token-200).
 
-{{<api-live-request method="POST" path="/api/secret/token" expected-status="201" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="POST /api/secret/token to create an auth token">}}
+{{<api-live-request method="GET" path="/api/secret/token" expected-status="200" headers="Authorization: Basic YWRtaW46cGFzc3dvcmQ=||Accept: */*" details="true" summary="GET /api/secret/token to retrieve an auth token">}}
 
 {{<api-live-request method="POST" path="/api/secret/note" expected-status="200" headers="X-AUTH-TOKEN: {{authToken}}||Accept: application/json" body='{"note":"note from solution widget"}' details="true" summary="POST /api/secret/note with X-AUTH-TOKEN to update the secret note" open="true">}}
 

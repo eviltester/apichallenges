@@ -166,46 +166,16 @@ final class ShoppingCartWriteLifecycleHooks {
     }
 
     /**
-     * The model allows negative quantities so the buggy API can demonstrate this defect. Clean mode
-     * rejects negative quantities here without changing the shared model.
+     * Current stock is now validated by the cartitem domain rule on the model. Keep the public
+     * API's existing 409 response because Thingifier model validation errors map as validation
+     * failures.
      */
-    void allowQuantityLessThanZeroBug(final AfterValidationContext context) {
-        if (allowQuantityLessThanZeroBugApplies(context)) {
+    void returnStockDomainValidationAsConflict(final AfterActionContext context) {
+        if (modelWriteDidNotFailWith(
+                context, ShoppingCartValidationRules.QUANTITY_EXCEEDS_CURRENT_PRODUCT_STOCK)) {
             return;
         }
-
-        if (quantityIsLessThanZero(context)) {
-            rejectQuantityMustBeGreaterThanZero(context);
-        }
-    }
-
-    /**
-     * The model accepts zero so the buggy API can demonstrate this defect. Clean mode rejects zero
-     * here because a cart item should have a quantity greater than zero.
-     */
-    void allowQuantityZeroBug(final AfterValidationContext context) {
-        if (allowQuantityZeroBugApplies(context)) {
-            return;
-        }
-
-        if (quantityIsZero(context)) {
-            rejectQuantityMustBeGreaterThanZero(context);
-        }
-    }
-
-    /**
-     * Quantity has to be checked against the selected product's current stock. That requires
-     * looking up the product record, so this happens after the request body has been validated. The
-     * classic bug lets callers order more than the available stock.
-     */
-    void allowQuantityGreaterThanStockBug(final AfterValidationContext context) {
-        if (allowQuantityGreaterThanStockBugApplies(context)) {
-            return;
-        }
-
-        if (quantityIsGreaterThanAvailableStock(context)) {
-            rejectQuantityExceedsCurrentProductStock(context);
-        }
+        rejectQuantityExceedsCurrentProductStock(context);
     }
 
     /**
@@ -351,46 +321,8 @@ final class ShoppingCartWriteLifecycleHooks {
                 ThingCommandResult.error("productId and quantity are required"));
     }
 
-    private boolean allowQuantityLessThanZeroBugApplies(
-            final ThingifierApiLifecycleContextView context) {
-        return bugMode.bugsEnabled() && quantityIsLessThanZero(context);
-    }
-
-    private boolean quantityIsLessThanZero(final ThingifierApiLifecycleContextView context) {
-        final Integer quantity = quantityFromBody(context);
-        return quantity != null && quantity < 0;
-    }
-
-    private boolean allowQuantityZeroBugApplies(final ThingifierApiLifecycleContextView context) {
-        return bugMode.bugsEnabled() && quantityIsZero(context);
-    }
-
-    private boolean quantityIsZero(final ThingifierApiLifecycleContextView context) {
-        final Integer quantity = quantityFromBody(context);
-        return quantity != null && quantity == 0;
-    }
-
-    private void rejectQuantityMustBeGreaterThanZero(final AfterValidationContext context) {
-        context.replaceValidationResult(
-                ThingCommandResult.error("quantity must be greater than 0"));
-    }
-
-    private boolean allowQuantityGreaterThanStockBugApplies(
-            final ThingifierApiLifecycleContextView context) {
-        return bugMode.bugsEnabled() && quantityIsGreaterThanAvailableStock(context);
-    }
-
-    private boolean quantityIsGreaterThanAvailableStock(
-            final ThingifierApiLifecycleContextView context) {
-        final Integer quantity = quantityFromBody(context);
-        final EntityInstance product = productForCartItemWrite(context);
-        return quantity != null
-                && product != null
-                && quantity > ShoppingCartSupport.intValue(product, "stock");
-    }
-
-    private void rejectQuantityExceedsCurrentProductStock(final AfterValidationContext context) {
-        context.shortCircuitWith(
+    private void rejectQuantityExceedsCurrentProductStock(final AfterActionContext context) {
+        context.replaceApiResponse(
                 ShoppingCartSupport.apiError(409, "quantity exceeds current product stock"));
     }
 
@@ -400,6 +332,13 @@ final class ShoppingCartWriteLifecycleHooks {
 
     private void rejectProductNotFound(final AfterValidationContext context) {
         context.shortCircuitWith(ShoppingCartSupport.apiError(404, "Product not found"));
+    }
+
+    private boolean modelWriteDidNotFailWith(
+            final AfterActionContext context, final String message) {
+        return context.writeCommandResult() == null
+                || !context.writeCommandResult().isError()
+                || !context.writeCommandResult().getCombinedErrorMessage().contains(message);
     }
 
     private boolean allowClosedCartModificationBugApplies(final EntityInstance cart) {

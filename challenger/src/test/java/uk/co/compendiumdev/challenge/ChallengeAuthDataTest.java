@@ -1,6 +1,8 @@
 package uk.co.compendiumdev.challenge;
 
+import com.google.gson.Gson;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +73,38 @@ public class ChallengeAuthDataTest {
         for (CHALLENGE challenge : CHALLENGE.values()) {
             Assertions.assertTrue(authData.statusOfChallenge(challenge));
         }
+    }
+
+    @Test
+    void canMapLegacySecretTokenChallengeStatuses() {
+
+        String legacyJson =
+                """
+                {
+                  "xAuthToken": "4567023d-5fe0-4d46-a0fa-2fe717ae29fe",
+                  "xChallenger": "2ce954c6-caa1-4299-85af-205a9d9f7867",
+                  "secretNote": "",
+                  "challengeStatus": {
+                    "CREATE_SECRET_TOKEN_401": true,
+                    "CREATE_SECRET_TOKEN_201": true
+                  }
+                }
+                """;
+
+        ChallengerAuthData legacyData = new Gson().fromJson(legacyJson, ChallengerAuthData.class);
+        ChallengerAuthData restored =
+                new ChallengerAuthData(
+                                List.of(
+                                        CHALLENGE.GET_SECRET_TOKEN_401,
+                                        CHALLENGE.GET_SECRET_TOKEN_200))
+                        .fromData(
+                                legacyData,
+                                List.of(
+                                        CHALLENGE.GET_SECRET_TOKEN_401,
+                                        CHALLENGE.GET_SECRET_TOKEN_200));
+
+        Assertions.assertTrue(restored.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_401));
+        Assertions.assertTrue(restored.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_200));
     }
 
     @Test
