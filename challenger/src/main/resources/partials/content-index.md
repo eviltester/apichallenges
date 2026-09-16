@@ -84,8 +84,11 @@
             </summary>
             <ul class="side-toc-section-links">
                 <li>
-                    <a href="/tools/clients">REST/HTTP Clients</a>
-                    <ul>
+                    <details class="side-toc-section side-toc-tool-category" data-side-toc-section="tools-rest-clients">
+                        <summary class="side-toc-section-summary">
+                            <a class="side-toc-section-title" href="/tools/clients">REST Clients</a>
+                        </summary>
+                        <ul class="side-toc-section-links">
                         <li><a href="/tools/clients/summary-reviews">Summary Reviews</a></li>
                         <li>
                             Detailed Reviews:
@@ -103,12 +106,25 @@
                                 <li><a href="/tools/clients/yaak">Yaak</a></li>
                             </ul>
                         </li>
-                    </ul>
+                        </ul>
+                    </details>
                 </li>
-                <li><a href="/tools/proxies">Proxies</a></li>
                 <li>
-                    <a href="/tools/online-clients">Online Clients</a>
-                    <ul>
+                    <details class="side-toc-section side-toc-tool-category" data-side-toc-section="tools-proxies">
+                        <summary class="side-toc-section-summary">
+                            <a class="side-toc-section-title" href="/tools/proxies">Proxies</a>
+                        </summary>
+                        <ul class="side-toc-section-links">
+                            <li><a href="/tools/proxies">Proxies Overview</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="side-toc-section side-toc-tool-category" data-side-toc-section="tools-online-clients">
+                        <summary class="side-toc-section-summary">
+                            <a class="side-toc-section-title" href="/tools/online-clients">Online Clients</a>
+                        </summary>
+                        <ul class="side-toc-section-links">
                         <li><a href="/tools/online-clients/basic-client">Basic Client</a></li>
                         <li>
                             <a href="/tools/online-clients/swagger">Swagger UI</a>
@@ -147,13 +163,18 @@
                             </ul>
                         </li>
                         <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
-                    </ul>
+                        </ul>
+                    </details>
                 </li>
                 <li>
-                    <a href="/tools/automation">Automation</a>
-                    <ul>
-                        <li><a href="/tools/automation/evomaster">EvoMaster</a></li>
-                    </ul>
+                    <details class="side-toc-section side-toc-tool-category" data-side-toc-section="tools-automation">
+                        <summary class="side-toc-section-summary">
+                            <a class="side-toc-section-title" href="/tools/automation">Automation</a>
+                        </summary>
+                        <ul class="side-toc-section-links">
+                            <li><a href="/tools/automation/evomaster">EvoMaster</a></li>
+                        </ul>
+                    </details>
                 </li>
             </ul>
         </details>

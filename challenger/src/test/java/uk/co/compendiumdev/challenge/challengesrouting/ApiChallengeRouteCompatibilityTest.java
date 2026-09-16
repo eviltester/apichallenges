@@ -376,6 +376,9 @@ public class ApiChallengeRouteCompatibilityTest {
         assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "put", "400");
         assertResponseHasJsonContent(paths, "/api/challenger/database/{guid}", "put", "404");
         assertChallengerSchemaKeepsUuidFormat(paths, "/api/challenger/{guid}", "get");
+        assertResponseHasJsonContent(paths, "/api/todos", "put", "400");
+        assertResponseHasJsonContent(paths, "/api/todos/{id}", "post", "400");
+        assertResponseHasJsonContent(paths, "/api/todos/{id}", "put", "400");
         assertResponseHasJsonContent(paths, "/api/todos/export", "get", "200");
         Assertions.assertTrue(
                 operationResponse(paths, "/api/todos/export", "get", "200")

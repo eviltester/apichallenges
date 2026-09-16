@@ -147,9 +147,13 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertFalse(html.contains("Guided Tutorials"));
         assertContainsInOrder(
                 html,
-                "<a href=\"/tools/clients\">REST/HTTP Clients</a>",
-                "<li><a href=\"/tools/proxies\">Proxies</a></li>",
-                "<a href=\"/tools/online-clients\">Online Clients</a>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-rest-clients\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/clients\">REST Clients</a>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-proxies\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/proxies\">Proxies</a>",
+                "<li><a href=\"/tools/proxies\">Proxies Overview</a></li>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-online-clients\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/online-clients\">Online Clients</a>",
                 "<li><a href=\"/tools/online-clients/basic-client\">Basic Client</a></li>",
                 "<a href=\"/tools/online-clients/swagger\">Swagger UI</a>",
                 "<li><a href=\"/tools/online-clients/swagger/about\">About Swagger UI</a></li>",
@@ -164,7 +168,8 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<a href=\"/tools/online-clients/redoc\">Redoc</a>",
                 "<li><a href=\"/tools/online-clients/redoc/about\">About Redoc</a></li>",
                 "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>",
-                "<a href=\"/tools/automation\">Automation</a>",
+                "<details class=\"side-toc-section side-toc-tool-category\" data-side-toc-section=\"tools-automation\">",
+                "<a class=\"side-toc-section-title\" href=\"/tools/automation\">Automation</a>",
                 "<li><a href=\"/tools/automation/evomaster\">EvoMaster</a></li>");
         Assertions.assertEquals(1, countOccurrences(html, "href=\"/blog\""));
         Assertions.assertFalse(html.contains("href=\"/changes\""));

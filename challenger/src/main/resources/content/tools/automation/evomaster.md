@@ -299,7 +299,11 @@ I created an example in the apichallenges repo
 
 This uses the external driver capabilities and was a little slower in 2 minutes than the HTTP tests but provided a different insight.
 
-The EvoMaster documentation recommends starting with 10 minute runs and then moving to 24 hours for most benefits. I haven't pushed the fuzzing for this length yet but I did get a lot of value from the 2 minute runs I've tried.
+The EvoMaster documentation recommends starting with 10 minute runs and then moving to 24 hours for most benefits.
+
+I haven't pushed the fuzzing for this length yet but I did get a lot of value from the 2 minute runs I've tried.
+
+I upped the white box execution to 20 minutes and it found a few extra issues relating to OpenAPI contracts. So there may well be some additional benefit in running it longer.
 
 ## Reading The Report
 
