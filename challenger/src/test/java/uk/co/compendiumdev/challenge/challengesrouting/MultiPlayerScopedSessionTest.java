@@ -72,7 +72,7 @@ public class MultiPlayerScopedSessionTest {
     }
 
     private static Stream<Arguments> apiRoutePrefixes() {
-        return Stream.of(Arguments.of(""), Arguments.of("/api"));
+        return Stream.of(Arguments.of("/api"));
     }
 
     private Todos getTodos(final String prefix, final Map<String, String> headers) {

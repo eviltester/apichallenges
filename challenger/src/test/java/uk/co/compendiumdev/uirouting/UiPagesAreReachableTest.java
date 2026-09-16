@@ -208,13 +208,12 @@ public class UiPagesAreReachableTest {
                         "API Practice Modes | Challenges, Simulator, Simple API and Buggy API",
                         "/practice-modes"));
         args.add(
-                Arguments.of(
-                        200,
-                        "API Testing Tools | REST Clients, Online Clients, Proxies and Automation",
-                        "/tools"));
+                Arguments.of(200, "API Testing Tools | Clients, Proxies and Automation", "/tools"));
         args.add(
                 Arguments.of(
-                        200, "API Automation Tools for REST API Testing", "/tools/automation"));
+                        200,
+                        "API Automation Tools and Fuzzers for REST API Testing",
+                        "/tools/automation"));
         args.add(
                 Arguments.of(
                         200,

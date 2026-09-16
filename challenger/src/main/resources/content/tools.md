@@ -1,6 +1,6 @@
 ---
 title: API Testing Tools
-seo_title: API Testing Tools | REST Clients, Online Clients, Proxies and Automation
+seo_title: API Testing Tools | Clients, Proxies and Automation
 description: Tool guidance for REST clients, online OpenAPI clients, API viewers, converters, proxies, and automation tools used in API testing.
 lastmod: 2026-09-16
 seo_description: Compare API testing tools including REST clients, online OpenAPI clients, Swagger UI, OpenAPI viewers, converters, proxies, and automation tools.

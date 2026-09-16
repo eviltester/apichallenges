@@ -1,6 +1,6 @@
 ---
 title: API Automation Tools
-seo_title: API Automation Tools for REST API Testing
+seo_title: API Automation Tools and Fuzzers for REST API Testing
 description: A summary of API automation tools that can run generated checks, fuzz REST APIs, and compare OpenAPI documentation with real behaviour.
 lastmod: 2026-09-16
 seo_description: Review API automation tools for REST API testing, including fuzzers and generated test tools that work from OpenAPI files.
