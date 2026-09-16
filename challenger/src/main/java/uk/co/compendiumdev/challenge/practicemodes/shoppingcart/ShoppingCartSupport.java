@@ -97,7 +97,7 @@ final class ShoppingCartSupport {
     static int asInt(final String value, final int defaultValue) {
         try {
             return Integer.parseInt(value);
-        } catch (RuntimeException e) {
+        } catch (NumberFormatException e) {
             return defaultValue;
         }
     }

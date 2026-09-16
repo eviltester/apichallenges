@@ -11,7 +11,6 @@ import uk.co.compendiumdev.challenge.httpserver.CorsHeaders;
 import uk.co.compendiumdev.thingifier.adapter.httpserver.messagehooks.InternalHttpResponseHook;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpRequest;
 import uk.co.compendiumdev.thingifier.adapter.internalhttp.InternalHttpResponse;
-import uk.co.compendiumdev.thingifier.api.http.headers.headerparser.BearerAuthHeaderParser;
 
 public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseHook {
 
@@ -195,128 +194,6 @@ public class ChallengerInternalHTTPResponseHook implements InternalHttpResponseH
                     && contentDisposition.contains("filename=\"todos.tsv\"")) {
                 challengers.pass(challenger, CHALLENGE.GET_TODOS_EXPORT_TSV_CONTENT_DISPOSITION);
             }
-        }
-
-        if (request.getVerb() == PUT
-                && path.matches("todos/.*")
-                && response.getStatusCode() == 422) {
-            if (response.getBody().contains("Cannot create todo with PUT due to Auto fields id")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_422);
-            }
-        }
-
-        if (request.getVerb() == PUT
-                && path.matches("todos/.*")
-                && response.getStatusCode() == 200) {
-            if (request.getBody().toLowerCase().contains("donestatus")
-                    && request.getBody().toLowerCase().contains("description")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_FULL_200);
-            }
-        }
-
-        if (request.getVerb() == PUT
-                && path.matches("todos/.*")
-                && response.getStatusCode() == 422) {
-            if (response.getBody().contains("title : field is mandatory")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_MISSING_TITLE_422);
-            }
-        }
-
-        if (request.getVerb() == PUT
-                && path.matches("todos/.*")
-                && response.getStatusCode() == 200) {
-            if (!request.getBody().toLowerCase().contains("donestatus")
-                    && !request.getBody().toLowerCase().contains("description")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_PARTIAL_200);
-            }
-        }
-
-        if (request.getVerb() == PUT
-                && path.matches("todos/.*")
-                && response.getStatusCode() == 422) {
-            if (response.getBody().contains("Can not amend id from")) {
-                challengers.pass(challenger, CHALLENGE.PUT_TODOS_422_NO_AMEND_ID);
-            }
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/token")
-                && request.getHeaders().headerExists("Authorization")
-                && request.getHeader("Authorization").length() > 10
-                && response.getStatusCode() == 401) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_TOKEN_401);
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/token")
-                && request.getHeaders().headerExists("Authorization")
-                && request.getHeader("Authorization").length() > 10
-                && response.getStatusCode() == 200) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_TOKEN_200);
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && request.getHeader("X-AUTH-TOKEN").length() > 1
-                && response.getStatusCode() == 403) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_403);
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/note")
-                && !request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && response.getStatusCode() == 401) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_401);
-        }
-
-        if (request.getVerb() == POST
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && request.getHeader("X-AUTH-TOKEN").length() > 1
-                && request.getBody().contains("\"note\"")
-                && response.getStatusCode() == 403) {
-            challengers.pass(challenger, CHALLENGE.POST_SECRET_NOTE_403);
-        }
-
-        if (request.getVerb() == POST
-                && path.contentEquals("secret/note")
-                && !request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && request.getBody().contains("\"note\"")
-                && response.getStatusCode() == 401) {
-            challengers.pass(challenger, CHALLENGE.POST_SECRET_NOTE_401);
-        }
-
-        if (request.getVerb() == POST
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && request.getBody().contains("\"note\"")
-                && response.getStatusCode() == 200) {
-            challengers.pass(challenger, CHALLENGE.POST_SECRET_NOTE_200);
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("X-AUTH-TOKEN")
-                && response.getStatusCode() == 200) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_200);
-        }
-
-        if (request.getVerb() == GET
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("Authorization")
-                && new BearerAuthHeaderParser(request.getHeader("Authorization")).isValid()
-                && response.getStatusCode() == 200) {
-            challengers.pass(challenger, CHALLENGE.GET_SECRET_NOTE_BEARER_200);
-        }
-
-        if (request.getVerb() == POST
-                && path.contentEquals("secret/note")
-                && request.getHeaders().headerExists("Authorization")
-                && new BearerAuthHeaderParser(request.getHeader("Authorization")).isValid()
-                && request.getBody().contains("\"note\"")
-                && response.getStatusCode() == 200) {
-            challengers.pass(challenger, CHALLENGE.POST_SECRET_NOTE_BEARER_200);
         }
 
         if (response.getStatusCode() == 404

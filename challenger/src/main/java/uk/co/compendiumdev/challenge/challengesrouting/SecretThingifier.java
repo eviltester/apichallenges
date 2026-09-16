@@ -67,6 +67,8 @@ final class SecretThingifier {
         thingifier.apiContract().authenticator(BASIC_SCHEME, auth::authenticateAdminPassword);
         thingifier.apiContract().authenticator(TOKEN_SCHEME, auth::authenticateSecretToken);
         thingifier.apiContract().authenticator(API_KEY_SCHEME, auth::authenticateSecretToken);
+        final ChallengerThingifierRouteChallengeCompletion challengeCompletion =
+                new ChallengerThingifierRouteChallengeCompletion(thingifier, challengers);
         final ThingifierApiRouteRule getSecretToken =
                 thingifier
                         .apiContract()
@@ -79,6 +81,8 @@ final class SecretThingifier {
                         .secureWithBasicAuth(BASIC_SCHEME)
                         .addDocumentation(
                                 "GET /secret/token with basic auth to get an X-AUTH-TOKEN header and token response body for access to /api/secret/note.");
+        getSecretToken.afterResponse(
+                "complete-get-secret-token", challengeCompletion::getSecretToken);
         getSecretToken.onSuccess().addInstanceFieldAsHeader("X-AUTH-TOKEN", "token");
         configureSecretTokenAuthFailurePolicies(getSecretToken);
 
@@ -95,6 +99,7 @@ final class SecretThingifier {
                         .authorizeWith(auth::authorizeSecretNote)
                         .addDocumentation(
                                 "GET /secret/note with X-AUTH-TOKEN to return the secret note for the user.");
+        getSecretNote.afterResponse("complete-get-secret-note", challengeCompletion::getSecretNote);
         configureSecretNoteAuthFailurePolicies(getSecretNote);
         getSecretNote.onError(406).suppressBody();
 
@@ -130,6 +135,8 @@ final class SecretThingifier {
                                 "note-body-required",
                                 ApiOperationValidators.requireBodyFields("note")
                                         .onMissing(422, "note is required"));
+        postSecretNote.afterResponse(
+                "complete-post-secret-note", challengeCompletion::postSecretNote);
         postSecretNote.afterSuccessfulOperation(
                 "sync-challenger-secret-note",
                 (context, result) -> syncChallengerSecretNote(challengers, context, result));

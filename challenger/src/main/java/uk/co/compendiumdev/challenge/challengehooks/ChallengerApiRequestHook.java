@@ -12,39 +12,28 @@ import uk.co.compendiumdev.thingifier.api.response.ApiResponse;
 import uk.co.compendiumdev.thingifier.apiconfig.ThingifierApiConfig;
 
 public class ChallengerApiRequestHook implements HttpApiRequestHook {
-
     private final Challengers challengers;
 
-    public ChallengerApiRequestHook(Challengers challengers) {
+    public ChallengerApiRequestHook(final Challengers challengers) {
         this.challengers = challengers;
     }
 
     @Override
     public HttpApiResponse run(final HttpApiRequest request, final ThingifierApiConfig config) {
-
-        final boolean paginationLimitTooHigh = isTodosPaginationLimitTooHigh(request, config);
-
-        ChallengerAuthData challenger =
-                challengers.getChallenger(request.getHeader("X-CHALLENGER"));
-        if (challenger == null) {
-            if (paginationLimitTooHigh) {
-                return rejectPaginationLimitTooHigh(request, config);
-            }
-
-            // cannot track challenges
+        if (!isTodosPaginationLimitTooHigh(request, config)) {
             return null;
         }
 
-        if (challengers.isSinglePlayerMode()) {
-            challenger.touch();
-        }
-
-        if (paginationLimitTooHigh) {
+        ChallengerAuthData challenger =
+                challengers.getChallenger(request.getHeader("X-CHALLENGER"));
+        if (challenger != null) {
+            if (challengers.isSinglePlayerMode()) {
+                challenger.touch();
+            }
             challengers.pass(challenger, CHALLENGE.GET_TODOS_PAGINATED_LIMIT_TOO_HIGH);
-            return rejectPaginationLimitTooHigh(request, config);
         }
 
-        return null;
+        return rejectPaginationLimitTooHigh(request, config);
     }
 
     private boolean isTodosPaginationLimitTooHigh(

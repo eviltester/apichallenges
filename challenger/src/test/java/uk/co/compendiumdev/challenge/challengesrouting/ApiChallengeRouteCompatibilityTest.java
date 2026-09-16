@@ -3,6 +3,7 @@ package uk.co.compendiumdev.challenge.challengesrouting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -126,6 +127,92 @@ public class ApiChallengeRouteCompatibilityTest {
         Assertions.assertNotNull(challenger);
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_TODOS));
         Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_HEARTBEAT_204));
+    }
+
+    @ParameterizedTest(name = "Thingifier afterResponse callbacks run under {0}")
+    @MethodSource("apiRoutePrefixes")
+    void thingifierRouteCallbacksRunThroughCanonicalAndLegacyAliases(final String prefix) {
+        http.clearHeaders();
+        HttpResponseDetails challengerResponse = http.send(path(prefix, "/challenger"), "post");
+        Assertions.assertEquals(201, challengerResponse.statusCode);
+        String challengerId = challengerResponse.getHeader("X-CHALLENGER");
+        Assertions.assertNotNull(challengerId);
+
+        Map<String, String> jsonHeaders = headersFor(challengerId, "application/json");
+        HttpResponseDetails createdDoneTodo =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        jsonHeaders,
+                        "{\"title\":\"alias callback done\",\"doneStatus\":true,\"description\":\"\"}");
+        Assertions.assertEquals(201, createdDoneTodo.statusCode);
+
+        HttpResponseDetails createdNotDoneTodo =
+                http.send(
+                        path(prefix, "/todos"),
+                        "post",
+                        jsonHeaders,
+                        "{\"title\":\"alias callback not done\",\"doneStatus\":false,\"description\":\"\"}");
+        Assertions.assertEquals(201, createdNotDoneTodo.statusCode);
+
+        Map<String, String> xmlAcceptHeaders = headersFor(challengerId, "application/json");
+        xmlAcceptHeaders.put("Accept", "text/xml");
+        Assertions.assertEquals(
+                200, http.send(path(prefix, "/todos"), "get", xmlAcceptHeaders, "").statusCode);
+
+        Map<String, String> vendorXmlHeaders =
+                headersFor(challengerId, "application/vnd.apichallenges.todo+xml");
+        vendorXmlHeaders.put("Accept", "application/json");
+        Assertions.assertEquals(
+                201,
+                http.send(
+                                path(prefix, "/todos"),
+                                "post",
+                                vendorXmlHeaders,
+                                "<todo><title>alias vendor xml</title><doneStatus>true</doneStatus></todo>")
+                        .statusCode);
+
+        Map<String, String> structuredQueryHeaders =
+                headersFor(challengerId, "application/vnd.thingifier.query+json");
+        structuredQueryHeaders.put("Accept", "application/json");
+        Assertions.assertEquals(
+                200,
+                http.send(
+                                path(prefix, "/todos"),
+                                "query",
+                                structuredQueryHeaders,
+                                "{\"filter\":{\"doneStatus\":true}}")
+                        .statusCode);
+
+        Map<String, String> jsonPatchHeaders =
+                headersFor(challengerId, "application/json-patch+json");
+        Assertions.assertEquals(
+                200,
+                http.send(
+                                path(
+                                        prefix,
+                                        "/todos/"
+                                                + lastPathSegment(
+                                                        createdDoneTodo.getHeader("Location"))),
+                                "patch",
+                                jsonPatchHeaders,
+                                "[{\"op\":\"replace\",\"path\":\"/title\",\"value\":\"alias patched\"}]")
+                        .statusCode);
+
+        Map<String, String> basicAuthHeaders = headersFor(challengerId, "application/json");
+        basicAuthHeaders.put("Authorization", "basic YWRtaW46cGFzc3dvcmQ=");
+        Assertions.assertEquals(
+                200,
+                http.send(path(prefix, "/secret/token"), "get", basicAuthHeaders, "").statusCode);
+
+        ChallengerAuthData challenger = challengerFor(challengerId);
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_TODOS));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_ACCEPT_TEXT_XML));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.POST_CREATE_VENDOR_XML));
+        Assertions.assertTrue(
+                challenger.statusOfChallenge(CHALLENGE.QUERY_TODOS_STRUCTURED_JSON_FILTERED));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.PATCH_TODOS_JSON_PATCH_200));
+        Assertions.assertTrue(challenger.statusOfChallenge(CHALLENGE.GET_SECRET_TOKEN_200));
     }
 
     @ParameterizedTest(name = "created todo Location uses active route prefix under {0}")
@@ -317,6 +404,25 @@ public class ApiChallengeRouteCompatibilityTest {
 
     private void assertBearerAuthenticationChallenge(final HttpResponseDetails response) {
         Assertions.assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
+    }
+
+    private Map<String, String> headersFor(final String challengerId, final String contentType) {
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("X-CHALLENGER", challengerId);
+        headers.put("Content-Type", contentType);
+        return headers;
+    }
+
+    private ChallengerAuthData challengerFor(final String challengerId) {
+        ChallengerAuthData challenger =
+                ChallengeMain.getChallenger().getChallengers().getChallenger(challengerId);
+        Assertions.assertNotNull(challenger);
+        return challenger;
+    }
+
+    private String lastPathSegment(final String location) {
+        Assertions.assertNotNull(location);
+        return location.substring(location.lastIndexOf("/") + 1);
     }
 
     private static String path(final String prefix, final String route) {
