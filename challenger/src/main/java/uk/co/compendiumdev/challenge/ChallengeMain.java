@@ -149,11 +149,10 @@ public class ChallengeMain {
 
         app.getApiDefn().setPathPrefix("//__apichallenges_internal");
 
-        final ThingifierHttpApiRoutings restServer = app.startRestServer();
-
+        final ThingifierHttpApiRoutings restServer = app.configureRestServer();
         app.addBuiltInArgConfiguredHooks();
-
         challenger.addHooks(restServer);
+        app.startHttpServer();
     }
 
     public static ChallengeRouteHandler getChallenger() {
