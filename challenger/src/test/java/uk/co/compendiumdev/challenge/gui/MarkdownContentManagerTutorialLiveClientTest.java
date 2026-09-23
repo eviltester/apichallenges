@@ -140,7 +140,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "<details class=\"side-toc-section\" data-side-toc-section=\"practice-sites\">",
                 "<a class=\"side-toc-section-title\" href=\"/practice-sites\">Practice Sites</a>",
                 "<li><a href=\"/sponsors\">Sponsors</a></li>",
-                "<li><a href=\"/blog\">Blog</a></li>");
+                "<li><a href=\"/blog\">Blog</a></li>",
+                "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>");
+        Assertions.assertFalse(html.contains("data-side-toc-section=\"more\""));
+        Assertions.assertFalse(html.contains("href=\"/more\">More...</a>"));
         Assertions.assertFalse(
                 html.contains(
                         "<details class=\"side-toc-section\" data-side-toc-section=\"tutorials\">"));
@@ -636,6 +639,10 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-custom-method=\"true\""));
         Assertions.assertTrue(html.contains("data-body-methods=\"all\""));
         Assertions.assertFalse(html.contains("data-allowed-path-prefixes"));
+        Assertions.assertTrue(html.contains("class=\"openapi-converter-callout\""));
+        Assertions.assertTrue(html.contains("more permissive for exploratory testing"));
+        assertContainsInOrder(
+                html, "class=\"openapi-converter-callout\"", "class=\"sim-live-request\"");
         Assertions.assertTrue(html.contains("For general browser client limits, CORS notes"));
         Assertions.assertFalse(html.contains("Use Browser Dev Tools To Help Test REST APIs"));
         Assertions.assertFalse(html.contains("HAR file"));
@@ -656,31 +663,36 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("data-online-swagger-client"));
         Assertions.assertTrue(html.contains("data-openapi-url"));
         Assertions.assertTrue(html.contains("data-openapi-file"));
-        Assertions.assertTrue(html.contains("data-openapi-profile"));
-        Assertions.assertTrue(html.contains("data-openapi-custom-options"));
-        Assertions.assertTrue(html.contains("data-openapi-copy-converted"));
-        Assertions.assertTrue(html.contains("data-openapi-download-converted"));
+        Assertions.assertFalse(html.contains("data-openapi-profile"));
+        Assertions.assertFalse(html.contains("data-openapi-custom-options"));
+        Assertions.assertFalse(html.contains("data-openapi-placement-scope"));
+        Assertions.assertFalse(html.contains("data-openapi-placement-target"));
+        Assertions.assertFalse(html.contains("data-openapi-evaluate-placement"));
+        Assertions.assertFalse(html.contains("data-openapi-copy-converted"));
+        Assertions.assertFalse(html.contains("data-openapi-download-converted"));
         Assertions.assertFalse(html.contains("data-openapi-example"));
-        Assertions.assertTrue(html.contains("<ul class=\"openapi-option-grid\">"));
-        Assertions.assertTrue(html.contains("<ul class=\"openapi-verb-grid\""));
-        Assertions.assertTrue(html.contains("data-openapi-copy-converted disabled"));
-        Assertions.assertTrue(html.contains("data-openapi-download-converted disabled"));
+        Assertions.assertTrue(html.contains("class=\"openapi-converter-callout\""));
+        Assertions.assertTrue(html.contains("more permissive for exploratory testing"));
+        assertContainsInOrder(
+                html, "class=\"openapi-converter-callout\"", "data-online-swagger-client");
         Assertions.assertTrue(html.contains("https://unpkg.com/swagger-ui-dist@5.32.12"));
         Assertions.assertTrue(html.contains("href=\"/css/online-swagger-theme.css\""));
         Assertions.assertTrue(html.contains("src=\"/js/vendor/js-yaml.min.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
-        Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
+        Assertions.assertFalse(html.contains("src=\"/js/openapi-tester-converter.js\""));
+        Assertions.assertFalse(html.contains("src=\"/js/openapi-parameter-placement.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/online-swagger-client.js\""));
         assertContainsInOrder(
                 html,
                 "src=\"/js/vendor/js-yaml.min.js\"",
                 "src=\"/js/openapi-text-loader.js\"",
-                "src=\"/js/openapi-tester-converter.js\"",
                 "src=\"/js/openapi-tool-controls.js\"",
                 "src=\"/js/online-swagger-client.js\"");
         Assertions.assertTrue(html.contains("Swagger UI In This Page"));
-        Assertions.assertTrue(html.contains("Tester OpenAPI Profile"));
+        Assertions.assertFalse(html.contains("OpenAPI Conversion"));
+        Assertions.assertFalse(html.contains("Expand OpenAPI Spec"));
+        Assertions.assertFalse(html.contains("Path Parameter Placement"));
         Assertions.assertTrue(html.contains("Swagger UI Testing Limits"));
         Assertions.assertFalse(html.contains("How To Use Swagger UI For REST API Testing"));
         Assertions.assertFalse(html.contains("CORS Limits For Browser Swagger UI"));
@@ -739,14 +751,24 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         html = renderContentPage("/tools/online-clients/openapi-converter");
 
         Assertions.assertTrue(
-                html.contains("<title>Convert OpenAPI To A More Permissive Tester Spec</title>"));
+                html.contains(
+                        "<title>Convert and Restructure OpenAPI Specifications Online</title>"));
         Assertions.assertTrue(html.contains("data-openapi-converter"));
         Assertions.assertTrue(html.contains("data-openapi-url"));
+        Assertions.assertTrue(html.contains("data-openapi-load-status"));
         Assertions.assertTrue(html.contains("data-openapi-file"));
         Assertions.assertTrue(html.contains("data-openapi-profile"));
         Assertions.assertTrue(html.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-scope"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-target"));
+        Assertions.assertTrue(html.contains("data-openapi-evaluate-placement"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-status"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-comparison"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-current"));
+        Assertions.assertTrue(html.contains("data-openapi-placement-output"));
         Assertions.assertTrue(html.contains("data-openapi-copy-converted"));
         Assertions.assertTrue(html.contains("data-openapi-download-converted"));
+        Assertions.assertTrue(html.contains("data-openapi-output-label"));
         Assertions.assertTrue(html.contains("data-openapi-open-swagger"));
         Assertions.assertTrue(html.contains("data-openapi-open-client=\"swagger\""));
         Assertions.assertTrue(html.contains("data-openapi-open-client=\"openapi-explorer\""));
@@ -777,19 +799,29 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("Open in Embedded Client"));
         assertContainsInOrder(
                 html,
+                "<h2 id=\"openapi-converter-editor-heading\">Use The OpenAPI Converter</h2>",
+                "<h3 id=\"openapi-converter-load-heading\">Load OpenAPI Spec</h3>",
+                "<h3 id=\"openapi-converter-expansion-heading\">Expand OpenAPI Coverage</h3>",
+                "<h3 id=\"openapi-converter-placement-heading\">Operation-Level vs Shared Path Configuration</h3>",
+                "<h3 id=\"openapi-converter-output-heading\">Converted OpenAPI Spec</h3>",
+                "<h3 id=\"openapi-converter-client-heading\">Open in Embedded Client</h3>");
+        assertContainsInOrder(
+                html,
                 "Converted OpenAPI JSON",
                 "Open in Embedded Client",
                 "Open in Swagger UI",
                 "Open in Redoc");
-        Assertions.assertTrue(html.contains("Convert OpenAPI To A More Permissive Tester Spec"));
+        Assertions.assertTrue(html.contains("Convert OpenAPI Specifications In Your Browser"));
         Assertions.assertTrue(
                 html.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
+        Assertions.assertTrue(html.contains("Move Shared And Operation-Level Parameters"));
         Assertions.assertTrue(
                 html.contains("Download A Less Restrictive OpenAPI File For REST Client Testing"));
         Assertions.assertTrue(
                 html.contains("Use Converted OpenAPI Files In Embedded Clients And REST Clients"));
         Assertions.assertTrue(html.contains("CORS Limits For Browser OpenAPI Conversion"));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tester-converter.js\""));
+        Assertions.assertTrue(html.contains("src=\"/js/openapi-parameter-placement.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-converter-page.js\""));
@@ -799,6 +831,7 @@ public class MarkdownContentManagerTutorialLiveClientTest {
                 "src=\"/js/vendor/js-yaml.min.js\"",
                 "src=\"/js/openapi-text-loader.js\"",
                 "src=\"/js/openapi-tester-converter.js\"",
+                "src=\"/js/openapi-parameter-placement.js\"",
                 "src=\"/js/openapi-tool-controls.js\"",
                 "src=\"/js/openapi-converter-page.js\"");
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
@@ -846,6 +879,11 @@ public class MarkdownContentManagerTutorialLiveClientTest {
         Assertions.assertTrue(html.contains("src=\"/js/openapi-text-loader.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/openapi-tool-controls.js\""));
         Assertions.assertTrue(html.contains("src=\"/js/online-openapi-ui-client.js\""));
+        Assertions.assertTrue(html.contains("class=\"openapi-converter-callout\""));
+        Assertions.assertTrue(html.contains("more permissive for exploratory testing"));
+        Assertions.assertTrue(html.contains("href=\"/tools/online-clients/openapi-converter\""));
+        assertContainsInOrder(
+                html, "class=\"openapi-converter-callout\"", "data-online-openapi-ui-client");
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/swagger\""));
         Assertions.assertTrue(html.contains("href=\"/tools/online-clients/redoc\""));
         Assertions.assertTrue(

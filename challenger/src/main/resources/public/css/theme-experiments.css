@@ -725,6 +725,37 @@ html[data-theme] a.openapi-ui-launch-link:focus-visible {
     color: var(--cta-text);
 }
 
+html[data-theme] .openapi-converter-section,
+html[data-theme] .openapi-placement-targets label {
+    border-color: var(--border);
+}
+
+html[data-theme] .openapi-placement-targets label:has(input:checked) {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+html[data-theme] .openapi-converter-callout,
+html[data-theme] .openapi-placement-status,
+html[data-theme] .online-client-status {
+    background: var(--surface-soft);
+    border-left-color: var(--accent);
+    color: var(--text);
+}
+
+html[data-theme] .openapi-placement-warnings {
+    background: color-mix(in srgb, var(--warning-accent) 12%, var(--surface));
+    border-left-color: var(--warning-accent);
+    color: var(--text);
+}
+
+html[data-theme] .online-client-status-error {
+    background: color-mix(in srgb, #b42318 12%, var(--surface));
+    border-left-color: #ef4444;
+    color: var(--text);
+}
+
 html[data-theme] .sponsor-logo-panel {
     align-items: center;
     display: flex;

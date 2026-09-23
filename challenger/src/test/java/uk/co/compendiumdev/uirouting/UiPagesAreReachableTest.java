@@ -162,6 +162,9 @@ public class UiPagesAreReachableTest {
         args.add(
                 Arguments.of(
                         200, "Learning Utilities and Resources | API Challenges", "/learning"));
+        args.add(
+                Arguments.of(
+                        200, "More API Testing Resources and Tools | API Challenges", "/more"));
         args.add(Arguments.of(200, "API Testing Blog and REST API Practice Updates", "/blog"));
         args.add(
                 Arguments.of(200, "API Challenges Blog - Page 2 | API Challenges", "/blog/page/2"));
@@ -323,6 +326,10 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-body-methods=\"all\""));
         Assertions.assertFalse(response.body.contains("data-allowed-path-prefixes"));
         Assertions.assertFalse(response.body.contains("data-expected-status"));
+        Assertions.assertTrue(response.body.contains("class=\"openapi-converter-callout\""));
+        Assertions.assertTrue(response.body.contains("more permissive for exploratory testing"));
+        assertContainsInOrder(
+                response.body, "class=\"openapi-converter-callout\"", "class=\"sim-live-request\"");
         Assertions.assertTrue(
                 response.body.contains("For general browser client limits, CORS notes"));
         Assertions.assertFalse(
@@ -346,24 +353,30 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("data-online-swagger-client"));
         Assertions.assertTrue(response.body.contains("data-openapi-url"));
         Assertions.assertTrue(response.body.contains("data-openapi-file"));
-        Assertions.assertTrue(response.body.contains("data-openapi-profile"));
-        Assertions.assertTrue(response.body.contains("data-openapi-custom-options"));
-        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted"));
-        Assertions.assertTrue(response.body.contains("data-openapi-download-converted"));
+        Assertions.assertFalse(response.body.contains("data-openapi-profile"));
+        Assertions.assertFalse(response.body.contains("data-openapi-custom-options"));
+        Assertions.assertFalse(response.body.contains("data-openapi-placement-scope"));
+        Assertions.assertFalse(response.body.contains("data-openapi-placement-target"));
+        Assertions.assertFalse(response.body.contains("data-openapi-evaluate-placement"));
+        Assertions.assertFalse(response.body.contains("data-openapi-copy-converted"));
+        Assertions.assertFalse(response.body.contains("data-openapi-download-converted"));
         Assertions.assertFalse(response.body.contains("data-openapi-example"));
-        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-option-grid\">"));
-        Assertions.assertTrue(response.body.contains("<ul class=\"openapi-verb-grid\""));
-        Assertions.assertTrue(response.body.contains("data-openapi-copy-converted disabled"));
-        Assertions.assertTrue(response.body.contains("data-openapi-download-converted disabled"));
+        Assertions.assertTrue(response.body.contains("class=\"openapi-converter-callout\""));
+        Assertions.assertTrue(response.body.contains("more permissive for exploratory testing"));
+        assertContainsInOrder(
+                response.body, "class=\"openapi-converter-callout\"", "data-online-swagger-client");
         Assertions.assertTrue(response.body.contains("https://unpkg.com/swagger-ui-dist@5.32.12"));
         assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
         assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
-        assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
+        Assertions.assertFalse(response.body.contains("/js/openapi-tester-converter.js"));
+        Assertions.assertFalse(response.body.contains("/js/openapi-parameter-placement.js"));
         assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
         assertBodyContainsVersionedScript(response, "/js/online-swagger-client.js");
         Assertions.assertTrue(response.body.contains("Swagger UI In This Page"));
-        Assertions.assertTrue(response.body.contains("Tester OpenAPI Profile"));
+        Assertions.assertFalse(response.body.contains("OpenAPI Conversion"));
+        Assertions.assertFalse(response.body.contains("Expand OpenAPI Spec"));
+        Assertions.assertFalse(response.body.contains("Path Parameter Placement"));
         Assertions.assertTrue(response.body.contains("Swagger UI Testing Limits"));
         Assertions.assertFalse(
                 response.body.contains("How To Use Swagger UI For REST API Testing"));
@@ -450,14 +463,23 @@ public class UiPagesAreReachableTest {
         assertContainsHeaderAndFooter(response);
         Assertions.assertTrue(
                 response.body.contains(
-                        "<title>Convert OpenAPI To A More Permissive Tester Spec</title>"));
+                        "<title>Convert and Restructure OpenAPI Specifications Online</title>"));
         Assertions.assertTrue(response.body.contains("data-openapi-converter"));
         Assertions.assertTrue(response.body.contains("data-openapi-url"));
+        Assertions.assertTrue(response.body.contains("data-openapi-load-status"));
         Assertions.assertTrue(response.body.contains("data-openapi-file"));
         Assertions.assertTrue(response.body.contains("data-openapi-profile"));
         Assertions.assertTrue(response.body.contains("data-openapi-custom-options"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-scope"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-target"));
+        Assertions.assertTrue(response.body.contains("data-openapi-evaluate-placement"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-status"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-comparison"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-current"));
+        Assertions.assertTrue(response.body.contains("data-openapi-placement-output"));
         Assertions.assertTrue(response.body.contains("data-openapi-copy-converted"));
         Assertions.assertTrue(response.body.contains("data-openapi-download-converted"));
+        Assertions.assertTrue(response.body.contains("data-openapi-output-label"));
         Assertions.assertTrue(response.body.contains("data-openapi-open-swagger"));
         Assertions.assertTrue(response.body.contains("data-openapi-open-client=\"swagger\""));
         Assertions.assertTrue(
@@ -493,14 +515,23 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("Open in Embedded Client"));
         assertContainsInOrder(
                 response.body,
+                "<h2 id=\"openapi-converter-editor-heading\">Use The OpenAPI Converter</h2>",
+                "<h3 id=\"openapi-converter-load-heading\">Load OpenAPI Spec</h3>",
+                "<h3 id=\"openapi-converter-expansion-heading\">Expand OpenAPI Coverage</h3>",
+                "<h3 id=\"openapi-converter-placement-heading\">Operation-Level vs Shared Path Configuration</h3>",
+                "<h3 id=\"openapi-converter-output-heading\">Converted OpenAPI Spec</h3>",
+                "<h3 id=\"openapi-converter-client-heading\">Open in Embedded Client</h3>");
+        assertContainsInOrder(
+                response.body,
                 "Converted OpenAPI JSON",
                 "Open in Embedded Client",
                 "Open in Swagger UI",
                 "Open in Redoc");
         Assertions.assertTrue(
-                response.body.contains("Convert OpenAPI To A More Permissive Tester Spec"));
+                response.body.contains("Convert OpenAPI Specifications In Your Browser"));
         Assertions.assertTrue(
                 response.body.contains("Create Practical Or Aggressive OpenAPI Testing Files"));
+        Assertions.assertTrue(response.body.contains("Move Shared And Operation-Level Parameters"));
         Assertions.assertTrue(
                 response.body.contains(
                         "Download A Less Restrictive OpenAPI File For REST Client Testing"));
@@ -511,6 +542,7 @@ public class UiPagesAreReachableTest {
         assertBodyContainsVersionedScript(response, "/js/vendor/js-yaml.min.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-text-loader.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tester-converter.js");
+        assertBodyContainsVersionedScript(response, "/js/openapi-parameter-placement.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-tool-controls.js");
         assertBodyContainsVersionedScript(response, "/js/openapi-converter-page.js");
         Assertions.assertTrue(response.body.contains("href=\"/tools/online-clients/swagger\""));
@@ -547,6 +579,15 @@ public class UiPagesAreReachableTest {
         Assertions.assertTrue(response.body.contains("Open local JSON or YAML file"), path);
         Assertions.assertTrue(response.body.contains(pageHeading), path);
         Assertions.assertTrue(response.body.contains(dependency), path);
+        Assertions.assertTrue(response.body.contains("class=\"openapi-converter-callout\""), path);
+        Assertions.assertTrue(
+                response.body.contains("more permissive for exploratory testing"), path);
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-converter\""), path);
+        assertContainsInOrder(
+                response.body,
+                "class=\"openapi-converter-callout\"",
+                "data-online-openapi-ui-client");
         assertOnlineOpenApiUiToolBreadcrumb(response.body, openApiUiToolDisplayName(client), path);
         assertOnlineOpenApiUiLaunchLinks(response.body, openApiUiToolDisplayName(client), client);
         assertBodyContainsVersionedStylesheet(response, "/css/online-swagger-theme.css");
@@ -1583,13 +1624,23 @@ public class UiPagesAreReachableTest {
         final int learningRoot = response.body.indexOf("<li id='learning-root-menu'");
         final int simulationRoot = response.body.indexOf("<li id='sim-api-root-menu'");
         final int mirrorRoot = response.body.indexOf("<li id='mirror-api-root-menu'");
-        final int blogRoot = response.body.indexOf("<li id='blog-root-menu'");
+        final int moreRoot = response.body.indexOf("<li id='more-root-menu'");
         Assertions.assertTrue(learningRoot > -1);
         Assertions.assertTrue(simulationRoot > learningRoot);
         Assertions.assertTrue(mirrorRoot > simulationRoot);
-        Assertions.assertTrue(blogRoot > mirrorRoot);
+        Assertions.assertTrue(moreRoot > mirrorRoot);
         Assertions.assertTrue(
-                response.body.contains("<li id='blog-root-menu'><a href=\"/blog\">Blog</a></li>"));
+                response.body.contains("<li id='more-root-menu'><a href=\"/more\">More...</a>"));
+        Assertions.assertTrue(response.body.contains("<li><a href=\"/blog\">Blog</a></li>"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "<li><a href=\"/tools/online-clients/openapi-converter\">OpenAPI Converter</a></li>"));
+        Assertions.assertFalse(response.body.contains("id='blog-root-menu'"));
+        Assertions.assertTrue(
+                response.body.contains(
+                        "['/tools/online-clients/openapi-converter', 'more-root-menu']"));
+        Assertions.assertTrue(response.body.contains("['/blog', 'more-root-menu']"));
+        Assertions.assertTrue(response.body.contains("['/more', 'more-root-menu']"));
 
         final String learningMenu = response.body.substring(learningRoot, simulationRoot);
         assertContainsInOrder(
@@ -1613,6 +1664,18 @@ public class UiPagesAreReachableTest {
         Assertions.assertFalse(learningMenu.contains("href=\"/practice-modes/simulation\""));
         Assertions.assertFalse(learningMenu.contains("href=\"/apichallenges\""));
         Assertions.assertFalse(learningMenu.contains("href=\"/apichallenges/solutions\""));
+    }
+
+    @Test
+    void morePageLinksToBlogAndOpenApiConverter() {
+
+        final HttpResponseDetails response = http.send("/more", "get");
+
+        Assertions.assertEquals(200, response.statusCode);
+        Assertions.assertTrue(response.body.contains("<h1>More API Testing Resources</h1>"));
+        Assertions.assertTrue(response.body.contains("href=\"/blog\""));
+        Assertions.assertTrue(
+                response.body.contains("href=\"/tools/online-clients/openapi-converter\""));
     }
 
     @Test

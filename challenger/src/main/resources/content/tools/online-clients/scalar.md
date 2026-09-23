@@ -2,7 +2,7 @@
 title: Online Scalar OpenAPI UI
 seo_title: Online Scalar OpenAPI UI for API Reference Testing
 description: A browser based Scalar API reference page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-12
+lastmod: 2026-09-23
 layout: wide-tool
 seo_description: Use Scalar online to load OpenAPI JSON or YAML from a URL or local file, inspect API reference docs, and explore request examples.
 schema_type: WebPage
@@ -13,6 +13,8 @@ showads: true
 # Online Scalar OpenAPI UI
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Scalar.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 <section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="scalar" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>

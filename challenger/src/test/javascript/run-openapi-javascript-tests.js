@@ -5,6 +5,7 @@ const path = require('node:path');
 const projectRoot = path.resolve(__dirname, '..', '..', '..');
 const filesToSyntaxCheck = [
   'src/main/resources/public/js/openapi-tester-converter.js',
+  'src/main/resources/public/js/openapi-parameter-placement.js',
   'src/main/resources/public/js/openapi-text-loader.js',
   'src/main/resources/public/js/openapi-tool-controls.js',
   'src/main/resources/public/js/openapi-converter-page.js',

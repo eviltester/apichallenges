@@ -24,7 +24,7 @@ Browser tools are convenient for learning and quick checks. They are still limit
 - [Stoplight Elements](/tools/online-clients/stoplight) - embeddable OpenAPI documentation components with navigation, schemas, code samples, and an interactive API console. Read [About Stoplight Elements](/tools/online-clients/stoplight/about).
 - [Zudoku](/tools/online-clients/zudoku) - a developer portal and API reference framework that can render OpenAPI powered documentation from a URL. Read [About Zudoku](/tools/online-clients/zudoku/about).
 - [Redoc](/tools/online-clients/redoc) - a polished OpenAPI documentation viewer for reading and navigating API reference content. Read [About Redoc](/tools/online-clients/redoc/about).
-- [OpenAPI Tester Converter](/tools/online-clients/openapi-converter) - a browser tool for creating a less restrictive tester OpenAPI file to import into Swagger UI or other clients.
+- [OpenAPI Converter](/tools/online-clients/openapi-converter) - a browser tool for expanding a specification for testing or moving parameters between shared Path Item and operation-level declarations.
 
 ## How The Tools Differ
 
@@ -34,7 +34,7 @@ Use [Swagger UI](/tools/online-clients/swagger), [OpenAPI Explorer](/tools/onlin
 
 Use [Redoc](/tools/online-clients/redoc) when you want to read the API reference. The open source Redoc experience is primarily a viewer, not a request-sending API client, so pair it with the Basic Client, Swagger UI, or a desktop REST client when you need to send test traffic.
 
-Use the [OpenAPI Tester Converter](/tools/online-clients/openapi-converter) when a strict OpenAPI description gets in the way of testing. The converter can remove common schema restrictions and add missing HTTP methods so OpenAPI-driven UIs can show more exploratory request shapes.
+Use the [OpenAPI Converter](/tools/online-clients/openapi-converter) when a strict OpenAPI description gets in the way of testing or a client needs a different parameter layout. The converter can remove common schema restrictions, add missing HTTP methods, and move shared parameters to operations or back again.
 
 ## CORS And Browser Limits
 

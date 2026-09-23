@@ -2,7 +2,7 @@
 title: Free Online REST API Client
 seo_title: Free Online REST API Client for Testing HTTP Requests
 description: A free browser based REST API client for sending custom HTTP requests during API testing and exploration.
-lastmod: 2026-08-09
+lastmod: 2026-09-23
 seo_description: Use a free online REST API client to send custom HTTP requests from the browser with any method, URL, headers, and body.
 schema_type: WebPage
 og_type: website
@@ -12,6 +12,8 @@ showads: true
 # Free Online REST API Client
 
 Use this basic online REST API client to send HTTP requests directly from the browser.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 {{<sim-live-request method="GET" path="/" editable="true" edit-mode="adhoc" custom-method="true" body-methods="all" headers="Accept: application/json">}}
 

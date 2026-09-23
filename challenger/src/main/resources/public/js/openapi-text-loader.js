@@ -30,20 +30,34 @@
     throw new Error(`${filename || 'This file'} is not JSON, and YAML parsing is unavailable.`);
   }
 
-  function fetchOpenApi(url) {
-    return root.fetch(url).then(function (response) {
+  function fetchOpenApiDocument(url) {
+    return root.fetch(url).catch(function () {
+      throw new Error(
+        `Could not load ${url}. The browser blocked the request or could not reach the server. Check the URL, the server's CORS policy, and your network connection.`,
+      );
+    }).then(function (response) {
       if (!response.ok) {
         throw new Error(`Could not load ${url}. The server returned HTTP ${response.status}.`);
       }
 
       return response.text();
     }).then(function (text) {
-      return parseOpenApiText(text, url);
+      return {
+        spec: parseOpenApiText(text, url),
+        text: text,
+      };
+    });
+  }
+
+  function fetchOpenApi(url) {
+    return fetchOpenApiDocument(url).then(function (document) {
+      return document.spec;
     });
   }
 
   return {
     parseOpenApiText: parseOpenApiText,
+    fetchOpenApiDocument: fetchOpenApiDocument,
     fetchOpenApi: fetchOpenApi,
   };
 }));

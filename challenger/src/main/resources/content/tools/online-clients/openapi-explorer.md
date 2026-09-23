@@ -2,7 +2,7 @@
 title: Online OpenAPI Explorer
 seo_title: Online OpenAPI Explorer UI for Loading API Specs
 description: A browser based OpenAPI Explorer page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-12
+lastmod: 2026-09-23
 layout: wide-tool
 seo_description: Use OpenAPI Explorer online to load OpenAPI JSON or YAML from a URL or local file, view resources and models, and try browser API calls.
 schema_type: WebPage
@@ -13,6 +13,8 @@ showads: true
 # Online OpenAPI Explorer
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in OpenAPI Explorer.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 <section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="openapi-explorer" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>

@@ -2,7 +2,7 @@
 title: Online Stoplight Elements
 seo_title: Online Stoplight Elements UI for OpenAPI Documentation
 description: A browser based Stoplight Elements page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-12
+lastmod: 2026-09-23
 layout: wide-tool
 seo_description: Use Stoplight Elements online to load OpenAPI JSON or YAML from a URL or local file, inspect schemas, code samples, and API docs.
 schema_type: WebPage
@@ -13,6 +13,8 @@ showads: true
 # Online Stoplight Elements
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Stoplight Elements.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 <section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="stoplight" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>
