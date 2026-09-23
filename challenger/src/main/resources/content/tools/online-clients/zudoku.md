@@ -2,7 +2,7 @@
 title: Online Zudoku OpenAPI UI
 seo_title: Online Zudoku OpenAPI UI for API Reference Demos
 description: A browser based Zudoku showcase page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-12
+lastmod: 2026-09-23
 layout: wide-tool
 seo_description: Use Zudoku online to load an OpenAPI JSON or YAML document from a URL or local file and preview a developer portal style API reference.
 schema_type: WebPage
@@ -13,6 +13,8 @@ showads: true
 # Online Zudoku OpenAPI UI
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Zudoku.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 <section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="zudoku" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>

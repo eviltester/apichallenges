@@ -39,6 +39,13 @@ function testScope() {
     { disabled: false },
     { disabled: false },
   ];
+  const placementScope = { disabled: false, value: 'path' };
+  const placementTargets = [
+    { checked: true, disabled: false, value: 'keep' },
+    { checked: false, disabled: false, value: 'path' },
+    { checked: false, disabled: false, value: 'operation' },
+  ];
+  const evaluatePlacement = { disabled: false };
 
   return {
     profile,
@@ -46,12 +53,21 @@ function testScope() {
     optionInputs,
     verbInputs,
     exportButtons,
+    evaluatePlacement,
+    placementScope,
+    placementTargets,
     querySelector(selector) {
       if (selector === '[data-openapi-profile]') {
         return profile;
       }
       if (selector === '[data-openapi-custom-options]') {
         return customOptions;
+      }
+      if (selector === '[data-openapi-placement-scope]') {
+        return placementScope;
+      }
+      if (selector === '[data-openapi-placement-target]:checked') {
+        return placementTargets.find((input) => input.checked) || null;
       }
       return null;
     },
@@ -76,6 +92,9 @@ function testScope() {
       }
       if (selector === controls.embeddedClientActionsSelector) {
         return exportButtons.slice(2);
+      }
+      if (selector === controls.placementControlSelector) {
+        return [placementScope].concat(placementTargets, [evaluatePlacement]);
       }
       return [];
     },
@@ -129,6 +148,18 @@ test('writeOptions treats missing verbs as no selected generated methods', () =>
   assert.equal(scope.verbInputs[2].checked, false);
 });
 
+test('readPlacementOptions maps the selected scope and target', () => {
+  const scope = testScope();
+  scope.placementScope.value = 'all';
+  scope.placementTargets[0].checked = false;
+  scope.placementTargets[2].checked = true;
+
+  assert.deepEqual(controls.readPlacementOptions(scope), {
+    scope: 'all',
+    target: 'operation',
+  });
+});
+
 test('applyProfile writes named profile defaults without closing visible custom options', () => {
   const scope = testScope();
   scope.customOptions.open = true;
@@ -175,6 +206,20 @@ test('setButtons can target all converter actions or only Swagger export actions
   assert.equal(scope.exportButtons[0].disabled, true);
   assert.equal(scope.exportButtons[1].disabled, true);
   assert.equal(scope.exportButtons[2].disabled, false);
+});
+
+test('setPlacementControlsEnabled toggles every placement control', () => {
+  const scope = testScope();
+
+  controls.setPlacementControlsEnabled(scope, false);
+  assert.equal(scope.placementScope.disabled, true);
+  assert.equal(scope.placementTargets.every((input) => input.disabled), true);
+  assert.equal(scope.evaluatePlacement.disabled, true);
+
+  controls.setPlacementControlsEnabled(scope, true);
+  assert.equal(scope.placementScope.disabled, false);
+  assert.equal(scope.placementTargets.every((input) => !input.disabled), true);
+  assert.equal(scope.evaluatePlacement.disabled, false);
 });
 
 test('setStatus writes status text and toggles the error class', () => {

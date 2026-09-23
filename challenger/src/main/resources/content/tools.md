@@ -18,7 +18,7 @@ Tools help you create requests, inspect responses, compare API documentation wit
 | [REST/HTTP Clients](/tools/clients) | How desktop and command-line clients support exploratory API testing. |
 | [Client Summary Reviews](/tools/clients/summary-reviews) | Which REST clients are lightweight, heavyweight, scriptable, proxy-friendly, or easiest to start with. |
 | [Online Clients](/tools/online-clients) | Which browser-based clients and OpenAPI UI showcases are hosted on this site. |
-| [OpenAPI Converter](/tools/online-clients/openapi-converter) | How to create more permissive OpenAPI files for tester-friendly exploration. |
+| [OpenAPI Converter](/tools/online-clients/openapi-converter) | How to create more permissive OpenAPI files and change shared or operation-level parameter placement. |
 | [Proxies](/tools/proxies) | Why proxies help you trust the actual HTTP traffic rather than only the client UI. |
 | [Automation](/tools/automation) | Tools that run API tests or fuzz an API from its OpenAPI description. |
 

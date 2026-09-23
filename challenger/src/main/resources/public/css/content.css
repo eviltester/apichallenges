@@ -1327,6 +1327,17 @@ a.next-challenge-cta-link:hover {
     padding: 1rem;
 }
 
+.openapi-converter-callout {
+    background: #eef4f9;
+    border-left: 4px solid #1f4e79;
+    margin: 1rem 0;
+    padding: 0.65rem 0.8rem;
+}
+
+.openapi-converter-callout a {
+    font-weight: 700;
+}
+
 .openapi-converter-tool {
     border: 1px solid #c9d5df;
     margin: 1rem 0 1.5rem;
@@ -1419,6 +1430,30 @@ a.openapi-ui-launch-link {
     padding-top: 0.9rem;
 }
 
+.openapi-converter-workflow-section {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.openapi-converter-workflow-section > h3,
+.openapi-converter-workflow-section > p {
+    margin: 0;
+}
+
+.openapi-converter-section {
+    border: 1px solid #d7e1e8;
+    box-sizing: border-box;
+    margin: 0;
+    min-width: 0;
+    padding: 0.85rem;
+}
+
+.openapi-converter-section legend {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0 0.35rem;
+}
+
 .openapi-profile-row,
 .openapi-converter-actions {
     align-items: flex-end;
@@ -1435,7 +1470,7 @@ a.openapi-ui-launch-link {
     padding-top: 1rem;
 }
 
-.openapi-converter-client-launch h2 {
+.openapi-converter-client-launch h3 {
     margin: 0;
 }
 
@@ -1458,8 +1493,95 @@ a.openapi-ui-launch-link {
     width: 100%;
 }
 
+.openapi-placement-controls {
+    align-items: end;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: minmax(12rem, 0.8fr) minmax(20rem, 1.6fr) auto;
+}
+
+.openapi-placement-controls > label {
+    display: grid;
+    font-weight: 600;
+    gap: 0.25rem;
+}
+
+.openapi-placement-controls select {
+    border: 1px solid #9bb6cd;
+    box-sizing: border-box;
+    font: inherit;
+    padding: 0.45rem;
+    width: 100%;
+}
+
+.openapi-placement-targets {
+    align-items: stretch;
+    display: grid;
+    gap: 0.35rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.openapi-placement-targets > span {
+    font-weight: 600;
+}
+
+.openapi-placement-targets label {
+    align-items: center;
+    border: 1px solid #9bb6cd;
+    border-radius: 0.25rem;
+    display: flex;
+    gap: 0.35rem;
+    min-height: 2.4rem;
+    padding: 0.35rem 0.55rem;
+}
+
+.openapi-placement-targets label:has(input:checked) {
+    background: #e8f2fa;
+    border-color: #3978a8;
+    position: relative;
+    z-index: 1;
+}
+
+.openapi-placement-status,
+.openapi-placement-warnings {
+    margin: 0.75rem 0 0;
+    padding: 0.5rem 0.7rem;
+}
+
+.openapi-placement-status {
+    background: #eef4f9;
+    border-left: 4px solid #1f4e79;
+    font-weight: 600;
+}
+
+.openapi-placement-status p,
+.openapi-placement-status ul {
+    margin: 0;
+}
+
+.openapi-placement-status ul {
+    padding-left: 1.25rem;
+}
+
+.openapi-placement-status li + li {
+    margin-top: 0.35rem;
+}
+
+.openapi-placement-warnings {
+    background: #fff7e6;
+    border-left: 4px solid #b36b00;
+}
+
+@media (max-width: 800px) {
+    .openapi-placement-controls {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+}
+
 .openapi-converter-options {
     border: 1px solid #d7e1e8;
+    margin-top: 0.75rem;
     padding: 0.75rem;
 }
 
@@ -1498,11 +1620,18 @@ a.openapi-ui-launch-link {
     width: 100%;
 }
 
+.openapi-converter-output-label {
+    display: grid;
+    font-weight: 600;
+    gap: 0.25rem;
+}
+
 .online-client-status {
     border-left: 4px solid #1f4e79;
     background: #eef4f9;
     font-weight: 600;
     margin: 0.75rem 0;
+    overflow-wrap: anywhere;
     padding: 0.5rem 0.75rem;
 }
 

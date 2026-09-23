@@ -110,7 +110,9 @@ public class ChallengerWebGUI {
                             ['/practice-modes/simulation', 'sim-api-root-menu'],
                             ['/mirror/', 'mirror-api-root-menu'],
                             ['/practice-modes/mirror', 'mirror-api-root-menu'],
-                            ['/blog', 'blog-root-menu']
+                            ['/tools/online-clients/openapi-converter', 'more-root-menu'],
+                            ['/blog', 'more-root-menu'],
+                            ['/more', 'more-root-menu']
                         ];
                         foundMapping = false;
                         for(const mapping of urlMapping){
@@ -203,7 +205,12 @@ public class ChallengerWebGUI {
 
                                 </ul>
                             </li>
-                            <li id='blog-root-menu'><a href="/blog">Blog</a></li>
+                            <li id='more-root-menu'><a href="/more">More...</a>
+                                <ul>
+                                    <li><a href="/blog">Blog</a></li>
+                                    <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </nav>

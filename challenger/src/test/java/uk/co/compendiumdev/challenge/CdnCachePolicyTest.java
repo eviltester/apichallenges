@@ -100,6 +100,7 @@ public class CdnCachePolicyTest {
                         "/simpleapi/docs",
                         "/shop/docs",
                         "/learning",
+                        "/more",
                         "/practice-modes/simpleapi",
                         "/tools/online-clients",
                         "/tools/online-clients/basic-client",

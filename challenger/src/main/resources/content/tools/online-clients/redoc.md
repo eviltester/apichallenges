@@ -2,7 +2,7 @@
 title: Online Redoc OpenAPI Viewer
 seo_title: Online Redoc OpenAPI Viewer for API Reference Docs
 description: A browser based Redoc page for opening OpenAPI files from a URL or local disk.
-lastmod: 2026-08-12
+lastmod: 2026-09-23
 layout: wide-tool
 seo_description: Use Redoc online to load OpenAPI JSON or YAML from a URL or local file and inspect readable API reference documentation in the browser.
 schema_type: WebPage
@@ -13,6 +13,8 @@ showads: true
 # Online Redoc OpenAPI Viewer
 
 Open an OpenAPI JSON or YAML file from a URL or from disk, then view it in Redoc.
+
+{{<PARTIAL_SNIPPET filename="partials/openapi-converter-callout.html">}}
 
 <section class="online-openapi-ui-client" data-online-openapi-ui-client data-openapi-ui="redoc" data-default-openapi-url="/api/docs/openapi.json">
   <form class="online-swagger-controls" data-openapi-url-form>

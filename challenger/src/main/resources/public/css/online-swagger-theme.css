@@ -889,7 +889,8 @@ html[data-theme] .online-openapi-ui-frame {
 
 html[data-theme] .online-swagger-controls input,
 html[data-theme] .online-swagger-file-row input,
-html[data-theme] .openapi-profile-row select {
+html[data-theme] .openapi-profile-row select,
+html[data-theme] .openapi-placement-controls select {
     background: var(--surface);
     border-color: var(--border);
     color: var(--text);
@@ -932,6 +933,28 @@ html[data-theme] .openapi-converter-actions button:disabled {
 
 html[data-theme] .openapi-tester-controls {
     border-color: var(--border);
+}
+
+html[data-theme] .openapi-converter-section,
+html[data-theme] .openapi-placement-targets label {
+    border-color: var(--border);
+}
+
+html[data-theme] .openapi-placement-targets label:has(input:checked) {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+html[data-theme] .openapi-placement-status {
+    background: var(--surface-soft);
+    border-left-color: var(--accent);
+    color: var(--text);
+}
+
+html[data-theme] .openapi-placement-warnings {
+    background: color-mix(in srgb, #b36b00 12%, var(--surface));
+    border-left-color: #d28a22;
+    color: var(--text);
 }
 
 html[data-theme] .openapi-converter-client-launch {

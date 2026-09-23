@@ -125,6 +125,35 @@ test('fetchOpenApi loads and parses JSON from a URL', async (t) => {
   );
 });
 
+test('fetchOpenApiDocument preserves source text with the parsed specification', async (t) => {
+  const previousFetch = globalThis.fetch;
+  const sourceText = '{\n  "openapi": "3.0.3",\n  "paths": {}\n}\n';
+  t.after(() => {
+    globalThis.fetch = previousFetch;
+  });
+  globalThis.fetch = async function (url) {
+    assert.equal(url, '/docs/openapi.json');
+    return {
+      ok: true,
+      status: 200,
+      text: async function () {
+        return sourceText;
+      },
+    };
+  };
+
+  assert.deepEqual(
+    await loader.fetchOpenApiDocument('/docs/openapi.json'),
+    {
+      spec: {
+        openapi: '3.0.3',
+        paths: {},
+      },
+      text: sourceText,
+    },
+  );
+});
+
 test('fetchOpenApi loads and parses YAML from a URL', async (t) => {
   const previousFetch = globalThis.fetch;
   useVendoredYamlParser(t);
@@ -169,5 +198,20 @@ test('fetchOpenApi reports non-success HTTP responses', async (t) => {
   await assert.rejects(
     () => loader.fetchOpenApi('/missing/openapi.json'),
     /Could not load \/missing\/openapi\.json\. The server returned HTTP 404/,
+  );
+});
+
+test('fetchOpenApi explains browser network and CORS failures', async (t) => {
+  const previousFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = previousFetch;
+  });
+  globalThis.fetch = async function () {
+    throw new TypeError('Failed to fetch');
+  };
+
+  await assert.rejects(
+    () => loader.fetchOpenApi('https://example.com/openapi.json'),
+    /browser blocked the request or could not reach the server.*CORS policy.*network connection/,
   );
 });

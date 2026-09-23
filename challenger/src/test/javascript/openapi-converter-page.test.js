@@ -67,13 +67,35 @@ function sessionStorage() {
   };
 }
 
-function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) {
+function converterPageHarness({
+  fetchError = null,
+  openApiUrl = '/docs/openapi.json',
+  openApiText = '{"openapi":"3.1.0"}\n',
+  placementChanges = true,
+  placementTarget = 'keep',
+  profile = 'original',
+  sourceSearch = '',
+} = {}) {
   const form = element();
-  const urlInput = element({ value: '/docs/openapi.json' });
+  const urlInput = element({ value: openApiUrl });
+  const loadStatus = element({ hidden: true });
   const fileInput = element({ files: [] });
   const profileInput = element({ value: profile });
   const status = element();
+  const placementStatus = element();
+  const placementMessage = element();
+  const placementComparison = element({ hidden: true });
+  const placementCurrent = element();
+  const placementOutput = element();
+  const placementWarnings = element({ hidden: true });
+  const evaluatePlacementButton = element();
+  const placementScope = element({ value: 'path' });
+  const placementTargets = ['keep', 'path', 'operation'].map((value) => element({
+    checked: value === placementTarget,
+    value,
+  }));
   const output = element();
+  const outputLabel = element({ textContent: 'Converted OpenAPI JSON' });
   const copyButton = element();
   const downloadButton = element();
   const openClientButton = element({
@@ -102,16 +124,31 @@ function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) 
     },
     paths: {},
   };
+  const placementCalls = {
+    convert: 0,
+    evaluate: 0,
+  };
 
   const tool = {
     querySelector(selector) {
       return {
         '[data-openapi-url-form]': form,
         '[data-openapi-url]': urlInput,
+        '[data-openapi-load-status]': loadStatus,
         '[data-openapi-file]': fileInput,
         '[data-openapi-profile]': profileInput,
         '[data-openapi-status]': status,
+        '[data-openapi-placement-status]': placementStatus,
+        '[data-openapi-placement-message]': placementMessage,
+        '[data-openapi-placement-comparison]': placementComparison,
+        '[data-openapi-placement-current]': placementCurrent,
+        '[data-openapi-placement-output]': placementOutput,
+        '[data-openapi-placement-warnings]': placementWarnings,
+        '[data-openapi-evaluate-placement]': evaluatePlacementButton,
+        '[data-openapi-placement-scope]': placementScope,
+        '[data-openapi-placement-target]:checked': placementTargets.find((input) => input.checked),
         '[data-openapi-output]': output,
+        '[data-openapi-output-label]': outputLabel,
         '[data-openapi-copy-converted]': copyButton,
         '[data-openapi-download-converted]': downloadButton,
         '[data-openapi-custom-options]': customOptions,
@@ -133,6 +170,9 @@ function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) 
       if (selector === '[data-openapi-option], [data-openapi-verb]') {
         return optionInputs.concat(verbInputs);
       }
+      if (selector === '[data-openapi-placement-scope], [data-openapi-placement-target]') {
+        return [placementScope].concat(placementTargets);
+      }
       if (selector === controls.allExportActionsSelector) {
         return [copyButton, downloadButton, openClientButton];
       }
@@ -141,6 +181,9 @@ function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) 
       }
       if (selector === controls.embeddedClientActionsSelector) {
         return [openClientButton];
+      }
+      if (selector === controls.placementControlSelector) {
+        return [placementScope].concat(placementTargets, [evaluatePlacementButton]);
       }
       return [];
     },
@@ -190,14 +233,55 @@ function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) 
       },
     },
     ApiChallengesOpenApiTextLoader: {
-      fetchOpenApi(url) {
-        assert.equal(url, '/docs/openapi.json');
-        return Promise.resolve(fetchedSpec);
+      fetchOpenApiDocument(url) {
+        assert.equal(url, openApiUrl);
+        if (fetchError) {
+          return Promise.reject(fetchError);
+        }
+        return Promise.resolve({
+          spec: fetchedSpec,
+          text: openApiText,
+        });
       },
       parseOpenApiText(text, name) {
         assert.equal(text, '{"openapi":"3.1.0"}');
         assert.equal(name, 'local-openapi.json');
         return parsedSpec;
+      },
+    },
+    ApiChallengesOpenApiParameterPlacement: {
+      evaluate() {
+        placementCalls.evaluate += 1;
+        return {
+          placement: 'none',
+          summary: 'No matching parameters: 0 shared and 0 operation-level declarations; 0 warnings.',
+          warnings: [],
+        };
+      },
+      convert(spec) {
+        placementCalls.convert += 1;
+        return {
+          spec: placementChanges
+            ? {
+              ...spec,
+              info: {
+                ...spec.info,
+                title: 'Placement Converted API',
+              },
+            }
+            : spec,
+          changed: placementChanges,
+          before: {
+            summary: 'Shared path-level: 1 shared and 0 operation-level declarations; 0 warnings.',
+          },
+          after: {
+            summary: 'Operation-level: 0 shared and 1 operation-level declarations; 0 warnings.',
+          },
+          summary: placementChanges
+            ? 'Converted toward operation-level placement.'
+            : 'No parameter placement changes were needed. No URL path parameters found; there is nothing to move for this scope.',
+          warnings: [],
+        };
       },
     },
     ApiChallengesOpenApiToolControls: controls,
@@ -235,8 +319,18 @@ function converterPageHarness({ profile = 'original', sourceSearch = '' } = {}) 
     downloadButton,
     fileInput,
     form,
+    loadStatus,
     openClientButton,
     output,
+    outputLabel,
+    evaluatePlacementButton,
+    placementCalls,
+    placementComparison,
+    placementCurrent,
+    placementMessage,
+    placementOutput,
+    placementStatus,
+    placementWarnings,
     status,
     storedSpecs,
     window,
@@ -264,6 +358,47 @@ test('converter opens original URL specs directly in embedded clients', async ()
   );
 });
 
+test('converter shows progress and success beside the URL control for an absolute URL', async () => {
+  const openApiUrl = 'http://localhost:4567/api/docs/openapi.json';
+  const openApiText = '{\n  "openapi": "3.1.0"\n}\n';
+  const page = converterPageHarness({ openApiText, openApiUrl });
+
+  page.form.dispatch('submit', {
+    preventDefault() {},
+  });
+
+  assert.equal(page.loadStatus.hidden, false);
+  assert.equal(page.loadStatus.textContent, `Loading OpenAPI from ${openApiUrl}...`);
+  assert.equal(page.loadStatus.classList.contains('online-client-status-error'), false);
+
+  await Promise.resolve();
+
+  assert.equal(
+    page.loadStatus.textContent,
+    `Loaded OpenAPI from ${openApiUrl}. Original length: ${openApiText.length} bytes; lines: 4 lines.`,
+  );
+  assert.equal(page.loadStatus.classList.contains('online-client-status-error'), false);
+  assert.equal(page.openClientButton.disabled, false);
+});
+
+test('converter shows URL loading failures beside the URL control', async () => {
+  const page = converterPageHarness({
+    fetchError: new Error('Could not load /docs/openapi.json. The server returned HTTP 404.'),
+  });
+
+  page.form.dispatch('submit', {
+    preventDefault() {},
+  });
+  await Promise.resolve();
+  await Promise.resolve();
+
+  assert.equal(page.loadStatus.hidden, false);
+  assert.match(page.loadStatus.textContent, /server returned HTTP 404/);
+  assert.equal(page.loadStatus.classList.contains('online-client-status-error'), true);
+  assert.equal(page.status.classList.contains('online-client-status-error'), true);
+  assert.equal(page.openClientButton.disabled, true);
+});
+
 test('converter opens original local file specs through browser-session handoff', () => {
   const page = converterPageHarness();
 
@@ -278,6 +413,10 @@ test('converter opens original local file specs through browser-session handoff'
   assert.equal(page.copyButton.disabled, true);
   assert.equal(page.downloadButton.disabled, true);
   assert.equal(page.openClientButton.disabled, false);
+  assert.equal(
+    page.loadStatus.textContent,
+    'Loaded OpenAPI from local-openapi.json. Original length: 19 bytes; lines: 1 lines.',
+  );
 
   page.openClientButton.dispatch('click');
 
@@ -300,4 +439,71 @@ test('converter opens original local file specs through browser-session handoff'
       paths: {},
     },
   });
+});
+
+test('converter automatically evaluates placement and supports an explicit rerun', async () => {
+  const page = converterPageHarness();
+
+  page.form.dispatch('submit', {
+    preventDefault() {},
+  });
+  await Promise.resolve();
+
+  assert.equal(page.placementCalls.evaluate, 1);
+  assert.match(page.placementMessage.textContent, /No matching parameters/);
+  assert.equal(page.placementComparison.hidden, true);
+  assert.equal(page.placementWarnings.hidden, true);
+
+  page.evaluatePlacementButton.dispatch('click');
+  assert.equal(page.placementCalls.evaluate, 2);
+  assert.match(page.placementMessage.textContent, /Evaluation complete/);
+});
+
+test('converter exports a placement-only conversion', async () => {
+  const page = converterPageHarness({ placementTarget: 'operation' });
+
+  page.form.dispatch('submit', {
+    preventDefault() {},
+  });
+  await Promise.resolve();
+
+  assert.equal(page.placementCalls.convert, 1);
+  assert.equal(page.copyButton.disabled, false);
+  assert.equal(page.downloadButton.disabled, false);
+  assert.match(page.output.value, /Placement Converted API/);
+  assert.equal(page.placementComparison.hidden, false);
+  assert.equal(
+    page.placementCurrent.textContent,
+    'Current: Shared path-level: 1 shared and 0 operation-level declarations; 0 warnings.',
+  );
+  assert.equal(
+    page.placementOutput.textContent,
+    'Output: Operation-level: 0 shared and 1 operation-level declarations; 0 warnings.',
+  );
+  const outputLines = page.output.value.split(/\r\n|\r|\n/).length;
+  assert.equal(
+    page.outputLabel.textContent,
+    `Converted OpenAPI JSON - length: ${page.output.value.length} bytes (+${page.output.value.length - 20} diff), lines: ${outputLines} lines (+${outputLines - 2} diff)`,
+  );
+  assert.match(page.status.textContent, /Converted toward operation-level placement/);
+});
+
+test('converter explains and exports a placement conversion with no matching parameters', async () => {
+  const page = converterPageHarness({
+    placementChanges: false,
+    placementTarget: 'operation',
+  });
+
+  page.form.dispatch('submit', {
+    preventDefault() {},
+  });
+  await Promise.resolve();
+
+  assert.equal(page.placementCalls.convert, 1);
+  assert.equal(page.copyButton.disabled, false);
+  assert.equal(page.downloadButton.disabled, false);
+  assert.match(page.output.value, /Fetched API/);
+  assert.match(page.placementMessage.textContent, /nothing to move for this scope/);
+  assert.equal(page.placementComparison.hidden, true);
+  assert.match(page.status.textContent, /No parameter placement changes were needed/);
 });

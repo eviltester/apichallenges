@@ -550,7 +550,7 @@
       .replace(/[^A-Za-z0-9._-]+/g, '-')
       .replace(/^-+|-+$/g, '') || 'openapi';
 
-    return `${clean}-tester-openapi.json`;
+    return `${clean}-converted-openapi.json`;
   }
 
   return {

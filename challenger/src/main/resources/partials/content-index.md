@@ -230,6 +230,7 @@
     </li>
     <li><a href="/sponsors">Sponsors</a></li>
     <li><a href="/blog">Blog</a></li>
+    <li><a href="/tools/online-clients/openapi-converter">OpenAPI Converter</a></li>
 </ul>
 
 ---

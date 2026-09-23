@@ -385,10 +385,10 @@ test('stringify and convertedFilename produce export-friendly JSON output', () =
   );
   assert.equal(
     converter.convertedFilename('https://example.com/openapi.yaml?version=1'),
-    'openapi-tester-openapi.json',
+    'openapi-converted-openapi.json',
   );
   assert.equal(
     converter.convertedFilename('bad name?.json'),
-    'bad-name-tester-openapi.json',
+    'bad-name-converted-openapi.json',
   );
 });

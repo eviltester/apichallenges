@@ -16,6 +16,7 @@
   const EXPORT_ACTION_SELECTOR = '[data-openapi-copy-converted], [data-openapi-download-converted], [data-openapi-open-client]';
   const SWAGGER_EXPORT_ACTION_SELECTOR = '[data-openapi-copy-converted], [data-openapi-download-converted]';
   const EMBEDDED_CLIENT_ACTION_SELECTOR = '[data-openapi-open-client]';
+  const PLACEMENT_CONTROL_SELECTOR = '[data-openapi-placement-control]';
 
   function setStatus(statusElement, message, isError) {
     statusElement.textContent = message;
@@ -51,6 +52,16 @@
     });
   }
 
+  function readPlacementOptions(scope) {
+    const scopeInput = scope.querySelector('[data-openapi-placement-scope]');
+    const targetInput = scope.querySelector('[data-openapi-placement-target]:checked');
+
+    return {
+      scope: scopeInput ? scopeInput.value : 'path',
+      target: targetInput ? targetInput.value : 'keep',
+    };
+  }
+
   function hasSelectedTesterOptions(scope) {
     return [].slice.call(scope.querySelectorAll('[data-openapi-option], [data-openapi-verb]')).some(function (input) {
       return input.checked;
@@ -83,6 +94,12 @@
   function setButtons(scope, selector, enabled) {
     scope.querySelectorAll(selector).forEach(function (button) {
       button.disabled = !enabled;
+    });
+  }
+
+  function setPlacementControlsEnabled(scope, enabled) {
+    scope.querySelectorAll(PLACEMENT_CONTROL_SELECTOR).forEach(function (control) {
+      control.disabled = !enabled;
     });
   }
 
@@ -130,12 +147,15 @@
     allExportActionsSelector: EXPORT_ACTION_SELECTOR,
     swaggerExportActionsSelector: SWAGGER_EXPORT_ACTION_SELECTOR,
     embeddedClientActionsSelector: EMBEDDED_CLIENT_ACTION_SELECTOR,
+    placementControlSelector: PLACEMENT_CONTROL_SELECTOR,
     setStatus: setStatus,
     readOptions: readOptions,
+    readPlacementOptions: readPlacementOptions,
     writeOptions: writeOptions,
     applyProfile: applyProfile,
     switchToCustomProfile: switchToCustomProfile,
     setButtons: setButtons,
+    setPlacementControlsEnabled: setPlacementControlsEnabled,
     copyText: copyText,
     downloadJson: downloadJson,
   };
